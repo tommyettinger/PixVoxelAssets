@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using AssetsCU;
-namespace AssetsCU
+using AssetsPV;
+namespace AssetsPV
 {
     public static class Extensions
     {
@@ -69,24 +69,6 @@ namespace AssetsCU
                     arr[i] = item;
             }
             return arr;
-        }
-        public static TallVoxels.UnitInfo RandomFactionUnit(this TallVoxels.UnitInfo[,] mat, int color)
-        {
-            if (mat.Length == 0)
-                return new TallVoxels.UnitInfo();
-            TallVoxels.UnitInfo u = new TallVoxels.UnitInfo();
-            List<TallVoxels.UnitInfo> units = new List<TallVoxels.UnitInfo>();
-            for (int i = 0; i < mat.GetLength(0); i++ )
-            {
-                for (int j = 0; j < mat.GetLength(1); j++)
-                {
-                    if (mat[i, j] != null && mat[i, j].color == color && mat[i, j].speed > 0)
-                    {
-                        units.Add(mat[i, j]);
-                    }
-                }
-            }
-            return units.RandomElement();
         }
     }   
 }

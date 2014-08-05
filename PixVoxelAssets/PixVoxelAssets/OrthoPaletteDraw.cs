@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace AssetsCU
+namespace AssetsPV
 {
 
     class OrthoPaletteDraw

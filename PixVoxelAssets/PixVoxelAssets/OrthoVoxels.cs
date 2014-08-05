@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
 
-namespace AssetsCU
+namespace AssetsPV
 {
 
     public class OrthoVoxels
@@ -23,27 +23,10 @@ namespace AssetsCU
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River", "Basement"};
         public static string[] Directions = { "SE", "SW", "NW", "NE" };
-        //foot 0-0, treads 1-5, wheels 6-8, flight 9-10
+
         public static string[] CurrentUnits = {
-"Infantry", "Infantry_P", "Infantry_S", "Infantry_T",
-"Artillery", "Artillery_P", "Artillery_S", "Artillery_T",
-"Tank", "Tank_P", "Tank_S", "Tank_T",
-"Plane", "Plane_P", "Plane_S", "Plane_T",
-"Supply", "Supply_P", "Supply_S", "Supply_T",
-"Copter", "Copter_P", "Copter_S", "Copter_T", 
-"City", "Factory", "Airport", "Laboratory", "Castle", "Estate"};
-        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30), TerrainLookup = new Dictionary<string, int>(10);
-        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(30), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
-        public static List<int>[] TerrainToUnits = new List<int>[30];
-        public static Dictionary<int, List<MovementType>> TerrainToMobilities = new Dictionary<int, List<MovementType>>();
-        public static int[] CurrentSpeeds = {
-3, 3, 5, 3,
-4, 3, 6, 4,
-6, 4, 7, 6,
-7, 5, 9, 8,
-5, 5, 6, 6,
-7, 5, 8, 7, 
-0,0,0,0,0,0};
+"Person"};
+        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30);
         public static int[][] CurrentWeapons = {
 new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
 new int[] {-1, 4}, new int[] {3, -1}, new int[] {-1, 6}, new int[] {-1, 6},
@@ -74,138 +57,22 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static void Initialize()
         {
-            MovementType[] values = (MovementType[])Enum.GetValues(typeof(MovementType));
-            foreach (MovementType v in values)
-            {
-                MobilityToUnits[v] = new List<int>();
-            }
-            for (int t = 0; t < Terrains.Length; t++)
-            {
-                TerrainLookup[Terrains[t]] = t;
-                TerrainToMobilities[t] = new List<MovementType>();
-                TerrainToUnits[t] = new List<int>();
-            }
             for (int i = 0; i < CurrentUnits.Length; i++)
             {
                 UnitLookup[CurrentUnits[i]] = i;
-                MobilityToUnits[CurrentMobilities[i]].Add(i);
-            }
-            MobilityToTerrains[MovementType.Flight] =
-                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            MobilityToTerrains[MovementType.Foot] =
-                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            MobilityToTerrains[MovementType.Treads] =
-                new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
-            MobilityToTerrains[MovementType.TreadsAmphi] =
-                new List<int>() { 0, 1, 2, 3, 6, 7, 8, 9 };
-            MobilityToTerrains[MovementType.Wheels] =
-                new List<int>() { 0, 2, 7, 8, };
-            MobilityToTerrains[MovementType.WheelsTraverse] =
-                new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
-            MobilityToTerrains[MovementType.Immobile] =
-                new List<int>() { };
-
-            foreach (var kv in MobilityToTerrains)
-            {
-                foreach (int t in kv.Value)
-                {
-                    TerrainToMobilities[t].Add(kv.Key);
-                }
-            }
-            foreach (var kv in TerrainToMobilities)
-            {
-                foreach (MovementType m in kv.Value)
-                    TerrainToUnits[kv.Key].AddRange(MobilityToUnits[m]);
-                TerrainToUnits[kv.Key] = TerrainToUnits[kv.Key].Distinct().ToList();
             }
         }
 
-        /*{ "Infantry", //foot 0 0
-                               "Tank", "Artillery", "Artillery_P", "Artillery_S", "Supply_P", //treads 1 5
-                               "Artillery_T", "Supply", "Supply_T", //wheels 6 8
-                               "Helicopter", "Plane", //flight 9 10
-                               "City", "Factory", "Castle", "Capital" //facility
-                             };*/
         public static string[] final_units =
         {
-            "Infantry",
-"Bazooka",
-"Bike",
-"Sniper",
-"Light Artillery",
-"Defensive Artillery",
-"AA Artillery",
-"Stealth Artillery",
-"Light Tank",
-"Heavy Tank",
-"AA Tank",
-"Recon Tank",
-"Prop Plane",
-"Ground Bomber",
-"Fighter Jet",
-"Stealth Bomber",
-"Supply Truck",
-"Rig",
-"Amphi Transport",
-"Jammer",
-"Transport Copter",
-"Gunship Copter",
-"Blitz Copter",
-"Comm Copter",
-};
+            "Person",
+        };
 
-        public class UnitInfo
-        {
-            public int unit;
-            public string name;
-            public int color;
-            public int facing;
-
-            public int speed;
-            public MovementType mobility;
-            public int x;
-            public int y;
-            public UnitInfo()
-            {
-                unit = 0;
-                name = "Infantry";
-                speed = 3;
-                mobility = MovementType.Foot;
-                color = 1;
-                facing = 0;
-                x = 3;
-                y = 3;
-            }
-            public UnitInfo(string name, int color, int facing, int x, int y)
-            {
-                this.name = name;
-                this.x = x;
-                this.y = y;
-                //                this.unit = index_matches[unit];
-                this.unit = UnitLookup[name];
-                this.color = color;
-                this.facing = facing;
-                this.speed = CurrentSpeeds[this.unit];
-                this.mobility = CurrentMobilities[this.unit];
-            }
-            public UnitInfo(int unit, int color, int facing, int x, int y)
-            {
-                this.name = CurrentUnits[unit];
-                this.x = x;
-                this.y = y;
-                //                this.unit = index_matches[unit];
-                this.unit = unit;
-                this.color = color;
-                this.facing = facing;
-                this.speed = CurrentSpeeds[this.unit];
-                this.mobility = CurrentMobilities[this.unit];
-            }
-        }
-        private static Random r = new Random(PlusPaletteDraw.r.Next());
+        private static Random r = new Random();
         private static float flat_alpha = 0.9991F;
         private static float spin_alpha_0 = 0.9993F;
         private static float spin_alpha_1 = 0.9995F;
-        public static float[][] colors = new float[][]
+        public static float[][] xcolors = new float[][]
         {
             //0 tires, tread
             new float[] {0.23F,0.2F,0.2F,1F},
@@ -487,7 +354,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 /*            new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},
             new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},*/
         };
-        public static float[][] colours = new float[256][];
+        public static float[][] xcolours = new float[256][];
         public struct MagicaVoxelData
         {
             public byte x;
@@ -679,7 +546,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         {
             for (int i = 0; i < 256; i++)
             {
-                colours[i] = colors[i];
+                xcolours[i] = xcolors[i];
             }
 
             for (int i = 1; i < 23; i++)
@@ -697,49 +564,49 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if (i == 22)
                 {
 
-                    colors[(i - 1) * 8 + 0] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 1] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 2] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 3] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 4] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 5] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 6] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 7] = new float[] { 1F, 1F, 1F, 0F };
-                    colors[(i - 1) * 8 + 8] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 0] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 1] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 2] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 3] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 4] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 5] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 6] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 7] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 8] = new float[] { 1F, 1F, 1F, 0F };
                 }
                 else if (i == 11)
                 {
-                    colors[(i - 1) * 8 + 0] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 1] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 2] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 3] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 4] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 5] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 6] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    colors[(i - 1) * 8 + 7] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 0] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 1] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 2] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 3] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 4] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 5] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 6] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 7] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
                 }
                 else
                 {
-                    colors[(i - 1) * 8 + 0] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 1] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 2] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 3] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 4] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 5] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 6] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    colors[(i - 1) * 8 + 7] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 0] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 1] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 2] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 3] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 4] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 5] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 6] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 7] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
                 }
             }
             for (int i = 177; i < 256; i++)
             {
-                colors[i] = new float[] { 0, 0, 0, 0 };
+                xcolors[i] = new float[] { 0, 0, 0, 0 };
             }
         }
         public static void Awaken()
         {
             for (int i = 0; i < 256; i++)
             {
-                colors[i] = colours[i];
+                xcolors[i] = xcolours[i];
             }
         }
         public static void CreateChannelBitmap(Bitmap bmp, string savename)
@@ -4235,10 +4102,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if (current_color > 112)
                     current_color = 24;
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + idx][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + idx][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + idx][2],  0, 0},
-   new float[] {0,  0,  0,  colors[current_color + idx][3], 0},
+   new float[] {0.22F+xcolors[current_color + idx][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + idx][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + idx][2],  0, 0},
+   new float[] {0,  0,  0,  xcolors[current_color + idx][3], 0},
    new float[] {0, 0, 0, 0, 1F}});
 
                 imageAttributes.SetColorMatrix(
@@ -4335,9 +4202,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && colors[current_color + faction][3] == spin_alpha_0)
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && colors[current_color + faction][3] == spin_alpha_1)
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 else if (current_color == 168)
                     continue;
@@ -4345,9 +4212,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
 
                     colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -4372,9 +4239,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0] + lightCalc,  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1] + lightCalc,  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2] + lightCalc,  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2] + lightCalc,  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -4395,9 +4262,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -4406,9 +4273,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
                     g.DrawImage((current_color == 80) ? spin :
-                       (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                       (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
                        new Rectangle(vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0),
-                           62 - 20 - 3 + vx.x - vx.z * 2 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : jitter),
+                           62 - 20 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter),
                            width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                        0, 0,        // upper-left corner of source rectangle 
@@ -4500,9 +4367,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && colors[current_color + faction][3] == spin_alpha_0)
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && colors[current_color + faction][3] == spin_alpha_1)
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 else if (current_color == 168)
                     continue;
@@ -4510,9 +4377,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
 
                     colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -4536,9 +4403,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0] + lightCalc,  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1] + lightCalc,  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2] + lightCalc,  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2] + lightCalc,  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -4559,9 +4426,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -4570,9 +4437,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
                     g.DrawImage((current_color == 80) ? spin :
-                       (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                       (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
                        new Rectangle((vx.x + vx.y) * 2 + 4 * 2 + ((current_color == 136) ? jitter - 1 * 2 : 0),
-                           100 * 2 - 20 * 2 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 * 2 : jitter),
+                           100 * 2 - 20 * 2 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 * 2 : jitter),
                            width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                        0, 0,        // upper-left corner of source rectangle 
@@ -4656,13 +4523,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if ((frame % 2 != 0) && colors[current_color + faction][3] == spin_alpha_0)
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && colors[current_color + faction][3] == spin_alpha_1)
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
-                if ((colors[current_color + faction][3] != flat_alpha))
+                if ((xcolors[current_color + faction][3] != flat_alpha))
                 {
                     imageAttributes.SetColorMatrix(
                        colorMatrix,
@@ -4755,13 +4622,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if ((frame % 2 != 0) && colors[current_color + faction][3] == spin_alpha_0)
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && colors[current_color + faction][3] == spin_alpha_1)
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
-                if ((colors[current_color + faction][3] != flat_alpha))
+                if ((xcolors[current_color + faction][3] != flat_alpha))
                 {
                     imageAttributes.SetColorMatrix(
                        colorMatrix,
@@ -4857,9 +4724,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && colors[current_color + faction][3] == spin_alpha_0)
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && colors[current_color + faction][3] == spin_alpha_1)
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 else if (current_color >= 168)
                 {
@@ -4870,9 +4737,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
 
                     colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -4897,18 +4764,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0] + lightCalc,  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1] + lightCalc,  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2] + lightCalc,  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2] + lightCalc,  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
                     else
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -4917,10 +4784,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
                     g.DrawImage((current_color == 80) ? spin :
-                       (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                       (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
                        new Rectangle(
                            vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0),
-                           182 - 60 - 3 + vx.x - vx.z * 2 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : 0),
+                           182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0),
                            //(vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0),
                            //300 - 60 - vx.y + vx.x - vx.z * 3, // - ((colors[current_color + faction][3] == flat_alpha) ? -2 : 0),
                            width, height),  // destination rectangle 
@@ -5006,13 +4873,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if ((frame % 2 != 0) && colors[current_color + faction][3] == spin_alpha_0)
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && colors[current_color + faction][3] == spin_alpha_1)
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
-                if (colors[current_color + faction][3] != flat_alpha && current_color != 120)
+                if (xcolors[current_color + faction][3] != flat_alpha && current_color != 120)
                 {
                     imageAttributes.SetColorMatrix(
                        colorMatrix,
@@ -5132,7 +4999,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                new float[] {0,  0.5F,  0,  0, 0},
                new float[] {0,  0,  0.5F,  0, 0},
                new float[] {0,  0,     0,  1F, 0},
-               new float[] {0.55F*(0.22F+colors[32 + faction][0]), 0.55F*(0.251F+colors[32 + faction][1]), 0.55F*(0.31F+colors[32 + faction][2]), 0, 1F}}),
+               new float[] {0.55F*(0.22F+xcolors[32 + faction][0]), 0.55F*(0.251F+xcolors[32 + faction][1]), 0.55F*(0.31F+xcolors[32 + faction][2]), 0, 1F}}),
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
             g.DrawImage(image,
@@ -5177,10 +5044,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 int current_color = v * 8;
 
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
-   new float[] {0,  0,  0, colors[current_color + faction][3], 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
+   new float[] {0,  0,  0, xcolors[current_color + faction][3], 0},
    new float[] {0, 0, 0, 0, 1F}});
 
                 imageAttributes.SetColorMatrix(
@@ -5188,7 +5055,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    ColorMatrixFlag.Default,
                    ColorAdjustType.Bitmap);
                 g.DrawImage(
-                   (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                   (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
                    new Rectangle(1 + 3 * v, 0,
                        width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
@@ -5206,9 +5073,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             for (int i = 0; i < 4; i++)
             {
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[80 + faction][0] + lightCalcs[i],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[80 + faction][1] + lightCalcs[i],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[80 + faction][2] + lightCalcs[i],  0, 0},
+   new float[] {0.22F+xcolors[80 + faction][0] + lightCalcs[i],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[80 + faction][1] + lightCalcs[i],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[80 + faction][2] + lightCalcs[i],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                 imageAttributes.SetColorMatrix(
@@ -5222,17 +5089,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 int current_color = v * 8;
 
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
-   new float[] {0,  0,  0, colors[current_color + faction][3], 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
+   new float[] {0,  0,  0, xcolors[current_color + faction][3], 0},
    new float[] {0, 0, 0, 0, 1F}});
                 imageAttributes.SetColorMatrix(
                    colorMatrix,
                    ColorMatrixFlag.Default,
                    ColorAdjustType.Bitmap);
                 g.DrawImage(
-                   (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                   (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
                    new Rectangle(1 + 3 * (v + 3), 0,
                        width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
@@ -5296,14 +5163,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -5313,8 +5180,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    ColorAdjustType.Bitmap);
 
                 g.DrawImage(
-                   (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
-                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                   (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                        , width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
@@ -5366,14 +5233,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -5383,8 +5250,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    ColorAdjustType.Bitmap);
 
                 g.DrawImage(
-                   (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
-                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                   (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                        , width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
@@ -5436,14 +5303,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -5453,8 +5320,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    ColorAdjustType.Bitmap);
 
                 g.DrawImage(
-                   (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
-                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                   (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                        , width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
@@ -5506,14 +5373,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
                 colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+colors[current_color + faction][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+colors[current_color + faction][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+colors[current_color + faction][2],  0, 0},
+   new float[] {0.22F+xcolors[current_color + faction][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color + faction][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color + faction][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
@@ -5523,8 +5390,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    ColorAdjustType.Bitmap);
 
                 g.DrawImage(
-                   (colors[current_color + faction][3] == 1F) ? image : (colors[current_color + faction][3] == flat_alpha) ? flat : spin,
-                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                   (xcolors[current_color + faction][3] == 1F) ? image : (xcolors[current_color + faction][3] == flat_alpha) ? flat : spin,
+                   new Rectangle((vx.x + vx.y) * 2, 100 - 24 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                        , width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
@@ -5563,11 +5430,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             foreach (MagicaVoxelData vx in voxels.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
-                if (colors[current_color + faction][3] != flat_alpha)
+                if (xcolors[current_color + faction][3] != flat_alpha)
                 {
                     /*colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0.22F+colors[56 + idx][0],  0,  0,  0, 0},
@@ -5582,7 +5449,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorAdjustType.Bitmap);
                     g.DrawImage(
                        image,
-                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                            , width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                        0, 0,        // upper-left corner of source rectangle 
@@ -5626,11 +5493,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
-                if (colors[current_color + faction][3] != flat_alpha)
+                if (xcolors[current_color + faction][3] != flat_alpha)
                 {
                     /*colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0.22F+colors[56 + idx][0],  0,  0,  0, 0},
@@ -5645,7 +5512,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorAdjustType.Bitmap);
                     g.DrawImage(
                        image,
-                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                            , width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                        0, 0,        // upper-left corner of source rectangle 
@@ -5690,11 +5557,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
-                if (colors[current_color + faction][3] != flat_alpha)
+                if (xcolors[current_color + faction][3] != flat_alpha)
                 {
                     /*colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0.22F+colors[56 + idx][0],  0,  0,  0, 0},
@@ -5709,7 +5576,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorAdjustType.Bitmap);
                     g.DrawImage(
                        image,
-                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
+                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2)
                            , width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                        0, 0,        // upper-left corner of source rectangle 
@@ -5756,11 +5623,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int current_color = 249 - vx.color;
 
-                if (frame != 0 && colors[current_color + faction][3] == spin_alpha_0)
+                if (frame != 0 && xcolors[current_color + faction][3] == spin_alpha_0)
                     continue;
-                else if (frame != 1 && colors[current_color + faction][3] == spin_alpha_1)
+                else if (frame != 1 && xcolors[current_color + faction][3] == spin_alpha_1)
                     continue;
-                if (colors[current_color + faction][3] != flat_alpha)
+                if (xcolors[current_color + faction][3] != flat_alpha)
                 {
                     /*colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0.22F+colors[56 + idx][0],  0,  0,  0, 0},
@@ -5775,7 +5642,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorAdjustType.Bitmap);
                     g.DrawImage(
                        image,
-                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((colors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2), width, height),  // destination rectangle 
+                       new Rectangle((vx.x + vx.y) * 2 + 2, 100 - 20 - 2 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : frame * 2), width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                        0, 0,        // upper-left corner of source rectangle 
                        width,       // width of source rectangle
@@ -6305,7 +6172,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
             MagicaVoxelData[] parsed = FromMagicaRaw(bin);
-            MagicaVoxelData[][] explode = FieryExplosion(parsed, ((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true));
+            MagicaVoxelData[][] explode = FieryExplosion(parsed, false);
             string folder = ("indexed");
 
             for (int d = 0; d < 4; d++)
@@ -6325,7 +6192,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 Console.WriteLine("Processing: " + u + " Firing");
                 bin = new BinaryReader(File.Open(u + "_Firing_X.vox", FileMode.Open));
                 parsed = FromMagicaRaw(bin);
-                explode = FieryExplosion(parsed, ((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true));
+                explode = FieryExplosion(parsed, false);
 
                 for (int d = 0; d < 4; d++)
                 {
@@ -6365,7 +6232,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 bin.Close();
                 return;
             }
-            else if (CurrentMobilities[UnitLookup[u]] == MovementType.Immobile)
+            else if (false)
             {
                 framelimit = 2;
             }
@@ -6510,7 +6377,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
             MagicaVoxelData[] parsed = FromMagica(bin);
             int framelimit = 4;
-            if (CurrentMobilities[UnitLookup[u]] == MovementType.Immobile)
+            if (false)
             {
                 framelimit = 2;
             }
@@ -7055,345 +6922,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return b;
         }
 
-        static float[,] dijkstra(UnitInfo self, int[,] grid, UnitInfo[,] placing, int goalX, int goalY)
-        {
-            /*
-            (defn find-cells [^doubles a cell-kind]
-                (persistent! (areduce ^doubles a i ret (transient {})
-                                      (if (= (hiphip/aget ^doubles a i) cell-kind) (assoc! ret i cell-kind) ret))))
-
-            (defn find-goals [^doubles a]
-              (find-cells a GOAL))
-
-            (defn find-walls [^doubles a]
-                (persistent! (areduce ^doubles a i ret (transient {})
-                                      (if (>= (hiphip/aget ^doubles a i) (double wall)) (assoc! ret i wall) ret))))
-
-            (defn find-floors [^doubles a]
-              (find-cells a floor))
-
-            (defn find-lowest [^doubles a]
-              (let [low-val (hiphip/amin a)]
-                (find-cells a low-val)))
-
-            (defn find-monsters [m]
-                (into {} (for [mp (map #(:pos @%) m)] [mp 1.0])))
-
-            (defn dijkstra
-              ([a]
-                 (dijkstra a (find-walls a) (find-lowest a)))
-              ([dun _]
-                 (dijkstra (:dungeon dun) (merge (find-walls (:dungeon dun)) (find-monsters @(:monsters dun))) (find-lowest (:dungeon dun))))
-              ([a closed open-cells]
-                 (loop [open open-cells]
-                   (when (seq open)
-                     (recur (reduce (fn [newly-open [^long i ^double v]]
-                                      (reduce (fn [acc dir]
-                                                (if (or (closed dir) (open dir)
-                                                        (>= (+ 1.0 v) (hiphip/aget ^doubles a dir)))
-                                                  acc
-                                                  (do (hiphip/aset ^doubles a dir (+ 1.0 v))
-                                                      (assoc acc dir (+ 1.0 v)))))
-                                              newly-open, [(- i wide2)
-                                                           (+ i wide2)
-                                                           (- i 2)
-                                                           (+ i 2)]))
-                                    {}, open))))
-                 a))*/
-            int width = grid.GetLength(0);
-            int height = grid.GetLength(1);
-            float wall = 222;
-            float unexplored = 111;
-            float goal = 0;
-            float[] d = new float[width * height];
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                    d[i + width * j] = unexplored;
-            }
-            for (int i = 0; i < width; i++)
-            {
-                d[i] = wall;
-                d[i + width * (height - 1)] = wall;
-            }
-            for (int j = 1; j < height - 1; j += 2)
-            {
-                d[j * width] = wall;
-                d[(j + 1) * width + (width - 1)] = wall;
-            }
-            d[goalX + width * goalY] = goal;
-            int[] ability =
-            new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, };
-            //plains forest desert jungle hills mountains ruins tundra road river
-            Dictionary<MovementType, bool> pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, true},
-                {MovementType.Treads, true},
-                {MovementType.Wheels, true},
-                {MovementType.TreadsAmphi, true},
-                {MovementType.WheelsTraverse, true},
-                {MovementType.Flight, true},
-                {MovementType.Immobile, false},
-            };
-            switch (self.mobility)
-            {
-                case MovementType.Foot:
-                    ability =
-            new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, };
-                    pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, false},
-                {MovementType.Treads, true},
-                {MovementType.Wheels, false},
-                {MovementType.TreadsAmphi, true},
-                {MovementType.WheelsTraverse, false},
-                {MovementType.Flight, true},
-                {MovementType.Immobile, false},
-            };
-                    break;
-                case MovementType.Treads:
-                    ability =
-            new int[] { 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, };
-                    pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, false},
-                {MovementType.Treads, false},
-                {MovementType.Wheels, false},
-                {MovementType.TreadsAmphi, false},
-                {MovementType.WheelsTraverse, false},
-                {MovementType.Flight, true},
-                {MovementType.Immobile, false},
-            };
-                    break;
-                case MovementType.Wheels:
-                    ability =
-            new int[] { 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, };
-                    pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, false},
-                {MovementType.Treads, false},
-                {MovementType.Wheels, false},
-                {MovementType.TreadsAmphi, false},
-                {MovementType.WheelsTraverse, false},
-                {MovementType.Flight, true},
-                {MovementType.Immobile, false},
-            };
-                    break;
-                case MovementType.TreadsAmphi:
-                    ability =
-            new int[] { 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, };
-                    pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, false},
-                {MovementType.Treads, false},
-                {MovementType.Wheels, false},
-                {MovementType.TreadsAmphi, false},
-                {MovementType.WheelsTraverse, false},
-                {MovementType.Flight, true},
-                {MovementType.Immobile, false},
-            };
-                    break;
-                case MovementType.WheelsTraverse:
-                    ability =
-            new int[] { 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, };
-                    pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, false},
-                {MovementType.Treads, false},
-                {MovementType.Wheels, false},
-                {MovementType.TreadsAmphi, false},
-                {MovementType.WheelsTraverse, false},
-                {MovementType.Flight, true},
-                {MovementType.Immobile, false},
-            };
-                    break;
-                case MovementType.Flight:
-                    ability =
-            new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, };
-                    pass = new Dictionary<MovementType, bool>
-            {
-                {MovementType.Foot, true},
-                {MovementType.Treads, true},
-                {MovementType.Wheels, true},
-                {MovementType.TreadsAmphi, true},
-                {MovementType.WheelsTraverse, true},
-                {MovementType.Flight, false},
-                {MovementType.Immobile, false},
-            };
-                    break;
-            }
-            Dictionary<int, int> open = new Dictionary<int, int> { { (goalX + width * goalY), 0 } },
-                fringe = new Dictionary<int, int>(),
-                closed = new Dictionary<int, int>();
-            int[] oddmoves = { -1 + width, width, -1 + -width, -width };
-            int[] evenmoves = { 1 + width, width, 1 + -width, -width };
-            while (open.Count > 0)
-            {
-                foreach (var idx_dijk in open)
-                {
-                    foreach (int mov in ((idx_dijk.Key / width) % 2 == 0) ? evenmoves : oddmoves)
-                        if (open.ContainsKey(idx_dijk.Key + mov) ||
-                            closed.ContainsKey(idx_dijk.Key + mov) ||
-                            d[idx_dijk.Key + mov] == wall ||
-                            d[idx_dijk.Key + mov] <= idx_dijk.Value + 1)
-                        {
-
-                        }
-                        else if (
-                            ability[grid[(idx_dijk.Key + mov) % width, (idx_dijk.Key + mov) / width]] == 1 &&
-                            (placing[(idx_dijk.Key + mov) % width, (idx_dijk.Key + mov) / width] == null ||
-                            pass[placing[(idx_dijk.Key + mov) % width, (idx_dijk.Key + mov) / width].mobility] ||
-                            (placing[(idx_dijk.Key + mov) % width, (idx_dijk.Key + mov) / width].color == self.color &&
-                            placing[(idx_dijk.Key + mov) % width, (idx_dijk.Key + mov) / width].mobility != MovementType.Immobile)
-                            //self.x + self.y * width == idx_dijk.Key + mov
-                            ))
-                        {
-                            fringe[idx_dijk.Key + mov] = (idx_dijk.Value + 1);
-                            d[idx_dijk.Key + mov] = idx_dijk.Value + 1;
-                        }
-                }
-                foreach (var kv in open)
-                {
-                    closed[kv.Key] = (kv.Value);
-                }
-                open.Clear();
-                foreach (var kv in fringe)
-                {
-                    open[kv.Key] = (kv.Value);
-                }
-                fringe.Clear();
-
-            }
-            /*
-([a closed open-cells]
-    (loop [open open-cells]
-        (when (seq open)
-            (recur
-               (reduce
-                   (fn [newly-open [^long i ^double v]]
-                       (reduce
-                           (fn [acc dir]
-                               (if (or (closed dir) (open dir) (>= (+ 1.0 v) (hiphip/aget ^doubles a dir)))
-                                   acc
-                                   (do (hiphip/aset ^doubles a dir (+ 1.0 v))
-                                       (assoc acc dir (+ 1.0 v))
-                                   )
-                                )
-                            )
-                            newly-open
-                            [(- i wide2)
-                             (+ i wide2)
-                             (- i 2)
-                             (+ i 2)]
-                        )
-                    )
-                    {}
-                    open))))
-     a)*/
-            d[goalX + width * goalY] = wall;
-            float[,] n = new float[width, height];
-
-            for (int j = 0; j < height; j++)
-            {
-                if (j % 2 == 0)
-                    Console.Write("  ");
-                for (int i = 0; i < width; i++)
-                {
-                    n[i, j] = d[i + j * width];
-                    Console.Write(string.Format("{0,4}", n[i, j]));
-                }
-                Console.WriteLine();
-            }
-            return n;
-        }
-        static List<Tuple<int, int, int>> getDijkstraPath(UnitInfo active, int[,] grid, UnitInfo[,] placing, int targetX, int targetY)
-        {
-            int width = grid.GetLength(0);
-            float[,] d_inv = dijkstra(active, grid, placing, targetX, targetY);
-            List<Tuple<int, int, int>> path = new List<Tuple<int, int, int>>();
-            int currentX = active.x, currentY = active.y, currentFacing = active.facing;
-
-            for (int f = 0; f < active.speed; f++)
-            {
-                Dictionary<int, float> near = new Dictionary<int, float>();
-                near[currentX + width * (currentY)] = d_inv[currentX, currentY];
-                near[currentX + width * (currentY + 1)] = d_inv[currentX, currentY + 1];
-                near[currentX + width * (currentY - 1)] = d_inv[currentX, currentY - 1];
-                if (currentY % 2 == 0)
-                {
-                    near[currentX + 1 + width * (currentY + 1)] = d_inv[currentX + 1, currentY + 1];
-                    near[currentX + 1 + width * (currentY - 1)] = d_inv[currentX + 1, currentY - 1];
-                }
-                else
-                {
-                    near[currentX - 1 + width * (currentY + 1)] = d_inv[currentX - 1, currentY + 1];
-                    near[currentX - 1 + width * (currentY - 1)] = d_inv[currentX - 1, currentY - 1];
-                }
-                var ordered = near.OrderBy(kv => kv.Value); //.First().Key;;
-                int newpos = ordered.TakeWhile(kv => kv.Value == ordered.First().Value).RandomElement().Key;
-                if (near.All(e => e.Value == near[newpos]))
-                {
-                    return new List<Tuple<int, int, int>>();
-                }
-                int newX = newpos % width, newY = newpos / width;
-                if (!(newX == currentX && newY == currentY))
-                {
-                    if (newY % 2 == 0)
-                    {
-                        if (newY > currentY)
-                        {
-                            //south
-                            if (newX < currentX)
-                                currentFacing = 1;
-                            else
-                                currentFacing = 0;
-                        }
-                        else
-                        {
-                            //north
-                            if (newX < currentX)
-                                currentFacing = 2;
-                            else
-                                currentFacing = 3;
-                        }
-                    }
-                    else
-                        if (newY > currentY)
-                        {
-                            //south
-                            if (newX == currentX)
-                                currentFacing = 1;
-                            else
-                                currentFacing = 0;
-                        }
-                        else
-                        {
-                            //north
-                            if (newX == currentX)
-                                currentFacing = 2;
-                            else
-                                currentFacing = 3;
-                        }
-
-                    currentX = newX;
-                    currentY = newY;
-                    /*if (placing[newX, newY] != null && newX == targetX && newY == targetY)
-                    {
-                        break;
-                    }
-                    if (d_inv[newX, newY] <= 1.1F && placing[newX, newY] == null)
-                        break;
-                    */
-                }
-                path.Add(new Tuple<int, int, int>(currentX, currentY, currentFacing));
-            }
-            while (path.Count > 0 && placing[path.Last().Item1, path.Last().Item2] != null)
-            {
-                path.RemoveAt(path.Count - 1);
-            }
-            return path;
-        }
-        
         /// <summary>
         /// This will take a long time to run.  It should produce a ton of assets and an animated gif preview.
         /// </summary>
@@ -7417,7 +6945,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             Madden();
             renderOnlyColors(7).Save("PaletteCrazy.png", ImageFormat.Png);
             */
-            InitializePalettes();
+//            InitializePalettes();
             //            Madden();
             //processTerrainChannel();
             makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
