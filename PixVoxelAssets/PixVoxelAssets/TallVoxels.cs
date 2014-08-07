@@ -550,7 +550,7 @@ MovementType.Foot};
         }
 
 
-        static TallVoxels()
+        public static void InitializeXPalette()
         {
             xrendered = storeColorCubes();
         }
@@ -5154,7 +5154,7 @@ MovementType.Foot};
                     }
                     break;
             }
-            int jitter = ((frame % 4) % 3) + ((frame % 4) / 3);
+            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
@@ -5187,11 +5187,11 @@ MovementType.Foot};
                              */
                             if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                 + i + //(int)(i / 4) * 4
-                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] == 0)
+                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0)
                             {
                                 argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
                                     xrendered[mod_color][i + j * 16];
                                 /*
                                 Console.Write(4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
@@ -5222,13 +5222,24 @@ MovementType.Foot};
                     outlineValues[i - 8] = 255;
                     outlineValues[i + bmpData.Stride * 2] = 255;
                     outlineValues[i - bmpData.Stride * 2] = 255;
+                    outlineValues[i + bmpData.Stride + 8] = 255;
+                    outlineValues[i - bmpData.Stride + 8] = 255;
+                    outlineValues[i + bmpData.Stride - 8] = 255;
+                    outlineValues[i - bmpData.Stride - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;
                 }
             }
             for (int i = 3; i < numBytes; i += 4)
             {
                 if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * flat_alpha))
                     argbValues[i] = 255;
-                
             }
             Marshal.Copy(argbValues, 0, ptr, numBytes);
 
@@ -7356,7 +7367,8 @@ MovementType.Foot};
             //processReceiving();
 
             //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
-
+            InitializeXPalette();
+            processUnitOutlinedDouble("Artillery_P");
             processUnitOutlinedDouble("Artillery_S");
 
             processUnitOutlinedW("Person");
