@@ -137,7 +137,7 @@ MovementType.Foot};
             
             //64 flesh
             new float[] {0.87F,0.65F,0.3F,1F},  //black
-            new float[] {0.7F,1.2F,-0.1F,1F},      //white
+            new float[] {0.7F,0.9F,0.4F,1F},      //white
             new float[] {0.87F,0.65F,0.3F,1F},  //red
             new float[] {0.87F,0.65F,0.3F,1F},  //orange
             new float[] {0.87F,0.65F,0.3F,1F},  //yellow
@@ -437,7 +437,16 @@ MovementType.Foot};
 
                 Graphics g = Graphics.FromImage((Image)b);
 
-                if (xcolors[current_color][3] == flat_alpha)
+                if (current_color / 8 == 96 / 8)
+                {
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                }
+                else if (xcolors[current_color][3] == flat_alpha)
                 {
                     colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
@@ -5109,8 +5118,10 @@ MovementType.Foot};
             int numBytes = bmpData.Stride * bmp.Height;
             byte[] argbValues = new byte[numBytes];
             argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
             byte[] outlineValues = new byte[numBytes];
-            argbValues.Fill<byte>(0);
+            outlineValues.Fill<byte>(0);
 
 
             int xSize = 60, ySize = 60;
@@ -5166,6 +5177,24 @@ MovementType.Foot};
                 {
                     continue;
                 }
+                else if(current_color == 96)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (shadowValues[4 * ((vx.x + vx.y) * 2 + 4)
+                                + i +
+                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] == 0)
+                            {
+                                shadowValues[4 * ((vx.x + vx.y) * 2 + 4)
+                                    + i +
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
+                                    xrendered[current_color][i + j * 16];
+                            }
+                        }
+                    }
+                }
                 else
                 {
                     int mod_color = current_color + faction;
@@ -5177,30 +5206,15 @@ MovementType.Foot};
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            /*
-                            Console.Write(4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j) + " = " +
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] + ", then ");
-                             */
                             if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i + //(int)(i / 4) * 4
+                                + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0)
                             {
                                 argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
                                     bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
                                     xrendered[mod_color][i + j * 16];
-                                /*
-                                Console.Write(4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j));
-                                Console.Write(" = " + xrendered[mod_color][i + j * 16] + ". ");
-                                */
                             }
-//                            else Console.Write("no change. ");
                         }
                     }
                 }
@@ -5236,10 +5250,22 @@ MovementType.Foot};
                     outlineValues[i - bmpData.Stride * 2 - 8] = 255;
                 }
             }
+
             for (int i = 3; i < numBytes; i += 4)
             {
                 if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * flat_alpha))
                     argbValues[i] = 255;
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = shadowValues[i - 0];
+                }
             }
             Marshal.Copy(argbValues, 0, ptr, numBytes);
 
