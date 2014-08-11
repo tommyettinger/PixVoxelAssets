@@ -236,15 +236,15 @@ MovementType.Foot};
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             
-            //136 smoke (FLAT ALPHA)
-            new float[] {0.12F,0.08F,-0.01F,flat_alpha},
-            new float[] {0.01F,0.12F,0.16F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
+            //136 smoke (MAYBE RETURN TO FLAT ALPHA?)
+            new float[] {0.12F,0.08F,-0.01F,1F},
+            new float[] {0.01F,0.12F,0.16F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
 
             //144 guts
             new float[] {0.67F,0.05F,-0.1F,1F},  //black
@@ -1746,6 +1746,10 @@ MovementType.Foot};
                         mvd.color = (byte)((r.Next(1 + f) == 0) ? 249 - 144 : (r.Next(8) == 0) ? 249 - 152 : 249 - 64); //random transform to guts
                     else if (v.color == 249 - 144) //guts
                         mvd.color = (byte)((r.Next(6) == 0) ? 249 - 152 : 249 - 144); //random transform to orange fire
+                    else if (v.color <= 249 - 168) //clear and markers
+                        mvd.color = (byte)249 - 168; //clear stays clear
+                    else if (v.color == 249 - 120)
+                        mvd.color = 249 - 168; //clear inner shadow
                     else if (v.color == 249 - 80) //lights
                         mvd.color = 249 - 16; //cannon color for broken lights
                     else if (v.color == 249 - 88) //windows
@@ -1766,7 +1770,7 @@ MovementType.Foot};
 
                     if (mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136)
                     {
-                        zMove = f / 3F;
+                        zMove = f * 0.6f;
                     }
                     else
                     {
@@ -1783,18 +1787,18 @@ MovementType.Foot};
 
                         //for higher values: center - (between 9 and 11) - distance from current voxel x to edge x, times variable based on height
                         //                    60                                                  70         80 = 50
-                        if (v.x > midX[v.z])// && v.x > maxX - 5)
-                            xMove = ((midX[v.z] - r.Next(3) - ((blowback) ? 9 : 0) - (maxX[v.z] - v.x)) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                        if (v.x > midX[v.z])
+                            xMove = ((midX[v.z] - r.Next(3) - ((blowback) ? 9 : 0) - (maxX[v.z] - v.x)) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         //for lower values: distance from current voxel x to center - (between 6 to 8), times variable based on height
-                        else if (v.x < midX[v.z])// && v.x < minX + 5)
+                        else if (v.x < midX[v.z])
                             xMove = ((midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0) - minX[v.z] + v.x) * -0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
                             //           60                                             40        50
                             //xMove = ((0 + (v.x - midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0))) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * ((v.z + 5)) * f; //-5 +
 
-                        if (v.y > midY[v.z])// && v.y > maxY - 5)
-                            yMove = ((midY[v.z] - r.Next(3) - (maxY[v.z] - v.y)) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * (v.z + 5);//5 -
-                        else if (v.y < midY[v.z])// && v.y < minY + 5)
-                            yMove = ((midY[v.z] + r.Next(3) - minY[v.z] + v.y) * -0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                        if (v.y > midY[v.z])
+                            yMove = ((midY[v.z] - r.Next(3) - (maxY[v.z] - v.y)) * 0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
+                        else if (v.y < midY[v.z])
+                            yMove = ((midY[v.z] + r.Next(3) - minY[v.z] + v.y) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                      
 //                            yMove = ((0 + (v.y - midY[v.z] + r.Next(3))) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * (v.z + 5); //-5 +
                         
@@ -1810,7 +1814,7 @@ MovementType.Foot};
                             yMove = (-5 + (minY - v.y)) / (minY + 1) * 3;
                         */
                         if (minZ > 0)
-                            zMove = ((v.z) * (1 - f) / 6F);
+                            zMove = ((v.z) * (1 - f) / 7F);
                         else
                             zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.8F;
                     }
@@ -1960,6 +1964,8 @@ MovementType.Foot};
                         mvd.color = (byte)((r.Next(5) == 0) ? 249 - 152 : 249 - 144); //random transform to orange fire
                     else if (v.color <= 249 - 168) //clear and markers
                         mvd.color = (byte)249 - 168; //clear stays clear
+                    else if (v.color == 249 - 120)
+                        mvd.color = 249 - 168; //clear inner shadow
                     else if (v.color == 249 - 80) //lights
                         mvd.color = 249 - 16; //cannon color for broken lights
                     else if (v.color == 249 - 88) //windows
@@ -1969,20 +1975,21 @@ MovementType.Foot};
                     else if (v.color == 249 - 112)
                         mvd.color = 249 - 168; //clear non-active rotors
                     else if (v.color == 249 - 152) //orange fire
-                        mvd.color = (byte)((r.Next(8) <= f) ? 249 - 136 : ((r.Next(3) <= 1) ? 249 - 160 : ((r.Next(3) == 0) ? 249 - 136 : 249 - 152))); //random transform to yellow fire or smoke
+                        mvd.color = (byte)((r.Next(8) + 2 <= f) ? 249 - 136 : ((r.Next(3) <= 1) ? 249 - 160 : ((r.Next(3) == 0) ? 249 - 136 : 249 - 152))); //random transform to yellow fire or smoke
                     else if (v.color == 249 - 160) //yellow fire
-                        mvd.color = (byte)((r.Next(8) <= f) ? 249 - 136 : ((r.Next(3) <= 1) ? 249 - 152 : ((r.Next(4) == 0) ? 249 - 136 : 249 - 160))); //random transform to orange fire or smoke
+                        mvd.color = (byte)((r.Next(8) + 1 <= f) ? 249 - 136 : ((r.Next(3) <= 1) ? 249 - 152 : ((r.Next(4) == 0) ? 249 - 136 : 249 - 160))); //random transform to orange fire or smoke
                     else if (v.color == 249 - 136) //smoke
-                        mvd.color = (byte)((r.Next(8) <= f - 1) ? 249 - 168 : 249 - 136); //random transform to clear
+                        mvd.color = (byte)((r.Next(8) + 3 <= f) ? 249 - 168 : 249 - 136); //random transform to clear
                     else
-                        mvd.color = (byte)((r.Next(f) <= 2) ? 249 - (152 + ((r.Next(4) == 0) ? 8 : 0)) : v.color); //random transform to orange or yellow fire //(f >= 6) ? 249 - 136 :
+                        mvd.color = (byte)((r.Next(f * 3) <= 5) ? 249 - (152 + ((r.Next(4) == 0) ? 8 : 0)) : v.color); //random transform to orange or yellow fire //(f >= 6) ? 249 - 136 :
                     float xMove = 0, yMove = 0, zMove = 0;
                     if (mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136)
                     {
-                        zMove = f * 0.3F;
+                        zMove = f * 2.5f;
                     }
                     else
                     {
+                        /*
                         if (v.x > midX[v.z])// && v.x > maxX - 5)
                             xMove = ((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //5 -
                         else if (v.x < midX[v.z])// && v.x < minX + 5)
@@ -1991,24 +1998,37 @@ MovementType.Foot};
                             yMove = ((midY[v.z] - r.Next(4) - (maxY[v.z] - v.y)) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));//5 -
                         else if (v.y < midY[v.z])// && v.y < minY + 5)
                             yMove = ((0 + (v.y - midY[v.z] + r.Next(4))) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //-5 +
+*/
 
+                        if (v.x > midX[v.z])
+                            xMove = ((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        //for lower values: distance from current voxel x to center - (between 7 to 10), times variable based on height
+                        else if (v.x < midX[v.z])
+                            xMove = ((midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0) - minX[v.z] + v.x) * -0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                        //           60                                             40        50
+                        //xMove = ((0 + (v.x - midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0))) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * ((v.z + 5)) * f; //-5 +
+
+                        if (v.y > midY[v.z])
+                            yMove = ((midY[v.z] - r.Next(4) - (maxY[v.z] - v.y)) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        else if (v.y < midY[v.z])
+                            yMove = ((midY[v.z] + r.Next(4) - minY[v.z] + v.y) * -0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
 
                         if (f < 5 && minZ == 0)
-                            zMove = (v.z / ((maxZ + 1) * (0.4F))) * (5 - f) * 0.3F;
+                            zMove = (v.z / ((maxZ + 1) * (0.2F))) * (4 - f) * 0.6F;
                         else
-                            zMove = (1 - f * 1.1F);
+                            zMove = (1 - f * 1.5F);
                     }
 
                     if (xMove > 0)
                     {
-                        float nv = (v.x + (xMove / (0.3f * (f + 5)))) - Math.Abs((yMove / (0.5f * (f + 5))));
+                        float nv = (v.x + (xMove / (0.1f * (f + 5)))) - Math.Abs((yMove / (0.15f * (f + 5))));
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.x = (byte)(Math.Floor(nv));
                     }
                     else if (xMove < 0)
                     {
-                        float nv = (v.x + (xMove / (0.3f * (f + 5)))) + Math.Abs((yMove / (0.5f * (f + 5))));
+                        float nv = (v.x + (xMove / (0.1f * (f + 5)))) + Math.Abs((yMove / (0.15f * (f + 5))));
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.x = (byte)(Math.Floor(nv));
@@ -2021,16 +2041,32 @@ MovementType.Foot};
                     }
                     if (yMove > 0)
                     {
-                        float nv = (v.y + (yMove / (0.3f * (f + 5)))) - Math.Abs((xMove / (0.5f * (f + 5))));
-                        if (nv < 0) nv = 0;
-                        if (nv > 119) nv = 119;
+                        float nv = (v.y + (yMove / (0.15f * (f + 5)))) - Math.Abs((xMove / (0.2f * (f + 5))));
+                        if (nv < 0)
+                        {
+                            nv = 0;
+                            mvd.color = 249 - 168;
+                        }
+                        if (nv > 119)
+                        {
+                            nv = 119;
+                            mvd.color = 249 - 168;
+                        }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
                     else if (yMove < 0)
                     {
-                        float nv = (v.y + (yMove / (0.3f * (f + 5)))) + Math.Abs((xMove / (0.5f * (f + 5))));
-                        if (nv < 0) nv = 0;
-                        if (nv > 119) nv = 119;
+                        float nv = (v.y + (yMove / (0.15f * (f + 5)))) + Math.Abs((xMove / (0.2f * (f + 5))));
+                        if (nv < 0)
+                        {
+                            nv = 0;
+                            mvd.color = 249 - 168;
+                        }
+                        if (nv > 119)
+                        {
+                            nv = 119;
+                            mvd.color = 249 - 168;
+                        }
                         mvd.y = (byte)(Math.Ceiling(nv));
                     }
                     else
@@ -2078,12 +2114,16 @@ MovementType.Foot};
                     //}
                     if (zMove != 0)
                     {
-                        float nv = (v.z + (zMove * 1.2f));
+                        float nv = (v.z + (zMove * 1.3f));
 
                         if (nv <= 0 && f < 8) nv = r.Next(2); //bounce
                         else if (nv < 0) nv = 0;
 
-                        if (nv > 79) nv = 79;
+                        if (nv > 79)
+                        {
+                            nv = 79;
+                            mvd.color = 249 - 168;
+                        }
                         mvd.z = (byte)Math.Round(nv);
                     }
                     else
@@ -5631,7 +5671,7 @@ MovementType.Foot};
                 {
                     continue;
                 }
-                else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80) 
                 {
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
@@ -5849,7 +5889,7 @@ MovementType.Foot};
                 {
                     continue;
                 }
-                else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80) // || current_color == 136
                 {
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
