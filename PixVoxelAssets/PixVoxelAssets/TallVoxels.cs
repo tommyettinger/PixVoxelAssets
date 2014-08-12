@@ -23,22 +23,99 @@ namespace AssetsPV
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River", "Basement"};
         public static string[] Directions = { "SE", "SW", "NW", "NE" };
-
         public static string[] CurrentUnits = {
-"Person"};
-        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30);
+"Infantry", "Infantry_P", "Infantry_S", "Infantry_T",
+"Artillery", "Artillery_P", "Artillery_S", "Artillery_T",
+"Tank", "Tank_P", "Tank_S", "Tank_T",
+"Plane", "Plane_P", "Plane_S", "Plane_T",
+"Supply", "Supply_P", "Supply_S", "Supply_T",
+"Copter", "Copter_P", "Copter_S", "Copter_T", 
+"City", "Factory", "Airport", "Laboratory", "Castle", "Estate"};
+        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30), TerrainLookup = new Dictionary<string, int>(10);
+        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(30), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
+        public static List<int>[] TerrainToUnits = new List<int>[30];
+        public static Dictionary<int, List<MovementType>> TerrainToMobilities = new Dictionary<int, List<MovementType>>();
+        public static int[] CurrentSpeeds = {
+3, 3, 5, 3,
+4, 3, 6, 4,
+6, 4, 7, 6,
+7, 5, 9, 8,
+5, 5, 6, 6,
+7, 5, 8, 7, 
+0,0,0,0,0,0};
         public static int[][] CurrentWeapons = {
-new int[] {-1, -1}};
+new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
+new int[] {-1, 4}, new int[] {3, -1}, new int[] {-1, 6}, new int[] {-1, 6},
+new int[] {3, 1}, new int[] {3, 1}, new int[] {1, -1}, new int[] {1, 3},
+new int[] {1, -1}, new int[] {-1, 7}, new int[] {5, -1}, new int[] {5, -1},
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
+new int[] {-1, -1}, new int[] {1, 5}, new int[] {1, -1}, new int[] {-1, -1},
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}
+};
         public static int[][] CurrentWeaponReceptions = {
-new int[] {-1, -1}};
+new int[] {1, -1}, new int[] {1, 3}, new int[] {2, -1}, new int[] {1, 1},
+new int[] {-1, 3}, new int[] {4, -1}, new int[] {-1, 3}, new int[] {-1, 4},
+new int[] {2, 1}, new int[] {4, 2}, new int[] {2, -1}, new int[] {1, 2},
+new int[] {2, -1}, new int[] {-1, 4}, new int[] {1, -1}, new int[] {2, -1},
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
+new int[] {-1, -1}, new int[] {2, 2}, new int[] {2, -1}, new int[] {-1, -1},
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}
+};
         public static MovementType[] CurrentMobilities = {
-MovementType.Foot};
+MovementType.Foot, MovementType.Foot, MovementType.WheelsTraverse, MovementType.Foot,
+MovementType.Treads, MovementType.Treads, MovementType.Treads, MovementType.Wheels,
+MovementType.Treads, MovementType.Treads, MovementType.Treads, MovementType.TreadsAmphi,
+MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flight,
+MovementType.Wheels, MovementType.Treads, MovementType.TreadsAmphi, MovementType.Wheels,
+MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flight, 
+MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, 
+                                                         };
 
         public static void Initialize()
         {
+            MovementType[] values = (MovementType[])Enum.GetValues(typeof(MovementType));
+            foreach (MovementType v in values)
+            {
+                MobilityToUnits[v] = new List<int>();
+            }
+            for (int t = 0; t < Terrains.Length; t++)
+            {
+                TerrainLookup[Terrains[t]] = t;
+                TerrainToMobilities[t] = new List<MovementType>();
+                TerrainToUnits[t] = new List<int>();
+            }
             for (int i = 0; i < CurrentUnits.Length; i++)
             {
                 UnitLookup[CurrentUnits[i]] = i;
+                MobilityToUnits[CurrentMobilities[i]].Add(i);
+            }
+            MobilityToTerrains[MovementType.Flight] =
+                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            MobilityToTerrains[MovementType.Foot] =
+                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            MobilityToTerrains[MovementType.Treads] =
+                new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
+            MobilityToTerrains[MovementType.TreadsAmphi] =
+                new List<int>() { 0, 1, 2, 3, 6, 7, 8, 9 };
+            MobilityToTerrains[MovementType.Wheels] =
+                new List<int>() { 0, 2, 7, 8, };
+            MobilityToTerrains[MovementType.WheelsTraverse] =
+                new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
+            MobilityToTerrains[MovementType.Immobile] =
+                new List<int>() { };
+
+            foreach (var kv in MobilityToTerrains)
+            {
+                foreach (int t in kv.Value)
+                {
+                    TerrainToMobilities[t].Add(kv.Key);
+                }
+            }
+            foreach (var kv in TerrainToMobilities)
+            {
+                foreach (MovementType m in kv.Value)
+                    TerrainToUnits[kv.Key].AddRange(MobilityToUnits[m]);
+                TerrainToUnits[kv.Key] = TerrainToUnits[kv.Key].Distinct().ToList();
             }
         }
 
@@ -480,7 +557,8 @@ MovementType.Foot};
                    ColorMatrixFlag.Default,
                    ColorAdjustType.Bitmap);
                 g.DrawImage((current_color / 8 == 10) ? spin :
-                   (xcolors[current_color][3] == 1F) ? image : (xcolors[current_color][3] == flat_alpha) ? flat : spin,
+                   (xcolors[current_color][3] == 1F || current_color / 8 == 13 || current_color / 8 == 15 || current_color / 8 == 16) ? image :
+                   (xcolors[current_color][3] == flat_alpha) ? flat : spin,
                    new Rectangle(0, 0,
                        width, height),  // destination rectangle 
                     //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
@@ -580,6 +658,144 @@ MovementType.Foot};
                 color = stream.ReadByte();
             }
         }
+        public class Bresenham3D : IEnumerable<MagicaVoxelData>
+        {
+            MagicaVoxelData start;
+            MagicaVoxelData end;
+            float steps = 1;
+
+            public Bresenham3D(MagicaVoxelData p_start, MagicaVoxelData p_end)
+            {
+                start = p_start;
+                end = p_end;
+                steps = 1;
+            }
+
+            public IEnumerator<MagicaVoxelData> GetEnumerator()
+            {
+                MagicaVoxelData result = new MagicaVoxelData { x = start.x, y = start.y, z = start.z, color = start.color };
+
+                int xd, yd, zd;
+                int x, y, z;
+                int ax, ay, az;
+                int sx, sy, sz;
+                int dx, dy, dz;
+
+                dx = (int)(end.x - start.x);
+                dy = (int)(end.y - start.y);
+                dz = (int)(end.z - start.z);
+
+                ax = Math.Abs(dx) << 1;
+                ay = Math.Abs(dy) << 1;
+                az = Math.Abs(dz) << 1;
+
+                sx = (int)Math.Sign((float)dx);
+                sy = (int)Math.Sign((float)dy);
+                sz = (int)Math.Sign((float)dz);
+
+                x = (int)start.x;
+                y = (int)start.y;
+                z = (int)start.z;
+
+                if (ax >= Math.Max(ay, az)) // x dominant
+                {
+                    yd = ay - (ax >> 1);
+                    zd = az - (ax >> 1);
+                    for (; ; )
+                    {
+                        result.x = (byte)(x / steps);
+                        result.y = (byte)(y / steps);
+                        result.z = (byte)(z / steps);
+                        yield return result;
+
+                        if (x == (int)end.x)
+                            yield break;
+
+                        if (yd >= 0)
+                        {
+                            y += sy;
+                            yd -= ax;
+                        }
+
+                        if (zd >= 0)
+                        {
+                            z += sz;
+                            zd -= ax;
+                        }
+
+                        x += sx;
+                        yd += ay;
+                        zd += az;
+                    }
+                }
+                else if (ay >= Math.Max(ax, az)) // y dominant
+                {
+                    xd = ax - (ay >> 1);
+                    zd = az - (ay >> 1);
+                    for (; ; )
+                    {
+                        result.x = (byte)(x / steps);
+                        result.y = (byte)(y / steps);
+                        result.z = (byte)(z / steps);
+                        yield return result;
+
+                        if (y == (byte)end.y)
+                            yield break;
+
+                        if (xd >= 0)
+                        {
+                            x += sx;
+                            xd -= ay;
+                        }
+
+                        if (zd >= 0)
+                        {
+                            z += sz;
+                            zd -= ay;
+                        }
+
+                        y += sy;
+                        xd += ax;
+                        zd += az;
+                    }
+                }
+                else if (az >= Math.Max(ax, ay)) // z dominant
+                {
+                    xd = ax - (az >> 1);
+                    yd = ay - (az >> 1);
+                    for (; ; )
+                    {
+                        result.x = (byte)(x / steps);
+                        result.y = (byte)(y / steps);
+                        result.z = (byte)(z / steps);
+                        yield return result;
+
+                        if (z == (byte)end.z)
+                            yield break;
+
+                        if (xd >= 0)
+                        {
+                            x += sx;
+                            xd -= az;
+                        }
+
+                        if (yd >= 0)
+                        {
+                            y += sy;
+                            yd -= az;
+                        }
+
+                        z += sz;
+                        xd += ax;
+                        yd += ay;
+                    }
+                }
+            }
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
         private static int sizex = 0, sizey = 0, sizez = 0;
         /// <summary>
         /// Load a MagicaVoxel .vox format file into a MagicaVoxelData[] that we use for voxel chunks.
@@ -662,7 +878,8 @@ MovementType.Foot};
                     */
                     voxelsAltered.Add(voxelData[i]);
                     if (-1 == taken[voxelData[i].x, voxelData[i].y] && voxelData[i].color != 249 - 80 && voxelData[i].color != 249 - 104 && voxelData[i].color != 249 - 112
-                         && voxelData[i].color != 249 - 96 && voxelData[i].color != 249 - 128 && voxelData[i].color != 249 - 136 && voxelData[i].color != 249 - 152 && voxelData[i].color != 249 - 160)
+                         && voxelData[i].color != 249 - 96 && voxelData[i].color != 249 - 128 && voxelData[i].color != 249 - 136 && voxelData[i].color != 249 - 152 && voxelData[i].color != 249 - 160
+                         && voxelData[i].color > 249 - 168)
                     {
                         MagicaVoxelData vox = new MagicaVoxelData();
                         vox.x = voxelData[i].x;
@@ -947,7 +1164,7 @@ MovementType.Foot};
                 for (int i = 0; i < voxelData.Count; i++)
                 {
                     // do not store this voxel if it lies out of range of the voxel chunk (32x128x32)
-                    if (voxelData[i].x > 31 || voxelData[i].y > 31 || voxelData[i].z > 127) continue;
+                    //if (voxelData[i].x > 31 || voxelData[i].y > 31 || voxelData[i].z > 127) continue;
 
                     voxelsAltered.Add(voxelData[i]);
 
@@ -2182,7 +2399,235 @@ MovementType.Foot};
             }
             return frames;
         }
+        private static List<MagicaVoxelData> generateFatVoxel(MagicaVoxelData start, int color)
+        {
+            List<MagicaVoxelData> vox = new List<MagicaVoxelData>(8);
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 2; y++)
+                {
+                    for (int z = 0; z < 2; z++)
+                    {
+                        vox.Add(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + y), z = (byte)(start.z + z), color = (byte)color });
+                    }
+                }
+            }
+            return vox;
+        }
+        private static List<MagicaVoxelData> generateCube(MagicaVoxelData start, int size, int color)
+        {
+            List<MagicaVoxelData> vox = new List<MagicaVoxelData>(8);
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    for (int z = 0; z < size; z++)
+                    {
+                        vox.Add(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + y), z = (byte)(start.z + z), color = (byte)color });
+                    }
+                }
+            }
+            return vox;
+        }
+        private static List<MagicaVoxelData> generateStraightLine(MagicaVoxelData start, MagicaVoxelData end, int color)
+        {
+            List<MagicaVoxelData> vox = new List<MagicaVoxelData>(16);
+            MagicaVoxelData newStart = new MagicaVoxelData { x = (start.x < end.x) ? start.x : end.x, y = (start.y < end.y) ? start.y : end.y, z = (start.z < end.z) ? start.z : end.z, color = (byte)color };
+            MagicaVoxelData newEnd = new MagicaVoxelData { x = (start.x > end.x) ? start.x : end.x, y = (start.y > end.y) ? start.y : end.y, z = (start.z > end.z) ? start.z : end.z, color = (byte)color };
+            Bresenham3D line = new Bresenham3D(newStart, newEnd);
+            foreach(MagicaVoxelData l in line)
+            {
+                vox.Add(l);
+            }
+/*            for (int x = newStart.x; x <= newEnd.x; x++)
+            {
+                for (int y = newStart.y; y <= newEnd.y; y++)
+                {
+                    for (int z = newStart.z; z <= newEnd.z; z++)
+                    {
+                        vox.Add(new MagicaVoxelData { x = (byte)(x), y = (byte)(y), z = (byte)(z), color = (byte)color });
+                    }
+                }
+            }*/
+            return vox;
+        }
+        private static List<MagicaVoxelData> generateFatStraightLine(MagicaVoxelData start, MagicaVoxelData end, int color)
+        {
+            List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 2; y++)
+                {
+                    for (int z = 0; z < 2; z++)
+                    {
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y+ y), z = (byte)(start.z + z), color = (byte)color },
+                            new MagicaVoxelData { x = (byte)(end.x + x), y = (byte)(end.y + y), z = (byte)(end.z + z), color = (byte)color }, color));
+                    }
+                }
+            }
+            return vox;
+        }
+        private static List<MagicaVoxelData> generateMissileDouble(MagicaVoxelData start, int length)
+        {
+            List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
+            for (int x = 0; x < 3; x++)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y), z = (byte)(start.z + z), color = (byte)(249 - 40) },
+                            new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + 3), z = (byte)(start.z + z), color = (byte)(249 - 40) }, 249 - 40));
+                }
+            }
 
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 1), z = (byte)(start.z), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 1), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 2), z = (byte)(start.z), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 2), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 2), y = (byte)(start.y + 1), z = (byte)(start.z + 3), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 0), y = (byte)(start.y + 1), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 2), y = (byte)(start.y + 2), z = (byte)(start.z + 3), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 0), y = (byte)(start.y + 2), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    if (length > 0 || x - 1 > length)
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + y), z = (byte)(start.z - 1), color = (byte)(249 - 72) },
+                        new MagicaVoxelData { x = (byte)(start.x + x - 1 - length), y = (byte)(start.y + y), z = (byte)(start.z - 2 - length), color = (byte)(249 - 72) }, 249 - 72));
+                }
+            }
+
+            for (int z = 0; z < 2; z++)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    if (length > 0 || z - 1 > length)
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 1), y = (byte)(start.y + y), z = (byte)(start.z + z), color = (byte)(249 - 72) },
+                        new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)(start.z + z - 1 - length), color = (byte)(249 - 72) }, 249 - 72));
+                
+                }
+            }
+
+            if (length > 0)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 1), y = (byte)(start.y + y), z = (byte)(start.z - 1), color = (byte)(249 - 72) },
+                    new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)(start.z - 2 - length), color = (byte)(249 - 72) }, 249 - 72));
+                }
+            }
+            return vox;
+        }
+        private static List<MagicaVoxelData> generateMissileFieryTrailDouble(MagicaVoxelData start, int length)
+        {
+            List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
+            for (int x = 0; x < 3; x++)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                    vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y), z = (byte)(start.z + z), color = (byte)(249 - 40) },
+                        new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + 3), z = (byte)(start.z + z), color = (byte)(249 - 40) }, 249 - 40));
+                }
+            }
+
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 1), z = (byte)(start.z), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 1), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 2), z = (byte)(start.z), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 3), y = (byte)(start.y + 2), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 2), y = (byte)(start.y + 1), z = (byte)(start.z + 3), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 0), y = (byte)(start.y + 1), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + 2), y = (byte)(start.y + 2), z = (byte)(start.z + 3), color = (byte)(249 - 40) },
+                new MagicaVoxelData { x = (byte)(start.x + 0), y = (byte)(start.y + 2), z = (byte)(start.z + 3), color = (byte)(249 - 40) }, 249 - 40));
+
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    if (length > 0 || x - 1 > length)
+                    {
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + y), z = (byte)(start.z - 1), color = (byte)(249 - 72) },
+                        new MagicaVoxelData { x = (byte)(start.x + x - 1 - length), y = (byte)(start.y + y), z = (byte)(start.z - 2 - length), color = (byte)(249 - 72) }, 249 - 72));
+                        if (x % 2 == 1)
+                        {
+                            vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x - 1 - length), y = (byte)(start.y + y), z = (byte)(start.z - 2 - length), color = (byte)(249 - 72) },
+                                new MagicaVoxelData { x = (byte)(start.x + x - ((y > 0 && y < 3 && x < 2) ? 9 : 5) - length), y = (byte)(start.y + y), z = (byte)(start.z - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length), color = (byte)(249 - 72) },
+                                (y > 0 && y < 3 && x > 0) ? 249 - 160 : 249 - 152));
+                        }
+                    }
+                }
+            }
+
+            for (int z = 0; z < 2; z++)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    if (length > 0 || z - 1 > length)
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 1), y = (byte)(start.y + y), z = (byte)(start.z + z), color = (byte)(249 - 72) },
+                        new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)(start.z + z - 1 - length), color = (byte)(249 - 72) }, 249 - 72));
+                    if (z % 2 == 1)
+                    {
+                        vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)(start.z + z - 1 - length), color = (byte)(249 - 72) },
+                            new MagicaVoxelData { x = (byte)(start.x - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length), y = (byte)(start.y + y), z = (byte)(start.z + z - ((y > 0 && y < 3 && z < 2) ? 9 : 5) - length), color = (byte)(249 - 72) },
+                            (y > 0 && y < 3 && z < 2) ? 249 - 160 : 249 - 152));
+                    }
+                }
+            }
+            if (length > 0)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 1), y = (byte)(start.y + y), z = (byte)(start.z - 1), color = (byte)(249 - 72) },
+                    new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)(start.z - 2 - length), color = (byte)(249 - 72) }, 249 - 72));
+                }
+            }
+            return vox;
+            /*
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 0), z = (byte)(launcher.z + 4), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 4), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = (byte)(launcher.y - 0), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 0), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 4), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 4), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 3), color = 249 - 152 });
+
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = launcher.y, z = (byte)(launcher.z + 2), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 2), color = 249 - 152 });
+
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 2), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 2), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 2), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 2), color = 249 - 152 });
+
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 1), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 1), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y - 1), z = (byte)(launcher.z + 3), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 3), color = 249 - 152 });
+
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = launcher.y, z = (byte)(launcher.z + 2), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 2), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 1), color = 249 - 152 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 1), color = 249 - 152 });
+
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x), y = (byte)(launcher.y), z = (byte)(launcher.z), color = 249 - 160 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y), z = (byte)(launcher.z), color = 249 - 160 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x), y = (byte)(launcher.y), z = (byte)(launcher.z + 1), color = 249 - 160 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y + 1), z = (byte)(launcher.z), color = 249 - 160 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 1), color = 249 - 160 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y), z = (byte)(launcher.z + 1), color = 249 - 160 });
+            missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x + 1), y = (byte)(launcher.y + 1), z = (byte)(launcher.z + 1), color = 249 - 160 });*/
+
+        }
         public static MagicaVoxelData[][] SmokePlume(MagicaVoxelData start, int height, int effectDuration)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[16];
@@ -3155,6 +3600,207 @@ MovementType.Foot};
             }
             return voxelFrames;
         }
+        public static MagicaVoxelData[][] CannonAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
+            parsedFrames[0].CopyTo(voxelFrames[0], 0);
+            parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(40);
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+
+            List<int> known = new List<int>(30);
+            foreach (MagicaVoxelData mvd in voxelFrames[0])
+            {
+                if(known.Contains(249 - mvd.color))
+                {
+
+                }
+                else
+                {
+                    known.Add(249 - mvd.color);
+                    Console.Write((249 - mvd.color) + " ");
+                }
+                if (mvd.color < 249 - 168)
+                {
+                    launchers.Add(mvd);
+                }
+            }
+            int maxY = launchers.Max(v => v.y);
+            int minY = launchers.Max(v => v.y);
+            float midY = (maxY + minY) / 2F;
+//            List<MagicaVoxelData>[] halves = { launchers.Where(mvd => (mvd.y <= midY)).ToList(), launchers.Where(mvd => (mvd.y > midY)).ToList() };
+            List<MagicaVoxelData>[] halves = { launchers.ToList(), launchers.ToList() };
+
+            for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            {
+                extra[f] = new List<MagicaVoxelData>(1024);
+
+                //if (f > 0)
+                //{
+                //    for (int i = 0; i < extra[f-1].Count; i++)
+                //    {
+                //        extra[f].Add(new MagicaVoxelData { x = (byte)(extra[f-1][i].x + 2), y = (byte)(extra[f-1][i].y + Math.Round(r.NextDouble() * 1.1 - 0.55)),
+                //            z = extra[f-1][i].z, color = extra[f-1][i].color });
+                //    }
+                //}
+                if (f == 0 || f == 1)
+                {
+                    foreach (MagicaVoxelData launcher in halves[0])
+                    {
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 10), y = launcher.y, z = launcher.z, color = (byte)(249 - 160) }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = launcher.y, z = (byte)(launcher.z + 6), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = launcher.y, z = (byte)(launcher.z - 6), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 6), z = launcher.z, color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 6), z = launcher.z, color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 2), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 2), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z + 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z - 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z + 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z - 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        
+                        extra[f] = extra[f].Where(v => r.Next(10) > 0).ToList();
+
+                    }
+                }
+                else if (f == 1 || f == 2)
+                {
+
+                    foreach (MagicaVoxelData launcher in halves[1])
+                    {
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 10), y = launcher.y, z = launcher.z, color = (byte)(249 - 160) }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = launcher.y, z = (byte)(launcher.z + 6), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = launcher.y, z = (byte)(launcher.z - 6), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 6), z = launcher.z, color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 6), z = launcher.z, color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 2), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 2), z = (byte)(launcher.z - 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z + 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y + 4), z = (byte)(launcher.z - 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z + 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 8), y = (byte)(launcher.y - 4), z = (byte)(launcher.z - 2), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
+                        
+                        extra[f] = extra[f].Where(v => r.Next(10) > 0).ToList();
+
+                    }
+                }
+                else if (f == 3)
+                {
+                    foreach (MagicaVoxelData launcher in launchers)
+                    {
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = launcher.y, z = launcher.z, color = (byte)(249 - 160) }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 2), color = 249 - 160 }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 2), z = launcher.z, color = 249 - 160 }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 2), color = 249 - 160 }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = launcher.z, color = 249 - 160 }, 249 - 136));
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(6) > 2).ToList();
+
+                }
+                else if (f == 4)
+                {
+                    foreach (MagicaVoxelData launcher in launchers)
+                    {
+                        extra[f].AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 2), color = (byte)(249 - 136) },
+                            new MagicaVoxelData { x = (byte)(launcher.x + 5), y = launcher.y, z = launcher.z, color = (byte)(249 - 160) }, 249 - 136));
+
+                        extra[f].AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 2), color = (byte)(249 - 136) },
+                            new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 4), color = (byte)(249 - 160) }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 2), color = (byte)(249 - 136) },
+                            new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 2), color = (byte)(249 - 160) }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 2), color = (byte)(249 - 136) },
+                            new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 4), color = (byte)(249 - 160) }, 249 - 136));
+                        extra[f].AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = (byte)(launcher.z + 2), color = (byte)(249 - 136) },
+                            new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 2), color = (byte)(249 - 160) }, 249 - 136));
+
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(6) > 2 && r.Next(6) > 1).ToList();
+
+                }
+                else if (f == 5)
+                {
+                    foreach (MagicaVoxelData launcher in launchers)
+                    {
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 5), z = (byte)(launcher.z + 5), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 5), z = (byte)(launcher.z + 5), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 5), z = (byte)(launcher.z + 5), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 5), z = (byte)(launcher.z + 5), color = 249 - 136 }, 249 - 136));
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(6) > 3 && r.Next(6) > 2).ToList();
+
+                }
+                else if (f == 6)
+                {
+                    foreach (MagicaVoxelData launcher in launchers)
+                    {
+
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 7), z = (byte)(launcher.z + 5), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 7), z = (byte)(launcher.z + 5), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 3 + r.Next(6)), z = (byte)(launcher.z + 9), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 3 - r.Next(6)), z = (byte)(launcher.z + 9), color = 249 - 136 }, 249 - 136));
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(6) > 4 && r.Next(6) > 3).ToList();
+
+                }
+                else if (f == 7)
+                {
+                    foreach (MagicaVoxelData launcher in launchers)
+                    {
+
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 7), z = (byte)(launcher.z + 6), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 7), z = (byte)(launcher.z + 6), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 3 + r.Next(6)), z = (byte)(launcher.z + 10), color = 249 - 136 }, 249 - 136));
+                        extra[f].AddRange(generateFatVoxel(new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 3 - r.Next(6)), z = (byte)(launcher.z + 10), color = 249 - 136 }, 249 - 136));
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(7) > 5 && r.Next(6) > 4).ToList();
+
+                }
+            }
+            for (int f = 1; f < voxelFrames.Length - 1; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(parsedFrames[f]);
+                if (f == 2 || f == 4)
+                {
+                    for (int i = 0; i < working.Count; i++)
+                    {
+                        working[i] = new MagicaVoxelData { x = (byte)(working[i].x - 1), y = working[i].y, z = working[i].z, color = working[i].color };
+                    }
+                }
+                else if (f == 3)
+                {
+                    for (int i = 0; i < working.Count; i++)
+                    {
+                        working[i] = new MagicaVoxelData { x = (byte)(working[i].x - 2), y = working[i].y, z = working[i].z, color = working[i].color };
+                    }
+                }
+                working.AddRange(extra[f - 1]);
+                voxelFrames[f] = working.ToArray();
+            }
+            return voxelFrames;
+        }
 
         public static MagicaVoxelData[][] CannonReceiveAnimation(MagicaVoxelData[][] parsedFrames, int strength)
         {
@@ -3703,9 +4349,34 @@ MovementType.Foot};
             List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
             for (int x = 0; x < segments; x++)
             {
+                for (float y = 0; y <= x * 0.75f; y++)
+                {
+                    for (float z = 0; z <= x * 0.75f; z++)
+                    {
+                        if (Math.Floor(y) == y && Math.Floor(z) == z)
+                        {
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z - 1), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z - 1), color = (byte)color });
+                        }
+                    }
+                }
+            }
+            return cone;
+
+        }
+
+        private static List<MagicaVoxelData> generateConeDouble(MagicaVoxelData start, int segments, int color)
+        {
+            List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
+            for (int x = 0; x < segments * 2; x++)
+            {
                 for (int y = 0; y <= x; y++)
                 {
-                    for (int z = 0; z <= segments; z++)
+                    for (int z = 0; z <= x; z++)
                     {
 
                         cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
@@ -3727,7 +4398,29 @@ MovementType.Foot};
             {
                 for (int y = 0; y <= x; y++)
                 {
-                    for (int z = 0; z <= segments; z++)
+                    for (int z = 0; z <= x; z++)
+                    {
+
+                        cone.Add(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + 0 - y), z = (byte)(start.z + z), color = (byte)color });
+                        cone.Add(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + 1 + y), z = (byte)(start.z + z), color = (byte)color });
+                        cone.Add(new MagicaVoxelData { x = (byte)(start.x + x + 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z + z), color = (byte)color });
+                        cone.Add(new MagicaVoxelData { x = (byte)(start.x + x + 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z + z), color = (byte)color });
+                        cone.Add(new MagicaVoxelData { x = (byte)(start.x + x + 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z + z + 1), color = (byte)color });
+                        cone.Add(new MagicaVoxelData { x = (byte)(start.x + x + 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z + z + 1), color = (byte)color });
+                    }
+                }
+            }
+            return cone;
+
+        }
+        private static List<MagicaVoxelData> generateDownwardConeDouble(MagicaVoxelData start, int segments, int color)
+        {
+            List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
+            for (int x = 0; x < segments; x++)
+            {
+                for (int y = 0; y <= x; y++)
+                {
+                    for (int z = 0; z <= x; z++)
                     {
 
                         cone.Add(new MagicaVoxelData { x = (byte)(start.x + x), y = (byte)(start.y + 0 - y), z = (byte)(start.z + z), color = (byte)color });
@@ -3978,6 +4671,109 @@ MovementType.Foot};
                 {
                     extra[f].AddRange(generateCone(new MagicaVoxelData { x = (byte)(launcher.x + 3 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z + 3 * (f - 3)), color = 249 - 136 }, (f + f) / 3, 249 - 136).Where(v => r.Next(95) > f * f));
 
+                }
+            }
+            for (int f = 1; f < voxelFrames.Length - 1; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(parsedFrames[f]);
+                working.AddRange(missile[f - 1]);
+                working.AddRange(extra[f - 1]);
+                voxelFrames[f] = working.ToArray();
+            }
+            return voxelFrames;
+        }
+        public static MagicaVoxelData[][] ArcMissileAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
+            parsedFrames[0].CopyTo(voxelFrames[0], 0);
+            parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(4), trails = new List<MagicaVoxelData>(4);
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2], missile = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+            foreach (MagicaVoxelData mvd in voxelFrames[0])
+            {
+                if (mvd.color == 249 - 170)
+                {
+                    launchers.Add(mvd);
+                }
+            }
+            int maxY = launchers.Max(v => v.y);
+            int minY = launchers.Max(v => v.y);
+            float midY = (maxY + minY) / 2F;
+            MagicaVoxelData launcher = launchers.RandomElement();
+            MagicaVoxelData trail = trails.RandomElement();
+            for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            {
+                extra[f] = new List<MagicaVoxelData>(160);
+                missile[f] = new List<MagicaVoxelData>(160);
+                /*
+                if (f > 1)
+                {
+                    for (int i = 0; i < missile[f - 1].Count; i++)
+                    {
+                        missile[f].Add(new MagicaVoxelData
+                        {
+                            x = (byte)(missile[f - 1][i].x + 4),
+                            y = (byte)(missile[f - 1][i].y),
+                            z = (byte)(missile[f - 1][i].z + 4),
+                            color = missile[f - 1][i].color
+                        });
+                    }
+                }*/
+                if (f == 0)
+                {
+                    missile[f].AddRange(generateMissileDouble(launcher, 0));
+                }
+                if (f == 1)
+                {
+                    missile[f].AddRange(generateMissileDouble(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = launcher.y, z = (byte)(launcher.z + 4), color = 249 - 40 }, 4));
+                }
+                else if (f == 2)
+                {
+                    missile[f].AddRange(generateMissileDouble(new MagicaVoxelData { x = (byte)(launcher.x + 12), y = launcher.y, z = (byte)(launcher.z + 12), color = 249 - 40 }, 12));
+                }
+                else if (f == 3)
+                {
+                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 20), y = launcher.y, z = (byte)(launcher.z + 20), color = 249 - 40 }, 12));
+                }
+                else if (f == 4)
+                {
+                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 28), y = launcher.y, z = (byte)(launcher.z + 28), color = 249 - 40 }, 12));
+
+                    extra[f].AddRange(generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 1), z = launcher.z, color = 249 - 120 }, 6, 249 - 120));
+
+                    extra[f] = extra[f].Where(v => r.Next(5) == 0).ToList();
+
+
+                }
+                else if (f == 5)
+                {
+                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 36), y = launcher.y, z = (byte)(launcher.z + 36), color = 249 - 40 }, 12));
+
+                    extra[f].AddRange(generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 1), z = launcher.z, color = 249 - 120 }, 6, 249 - 120));
+
+                    extra[f] = extra[f].Where(v => r.Next(7) == 0).ToList();
+                    //extra[f].AddRange(generateCone(new MagicaVoxelData { x = (byte)(launcher.x + 6), y = (byte)(launcher.y), z = (byte)(launcher.z + 6), color = 249 - 136 }, 4, 249 - 120));
+
+                }
+                else if (f == 6)
+                {
+                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 44), y = launcher.y, z = (byte)(launcher.z + 44), color = 249 - 40 }, 12));
+
+                    extra[f].AddRange(generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 2), z = launcher.z, color = 249 - 120 }, 8, 249 - 120));
+
+                    extra[f] = extra[f].Where(v => r.Next(20) == 0).ToList();
+
+                }
+                else if(f > 6)
+                {
+                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 8 + f * 8), y = launcher.y, z = (byte)(launcher.z + 8 + f * 8), color = 249 - 40 }, 12));
+                }
+                if (f >= 4)
+                {
+                    extra[f].AddRange(generateCone(new MagicaVoxelData { x = (byte)(launcher.x + 3 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z + 3 * (f - 3)), color = 249 - 136 }, (f * 3) / 2, 249 - 136).
+                        Where(v => r.Next(15) > f && r.Next(15) > f && r.Next(15) > f));
                 }
             }
             for (int f = 1; f < voxelFrames.Length - 1; f++)
@@ -4442,63 +5238,10 @@ MovementType.Foot};
 
 
         private static AnimationGenerator[] weaponAnimations = { HandgunAnimation, MachineGunAnimation, AAGunAnimation, CannonAnimation, LongCannonAnimation, RocketAnimation, ArcMissileAnimation, BombAnimation };
+        private static AnimationGenerator[] weaponAnimationsDouble = { HandgunAnimation, MachineGunAnimation, AAGunAnimation, CannonAnimationDouble, LongCannonAnimation, RocketAnimation, ArcMissileAnimationDouble, BombAnimation };
         private static AnimationGenerator[] receiveAnimations = { HandgunReceiveAnimation, MachineGunReceiveAnimation, MachineGunReceiveAnimation,
                                                                     CannonReceiveAnimation, LongCannonReceiveAnimation,
                                                                     RocketReceiveAnimation, ArcMissileReceiveAnimation, BombReceiveAnimation};
-
-        public static MagicaVoxelData[][] makeFiringAnimation(MagicaVoxelData[][] parsedFrames, int unit, int weapon)
-        {
-            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
-            //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
-            parsedFrames.CopyTo(voxelFrames, 0);
-            /*for (int i = 0; i < parsedFrames[0].Length; i++)
-            {
-                voxelFrames[0][i].x += 5;
-                voxelFrames[0][i].y += 5;
-            }*/
-            Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
-            if (CurrentWeapons[unit][weapon] == -1)
-            {
-                return new MagicaVoxelData[0][];
-            }
-            else
-            {
-                voxelFrames = weaponAnimations[CurrentWeapons[unit][weapon]](voxelFrames, unit);
-            }
-            for (int f = 0; f < parsedFrames.Length; f++)
-            {
-
-                List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
-                int[,] taken = new int[30, 30];
-                taken.Fill(-1);
-                for (int i = 0; i < voxelFrames[f].Length; i++)
-                {
-                    // do not store this voxel if it lies out of range of the voxel chunk (60x60x40)
-                    if (voxelFrames[f][i].x >= 60 || voxelFrames[f][i].y >= 60 || voxelFrames[f][i].z >= 60)
-                    {
-                        Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
-                        continue;
-                    }
-
-                    altered.Add(voxelFrames[f][i]);
-                    if (-1 == taken[voxelFrames[f][i].x, voxelFrames[f][i].y] && voxelFrames[f][i].color != 249 - 80 && voxelFrames[f][i].color != 249 - 104 && voxelFrames[f][i].color != 249 - 112
-                         && voxelFrames[f][i].color != 249 - 96 && voxelFrames[f][i].color != 249 - 128 && voxelFrames[f][i].color != 249 - 136
-                         && voxelFrames[f][i].color != 249 - 152 && voxelFrames[f][i].color != 249 - 160 && voxelFrames[f][i].color > 249 - 168)
-                    {
-                        MagicaVoxelData vox = new MagicaVoxelData();
-                        vox.x = voxelFrames[f][i].x;
-                        vox.y = voxelFrames[f][i].y;
-                        vox.z = (byte)(0);
-                        vox.color = 249 - 96;
-                        taken[vox.x, vox.y] = altered.Count();
-                        altered.Add(vox);
-                    }
-                }
-                voxelFrames[f] = altered.ToArray();
-            }
-
-            return voxelFrames;
-        }
 
         public static MagicaVoxelData[][] makeFiringAnimation(MagicaVoxelData[] parsed, int unit, int weapon)
         {
@@ -4534,6 +5277,64 @@ MovementType.Foot};
                 {
                     // do not store this voxel if it lies out of range of the voxel chunk (60x60x60)
                     if (voxelFrames[f][i].x >= 60 || voxelFrames[f][i].y >= 60 || voxelFrames[f][i].z >= 60)
+                    {
+                        Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                        continue;
+                    }
+
+                    altered.Add(voxelFrames[f][i]);
+                    if (-1 == taken[voxelFrames[f][i].x, voxelFrames[f][i].y] && voxelFrames[f][i].color != 249 - 80 && voxelFrames[f][i].color != 249 - 104 && voxelFrames[f][i].color != 249 - 112
+                         && voxelFrames[f][i].color != 249 - 96 && voxelFrames[f][i].color != 249 - 128 && voxelFrames[f][i].color != 249 - 136
+                         && voxelFrames[f][i].color != 249 - 152 && voxelFrames[f][i].color != 249 - 160 && voxelFrames[f][i].color > 249 - 168)
+                    {
+                        MagicaVoxelData vox = new MagicaVoxelData();
+                        vox.x = voxelFrames[f][i].x;
+                        vox.y = voxelFrames[f][i].y;
+                        vox.z = (byte)(0);
+                        vox.color = 249 - 96;
+                        taken[vox.x, vox.y] = altered.Count();
+                        altered.Add(vox);
+                    }
+                }
+                voxelFrames[f] = altered.ToArray();
+            }
+
+            return voxelFrames;
+        }
+        public static MagicaVoxelData[][] makeFiringAnimationDouble(MagicaVoxelData[] parsed, int unit, int weapon)
+        {
+            MagicaVoxelData[][] parsedFrames = new MagicaVoxelData[][] {
+                parsed, parsed, parsed, parsed,
+                parsed, parsed, parsed, parsed, 
+                parsed, parsed, parsed, parsed,
+                parsed, parsed, parsed, parsed, };
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            parsedFrames.CopyTo(voxelFrames, 0);
+            for (int i = 0; i < parsedFrames[0].Length; i++)
+            {
+                voxelFrames[0][i].x += 40;
+                voxelFrames[0][i].y += 40;
+            }
+
+            if (CurrentWeapons[unit][weapon] == -1)
+            {
+                return new MagicaVoxelData[0][];
+            }
+            else
+            {
+                voxelFrames = weaponAnimationsDouble[CurrentWeapons[unit][weapon]](voxelFrames, unit);
+            }
+            for (int f = 0; f < parsedFrames.Length; f++)
+            {
+
+                List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                int[,] taken = new int[120, 120];
+                taken.Fill(-1);
+                for (int i = 0; i < voxelFrames[f].Length; i++)
+                {
+                    // do not store this voxel if it lies out of range of the voxel chunk (60x60x60)
+                    if (voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
                     {
                         Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
                         continue;
@@ -5682,25 +6483,28 @@ MovementType.Foot};
                     {
                         for (int i = 0; i < 16; i++)
                         {
+                            /*
+                             &&
+                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                + i +
+                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0
+                             */
                             if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0
-                                &&
-                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0)
+                                )
                             {
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4)
+                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
                                     xrendered[mod_color][i + j * 16];
-                                bareValues[4 * ((vx.x + vx.y) * 2 + 4)
+                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
                                     xrendered[mod_color][i + j * 16];
-                                barePositions[4 * ((vx.x + vx.y) * 2 + 4)
+                                barePositions[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] = true;
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] = true;
                             }
                         }
                     }
@@ -5894,7 +6698,7 @@ MovementType.Foot};
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
                     {
-                        mod_color = 168 + faction + frame * 8;
+                        mod_color = 168 + faction + (frame % 4) * 8;
                     }
                     for (int j = 0; j < 4; j++)
                     {
@@ -5902,23 +6706,25 @@ MovementType.Foot};
                         {
                             if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                 + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0
+                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] == 0
+                                /*
                                 &&
                                 bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                 + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0)
+                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0
+                                 */)
                             {
                                 argbValues[4 * ((vx.x + vx.y) * 2 + 4)
                                     + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
+                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
                                     xrendered[mod_color][i + j * 16];
                                 bareValues[4 * ((vx.x + vx.y) * 2 + 4)
                                     + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
+                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
                                     xrendered[mod_color][i + j * 16];
                                 barePositions[4 * ((vx.x + vx.y) * 2 + 4)
                                     + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 + 2 + j)] = true;
+                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] = true;
                             }
                         }
                     }
@@ -5951,11 +6757,11 @@ MovementType.Foot};
                         {
                             if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                 + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0)
+                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] == 0)
                             {
                                 argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
+                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
                                     xrendered[mod_color][i + j * 16];
                             }
                         }
@@ -6613,6 +7419,43 @@ MovementType.Foot};
             g2.Dispose();
             return b2;
         }
+        private static Bitmap processSingleOutlinedHuge(MagicaVoxelData[] parsed, int color, string dir, int frame, int maxFrames)
+        {
+            Graphics g;
+            Bitmap b;
+            Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+            int d = 0;
+            switch (dir)
+            {
+                case "SE":
+                    break;
+                case "SW": d = 1;
+                    break;
+                case "NW": d = 2;
+                    break;
+                case "NE": d = 3;
+                    break;
+                default:
+                    break;
+            }
+
+            b = renderHugeSmart(parsed, d, color, frame);
+            // o = renderOutlineLarge(parsed, d, color, frame);
+            g = Graphics.FromImage(b);
+
+            //            g.DrawImage(o, 0, 0);
+            //ImageAttributes attr = new ImageAttributes();
+            //g.DrawImage(b[0], 0, 0);//, new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr
+            //attr.SetColorKey(Color.FromArgb(255, 16, 16, 16), Color.White);
+            //g = Graphics.FromImage(n);
+            //g.DrawImage(b[1], new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr);
+
+            Graphics g2 = Graphics.FromImage(b2);
+            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 0, 0, 248, 308);
+            g2.Dispose();
+            return b2;
+        }
 
         private static void processExplosion(string u)
         {
@@ -6847,6 +7690,140 @@ MovementType.Foot};
                         for (int frame = 0; frame < 16; frame++)
                         {
                             s += folder + "/color" + i + "_" + u + "_face" + d + "_attack_" + w + "_" + frame + ".png ";
+                        }
+                    }
+                }
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + u + "_attack_" + w + "_animated.gif";
+                Console.WriteLine("Running convert.exe ...");
+                Process.Start(startInfo).WaitForExit();
+            }
+
+        }
+
+        private static void processFiringDouble(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            string filename = u + "_Large_X.vox";
+            BinaryReader bin = new BinaryReader(File.Open(filename, FileMode.Open));
+            bin.Close();
+            MagicaVoxelData[] parsed;
+            string folder = ("frames");
+
+            for (int w = 0; w < 2; w++)
+            {
+                if ((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
+                {
+                    filename = u + "_Firing_X.vox";
+                }
+                if (CurrentWeapons[UnitLookup[u]][w] == 7)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = FromMagicaRaw(bin);
+                    MagicaVoxelData[][] flying = Flyover(parsed);
+                    MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+                    //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
+                        flying[i].CopyTo(voxelFrames[i], 0);
+                    }
+                    /*                    for (int i = 0; i < flying[4].Length; i++)
+                                        {
+                                            voxelFrames[0][i].x += 20;
+                                            voxelFrames[0][i].y += 20;
+                                        }*/
+                    Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
+
+                    voxelFrames = weaponAnimations[CurrentWeapons[UnitLookup[u]][w]](voxelFrames, UnitLookup[u]);
+
+                    for (int f = 0; f < 16; f++)
+                    {
+                        List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                        int[,] taken = new int[60, 60];
+                        taken.Fill(-1);
+                        for (int i = 0; i < voxelFrames[f].Length; i++)
+                        {
+                            // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
+                            if (voxelFrames[f][i].x >= 60 || voxelFrames[f][i].y >= 60 || voxelFrames[f][i].z >= 60)
+                            {
+                                //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                continue;
+                            }
+                            altered.Add(voxelFrames[f][i]);
+                        }
+                        flying[f] = altered.ToArray();
+                    }
+                    for (int color = 0; color < 8; color++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                Graphics g;
+                                Bitmap[] b;
+                                Bitmap o;
+
+                                b = renderLarge(flying[frame], d, color, frame);
+                                o = renderOutlineLarge(flying[frame], d, color, frame);
+                                g = Graphics.FromImage(b[1]);
+
+                                g.DrawImage(o, 0, 0);
+                                g.DrawImage(b[0], 0, 0);
+
+                                b[1].Save(folder + "/color" + color + "_" + u + "_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                            }
+                        }
+                    }
+
+                    bin.Close();
+                }
+                else if (CurrentWeapons[UnitLookup[u]][w] != -1)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = FromMagicaRaw(bin);
+                    MagicaVoxelData[][] firing = makeFiringAnimationDouble(parsed, UnitLookup[u], w);
+                    for (int color = 0; color < 8; color++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                Bitmap b = renderHugeSmart(firing[frame], d, color, frame);
+                                Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+
+                                //                        b.Save("temp.png", ImageFormat.Png);
+                                Graphics g2 = Graphics.FromImage(b2);
+                                g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                b.Dispose();
+                                g2.DrawImage(b3, 0, 0, 248, 308);
+
+                                b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b2.Dispose();
+                                g2.Dispose();
+                            }
+                        }
+                    }
+                    bin.Close();
+                }
+                else continue;
+
+                System.IO.Directory.CreateDirectory("gifs");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int d = 0; d < 4; d++)
+                    {
+                        for (int frame = 0; frame < 16; frame++)
+                        {
+                            s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png ";
                         }
                     }
                 }
@@ -7246,27 +8223,59 @@ MovementType.Foot};
                 parsed[i].y += 10;
             }
             int framelimit = 4;
-            /*if (!UnitLookup.ContainsKey(u))
+            if (!UnitLookup.ContainsKey(u))
             {
                 framelimit = 4;
-                Bitmap b = new Bitmap(56*2, 108*2);
-                Graphics g = Graphics.FromImage(b);
                 for (int i = 0; i < 8; i++)
                 {
+                    string folder = ("color" + i);//"color" + i;
+                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
                     for (int f = 0; f < framelimit; f++)
                     {
-                        g.DrawImage(processSingleOutlinedDouble(parsed, i, "SE", f, framelimit), -16, (f - 2) * 26);
+                        Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit);
+                        b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Dispose();
                     }
-                    b.Save("color" + i + "_" + u + ".png", ImageFormat.Png);
                 }
                 bin.Close();
+
+                System.IO.Directory.CreateDirectory("gifs");
+                ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
+                starter.UseShellExecute = false;
+                string arrgs = "";
+                for (int i = 0; i < 8; i++)
+                    arrgs += "color" + i + "/" + u + "_Large_face* ";
+                starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " gifs/" + u + "_Large_animated.gif";
+                Process.Start(starter).WaitForExit();
+
+                for (int i = 0; i < parsed.Length; i++)
+                {
+                    parsed[i].x += 30;
+                    parsed[i].y += 30;
+                }
+                for (int i = 0; i < 8; i++)
+                {
+                    string folder = ("color" + i);//"color" + i;
+                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    for (int f = 0; f < framelimit; f++)
+                    {
+                        Bitmap b = processSingleOutlinedHuge(parsed, i, "SE", f, framelimit);
+                        b.Save(folder + "/" + u + "_Huge_face0" + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Dispose();
+                    }
+                }
+                arrgs = "";
+                for (int i = 0; i < 8; i++)
+                    arrgs += "color" + i + "/" + u + "_Huge_face* ";
+                starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " gifs/" + u + "_Huge_animated.gif";
+                Process.Start(starter).WaitForExit();
                 return;
             }
             else if (CurrentMobilities[UnitLookup[u]] == MovementType.Immobile)
             {
                 framelimit = 2;
             }
-            */
+            
             for (int i = 0; i < 8; i++)
             {
                 string folder = ("color" + i);//"color" + i;
@@ -7300,9 +8309,10 @@ MovementType.Foot};
 
             bin.Close();
 
+            processFiringDouble(u);
+
             processExplosionDouble(u);
 
-            //processFiring(u);
         }
         public static void processTerrainChannel()
         {
@@ -8207,9 +9217,14 @@ MovementType.Foot};
 
             //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
             InitializeXPalette();
-            processUnitOutlinedDouble("Artillery_P");
-            processUnitOutlinedDouble("Artillery_S");
 
+            processUnitOutlinedDouble("Block");
+
+
+            processUnitOutlinedDouble("Artillery_P");
+
+            processUnitOutlinedDouble("Artillery_S");
+            
             processUnitOutlinedW("Person");
 
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");

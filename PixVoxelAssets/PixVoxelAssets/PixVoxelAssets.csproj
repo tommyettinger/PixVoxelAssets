@@ -68,6 +68,9 @@
     <None Include="Artillery_S_Large_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Block_Large_X.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Person_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
