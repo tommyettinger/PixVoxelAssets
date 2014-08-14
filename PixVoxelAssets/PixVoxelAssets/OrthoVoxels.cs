@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace AssetsPV
 {
@@ -23,10 +24,26 @@ namespace AssetsPV
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River", "Basement"};
         public static string[] Directions = { "SE", "SW", "NW", "NE" };
-
         public static string[] CurrentUnits = {
-"Person"};
-        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30);
+"Infantry", "Infantry_P", "Infantry_S", "Infantry_T",
+"Artillery", "Artillery_P", "Artillery_S", "Artillery_T",
+"Tank", "Tank_P", "Tank_S", "Tank_T",
+"Plane", "Plane_P", "Plane_S", "Plane_T",
+"Supply", "Supply_P", "Supply_S", "Supply_T",
+"Copter", "Copter_P", "Copter_S", "Copter_T", 
+"City", "Factory", "Airport", "Laboratory", "Castle", "Estate"};
+        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30), TerrainLookup = new Dictionary<string, int>(10);
+        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(30), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
+        public static List<int>[] TerrainToUnits = new List<int>[30];
+        public static Dictionary<int, List<MovementType>> TerrainToMobilities = new Dictionary<int, List<MovementType>>();
+        public static int[] CurrentSpeeds = {
+3, 3, 5, 3,
+4, 3, 6, 4,
+6, 4, 7, 6,
+7, 5, 9, 8,
+5, 5, 6, 6,
+7, 5, 8, 7, 
+0,0,0,0,0,0};
         public static int[][] CurrentWeapons = {
 new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
 new int[] {-1, 4}, new int[] {3, -1}, new int[] {-1, 6}, new int[] {-1, 6},
@@ -57,11 +74,53 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static void Initialize()
         {
+            MovementType[] values = (MovementType[])Enum.GetValues(typeof(MovementType));
+            foreach (MovementType v in values)
+            {
+                MobilityToUnits[v] = new List<int>();
+            }
+            for (int t = 0; t < Terrains.Length; t++)
+            {
+                TerrainLookup[Terrains[t]] = t;
+                TerrainToMobilities[t] = new List<MovementType>();
+                TerrainToUnits[t] = new List<int>();
+            }
             for (int i = 0; i < CurrentUnits.Length; i++)
             {
                 UnitLookup[CurrentUnits[i]] = i;
+                MobilityToUnits[CurrentMobilities[i]].Add(i);
+            }
+            MobilityToTerrains[MovementType.Flight] =
+                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            MobilityToTerrains[MovementType.Foot] =
+                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            MobilityToTerrains[MovementType.Treads] =
+                new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
+            MobilityToTerrains[MovementType.TreadsAmphi] =
+                new List<int>() { 0, 1, 2, 3, 6, 7, 8, 9 };
+            MobilityToTerrains[MovementType.Wheels] =
+                new List<int>() { 0, 2, 7, 8, };
+            MobilityToTerrains[MovementType.WheelsTraverse] =
+                new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
+            MobilityToTerrains[MovementType.Immobile] =
+                new List<int>() { };
+
+            foreach (var kv in MobilityToTerrains)
+            {
+                foreach (int t in kv.Value)
+                {
+                    TerrainToMobilities[t].Add(kv.Key);
+                }
+            }
+            foreach (var kv in TerrainToMobilities)
+            {
+                foreach (MovementType m in kv.Value)
+                    TerrainToUnits[kv.Key].AddRange(MobilityToUnits[m]);
+                TerrainToUnits[kv.Key] = TerrainToUnits[kv.Key].Distinct().ToList();
             }
         }
+
+
 
         public static string[] final_units =
         {
@@ -69,8 +128,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         };
 
         private static Random r = new Random();
-        private static float flat_alpha = 0.9991F;
-        private static float spin_alpha_0 = 0.9993F;
+        private static float flat_alpha = 0.7771F;
+        private static float spin_alpha_0 = 0.8883F;
         private static float spin_alpha_1 = 0.9995F;
         public static float[][] xcolors = new float[][]
         {
@@ -158,7 +217,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             
             //64 flesh
             new float[] {0.87F,0.65F,0.3F,1F},  //black
-            new float[] {0.7F,1.2F,-0.1F,1F},      //white
+            new float[] {0.7F,0.9F,0.4F,1F},      //white
             new float[] {0.87F,0.65F,0.3F,1F},  //red
             new float[] {0.87F,0.65F,0.3F,1F},  //orange
             new float[] {0.87F,0.65F,0.3F,1F},  //yellow
@@ -257,15 +316,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             
-            //136 smoke (FLAT ALPHA)
-            new float[] {0.12F,0.08F,-0.01F,flat_alpha},
-            new float[] {0.01F,0.12F,0.16F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
-            new float[] {0.14F,0.14F,0.02F,flat_alpha},
+            //136 smoke (MAYBE RETURN TO FLAT ALPHA?)
+            new float[] {0.12F,0.08F,-0.01F,1F},
+            new float[] {0.01F,0.12F,0.16F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
+            new float[] {0.14F,0.14F,0.02F,1F},
 
             //144 guts
             new float[] {0.67F,0.05F,-0.1F,1F},  //black
@@ -354,7 +413,238 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 /*            new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},
             new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},*/
         };
+
+        public static float[][] wcolors = new float[][]
+        {
+            //0 shoes, boots, brown leather
+            new float[] {0.45F,0.25F,0.05F,1F},
+            //1 pants, jeans
+            new float[] {0.2F,0.3F,0.6F,1F},
+            //2 shirt
+            new float[] {0.25F,0.6F,0.25F,1F},
+            //3 hair
+            new float[] {0.6F,0.35F,0.1F,1F},
+            //4 skin
+            new float[] {0.87F,0.65F,0.3F,1F},
+            //5 eyes
+            new float[] {0.2F,0.4F,0.9F,1F},
+            //6 skin contrast
+            new float[] {0.77F,0.5F,0.1F,1F},
+        };
+
+        public static float[][][] wpalettes = new float[][][]
+            {
+                new float[][] {
+            //0 shoes, boots, brown leather
+            new float[] {0.45F,0.25F,0.1F,1F},
+            //1 pants, jeans
+            new float[] {0.25F,0.35F,0.55F,1F},
+            //2 shirt
+            new float[] {0.3F,0.55F,0.3F,1F},
+            //3 hair
+            new float[] {0.6F,0.35F,0.1F,1F},
+            //4 skin
+            new float[] {0.87F,0.65F,0.3F,1F},
+            //5 eyes
+            new float[] {0.4F,0.3F,0.0F,1F},
+            //6 skin contrast
+            new float[] {0.77F,0.45F,0.05F,1F},
+            },
+            new float[][] {
+            //0 shoes, boots, brown leather
+            new float[] {0.45F,0.25F,0.1F,1F},
+            //1 pants, jeans
+            new float[] {0.9F,0.83F,0.65F,1F},
+            //2 shirt
+            new float[] {0.5F,0.6F,0.7F,1F},
+            //3 hair
+            new float[] {0.65F,0.6F,0.2F,1F},
+            //4 skin
+            new float[] {0.89F,0.69F,0.32F,1F},
+            //5 eyes
+            new float[] {0.2F,0.4F,0.9F,1F},
+            //6 skin contrast (lips, ears)
+            new float[] {0.82F,0.5F,0.1F,1F},
+            },
+            new float[][] {
+            //0 shoes, boots, brown leather
+            new float[] {0.4F,0.18F,0.0F,1F},
+            //1 pants, jeans
+            new float[] {0.6F,0.55F,0.3F,1F},
+            //2 shirt
+            new float[] {0.44F,0.36F,0.33F,1F},
+            //3 hair
+            new float[] {0.0F,0.2F,0.0F,1F},
+            //4 skin
+            new float[] {0.45F,0.57F,0.35F,1F},
+            //5 eyes
+            new float[] {0.8F,0.75F,0.0F,1F},
+            //6 skin contrast (lips, ears)
+            new float[] {0.23F,0.4F,0.0F,1F},
+
+            },
+        };
         public static float[][] xcolours = new float[256][];
+        public static byte[][] xrendered;
+        private static byte[][] storeColorCubes()
+        {
+            byte[][] cubes = new byte[168 + 32][];
+
+            Image image = new Bitmap("cube_soft.png");
+            Image flat = new Bitmap("flat_soft.png");
+            Image spin = new Bitmap("spin_soft.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 4;
+            float[][] colorMatrixElements = { 
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+
+            for (int current_color = 0; current_color < 168; current_color++)
+            {
+                Bitmap b =
+                new Bitmap(4, 4, PixelFormat.Format32bppArgb);
+
+                Graphics g = Graphics.FromImage((Image)b);
+
+                if (current_color / 8 == 96 / 8)
+                {
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                }
+                else if (xcolors[current_color][3] == flat_alpha)
+                {
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color][2],  0, 0},
+   new float[] {0,  0,  0,  flat_alpha, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                }
+                else if (current_color / 8 == 10) //lights
+                {
+                    float lightCalc = 0.06F;
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+xcolors[current_color][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color][2] + lightCalc,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                }
+
+                else
+                {
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                }
+                imageAttributes.SetColorMatrix(
+                   colorMatrix,
+                   ColorMatrixFlag.Default,
+                   ColorAdjustType.Bitmap);
+                g.DrawImage((current_color / 8 == 10) ? spin :
+                   (xcolors[current_color][3] == 1F || current_color / 8 == 13 || current_color / 8 == 15 || current_color / 8 == 16) ? image :
+                   (xcolors[current_color][3] == flat_alpha) ? flat : spin,
+                   new Rectangle(0, 0,
+                       width, height),  // destination rectangle 
+                    //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                   0, 0,        // upper-left corner of source rectangle 
+                   width,       // width of source rectangle
+                   height,      // height of source rectangle
+                   GraphicsUnit.Pixel,
+                   imageAttributes);
+                cubes[current_color] = new byte[64];
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        try
+                        {
+                            Color c = b.GetPixel(i, j);
+                            cubes[current_color][i * 4 + j * 16 + 0] = c.B;
+                            cubes[current_color][i * 4 + j * 16 + 1] = c.G;
+                            cubes[current_color][i * 4 + j * 16 + 2] = c.R;
+                            cubes[current_color][i * 4 + j * 16 + 3] = c.A;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.StackTrace);
+                            Console.WriteLine(e.InnerException);
+                        }
+                    }
+                }
+
+            }
+            for (int current_color = 80; current_color < 88; current_color++)
+            {
+                for (int frame = 0; frame < 4; frame++)
+                {
+                    Bitmap b =
+                    new Bitmap(4, 4, PixelFormat.Format32bppArgb);
+
+                    Graphics g = Graphics.FromImage((Image)b);
+                    float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+xcolors[current_color][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+xcolors[current_color][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+xcolors[current_color][2] + lightCalc,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    g.DrawImage(spin,
+                       new Rectangle(0, 0,
+                           width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+
+                    cubes[88 + current_color + (8 * frame)] = new byte[64];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            Color c = b.GetPixel(i, j);
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 0] = c.B;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 1] = c.G;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 2] = c.R;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 3] = c.A;
+                        }
+                    }
+                }
+            }
+            return cubes;
+        }
+
+
+        public static void InitializeXPalette()
+        {
+            xrendered = storeColorCubes();
+        }
+
         public struct MagicaVoxelData
         {
             public byte x;
@@ -4900,7 +5190,705 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return b;
         }
 
+        private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
+        {
+            Bitmap bmp = new Bitmap(124, 184, PixelFormat.Format32bppArgb);
 
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
+            byte[] outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+            byte[] bareValues = new byte[numBytes];
+            bareValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill<bool>(false);
+            int xSize = 60, ySize = 60;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
+                    continue;
+                else if (current_color >= 168)
+                {
+                    continue;
+                }
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                {
+                    int mod_color = current_color + faction;
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + frame * 8;
+                    }
+                    for (int j = 0; j < 3; j++)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            /*
+                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)
+                             */
+                            if (argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0
+                                )
+                            {
+                                argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 16];
+                                bareValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 16];
+                                barePositions[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] = true;
+                            }
+                        }
+                    }
+                }
+                else if (current_color == 96)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if (shadowValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 + 2 + j)] == 0)
+                            {
+                                shadowValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 + 2 + j)] =
+                                    xrendered[current_color][i + j * 16];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    int mod_color = current_color + faction;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] == 0)
+                            {
+                                argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 16];
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 255 * flat_alpha && barePositions[i] == false)
+                {
+                    outlineValues[i + 4] = 255;
+                    outlineValues[i - 4] = 255;
+                    outlineValues[i + bmpData.Stride] = 255;
+                    outlineValues[i - bmpData.Stride] = 255;
+                    outlineValues[i + bmpData.Stride + 4] = 255;
+                    outlineValues[i - bmpData.Stride - 4] = 255;
+                    outlineValues[i + bmpData.Stride - 4] = 255;
+                    outlineValues[i - bmpData.Stride + 4] = 255;
+
+                    outlineValues[i + 8] = 255;
+                    outlineValues[i - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2] = 255;
+                    outlineValues[i - bmpData.Stride * 2] = 255;
+                    outlineValues[i + bmpData.Stride + 8] = 255;
+                    outlineValues[i - bmpData.Stride + 8] = 255;
+                    outlineValues[i + bmpData.Stride - 8] = 255;
+                    outlineValues[i - bmpData.Stride - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+                }
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * flat_alpha))
+                    argbValues[i] = 255;
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 0 && bareValues[i] > 0)
+                {
+                    argbValues[i - 3] = bareValues[i - 3];
+                    argbValues[i - 2] = bareValues[i - 2];
+                    argbValues[i - 1] = bareValues[i - 1];
+                    argbValues[i - 0] = bareValues[i - 0];
+                }
+                else if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = shadowValues[i - 0];
+                }
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+
+
+        private static Bitmap renderHugeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
+        {
+            Bitmap bmp = new Bitmap(124 * 2, 184 * 2, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
+            byte[] outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+            byte[] bareValues = new byte[numBytes];
+            bareValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill<bool>(false);
+            int xSize = 60, ySize = 60;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                if ((frame % 2 != 0) && xcolors[current_color + faction][3] == spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && xcolors[current_color + faction][3] == spin_alpha_1)
+                    continue;
+                else if (current_color >= 168)
+                {
+                    continue;
+                }
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                {
+                    int mod_color = current_color + faction;
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + frame * 8;
+                    }
+                    for (int j = 0; j < 3; j++)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            /*
+argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                + i +
+                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)
+                             */
+                            if (argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] == 0
+                                )
+                            {
+                                argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
+                                    xrendered[mod_color][i + j * 16];
+                                bareValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
+                                    xrendered[mod_color][i + j * 16];
+                                barePositions[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] = true;
+                            }
+                        }
+                    }
+                }
+                else if (current_color == 96)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if (shadowValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 + 2 + j)] == 0)
+                            {
+                                shadowValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 + 2 + j)] =
+                                    xrendered[current_color][i + j * 16];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    int mod_color = current_color + faction;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] == 0)
+                            {
+                                argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((xcolors[current_color + faction][3] == flat_alpha) ? -2 : 0) + j)] =
+                                    xrendered[mod_color][i + j * 16];
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 255 * flat_alpha && barePositions[i] == false)
+                {
+                    outlineValues[i + 4] = 255;
+                    outlineValues[i - 4] = 255;
+                    outlineValues[i + bmpData.Stride] = 255;
+                    outlineValues[i - bmpData.Stride] = 255;
+                    outlineValues[i + bmpData.Stride + 4] = 255;
+                    outlineValues[i - bmpData.Stride - 4] = 255;
+                    outlineValues[i + bmpData.Stride - 4] = 255;
+                    outlineValues[i - bmpData.Stride + 4] = 255;
+
+                    outlineValues[i + 8] = 255;
+                    outlineValues[i - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2] = 255;
+                    outlineValues[i - bmpData.Stride * 2] = 255;
+                    outlineValues[i + bmpData.Stride + 8] = 255;
+                    outlineValues[i - bmpData.Stride + 8] = 255;
+                    outlineValues[i + bmpData.Stride - 8] = 255;
+                    outlineValues[i - bmpData.Stride - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+                }
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * flat_alpha))
+                    argbValues[i] = 255;
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 0 && bareValues[i] > 0)
+                {
+                    argbValues[i - 3] = bareValues[i - 3];
+                    argbValues[i - 2] = bareValues[i - 2];
+                    argbValues[i - 1] = bareValues[i - 1];
+                    argbValues[i - 0] = bareValues[i - 0];
+                }
+                else if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = shadowValues[i - 0];
+                }
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+
+        private static Bitmap[] renderW(MagicaVoxelData[] voxels, int facing, int frame, int maxFrames)
+        {
+            Bitmap[] b = {
+            new Bitmap(44, 64, PixelFormat.Format32bppArgb),
+            new Bitmap(44, 64, PixelFormat.Format32bppArgb),};
+
+            Graphics g = Graphics.FromImage((Image)b[0]);
+            Graphics gsh = Graphics.FromImage((Image)b[1]);
+            //Image image = new Bitmap("cube_large.png");
+            Image image = new Bitmap("cube_soft.png");
+            Image flat = new Bitmap("flat_soft.png");
+            Image spin = new Bitmap("spin_soft.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 4;
+            int xSize = 20, ySize = 20;
+            float[][] colorMatrixElements = { 
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int jitter = (frame % 3) + (frame / 3);
+            if (maxFrames != 4)
+                jitter = 0;
+            foreach (MagicaVoxelData vx in vls.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128 - ((v.color == 249 - 96) ? 32 * 128 * 32 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = (249 - vx.color) / 8;
+                if (current_color >= wcolors.Length)
+                    continue;
+                // Console.Write(current_color + "  ");
+                if ((frame % 2 != 0) && wcolors[current_color][3] == spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && wcolors[current_color][3] == spin_alpha_1)
+                    continue;
+                else if (current_color == 168)
+                    continue;
+                else if (current_color == 96)
+                {
+
+                    colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+wcolors[current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wcolors[current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wcolors[current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    gsh.DrawImage(flat,
+                       new Rectangle((vx.x + vx.y) * 2 + 4, 100 - 20 - vx.y + vx.x - vx.z * 3 + 2
+                           , width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                }
+                else
+                {
+                    if (current_color == 80) //lights
+                    {
+                        float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+wcolors[current_color][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+wcolors[current_color][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+wcolors[current_color][2] + lightCalc,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if (current_color >= 168)
+                    {
+
+                        //169 Bomb Drop
+                        //170 Arc Missile
+                        //171 Rocket
+                        //172 Long Cannon
+                        //173 Cannon
+                        //174 AA Gun
+                        //175 Machine Gun
+                        //176 Handgun
+
+                        continue;
+                    }
+                    else
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+wcolors[current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wcolors[current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wcolors[current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    g.DrawImage((current_color == 80) ? spin :
+                       (wcolors[current_color][3] == 1F) ? image : (wcolors[current_color][3] == flat_alpha) ? flat : spin,
+                       new Rectangle(vx.y * 2 + 2 + 0,
+                           62 - 20 - 3 + vx.x - vx.z * 2 - ((wcolors[current_color][3] == flat_alpha) ? -2 : jitter),
+                           width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                }
+            }
+            return b;
+        }
+        public static Bitmap renderOutlineW(MagicaVoxelData[] voxels, int facing, int frame, int maxFrames)
+        {
+            Bitmap b = new Bitmap(44, 64, PixelFormat.Format32bppArgb);
+            Graphics g = Graphics.FromImage((Image)b);
+            Image image = new Bitmap("black_outline_soft.png");
+            //            Image flat = new Bitmap("flat_soft.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 8;
+            int height = 8;
+
+            int xSize = 20, ySize = 20;
+
+            float[][] colorMatrixElements = { 
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+
+            int jitter = (frame % 3) + (frame / 3);
+            if (maxFrames != 4)
+                jitter = 0;
+            foreach (MagicaVoxelData vx in vls.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128 // - ((v.color == 249 - 96) ? 32 * 128 * 32 : 0)
+            {
+                int current_color = (249 - vx.color) / 8;
+                if (current_color >= wcolors.Length)
+                    continue;
+                if ((frame % 2 != 0) && wcolors[current_color][3] == spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && wcolors[current_color][3] == spin_alpha_1)
+                    continue;
+                else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
+                    continue;
+                if ((wcolors[current_color][3] != flat_alpha))
+                {
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    g.DrawImage(image, //((colors[current_color + faction][3] == flat_alpha) ? flat : image)
+                        //vx.y * 2 + 2 + 0,
+                         //  62 - 20 - 3 + vx.x - vx.z * 2 - ((wcolors[current_color][3] == flat_alpha) ? -2 : jitter
+                    new Rectangle(vx.y * 2 + 0 + 0, //if flat use + 4
+                        64 - 20 - 4 - 3 + vx.x - vx.z * 2 - jitter, //((colors[current_color + faction][3] == flat_alpha) ? -4 : jitter
+                        width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                }
+            }
+            return b;
+        }
+        
         private static Bitmap renderOnlyTerrainColors()
         {
             Bitmap b = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
@@ -5709,25 +6697,49 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         private static Bitmap processSingleOutlinedDouble(MagicaVoxelData[] parsed, int color, string dir, int frame, int maxFrames)
         {
             Graphics g;
-            Bitmap[] b;
-            Bitmap o, n = new Bitmap(88 * 2, 108 * 2, PixelFormat.Format32bppArgb), b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
+            Bitmap b;
+            Bitmap b2 = new Bitmap(44, 64, PixelFormat.Format32bppArgb);
             int d = 0;
             switch (dir)
             {
-                case "SE":
+                case "S":
                     break;
-                case "SW": d = 1;
+                case "W": d = 1;
                     break;
-                case "NW": d = 2;
+                case "N": d = 2;
                     break;
-                case "NE": d = 3;
+                case "E": d = 3;
                     break;
                 default:
                     break;
             }
 
-            b = renderLarge(parsed, d, color, frame);
-            o = renderOutlineLarge(parsed, d, color, frame);
+            b = renderLargeSmart(parsed, d, color, frame);
+            // o = renderOutlineLarge(parsed, d, color, frame);
+            g = Graphics.FromImage(b);
+
+            //            g.DrawImage(o, 0, 0);
+            //ImageAttributes attr = new ImageAttributes();
+            //g.DrawImage(b[0], 0, 0);//, new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr
+            //attr.SetColorKey(Color.FromArgb(255, 16, 16, 16), Color.White);
+            //g = Graphics.FromImage(n);
+            //g.DrawImage(b[1], new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr);
+
+            Graphics g2 = Graphics.FromImage(b2);
+            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g2.DrawImage(b.Clone(new Rectangle(16+2, 16 + 34, 44 * 2, 64 * 2), b.PixelFormat), 0, 0, 44, 64);
+            g2.Dispose();
+            return b2;
+        }
+        private static Bitmap processSingleOutlinedW(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames)
+        {
+            Graphics g;
+            Bitmap[] b;
+            Bitmap o, n = new Bitmap(44, 64, PixelFormat.Format32bppArgb);
+
+            wcolors = wpalettes[palette];
+            b = renderW(parsed, dir, frame, maxFrames);
+            o = renderOutlineW(parsed, dir, frame, maxFrames);
             g = Graphics.FromImage(b[1]);
 
             g.DrawImage(o, 0, 0);
@@ -5737,11 +6749,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //g = Graphics.FromImage(n);
             //g.DrawImage(b[1], new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr);
 
-            Graphics g2 = Graphics.FromImage(b2);
-            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            g2.DrawImage(b[1].Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b[1].PixelFormat), 0, 0, 88, 108);
-            return b2;
+            return b[1];
         }
+
 
         private static void processExplosion(string u)
         {
@@ -6284,17 +7294,28 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             if (!UnitLookup.ContainsKey(u))
             {
                 framelimit = 4;
-                Bitmap b = new Bitmap(56 * 2, 108 * 2);
-                Graphics g = Graphics.FromImage(b);
                 for (int i = 0; i < 8; i++)
                 {
+                    string folder = ("ortho/color" + i);//"color" + i;
+                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
                     for (int f = 0; f < framelimit; f++)
                     {
-                        g.DrawImage(processSingleOutlinedDouble(parsed, i, "SE", f, framelimit), -16, (f - 2) * 26);
+                        Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit);
+                        b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Dispose();
                     }
-                    b.Save("color" + i + "_" + u + ".png", ImageFormat.Png);
                 }
                 bin.Close();
+
+                System.IO.Directory.CreateDirectory("gifs");
+                ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
+                starter.UseShellExecute = false;
+                string arrgs = "";
+                for (int i = 0; i < 8; i++)
+                    arrgs += "ortho/color" + i + "/" + u + "_Large_face* ";
+                starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " gifs/" + u + "_Large_animated.gif";
+                Process.Start(starter).WaitForExit();
+
                 return;
             }
             else if (CurrentMobilities[UnitLookup[u]] == MovementType.Immobile)
@@ -6304,35 +7325,83 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             for (int i = 0; i < 8; i++)
             {
-                string folder = ("color" + i);//"color" + i;
+                string folder = ("ortho/color" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
 
-                    processSingleOutlinedDouble(parsed, i, "SE", f, framelimit).Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
-                    processSingleOutlinedDouble(parsed, i, "SW", f, framelimit).Save(folder + "/" + u + "_Large_face1" + "_" + f + ".png", ImageFormat.Png); //sw
-                    processSingleOutlinedDouble(parsed, i, "NW", f, framelimit).Save(folder + "/" + u + "_Large_face2" + "_" + f + ".png", ImageFormat.Png); //nw
-                    processSingleOutlinedDouble(parsed, i, "NE", f, framelimit).Save(folder + "/" + u + "_Large_face3" + "_" + f + ".png", ImageFormat.Png); //ne
-
+                    Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                    b = processSingleOutlinedDouble(parsed, i, "W", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face1" + "_" + f + ".png", ImageFormat.Png); //sw
+                    b.Dispose();
+                    b = processSingleOutlinedDouble(parsed, i, "N", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face2" + "_" + f + ".png", ImageFormat.Png); //nw
+                    b.Dispose();
+                    b = processSingleOutlinedDouble(parsed, i, "E", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face3" + "_" + f + ".png", ImageFormat.Png); //ne
+                    b.Dispose();
                 }
 
             }
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("ortho/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
             for (int i = 0; i < 8; i++)
-                s += "color" + i + "/" + u + "_Large_face* ";
+                s += "ortho/color" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             bin.Close();
 
-            //processExplosion(u);
+           // processFiringDouble(u);
 
-            //processFiring(u);
+           // processExplosionDouble(u);
+
         }
+
+
+        private static void processUnitOutlinedW(string u)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = FromMagica(bin);
+            int framelimit = 1;
+
+            for (int i = 0; i < 3; i++)
+            {
+                string folder = ("ortho/palette" + i);//"color" + i;
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                for (int f = 0; f < framelimit; f++)
+                { //"color" + i + "/"
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        processSingleOutlinedW(parsed, i, dir, f, framelimit).Save(folder + "/" + u + "_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    }
+                }
+
+            }
+            /*
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+            for (int i = 0; i < 8; i++)
+                s += "color" + i + "/" + u + "_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+            */
+            bin.Close();
+
+            //            processExplosion(u);
+
+            //            processFiring(u);
+        }
+
         public static void processTerrainChannel()
         {
             for (int i = 0; i < 11; i++)
@@ -6948,11 +8017,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 //            InitializePalettes();
             //            Madden();
             //processTerrainChannel();
-            makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
+            //makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
            // processReceiving();
             //processExplosion("Plane");
 
+            InitializeXPalette();
+
+            processUnitOutlinedDouble("Artillery_P");
+
+            processUnitOutlinedDouble("Artillery_S");
+
+            processUnitOutlinedW("Person");
 
             
             /*

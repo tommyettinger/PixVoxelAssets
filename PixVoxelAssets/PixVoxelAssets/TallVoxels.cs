@@ -9220,10 +9220,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //processReceiving();
 
             //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
+            //            processUnitOutlinedDouble("Block");
+
             InitializeXPalette();
-
-//            processUnitOutlinedDouble("Block");
-
 
             processUnitOutlinedDouble("Artillery_P");
 
