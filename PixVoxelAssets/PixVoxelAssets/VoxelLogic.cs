@@ -802,10 +802,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static MagicaVoxelData[] FromMagica(BinaryReader stream)
         {
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
-            // we're going to return a voxel chunk worth of data
-            ushort[] data = new ushort[32 * 128 * 32];
-
-            List<MagicaVoxelData> voxelData = new List<MagicaVoxelData>(), voxelsAltered = new List<MagicaVoxelData>();
+            
+            List<MagicaVoxelData> voxelData = new List<MagicaVoxelData>();//, voxelsAltered = new List<MagicaVoxelData>();
             int[,] taken = new int[20, 20];
             string magic = new string(stream.ReadChars(4));
             int version = stream.ReadInt32();
@@ -864,29 +862,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if (voxelData.Count == 0) return voxelData.ToArray(); // failed to read any valid voxel data
 
                 // now push the voxel data into our voxel chunk structure
-                for (int i = 0; i < voxelData.Count; i++)
-                {
-                    /*
-                    // do not store this voxel if it lies out of range of the voxel chunk (32x128x32)
-                    if (subsample)
-                        if (voxelData[i].x > 63 || voxelData[i].y > 63 || voxelData[i].z > 127) continue;
-                    else
-                        if (voxelData[i].x > 31 || voxelData[i].y > 31 || voxelData[i].z > 127) continue;
-                    */
-                    voxelsAltered.Add(voxelData[i]);
-                    if (-1 == taken[voxelData[i].x, voxelData[i].y] && voxelData[i].color != 249 - 80 && voxelData[i].color != 249 - 104 && voxelData[i].color != 249 - 112
-                         && voxelData[i].color != 249 - 96 && voxelData[i].color != 249 - 128 && voxelData[i].color != 249 - 136 && voxelData[i].color != 249 - 152 && voxelData[i].color != 249 - 160
-                         && voxelData[i].color > 249 - 168)
-                    {
-                        MagicaVoxelData vox = new MagicaVoxelData();
-                        vox.x = voxelData[i].x;
-                        vox.y = voxelData[i].y;
-                        vox.z = (byte)(0);
-                        vox.color = 249 - 96;
-                        taken[vox.x, vox.y] = voxelsAltered.Count();
-                        voxelsAltered.Add(vox);
-                    }
-                }
+                
             }
             /*            taken.Fill(-1);
                         foreach (MagicaVoxelData mvd in voxelsAltered.FindAll(v => v.z == 0))
@@ -906,82 +882,34 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             }
                         }*/
 
-            return voxelsAltered.ToArray();
+            return PlaceShadows(voxelData).ToArray();
         }
-        public static void Madden()
+        public static List<MagicaVoxelData> PlaceShadows(List<MagicaVoxelData> voxelData)
         {
-            for (int i = 0; i < 256; i++)
+            int[,] taken = new int[sizex, sizey];
+            taken.Fill(-1);
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 9 / 8);
+            for (int i = 0; i < voxelData.Count; i++)
             {
-                xcolours[i] = xcolors[i];
-            }
-
-            for (int i = 1; i < 23; i++)
-            {
-                float alpha = 1F;
-                switch (i)
+                voxelsAltered.Add(voxelData[i]);
+                if (-1 == taken[voxelData[i].x, voxelData[i].y] && voxelData[i].color != 249 - 80 && voxelData[i].color != 249 - 104 && voxelData[i].color != 249 - 112
+                     && voxelData[i].color != 249 - 96 && voxelData[i].color != 249 - 128 && voxelData[i].color != 249 - 136 && voxelData[i].color != 249 - 152 && voxelData[i].color != 249 - 160
+                     && voxelData[i].color > 249 - 168)
                 {
-                    case 22: alpha = 0F; break;
-                    case 18: alpha = flat_alpha; break;
-                    case 17: alpha = flat_alpha; break;
-                    case 13: alpha = flat_alpha; break;
-                    case 14: alpha = spin_alpha_0; break;
-                    case 15: alpha = spin_alpha_1; break;
-                }
-                if (i == 22)
-                {
-
-                    xcolors[(i - 1) * 8 + 0] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 1] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 2] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 3] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 4] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 5] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 6] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 7] = new float[] { 1F, 1F, 1F, 0F };
-                    xcolors[(i - 1) * 8 + 8] = new float[] { 1F, 1F, 1F, 0F };
-                }
-                else if (i == 11)
-                {
-                    xcolors[(i - 1) * 8 + 0] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 1] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 2] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 3] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 4] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 5] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 6] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                    xcolors[(i - 1) * 8 + 7] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
-                }
-                else
-                {
-                    xcolors[(i - 1) * 8 + 0] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 1] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 2] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 3] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 4] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 5] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 6] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
-                    xcolors[(i - 1) * 8 + 7] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = (byte)(0);
+                    vox.color = 249 - 96;
+                    taken[vox.x, vox.y] = voxelsAltered.Count();
+                    voxelsAltered.Add(vox);
                 }
             }
-            for (int i = 177; i < 256; i++)
-            {
-                xcolors[i] = new float[] { 0, 0, 0, 0 };
-            }
+            return voxelsAltered;
         }
-        public static void Awaken()
-        {
-            for (int i = 0; i < 256; i++)
-            {
-                xcolors[i] = xcolours[i];
-            }
-        }
-
-
         public static MagicaVoxelData[] FromMagicaRaw(BinaryReader stream)
         {
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
-            // we're going to return a voxel chunk worth of data
-            ushort[] data = new ushort[32 * 128 * 32];
 
             List<MagicaVoxelData> voxelData = new List<MagicaVoxelData>(), voxelsAltered = new List<MagicaVoxelData>();
             string magic = new string(stream.ReadChars(4));
@@ -1068,6 +996,120 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             return voxelsAltered.ToArray();
         }
+        
+        public static MagicaVoxelData[] AssembleHeadToBody(BinaryReader body, bool raw)
+        {
+            List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
+            List<MagicaVoxelData> head = FromMagicaRaw(new BinaryReader(File.Open("Head_Part_X.vox", FileMode.Open))).ToList();
+            MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 255 };
+            MagicaVoxelData headPlug = new MagicaVoxelData { color = 255 };
+            foreach (MagicaVoxelData mvd in bod)
+            {
+                if (mvd.color > 249 - 168 && (250 - mvd.color) % 8 == 0)
+                {
+                    bodyPlug = mvd;
+                    bodyPlug.color--;
+                    break;
+                }
+            }
+            foreach (MagicaVoxelData mvd in head)
+            {
+                if (mvd.color > 249 - 168 && (250 - mvd.color) % 8 == 0)
+                {
+                    headPlug = mvd;
+                    headPlug.color--;
+                    break;
+                }
+            }
+            if (headPlug.color == 255)
+                return bod.ToArray();
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(head.Count + bod.Count);
+            for(int i = 0; i < head.Count; i++)
+            {
+                MagicaVoxelData mvd = head[i];
+                mvd.x += (byte)(bodyPlug.x - headPlug.x);
+                mvd.y += (byte)(bodyPlug.y - headPlug.y);
+                mvd.z += (byte)(bodyPlug.z - headPlug.z);
+                working.Add(mvd);
+            }
+            bod.AddRange(working);
+            if (raw)
+            {
+                return bod.ToArray();
+            }
+            return PlaceShadows(bod).ToArray();
+        }
+
+
+        public static void Madden()
+        {
+            for (int i = 0; i < 256; i++)
+            {
+                xcolours[i] = xcolors[i];
+            }
+
+            for (int i = 1; i < 23; i++)
+            {
+                float alpha = 1F;
+                switch (i)
+                {
+                    case 22: alpha = 0F; break;
+                    case 18: alpha = flat_alpha; break;
+                    case 17: alpha = flat_alpha; break;
+                    case 13: alpha = flat_alpha; break;
+                    case 14: alpha = spin_alpha_0; break;
+                    case 15: alpha = spin_alpha_1; break;
+                }
+                if (i == 22)
+                {
+
+                    xcolors[(i - 1) * 8 + 0] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 1] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 2] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 3] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 4] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 5] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 6] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 7] = new float[] { 1F, 1F, 1F, 0F };
+                    xcolors[(i - 1) * 8 + 8] = new float[] { 1F, 1F, 1F, 0F };
+                }
+                else if (i == 11)
+                {
+                    xcolors[(i - 1) * 8 + 0] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 1] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 2] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 3] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 4] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 5] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 6] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                    xcolors[(i - 1) * 8 + 7] = new float[] { 1.0F, 0.5F, 1.0F, 1F };
+                }
+                else
+                {
+                    xcolors[(i - 1) * 8 + 0] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 1] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 2] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 3] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 4] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 5] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 6] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                    xcolors[(i - 1) * 8 + 7] = new float[] { 1 / i, 1F / i * 1.5F, 0.9F / (24 - i), alpha };
+                }
+            }
+            for (int i = 177; i < 256; i++)
+            {
+                xcolors[i] = new float[] { 0, 0, 0, 0 };
+            }
+        }
+        public static void Awaken()
+        {
+            for (int i = 0; i < 256; i++)
+            {
+                xcolors[i] = xcolours[i];
+            }
+        }
+
+
         public static List<MagicaVoxelData> adjacent(MagicaVoxelData pos)
         {
             List<MagicaVoxelData> near = new List<MagicaVoxelData>(6);
@@ -1779,25 +1821,29 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         private static List<MagicaVoxelData> generateConeDouble(MagicaVoxelData start, int segments, int color)
         {
             List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
-            for (int x = 0; x < segments * 2; x++)
+            for (int x = 0; x < segments; x++)
             {
-                for (int y = 0; y <= x; y++)
+                for (float y = 0; y <= x * 0.75f; y++)
                 {
-                    for (int z = 0; z <= x; z++)
+                    for (float z = 0; z <= x * 0.75f; z++)
                     {
-
-                        cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
-                        cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z), color = (byte)color });
-                        cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
-                        cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z), color = (byte)color });
-                        cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z - 1), color = (byte)color });
-                        cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z - 1), color = (byte)color });
+                        if (Math.Floor(y) == y && Math.Floor(z) == z)
+                        {
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 0 - y), z = (byte)(start.z - z - 1), color = (byte)color });
+                            cone.Add(new MagicaVoxelData { x = (byte)(start.x - x - 1), y = (byte)(start.y + 1 + y), z = (byte)(start.z - z - 1), color = (byte)color });
+                        }
                     }
                 }
             }
             return cone;
 
         }
+
+
 
         private static List<MagicaVoxelData> generateDownwardConeDouble(MagicaVoxelData start, int segments, int color)
         {
@@ -1835,15 +1881,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             List<int> known = new List<int>(30);
             foreach (MagicaVoxelData mvd in voxelFrames[0])
             {
-                if (known.Contains(249 - mvd.color))
-                {
-
-                }
-                else
-                {
-                    known.Add(249 - mvd.color);
-                    Console.Write((249 - mvd.color) + " ");
-                }
                 if (mvd.color < 249 - 168)
                 {
                     launchers.Add(mvd);
