@@ -7339,9 +7339,9 @@ namespace AssetsPV
 
             VoxelLogic.InitializeXPalette();
 
-
-            processUnitOutlinedPartial("Artillery_S"); 
-            processUnitOutlinedDouble("Artillery_P");
+            processUnitOutlinedPartial("Artillery_T"); 
+/*            processUnitOutlinedPartial("Artillery_S");
+            processUnitOutlinedDouble("Artillery_P");*/
 
             
             processUnitOutlinedW("Person");
