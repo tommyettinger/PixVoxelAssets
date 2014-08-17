@@ -7595,11 +7595,12 @@ namespace AssetsPV
 
             InitializeXPalette();
 
-            processUnitOutlinedPartial("Artillery_P");
             processUnitOutlinedPartial("Artillery");
+
+/*            processUnitOutlinedPartial("Artillery_P");
             processUnitOutlinedPartial("Artillery_S");
             processUnitOutlinedPartial("Artillery_T");
-
+            */
             processUnitOutlinedW("Person");
 
             
