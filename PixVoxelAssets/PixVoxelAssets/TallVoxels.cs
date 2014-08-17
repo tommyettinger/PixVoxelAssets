@@ -5724,7 +5724,7 @@ namespace AssetsPV
             {
                 if ((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
                 {
-                    filename = u + "_Firing_X.vox";
+                    filename = u + "_Firing_Part_X.vox";
                 }
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
@@ -7339,6 +7339,7 @@ namespace AssetsPV
 
             VoxelLogic.InitializeXPalette();
 
+            processUnitOutlinedPartial("Artillery");
             processUnitOutlinedPartial("Artillery_T"); 
 /*            processUnitOutlinedPartial("Artillery_S");
             processUnitOutlinedDouble("Artillery_P");*/

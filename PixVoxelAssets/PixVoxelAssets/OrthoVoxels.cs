@@ -4707,7 +4707,7 @@ namespace AssetsPV
 
         private static Bitmap renderHugeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
         {
-            Bitmap bmp = new Bitmap(124 * 2, 184 * 2, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(124*2, 184*2, PixelFormat.Format32bppArgb);
 
             // Specify a pixel format.
             PixelFormat pxf = PixelFormat.Format32bppArgb;
@@ -4732,7 +4732,7 @@ namespace AssetsPV
             bareValues.Fill<byte>(0);
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
-            int xSize = 60, ySize = 60;
+            int xSize = 120, ySize = 120;
             MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
             switch (facing)
             {
@@ -4797,26 +4797,26 @@ namespace AssetsPV
                         for (int i = 0; i < 8; i++)
                         {
                             /*
-argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
                             if (argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] == 0
+                           bmpData.Stride * (180*2 - 60*2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] == 0
                                 )
                             {
                                 argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
-                                    xrendered[mod_color][i + j * 16];
+                           bmpData.Stride * (180*2 - 60*2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
+                                    xrendered[mod_color][i + j * 8];
                                 bareValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
-                                    xrendered[mod_color][i + j * 16];
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
+                                    xrendered[mod_color][i + j * 8];
                                 barePositions[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] = true;
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] = true;
                             }
                         }
                     }
@@ -4829,12 +4829,12 @@ argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0
                         {
                             if (shadowValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 + 2 + j)] == 0)
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 + 2 + j)] == 0)
                             {
                                 shadowValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 + 2 + j)] =
-                                    xrendered[current_color][i + j * 16];
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 + 2 + j)] =
+                                    xrendered[current_color][i + j * 8];
                             }
                         }
                     }
@@ -4843,18 +4843,18 @@ argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0
                 {
                     int mod_color = current_color + faction;
 
-                    for (int j = 0; j < 4; j++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 8; i++)
                         {
                             if (argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] == 0)
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] == 0)
                             {
                                 argbValues[4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (360 - 120 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
-                                    xrendered[mod_color][i + j * 16];
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
+                                    xrendered[mod_color][i + j * 8];
                             }
                         }
                     }
@@ -6049,6 +6049,63 @@ argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0
         }
 
 
+        private static void processExplosionPartial(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, true);
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDouble(parsed, ((VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile) ? false : true));
+            string folder = ("ortho/frames");
+            for (int color = 0; color < 8; color++)
+            {
+                for (int d = 0; d < 4; d++)
+                {
+                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                    for (int frame = 0; frame < 8; frame++)
+                    {
+
+                        Bitmap b = renderHugeSmart(explode[frame], d, color, frame);
+                        Bitmap b2 = new Bitmap(124, 184, PixelFormat.Format32bppArgb);
+
+
+                        //                        b.Save("temp.png", ImageFormat.Png);
+                        Graphics g2 = Graphics.FromImage(b2);
+                        g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                        Bitmap b3 = b.Clone(new Rectangle(0, 0, 124 * 2, 184 * 2), b.PixelFormat);
+                        b.Dispose();
+                        g2.DrawImage(b3, 0, 0, 124, 184);
+
+                        b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                        b2.Dispose();
+                        g2.Dispose();
+                    }
+                }
+            }
+
+            System.IO.Directory.CreateDirectory("ortho/gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+            for (int i = 0; i < 8; i++)
+            {
+                for (int d = 0; d < 4; d++)
+                {
+                    for (int frame = 0; frame < 8; frame++)
+                    {
+                        s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
+                    }
+                }
+            }
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " ortho/gifs/" + u + "_explosion_animated.gif";
+            Console.WriteLine("Running convert.exe ...");
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+        }
+
         private static void processExplosion(string u)
         {
             Console.WriteLine("Processing: " + u);
@@ -6226,6 +6283,141 @@ argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0
                         for (int frame = 0; frame < 16; frame++)
                         {
                             s += folder + "/color" + i + "_" + u + "_face" + d + "_attack_" + w + "_" + frame + ".png ";
+                        }
+                    }
+                }
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " ortho/gifs/" + u + "_attack_" + w + "_animated.gif";
+                Console.WriteLine("Running convert.exe ...");
+                Process.Start(startInfo).WaitForExit();
+            }
+
+        }
+        private static void processFiringPartial(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            string filename = u + "_Part_X.vox";
+            BinaryReader bin = new BinaryReader(File.Open(filename, FileMode.Open));
+            bin.Close();
+            MagicaVoxelData[] parsed;
+            string folder = ("ortho/frames");
+
+            for (int w = 0; w < 2; w++)
+            {
+                if ((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
+                {
+                    filename = u + "_Firing_Part_X.vox";
+                }
+                if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    MagicaVoxelData[][] flying = Flyover(parsed);
+                    MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+                    //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
+                        flying[i].CopyTo(voxelFrames[i], 0);
+                    }
+                    /*                    for (int i = 0; i < flying[4].Length; i++)
+                                        {
+                                            voxelFrames[0][i].x += 20;
+                                            voxelFrames[0][i].y += 20;
+                                        }*/
+                    Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
+
+                    voxelFrames = weaponAnimations[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
+
+                    for (int f = 0; f < 16; f++)
+                    {
+                        List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                        int[,] taken = new int[60, 60];
+                        taken.Fill(-1);
+                        for (int i = 0; i < voxelFrames[f].Length; i++)
+                        {
+                            // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
+                            if (voxelFrames[f][i].x >= 60 || voxelFrames[f][i].y >= 60 || voxelFrames[f][i].z >= 60)
+                            {
+                                Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                continue;
+                            }
+                            altered.Add(voxelFrames[f][i]);
+                        }
+                        flying[f] = altered.ToArray();
+                    }
+                    for (int color = 0; color < 8; color++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                Graphics g;
+                                Bitmap[] b;
+                                Bitmap o;
+
+                                b = renderLarge(flying[frame], d, color, frame);
+                                o = renderOutlineLarge(flying[frame], d, color, frame);
+                                g = Graphics.FromImage(b[1]);
+
+                                g.DrawImage(o, 0, 0);
+                                g.DrawImage(b[0], 0, 0);
+
+                                b[1].Save(folder + "/color" + color + "_" + u + "_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                            }
+                        }
+                    }
+
+                    bin.Close();
+                }
+                else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+                    MagicaVoxelData[][] firing = VoxelLogic.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    for (int color = 0; color < 8; color++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+
+                                Bitmap b = renderHugeSmart(firing[frame], d, color, frame);
+                                Bitmap b2 = new Bitmap(124, 184, PixelFormat.Format32bppArgb);
+
+
+                                //                        b.Save("temp.png", ImageFormat.Png);
+                                Graphics g2 = Graphics.FromImage(b2);
+                                g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 124 * 2, 184 * 2), b.PixelFormat);
+                                b.Dispose();
+                                g2.DrawImage(b3, 0, 0, 124, 184);
+
+                                b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b2.Dispose();
+                                g2.Dispose();
+                            }
+                        }
+                    }
+
+                    bin.Close();
+                }
+                else continue;
+
+                System.IO.Directory.CreateDirectory("ortho/gifs");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int d = 0; d < 4; d++)
+                    {
+                        for (int frame = 0; frame < 16; frame++)
+                        {
+                            s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png ";
                         }
                     }
                 }
@@ -6656,6 +6848,89 @@ argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0
            // processFiringDouble(u);
 
            // processExplosionDouble(u);
+
+        }
+        private static void processUnitOutlinedPartial(string u)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+            if (!VoxelLogic.UnitLookup.ContainsKey(u))
+            {
+                framelimit = 4;
+                for (int i = 0; i < 8; i++)
+                {
+                    string folder = ("ortho/color" + i);//"color" + i;
+                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    for (int f = 0; f < framelimit; f++)
+                    {
+                        Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit);
+                        b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Dispose();
+                    }
+                }
+                bin.Close();
+
+                System.IO.Directory.CreateDirectory("gifs");
+                ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
+                starter.UseShellExecute = false;
+                string arrgs = "";
+                for (int i = 0; i < 8; i++)
+                    arrgs += "ortho/color" + i + "/" + u + "_Large_face* ";
+                starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " gifs/" + u + "_Large_animated.gif";
+                Process.Start(starter).WaitForExit();
+
+                return;
+            }
+            else if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
+            {
+                framelimit = 2;
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                string folder = ("ortho/color" + i);//"color" + i;
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                for (int f = 0; f < framelimit; f++)
+                { //"color" + i + "/"
+
+                    Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                    b = processSingleOutlinedDouble(parsed, i, "W", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face1" + "_" + f + ".png", ImageFormat.Png); //sw
+                    b.Dispose();
+                    b = processSingleOutlinedDouble(parsed, i, "N", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face2" + "_" + f + ".png", ImageFormat.Png); //nw
+                    b.Dispose();
+                    b = processSingleOutlinedDouble(parsed, i, "E", f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face3" + "_" + f + ".png", ImageFormat.Png); //ne
+                    b.Dispose();
+                }
+
+            }
+
+            System.IO.Directory.CreateDirectory("ortho/gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+            for (int i = 0; i < 8; i++)
+                s += "ortho/color" + i + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+
+             processFiringPartial(u);
+
+             processExplosionPartial(u);
 
         }
 
@@ -7320,9 +7595,10 @@ argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0
 
             InitializeXPalette();
 
-            processUnitOutlinedDouble("Artillery_P");
-
-            processUnitOutlinedDouble("Artillery_S");
+            processUnitOutlinedPartial("Artillery_P");
+            processUnitOutlinedPartial("Artillery");
+            processUnitOutlinedPartial("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
 
             processUnitOutlinedW("Person");
 
