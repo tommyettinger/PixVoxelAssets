@@ -436,7 +436,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //4 skin
             new float[] {0.87F,0.65F,0.3F,1F},
             //5 eyes
-            new float[] {0.2F,0.4F,0.9F,1F},
+            new float[] {0.2F,0.2F,0.1F,1F},
             //6 skin contrast
             new float[] {0.77F,0.5F,0.1F,1F},
         };
@@ -455,7 +455,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //4 skin
             new float[] {0.87F,0.65F,0.3F,1F},
             //5 eyes
-            new float[] {0.4F,0.3F,0.0F,1F},
+            new float[] {0.2F,0.2F,0.05F,1F},
             //6 skin contrast
             new float[] {0.77F,0.45F,0.05F,1F},
             },
@@ -471,7 +471,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //4 skin
             new float[] {0.89F,0.69F,0.32F,1F},
             //5 eyes
-            new float[] {0.2F,0.4F,0.9F,1F},
+            new float[] {0.1F,0.25F,0.5F,1F},
             //6 skin contrast (lips, ears)
             new float[] {0.82F,0.5F,0.1F,1F},
             },
@@ -487,7 +487,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //4 skin
             new float[] {0.45F,0.57F,0.35F,1F},
             //5 eyes
-            new float[] {0.8F,0.75F,0.0F,1F},
+            new float[] {0.8F,0.15F,0.0F,1F},
             //6 skin contrast (lips, ears)
             new float[] {0.23F,0.4F,0.0F,1F},
 
@@ -907,6 +907,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelsAltered;
         }
+
+        /// <summary>
+        /// Load a MagicaVoxel .vox format file into a MagicaVoxelData[] that we use for voxel chunks.
+        /// </summary>
+        /// <param name="stream">An open BinaryReader stream that is the .vox file.</param>
+        /// <returns>The voxel chunk data for the MagicaVoxel .vox file.</returns>
         public static MagicaVoxelData[] FromMagicaRaw(BinaryReader stream)
         {
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
