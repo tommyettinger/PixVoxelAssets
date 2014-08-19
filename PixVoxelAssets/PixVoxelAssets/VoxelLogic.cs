@@ -490,7 +490,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.8F,0.15F,0.0F,1F},
             //6 skin contrast (lips, ears)
             new float[] {0.23F,0.4F,0.0F,1F},
-
             },
         };
         public static float[][] xcolours = new float[256][];
@@ -647,11 +646,176 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return cubes;
         }
+        public static byte[][][] wrendered;
+        public static byte[][] wcurrent;
+        private static byte[][][] storeColorCubesW()
+        {
+            byte[, ,] cubes = new byte[3, 7, 64];
+
+            Image image = new Bitmap("cube_soft.png");
+            Image flat = new Bitmap("flat_soft.png");
+            Image spin = new Bitmap("spin_soft.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 4;
+            float[][] colorMatrixElements = { 
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+            for (int p = 0; p < 3; p++)
+            {
+                for (int current_color = 0; current_color < 7; current_color++)
+                {
+                    Bitmap b =
+                    new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+                    Graphics g = Graphics.FromImage((Image)b);
+
+                    if (current_color == 31)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  VoxelLogic.flat_alpha, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if (current_color == 20) //lights
+                    {
+                        float lightCalc = 0.06F;
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0] + lightCalc,  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1] + lightCalc,  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2] + lightCalc,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+
+                    else
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    g.DrawImage((current_color == 20) ? spin :
+                       (VoxelLogic.wpalettes[p][current_color][3] == 1F || current_color / 8 == 23 || current_color / 8 == 25 || current_color / 8 == 26) ? image :
+                       (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha) ? flat : spin,
+                       new Rectangle(0, 0,
+                           width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            Color c = b.GetPixel(i, j);
+                            cubes[p, current_color, i * 4 + j * 16 + 0] = c.B;
+                            cubes[p, current_color, i * 4 + j * 16 + 1] = c.G;
+                            cubes[p, current_color, i * 4 + j * 16 + 2] = c.R;
+                            cubes[p, current_color, i * 4 + j * 16 + 3] = c.A;
+                        }
+                    }
+                }
+                /*                for (int current_color = 80; current_color < 88; current_color++)
+                                {
+                                    for (int frame = 0; frame < 4; frame++)
+                                    {
+                                        Bitmap b =
+                                        new Bitmap(2, 3, PixelFormat.Format32bppArgb);
+
+                                        Graphics g = Graphics.FromImage((Image)b);
+                                        float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
+                                        colorMatrix = new ColorMatrix(new float[][]{ 
+                   new float[] {0.22F+VoxelLogic.xcolors[current_color][0] + lightCalc,  0,  0,  0, 0},
+                   new float[] {0,  0.251F+VoxelLogic.xcolors[current_color][1] + lightCalc,  0,  0, 0},
+                   new float[] {0,  0,  0.31F+VoxelLogic.xcolors[current_color][2] + lightCalc,  0, 0},
+                   new float[] {0,  0,  0,  1F, 0},
+                   new float[] {0, 0, 0, 0, 1F}});
+
+                                        imageAttributes.SetColorMatrix(
+                                           colorMatrix,
+                                           ColorMatrixFlag.Default,
+                                           ColorAdjustType.Bitmap);
+                                        g.DrawImage(spin,
+                                           new Rectangle(0, 0,
+                                               width, height),  // destination rectangle 
+                                            //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                                           0, 0,        // upper-left corner of source rectangle 
+                                           width,       // width of source rectangle
+                                           height,      // height of source rectangle
+                                           GraphicsUnit.Pixel,
+                                           imageAttributes);
+
+                                        cubes[88 + current_color + (8 * frame)] = new byte[24];
+                                        for (int i = 0; i < 2; i++)
+                                        {
+                                            for (int j = 0; j < 3; j++)
+                                            {
+                                                Color c = b.GetPixel(i, j);
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 0] = c.B;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 1] = c.G;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 2] = c.R;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 3] = c.A;
+                                            }
+                                        }
+                                    }
+                                }*/
+            }
+            byte[][][] cubes2 = new byte[3][][];
+            for (int i = 0; i < 3; i++)
+            {
+                cubes2[i] = new byte[7][];
+                for (int c = 0; c < 7; c++)
+                {
+                    cubes2[i][c] = new byte[64];
+                    for (int j = 0; j < 64; j++)
+                    {
+                        cubes2[i][c][j] = cubes[i, c, j];
+                    }
+                }
+            }
+            return cubes2;
+        }
+
 
 
         public static void InitializeXPalette()
         {
             xrendered = storeColorCubes();
+        }
+
+        public static void InitializeWPalette()
+        {
+            wrendered = storeColorCubesW();
         }
 
 

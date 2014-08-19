@@ -207,7 +207,7 @@ namespace AssetsPV
                 for (int current_color = 0; current_color < 7; current_color++)
                 {
                     Bitmap b =
-                    new Bitmap(2, 3, PixelFormat.Format32bppArgb);
+                    new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
                     Graphics g = Graphics.FromImage((Image)b);
 
@@ -6637,16 +6637,7 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
             b = renderWSmart(parsed, dir, palette, frame);
-            // o = renderOutlineLarge(parsed, d, color, frame);
             g = Graphics.FromImage(b);
-
-            //            g.DrawImage(o, 0, 0);
-            //ImageAttributes attr = new ImageAttributes();
-            //g.DrawImage(b[0], 0, 0);//, new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr
-            //attr.SetColorKey(Color.FromArgb(255, 16, 16, 16), Color.White);
-            //g = Graphics.FromImage(n);
-            //g.DrawImage(b[1], new Rectangle(0, 0, 88, 108), 0, 0, 88, 108, GraphicsUnit.Pixel, attr);
-
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(16 + 2, 16 + 34, 44 * 2, 64 * 2), b.PixelFormat), 0, 0, 44, 64);
