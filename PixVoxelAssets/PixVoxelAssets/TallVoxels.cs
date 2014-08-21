@@ -7620,103 +7620,105 @@ namespace AssetsPV
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
             processUnitOutlinedWDouble("Person");
-            processUnitOutlinedPartial("Artillery_P");
-/*
-            processUnitOutlinedPartial("Artillery");
-            processUnitOutlinedPartial("Artillery_T"); 
-            processUnitOutlinedPartial("Artillery_S");
-
-            //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
-            //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
-
-
-            //processUnitOutlined("Block");
+            processUnitOutlinedPartial("Infantry");
             /*
-            Madden();
-            processMedalChannel("Medal_P");
-            processMedalChannel("Medal_S");
-            processMedalChannel("Medal_T");
-            
-            processUnitChannel("Plane");
-            processUnitChannel("Plane_P");
-            processUnitChannel("Plane_S");
-            processUnitChannel("Plane_T");
+                        processUnitOutlinedPartial("Artillery_P");
 
-            processUnitChannel("Copter");
-            processUnitChannel("Copter_P");
-            processUnitChannel("Copter_S");
-            processUnitChannel("Copter_T");
-            
-            processUnitChannel("Infantry");
-            processUnitChannel("Infantry_P");
-            processUnitChannel("Infantry_S");
-            processUnitChannel("Infantry_T");
+                        processUnitOutlinedPartial("Artillery");
+                        processUnitOutlinedPartial("Artillery_T"); 
+                        processUnitOutlinedPartial("Artillery_S");
 
-            processUnitChannel("Artillery");
-            processUnitChannel("Artillery_P");
-            processUnitChannel("Artillery_S");
-            processUnitChannel("Artillery_T");
+                        //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
+                        //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
 
-            processUnitChannel("Tank");
-            processUnitChannel("Tank_P");
-            processUnitChannel("Tank_S");
-            processUnitChannel("Tank_T");
 
-            processUnitChannel("Supply");
-            processUnitChannel("Supply_P");
-            processUnitChannel("Supply_S");
-            processUnitChannel("Supply_T");
+                        //processUnitOutlined("Block");
+                        /*
+                        Madden();
+                        processMedalChannel("Medal_P");
+                        processMedalChannel("Medal_S");
+                        processMedalChannel("Medal_T");
             
-            processUnitChannel("City");
-            processUnitChannel("Factory");
-            processUnitChannel("Airport");
-            processUnitChannel("Laboratory");
-            processUnitChannel("Castle");
-            processUnitChannel("Estate");
+                        processUnitChannel("Plane");
+                        processUnitChannel("Plane_P");
+                        processUnitChannel("Plane_S");
+                        processUnitChannel("Plane_T");
+
+                        processUnitChannel("Copter");
+                        processUnitChannel("Copter_P");
+                        processUnitChannel("Copter_S");
+                        processUnitChannel("Copter_T");
+            
+                        processUnitChannel("Infantry");
+                        processUnitChannel("Infantry_P");
+                        processUnitChannel("Infantry_S");
+                        processUnitChannel("Infantry_T");
+
+                        processUnitChannel("Artillery");
+                        processUnitChannel("Artillery_P");
+                        processUnitChannel("Artillery_S");
+                        processUnitChannel("Artillery_T");
+
+                        processUnitChannel("Tank");
+                        processUnitChannel("Tank_P");
+                        processUnitChannel("Tank_S");
+                        processUnitChannel("Tank_T");
+
+                        processUnitChannel("Supply");
+                        processUnitChannel("Supply_P");
+                        processUnitChannel("Supply_S");
+                        processUnitChannel("Supply_T");
+            
+                        processUnitChannel("City");
+                        processUnitChannel("Factory");
+                        processUnitChannel("Airport");
+                        processUnitChannel("Laboratory");
+                        processUnitChannel("Castle");
+                        processUnitChannel("Estate");
             
 
-            //File.WriteAllText("FiringPositions.txt", log.ToString());
+                        //File.WriteAllText("FiringPositions.txt", log.ToString());
 
-            /*
-            processUnitOutlined("Infantry");
-            processUnitOutlined("Infantry_P");
-            processUnitOutlined("Infantry_S");
-            processUnitOutlined("Infantry_T");
+                        /*
+                        processUnitOutlined("Infantry");
+                        processUnitOutlined("Infantry_P");
+                        processUnitOutlined("Infantry_S");
+                        processUnitOutlined("Infantry_T");
 
-            processUnitOutlined("Artillery");
-            processUnitOutlined("Artillery_P");
-            processUnitOutlined("Artillery_S");
-            processUnitOutlined("Artillery_T");
+                        processUnitOutlined("Artillery");
+                        processUnitOutlined("Artillery_P");
+                        processUnitOutlined("Artillery_S");
+                        processUnitOutlined("Artillery_T");
 
-            processUnitOutlined("Tank");
-            processUnitOutlined("Tank_P");
-            processUnitOutlined("Tank_S");
-            processUnitOutlined("Tank_T");
+                        processUnitOutlined("Tank");
+                        processUnitOutlined("Tank_P");
+                        processUnitOutlined("Tank_S");
+                        processUnitOutlined("Tank_T");
             
-            processUnitOutlined("Supply");
-            processUnitOutlined("Supply_P");
-            processUnitOutlined("Supply_S");
-            processUnitOutlined("Supply_T");
+                        processUnitOutlined("Supply");
+                        processUnitOutlined("Supply_P");
+                        processUnitOutlined("Supply_S");
+                        processUnitOutlined("Supply_T");
             
-            processUnitOutlined("Plane");
-            processUnitOutlined("Plane_P");
-            processUnitOutlined("Plane_S");
-            processUnitOutlined("Plane_T");
+                        processUnitOutlined("Plane");
+                        processUnitOutlined("Plane_P");
+                        processUnitOutlined("Plane_S");
+                        processUnitOutlined("Plane_T");
             
-            processUnitOutlined("Copter");
-            processUnitOutlined("Copter_P");
-            processUnitOutlined("Copter_S");
-            processUnitOutlined("Copter_T");
+                        processUnitOutlined("Copter");
+                        processUnitOutlined("Copter_P");
+                        processUnitOutlined("Copter_S");
+                        processUnitOutlined("Copter_T");
 
             
-            processUnitOutlined("City");
-            processUnitOutlined("Factory");
-            processUnitOutlined("Airport");
-            processUnitOutlined("Laboratory");
-            processUnitOutlined("Castle");
-            processUnitOutlined("Estate");
+                        processUnitOutlined("City");
+                        processUnitOutlined("Factory");
+                        processUnitOutlined("Airport");
+                        processUnitOutlined("Laboratory");
+                        processUnitOutlined("Castle");
+                        processUnitOutlined("Estate");
             
-            */
+                        */
 
             //       makeGamePreview(9, 18);
 
