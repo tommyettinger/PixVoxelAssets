@@ -2136,7 +2136,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             List<int> known = new List<int>(30);
             foreach (MagicaVoxelData mvd in voxelFrames[0])
             {
-                if (mvd.color < 249 - 168)
+                if (mvd.color == 249 - 173)
                 {
                     launchers.Add(mvd);
                 }
