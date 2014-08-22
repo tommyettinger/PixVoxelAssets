@@ -7619,13 +7619,15 @@ namespace AssetsPV
 
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
-            processUnitOutlinedWDouble("Person");
-            processUnitOutlinedPartial("Tank_S");
-            processUnitOutlinedPartial("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            processUnitOutlinedPartial("Tank_T");
 
             /*
+                         processUnitOutlinedWDouble("Person");
+
                         processUnitOutlinedPartial("Artillery_P");
             
+            processUnitOutlinedPartial("Tank_S");
             processUnitOutlinedPartial("Tank");
             processUnitOutlinedPartial("Infantry");
                         processUnitOutlinedPartial("Artillery");
