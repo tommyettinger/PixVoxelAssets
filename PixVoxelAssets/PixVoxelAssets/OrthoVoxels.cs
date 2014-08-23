@@ -4725,10 +4725,12 @@ namespace AssetsPV
                 }
                 else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
                 {
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
                     {
-                        mod_color = 168 + faction + frame * 8;
+                        mod_color = 168 + faction + (frame%4) * 8;
                     }
                     for (int j = 0; j < 3; j++)
                     {
@@ -4930,7 +4932,7 @@ namespace AssetsPV
                     }
                     break;
             }
-            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            int jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
@@ -4944,10 +4946,12 @@ namespace AssetsPV
                 }
                 else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
                 {
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
                     {
-                        mod_color = 168 + faction + frame * 8;
+                        mod_color = 168 + faction + (frame%4) * 8;
                     }
                     for (int j = 0; j < 3; j++)
                     {
@@ -8251,9 +8255,15 @@ namespace AssetsPV
 
             InitializeXPalette();
             InitializeWPalette();
-            processUnitOutlinedWDouble("Person");
-/*            processUnitOutlinedPartial("Artillery");
 
+            processUnitOutlinedWDouble("Person");
+
+            processUnitOutlinedPartial("Infantry");
+            processUnitOutlinedPartial("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            processUnitOutlinedPartial("Artillery");
             processUnitOutlinedPartial("Artillery_P");
             processUnitOutlinedPartial("Artillery_S");
             processUnitOutlinedPartial("Artillery_T");

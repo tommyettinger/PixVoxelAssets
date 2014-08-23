@@ -19,7 +19,7 @@ namespace AssetsPV
         public static string[] Terrains = new string[]
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River", "Basement"};
-        
+
         private static bool PalettesInitialized = false;
         private static List<Color>[] SDPalettes = new List<Color>[18];
         public static void InitializePalettes()
@@ -1831,7 +1831,7 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        
+
         public static MagicaVoxelData[][] CannonReceiveAnimation(MagicaVoxelData[][] parsedFrames, int strength)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
@@ -2668,7 +2668,7 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        
+
         public static MagicaVoxelData[][] ArcMissileReceiveAnimation(MagicaVoxelData[][] parsedFrames, int strength)
         {
 
@@ -3479,9 +3479,9 @@ namespace AssetsPV
                 if (current_color >= VoxelLogic.wcolors.Length)
                     continue;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 168)
                     continue;
@@ -3634,9 +3634,9 @@ namespace AssetsPV
                 int current_color = (249 - vx.color) / 8;
                 if (current_color >= VoxelLogic.wcolors.Length)
                     continue;
-                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
@@ -3770,9 +3770,9 @@ namespace AssetsPV
             {
                 int current_color = 249 - vx.color;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 168)
                     continue;
@@ -3934,9 +3934,9 @@ namespace AssetsPV
             {
                 int current_color = 249 - vx.color;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 168)
                     continue;
@@ -4090,9 +4090,9 @@ namespace AssetsPV
             {
                 int current_color = 249 - vx.color;
 
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
@@ -4188,9 +4188,9 @@ namespace AssetsPV
             {
                 int current_color = 249 - vx.color;
 
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
@@ -4287,16 +4287,19 @@ namespace AssetsPV
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color >= 168)
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80) 
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
                 {
+
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
                     {
@@ -4332,7 +4335,7 @@ namespace AssetsPV
                         }
                     }
                 }
-                else if(current_color == 96)
+                else if (current_color == 96)
                 {
                     for (int j = 0; j < 4; j++)
                     {
@@ -4353,7 +4356,7 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color + faction;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4436,7 +4439,7 @@ namespace AssetsPV
 
         private static Bitmap renderHugeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
         {
-            Bitmap bmp = new Bitmap(248*2, 308*2, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(248 * 2, 308 * 2, PixelFormat.Format32bppArgb);
 
             // Specify a pixel format.
             PixelFormat pxf = PixelFormat.Format32bppArgb;
@@ -4463,7 +4466,7 @@ namespace AssetsPV
             barePositions.Fill<bool>(false);
 
 
-            int xSize = 60*2, ySize = 60*2;
+            int xSize = 60 * 2, ySize = 60 * 2;
             MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
             switch (facing)
             {
@@ -4504,13 +4507,15 @@ namespace AssetsPV
                     }
                     break;
             }
-            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            // 0 1 2 3 4 5 6 7
+            // 0 1 2 3 4 3 2 1
+            int jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color >= 168)
                 {
@@ -4518,6 +4523,8 @@ namespace AssetsPV
                 }
                 else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80) // || current_color == 136
                 {
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
                     int mod_color = current_color + faction;
                     if (current_color == 80) //lights
                     {
@@ -4537,15 +4544,15 @@ namespace AssetsPV
                                 bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                                  */)
                             {
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4)
+                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
                                     bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
                                     VoxelLogic.xrendered[mod_color][i + j * 16];
-                                bareValues[4 * ((vx.x + vx.y) * 2 + 4)
+                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
                                     bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
                                     VoxelLogic.xrendered[mod_color][i + j * 16];
-                                barePositions[4 * ((vx.x + vx.y) * 2 + 4)
+                                barePositions[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
                                     bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] = true;
                             }
@@ -4948,9 +4955,9 @@ namespace AssetsPV
             {
                 int current_color = 249 - vx.color;
                 // Console.Write(current_color + "  ");
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color >= 168)
                 {
@@ -5094,9 +5101,9 @@ namespace AssetsPV
             {
                 int current_color = 249 - vx.color;
 
-                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] ==  VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
                 else if (current_color == 120 || current_color == 152 || current_color == 160 || current_color == 136 || current_color >= 168)
                     continue;
@@ -5398,7 +5405,7 @@ namespace AssetsPV
             Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            VoxelLogic.wcurrent =VoxelLogic.wrendered[palette];
+            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmart(parsed, dir, palette, frame);
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
@@ -6080,8 +6087,8 @@ namespace AssetsPV
             }
 
         }
-        
-        
+
+
         private static void processReceiving()
         {
             string folder = ("frames");
@@ -6524,7 +6531,7 @@ namespace AssetsPV
             {
                 framelimit = 2;
             }
-            
+
             for (int i = 0; i < 8; i++)
             {
                 string folder = ("color" + i);//"color" + i;
@@ -6575,7 +6582,7 @@ namespace AssetsPV
                 parsed[i].y += 10;
             }
             int framelimit = 1;
-            
+
             for (int i = 0; i < 3; i++)
             {
                 string folder = ("palette" + i);//"color" + i;
@@ -6602,9 +6609,9 @@ namespace AssetsPV
 
             bin.Close();
 
-//            processFiringDouble(u);
+            //            processFiringDouble(u);
 
-//            processExplosionDouble(u);
+            //            processExplosionDouble(u);
 
         }
 
@@ -6614,7 +6621,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
-            
+
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -6712,7 +6719,7 @@ namespace AssetsPV
             processExplosionPartial(u);
 
         }
-        
+
         public static void processTerrainChannel()
         {
             for (int i = 0; i < 11; i++)
@@ -7619,112 +7626,109 @@ namespace AssetsPV
 
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
+            processUnitOutlinedWDouble("Person");
+
+            processUnitOutlinedPartial("Infantry");
+            processUnitOutlinedPartial("Tank");
             processUnitOutlinedPartial("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
             processUnitOutlinedPartial("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+
+            //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
+            //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
+
+
+            //processUnitOutlined("Block");
+            /*
+            Madden();
+            processMedalChannel("Medal_P");
+            processMedalChannel("Medal_S");
+            processMedalChannel("Medal_T");
+            
+            processUnitChannel("Plane");
+            processUnitChannel("Plane_P");
+            processUnitChannel("Plane_S");
+            processUnitChannel("Plane_T");
+
+            processUnitChannel("Copter");
+            processUnitChannel("Copter_P");
+            processUnitChannel("Copter_S");
+            processUnitChannel("Copter_T");
+            
+            processUnitChannel("Infantry");
+            processUnitChannel("Infantry_P");
+            processUnitChannel("Infantry_S");
+            processUnitChannel("Infantry_T");
+
+            processUnitChannel("Artillery");
+            processUnitChannel("Artillery_P");
+            processUnitChannel("Artillery_S");
+            processUnitChannel("Artillery_T");
+
+            processUnitChannel("Tank");
+            processUnitChannel("Tank_P");
+            processUnitChannel("Tank_S");
+            processUnitChannel("Tank_T");
+
+            processUnitChannel("Supply");
+            processUnitChannel("Supply_P");
+            processUnitChannel("Supply_S");
+            processUnitChannel("Supply_T");
+            
+            processUnitChannel("City");
+            processUnitChannel("Factory");
+            processUnitChannel("Airport");
+            processUnitChannel("Laboratory");
+            processUnitChannel("Castle");
+            processUnitChannel("Estate");
+            
+
+            //File.WriteAllText("FiringPositions.txt", log.ToString());
 
             /*
-                         processUnitOutlinedWDouble("Person");
+            processUnitOutlined("Infantry");
+            processUnitOutlined("Infantry_P");
+            processUnitOutlined("Infantry_S");
+            processUnitOutlined("Infantry_T");
 
-                        processUnitOutlinedPartial("Artillery_P");
+            processUnitOutlined("Artillery");
+            processUnitOutlined("Artillery_P");
+            processUnitOutlined("Artillery_S");
+            processUnitOutlined("Artillery_T");
+
+            processUnitOutlined("Tank");
+            processUnitOutlined("Tank_P");
+            processUnitOutlined("Tank_S");
+            processUnitOutlined("Tank_T");
             
-            processUnitOutlinedPartial("Tank_S");
-            processUnitOutlinedPartial("Tank");
-            processUnitOutlinedPartial("Infantry");
-                        processUnitOutlinedPartial("Artillery");
-                        processUnitOutlinedPartial("Artillery_T"); 
-                        processUnitOutlinedPartial("Artillery_S");
-
-                        //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
-                        //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
-
-
-                        //processUnitOutlined("Block");
-                        /*
-                        Madden();
-                        processMedalChannel("Medal_P");
-                        processMedalChannel("Medal_S");
-                        processMedalChannel("Medal_T");
+            processUnitOutlined("Supply");
+            processUnitOutlined("Supply_P");
+            processUnitOutlined("Supply_S");
+            processUnitOutlined("Supply_T");
             
-                        processUnitChannel("Plane");
-                        processUnitChannel("Plane_P");
-                        processUnitChannel("Plane_S");
-                        processUnitChannel("Plane_T");
-
-                        processUnitChannel("Copter");
-                        processUnitChannel("Copter_P");
-                        processUnitChannel("Copter_S");
-                        processUnitChannel("Copter_T");
+            processUnitOutlined("Plane");
+            processUnitOutlined("Plane_P");
+            processUnitOutlined("Plane_S");
+            processUnitOutlined("Plane_T");
             
-                        processUnitChannel("Infantry");
-                        processUnitChannel("Infantry_P");
-                        processUnitChannel("Infantry_S");
-                        processUnitChannel("Infantry_T");
-
-                        processUnitChannel("Artillery");
-                        processUnitChannel("Artillery_P");
-                        processUnitChannel("Artillery_S");
-                        processUnitChannel("Artillery_T");
-
-                        processUnitChannel("Tank");
-                        processUnitChannel("Tank_P");
-                        processUnitChannel("Tank_S");
-                        processUnitChannel("Tank_T");
-
-                        processUnitChannel("Supply");
-                        processUnitChannel("Supply_P");
-                        processUnitChannel("Supply_S");
-                        processUnitChannel("Supply_T");
-            
-                        processUnitChannel("City");
-                        processUnitChannel("Factory");
-                        processUnitChannel("Airport");
-                        processUnitChannel("Laboratory");
-                        processUnitChannel("Castle");
-                        processUnitChannel("Estate");
-            
-
-                        //File.WriteAllText("FiringPositions.txt", log.ToString());
-
-                        /*
-                        processUnitOutlined("Infantry");
-                        processUnitOutlined("Infantry_P");
-                        processUnitOutlined("Infantry_S");
-                        processUnitOutlined("Infantry_T");
-
-                        processUnitOutlined("Artillery");
-                        processUnitOutlined("Artillery_P");
-                        processUnitOutlined("Artillery_S");
-                        processUnitOutlined("Artillery_T");
-
-                        processUnitOutlined("Tank");
-                        processUnitOutlined("Tank_P");
-                        processUnitOutlined("Tank_S");
-                        processUnitOutlined("Tank_T");
-            
-                        processUnitOutlined("Supply");
-                        processUnitOutlined("Supply_P");
-                        processUnitOutlined("Supply_S");
-                        processUnitOutlined("Supply_T");
-            
-                        processUnitOutlined("Plane");
-                        processUnitOutlined("Plane_P");
-                        processUnitOutlined("Plane_S");
-                        processUnitOutlined("Plane_T");
-            
-                        processUnitOutlined("Copter");
-                        processUnitOutlined("Copter_P");
-                        processUnitOutlined("Copter_S");
-                        processUnitOutlined("Copter_T");
+            processUnitOutlined("Copter");
+            processUnitOutlined("Copter_P");
+            processUnitOutlined("Copter_S");
+            processUnitOutlined("Copter_T");
 
             
-                        processUnitOutlined("City");
-                        processUnitOutlined("Factory");
-                        processUnitOutlined("Airport");
-                        processUnitOutlined("Laboratory");
-                        processUnitOutlined("Castle");
-                        processUnitOutlined("Estate");
+            processUnitOutlined("City");
+            processUnitOutlined("Factory");
+            processUnitOutlined("Airport");
+            processUnitOutlined("Laboratory");
+            processUnitOutlined("Castle");
+            processUnitOutlined("Estate");
             
-                        */
+            */
 
             //       makeGamePreview(9, 18);
 
