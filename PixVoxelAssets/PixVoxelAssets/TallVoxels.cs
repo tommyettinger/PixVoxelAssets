@@ -4295,7 +4295,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 104 || current_color == 112)
                 {
 
                     if (current_color == 136 && r.Next(7) < 2)
@@ -4521,7 +4521,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80) // || current_color == 136
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 104 || current_color == 112)
                 {
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
@@ -7626,8 +7626,10 @@ namespace AssetsPV
 
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
-            processUnitOutlinedWDouble("Person");
+//            processUnitOutlinedWDouble("Person");
 
+            processUnitOutlinedPartial("Copter");
+/*            processUnitOutlinedPartial("Infantry_P");
             processUnitOutlinedPartial("Infantry");
             processUnitOutlinedPartial("Tank");
             processUnitOutlinedPartial("Tank_P");

@@ -98,7 +98,7 @@ namespace AssetsPV
                    colorMatrix,
                    ColorMatrixFlag.Default,
                    ColorAdjustType.Bitmap);
-                g.DrawImage((current_color / 8 == 10) ? spin :
+                g.DrawImage((current_color / 8 == 10 || current_color / 8 == 13 || current_color / 8 == 14) ? spin :
                    (VoxelLogic.xcolors[current_color][3] == 1F || current_color / 8 == 13 || current_color / 8 == 15 || current_color / 8 == 16) ? image :
                    (VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? flat : spin,
                    new Rectangle(0, 0,
@@ -4723,7 +4723,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 104 || current_color == 112)
                 {
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
@@ -4944,7 +4944,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 104 || current_color == 112)
                 {
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
