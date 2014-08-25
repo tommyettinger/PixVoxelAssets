@@ -7629,7 +7629,7 @@ namespace AssetsPV
 //            processUnitOutlinedWDouble("Person");
 
             processUnitOutlinedPartial("Copter");
-/*            processUnitOutlinedPartial("Infantry_P");
+            processUnitOutlinedPartial("Infantry_P");
             processUnitOutlinedPartial("Infantry");
             processUnitOutlinedPartial("Tank");
             processUnitOutlinedPartial("Tank_P");

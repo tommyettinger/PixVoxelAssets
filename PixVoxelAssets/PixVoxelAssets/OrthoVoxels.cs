@@ -8258,50 +8258,54 @@ namespace AssetsPV
 
             processUnitOutlinedWDouble("Person");
 
+            processUnitOutlinedPartial("Copter");
+            processUnitOutlinedPartial("Infantry_P");
+            
             processUnitOutlinedPartial("Infantry");
-            processUnitOutlinedPartial("Tank");
-            processUnitOutlinedPartial("Tank_P");
-            processUnitOutlinedPartial("Tank_S");
-            processUnitOutlinedPartial("Tank_T");
-            processUnitOutlinedPartial("Artillery");
-            processUnitOutlinedPartial("Artillery_P");
-            processUnitOutlinedPartial("Artillery_S");
-            processUnitOutlinedPartial("Artillery_T");
-            
-//            processUnitOutlinedWDouble("Person");
+                        processUnitOutlinedPartial("Tank");
+                        processUnitOutlinedPartial("Tank_P");
+                        processUnitOutlinedPartial("Tank_S");
+                        processUnitOutlinedPartial("Tank_T");
+                        processUnitOutlinedPartial("Artillery");
+                        processUnitOutlinedPartial("Artillery_P");
+                        processUnitOutlinedPartial("Artillery_S");
+                        processUnitOutlinedPartial("Artillery_T");
+
+
+            //            processUnitOutlinedWDouble("Person");
 
             
-            /*
-            processFiring("Copter");
-            processFiring("Copter_P");
-            processFiring("Copter_S");
-            processFiring("Copter_T");
+                        /*
+                        processFiring("Copter");
+                        processFiring("Copter_P");
+                        processFiring("Copter_S");
+                        processFiring("Copter_T");
 
-            processFiring("Plane");
-            processFiring("Plane_P");
-            processFiring("Plane_S");
-            processFiring("Plane_T");
+                        processFiring("Plane");
+                        processFiring("Plane_P");
+                        processFiring("Plane_S");
+                        processFiring("Plane_T");
 
-            processFiring("Supply");
-            processFiring("Supply_P");
-            processFiring("Supply_S");
-            processFiring("Supply_T");
+                        processFiring("Supply");
+                        processFiring("Supply_P");
+                        processFiring("Supply_S");
+                        processFiring("Supply_T");
 
-            processFiring("Artillery");
-            processFiring("Artillery_S");
-            processFiring("Artillery_P");
-            processFiring("Artillery_T");
+                        processFiring("Artillery");
+                        processFiring("Artillery_S");
+                        processFiring("Artillery_P");
+                        processFiring("Artillery_T");
 
-            processFiring("Infantry_P");
-            processFiring("Infantry");
-            processFiring("Infantry_S");
-            processFiring("Infantry_T");
+                        processFiring("Infantry_P");
+                        processFiring("Infantry");
+                        processFiring("Infantry_S");
+                        processFiring("Infantry_T");
 
-            processFiring("Tank");
-            processFiring("Tank_P");
-            processFiring("Tank_S");
-            processFiring("Tank_T");
-            */
+                        processFiring("Tank");
+                        processFiring("Tank_P");
+                        processFiring("Tank_S");
+                        processFiring("Tank_T");
+                        */
             /*for (int c = 0; c < 8; c++)
             {
                 List<string> ls = new List<string>(17);
