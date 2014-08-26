@@ -8259,8 +8259,9 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Person");
 
             //processUnitOutlinedPartial("Copter");
-            processUnitOutlinedPartial("Copter_P");
-
+            //processUnitOutlinedPartial("Copter_P");
+//            processUnitOutlinedPartial("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
 
             //processUnitOutlinedPartial("Infantry");
             //processUnitOutlinedPartial("Infantry_P");
