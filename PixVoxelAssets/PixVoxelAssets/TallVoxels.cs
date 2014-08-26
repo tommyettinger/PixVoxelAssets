@@ -7628,17 +7628,18 @@ namespace AssetsPV
             VoxelLogic.InitializeWPalette();
 //            processUnitOutlinedWDouble("Person");
 
-            processUnitOutlinedPartial("Copter");
-            processUnitOutlinedPartial("Infantry_P");
-            processUnitOutlinedPartial("Infantry");
-            processUnitOutlinedPartial("Tank");
-            processUnitOutlinedPartial("Tank_P");
-            processUnitOutlinedPartial("Tank_S");
-            processUnitOutlinedPartial("Tank_T");
-            processUnitOutlinedPartial("Artillery");
-            processUnitOutlinedPartial("Artillery_P");
-            processUnitOutlinedPartial("Artillery_S");
-            processUnitOutlinedPartial("Artillery_T");
+//            processUnitOutlinedPartial("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            //processUnitOutlinedPartial("Infantry_P");
+            //processUnitOutlinedPartial("Infantry");
+            //processUnitOutlinedPartial("Tank");
+            //processUnitOutlinedPartial("Tank_P");
+            //processUnitOutlinedPartial("Tank_S");
+            //processUnitOutlinedPartial("Tank_T");
+            //processUnitOutlinedPartial("Artillery");
+            //processUnitOutlinedPartial("Artillery_P");
+            //processUnitOutlinedPartial("Artillery_S");
+            //processUnitOutlinedPartial("Artillery_T");
 
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
             //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
