@@ -7630,10 +7630,12 @@ namespace AssetsPV
 
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
-            processUnitOutlinedPartial("Copter_S");
-            processUnitOutlinedPartial("Copter_T");
-            //processUnitOutlinedPartial("Infantry_P");
+            //processUnitOutlinedPartial("Copter_S");
+            //processUnitOutlinedPartial("Copter_T");
             //processUnitOutlinedPartial("Infantry");
+            //processUnitOutlinedPartial("Infantry_P");
+            //processUnitOutlinedPartial("Infantry_S");
+            processUnitOutlinedPartial("Infantry_T");
             //processUnitOutlinedPartial("Tank");
             //processUnitOutlinedPartial("Tank_P");
             //processUnitOutlinedPartial("Tank_S");
