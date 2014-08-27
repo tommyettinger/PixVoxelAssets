@@ -8264,8 +8264,8 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Copter_T");
             //processUnitOutlinedPartial("Infantry");
             //processUnitOutlinedPartial("Infantry_P");
-//            processUnitOutlinedPartial("Infantry_S");
-            processUnitOutlinedPartial("Infantry_T");
+            //processUnitOutlinedPartial("Infantry_S");
+            //processUnitOutlinedPartial("Infantry_T");
             //processUnitOutlinedPartial("Tank");
             //processUnitOutlinedPartial("Tank_P");
             //processUnitOutlinedPartial("Tank_S");
@@ -8274,6 +8274,10 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Artillery_P");
             //processUnitOutlinedPartial("Artillery_S");
             //processUnitOutlinedPartial("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
 
 
             //            processUnitOutlinedWDouble("Person");

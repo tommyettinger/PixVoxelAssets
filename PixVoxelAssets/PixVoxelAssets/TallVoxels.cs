@@ -7635,7 +7635,7 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Infantry");
             //processUnitOutlinedPartial("Infantry_P");
             //processUnitOutlinedPartial("Infantry_S");
-            processUnitOutlinedPartial("Infantry_T");
+            //processUnitOutlinedPartial("Infantry_T");
             //processUnitOutlinedPartial("Tank");
             //processUnitOutlinedPartial("Tank_P");
             //processUnitOutlinedPartial("Tank_S");
@@ -7644,6 +7644,10 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Artillery_P");
             //processUnitOutlinedPartial("Artillery_S");
             //processUnitOutlinedPartial("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
 
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
             //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
