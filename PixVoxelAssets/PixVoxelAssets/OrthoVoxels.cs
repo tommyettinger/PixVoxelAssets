@@ -8274,10 +8274,11 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Artillery_P");
             //processUnitOutlinedPartial("Artillery_S");
             //processUnitOutlinedPartial("Artillery_T");
-            processUnitOutlinedPartial("Supply");
-            processUnitOutlinedPartial("Supply_P");
-            processUnitOutlinedPartial("Supply_S");
-            processUnitOutlinedPartial("Supply_T");
+            //processUnitOutlinedPartial("Supply");
+            //processUnitOutlinedPartial("Supply_P");
+            //processUnitOutlinedPartial("Supply_S");
+            //processUnitOutlinedPartial("Supply_T");
+            processUnitOutlinedPartial("Plane");
 
 
             //            processUnitOutlinedWDouble("Person");
