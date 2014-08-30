@@ -425,8 +425,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static float[][] wcolors = new float[][]
         {
-            //0 shoes, boots, brown leather
+            //0 HIGHLIGHT shoes, boots, brown leather
             new float[] {0.45F,0.25F,0.05F,1F},
+            //1 shoes, boots, brown leather
+            new float[] {0.45F,0.25F,0.05F,1F},
+            //1 pants, jeans
+            new float[] {0.2F,0.3F,0.6F,1F},
             //1 pants, jeans
             new float[] {0.2F,0.3F,0.6F,1F},
             //2 shirt
@@ -444,52 +448,124 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static float[][][] wpalettes = new float[][][]
             {
                 new float[][] {
-            //0 shoes, boots, brown leather
+            //0 shoes, boots, brown leather contrast
+            new float[] {0.35F,0.15F,0.0F,1F},
+            //1 shoes, boots, brown leather
             new float[] {0.45F,0.25F,0.1F,1F},
-            //1 pants, jeans
+            //2 pants, jeans contrast
+            new float[] {0.5F,0.65F,0.95F,1F},
+            //3 pants, jeans
             new float[] {0.25F,0.35F,0.55F,1F},
-            //2 shirt
+            //4 shirt contrast
+            new float[] {0.3F,0.5F,0.2F,1F},
+            //5 shirt
             new float[] {0.3F,0.55F,0.3F,1F},
-            //3 hair
+            //6 hair contrast
+            new float[] {0.6F,0.3F,0.0F,1F},
+            //7 hair
             new float[] {0.6F,0.35F,0.1F,1F},
-            //4 skin
-            new float[] {0.87F,0.65F,0.3F,1F},
-            //5 eyes
-            new float[] {0.2F,0.2F,0.05F,1F},
-            //6 skin contrast
+            //8 skin contrast
             new float[] {0.77F,0.45F,0.05F,1F},
+            //9 skin
+            new float[] {0.87F,0.65F,0.3F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.2F,0.2F,0.05F,1F},
+            //12 metal contrast
+            new float[] {0.6F,0.6F,1.0F,1F},
+            //13 metal
+            new float[] {0.6F,0.6F,0.6F,1F},
             },
             new float[][] {
-            //0 shoes, boots, brown leather
+            //0 shoes, boots, brown leather contrast
+            new float[] {0.35F,0.15F,0.0F,1F},
+            //1 shoes, boots, brown leather
             new float[] {0.45F,0.25F,0.1F,1F},
-            //1 pants, jeans
+            //2 pants, jeans contrast
+            new float[] {0.86F,0.8F,0.6F,1F},
+            //3 pants, jeans
             new float[] {0.9F,0.83F,0.65F,1F},
-            //2 shirt
+            //4 shirt contrast
+            new float[] {0.4F,0.55F,0.65F,1F},
+            //5 shirt
             new float[] {0.5F,0.6F,0.7F,1F},
-            //3 hair
+            //6 hair contrast
+            new float[] {0.55F,0.43F,0.18F,1F},
+            //7 hair
             new float[] {0.65F,0.6F,0.2F,1F},
-            //4 skin
-            new float[] {0.89F,0.69F,0.32F,1F},
-            //5 eyes
-            new float[] {0.1F,0.25F,0.5F,1F},
-            //6 skin contrast (lips, ears)
+            //8 skin contrast
             new float[] {0.82F,0.5F,0.1F,1F},
+            //9 skin
+            new float[] {0.89F,0.69F,0.32F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.08F,0.22F,0.4F,1F},
+            //12 metal contrast
+            new float[] {0.6F,0.6F,1.0F,1F},
+            //13 metal
+            new float[] {0.6F,0.6F,0.6F,1F},
             },
             new float[][] {
-            //0 shoes, boots, brown leather
+            //0 shoes, boots, brown leather contrast
+            new float[] {0.3F,0.1F,0.0F,1F},
+            //1 shoes, boots, brown leather
             new float[] {0.4F,0.18F,0.0F,1F},
-            //1 pants, jeans
+            //2 pants, jeans contrast
+            new float[] {0F,0F,0F,0F},
+            //3 pants, jeans
             new float[] {0.6F,0.55F,0.3F,1F},
-            //2 shirt
+            //4 shirt contrast
+            new float[] {0F,0F,0F,0F},
+            //5 shirt
             new float[] {0.44F,0.36F,0.33F,1F},
-            //3 hair
+            //6 hair contrast
+            new float[] {0.1F,0.25F,0.05F,1F},
+            //7 hair
             new float[] {0.0F,0.2F,0.0F,1F},
-            //4 skin
-            new float[] {0.45F,0.57F,0.35F,1F},
-            //5 eyes
-            new float[] {0.8F,0.15F,0.0F,1F},
-            //6 skin contrast (lips, ears)
+            //8 skin contrast
             new float[] {0.23F,0.4F,0.0F,1F},
+            //9 skin
+            new float[] {0.45F,0.57F,0.35F,1F},
+            //10 eyes shine
+            new float[] {1.4F,0.6F,0.4F,1F},
+            //11 eyes
+            new float[] {0.8F,0.15F,0.0F,1F},
+            //12 metal contrast
+            new float[] {0.4F,0.7F,0.4F,1F},
+            //13 metal
+            new float[] {0.4F,0.4F,0.4F,1F},
+            },
+            new float[][] {
+            //0 shoes, boots, brown leather contrast
+            new float[] {0.2F,0.0F,0.0F,1F},
+            //1 shoes, boots, brown leather
+            new float[] {0.5F,0.5F,0.5F,1F},
+            //2 pants, jeans contrast
+            new float[] {0.65F,0.5F,0.2F,1F},
+            //3 pants, jeans
+            new float[] {0.75F,0.6F,0.35F,1F},
+            //4 shirt contrast
+            new float[] {0.55F,0.35F,0.35F,1F},
+            //5 shirt
+            new float[] {0.33F,0.33F,0.33F,1F},
+            //6 hair contrast
+            new float[] {0.7F,0.8F,1.0F,1F},
+            //7 hair
+            new float[] {0.0F,0.1F,0.2F,1F},
+            //8 skin contrast
+            new float[] {0.82F,0.6F,0.1F,1F},
+            //9 skin
+            new float[] {0.89F,0.73F,0.34F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.05F,0.0F,0.5F,1F},
+            //12 metal contrast
+            new float[] {0.75F,0.75F,0.9F,1F},
+            //13 metal
+            new float[] {0.7F,0.7F,0.8F,1F},
             },
         };
         public static float[][] xcolours = new float[256][];
@@ -648,9 +724,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
+        private const int wcolorcount = 14, wpalettecount = 4;
         private static byte[][][] storeColorCubesW()
         {
-            byte[, ,] cubes = new byte[3, 7, 64];
+            byte[, ,] cubes = new byte[wpalettecount, wcolorcount, 64];
 
             Image image = new Bitmap("cube_soft.png");
             Image flat = new Bitmap("flat_soft.png");
@@ -671,9 +748,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                colorMatrix,
                ColorMatrixFlag.Default,
                ColorAdjustType.Bitmap);
-            for (int p = 0; p < 3; p++)
+            for (int p = 0; p < wpalettecount; p++)
             {
-                for (int current_color = 0; current_color < 7; current_color++)
+                for (int current_color = 0; current_color < 14; current_color++)
                 {
                     Bitmap b =
                     new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -790,11 +867,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     }
                                 }*/
             }
-            byte[][][] cubes2 = new byte[3][][];
-            for (int i = 0; i < 3; i++)
+            byte[][][] cubes2 = new byte[wpalettecount][][];
+            for (int i = 0; i < wpalettecount; i++)
             {
-                cubes2[i] = new byte[7][];
-                for (int c = 0; c < 7; c++)
+                cubes2[i] = new byte[wcolorcount][];
+                for (int c = 0; c < wcolorcount; c++)
                 {
                     cubes2[i][c] = new byte[64];
                     for (int j = 0; j < 64; j++)

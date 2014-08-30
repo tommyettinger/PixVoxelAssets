@@ -5416,7 +5416,7 @@ namespace AssetsPV
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 248) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
-                int current_color = (249 - vx.color) / 8;
+                int current_color = (253 - vx.color) / 4;
                 if (current_color >= VoxelLogic.wcolors.Length)
                     continue;
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
@@ -5636,7 +5636,7 @@ namespace AssetsPV
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
-                int current_color = (249 - vx.color) / 8;
+                int current_color = (253 - vx.color) / 4;
                 if (current_color >= VoxelLogic.wcolors.Length)
                     continue;
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)

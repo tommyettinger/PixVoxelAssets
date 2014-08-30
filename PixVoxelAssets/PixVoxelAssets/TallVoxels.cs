@@ -4731,7 +4731,7 @@ namespace AssetsPV
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
-                int current_color = (249 - vx.color) / 8;
+                int current_color = (253 - vx.color) / 4;
                 if (current_color >= VoxelLogic.wcolors.Length)
                     continue;
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
@@ -6583,7 +6583,7 @@ namespace AssetsPV
             }
             int framelimit = 1;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 string folder = ("palette" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
@@ -7627,7 +7627,8 @@ namespace AssetsPV
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
 //            processUnitOutlinedWDouble("Person");
-
+            processUnitOutlinedWDouble("Person");
+            processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
             //processUnitOutlinedPartial("Copter_S");
@@ -7649,7 +7650,7 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Supply_S");
             //processUnitOutlinedPartial("Supply_T");
             //processUnitOutlinedPartial("Plane");
-            processUnitOutlinedPartial("Plane_S");
+            //processUnitOutlinedPartial("Plane_S");
 
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
             //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
