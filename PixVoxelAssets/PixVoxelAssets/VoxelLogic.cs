@@ -547,9 +547,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //3 pants, jeans
             new float[] {0.75F,0.6F,0.35F,1F},
             //4 shirt contrast
-            new float[] {0.55F,0.35F,0.35F,1F},
+            new float[] {0.2F,0.2F,0.2F,1F},
             //5 shirt
-            new float[] {0.33F,0.33F,0.33F,1F},
+            new float[] {0.3F,0.3F,0.3F,1F},
             //6 hair contrast
             new float[] {0.7F,0.8F,1.0F,1F},
             //7 hair
@@ -557,15 +557,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //8 skin contrast
             new float[] {0.82F,0.6F,0.1F,1F},
             //9 skin
-            new float[] {0.89F,0.73F,0.34F,1F},
+            new float[] {0.9F,0.7F,0.3F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
             new float[] {0.05F,0.0F,0.5F,1F},
             //12 metal contrast
-            new float[] {0.75F,0.75F,0.9F,1F},
+            new float[] {0.5F,0.04F,0.04F,1F},
             //13 metal
-            new float[] {0.7F,0.7F,0.8F,1F},
+            new float[] {0.7F,0.75F,0.85F,1F},
             },
         };
         public static float[][] xcolours = new float[256][];
@@ -724,7 +724,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
-        private const int wcolorcount = 14, wpalettecount = 4;
+        public const int wcolorcount = 14, wpalettecount = 4;
         private static byte[][][] storeColorCubesW()
         {
             byte[, ,] cubes = new byte[wpalettecount, wcolorcount, 64];

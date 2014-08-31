@@ -181,7 +181,7 @@ namespace AssetsPV
         public static byte[][] wcurrent;
         private static byte[][][] storeColorCubesW()
         {
-            byte[, ,] cubes = new byte[3, 7, 24];
+            byte[, ,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wcolorcount, 24];
 
             Image image = new Bitmap("cube_ortho.png");
             Image flat = new Bitmap("flat_ortho.png");
@@ -202,9 +202,9 @@ namespace AssetsPV
                colorMatrix,
                ColorMatrixFlag.Default,
                ColorAdjustType.Bitmap);
-            for (int p = 0; p < 3; p++)
+            for (int p = 0; p < VoxelLogic.wpalettecount; p++)
             {
-                for (int current_color = 0; current_color < 7; current_color++)
+                for (int current_color = 0; current_color < VoxelLogic.wcolorcount; current_color++)
                 {
                     Bitmap b =
                     new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -321,11 +321,11 @@ namespace AssetsPV
                                     }
                                 }*/
             }
-            byte[][][] cubes2 = new byte[3][][];
-            for (int i = 0; i < 3; i++)
+            byte[][][] cubes2 = new byte[VoxelLogic.wpalettecount][][];
+            for (int i = 0; i < VoxelLogic.wpalettecount; i++)
             {
-                cubes2[i] = new byte[7][];
-                for (int c = 0; c < 7; c++)
+                cubes2[i] = new byte[VoxelLogic.wcolorcount][];
+                for (int c = 0; c < VoxelLogic.wcolorcount; c++)
                 {
                     cubes2[i][c] = new byte[24];
                     for (int j = 0; j < 24; j++)
@@ -7604,7 +7604,7 @@ namespace AssetsPV
             }
             int framelimit = 1;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < VoxelLogic.wpalettecount; i++)
             {
                 string folder = ("ortho/palette" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
@@ -8257,6 +8257,7 @@ namespace AssetsPV
             InitializeWPalette();
 
             processUnitOutlinedWDouble("Person");
+            processUnitOutlinedWDouble("Shinobi");
 
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
@@ -8279,7 +8280,7 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Supply_S");
             //processUnitOutlinedPartial("Supply_T");
             //processUnitOutlinedPartial("Plane");
-            processUnitOutlinedPartial("Plane_S");
+            //processUnitOutlinedPartial("Plane_S");
 
             //            processUnitOutlinedWDouble("Person");
 

@@ -135,6 +135,7 @@
     <None Include="Shinobi_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Shinobi_Large_W_archive.vox" />
     <None Include="Supply_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

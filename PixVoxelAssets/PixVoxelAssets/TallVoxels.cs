@@ -6583,7 +6583,7 @@ namespace AssetsPV
             }
             int framelimit = 1;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < VoxelLogic.wpalettecount; i++)
             {
                 string folder = ("palette" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
