@@ -8244,6 +8244,7 @@ namespace AssetsPV
 
             processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Shinobi");
+            processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");
 
 //            processUnitOutlinedPartial("Copter");
@@ -8252,7 +8253,7 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Copter_T");
             //processUnitOutlinedPartial("Infantry");
             //processUnitOutlinedPartial("Infantry_P");
-            processUnitOutlinedPartial("Infantry_S");
+            //processUnitOutlinedPartial("Infantry_S");
             //processUnitOutlinedPartial("Infantry_T");
             //processUnitOutlinedPartial("Tank");
             //processUnitOutlinedPartial("Tank_P");

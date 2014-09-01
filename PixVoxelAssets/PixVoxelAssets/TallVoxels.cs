@@ -7629,6 +7629,7 @@ namespace AssetsPV
 //            processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Shinobi");
+            processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");
 
             //processUnitOutlinedPartial("Copter");
