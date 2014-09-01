@@ -7616,16 +7616,16 @@ namespace AssetsPV
                     }
                 }
             }
-            /*
-            System.IO.Directory.CreateDirectory("gifs");
+            
+            System.IO.Directory.CreateDirectory("ortho/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
-            for (int i = 0; i < 8; i++)
-                s += "color" + i + "/" + u + "_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_animated.gif";
+            for (int i = 0; i < VoxelLogic.wpalettecount ; i++)
+                s += "ortho/palette" + i + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             bin.Close();
 
             //            processExplosion(u);
@@ -8258,6 +8258,7 @@ namespace AssetsPV
 
             processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Shinobi");
+            processUnitOutlinedWDouble("Lord");
 
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
