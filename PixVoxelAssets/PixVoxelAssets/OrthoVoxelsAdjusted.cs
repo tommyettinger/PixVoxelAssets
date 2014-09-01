@@ -33,8 +33,8 @@ namespace AssetsPV
             Image flat = new Bitmap("flat_ortho_adjusted.png");
             Image spin = new Bitmap("spin_ortho_adjusted.png");
             ImageAttributes imageAttributes = new ImageAttributes();
-            int width = 4;
-            int height = 5;
+            int width = 3;
+            int height = 4;
             float[][] colorMatrixElements = { 
    new float[] {1F, 0,  0,  0,  0},
    new float[] {0, 1F,  0,  0,  0},
@@ -117,10 +117,10 @@ namespace AssetsPV
                         try
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[current_color][i * 4 + j * 16 + 0] = c.B;
-                            cubes[current_color][i * 4 + j * 16 + 1] = c.G;
-                            cubes[current_color][i * 4 + j * 16 + 2] = c.R;
-                            cubes[current_color][i * 4 + j * 16 + 3] = c.A;
+                            cubes[current_color][i * 4 + j * width * 4 + 0] = c.B;
+                            cubes[current_color][i * 4 + j * width * 4 + 1] = c.G;
+                            cubes[current_color][i * 4 + j * width * 4 + 2] = c.R;
+                            cubes[current_color][i * 4 + j * width * 4 + 3] = c.A;
                         }
                         catch (Exception e)
                         {
@@ -167,10 +167,10 @@ namespace AssetsPV
                         for (int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 0] = c.B;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 1] = c.G;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 2] = c.R;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * 16 + 3] = c.A;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 0] = c.B;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 1] = c.G;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 2] = c.R;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 3] = c.A;
                         }
                     }
                 }
@@ -181,14 +181,15 @@ namespace AssetsPV
         public static byte[][] wcurrent;
         private static byte[][][] storeColorCubesW()
         {
-            byte[, ,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wcolorcount, 80];
+            int width = 3;
+            int height = 4; 
+            byte[, ,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wcolorcount, width * height * 4];
 
             Image image = new Bitmap("cube_ortho_adjusted.png");
             Image flat = new Bitmap("flat_ortho_adjusted.png");
             Image spin = new Bitmap("spin_ortho_adjusted.png");
             ImageAttributes imageAttributes = new ImageAttributes();
-            int width = 4;
-            int height = 5;
+            
             float[][] colorMatrixElements = { 
    new float[] {1F, 0,  0,  0,  0},
    new float[] {0, 1F,  0,  0,  0},
@@ -269,10 +270,10 @@ namespace AssetsPV
                         for (int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[p, current_color, i * 4 + j * 16 + 0] = c.B;
-                            cubes[p, current_color, i * 4 + j * 16 + 1] = c.G;
-                            cubes[p, current_color, i * 4 + j * 16 + 2] = c.R;
-                            cubes[p, current_color, i * 4 + j * 16 + 3] = c.A;
+                            cubes[p, current_color, i * 4 + j * 12 + 0] = c.B;
+                            cubes[p, current_color, i * 4 + j * 12 + 1] = c.G;
+                            cubes[p, current_color, i * 4 + j * 12 + 2] = c.R;
+                            cubes[p, current_color, i * 4 + j * 12 + 3] = c.A;
                         }
                     }
                 }
@@ -4732,49 +4733,49 @@ namespace AssetsPV
                     {
                         mod_color = 168 + faction + (frame % 4) * 8;
                     }
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
                             /*
                              vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
                                 )
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 16];
-                                bareValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 12];
+                                bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 16];
-                                barePositions[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 12];
+                                barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
                             }
                         }
                     }
                 }
                 else if (current_color == 96)
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 + 3 + j)] == 0)
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
                             {
-                                shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 + 3 + j)] =
-                                    xrendered[current_color][i + j * 16];
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[current_color][i + j * 12];
                             }
                         }
                     }
@@ -4783,18 +4784,18 @@ namespace AssetsPV
                 {
                     int mod_color = current_color + faction;
 
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 16];
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 12];
                             }
                         }
                     }
@@ -4953,49 +4954,49 @@ namespace AssetsPV
                     {
                         mod_color = 168 + faction + (frame % 4) * 8;
                     }
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
                             /*
                              vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
                                 )
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 16];
-                                bareValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 12];
+                                bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 16];
-                                barePositions[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 12];
+                                barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
                             }
                         }
                     }
                 }
                 else if (current_color == 96)
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
                             {
-                                shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[current_color][i + j * 16];
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[current_color][i + j * 12];
                             }
                         }
                     }
@@ -5004,18 +5005,18 @@ namespace AssetsPV
                 {
                     int mod_color = current_color + faction;
 
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 16];
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    xrendered[mod_color][i + j * 12];
                             }
                         }
                     }
@@ -5435,67 +5436,67 @@ namespace AssetsPV
                     {
                         mod_color = 168 + frame * 8;
                     }
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
                             /*
                              vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
                                 )
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    wcurrent[mod_color][i + j * 16];
-                                bareValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    wcurrent[mod_color][i + j * 12];
+                                bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    wcurrent[mod_color][i + j * 16];
-                                barePositions[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    wcurrent[mod_color][i + j * 12];
+                                barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
                             }
                         }
                     }
                 }
                 else if (current_color == 31)
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
                             {
-                                shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    wcurrent[current_color][i + j * 16];
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    wcurrent[current_color][i + j * 12];
                             }
                         }
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    wcurrent[current_color][i + j * 16];
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                                    wcurrent[current_color][i + j * 12];
                             }
                         }
                     }
@@ -5654,49 +5655,49 @@ namespace AssetsPV
                     {
                         mod_color = 168 + frame * 8;
                     }
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
                             /*
                              vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0
                                 )
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    wcurrent[mod_color][i + j * 16];
-                                bareValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
+                                    wcurrent[mod_color][i + j * 12];
+                                bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    wcurrent[mod_color][i + j * 16];
-                                barePositions[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
+                                    wcurrent[mod_color][i + j * 12];
+                                barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] = true;
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] = true;
                             }
                         }
                     }
                 }
                 else if (current_color == 96)
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
                             {
-                                shadowValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    wcurrent[current_color][i + j * 16];
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
+                                    wcurrent[current_color][i + j * 12];
                             }
                         }
                     }
@@ -5705,18 +5706,18 @@ namespace AssetsPV
                 {
                     int mod_color = current_color;
 
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
                             {
-                                argbValues[4 * (vx.y * 4 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 4 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    wcurrent[mod_color][i + j * 16];
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
+                                    wcurrent[mod_color][i + j * 12];
                             }
                         }
                     }
@@ -6619,7 +6620,7 @@ namespace AssetsPV
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            g2.DrawImage(b.Clone(new Rectangle(40, 70, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
+            g2.DrawImage(b.Clone(new Rectangle(32, 80, 88 * 2, 108 * 2), b.PixelFormat), 12, -16, 88, 108);
             g2.Dispose();
             return b2;
         }
@@ -6635,7 +6636,7 @@ namespace AssetsPV
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            g2.DrawImage(b.Clone(new Rectangle(40, 70, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
+            g2.DrawImage(b.Clone(new Rectangle(32, 80, 88 * 2, 108 * 2), b.PixelFormat), 12, -16, 88, 108);
             g2.Dispose();
             return b2;
         }
@@ -6682,14 +6683,11 @@ namespace AssetsPV
                         Bitmap b = renderHugeSmart(explode[frame], d, color, frame);
                         Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
-
-                        //                        b.Save("temp.png", ImageFormat.Png);
                         Graphics g2 = Graphics.FromImage(b2);
                         g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                        Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                        g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 32, -16 - 54, 248, 308);
+                        g2.Dispose();
                         b.Dispose();
-                        g2.DrawImage(b3, 0, 0, 248, 308);
-
                         b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                         b2.Dispose();
                         g2.Dispose();
@@ -7000,13 +6998,11 @@ namespace AssetsPV
                                 Bitmap b = renderHugeSmart(firing[frame], d, color, frame);
                                 Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
-
-                                //                        b.Save("temp.png", ImageFormat.Png);
                                 Graphics g2 = Graphics.FromImage(b2);
                                 g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 32, -16 - 54, 248, 308);
+                                g2.Dispose();
                                 b.Dispose();
-                                g2.DrawImage(b3, 0, 0, 248, 308);
 
                                 b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
                                 b2.Dispose();
@@ -7508,7 +7504,7 @@ namespace AssetsPV
 
             for (int i = 0; i < 8; i++)
             {
-                string folder = ("ortho/color" + i);//"color" + i;
+                string folder = ("ortho_adj/color" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
@@ -7529,13 +7525,13 @@ namespace AssetsPV
 
             }
 
-            System.IO.Directory.CreateDirectory("ortho/gifs");
+            System.IO.Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
             for (int i = 0; i < 8; i++)
-                s += "ortho/color" + i + "/" + u + "_Large_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho/gifs/" + u + "_Large_animated.gif";
+                s += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho_adj/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             bin.Close();
