@@ -585,7 +585,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //7 hair
             new float[] {-0.05F,-0.05F,-0.05F,1F},
             //8 skin contrast
-            new float[] {1.2F,0.8F,0.8F,1F},
+            new float[] {0.7F,0.1F,0.15F,1F},
             //9 skin
             new float[] {0.8F,0.8F,0.82F,1F},
             //10 eyes shine
@@ -795,6 +795,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
    new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if (VoxelLogic.wpalettes[p][current_color][3] == 0F)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  0F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
                     else if (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)

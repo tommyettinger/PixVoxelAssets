@@ -220,6 +220,15 @@ namespace AssetsPV
    new float[] {0,  0,  0,  1, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
+                    else if (VoxelLogic.wpalettes[p][current_color][3] == 0F)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  0F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
                     else if (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 

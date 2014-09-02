@@ -221,6 +221,15 @@ namespace AssetsPV
    new float[] {0,  0,  0,  1, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
+                    else if (VoxelLogic.wpalettes[p][current_color][3] == 0F)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  0F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
                     else if (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
@@ -6620,7 +6629,7 @@ namespace AssetsPV
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            g2.DrawImage(b.Clone(new Rectangle(32, 80, 88 * 2, 108 * 2), b.PixelFormat), 12, -16, 88, 108);
+            g2.DrawImage(b.Clone(new Rectangle(32, 80, 88 * 2, 108 * 2), b.PixelFormat), 12, -12, 88, 108);
             g2.Dispose();
             return b2;
         }
@@ -6636,7 +6645,7 @@ namespace AssetsPV
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            g2.DrawImage(b.Clone(new Rectangle(32, 80, 88 * 2, 108 * 2), b.PixelFormat), 12, -16, 88, 108);
+            g2.DrawImage(b.Clone(new Rectangle(32, 80, 88 * 2, 108 * 2), b.PixelFormat), 12, -12, 88, 108);
             g2.Dispose();
             return b2;
         }
@@ -7578,6 +7587,29 @@ namespace AssetsPV
 
             //            processFiring(u);
         }
+        public static void processEightWayAnimation(string u)
+        {
+
+            System.IO.Directory.CreateDirectory("8way");
+            System.IO.Directory.CreateDirectory("8way/gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+            for (int i = 0; i < VoxelLogic.wpalettecount; i++)
+            {
+                s += "palette" + i + "/" + u + "_Large_face0* ";
+                s += "ortho_adj/palette" + i + "/" + u + "_Large_face0* ";
+                s += "palette" + i + "/" + u + "_Large_face1* ";
+                s += "ortho_adj/palette" + i + "/" + u + "_Large_face1* ";
+                s += "palette" + i + "/" + u + "_Large_face2* ";
+                s += "ortho_adj/palette" + i + "/" + u + "_Large_face2* ";
+                s += "palette" + i + "/" + u + "_Large_face3* ";
+                s += "ortho_adj/palette" + i + "/" + u + "_Large_face3* ";
+            }
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+            
+        }
         private static void processUnitOutlinedWDouble(string u)
         {
             Console.WriteLine("Processing: " + u);
@@ -8246,8 +8278,17 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");
+            VoxelLogic.InitializeWPalette();
 
-//            processUnitOutlinedPartial("Copter");
+            TallVoxels.processUnitOutlinedWDouble("Person");
+            TallVoxels.processUnitOutlinedWDouble("Shinobi");
+            TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
+            TallVoxels.processUnitOutlinedWDouble("Lord");
+            processEightWayAnimation("Person");
+            processEightWayAnimation("Shinobi");
+            processEightWayAnimation("Shinobi_Unarmed");
+            processEightWayAnimation("Lord");
+            //            processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
             //processUnitOutlinedPartial("Copter_S");
             //processUnitOutlinedPartial("Copter_T");

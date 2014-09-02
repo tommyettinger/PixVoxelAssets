@@ -5632,7 +5632,7 @@ namespace AssetsPV
 
             bin.Close();
         }
-        private static void processExplosionPartial(string u)
+        public static void processExplosionPartial(string u)
         {
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
@@ -5954,7 +5954,7 @@ namespace AssetsPV
             }
 
         }
-        private static void processFiringPartial(string u)
+        public static void processFiringPartial(string u)
         {
             Console.WriteLine("Processing: " + u);
             string filename = u + "_Part_X.vox";
@@ -6570,7 +6570,7 @@ namespace AssetsPV
             processExplosionDouble(u);
 
         }
-        private static void processUnitOutlinedWDouble(string u)
+        public static void processUnitOutlinedWDouble(string u)
         {
 
             Console.WriteLine("Processing: " + u);
@@ -6615,7 +6615,7 @@ namespace AssetsPV
 
         }
 
-        private static void processUnitOutlinedPartial(string u)
+        public static void processUnitOutlinedPartial(string u)
         {
 
             Console.WriteLine("Processing: " + u);
