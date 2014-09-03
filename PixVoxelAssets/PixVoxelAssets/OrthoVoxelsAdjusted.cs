@@ -8278,16 +8278,19 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");
+            processUnitOutlinedWDouble("Guard");
             VoxelLogic.InitializeWPalette();
 
             TallVoxels.processUnitOutlinedWDouble("Person");
             TallVoxels.processUnitOutlinedWDouble("Shinobi");
             TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
             TallVoxels.processUnitOutlinedWDouble("Lord");
+            TallVoxels.processUnitOutlinedWDouble("Guard");
             processEightWayAnimation("Person");
             processEightWayAnimation("Shinobi");
             processEightWayAnimation("Shinobi_Unarmed");
             processEightWayAnimation("Lord");
+            processEightWayAnimation("Guard");
             //            processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
             //processUnitOutlinedPartial("Copter_S");

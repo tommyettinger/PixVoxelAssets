@@ -597,8 +597,38 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.7F,0.75F,0.85F,1F},
             },
+            new float[][] {
+            //0 white cloth
+            new float[] {0.85F,0.8F,0.9F,1F},
+            //1 shoes, boots, black socks
+            new float[] {0.1F,0.05F,-0.05F,1F},
+            //2 belt
+            new float[] {0.3F,0.5F,0.2F,1F},
+            //3 pants, jeans
+            new float[] {0.15F,0.15F,0.15F,1F},
+            //4 shirt contrast
+            new float[] {0.1F,0.7F,0.4F,1F},
+            //5 shirt
+            new float[] {0.15F,0.6F,0.3F,1F},
+            //6 hair contrast
+            new float[] {0.7F,1.15F,0.6F,1F},
+            //7 hair
+            new float[] {-0.05F,-0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.7F,0.1F,0.15F,1F},
+            //9 skin
+            new float[] {0.88F,0.75F,0.7F,1F},
+            //10 eyes shine
+            new float[] {1.2F,1.2F,1.2F,1F},
+            //11 eyes
+            new float[] {0.15F,0.2F,0.2F,1F},
+            //12 metal contrast
+            new float[] {0.1F,0.3F,0.05F,1F},
+            //13 metal
+            new float[] {0.75F,0.8F,0.9F,1F},
+            },
         };
-        public const int wcolorcount = 14, wpalettecount = 5;
+        public const int wcolorcount = 14, wpalettecount = 6;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;
