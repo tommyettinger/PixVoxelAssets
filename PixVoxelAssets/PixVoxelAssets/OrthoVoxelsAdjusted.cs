@@ -182,14 +182,14 @@ namespace AssetsPV
         private static byte[][][] storeColorCubesW()
         {
             int width = 3;
-            int height = 4; 
+            int height = 4;
             byte[, ,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wcolorcount, width * height * 4];
 
             Image image = new Bitmap("cube_ortho_adjusted.png");
             Image flat = new Bitmap("flat_ortho_adjusted.png");
             Image spin = new Bitmap("spin_ortho_adjusted.png");
             ImageAttributes imageAttributes = new ImageAttributes();
-            
+
             float[][] colorMatrixElements = { 
    new float[] {1F, 0,  0,  0,  0},
    new float[] {0, 1F,  0,  0,  0},
@@ -4974,20 +4974,20 @@ namespace AssetsPV
                              */
                             if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0
                                 )
                             {
                                 argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
                                     xrendered[mod_color][i + j * 12];
                                 bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
                                     xrendered[mod_color][i + j * 12];
                                 barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] = true;
                             }
                         }
                     }
@@ -5000,11 +5000,11 @@ namespace AssetsPV
                         {
                             if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
                             {
                                 shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
                                     xrendered[current_color][i + j * 12];
                             }
                         }
@@ -5020,11 +5020,11 @@ namespace AssetsPV
                         {
                             if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
                             {
                                 argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
+                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
                                     xrendered[mod_color][i + j * 12];
                             }
                         }
@@ -7009,7 +7009,7 @@ namespace AssetsPV
 
                                 Graphics g2 = Graphics.FromImage(b2);
                                 g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 32, -16 - 54, 248, 308);
+                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
                                 g2.Dispose();
                                 b.Dispose();
 
@@ -7589,6 +7589,7 @@ namespace AssetsPV
         }
         public static void processEightWayAnimation(string u)
         {
+            Console.WriteLine("Processing: " + u);
 
             System.IO.Directory.CreateDirectory("8way");
             System.IO.Directory.CreateDirectory("8way/gifs");
@@ -7606,9 +7607,45 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_Large_face3* ";
                 s += "ortho_adj/color" + i + "/" + u + "_Large_face3* ";
             }
-            startInfo.Arguments = "-dispose background -delay 20 -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
+            startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
+            s = "";
+            for (int i = 0; i < 8; i++)
+            {
+                //color6_Plane_T_Large_face1_fiery_explode_0
+                s += "frames/" + "color" + i + "_" + u + "_Large_face0_fiery_explode* ";
+                s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face0_fiery_explode* ";
+                s += "frames/" + "color" + i + "_" + u + "_Large_face1_fiery_explode* ";
+                s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face1_fiery_explode* ";
+                s += "frames/" + "color" + i + "_" + u + "_Large_face2_fiery_explode* ";
+                s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face2_fiery_explode* ";
+                s += "frames/" + "color" + i + "_" + u + "_Large_face3_fiery_explode* ";
+                s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face3_fiery_explode* ";
+            }
+            startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
+            Process.Start(startInfo).WaitForExit();
+            for (int w = 0; w < 2; w++)
+            {
+                if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                {
+                    //color5_Plane_T_Large_face3_attack_0_10
+                    s = "";
+                    for (int i = 0; i < 8; i++)
+                    {
+                        s += "frames/" + "color" + i + "_" + u + "_Large_face0_attack_" + w + "_%d.png[0-15] ";
+                        s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face0_attack_" + w + "_%d.png[0-15] ";
+                        s += "frames/" + "color" + i + "_" + u + "_Large_face1_attack_" + w + "_%d.png[0-15] ";
+                        s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face1_attack_" + w + "_%d.png[0-15] ";
+                        s += "frames/" + "color" + i + "_" + u + "_Large_face2_attack_" + w + "_%d.png[0-15] ";
+                        s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face2_attack_" + w + "_%d.png[0-15] ";
+                        s += "frames/" + "color" + i + "_" + u + "_Large_face3_attack_" + w + "_%d.png[0-15] ";
+                        s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face3_attack_" + w + "_%d.png[0-15] ";
+                    }
+                    startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_attack" + w + ".gif";
+                    Process.Start(startInfo).WaitForExit();
+                }
+            }
         }
         public static void processEightWayAnimationW(string u)
         {
@@ -7631,7 +7668,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+
         }
         private static void processUnitOutlinedWDouble(string u)
         {
@@ -7663,11 +7700,11 @@ namespace AssetsPV
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
-            for (int i = 0; i < VoxelLogic.wpalettecount ; i++)
+            for (int i = 0; i < VoxelLogic.wpalettecount; i++)
                 s += "ortho_adj/palette" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho_adj/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+
             bin.Close();
 
             //            processExplosion(u);
@@ -8297,38 +8334,61 @@ namespace AssetsPV
             InitializeXPalette();
             InitializeWPalette();
 
+            VoxelLogic.InitializeXPalette();
+            VoxelLogic.InitializeWPalette();
             //processUnitOutlinedWDouble("Person");
             //processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
             //processUnitOutlinedWDouble("Lord");
             //processUnitOutlinedWDouble("Guard");
-            /*
-            processUnitOutlinedPartial("Copter");
+
             processUnitOutlinedPartial("Copter_P");
+            processEightWayAnimation("Copter_P");
             processUnitOutlinedPartial("Copter_S");
+            processEightWayAnimation("Copter_S");
             processUnitOutlinedPartial("Copter_T");
+            processEightWayAnimation("Copter_T");
+            processUnitOutlinedPartial("Copter");
+            processEightWayAnimation("Copter"); 
             processUnitOutlinedPartial("Infantry");
+            processEightWayAnimation("Infantry");
             processUnitOutlinedPartial("Infantry_P");
+            processEightWayAnimation("Infantry_P");
             processUnitOutlinedPartial("Infantry_S");
+            processEightWayAnimation("Infantry_S");
             processUnitOutlinedPartial("Infantry_T");
+            processEightWayAnimation("Infantry_T");
             processUnitOutlinedPartial("Tank");
+            processEightWayAnimation("Tank");
             processUnitOutlinedPartial("Tank_P");
+            processEightWayAnimation("Tank_P");
             processUnitOutlinedPartial("Tank_S");
+            processEightWayAnimation("Tank_S");
             processUnitOutlinedPartial("Tank_T");
+            processEightWayAnimation("Tank_T");
             processUnitOutlinedPartial("Artillery");
+            processEightWayAnimation("Artillery");
             processUnitOutlinedPartial("Artillery_P");
+            processEightWayAnimation("Artillery_P");
             processUnitOutlinedPartial("Artillery_S");
+            processEightWayAnimation("Artillery_S");
             processUnitOutlinedPartial("Artillery_T");
+            processEightWayAnimation("Artillery_T");
             processUnitOutlinedPartial("Supply");
+            processEightWayAnimation("Supply");
             processUnitOutlinedPartial("Supply_P");
+            processEightWayAnimation("Supply_P");
             processUnitOutlinedPartial("Supply_S");
+            processEightWayAnimation("Supply_S");
             processUnitOutlinedPartial("Supply_T");
+            processEightWayAnimation("Supply_T");
             processUnitOutlinedPartial("Plane");
+            processEightWayAnimation("Plane");
             processUnitOutlinedPartial("Plane_S");
+            processEightWayAnimation("Plane_S");
             processUnitOutlinedPartial("Plane_T");
-            */
-            VoxelLogic.InitializeXPalette();
-            VoxelLogic.InitializeWPalette();
+            processEightWayAnimation("Plane_T");
+
 
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
@@ -8336,29 +8396,29 @@ namespace AssetsPV
             //TallVoxels.processUnitOutlinedWDouble("Lord");
             //TallVoxels.processUnitOutlinedWDouble("Guard");
 
-            TallVoxels.processUnitOutlinedPartial("Copter");
-            TallVoxels.processUnitOutlinedPartial("Copter_P");
-            TallVoxels.processUnitOutlinedPartial("Copter_S");
-            TallVoxels.processUnitOutlinedPartial("Copter_T");
-            TallVoxels.processUnitOutlinedPartial("Infantry");
-            TallVoxels.processUnitOutlinedPartial("Infantry_P");
-            TallVoxels.processUnitOutlinedPartial("Infantry_S");
-            TallVoxels.processUnitOutlinedPartial("Infantry_T");
-            TallVoxels.processUnitOutlinedPartial("Tank");
-            TallVoxels.processUnitOutlinedPartial("Tank_P");
-            TallVoxels.processUnitOutlinedPartial("Tank_S");
-            TallVoxels.processUnitOutlinedPartial("Tank_T");
-            TallVoxels.processUnitOutlinedPartial("Artillery");
-            TallVoxels.processUnitOutlinedPartial("Artillery_P");
-            TallVoxels.processUnitOutlinedPartial("Artillery_S");
-            TallVoxels.processUnitOutlinedPartial("Artillery_T");
-            TallVoxels.processUnitOutlinedPartial("Supply");
-            TallVoxels.processUnitOutlinedPartial("Supply_P");
-            TallVoxels.processUnitOutlinedPartial("Supply_S");
-            TallVoxels.processUnitOutlinedPartial("Supply_T");
-            TallVoxels.processUnitOutlinedPartial("Plane");
+            /*            TallVoxels.processUnitOutlinedPartial("Copter");
+                        TallVoxels.processUnitOutlinedPartial("Copter_P");
+                        TallVoxels.processUnitOutlinedPartial("Copter_S");
+                        TallVoxels.processUnitOutlinedPartial("Copter_T");
+                        TallVoxels.processUnitOutlinedPartial("Infantry");
+                        TallVoxels.processUnitOutlinedPartial("Infantry_P");
+                        TallVoxels.processUnitOutlinedPartial("Infantry_S");
+                        TallVoxels.processUnitOutlinedPartial("Infantry_T");
+                        TallVoxels.processUnitOutlinedPartial("Tank");
+                        TallVoxels.processUnitOutlinedPartial("Tank_P");
+                        TallVoxels.processUnitOutlinedPartial("Tank_S");
+                        TallVoxels.processUnitOutlinedPartial("Tank_T");
+                        TallVoxels.processUnitOutlinedPartial("Artillery");
+                        TallVoxels.processUnitOutlinedPartial("Artillery_P");
+                        TallVoxels.processUnitOutlinedPartial("Artillery_S");
+                        TallVoxels.processUnitOutlinedPartial("Artillery_T");
+                        TallVoxels.processUnitOutlinedPartial("Supply");
+                        TallVoxels.processUnitOutlinedPartial("Supply_P");
+                        TallVoxels.processUnitOutlinedPartial("Supply_S");
+                        TallVoxels.processUnitOutlinedPartial("Supply_T");
+                        TallVoxels.processUnitOutlinedPartial("Plane");
             TallVoxels.processUnitOutlinedPartial("Plane_S");
-            TallVoxels.processUnitOutlinedPartial("Plane_T");
+            TallVoxels.processUnitOutlinedPartial("Plane_T");*/
 
             //processEightWayAnimationW("Person");
             //processEightWayAnimationW("Shinobi");
@@ -8366,11 +8426,11 @@ namespace AssetsPV
             //processEightWayAnimationW("Lord");
             //processEightWayAnimationW("Guard");
 
-
-            processEightWayAnimation("Copter");
+            /*
             processEightWayAnimation("Copter_P");
             processEightWayAnimation("Copter_S");
             processEightWayAnimation("Copter_T");
+            processEightWayAnimation("Copter"); 
             processEightWayAnimation("Infantry");
             processEightWayAnimation("Infantry_P");
             processEightWayAnimation("Infantry_S");
@@ -8390,6 +8450,7 @@ namespace AssetsPV
             processEightWayAnimation("Plane");
             processEightWayAnimation("Plane_S");
             processEightWayAnimation("Plane_T");
+            */
             //            processUnitOutlinedWDouble("Person");
 
 
