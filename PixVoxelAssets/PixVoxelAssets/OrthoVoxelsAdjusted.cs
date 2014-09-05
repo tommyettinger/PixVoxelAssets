@@ -7595,6 +7595,29 @@ namespace AssetsPV
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
+            for (int i = 0; i < 8; i++)
+            {
+                s += "color" + i + "/" + u + "_Large_face0* ";
+                s += "ortho_adj/color" + i + "/" + u + "_Large_face0* ";
+                s += "color" + i + "/" + u + "_Large_face1* ";
+                s += "ortho_adj/color" + i + "/" + u + "_Large_face1* ";
+                s += "color" + i + "/" + u + "_Large_face2* ";
+                s += "ortho_adj/color" + i + "/" + u + "_Large_face2* ";
+                s += "color" + i + "/" + u + "_Large_face3* ";
+                s += "ortho_adj/color" + i + "/" + u + "_Large_face3* ";
+            }
+            startInfo.Arguments = "-dispose background -delay 20 -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+        }
+        public static void processEightWayAnimationW(string u)
+        {
+
+            System.IO.Directory.CreateDirectory("8way");
+            System.IO.Directory.CreateDirectory("8way/gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
             for (int i = 0; i < VoxelLogic.wpalettecount; i++)
             {
                 s += "palette" + i + "/" + u + "_Large_face0* ";
@@ -8274,46 +8297,99 @@ namespace AssetsPV
             InitializeXPalette();
             InitializeWPalette();
 
-            processUnitOutlinedWDouble("Person");
-            processUnitOutlinedWDouble("Shinobi");
-            processUnitOutlinedWDouble("Shinobi_Unarmed");
-            processUnitOutlinedWDouble("Lord");
-            processUnitOutlinedWDouble("Guard");
+            //processUnitOutlinedWDouble("Person");
+            //processUnitOutlinedWDouble("Shinobi");
+            //processUnitOutlinedWDouble("Shinobi_Unarmed");
+            //processUnitOutlinedWDouble("Lord");
+            //processUnitOutlinedWDouble("Guard");
+            /*
+            processUnitOutlinedPartial("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
+            processUnitOutlinedPartial("Infantry");
+            processUnitOutlinedPartial("Infantry_P");
+            processUnitOutlinedPartial("Infantry_S");
+            processUnitOutlinedPartial("Infantry_T");
+            processUnitOutlinedPartial("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
+            processUnitOutlinedPartial("Plane");
+            processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
+            */
+            VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
 
-            TallVoxels.processUnitOutlinedWDouble("Person");
-            TallVoxels.processUnitOutlinedWDouble("Shinobi");
-            TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
-            TallVoxels.processUnitOutlinedWDouble("Lord");
-            TallVoxels.processUnitOutlinedWDouble("Guard");
-            processEightWayAnimation("Person");
-            processEightWayAnimation("Shinobi");
-            processEightWayAnimation("Shinobi_Unarmed");
-            processEightWayAnimation("Lord");
-            processEightWayAnimation("Guard");
-            //            processUnitOutlinedPartial("Copter");
-            //processUnitOutlinedPartial("Copter_P");
-            //processUnitOutlinedPartial("Copter_S");
-            //processUnitOutlinedPartial("Copter_T");
-            //processUnitOutlinedPartial("Infantry");
-            //processUnitOutlinedPartial("Infantry_P");
-            //processUnitOutlinedPartial("Infantry_S");
-            //processUnitOutlinedPartial("Infantry_T");
-            //processUnitOutlinedPartial("Tank");
-            //processUnitOutlinedPartial("Tank_P");
-            //processUnitOutlinedPartial("Tank_S");
-            //processUnitOutlinedPartial("Tank_T");
-            //processUnitOutlinedPartial("Artillery");
-            //processUnitOutlinedPartial("Artillery_P");
-            //processUnitOutlinedPartial("Artillery_S");
-            //processUnitOutlinedPartial("Artillery_T");
-            //processUnitOutlinedPartial("Supply");
-            //processUnitOutlinedPartial("Supply_P");
-            //processUnitOutlinedPartial("Supply_S");
-            //processUnitOutlinedPartial("Supply_T");
-            //processUnitOutlinedPartial("Plane");
-            //processUnitOutlinedPartial("Plane_S");
+            //TallVoxels.processUnitOutlinedWDouble("Person");
+            //TallVoxels.processUnitOutlinedWDouble("Shinobi");
+            //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
+            //TallVoxels.processUnitOutlinedWDouble("Lord");
+            //TallVoxels.processUnitOutlinedWDouble("Guard");
 
+            TallVoxels.processUnitOutlinedPartial("Copter");
+            TallVoxels.processUnitOutlinedPartial("Copter_P");
+            TallVoxels.processUnitOutlinedPartial("Copter_S");
+            TallVoxels.processUnitOutlinedPartial("Copter_T");
+            TallVoxels.processUnitOutlinedPartial("Infantry");
+            TallVoxels.processUnitOutlinedPartial("Infantry_P");
+            TallVoxels.processUnitOutlinedPartial("Infantry_S");
+            TallVoxels.processUnitOutlinedPartial("Infantry_T");
+            TallVoxels.processUnitOutlinedPartial("Tank");
+            TallVoxels.processUnitOutlinedPartial("Tank_P");
+            TallVoxels.processUnitOutlinedPartial("Tank_S");
+            TallVoxels.processUnitOutlinedPartial("Tank_T");
+            TallVoxels.processUnitOutlinedPartial("Artillery");
+            TallVoxels.processUnitOutlinedPartial("Artillery_P");
+            TallVoxels.processUnitOutlinedPartial("Artillery_S");
+            TallVoxels.processUnitOutlinedPartial("Artillery_T");
+            TallVoxels.processUnitOutlinedPartial("Supply");
+            TallVoxels.processUnitOutlinedPartial("Supply_P");
+            TallVoxels.processUnitOutlinedPartial("Supply_S");
+            TallVoxels.processUnitOutlinedPartial("Supply_T");
+            TallVoxels.processUnitOutlinedPartial("Plane");
+            TallVoxels.processUnitOutlinedPartial("Plane_S");
+            TallVoxels.processUnitOutlinedPartial("Plane_T");
+
+            //processEightWayAnimationW("Person");
+            //processEightWayAnimationW("Shinobi");
+            //processEightWayAnimationW("Shinobi_Unarmed");
+            //processEightWayAnimationW("Lord");
+            //processEightWayAnimationW("Guard");
+
+
+            processEightWayAnimation("Copter");
+            processEightWayAnimation("Copter_P");
+            processEightWayAnimation("Copter_S");
+            processEightWayAnimation("Copter_T");
+            processEightWayAnimation("Infantry");
+            processEightWayAnimation("Infantry_P");
+            processEightWayAnimation("Infantry_S");
+            processEightWayAnimation("Infantry_T");
+            processEightWayAnimation("Tank");
+            processEightWayAnimation("Tank_P");
+            processEightWayAnimation("Tank_S");
+            processEightWayAnimation("Tank_T");
+            processEightWayAnimation("Artillery");
+            processEightWayAnimation("Artillery_P");
+            processEightWayAnimation("Artillery_S");
+            processEightWayAnimation("Artillery_T");
+            processEightWayAnimation("Supply");
+            processEightWayAnimation("Supply_P");
+            processEightWayAnimation("Supply_S");
+            processEightWayAnimation("Supply_T");
+            processEightWayAnimation("Plane");
+            processEightWayAnimation("Plane_S");
+            processEightWayAnimation("Plane_T");
             //            processUnitOutlinedWDouble("Person");
 
 
