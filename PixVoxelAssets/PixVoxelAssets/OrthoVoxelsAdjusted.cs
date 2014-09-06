@@ -6694,7 +6694,8 @@ namespace AssetsPV
 
                         Graphics g2 = Graphics.FromImage(b2);
                         g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                        g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 32, -16 - 54, 248, 308);
+                        g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
+//                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
                         g2.Dispose();
                         b.Dispose();
                         b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
@@ -7625,7 +7626,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
             Process.Start(startInfo).WaitForExit();
-            for (int w = 0; w < 2; w++)
+            /*for (int w = 0; w < 2; w++)
             {
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -7645,7 +7646,7 @@ namespace AssetsPV
                     startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_attack" + w + ".gif";
                     Process.Start(startInfo).WaitForExit();
                 }
-            }
+            }*/
         }
         public static void processEightWayAnimationW(string u)
         {
@@ -8343,6 +8344,53 @@ namespace AssetsPV
             //processUnitOutlinedWDouble("Guard");
 
             processUnitOutlinedPartial("Infantry");
+            processEightWayAnimation("Infantry");
+            processUnitOutlinedPartial("Infantry_P");
+            processEightWayAnimation("Infantry_P");
+            processUnitOutlinedPartial("Infantry_S");
+            processEightWayAnimation("Infantry_S");
+            processUnitOutlinedPartial("Infantry_T");
+            processEightWayAnimation("Infantry_T");
+            processUnitOutlinedPartial("Tank");
+            processEightWayAnimation("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            processEightWayAnimation("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            processEightWayAnimation("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            processEightWayAnimation("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            processEightWayAnimation("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            processEightWayAnimation("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            processEightWayAnimation("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+            processEightWayAnimation("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            processEightWayAnimation("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            processEightWayAnimation("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            processEightWayAnimation("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
+            processEightWayAnimation("Supply_T");
+            processUnitOutlinedPartial("Plane");
+            processEightWayAnimation("Plane");
+            processUnitOutlinedPartial("Plane_S");
+            processEightWayAnimation("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
+            processEightWayAnimation("Plane_T");
+            processUnitOutlinedPartial("Copter");
+            processEightWayAnimation("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            processEightWayAnimation("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            processEightWayAnimation("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
+            processEightWayAnimation("Copter_T");
+            /*
+            processUnitOutlinedPartial("Infantry");
             TallVoxels.processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");
             processUnitOutlinedPartial("Infantry_P");
@@ -8411,7 +8459,7 @@ namespace AssetsPV
             processUnitOutlinedPartial("Plane_T");
             TallVoxels.processUnitOutlinedPartial("Plane_T");
             processEightWayAnimation("Plane_T");
-
+            */
 
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
