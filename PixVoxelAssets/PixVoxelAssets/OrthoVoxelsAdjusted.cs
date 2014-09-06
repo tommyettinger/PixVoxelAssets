@@ -7624,7 +7624,7 @@ namespace AssetsPV
                 s += "frames/" + "color" + i + "_" + u + "_Large_face3_fiery_explode* ";
                 s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face3_fiery_explode* ";
             }
-            startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
             Process.Start(startInfo).WaitForExit();
             /*for (int w = 0; w < 2; w++)
             {
