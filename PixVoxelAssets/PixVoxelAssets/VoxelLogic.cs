@@ -1449,7 +1449,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             near.Add(new MagicaVoxelData { x = (byte)(pos.x - 1), y = (byte)(pos.y), z = (byte)(pos.z), color = (byte)(colors.RandomElement()), });
             near.Add(new MagicaVoxelData { x = (byte)(pos.x), y = (byte)(pos.y + 1), z = (byte)(pos.z), color = (byte)(colors.RandomElement()), });
             near.Add(new MagicaVoxelData { x = (byte)(pos.x), y = (byte)(pos.y - 1), z = (byte)(pos.z), color = (byte)(colors.RandomElement()), });
-            if (pos.z < 20)
+            if (pos.z < 60)
                 near.Add(new MagicaVoxelData { x = (byte)(pos.x), y = (byte)(pos.y), z = (byte)(pos.z + 1), color = (byte)(colors.RandomElement()), });
             if (pos.z > 0)
                 near.Add(new MagicaVoxelData { x = (byte)(pos.x), y = (byte)(pos.y), z = (byte)(pos.z - 1), color = (byte)(colors.RandomElement()), });
@@ -1562,32 +1562,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             xMove = ((midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0) - minX[v.z] + v.x) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
                         //           60                                             40        50
                         //xMove = ((0 + (v.x - midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0))) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * ((v.z + 5)) * f; //-5 +
-
                         if (v.y > midY[v.z])
                             yMove = ((midY[v.z] - r.Next(3) - (maxY[v.z] - v.y)) * 0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         else if (v.y < midY[v.z])
                             yMove = ((midY[v.z] + r.Next(3) - minY[v.z] + v.y) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
-
                         //                            yMove = ((0 + (v.y - midY[v.z] + r.Next(3))) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * (v.z + 5); //-5 +
-
                         if (minZ > 0)
                             zMove = ((v.z) * (1 - f) / 8F);
                         else
                             zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.8F;
-
-
-                        /*
-                        if (v.x > midX)// && v.x > maxX - 5)
-                            xMove = (5 - (maxX - v.x)) / ((30F - maxX)) * 3;
-                        else if (v.x < midX)// && v.x < minX + 5)
-                            xMove = (-5 + (minX - v.x)) / (minX + 1) * 2;
-
-                        if (v.y > midY)// && v.y > maxY - 5)
-                            yMove = (5 - (maxY - v.y)) / ((30F - maxY)) * 3;
-                        else if (v.y < midY)// && v.y < minY + 5)
-                            yMove = (-5 + (minY - v.y)) / (minY + 1) * 3;
-                        */
-                    
                     }
                     if (xMove > 0)
                     {
@@ -2948,6 +2931,286 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelFrames;
         }
+        private static List<MagicaVoxelData> randomFill(int xStart, int yStart, int zStart, int xSize, int ySize, int zSize, int[] colors)
+        {
+            List<MagicaVoxelData> box = new List<MagicaVoxelData>(xSize * ySize * zSize);
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    for (int z = 0; z < zSize; z++)
+                    {
+                        if (zStart + z < 0) //x + y == xSize + ySize - 2 || x + z == xSize + zSize - 2 || z + y == zSize + ySize - 2 || 
+                            continue;
+                        box.Add(new MagicaVoxelData { x = (byte)(xStart + x), y = (byte)(yStart + y), z = (byte)(zStart + z), color = (byte)colors.RandomElement() });
+                    }
+                }
+            }
+            return box;
+
+        }
+        public static MagicaVoxelData[][] HugeExplosionDouble(MagicaVoxelData[] voxels, int blowback, int maxFrames, int trimLevel)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[maxFrames + 1][];
+            voxelFrames[0] = new MagicaVoxelData[voxels.Length];
+            voxels.CopyTo(voxelFrames[0], 0);
+            //for (int i = 0; i < voxels.Length; i++)
+            //{
+            //    voxelFrames[0][i].x += 20;
+            //    voxelFrames[0][i].y += 20;
+            //}
+            for (int f = 1; f <= maxFrames; f++)
+            {
+                List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxels.Length), working = new List<MagicaVoxelData>(voxelFrames[f - 1].Length * 2);
+                MagicaVoxelData[] vls = new MagicaVoxelData[voxelFrames[f - 1].Length]; //.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)
+                voxelFrames[f - 1].CopyTo(vls, 0);
+
+                int[] minX = new int[60];
+                int[] maxX = new int[60];
+                float[] midX = new float[60];
+                for (int level = 0; level < 60; level++)
+                {
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color < 249 - 168) ? 100 : 1));
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color < 249 - 168) ? 0 : 1));
+                    midX[level] = (maxX[level] + minX[level]) / 2F;
+                }
+
+                int[] minY = new int[60];
+                int[] maxY = new int[60];
+                float[] midY = new float[60];
+                for (int level = 0; level < 60; level++)
+                {
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color < 249 - 168) ? 100 : 1));
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color < 249 - 168) ? 0 : 1));
+                    midY[level] = (maxY[level] + minY[level]) / 2F;
+                }
+
+                int minZ = vls.Min(v => v.z * ((v.color < 249 - 168) ? 100 : 1));
+                int maxZ = vls.Max(v => v.z * ((v.color < 249 - 168) ? 0 : 1));
+                float midZ = (maxZ + minZ) / 2F;
+
+                foreach (MagicaVoxelData v in vls)
+                {
+                    MagicaVoxelData mvd = new MagicaVoxelData();
+
+                    if (v.color == 249 - 64) //flesh
+                        mvd.color = (byte)((r.Next(1 + f) == 0) ? 249 - 144 : (r.Next(8) == 0) ? 249 - 152 : 249 - 64); //random transform to guts
+                    else if (v.color == 249 - 144) //guts
+                        mvd.color = (byte)((r.Next(10) == 0) ? 249 - 152 : 249 - 144); //random transform to orange fire
+                    else if (v.color <= 249 - 168) //clear and markers
+                        mvd.color = (byte)249 - 168; //clear stays clear
+                    else if (v.color == 249 - 120)
+                        mvd.color = 249 - 168; //clear inner shadow
+                    else if (v.color == 249 - 96)
+                        mvd.color = 249 - 96; //shadow stays shadow
+                    else if (v.color == 249 - 80) //lights
+                        mvd.color = 249 - 16; //cannon color for broken lights
+                    else if (v.color == 249 - 88) //windows
+                        mvd.color = (byte)((r.Next(3) == 0) ? 249 - 168 : 249 - 88); //random transform to clear
+                    else if (v.color == 249 - 104) //rotors
+                        mvd.color = 249 - 56; //grayish paint color for broken rotors
+                    else if (v.color == 249 - 112)
+                        mvd.color = 249 - 168; //clear non-active rotors
+                    else if (v.color == 249 - 152) //orange fire
+                        mvd.color = (byte)((f > maxFrames / 2 && r.Next(maxFrames) <= f + 2) ? 249 - 136 : ((r.Next(3) <= 1) ? 249 - 160 : ((r.Next(3) == 0) ? 249 - 136 : 249 - 152))); //random transform to yellow fire or smoke
+                    else if (v.color == 249 - 160) //yellow fire
+                        mvd.color = (byte)((f > maxFrames / 2 && r.Next(maxFrames) <= f + 2) ? 249 - 136 : ((r.Next(3) <= 1) ? 249 - 152 : ((r.Next(4) == 0) ? 249 - 136 : 249 - 160))); //random transform to orange fire or smoke
+                    else if (v.color == 249 - 136) //smoke
+                        mvd.color = (byte)((f > maxFrames * 3 / 5 && r.Next(maxFrames) <= f) ? 249 - 168 : 249 - 136); //random transform to clear
+                    else
+                        mvd.color = (byte)((r.Next((f + 3) * 2) <= 2) ? 249 - (152 + ((r.Next(4) == 0) ? 8 : 0)) : v.color); //random transform to orange or yellow fire
+                    
+                    float xMove = 0, yMove = 0, zMove = 0;
+                    if (f > maxFrames / 2 && (mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136))
+                    {
+                        zMove = f * (16F * 0.4F / maxFrames);
+                    }
+                    else
+                    {
+                        if (v.x > midX[v.z])
+                            xMove = r.Next(10) + 5 + blowback;//((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //5 -
+                        else if (v.x < midX[v.z])// && v.x < minX + 5)
+                            xMove = blowback - r.Next(10) - 6;// ((0 + (v.x - midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0))) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //-5 +
+                        if (v.y > midY[v.z])// && v.y > maxY - 5)
+                            yMove = r.Next(10) + 5;//((midY[v.z] - r.Next(4) - (maxY[v.z] - v.y)) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));//5 -
+                        else if (v.y < midY[v.z])// && v.y < minY + 5)
+                            yMove = 0 - r.Next(10) - 6;//((0 + (v.y - midY[v.z] + r.Next(4))) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //-5 +
+
+                        if (mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136)
+                            zMove = f * 0.55F;
+                        else if (f < (maxFrames - 3) && minZ <= 1)
+                            zMove = (v.z / ((maxZ + 1) * (0.3F))) * ((maxFrames - 3) - f) * 0.8F;
+                        else
+                            zMove = (1 - f * 2.1F);
+                    }
+                    if (xMove > 0)
+                    {
+                        float nv = (v.x + (xMove / (0.2f * (f + 4)))) - Math.Abs((yMove / (0.5f * (f + 3))));
+                        if (nv < 1) nv = 1;
+                        if (nv > 118) nv = 118;
+                        mvd.x = (byte)((blowback <= 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
+                    }
+                    else if (xMove < 0)
+                    {
+                        float nv = (v.x + (xMove / (0.2f * (f + 4)))) + Math.Abs((yMove / (0.5f * (f + 3))));
+                        if (nv < 1) nv = 1;
+                        if (nv > 118) nv = 118;
+                        mvd.x = (byte)((blowback > 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
+                    }
+                    else
+                    {
+                        if (v.x < 1) mvd.x = 1;
+                        if (v.x > 118) mvd.x = 118;
+                        else mvd.x = v.x;
+                    }
+                    if (yMove > 0)
+                    {
+                        float nv = (v.y + (yMove / (0.2f * (f + 4)))) - Math.Abs((xMove / (0.5f * (f + 3))));
+                        if (nv < 1) nv = 1;
+                        if (nv > 118) nv = 118;
+                        mvd.y = (byte)(Math.Floor(nv));
+                    }
+                    else if (yMove < 0)
+                    {
+                        float nv = (v.y + (yMove / (0.2f * (f + 4)))) + Math.Abs((xMove / (0.5f * (f + 3))));
+                        if (nv < 1) nv = 1;
+                        if (nv > 118) nv = 118;
+                        mvd.y = (byte)(Math.Ceiling(nv));
+                    }
+                    else
+                    {
+                        mvd.y = v.y;
+                    }
+                    if (zMove != 0)
+                    {
+                        float nv = (v.z + (zMove / (0.2f * (f + 3))));
+
+                        if (nv <= 0 && f < maxFrames && !(mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136)) nv = r.Next(2); //bounce
+                        else if (nv < 0) nv = 0;
+
+                        if (nv > 45) nv = 45;
+                        mvd.z = (byte)Math.Round(nv);
+                    }
+                    else
+                    {
+                        mvd.z = v.z;
+                    }
+                    working.Add(mvd);
+                    if (r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 2) working.AddRange(adjacent(mvd, new int[] { 249 - 152, 249 - 160, 249 - 152, 249 - 160, 249 - 136 }));
+                }
+                working = working.Where(_ => r.Next(7) < 8 - trimLevel).ToList();
+                voxelFrames[f] = new MagicaVoxelData[working.Count];
+                working.ToArray().CopyTo(voxelFrames[f], 0);
+            }
+            MagicaVoxelData[][] frames = new MagicaVoxelData[maxFrames][];
+
+            for (int f = 1; f <= maxFrames; f++)
+            {
+                frames[f - 1] = new MagicaVoxelData[voxelFrames[f].Length];
+                voxelFrames[f].ToArray().CopyTo(frames[f - 1], 0);
+            }
+            return frames;
+        }
+
+        public static MagicaVoxelData[][] BombAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
+            parsedFrames[0].CopyTo(voxelFrames[0], 0);
+            parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(4);
+            // List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+            foreach (MagicaVoxelData mvd in voxelFrames[0])
+            {
+                if (mvd.color == 249 - 169)
+                {
+                    launchers.Add(mvd);
+                }
+            }
+            List<MagicaVoxelData>[][] missiles = new List<MagicaVoxelData>[launchers.Count][];
+            MagicaVoxelData[][][] explosions = new MagicaVoxelData[launchers.Count][][];
+            MagicaVoxelData[] centers = new MagicaVoxelData[launchers.Count];
+            int[] exploding = new int[launchers.Count];
+            for (int i = 0; i < launchers.Count; i++)
+            {
+                missiles[i] = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+                explosions[i] = new MagicaVoxelData[voxelFrames.Length - 2][];
+                exploding[i] = -1;
+            }
+            for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            {
+                //extra[f] = new List<MagicaVoxelData>(100);
+                for (int m = 0; m < missiles.Length; m++)
+                {
+
+                    launchers = new List<MagicaVoxelData>(4);
+                    foreach (MagicaVoxelData mvd in voxelFrames[0])
+                    {
+                        if (mvd.color == 249 - 169)
+                        {
+                            launchers.Add(mvd);
+                        }
+                    }
+                    MagicaVoxelData launcher = launchers[m];
+                    missiles[m][f] = new List<MagicaVoxelData>(40);
+
+                    if (f > 0)
+                    {
+                        double drop = f * (r.NextDouble() * 1.3 + 1.0);
+                        foreach (MagicaVoxelData missile in missiles[m][f - 1].OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128))
+                        {
+                            if (missile.z - drop < 1)
+                            {
+                                exploding[m] = 0;
+                                centers[m] = missile;
+                                missiles[m][f].Clear(); ;
+                                break;
+                            }
+                            else
+                            {
+                                missiles[m][f].Add(new MagicaVoxelData
+                                {
+                                    x = (byte)(missile.x),
+                                    y = (byte)(missile.y),
+                                    z = (byte)(missile.z - drop),
+                                    color = missile.color
+                                });
+                            }
+                        }
+                    }
+                    if (f <= 1)
+                    {
+                        missiles[m][f].AddRange(generateCube(new MagicaVoxelData { x = (byte)(launcher.x + 0), y = (byte)(launcher.y), z = (byte)(launcher.z - 1), color = 249 - 40 }, 4, 249 - 40));
+                    }
+
+                    if (exploding[m] > -1)
+                    {
+                        if (exploding[m] == 0)
+                        {
+                            explosions[m] = HugeExplosionDouble(randomFill(centers[m].x - 3, centers[m].y - 3, 0, 10, 10, 8, new int[] { 249 - 136, 249 - 152, 249 - 160 }).ToArray(), 0, voxelFrames.Length - 2 - f, 4);
+                        }
+                        exploding[m]++;
+                    }
+                }
+            }
+            for (int f = 1; f < voxelFrames.Length - 1; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(parsedFrames[f]);
+                for (int i = 0; i < launchers.Count; i++)
+                {
+                    working.AddRange(missiles[i][f - 1]);
+                    if (f + 1 - voxelFrames.Length + exploding[i] >= 0 && f + 1 - voxelFrames.Length + exploding[i] < explosions[i].Length)
+                        working.AddRange(explosions[i][f + 1 - voxelFrames.Length + exploding[i]]);
+                }
+                //working.AddRange(extra[f - 1]);
+                voxelFrames[f] = working.ToArray();
+            }
+
+            return voxelFrames;
+        }
+
+
         public delegate MagicaVoxelData[][] AnimationGenerator(MagicaVoxelData[][] parsedFrames, int unit);
 
         //169 Bomb Drop
@@ -2960,8 +3223,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         //176 Handgun
         public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "AA_Gun", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb" };
 
-        private static AnimationGenerator[] weaponAnimationsDouble = { HandgunAnimationDouble, MachineGunAnimationDouble, MachineGunAnimationDouble, CannonAnimationDouble,
-                                                                       LongCannonAnimationDouble, RocketAnimationDouble, ArcMissileAnimationDouble, CannonAnimationDouble };
+        public static AnimationGenerator[] weaponAnimationsDouble = { HandgunAnimationDouble, MachineGunAnimationDouble, MachineGunAnimationDouble, CannonAnimationDouble,
+                                                                       LongCannonAnimationDouble, RocketAnimationDouble, ArcMissileAnimationDouble, BombAnimationDouble };
 
 
         public static MagicaVoxelData[][] makeFiringAnimationDouble(MagicaVoxelData[] parsed, int unit, int weapon)
@@ -3023,6 +3286,135 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return voxelFrames;
         }
 
+        public static MagicaVoxelData[][] Flyover(MagicaVoxelData[] voxels)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[17][];
+            voxelFrames[0] = new MagicaVoxelData[voxels.Length];
+            voxels.CopyTo(voxelFrames[0], 0);
+            for (int i = 0; i < voxels.Length; i++)
+            {
+                voxelFrames[0][i].x += 40;
+                voxelFrames[0][i].y += 40;
+            }
+            for (int f = 1; f <= 8; f++)
+            {
+                voxelFrames[f] = new MagicaVoxelData[voxelFrames[f - 1].Length]; //.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)
+                voxelFrames[f - 1].CopyTo(voxelFrames[f], 0);
 
+                for (int i = 0; i < voxelFrames[f].Length; i++)
+                {
+                    voxelFrames[f][i].z += 2;
+                }
+            }
+            /*            for (int f = 9; f <= 16; f++)
+                        {
+                            voxelFrames[f] = new MagicaVoxelData[voxelFrames[f - 1].Length]; //.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)
+                            voxelFrames[f - 1].CopyTo(voxelFrames[f], 0);
+
+
+                            for (int i = 0; i < voxelFrames[f].Length; i++)
+                            {
+                                voxelFrames[f][i].z--;
+                            }
+                        }*/
+            for (int f = 1; f <= 8; f++)
+            {
+
+                List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                int[,] taken = new int[120, 120];
+                taken.Fill(-1);
+
+                int minX;
+                int maxX;
+                float midX;
+
+                minX = voxelFrames[f].Min(v => v.x * ((v.color == 249 - 80 || v.color == 249 - 104 || v.color == 249 - 112 ||
+                    v.color == 249 - 96 || v.color == 249 - 128 || v.color == 249 - 136 || v.color == 249 - 152 ||
+                    v.color == 249 - 160 && v.color > 249 - 168) ? 100 : 1));
+                maxX = voxelFrames[f].Max(v => v.x * ((v.color == 249 - 80 || v.color == 249 - 104 || v.color == 249 - 112 ||
+                    v.color == 249 - 96 || v.color == 249 - 128 || v.color == 249 - 136 || v.color == 249 - 152 ||
+                    v.color == 249 - 160 && v.color > 249 - 168) ? 0 : 1));
+                midX = (maxX + minX) / 2F;
+
+                int minY;
+                int maxY;
+                float midY;
+                minY = voxelFrames[f].Min(v => v.y * ((v.color == 249 - 80 || v.color == 249 - 104 || v.color == 249 - 112 ||
+                    v.color == 249 - 96 || v.color == 249 - 128 || v.color == 249 - 136 || v.color == 249 - 152 ||
+                    v.color == 249 - 160 && v.color > 249 - 168) ? 100 : 1));
+                maxY = voxelFrames[f].Max(v => v.y * ((v.color == 249 - 80 || v.color == 249 - 104 || v.color == 249 - 112 ||
+                    v.color == 249 - 96 || v.color == 249 - 128 || v.color == 249 - 136 || v.color == 249 - 152 ||
+                    v.color == 249 - 160 && v.color > 249 - 168) ? 0 : 1));
+                midY = (maxY + minY) / 2F;
+
+                for (int i = 0; i < voxelFrames[f].Length; i++)
+                {
+                    // do not store this voxel if it lies out of range of the voxel chunk (120x120x120)
+                    if (voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                    {
+                        Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                        continue;
+                    }
+
+                    altered.Add(voxelFrames[f][i]);
+                    //-1 == taken[voxelFrames[f][i].x, voxelFrames[f][i].y] && 
+                    if (voxelFrames[f][i].color != 249 - 80 && voxelFrames[f][i].color != 249 - 104 && voxelFrames[f][i].color != 249 - 112
+                         && voxelFrames[f][i].color != 249 - 96 && voxelFrames[f][i].color != 249 - 128 && voxelFrames[f][i].color != 249 - 136
+                         && voxelFrames[f][i].color != 249 - 152 && voxelFrames[f][i].color != 249 - 160 && voxelFrames[f][i].color > 249 - 168)
+                    {
+                        MagicaVoxelData vox = new MagicaVoxelData();
+                        vox.color = (byte)(249 - 96);
+                        if (i == 0)
+                        {
+                            vox.x = voxelFrames[f][i].x;
+                            vox.y = voxelFrames[f][i].y;
+                            vox.z = 0;
+                        }
+                        else
+                        {
+                            if (voxelFrames[f][i].x > midX)
+                            {
+                                vox.x = (byte)(voxelFrames[f][i].x - f * (r.NextDouble() + 0.7));
+                                if (vox.x < midX)
+                                    vox.color = 249 - 168;
+                            }
+                            else
+                            {
+                                vox.x = (byte)(voxelFrames[f][i].x + f * (r.NextDouble() + 0.7));
+                                if (vox.x > midX)
+                                    vox.color = 249 - 168;
+                            }
+                            if (voxelFrames[f][i].y > midY)
+                            {
+                                vox.y = (byte)(voxelFrames[f][i].y - f * (r.NextDouble() + 0.7));
+                                if (vox.y < midY)
+                                    vox.color = 249 - 168;
+                            }
+                            else
+                            {
+                                vox.y = (byte)(voxelFrames[f][i].y + f * (r.NextDouble() + 0.7));
+                                if (vox.y > midY)
+                                    vox.color = 249 - 168;
+                            }
+                            vox.z = (byte)(0);
+                        }
+                        taken[vox.x, vox.y] = altered.Count();
+                        altered.Add(vox);
+                    }
+                }
+                voxelFrames[f] = altered.ToArray();
+            }
+
+            MagicaVoxelData[][] frames = new MagicaVoxelData[16][];
+
+            for (int f = 1; f < 9; f++)
+            {
+                frames[f - 1] = new MagicaVoxelData[voxelFrames[f].Length];
+                frames[16 - f] = new MagicaVoxelData[voxelFrames[f].Length];
+                voxelFrames[f].CopyTo(frames[f - 1], 0);
+                voxelFrames[f].CopyTo(frames[16 - f], 0);
+            }
+            return frames;
+        }
     }
 }

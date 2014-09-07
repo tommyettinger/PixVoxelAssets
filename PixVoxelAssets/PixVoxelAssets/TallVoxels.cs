@@ -5663,6 +5663,7 @@ namespace AssetsPV
                         b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_fiery_explode_" + (frame) + ".png", ImageFormat.Png);
                         b2.Dispose();
                         g2.Dispose();
+                        b3.Dispose();
                     }
                 }
             }
@@ -5973,7 +5974,7 @@ namespace AssetsPV
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.FromMagicaRaw(bin);
-                    MagicaVoxelData[][] flying = Flyover(parsed);
+                    MagicaVoxelData[][] flying = VoxelLogic.Flyover(parsed);
                     MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
                     //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
                     for (int i = 0; i < 16; i++)
@@ -5988,17 +5989,17 @@ namespace AssetsPV
                                         }*/
                     Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
 
-                    voxelFrames = weaponAnimations[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
+                    voxelFrames = VoxelLogic.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
 
                     for (int f = 0; f < 16; f++)
                     {
                         List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
-                        int[,] taken = new int[60, 60];
+                        int[,] taken = new int[120, 120];
                         taken.Fill(-1);
                         for (int i = 0; i < voxelFrames[f].Length; i++)
                         {
                             // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
-                            if (voxelFrames[f][i].x >= 60 || voxelFrames[f][i].y >= 60 || voxelFrames[f][i].z >= 60)
+                            if (voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
                             {
                                 //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
                                 continue;
@@ -6015,18 +6016,18 @@ namespace AssetsPV
 
                             for (int frame = 0; frame < 16; frame++)
                             {
-                                Graphics g;
-                                Bitmap[] b;
-                                Bitmap o;
+                                Bitmap b = renderHugeSmart(flying[frame], d, color, frame);
+                                Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                                Graphics g2 = Graphics.FromImage(b2);
+                                g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                b.Dispose();
+                                g2.DrawImage(b3, 0, 0, 248, 308);
 
-                                b = renderLarge(flying[frame], d, color, frame);
-                                o = renderOutlineLarge(flying[frame], d, color, frame);
-                                g = Graphics.FromImage(b[1]);
-
-                                g.DrawImage(o, 0, 0);
-                                g.DrawImage(b[0], 0, 0);
-
-                                b[1].Save(folder + "/color" + color + "_" + u + "_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b2.Dispose();
+                                g2.Dispose();
+                                b3.Dispose();
                             }
                         }
                     }
@@ -6048,9 +6049,6 @@ namespace AssetsPV
                             {
                                 Bitmap b = renderHugeSmart(firing[frame], d, color, frame);
                                 Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
-
-
-                                //                        b.Save("temp.png", ImageFormat.Png);
                                 Graphics g2 = Graphics.FromImage(b2);
                                 g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                                 Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
@@ -6060,6 +6058,7 @@ namespace AssetsPV
                                 b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
                                 b2.Dispose();
                                 g2.Dispose();
+                                b3.Dispose();
                             }
                         }
                     }

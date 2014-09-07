@@ -6694,13 +6694,15 @@ namespace AssetsPV
 
                         Graphics g2 = Graphics.FromImage(b2);
                         g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                        g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
+                        Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                        g2.DrawImage(b3, 28, -36, 248, 308);
 //                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
                         g2.Dispose();
                         b.Dispose();
                         b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                         b2.Dispose();
                         g2.Dispose();
+                        b3.Dispose();
                     }
                 }
             }
@@ -6931,7 +6933,7 @@ namespace AssetsPV
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.FromMagicaRaw(bin);
-                    MagicaVoxelData[][] flying = Flyover(parsed);
+                    MagicaVoxelData[][] flying = VoxelLogic.Flyover(parsed);
                     MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
                     //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
                     for (int i = 0; i < 16; i++)
@@ -6946,19 +6948,19 @@ namespace AssetsPV
                                         }*/
                     Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
 
-                    voxelFrames = weaponAnimations[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
+                    voxelFrames = VoxelLogic.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
 
                     for (int f = 0; f < 16; f++)
                     {
                         List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
-                        int[,] taken = new int[60, 60];
+                        int[,] taken = new int[120, 120];
                         taken.Fill(-1);
                         for (int i = 0; i < voxelFrames[f].Length; i++)
                         {
                             // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
-                            if (voxelFrames[f][i].x >= 60 || voxelFrames[f][i].y >= 60 || voxelFrames[f][i].z >= 60)
+                            if (voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
                             {
-                                Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
                                 continue;
                             }
                             altered.Add(voxelFrames[f][i]);
@@ -6973,18 +6975,21 @@ namespace AssetsPV
 
                             for (int frame = 0; frame < 16; frame++)
                             {
-                                Graphics g;
-                                Bitmap[] b;
-                                Bitmap o;
 
-                                b = renderLarge(flying[frame], d, color, frame);
-                                o = renderOutlineLarge(flying[frame], d, color, frame);
-                                g = Graphics.FromImage(b[1]);
+                                Bitmap b = renderHugeSmart(flying[frame], d, color, frame);
+                                Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
-                                g.DrawImage(o, 0, 0);
-                                g.DrawImage(b[0], 0, 0);
+                                Graphics g2 = Graphics.FromImage(b2);
+                                g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                g2.DrawImage(b3, 28, -36, 248, 308);
+                                g2.Dispose();
+                                b.Dispose();
 
-                                b[1].Save(folder + "/color" + color + "_" + u + "_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b2.Dispose();
+                                g2.Dispose();
+                                b3.Dispose();
                             }
                         }
                     }
@@ -7010,13 +7015,15 @@ namespace AssetsPV
 
                                 Graphics g2 = Graphics.FromImage(b2);
                                 g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                g2.DrawImage(b3, 28, -36, 248, 308);
                                 g2.Dispose();
                                 b.Dispose();
 
                                 b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
                                 b2.Dispose();
                                 g2.Dispose();
+                                b3.Dispose();
                             }
                         }
                     }
@@ -7626,7 +7633,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
             Process.Start(startInfo).WaitForExit();
-            /*for (int w = 0; w < 2; w++)
+            for (int w = 0; w < 2; w++)
             {
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -7643,10 +7650,10 @@ namespace AssetsPV
                         s += "frames/" + "color" + i + "_" + u + "_Large_face3_attack_" + w + "_%d.png[0-15] ";
                         s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face3_attack_" + w + "_%d.png[0-15] ";
                     }
-                    startInfo.Arguments = "-dispose background -delay 16 -loop 0 " + s + " 8way/gifs/" + u + "_Large_attack" + w + ".gif";
+                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " 8way/gifs/" + u + "_Large_attack" + w + ".gif";
                     Process.Start(startInfo).WaitForExit();
                 }
-            }*/
+            }
         }
         public static void processEightWayAnimationW(string u)
         {
@@ -8342,7 +8349,7 @@ namespace AssetsPV
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
             //processUnitOutlinedWDouble("Lord");
             //processUnitOutlinedWDouble("Guard");
-
+            /*
             processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");
             processUnitOutlinedPartial("Infantry_P");
@@ -8389,7 +8396,7 @@ namespace AssetsPV
             processEightWayAnimation("Copter_S");
             processUnitOutlinedPartial("Copter_T");
             processEightWayAnimation("Copter_T");
-            /*
+            */
             processUnitOutlinedPartial("Infantry");
             TallVoxels.processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");
@@ -8459,8 +8466,9 @@ namespace AssetsPV
             processUnitOutlinedPartial("Plane_T");
             TallVoxels.processUnitOutlinedPartial("Plane_T");
             processEightWayAnimation("Plane_T");
-            */
-
+            processUnitOutlinedPartial("Plane_P");
+            TallVoxels.processUnitOutlinedPartial("Plane_P");
+            processEightWayAnimation("Plane_P");
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
