@@ -4215,7 +4215,7 @@ namespace AssetsPV
             return b;
         }
 
-        private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
+        private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
@@ -4284,6 +4284,8 @@ namespace AssetsPV
                     break;
             }
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            if (still)
+                jitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
@@ -5448,7 +5450,7 @@ namespace AssetsPV
             return b[1];
         }
 
-        private static Bitmap processSingleOutlinedDouble(MagicaVoxelData[] parsed, int color, string dir, int frame, int maxFrames)
+        private static Bitmap processSingleOutlinedDouble(MagicaVoxelData[] parsed, int color, string dir, int frame, int maxFrames, string u)
         {
             Graphics g;
             Bitmap b;
@@ -5468,7 +5470,7 @@ namespace AssetsPV
                     break;
             }
 
-            b = renderLargeSmart(parsed, d, color, frame);
+            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
             // o = renderOutlineLarge(parsed, d, color, frame);
             g = Graphics.FromImage(b);
 
@@ -6487,7 +6489,7 @@ namespace AssetsPV
                     System.IO.Directory.CreateDirectory(folder); //("color" + i);
                     for (int f = 0; f < framelimit; f++)
                     {
-                        Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit);
+                        Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit, u);
                         b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -6537,16 +6539,16 @@ namespace AssetsPV
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
-                    Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit);
+                    Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
-                    b = processSingleOutlinedDouble(parsed, i, "SW", f, framelimit);
+                    b = processSingleOutlinedDouble(parsed, i, "SW", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face1" + "_" + f + ".png", ImageFormat.Png); //sw
                     b.Dispose();
-                    b = processSingleOutlinedDouble(parsed, i, "NW", f, framelimit);
+                    b = processSingleOutlinedDouble(parsed, i, "NW", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face2" + "_" + f + ".png", ImageFormat.Png); //nw
                     b.Dispose();
-                    b = processSingleOutlinedDouble(parsed, i, "NE", f, framelimit);
+                    b = processSingleOutlinedDouble(parsed, i, "NE", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face3" + "_" + f + ".png", ImageFormat.Png); //ne
                     b.Dispose();
                 }
@@ -6636,7 +6638,7 @@ namespace AssetsPV
                     System.IO.Directory.CreateDirectory(folder); //("color" + i);
                     for (int f = 0; f < framelimit; f++)
                     {
-                        Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit);
+                        Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit, u);
                         b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -6649,7 +6651,7 @@ namespace AssetsPV
                 string arrgs = "";
                 for (int i = 0; i < 8; i++)
                     arrgs += "color" + i + "/" + u + "_Large_face* ";
-                starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " gifs/" + u + "_Large_animated.gif";
+                starter.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 50 : 25) + " -loop 0 " + arrgs + " gifs/" + u + "_Large_animated.gif";
                 Process.Start(starter).WaitForExit();
 
                 for (int i = 0; i < parsed.Length; i++)
@@ -6684,18 +6686,18 @@ namespace AssetsPV
             {
                 string folder = ("color" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
-                for (int f = 0; f < framelimit; f++)
+                for (int f = 0; f < 4; f++)
                 { //"color" + i + "/"
-                    Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit);
+                    Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
-                    b = processSingleOutlinedDouble(parsed, i, "SW", f, framelimit);
+                    b = processSingleOutlinedDouble(parsed, i, "SW", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face1" + "_" + f + ".png", ImageFormat.Png); //sw
                     b.Dispose();
-                    b = processSingleOutlinedDouble(parsed, i, "NW", f, framelimit);
+                    b = processSingleOutlinedDouble(parsed, i, "NW", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face2" + "_" + f + ".png", ImageFormat.Png); //nw
                     b.Dispose();
-                    b = processSingleOutlinedDouble(parsed, i, "NE", f, framelimit);
+                    b = processSingleOutlinedDouble(parsed, i, "NE", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face3" + "_" + f + ".png", ImageFormat.Png); //ne
                     b.Dispose();
                 }
@@ -6708,7 +6710,7 @@ namespace AssetsPV
             string s = "";
             for (int i = 0; i < 8; i++)
                 s += "color" + i + "/" + u + "_Large_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
+            startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             bin.Close();

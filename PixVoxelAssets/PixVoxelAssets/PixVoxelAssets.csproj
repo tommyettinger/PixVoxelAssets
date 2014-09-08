@@ -60,6 +60,9 @@
     <Compile Include="VoxelLogic.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Airport_Part_X.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
     <None Include="Artillery_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -83,6 +86,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Block_Large_X.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="City_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Copter_Part_X.vox">
