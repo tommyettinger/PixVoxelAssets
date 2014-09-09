@@ -8477,7 +8477,7 @@ namespace AssetsPV
             processUnitOutlinedPartial("Plane_P");
             TallVoxels.processUnitOutlinedPartial("Plane_P");
             processEightWayAnimation("Plane_P");
-            */
+            
 
             processUnitOutlinedPartial("City");
             TallVoxels.processUnitOutlinedPartial("City");
@@ -8488,6 +8488,16 @@ namespace AssetsPV
             processUnitOutlinedPartial("Airport");
             TallVoxels.processUnitOutlinedPartial("Airport");
             processEightWayAnimation("Airport");
+            */
+            processUnitOutlinedPartial("Laboratory");
+            TallVoxels.processUnitOutlinedPartial("Laboratory");
+            processEightWayAnimation("Laboratory");
+            processUnitOutlinedPartial("Castle");
+            TallVoxels.processUnitOutlinedPartial("Castle");
+            processEightWayAnimation("Castle");
+            processUnitOutlinedPartial("Estate");
+            TallVoxels.processUnitOutlinedPartial("Estate");
+            processEightWayAnimation("Estate");
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
