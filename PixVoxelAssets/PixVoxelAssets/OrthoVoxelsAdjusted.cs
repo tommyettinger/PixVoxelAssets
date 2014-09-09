@@ -8479,12 +8479,15 @@ namespace AssetsPV
             processEightWayAnimation("Plane_P");
             */
 
-            processUnitOutlinedPartial("Airport");
-            TallVoxels.processUnitOutlinedPartial("Airport");
-            processEightWayAnimation("Airport");
             processUnitOutlinedPartial("City");
             TallVoxels.processUnitOutlinedPartial("City");
             processEightWayAnimation("City");
+            processUnitOutlinedPartial("Factory");
+            TallVoxels.processUnitOutlinedPartial("Factory");
+            processEightWayAnimation("Factory");
+            processUnitOutlinedPartial("Airport");
+            TallVoxels.processUnitOutlinedPartial("Airport");
+            processEightWayAnimation("Airport");
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
