@@ -4735,7 +4735,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 104 || current_color == 112)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
                 {
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
@@ -4956,7 +4956,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 104 || current_color == 112)
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
                 {
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
@@ -8453,6 +8453,7 @@ namespace AssetsPV
             processUnitOutlinedPartial("Supply_T");
             TallVoxels.processUnitOutlinedPartial("Supply_T");
             processEightWayAnimation("Supply_T");
+             */
             processUnitOutlinedPartial("Copter");
             TallVoxels.processUnitOutlinedPartial("Copter");
             processEightWayAnimation("Copter");
@@ -8468,27 +8469,26 @@ namespace AssetsPV
             processUnitOutlinedPartial("Plane");
             TallVoxels.processUnitOutlinedPartial("Plane");
             processEightWayAnimation("Plane");
-            processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane_P");
+            TallVoxels.processUnitOutlinedPartial("Plane_P");
+            processEightWayAnimation("Plane_P");
+/*            processUnitOutlinedPartial("Plane_S");
             TallVoxels.processUnitOutlinedPartial("Plane_S");
             processEightWayAnimation("Plane_S");
             processUnitOutlinedPartial("Plane_T");
             TallVoxels.processUnitOutlinedPartial("Plane_T");
-            processEightWayAnimation("Plane_T");
-            processUnitOutlinedPartial("Plane_P");
-            TallVoxels.processUnitOutlinedPartial("Plane_P");
-            processEightWayAnimation("Plane_P");
-            
-
+            processEightWayAnimation("Plane_T");*/
+            processUnitOutlinedPartial("Airport");
+            TallVoxels.processUnitOutlinedPartial("Airport");
+            processEightWayAnimation("Airport");
+            /*
             processUnitOutlinedPartial("City");
             TallVoxels.processUnitOutlinedPartial("City");
             processEightWayAnimation("City");
             processUnitOutlinedPartial("Factory");
             TallVoxels.processUnitOutlinedPartial("Factory");
             processEightWayAnimation("Factory");
-            processUnitOutlinedPartial("Airport");
-            TallVoxels.processUnitOutlinedPartial("Airport");
-            processEightWayAnimation("Airport");
-            */
+            
             processUnitOutlinedPartial("Laboratory");
             TallVoxels.processUnitOutlinedPartial("Laboratory");
             processEightWayAnimation("Laboratory");
@@ -8498,6 +8498,7 @@ namespace AssetsPV
             processUnitOutlinedPartial("Estate");
             TallVoxels.processUnitOutlinedPartial("Estate");
             processEightWayAnimation("Estate");
+             * */
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
