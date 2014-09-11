@@ -7619,7 +7619,7 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_Large_face3* ";
                 s += "ortho_adj/color" + i + "/" + u + "_Large_face3* ";
             }
-            int delay = 16;
+            int delay = 25;
             if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
                 delay = 50;
             startInfo.Arguments = "-dispose background -delay " + delay + " -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
@@ -7638,13 +7638,12 @@ namespace AssetsPV
                 s += "frames/" + "color" + i + "_" + u + "_Large_face3_fiery_explode* ";
                 s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face3_fiery_explode* ";
             }
-            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
+            startInfo.Arguments = "-dispose background -delay 12 -loop 0 " + s + " 8way/gifs/" + u + "_Large_explosion.gif";
             Process.Start(startInfo).WaitForExit();
             for (int w = 0; w < 2; w++)
             {
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
-                    //color5_Plane_T_Large_face3_attack_0_10
                     s = "";
                     for (int i = 0; i < 8; i++)
                     {
@@ -7657,7 +7656,7 @@ namespace AssetsPV
                         s += "frames/" + "color" + i + "_" + u + "_Large_face3_attack_" + w + "_%d.png[0-15] ";
                         s += "ortho_adj/frames/color" + i + "_" + u + "_Large_face3_attack_" + w + "_%d.png[0-15] ";
                     }
-                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " 8way/gifs/" + u + "_Large_attack" + w + ".gif";
+                    startInfo.Arguments = "-dispose background -delay 12 -loop 0 " + s + " 8way/gifs/" + u + "_Large_attack" + w + ".gif";
                     Process.Start(startInfo).WaitForExit();
                 }
             }
@@ -8453,10 +8452,11 @@ namespace AssetsPV
             processUnitOutlinedPartial("Supply_T");
             TallVoxels.processUnitOutlinedPartial("Supply_T");
             processEightWayAnimation("Supply_T");
-             */
+            */
             processUnitOutlinedPartial("Copter");
             TallVoxels.processUnitOutlinedPartial("Copter");
             processEightWayAnimation("Copter");
+            /*
             processUnitOutlinedPartial("Copter_P");
             TallVoxels.processUnitOutlinedPartial("Copter_P");
             processEightWayAnimation("Copter_P");
@@ -8472,16 +8472,17 @@ namespace AssetsPV
             processUnitOutlinedPartial("Plane_P");
             TallVoxels.processUnitOutlinedPartial("Plane_P");
             processEightWayAnimation("Plane_P");
-/*            processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane_S");
             TallVoxels.processUnitOutlinedPartial("Plane_S");
             processEightWayAnimation("Plane_S");
             processUnitOutlinedPartial("Plane_T");
             TallVoxels.processUnitOutlinedPartial("Plane_T");
-            processEightWayAnimation("Plane_T");*/
+            processEightWayAnimation("Plane_T");
+            
             processUnitOutlinedPartial("Airport");
             TallVoxels.processUnitOutlinedPartial("Airport");
             processEightWayAnimation("Airport");
-            /*
+            
             processUnitOutlinedPartial("City");
             TallVoxels.processUnitOutlinedPartial("City");
             processEightWayAnimation("City");
@@ -8498,7 +8499,7 @@ namespace AssetsPV
             processUnitOutlinedPartial("Estate");
             TallVoxels.processUnitOutlinedPartial("Estate");
             processEightWayAnimation("Estate");
-             * */
+            */
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
