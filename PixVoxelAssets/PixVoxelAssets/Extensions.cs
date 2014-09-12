@@ -59,6 +59,23 @@ namespace AssetsPV
             }
             return mat;
         }
+        public static T[,,] Fill<T>(this T[,,] mat, T item)
+        {
+            if (mat.Length == 0)
+                return mat;
+
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+                for (int j = 0; j < mat.GetLength(1); j++)
+                {
+                    for (int k = 0; k < mat.GetLength(2); k++)
+                    {
+                        mat[i, j, k] = item;
+                    }
+                }
+            }
+            return mat;
+        }
         public static T[] Fill<T>(this T[] arr, T item)
         {
             if (arr.Length == 0)

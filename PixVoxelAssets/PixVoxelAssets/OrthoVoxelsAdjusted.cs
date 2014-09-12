@@ -4652,7 +4652,437 @@ namespace AssetsPV
             }
             return b;
         }
+        private static byte[] outlineValues = new byte[64];
+        private static void setOutline(byte x, byte y, byte z, byte[, ,] outlined, int stride, int jitter)
+        {
+            bool[, ,] adjacent = new bool[3, 3, 3];
 
+            if (outlined[x, y, z] == 255) return;
+            int current_color = outlined[x, y, z];
+            for (int x2 = -1; x2 < 2; x2++)
+            {
+                for (int y2 = -1; y2 < 2; y2++)
+                {
+                    for (int z2 = -1; z2 < 2; z2++)
+                    {
+                        if (x + x2 >= 0 && y + y2 >= 0 && z + z2 >= 0 &&
+                           x + x2 < 60 && y + y2 < 60 && z + z2 < 60)
+                        {
+                            adjacent[1 + x2, 1 + y2, 1 + z2] = outlined[x + x2, y + y2, z + z2] != 255;
+                        }
+                        else
+                        {
+                            adjacent[1 + x2, 1 + y2, 1 + z2] = false;
+                        }
+                    }
+                }
+            }
+            //left side
+            for (int j = -2; j < 6; j++)
+            {
+                int i = 3;
+                int q = voxelToPixelLarge(i, j, x, y, z, outlined[x, y, z], stride, jitter);
+                for (int x2 = 0; x2 < 3; x2++)
+                {
+                    for (int z2 = 0; z2 < 3; z2++)
+                    {
+                        if (!adjacent[x2, 0, z2])
+                        {
+                            outlineValues[q - 4] = 255;
+                            outlineValues[q - 8] = 255;
+                        }
+                        else
+                        {
+                            outlineValues[q - 4] = 0;
+                            outlineValues[q - 8] = 0;
+                            goto END_LEFT;
+                        }
+                    }
+                }
+            }
+        END_LEFT: { }
+            //right side
+            for (int j = -2; j < 6; j++)
+            {
+                int i = 11;
+                int q = voxelToPixelLarge(i, j, x, y, z, outlined[x, y, z], stride, jitter);
+                for (int x2 = 0; x2 < 3; x2++)
+                {
+                    for (int z2 = 0; z2 < 3; z2++)
+                    {
+                        if (!adjacent[x2, 2, z2])
+                        {
+                            outlineValues[q + 4] = 255;
+                            outlineValues[q + 8] = 255;
+                        }
+                        else
+                        {
+                            outlineValues[q + 4] = 0;
+                            outlineValues[q + 8] = 0;
+                            goto END_RIGHT;
+                        }
+                    }
+                }
+            }
+        END_RIGHT: { }
+            //top
+            for (int i = -8; i < 20; i++)
+            {
+                int j = 0;
+                int q = voxelToPixelLarge(i, j, x, y, z, outlined[x, y, z], stride, jitter);
+                for (int x2 = 0; x2 < 3; x2++)
+                {
+                    for (int y2 = 0; y2 < 3; y2++)
+                    {
+                        if (!adjacent[x2, y2, 2])
+                        {
+                            outlineValues[q - stride] = 255;
+                            outlineValues[q - stride * 2] = 255;
+                        }
+                        else
+                        {
+                            outlineValues[q - stride] = 0;
+                            outlineValues[q - stride * 2] = 0;
+                            goto END_TOP;
+                        }
+                    }
+                }
+            }
+        END_TOP: { }
+            //bottom
+            for (int i = -8; i < 20; i++)
+            {
+                int j = 3;
+                int q = voxelToPixelLarge(i, j, x, y, z, outlined[x, y, z], stride, jitter);
+                for (int x2 = 0; x2 < 3; x2++)
+                {
+                    for (int y2 = 0; y2 < 3; y2++)
+                    {
+                        if (!adjacent[x2, y2, 0])
+                        {
+                            outlineValues[q + stride] = 255;
+                            outlineValues[q + stride * 2] = 255;
+                        }
+                        else
+                        {
+                            outlineValues[q + stride] = 0;
+                            outlineValues[q + stride * 2] = 0;
+                            goto END_BOTTOM;
+                        }
+                    }
+                }
+            }
+        END_BOTTOM: { }
+
+            return;
+        }
+        private static Bitmap renderLargeSmartSlow(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
+        {
+            Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
+            byte[] bareValues = new byte[numBytes];
+            bareValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill<bool>(false);
+
+            outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+
+            int xSize = 60, ySize = 60;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            if (still)
+                jitter = 0;
+
+            byte[, ,] outlined = new byte[60, 60, 60];
+            outlined.Fill<byte>(255);
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                if ((current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 96 || current_color >= 168) ||
+                    ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1) ||
+                    ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0))
+                {
+                    outlined[vx.x, vx.y, vx.z] = 255;
+                }
+                else
+                {
+                    outlined[vx.x, vx.y, vx.z] = (byte)(faction + current_color);
+                }
+            }
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                int p = 0;
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
+                    continue;
+                else if (current_color >= 168)
+                {
+                    continue;
+                }
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
+                {
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
+                    int mod_color = current_color + faction;
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            /*
+                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+                             */
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                                bareValues[p] = xrendered[mod_color][i + j * 12];
+                                barePositions[p] = true;
+                            }
+                        }
+                    }
+                }
+                else if (current_color == 96)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            if (shadowValues[p] == 0)
+                            {
+                                shadowValues[p] = xrendered[current_color][i + j * 12];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    int mod_color = current_color + faction;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                            }
+                            setOutline(vx.x, vx.y, vx.z, outlined, bmpData.Stride, jitter);
+                        }
+                    }
+                }
+            }
+
+            //        }
+            //    }
+            //}
+
+            //for (int i = 3; i < numBytes; i += 4)
+            //{
+            //    if (argbValues[i] > 255 * VoxelLogic.flat_alpha && barePositions[i] == false)
+            //    {
+            //outlineValues[i + 4] = 255;
+            //outlineValues[i - 4] = 255;
+            //outlineValues[i + bmpData.Stride] = 255;
+            //outlineValues[i - bmpData.Stride] = 255;
+            //outlineValues[i + bmpData.Stride + 4] = 255;
+            //outlineValues[i - bmpData.Stride - 4] = 255;
+            //outlineValues[i + bmpData.Stride - 4] = 255;
+            //outlineValues[i - bmpData.Stride + 4] = 255;
+
+            //outlineValues[i + 8] = 255;
+            //outlineValues[i - 8] = 255;
+            //outlineValues[i + bmpData.Stride * 2] = 255;
+            //outlineValues[i - bmpData.Stride * 2] = 255;
+            //outlineValues[i + bmpData.Stride + 8] = 255;
+            //outlineValues[i - bmpData.Stride + 8] = 255;
+            //outlineValues[i + bmpData.Stride - 8] = 255;
+            //outlineValues[i - bmpData.Stride - 8] = 255;
+            //outlineValues[i + bmpData.Stride * 2 + 8] = 255;
+            //outlineValues[i + bmpData.Stride * 2 + 4] = 255;
+            //outlineValues[i + bmpData.Stride * 2 - 4] = 255;
+            //outlineValues[i + bmpData.Stride * 2 - 8] = 255;
+            //outlineValues[i - bmpData.Stride * 2 + 8] = 255;
+            //outlineValues[i - bmpData.Stride * 2 + 4] = 255;
+            //outlineValues[i - bmpData.Stride * 2 - 4] = 255;
+            //outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+            //    }
+            //}
+            //for (int z = 59; z >= 0; z--)
+            //{
+            //    for (int y = 0; y < 60; y++)
+            //    {
+            //        for (int x = 0; x < 60; x++)
+            //        {
+            //            int current_color = outlined[x, y, z];
+            //            for (int j = 0; j < 4; j++)
+            //            {
+            //                for (int i = 0; i < 12; i += 4)
+            //                {
+            //                    int p = voxelToPixelLarge(i, j, x, y, z, current_color, bmpData.Stride, jitter);
+
+            //                    int q = p - bmpData.Stride * j - i;
+            //                    if (argbValues[q] > 255 * VoxelLogic.flat_alpha && barePositions[q] == false)
+            //                    {
+            //                        argbValues[q + 4] = 255;
+            //                        argbValues[q - 4] = 255;
+            //                        argbValues[q + bmpData.Stride] = 255;
+            //                        argbValues[q - bmpData.Stride] = 255;
+            //                        argbValues[q + bmpData.Stride + 4] = 255;
+            //                        argbValues[q - bmpData.Stride - 4] = 255;
+            //                        argbValues[q + bmpData.Stride - 4] = 255;
+            //                        argbValues[q - bmpData.Stride + 4] = 255;
+
+            //                        argbValues[q + 8] = 255;
+            //                        argbValues[q - 8] = 255;
+            //                        argbValues[q + bmpData.Stride * 2] = 255;
+            //                        argbValues[q - bmpData.Stride * 2] = 255;
+            //                        argbValues[q + bmpData.Stride + 8] = 255;
+            //                        argbValues[q - bmpData.Stride + 8] = 255;
+            //                        argbValues[q + bmpData.Stride - 8] = 255;
+            //                        argbValues[q - bmpData.Stride - 8] = 255;
+            //                        argbValues[q + bmpData.Stride * 2 + 8] = 255;
+            //                        argbValues[q + bmpData.Stride * 2 + 4] = 255;
+            //                        argbValues[q + bmpData.Stride * 2 - 4] = 255;
+            //                        argbValues[q + bmpData.Stride * 2 - 8] = 255;
+            //                        argbValues[q - bmpData.Stride * 2 + 8] = 255;
+            //                        argbValues[q - bmpData.Stride * 2 + 4] = 255;
+            //                        argbValues[q - bmpData.Stride * 2 - 4] = 255;
+            //                        argbValues[q - bmpData.Stride * 2 - 8] = 255;
+
+            //                        if (outlined[x - 1, y, z] < 255)
+            //                        {
+
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 0 && bareValues[i] > 0)
+                {
+                    argbValues[i - 3] = bareValues[i - 3];
+                    argbValues[i - 2] = bareValues[i - 2];
+                    argbValues[i - 1] = bareValues[i - 1];
+                    argbValues[i - 0] = 255;
+                }
+                else if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = 255;
+                }
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha)
+                    argbValues[i] = 255;
+                if (outlineValues[i] == 255)
+                {
+                    argbValues[i] = 255;
+                    argbValues[i - 1] = 0;
+                    argbValues[i - 2] = 0;
+                    argbValues[i - 3] = 0;
+                }
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+
+        private static int voxelToPixelLarge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+            4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)
+             */
+            return 4 * (y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                 + innerX +
+                stride * (308 - 60 - 8 + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + innerY);
+        }
+
+        private static int voxelToPixelHuge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            return 4 * (y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+                 + innerX +
+                stride * (308 * 2 - 120 - 8 + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : 0) + innerY);
+        }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -4721,12 +5151,152 @@ namespace AssetsPV
                     }
                     break;
             }
+            bool[, ,] outlineable = new bool[60, 60, 60];
+            outlineable.Fill<bool>(false);
+            byte[, ,] outlined = new byte[60, 60, 60];
+            outlined.Fill<byte>(0);
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                if ((current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80 || current_color == 96 || current_color >= 168) ||
+                    ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1) ||
+                    ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0))
+                {
+                    outlineable[vx.x, vx.y, vx.z] = false;
+                }
+                else
+                {
+                    outlineable[vx.x, vx.y, vx.z] = true;
+                }
+            }
+            /** Strawcasting code.
+             * This sends a "racer" from the edge of the space used by the model, and traces the path that the viewer's eye would take, like raytracing.
+             * The difference here is that it uses a "drinking straw" shape that must find an empty space with a voxel adjacent (touching the "straw").
+             * If it finds one, and that voxel is in the outlineable array, it marks that voxel as outlined and will draw an outline later.
+             * If the center of the straw ever is occupied, it stops.
+             * outlined uses bytes with each bit representing the presence of an outline for that voxel at a certain point around it.
+             * 128   1   2
+             * 64        4
+             * 32   16   8
+             */
+            for (int i = 0; i < 60; i++)
+            {
+                for (int j = 0; j < 60; j++)
+                {
+                    int racerX = 59, racerZ = j;
+                    while (racerX >= 0 && racerZ >= 0)
+                    {
+                        if (outlineable[racerX, i, racerZ])
+                            break;
+                        if (racerX < 60 - 2)
+                        {
+                            if (i > 0 && outlineable[racerX + 2, i - 1, racerZ])
+                            {
+                                outlined[racerX + 2, i - 1, racerZ] |= 128;
+                            }
+                            if (outlineable[racerX + 2, i, racerZ])
+                            {
+                                outlined[racerX + 2, i, racerZ] |= 1;
+                            }
+                            if (i < 60 - 1 && outlineable[racerX + 2, i + 1, racerZ])
+                            {
+                                outlined[racerX + 2, i + 1, racerZ] |= 2;
+                            }
+                        }
+                        if (racerX < 60 - 1 && racerZ < 60 - 1)
+                        {
+                            if (i > 0 && outlineable[racerX + 1, i - 1, racerZ + 1])
+                            {
+                                outlined[racerX + 1, i - 1, racerZ + 1] |= 64;
+                            }
+                            if (i < 60 - 1 && outlineable[racerX + 1, i + 1, racerZ + 1])
+                            {
+                                outlined[racerX + 1, i + 1, racerZ + 1] |= 4;
+                            }
+                        }
+                        if (racerZ < 60 - 2)
+                        {
+                            if (i > 0 && outlineable[racerX, i - 1, racerZ + 2])
+                            {
+                                outlined[racerX, i - 1, racerZ + 2] |= 32;
+                            }
+                            if (outlineable[racerX, i, racerZ + 2])
+                            {
+                                outlined[racerX, i, racerZ + 2] |= 16;
+                            }
+                            if (i < 60 - 1 && outlineable[racerX, i + 1, racerZ + 2])
+                            {
+                                outlined[racerX, i + 1, racerZ + 2] |= 8;
+                            }
+                        }
+                        racerX--;
+                        racerZ--;
+                    }
+                }
+            }
+            for (int i = 0; i < 60; i++)
+            {
+                for (int j = 0; j < 60; j++)
+                {
+                    int racerX = j, racerZ = 59;
+                    while (racerX >= 0 && racerZ >= 0)
+                    {
+                        if (outlineable[racerX, i, racerZ])
+                            break;
+                        if (racerX < 60 - 2)
+                        {
+                            if (i > 0 && outlineable[racerX + 2, i - 1, racerZ])
+                            {
+                                outlined[racerX + 2, i - 1, racerZ] |= 128;
+                            }
+                            if (outlineable[racerX + 2, i, racerZ])
+                            {
+                                outlined[racerX + 2, i, racerZ] |= 1;
+                            }
+                            if (i < 60 - 1 && outlineable[racerX + 2, i + 1, racerZ])
+                            {
+                                outlined[racerX + 2, i + 1, racerZ] |= 2;
+                            }
+                        }
+                        if (racerX < 60 - 1 && racerZ < 60 - 1)
+                        {
+                            if (i > 0 && outlineable[racerX + 1, i - 1, racerZ + 1])
+                            {
+                                outlined[racerX + 1, i - 1, racerZ + 1] |= 64;
+                            }
+                            if (i < 60 - 1 && outlineable[racerX + 1, i + 1, racerZ + 1])
+                            {
+                                outlined[racerX + 1, i + 1, racerZ + 1] |= 4;
+                            }
+                        }
+                        if (racerZ < 60 - 2)
+                        {
+                            if (i > 0 && outlineable[racerX, i - 1, racerZ + 2])
+                            {
+                                outlined[racerX, i - 1, racerZ + 2] |= 32;
+                            }
+                            if (outlineable[racerX, i, racerZ + 2])
+                            {
+                                outlined[racerX, i, racerZ + 2] |= 16;
+                            }
+                            if (i < 60 - 1 && outlineable[racerX, i + 1, racerZ + 2])
+                            {
+                                outlined[racerX, i + 1, racerZ + 2] |= 8;
+                            }
+                        }
+                        racerX--;
+                        racerZ--;
+                    }
+                }
+            }
+
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             if (still)
                 jitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
+                int p = 0;
                 if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
@@ -4753,22 +5323,12 @@ namespace AssetsPV
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0
-                                )
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 12];
-                                bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 12];
-                                barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] = true;
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                                bareValues[p] = xrendered[mod_color][i + j * 12];
+                                barePositions[p] = true;
                             }
                         }
                     }
@@ -4779,14 +5339,11 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+
+                            if (shadowValues[p] == 0)
                             {
-                                shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[current_color][i + j * 12];
+                                shadowValues[p] = xrendered[current_color][i + j * 12];
                             }
                         }
                     }
@@ -4799,20 +5356,59 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] == 0)
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)] =
-                                    xrendered[mod_color][i + j * 12];
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                                byte o = outlined[vx.x, vx.y, vx.z];
+                                if(o > 0 && p % 4 == 3)
+                                {
+                                    if ((o & 1) == 1)
+                                    { argbValues[p - bmpData.Stride] = 255; argbValues[p - bmpData.Stride - 1] = 0; argbValues[p - bmpData.Stride - 2] = 0; argbValues[p - bmpData.Stride - 3] = 0;
+                                    argbValues[p - bmpData.Stride * 2] = 255; argbValues[p - bmpData.Stride * 2 - 1] = 0; argbValues[p - bmpData.Stride * 2 - 2] = 0; argbValues[p - bmpData.Stride * 2 - 3] = 0;
+                                    }
+                                    if ((o & 2) == 2)
+                                    { argbValues[p - bmpData.Stride + 4] = 255; argbValues[p - bmpData.Stride + 4 - 1] = 0; argbValues[p - bmpData.Stride + 4 - 2] = 0; argbValues[p - bmpData.Stride + 4 - 3] = 0;
+                                    argbValues[p - bmpData.Stride + 8] = 255; argbValues[p - bmpData.Stride + 8 - 1] = 0; argbValues[p - bmpData.Stride + 8 - 2] = 0; argbValues[p - bmpData.Stride + 8 - 3] = 0;
+                                    argbValues[p - bmpData.Stride * 2 + 4] = 255; argbValues[p - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[p - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[p - bmpData.Stride * 2 + 4 - 3] = 0;
+                                    argbValues[p - bmpData.Stride * 2 + 8] = 255; argbValues[p - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[p - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[p - bmpData.Stride * 2 + 8 - 3] = 0;
+                                    }
+                                    if ((o & 4) == 4)
+                                    { argbValues[p + 4] = 255; argbValues[p + 4 - 1] = 0; argbValues[p + 4 - 2] = 0; argbValues[p + 4 - 3] = 0;
+                                    argbValues[p + 8] = 255; argbValues[p + 8 - 1] = 0; argbValues[p + 8 - 2] = 0; argbValues[p + 8 - 3] = 0; }
+                                    if ((o & 8) == 8)
+                                    { argbValues[p + bmpData.Stride + 4] = 255; argbValues[p + bmpData.Stride + 4 - 1] = 0; argbValues[p + bmpData.Stride + 4 - 2] = 0; argbValues[p + bmpData.Stride + 4 - 3] = 0;
+                                    argbValues[p + bmpData.Stride + 8] = 255; argbValues[p + bmpData.Stride + 8 - 1] = 0; argbValues[p + bmpData.Stride + 8 - 2] = 0; argbValues[p + bmpData.Stride + 8 - 3] = 0;
+                                    argbValues[p + bmpData.Stride * 2 + 4] = 255; argbValues[p + bmpData.Stride * 2 + 4 - 1] = 0; argbValues[p + bmpData.Stride * 2 + 4 - 2] = 0; argbValues[p + bmpData.Stride * 2 + 4 - 3] = 0;
+                                    argbValues[p + bmpData.Stride * 2 + 8] = 255; argbValues[p + bmpData.Stride * 2 + 8 - 1] = 0; argbValues[p + bmpData.Stride * 2 + 8 - 2] = 0; argbValues[p + bmpData.Stride * 2 + 8 - 3] = 0;
+                                    }
+                                    if ((o & 16) == 16)
+                                    { argbValues[p + bmpData.Stride] = 255; argbValues[p + bmpData.Stride - 1] = 0; argbValues[p + bmpData.Stride - 2] = 0; argbValues[p + bmpData.Stride - 3] = 0;
+                                    argbValues[p + bmpData.Stride * 2] = 255; argbValues[p + bmpData.Stride * 2 - 1] = 0; argbValues[p + bmpData.Stride * 2 - 2] = 0; argbValues[p + bmpData.Stride * 2 - 3] = 0;
+                                    }
+                                    if ((o & 32) == 32)
+                                    { argbValues[p + bmpData.Stride - 4] = 255; argbValues[p + bmpData.Stride - 4 - 1] = 0; argbValues[p + bmpData.Stride - 4 - 2] = 0; argbValues[p + bmpData.Stride - 4 - 3] = 0;
+                                    argbValues[p + bmpData.Stride - 8] = 255; argbValues[p + bmpData.Stride - 8 - 1] = 0; argbValues[p + bmpData.Stride - 8 - 2] = 0; argbValues[p + bmpData.Stride - 8 - 3] = 0;
+                                    argbValues[p + bmpData.Stride * 2 - 4] = 255; argbValues[p + bmpData.Stride * 2 - 4 - 1] = 0; argbValues[p + bmpData.Stride * 2 - 4 - 2] = 0; argbValues[p + bmpData.Stride * 2 - 4 - 3] = 0;
+                                    argbValues[p + bmpData.Stride * 2 - 8] = 255; argbValues[p + bmpData.Stride * 2 - 8 - 1] = 0; argbValues[p + bmpData.Stride * 2 - 8 - 2] = 0; argbValues[p + bmpData.Stride * 2 - 8 - 3] = 0;
+                                    }
+                                    if ((o & 64) == 64)
+                                    { argbValues[p - 4] = 255; argbValues[p - 4 - 1] = 0; argbValues[p - 4 - 2] = 0; argbValues[p - 4 - 3] = 0;
+                                    argbValues[p - 8] = 255; argbValues[p - 8 - 1] = 0; argbValues[p - 8 - 2] = 0; argbValues[p - 8 - 3] = 0;
+                                    }
+                                    if ((o & 128) == 128)
+                                    { argbValues[p - bmpData.Stride - 4] = 255; argbValues[p - bmpData.Stride - 4 - 1] = 0; argbValues[p - bmpData.Stride - 4 - 2] = 0; argbValues[p - bmpData.Stride - 4 - 3] = 0;
+                                    argbValues[p - bmpData.Stride - 8] = 255; argbValues[p - bmpData.Stride - 8 - 1] = 0; argbValues[p - bmpData.Stride - 8 - 2] = 0; argbValues[p - bmpData.Stride - 8 - 3] = 0;
+                                    argbValues[p - bmpData.Stride * 2 - 4] = 255; argbValues[p - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[p - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[p - bmpData.Stride * 2 - 4 - 3] = 0;
+                                    argbValues[p - bmpData.Stride * 2 - 8] = 255; argbValues[p - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[p - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[p - bmpData.Stride * 2 - 8 - 3] = 0;
+                                    }                                    
+                                }
                             }
                         }
                     }
                 }
             }
-            for (int i = 3; i < numBytes; i += 4)
+/*            for (int i = 3; i < numBytes; i += 4)
             {
                 if (argbValues[i] > 255 * VoxelLogic.flat_alpha && barePositions[i] == false)
                 {
@@ -4842,11 +5438,11 @@ namespace AssetsPV
                     outlineValues[i - bmpData.Stride * 2 - 4] = 255;
                     outlineValues[i - bmpData.Stride * 2 - 8] = 255;
                 }
-            }
+            }*/
 
             for (int i = 3; i < numBytes; i += 4)
             {
-                if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha))
+                if ((argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha)) //outlineValues[i] > 0 || 
                     argbValues[i] = 255;
             }
 
@@ -4857,14 +5453,14 @@ namespace AssetsPV
                     argbValues[i - 3] = bareValues[i - 3];
                     argbValues[i - 2] = bareValues[i - 2];
                     argbValues[i - 1] = bareValues[i - 1];
-                    argbValues[i - 0] = bareValues[i - 0];
+                    argbValues[i - 0] = 255;
                 }
                 else if (argbValues[i] == 0 && shadowValues[i] > 0)
                 {
                     argbValues[i - 3] = shadowValues[i - 3];
                     argbValues[i - 2] = shadowValues[i - 2];
                     argbValues[i - 1] = shadowValues[i - 1];
-                    argbValues[i - 0] = shadowValues[i - 0];
+                    argbValues[i - 0] = 255;
                 }
             }
             Marshal.Copy(argbValues, 0, ptr, numBytes);
@@ -4874,7 +5470,6 @@ namespace AssetsPV
 
             return bmp;
         }
-
 
         private static Bitmap renderHugeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
         {
@@ -4948,6 +5543,7 @@ namespace AssetsPV
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
+                int p = 0;
                 if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
@@ -4974,22 +5570,13 @@ namespace AssetsPV
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0
-                                )
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    xrendered[mod_color][i + j * 12];
-                                bareValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    xrendered[mod_color][i + j * 12];
-                                barePositions[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] = true;
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                                bareValues[p] = xrendered[mod_color][i + j * 12];
+                                barePositions[p] = true;
                             }
                         }
                     }
@@ -5000,14 +5587,10 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            if (shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            if (shadowValues[p] == 0)
                             {
-                                shadowValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    xrendered[current_color][i + j * 12];
+                                shadowValues[p] = xrendered[current_color][i + j * 12];
                             }
                         }
                     }
@@ -5020,14 +5603,11 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            if (argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] == 0)
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
-                             + i +
-                           bmpData.Stride * (308 * 2 - 120 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : 0) + j)] =
-                                    xrendered[mod_color][i + j * 12];
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
                             }
                         }
                     }
@@ -5095,6 +5675,484 @@ namespace AssetsPV
 
             return bmp;
         }
+        private static Bitmap renderHugeSmartSlow(MagicaVoxelData[] voxels, int facing, int faction, int frame)
+        {
+            Bitmap bmp = new Bitmap(248 * 2, 308 * 2, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
+            byte[] outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+            byte[] bareValues = new byte[numBytes];
+            bareValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill<bool>(false);
+            int xSize = 120, ySize = 120;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                int p = 0;
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
+                    continue;
+                else if (current_color >= 168)
+                {
+                    continue;
+                }
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
+                {
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
+                    int mod_color = current_color + faction;
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            /*
+                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+                             */
+
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                                bareValues[p] = xrendered[mod_color][i + j * 12];
+                                barePositions[p] = true;
+                            }
+                        }
+                    }
+                }
+                else if (current_color == 96)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            if (shadowValues[p] == 0)
+                            {
+                                shadowValues[p] = xrendered[current_color][i + j * 12];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    int mod_color = current_color + faction;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (i % 4 == 3)
+                            {
+                                int q = p;
+                                if (argbValues[q] > 255 * VoxelLogic.flat_alpha && barePositions[q] == false)
+                                {
+                                    if (argbValues[q + 4] == 0 && shadowValues[q + 4] == 0) { argbValues[q + 4] = 255; argbValues[q + 4 - 1] = 0; argbValues[q + 4 - 2] = 0; argbValues[q + 4 - 3] = 0; }
+                                    if (argbValues[q - 4] == 0 && shadowValues[q - 4] == 0) { argbValues[q - 4] = 255; argbValues[q - 4 - 1] = 0; argbValues[q - 4 - 2] = 0; argbValues[q - 4 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride] == 0 && shadowValues[q + bmpData.Stride] == 0) { argbValues[q + bmpData.Stride] = 255; argbValues[q + bmpData.Stride - 1] = 0; argbValues[q + bmpData.Stride - 2] = 0; argbValues[q + bmpData.Stride - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride] == 0 && shadowValues[q - bmpData.Stride] == 0) { argbValues[q - bmpData.Stride] = 255; argbValues[q - bmpData.Stride - 1] = 0; argbValues[q - bmpData.Stride - 2] = 0; argbValues[q - bmpData.Stride - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride + 4] == 0 && shadowValues[q + bmpData.Stride + 4] == 0) { argbValues[q + bmpData.Stride + 4] = 255; argbValues[q + bmpData.Stride + 4 - 1] = 0; argbValues[q + bmpData.Stride + 4 - 2] = 0; argbValues[q + bmpData.Stride + 4 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride - 4] == 0 && shadowValues[q - bmpData.Stride - 4] == 0) { argbValues[q - bmpData.Stride - 4] = 255; argbValues[q - bmpData.Stride - 4 - 1] = 0; argbValues[q - bmpData.Stride - 4 - 2] = 0; argbValues[q - bmpData.Stride - 4 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride - 4] == 0 && shadowValues[q + bmpData.Stride - 4] == 0) { argbValues[q + bmpData.Stride - 4] = 255; argbValues[q + bmpData.Stride - 4 - 1] = 0; argbValues[q + bmpData.Stride - 4 - 2] = 0; argbValues[q + bmpData.Stride - 4 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride + 4] == 0 && shadowValues[q - bmpData.Stride + 4] == 0) { argbValues[q - bmpData.Stride + 4] = 255; argbValues[q - bmpData.Stride + 4 - 1] = 0; argbValues[q - bmpData.Stride + 4 - 2] = 0; argbValues[q - bmpData.Stride + 4 - 3] = 0; }
+
+                                    if (argbValues[q + 8] == 0 && shadowValues[q + 8] == 0) { argbValues[q + 8] = 255; argbValues[q + 8 - 1] = 0; argbValues[q + 8 - 2] = 0; argbValues[q + 8 - 3] = 0; }
+                                    if (argbValues[q - 8] == 0 && shadowValues[q - 8] == 0) { argbValues[q - 8] = 255; argbValues[q - 8 - 1] = 0; argbValues[q - 8 - 2] = 0; argbValues[q - 8 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride * 2] == 0 && shadowValues[q + bmpData.Stride * 2] == 0) { argbValues[q + bmpData.Stride * 2] = 255; argbValues[q + bmpData.Stride * 2 - 1] = 0; argbValues[q + bmpData.Stride * 2 - 2] = 0; argbValues[q + bmpData.Stride * 2 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride * 2] == 0 && shadowValues[q - bmpData.Stride * 2] == 0) { argbValues[q - bmpData.Stride * 2] = 255; argbValues[q - bmpData.Stride * 2 - 1] = 0; argbValues[q - bmpData.Stride * 2 - 2] = 0; argbValues[q - bmpData.Stride * 2 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride + 8] == 0 && shadowValues[q + bmpData.Stride + 8] == 0) { argbValues[q + bmpData.Stride + 8] = 255; argbValues[q + bmpData.Stride + 8 - 1] = 0; argbValues[q + bmpData.Stride + 8 - 2] = 0; argbValues[q + bmpData.Stride + 8 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride + 8] == 0 && shadowValues[q - bmpData.Stride + 8] == 0) { argbValues[q - bmpData.Stride + 8] = 255; argbValues[q - bmpData.Stride + 8 - 1] = 0; argbValues[q - bmpData.Stride + 8 - 2] = 0; argbValues[q - bmpData.Stride + 8 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride - 8] == 0 && shadowValues[q + bmpData.Stride - 8] == 0) { argbValues[q + bmpData.Stride - 8] = 255; argbValues[q + bmpData.Stride - 8 - 1] = 0; argbValues[q + bmpData.Stride - 8 - 2] = 0; argbValues[q + bmpData.Stride - 8 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride - 8] == 0 && shadowValues[q - bmpData.Stride - 8] == 0) { argbValues[q - bmpData.Stride - 8] = 255; argbValues[q - bmpData.Stride - 8 - 1] = 0; argbValues[q - bmpData.Stride - 8 - 2] = 0; argbValues[q - bmpData.Stride - 8 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride * 2 + 8] == 0 && shadowValues[q + bmpData.Stride * 2 + 8] == 0) { argbValues[q + bmpData.Stride * 2 + 8] = 255; argbValues[q + bmpData.Stride * 2 + 8 - 1] = 0; argbValues[q + bmpData.Stride * 2 + 8 - 2] = 0; argbValues[q + bmpData.Stride * 2 + 8 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride * 2 + 4] == 0 && shadowValues[q + bmpData.Stride * 2 + 4] == 0) { argbValues[q + bmpData.Stride * 2 + 4] = 255; argbValues[q + bmpData.Stride * 2 + 4 - 1] = 0; argbValues[q + bmpData.Stride * 2 + 4 - 2] = 0; argbValues[q + bmpData.Stride * 2 + 4 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride * 2 - 4] == 0 && shadowValues[q + bmpData.Stride * 2 - 4] == 0) { argbValues[q + bmpData.Stride * 2 - 4] = 255; argbValues[q + bmpData.Stride * 2 - 4 - 1] = 0; argbValues[q + bmpData.Stride * 2 - 4 - 2] = 0; argbValues[q + bmpData.Stride * 2 - 4 - 3] = 0; }
+                                    if (argbValues[q + bmpData.Stride * 2 - 8] == 0 && shadowValues[q + bmpData.Stride * 2 - 8] == 0) { argbValues[q + bmpData.Stride * 2 - 8] = 255; argbValues[q + bmpData.Stride * 2 - 8 - 1] = 0; argbValues[q + bmpData.Stride * 2 - 8 - 2] = 0; argbValues[q + bmpData.Stride * 2 - 8 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride * 2 + 8] == 0 && shadowValues[q - bmpData.Stride * 2 + 8] == 0) { argbValues[q - bmpData.Stride * 2 + 8] = 255; argbValues[q - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[q - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[q - bmpData.Stride * 2 + 8 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride * 2 + 4] == 0 && shadowValues[q - bmpData.Stride * 2 + 4] == 0) { argbValues[q - bmpData.Stride * 2 + 4] = 255; argbValues[q - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[q - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[q - bmpData.Stride * 2 + 4 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride * 2 - 4] == 0 && shadowValues[q - bmpData.Stride * 2 - 4] == 0) { argbValues[q - bmpData.Stride * 2 - 4] = 255; argbValues[q - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[q - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[q - bmpData.Stride * 2 - 4 - 3] = 0; }
+                                    if (argbValues[q - bmpData.Stride * 2 - 8] == 0 && shadowValues[q - bmpData.Stride * 2 - 8] == 0) { argbValues[q - bmpData.Stride * 2 - 8] = 255; argbValues[q - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[q - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[q - bmpData.Stride * 2 - 8 - 3] = 0; }
+                                }
+                            }
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                            }
+
+                        }
+                    }
+                }
+                //for (int j = 0; j < 4; j++)
+                //{
+                //    for (int i = 0; i < 12; i += 4)
+                //    {
+
+                //        if (argbValues[q] > 255 * VoxelLogic.flat_alpha && barePositions[q] == false)
+                //        {
+                //            argbValues[q + 4] = 255;
+                //            argbValues[q - 4] = 255;
+                //            argbValues[q + bmpData.Stride] = 255;
+                //            argbValues[q - bmpData.Stride] = 255;
+                //            argbValues[q + bmpData.Stride + 4] = 255;
+                //            argbValues[q - bmpData.Stride - 4] = 255;
+                //            argbValues[q + bmpData.Stride - 4] = 255;
+                //            argbValues[q - bmpData.Stride + 4] = 255;
+
+                //            argbValues[q + 8] = 255;
+                //            argbValues[q - 8] = 255;
+                //            argbValues[q + bmpData.Stride * 2] = 255;
+                //            argbValues[q - bmpData.Stride * 2] = 255;
+                //            argbValues[q + bmpData.Stride + 8] = 255;
+                //            argbValues[q - bmpData.Stride + 8] = 255;
+                //            argbValues[q + bmpData.Stride - 8] = 255;
+                //            argbValues[q - bmpData.Stride - 8] = 255;
+                //            argbValues[q + bmpData.Stride * 2 + 8] = 255;
+                //            argbValues[q + bmpData.Stride * 2 + 4] = 255;
+                //            argbValues[q + bmpData.Stride * 2 - 4] = 255;
+                //            argbValues[q + bmpData.Stride * 2 - 8] = 255;
+                //            argbValues[q - bmpData.Stride * 2 + 8] = 255;
+                //            argbValues[q - bmpData.Stride * 2 + 4] = 255;
+                //            argbValues[q - bmpData.Stride * 2 - 4] = 255;
+                //            argbValues[q - bmpData.Stride * 2 - 8] = 255;
+                //        }
+                //    }
+                //}
+            }
+            //for (int i = 3; i < numBytes; i += 4)
+            //{
+            //    if (argbValues[i] > 255 * VoxelLogic.flat_alpha && barePositions[i] == false)
+            //    {
+            //        outlineValues[i + 4] = 255;
+            //        outlineValues[i - 4] = 255;
+            //        outlineValues[i + bmpData.Stride] = 255;
+            //        outlineValues[i - bmpData.Stride] = 255;
+            //        outlineValues[i + bmpData.Stride + 4] = 255;
+            //        outlineValues[i - bmpData.Stride - 4] = 255;
+            //        outlineValues[i + bmpData.Stride - 4] = 255;
+            //        outlineValues[i - bmpData.Stride + 4] = 255;
+
+            //        outlineValues[i + 8] = 255;
+            //        outlineValues[i - 8] = 255;
+            //        outlineValues[i + bmpData.Stride * 2] = 255;
+            //        outlineValues[i - bmpData.Stride * 2] = 255;
+            //        outlineValues[i + bmpData.Stride + 8] = 255;
+            //        outlineValues[i - bmpData.Stride + 8] = 255;
+            //        outlineValues[i + bmpData.Stride - 8] = 255;
+            //        outlineValues[i - bmpData.Stride - 8] = 255;
+            //        outlineValues[i + bmpData.Stride * 2 + 8] = 255;
+            //        outlineValues[i + bmpData.Stride * 2 + 4] = 255;
+            //        outlineValues[i + bmpData.Stride * 2 - 4] = 255;
+            //        outlineValues[i + bmpData.Stride * 2 - 8] = 255;
+            //        outlineValues[i - bmpData.Stride * 2 + 8] = 255;
+            //        outlineValues[i - bmpData.Stride * 2 + 4] = 255;
+            //        outlineValues[i - bmpData.Stride * 2 - 4] = 255;
+            //        outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+            //    }
+            //}
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha))
+                    argbValues[i] = 255;
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 0 && bareValues[i] > 0)
+                {
+                    argbValues[i - 3] = bareValues[i - 3];
+                    argbValues[i - 2] = bareValues[i - 2];
+                    argbValues[i - 1] = bareValues[i - 1];
+                    argbValues[i - 0] = 255;
+                }
+                else if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = 255;
+                }
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+
+        private static Bitmap renderLargeSmartArchive(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
+        {
+            Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
+            byte[] outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+            byte[] bareValues = new byte[numBytes];
+            bareValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill<bool>(false);
+            int xSize = 60, ySize = 60;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            if (still)
+                jitter = 0;
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = 249 - vx.color;
+                int p = 0;
+                if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
+                    continue;
+                else if (current_color >= 168)
+                {
+                    continue;
+                }
+                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
+                {
+                    if (current_color == 136 && r.Next(7) < 2)
+                        continue;
+                    int mod_color = current_color + faction;
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            /*
+                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+                             */
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                                bareValues[p] = xrendered[mod_color][i + j * 12];
+                                barePositions[p] = true;
+                            }
+                        }
+                    }
+                }
+                else if (current_color == 96)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+
+                            if (shadowValues[p] == 0)
+                            {
+                                shadowValues[p] = xrendered[current_color][i + j * 12];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    int mod_color = current_color + faction;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = xrendered[mod_color][i + j * 12];
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 255 * VoxelLogic.flat_alpha && barePositions[i] == false)
+                {
+                    outlineValues[i + 4] = 255;
+                    outlineValues[i - 4] = 255;
+                    outlineValues[i + bmpData.Stride] = 255;
+                    outlineValues[i - bmpData.Stride] = 255;
+                    outlineValues[i + bmpData.Stride + 4] = 255;
+                    outlineValues[i - bmpData.Stride - 4] = 255;
+                    outlineValues[i + bmpData.Stride - 4] = 255;
+                    outlineValues[i - bmpData.Stride + 4] = 255;
+
+                    outlineValues[i + 8] = 255;
+                    outlineValues[i - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2] = 255;
+                    outlineValues[i - bmpData.Stride * 2] = 255;
+                    outlineValues[i + bmpData.Stride + 8] = 255;
+                    outlineValues[i - bmpData.Stride + 8] = 255;
+                    outlineValues[i + bmpData.Stride - 8] = 255;
+                    outlineValues[i - bmpData.Stride - 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i + bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i + bmpData.Stride * 2 - 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 + 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 4] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+                }
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha))
+                    argbValues[i] = 255;
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 0 && bareValues[i] > 0)
+                {
+                    argbValues[i - 3] = bareValues[i - 3];
+                    argbValues[i - 2] = bareValues[i - 2];
+                    argbValues[i - 1] = bareValues[i - 1];
+                    argbValues[i - 0] = 255;
+                }
+                else if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = 255;
+                }
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+
 
         private static Bitmap[] renderW(MagicaVoxelData[] voxels, int facing, int frame, int maxFrames)
         {
@@ -6700,7 +7758,7 @@ namespace AssetsPV
                         g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                         Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
                         g2.DrawImage(b3, 28, -36, 248, 308);
-//                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
+                        //                                g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), 28, -36, 248, 308);
                         g2.Dispose();
                         b.Dispose();
                         b2.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
@@ -7552,7 +8610,7 @@ namespace AssetsPV
             string s = "";
             for (int i = 0; i < 8; i++)
                 s += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
-            startInfo.Arguments = "-dispose background -delay " +  ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " ortho_adj/gifs/" + u + "_Large_animated.gif";
+            startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " ortho_adj/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             bin.Close();
@@ -8431,9 +9489,11 @@ namespace AssetsPV
             processUnitOutlinedPartial("Artillery");
             TallVoxels.processUnitOutlinedPartial("Artillery");
             processEightWayAnimation("Artillery");
+            */
             processUnitOutlinedPartial("Artillery_P");
             TallVoxels.processUnitOutlinedPartial("Artillery_P");
             processEightWayAnimation("Artillery_P");
+            /*
             processUnitOutlinedPartial("Artillery_S");
             TallVoxels.processUnitOutlinedPartial("Artillery_S");
             processEightWayAnimation("Artillery_S");
@@ -8456,11 +9516,11 @@ namespace AssetsPV
             processUnitOutlinedPartial("Copter");
             TallVoxels.processUnitOutlinedPartial("Copter");
             processEightWayAnimation("Copter");
-            /*
+
             processUnitOutlinedPartial("Copter_P");
             TallVoxels.processUnitOutlinedPartial("Copter_P");
             processEightWayAnimation("Copter_P");
-            processUnitOutlinedPartial("Copter_S");
+            /*processUnitOutlinedPartial("Copter_S");
             TallVoxels.processUnitOutlinedPartial("Copter_S");
             processEightWayAnimation("Copter_S");
             processUnitOutlinedPartial("Copter_T");
