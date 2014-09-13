@@ -4214,7 +4214,28 @@ namespace AssetsPV
             }
             return b;
         }
-
+        private static int voxelToPixelLarge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+             4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                    + i +
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)
+             */
+            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                    + innerX +
+                                    stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
+        }
+        private static int voxelToPixelHuge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                    + i +
+                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+             */
+            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                    + innerX +
+                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
+        }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -4283,12 +4304,17 @@ namespace AssetsPV
                     }
                     break;
             }
+
+            int[] zbuffer = new int[numBytes];
+            zbuffer.Fill<int>(-999);
+
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             if (still)
                 jitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
+                int p = 0;
                 if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
@@ -4317,22 +4343,14 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
-                            if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
-                                )
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] =
-                                    VoxelLogic.xrendered[mod_color][i + j * 16];
-                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] =
-                                    VoxelLogic.xrendered[mod_color][i + j * 16];
-                                barePositions[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] = true;
+                                argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
+                                zbuffer[p] = vx.z + vx.x - vx.y;
+
+                                /*bareValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
+                                barePositions[p] = true;*/
                             }
                         }
                     }
@@ -4343,14 +4361,10 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            if (shadowValues[4 * ((vx.x + vx.y) * 2 + 4)
-                                + i +
-                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] == 0)
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            if (shadowValues[p] == 0)
                             {
-                                shadowValues[4 * ((vx.x + vx.y) * 2 + 4)
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
-                                    VoxelLogic.xrendered[current_color][i + j * 16];
+                                shadowValues[p] = VoxelLogic.xrendered[current_color + faction][i + j * 16];
                             }
                         }
                     }
@@ -4363,14 +4377,13 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0)
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] =
-                                    VoxelLogic.xrendered[mod_color][i + j * 16];
+                                argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
+                                zbuffer[p] = vx.z + vx.x - vx.y;
+
                             }
                         }
                     }
@@ -4380,6 +4393,34 @@ namespace AssetsPV
             {
                 if (argbValues[i] > 255 * VoxelLogic.flat_alpha && barePositions[i] == false)
                 {
+
+                    if (zbuffer[i] - 2 > zbuffer[i + 4]) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = 0; argbValues[i + 4 - 2] = 0; argbValues[i + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - 4]) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = 0; argbValues[i - 4 - 2] = 0; argbValues[i - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride]) { argbValues[i + bmpData.Stride] = 255; argbValues[i + bmpData.Stride - 1] = 0; argbValues[i + bmpData.Stride - 2] = 0; argbValues[i + bmpData.Stride - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride]) { argbValues[i - bmpData.Stride] = 255; argbValues[i - bmpData.Stride - 1] = 0; argbValues[i - bmpData.Stride - 2] = 0; argbValues[i - bmpData.Stride - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4]) { argbValues[i + bmpData.Stride + 4] = 255; argbValues[i + bmpData.Stride + 4 - 1] = 0; argbValues[i + bmpData.Stride + 4 - 2] = 0; argbValues[i + bmpData.Stride + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 4]) { argbValues[i - bmpData.Stride - 4] = 255; argbValues[i - bmpData.Stride - 4 - 1] = 0; argbValues[i - bmpData.Stride - 4 - 2] = 0; argbValues[i - bmpData.Stride - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = 0; argbValues[i + bmpData.Stride - 4 - 2] = 0; argbValues[i + bmpData.Stride - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = 0; argbValues[i - bmpData.Stride + 4 - 2] = 0; argbValues[i - bmpData.Stride + 4 - 3] = 0; }
+
+                    if (zbuffer[i] - 2 > zbuffer[i + 8]) { argbValues[i + 8] = 255; argbValues[i + 8 - 1] = 0; argbValues[i + 8 - 2] = 0; argbValues[i + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - 8]) { argbValues[i - 8] = 255; argbValues[i - 8 - 1] = 0; argbValues[i - 8 - 2] = 0; argbValues[i - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2]) { argbValues[i + bmpData.Stride * 2] = 255; argbValues[i + bmpData.Stride * 2 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2]) { argbValues[i - bmpData.Stride * 2] = 255; argbValues[i - bmpData.Stride * 2 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 8]) { argbValues[i + bmpData.Stride + 8] = 255; argbValues[i + bmpData.Stride + 8 - 1] = 0; argbValues[i + bmpData.Stride + 8 - 2] = 0; argbValues[i + bmpData.Stride + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 8]) { argbValues[i - bmpData.Stride + 8] = 255; argbValues[i - bmpData.Stride + 8 - 1] = 0; argbValues[i - bmpData.Stride + 8 - 2] = 0; argbValues[i - bmpData.Stride + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 8]) { argbValues[i + bmpData.Stride - 8] = 255; argbValues[i + bmpData.Stride - 8 - 1] = 0; argbValues[i + bmpData.Stride - 8 - 2] = 0; argbValues[i + bmpData.Stride - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 8]) { argbValues[i - bmpData.Stride - 8] = 255; argbValues[i - bmpData.Stride - 8 - 1] = 0; argbValues[i - bmpData.Stride - 8 - 2] = 0; argbValues[i - bmpData.Stride - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 + 8]) { argbValues[i + bmpData.Stride * 2 + 8] = 255; argbValues[i + bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i + bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i + bmpData.Stride * 2 + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 + 4]) { argbValues[i + bmpData.Stride * 2 + 4] = 255; argbValues[i + bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i + bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i + bmpData.Stride * 2 + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 - 4]) { argbValues[i + bmpData.Stride * 2 - 4] = 255; argbValues[i + bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 - 8]) { argbValues[i + bmpData.Stride * 2 - 8] = 255; argbValues[i + bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 8]) { argbValues[i - bmpData.Stride * 2 + 8] = 255; argbValues[i - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 4]) { argbValues[i - bmpData.Stride * 2 + 4] = 255; argbValues[i - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 4]) { argbValues[i - bmpData.Stride * 2 - 4] = 255; argbValues[i - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; } 
+                    
+                    /*
                     outlineValues[i + 4] = 255;
                     outlineValues[i - 4] = 255;
                     outlineValues[i + bmpData.Stride] = 255;
@@ -4404,7 +4445,7 @@ namespace AssetsPV
                     outlineValues[i - bmpData.Stride * 2 + 8] = 255;
                     outlineValues[i - bmpData.Stride * 2 + 4] = 255;
                     outlineValues[i - bmpData.Stride * 2 - 4] = 255;
-                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;*/
                 }
             }
 
@@ -4509,12 +4550,17 @@ namespace AssetsPV
                     }
                     break;
             }
+
+            int[] zbuffer = new int[numBytes];
+            zbuffer.Fill<int>(-999);
+
             // 0 1 2 3 4 5 6 7
             // 0 1 2 3 4 3 2 1
             int jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
-            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 128 - v.y + v.z * 128 * 128 - ((v.color == 249 - 96) ? 128 * 128 * 128 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
+                int p = 0;
                 if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
@@ -4536,9 +4582,8 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] == 0
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0
                                 /*
                                 &&
                                 bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
@@ -4546,17 +4591,12 @@ namespace AssetsPV
                                 bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                                  */)
                             {
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
-                                    VoxelLogic.xrendered[mod_color][i + j * 16];
-                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
-                                    VoxelLogic.xrendered[mod_color][i + j * 16];
-                                barePositions[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] = true;
+                                argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
+                                zbuffer[p] = vx.z + vx.x - vx.y;
+                                /*
+                                bareValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
+                                barePositions[p] = true;
+                                */
                             }
                         }
                     }
@@ -4567,14 +4607,10 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            if (shadowValues[4 * ((vx.x + vx.y) * 2 + 4)
-                                + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 + 2 + j)] == 0)
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            if (shadowValues[p] == 0)
                             {
-                                shadowValues[4 * ((vx.x + vx.y) * 2 + 4)
-                                    + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 + 2 + j)] =
-                                    VoxelLogic.xrendered[current_color][i + j * 16];
+                                shadowValues[p] = VoxelLogic.xrendered[current_color][i + j * 16];
                             }
                         }
                     }
@@ -4587,14 +4623,11 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            if (argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] == 0)
+                            p = voxelToPixelHuge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
                             {
-                                argbValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + i +
-                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)] =
-                                    VoxelLogic.xrendered[mod_color][i + j * 16];
+                                argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
+                                zbuffer[p] = vx.z + vx.x - vx.y;
                             }
                         }
                     }
@@ -4604,6 +4637,33 @@ namespace AssetsPV
             {
                 if (argbValues[i] > 255 * VoxelLogic.flat_alpha && barePositions[i] == false)
                 {
+                    if (zbuffer[i] - 2 > zbuffer[i + 4]) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = 0; argbValues[i + 4 - 2] = 0; argbValues[i + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - 4]) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = 0; argbValues[i - 4 - 2] = 0; argbValues[i - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride]) { argbValues[i + bmpData.Stride] = 255; argbValues[i + bmpData.Stride - 1] = 0; argbValues[i + bmpData.Stride - 2] = 0; argbValues[i + bmpData.Stride - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride]) { argbValues[i - bmpData.Stride] = 255; argbValues[i - bmpData.Stride - 1] = 0; argbValues[i - bmpData.Stride - 2] = 0; argbValues[i - bmpData.Stride - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4]) { argbValues[i + bmpData.Stride + 4] = 255; argbValues[i + bmpData.Stride + 4 - 1] = 0; argbValues[i + bmpData.Stride + 4 - 2] = 0; argbValues[i + bmpData.Stride + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 4]) { argbValues[i - bmpData.Stride - 4] = 255; argbValues[i - bmpData.Stride - 4 - 1] = 0; argbValues[i - bmpData.Stride - 4 - 2] = 0; argbValues[i - bmpData.Stride - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = 0; argbValues[i + bmpData.Stride - 4 - 2] = 0; argbValues[i + bmpData.Stride - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = 0; argbValues[i - bmpData.Stride + 4 - 2] = 0; argbValues[i - bmpData.Stride + 4 - 3] = 0; }
+
+                    if (zbuffer[i] - 2 > zbuffer[i + 8]) { argbValues[i + 8] = 255; argbValues[i + 8 - 1] = 0; argbValues[i + 8 - 2] = 0; argbValues[i + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - 8]) { argbValues[i - 8] = 255; argbValues[i - 8 - 1] = 0; argbValues[i - 8 - 2] = 0; argbValues[i - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2]) { argbValues[i + bmpData.Stride * 2] = 255; argbValues[i + bmpData.Stride * 2 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2]) { argbValues[i - bmpData.Stride * 2] = 255; argbValues[i - bmpData.Stride * 2 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 8]) { argbValues[i + bmpData.Stride + 8] = 255; argbValues[i + bmpData.Stride + 8 - 1] = 0; argbValues[i + bmpData.Stride + 8 - 2] = 0; argbValues[i + bmpData.Stride + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 8]) { argbValues[i - bmpData.Stride + 8] = 255; argbValues[i - bmpData.Stride + 8 - 1] = 0; argbValues[i - bmpData.Stride + 8 - 2] = 0; argbValues[i - bmpData.Stride + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 8]) { argbValues[i + bmpData.Stride - 8] = 255; argbValues[i + bmpData.Stride - 8 - 1] = 0; argbValues[i + bmpData.Stride - 8 - 2] = 0; argbValues[i + bmpData.Stride - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 8]) { argbValues[i - bmpData.Stride - 8] = 255; argbValues[i - bmpData.Stride - 8 - 1] = 0; argbValues[i - bmpData.Stride - 8 - 2] = 0; argbValues[i - bmpData.Stride - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 + 8]) { argbValues[i + bmpData.Stride * 2 + 8] = 255; argbValues[i + bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i + bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i + bmpData.Stride * 2 + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 + 4]) { argbValues[i + bmpData.Stride * 2 + 4] = 255; argbValues[i + bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i + bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i + bmpData.Stride * 2 + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 - 4]) { argbValues[i + bmpData.Stride * 2 - 4] = 255; argbValues[i + bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 - 8]) { argbValues[i + bmpData.Stride * 2 - 8] = 255; argbValues[i + bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 8]) { argbValues[i - bmpData.Stride * 2 + 8] = 255; argbValues[i - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 4]) { argbValues[i - bmpData.Stride * 2 + 4] = 255; argbValues[i - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 4]) { argbValues[i - bmpData.Stride * 2 - 4] = 255; argbValues[i - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 3] = 0; }
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; } 
+
+                    /*
                     outlineValues[i + 4] = 255;
                     outlineValues[i - 4] = 255;
                     outlineValues[i + bmpData.Stride] = 255;
@@ -4628,7 +4688,7 @@ namespace AssetsPV
                     outlineValues[i - bmpData.Stride * 2 + 8] = 255;
                     outlineValues[i - bmpData.Stride * 2 + 4] = 255;
                     outlineValues[i - bmpData.Stride * 2 - 4] = 255;
-                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;
+                    outlineValues[i - bmpData.Stride * 2 - 8] = 255;*/
                 }
             }
 
