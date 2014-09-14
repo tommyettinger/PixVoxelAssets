@@ -4323,7 +4323,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
+                else if (current_color == 152 || current_color == 160 || current_color == 136)// || current_color == 104 || current_color == 112) // || current_color == 80
                 {
 
                     if (current_color == 136 && r.Next(7) < 2)
@@ -4347,7 +4347,6 @@ namespace AssetsPV
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
-                                zbuffer[p] = vx.z + vx.x - vx.y;
 
                                 /*bareValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
                                 barePositions[p] = true;*/
@@ -4569,7 +4568,7 @@ namespace AssetsPV
                 {
                     continue;
                 }
-                else if (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80)// || current_color == 104 || current_color == 112)
+                else if (current_color == 152 || current_color == 160 || current_color == 136)// || current_color == 104 || current_color == 112) // || current_color == 80
                 {
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
@@ -4592,7 +4591,6 @@ namespace AssetsPV
                                  */)
                             {
                                 argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
-                                zbuffer[p] = vx.z + vx.x - vx.y;
                                 /*
                                 bareValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
                                 barePositions[p] = true;
