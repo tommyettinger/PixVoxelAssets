@@ -6207,6 +6207,65 @@ namespace AssetsPV
                 }
             }
         }
+        public static void processReceivingDouble()
+        {
+            string folder = ("frames");
+
+            for (int i = 0; i < 1; i++)
+            {
+                if (i == 2) continue;
+                for (int s = 0; s < 4; s++)
+                {
+                    MagicaVoxelData[][] receive = makeReceiveAnimation(i, s + 1);
+                    for (int color = 0; color < 8; color++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                Bitmap b = renderHugeSmart(receive[frame], d, color, frame);
+                                Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                                Graphics g2 = Graphics.FromImage(b2);
+                                g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                b.Dispose();
+                                g2.DrawImage(b3, 0, 0, 248, 308);
+
+                                b2.Save(folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", ImageFormat.Png);
+                                b2.Dispose();
+                                g2.Dispose();
+                                b3.Dispose();
+                            }
+                        }
+                    }
+                }
+
+                System.IO.Directory.CreateDirectory("gifs");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                for (int color = 0; color < 8; color++)
+                {
+                    string st = "";
+
+                    for (int strength = 0; strength < 4; strength++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                st += folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png ";
+                            }
+                        }
+                    }
+                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + st + " gifs/" + "color" + color + "_" + WeaponTypes[i] + "_animated.gif";
+                    Console.WriteLine("Running convert.exe ...");
+                    Console.WriteLine("Args: " + st);
+                    Process.Start(startInfo).WaitForExit();
+                }
+            }
+        }
         private static void processChannelFiring(string u)
         {
             Console.WriteLine("Processing: " + u);

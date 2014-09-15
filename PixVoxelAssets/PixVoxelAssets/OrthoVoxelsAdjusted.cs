@@ -8275,6 +8275,65 @@ namespace AssetsPV
                 }
             }
         }
+        private static void processReceivingDouble()
+        {
+            string folder = ("ortho_adj/frames");
+
+            for (int i = 0; i < 1; i++)
+            {
+                if (i == 2) continue;
+                for (int s = 0; s < 4; s++)
+                {
+                    MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(i, s + 1);
+                    for (int color = 0; color < 8; color++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                Bitmap b = renderHugeSmart(receive[frame], d, color, frame);
+                                Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+                                Graphics g = Graphics.FromImage(b2);
+                                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                                Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                                g.DrawImage(b3, 28, -36, 248, 308);
+                                b2.Save(folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", ImageFormat.Png);
+                                b.Dispose();
+                                b2.Dispose();
+                                b3.Dispose();
+                                g.Dispose();
+                            }
+                        }
+                    }
+                }
+
+                System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                for (int color = 0; color < 8; color++)
+                {
+                    string st = "";
+
+                    for (int strength = 0; strength < 4; strength++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                st += folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png ";
+                            }
+                        }
+                    }
+                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + st + " ortho_adj/gifs/" + "color" + color + "_" + WeaponTypes[i] + "_animated.gif";
+                    Console.WriteLine("Running convert.exe ...");
+                    Console.WriteLine("Args: " + st);
+                    Process.Start(startInfo).WaitForExit();
+                }
+            }
+        }
         private static void processChannelFiring(string u)
         {
             Console.WriteLine("Processing: " + u);
@@ -9504,13 +9563,15 @@ namespace AssetsPV
             //processTerrainChannel();
             //makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
-            // processReceiving();
-
             InitializeXPalette();
             InitializeWPalette();
 
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
+
+            processReceivingDouble();
+            TallVoxels.processReceivingDouble();
+
             //processUnitOutlinedWDouble("Person");
             //processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
@@ -9564,7 +9625,7 @@ namespace AssetsPV
             processUnitOutlinedPartial("Copter_T");
             processEightWayAnimation("Copter_T");
             */
-            
+            /*
             processUnitOutlinedPartial("Infantry");
             TallVoxels.processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");
