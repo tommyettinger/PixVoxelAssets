@@ -6211,13 +6211,13 @@ namespace AssetsPV
         {
             string folder = ("frames");
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 if (i == 2) continue;
                 for (int s = 0; s < 4; s++)
                 {
                     MagicaVoxelData[][] receive = makeReceiveAnimation(i, s + 1);
-                    for (int color = 0; color < 8; color++)
+                    for (int color = 0; color < ((i > 4) ? 8 : 2); color++)
                     {
                         for (int d = 0; d < 4; d++)
                         {
@@ -6245,7 +6245,7 @@ namespace AssetsPV
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
-                for (int color = 0; color < 8; color++)
+                for (int color = 0; color < ((i > 4) ? 8 : 2); color++)
                 {
                     string st = "";
 
