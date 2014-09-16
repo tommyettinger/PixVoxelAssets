@@ -5313,10 +5313,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    if (current_color == 80) //lights
-                    {
-                        mod_color = 168 + faction + (frame % 4) * 8;
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 12; i++)
@@ -5357,7 +5354,10 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color + faction;
-
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 12; i++)
@@ -5622,10 +5622,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    if (current_color == 80) //lights
-                    {
-                        mod_color = 168 + faction + (frame % 4) * 8;
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 12; i++)
@@ -5666,7 +5663,10 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color + faction;
-
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 12; i++)

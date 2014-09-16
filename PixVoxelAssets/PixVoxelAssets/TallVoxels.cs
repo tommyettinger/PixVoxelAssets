@@ -4329,10 +4329,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    if (current_color == 80) //lights
-                    {
-                        mod_color = 168 + faction + frame * 8;
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4343,7 +4340,7 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
@@ -4371,12 +4368,15 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color + faction;
-
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
 
                             if (argbValues[p] == 0)
                             {
@@ -4573,10 +4573,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    if (current_color == 80) //lights
-                    {
-                        mod_color = 168 + faction + (frame % 4) * 8;
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4616,7 +4613,10 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color + faction;
-
+                    if (current_color == 80) //lights
+                    {
+                        mod_color = 168 + faction + (frame % 4) * 8;
+                    }
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)

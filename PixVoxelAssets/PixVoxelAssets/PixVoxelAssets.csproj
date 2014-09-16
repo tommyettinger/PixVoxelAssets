@@ -36,7 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.OrthoVoxelsAdjusted</StartupObject>
+    <StartupObject>AssetsPV.OrthoVoxels</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
