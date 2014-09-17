@@ -8279,7 +8279,7 @@ namespace AssetsPV
         {
             string folder = ("ortho_adj/frames");
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
                 if (i == 2) continue;
                 for (int s = 0; s < 4; s++)
