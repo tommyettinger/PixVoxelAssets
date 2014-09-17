@@ -8279,7 +8279,8 @@ namespace AssetsPV
         {
             string folder = ("ortho_adj/frames");
 
-            for (int i = 0; i < 5; i++)
+            //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
+            for (int i = 4; i < 6; i++)
             {
                 if (i == 2) continue;
                 for (int s = 0; s < 4; s++)

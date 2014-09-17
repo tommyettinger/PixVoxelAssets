@@ -2982,12 +2982,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 extra[f] = new List<MagicaVoxelData>(400);
             }
 
-                    for (int i = 0; i < 6 + strength; i++)
-                    {
-                        for (int sp = 0; sp < explosions.Length; sp++)
-                            extra[3 + i].AddRange(explosions[sp][i]);
-                    }
-             
+            for (int i = 0; i < 6 + strength; i++)
+            {
+                for (int sp = 0; sp < explosions.Length; sp++)
+                    extra[3 + i].AddRange(explosions[sp][i]);
+            }
+
             for (int f = 0; f < voxelFrames.Length; f++)
             {
                 List<MagicaVoxelData> working = new List<MagicaVoxelData>(400);
@@ -3170,11 +3170,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 extra[f] = new List<MagicaVoxelData>(600);
             }
 
-                    for (int i = 0; i < 5 + strength; i++)
-                    {
-                        for (int sp = 0; sp < explosions.Length; sp++)
-                            extra[4 + i].AddRange(explosions[sp][i]);
-                    }
+            for (int i = 0; i < 5 + strength; i++)
+            {
+                for (int sp = 0; sp < explosions.Length; sp++)
+                    extra[4 + i].AddRange(explosions[sp][i]);
+            }
             for (int f = 0; f < voxelFrames.Length; f++)
             {
                 List<MagicaVoxelData> working = new List<MagicaVoxelData>(600);
@@ -3183,7 +3183,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return finalFrames;
         }
-        
+
         public static MagicaVoxelData[][] RocketAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -3332,7 +3332,32 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelFrames;
         }
-        
+        public static MagicaVoxelData[][] RocketReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int distance)
+        {
+            List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
+            MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
+
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
+            MagicaVoxelData[][] explosion = HugeExplosionDouble(randomFill(70, 48, 20, 8, 5, 5, new int[] { 249 - 136, 249 - 152, 249 - 160, 249 - 152, 249 - 160 }).ToArray(), -2, 7, 2);
+
+            for (int f = 0; f < voxelFrames.Length; f++)
+            {
+                extra[f] = new List<MagicaVoxelData>(20);
+            }
+            for (int i = 0; i < 7; i++)
+            {
+                extra[3 + distance + i].AddRange(explosion[i]);
+            }
+
+            for (int f = 0; f < voxelFrames.Length; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(20);
+                working.AddRange(extra[f]);
+                finalFrames[f] = working.ToArray();
+            }
+            return finalFrames;
+        }
+
         public static MagicaVoxelData[][] ArcMissileAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -3436,7 +3461,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelFrames;
         }
-        
+
         public static MagicaVoxelData[][] BombAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -3552,7 +3577,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                                                        LongCannonAnimationDouble, RocketAnimationDouble, ArcMissileAnimationDouble, BombAnimationDouble };
         private static AnimationGenerator[] receiveAnimations = { HandgunReceiveAnimationDouble, MachineGunReceiveAnimationDouble, MachineGunReceiveAnimationDouble,
                                                                     CannonReceiveAnimationDouble, LongCannonReceiveAnimationDouble,
-                                                                    //RocketReceiveAnimationDouble, 
+                                                                    RocketReceiveAnimationDouble, 
                                                                     //ArcMissileReceiveAnimationDouble, 
                                                                     //BombReceiveAnimationDouble
                                                                 };
