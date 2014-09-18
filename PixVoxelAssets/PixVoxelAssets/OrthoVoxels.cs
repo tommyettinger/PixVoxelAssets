@@ -8290,30 +8290,37 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");
             */
-            //processUnitOutlinedPartial("Copter");
-            //processUnitOutlinedPartial("Copter_P");
-            //processUnitOutlinedPartial("Copter_S");
-            //processUnitOutlinedPartial("Copter_T");
+            processUnitOutlinedPartial("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
             processUnitOutlinedPartial("Infantry");
             processUnitOutlinedPartial("Infantry_P");
             processUnitOutlinedPartial("Infantry_S");
             processUnitOutlinedPartial("Infantry_T");
-            //processUnitOutlinedPartial("Tank");
-            //processUnitOutlinedPartial("Tank_P");
-            //processUnitOutlinedPartial("Tank_S");
-            //processUnitOutlinedPartial("Tank_T");
-            //processUnitOutlinedPartial("Artillery");
-            //processUnitOutlinedPartial("Artillery_P");
-            //processUnitOutlinedPartial("Artillery_S");
-            //processUnitOutlinedPartial("Artillery_T");
-            //processUnitOutlinedPartial("Supply");
-            //processUnitOutlinedPartial("Supply_P");
-            //processUnitOutlinedPartial("Supply_S");
-            //processUnitOutlinedPartial("Supply_T");
-            //processUnitOutlinedPartial("Plane");
-            //processUnitOutlinedPartial("Plane_P");
-            //processUnitOutlinedPartial("Plane_S");
-            //processUnitOutlinedPartial("Plane_T");
+            processUnitOutlinedPartial("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
+            processUnitOutlinedPartial("Plane");
+            processUnitOutlinedPartial("Plane_P");
+            processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
+
+            processUnitOutlinedPartial("Airport");
+            processUnitOutlinedPartial("City");
+            processUnitOutlinedPartial("Factory");
+            processUnitOutlinedPartial("Laboratory");
+            processUnitOutlinedPartial("Castle");
+            processUnitOutlinedPartial("Estate");
 
             //            processUnitOutlinedWDouble("Person");
 

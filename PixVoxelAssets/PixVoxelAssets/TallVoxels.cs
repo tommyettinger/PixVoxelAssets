@@ -4221,9 +4221,7 @@ namespace AssetsPV
                                     + i +
                                     bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)
              */
-            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                    + innerX +
-                                    stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
+            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0)) + innerX + stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
         }
         private static int voxelToPixelHuge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
         {
@@ -6211,7 +6209,7 @@ namespace AssetsPV
         {
             string folder = ("frames");
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            for (int i = 4; i < 6; i++)
+            for (int i = 6; i < 7; i++)
             {
                 if (i == 2) continue;
                 for (int s = 0; s < 4; s++)
