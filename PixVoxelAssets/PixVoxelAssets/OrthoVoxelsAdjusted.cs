@@ -427,7 +427,7 @@ namespace AssetsPV
                 switch (i)
                 {
                     case 22: alpha = 0F; break;
-                    case 18: alpha = VoxelLogic.flat_alpha; break;
+//                    case 18: alpha = VoxelLogic.flat_alpha; break;
                     case 17: alpha = VoxelLogic.flat_alpha; break;
                     case 13: alpha = VoxelLogic.flat_alpha; break;
                     case 14: alpha = VoxelLogic.spin_alpha_0; break;
@@ -7170,9 +7170,9 @@ namespace AssetsPV
                    imageAttributes);
             }
             colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {1F, 0,  0,  0,  0},
-   new float[] {0, 1F,  0,  0,  0},
-   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0F, 0,  0,  0,  0},
+   new float[] {0, 0F,  0,  0,  0},
+   new float[] {0,  0,  0F, 0,  0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0,  0,  0,  0, 1F}});
             imageAttributes.SetColorMatrix(
@@ -7891,6 +7891,41 @@ namespace AssetsPV
 
             bin.Close();
         }
+        public static void processExplosionChannelPartial(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, true);
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDouble(parsed, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("ortho_adj/indexed");
+            int color = 0;
+            for (int d = 0; d < 4; d++)
+            {
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                for (int frame = 0; frame < 8; frame++)
+                {
+                    Bitmap b = renderHugeSmart(explode[frame], d, color, frame);
+                    Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+
+                    //                        b.Save("temp.png", ImageFormat.Png);
+                    Graphics g2 = Graphics.FromImage(b2);
+                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                    b.Dispose();
+                    g2.DrawImage(b3, 28, -36, 248, 308);
+                    CreateChannelBitmap(b2, folder + "/" + u + "_Explode_face" + d + "_" + frame + ".png");
+                    b2.Dispose();
+                    g2.Dispose();
+                    b3.Dispose();
+                }
+            }
+
+            bin.Close();
+        }
 
         private static void processExplosion(string u)
         {
@@ -8216,6 +8251,153 @@ namespace AssetsPV
             }
 
         }
+
+        public static void processFiringChannelPartial(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            string filename = u + "_Part_X.vox";
+            BinaryReader bin = new BinaryReader(File.Open(filename, FileMode.Open));
+            bin.Close();
+            MagicaVoxelData[] parsed;
+            string folder = ("ortho_adj/indexed");
+
+            for (int w = 0; w < 2; w++)
+            {
+                if ((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
+                {
+                    filename = u + "_Firing_Part_X.vox";
+                }
+                if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    MagicaVoxelData[][] flying = VoxelLogic.Flyover(parsed);
+                    MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(7, VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
+                    MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+                    //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
+                        flying[i].CopyTo(voxelFrames[i], 0);
+                    }
+                    /*                    for (int i = 0; i < flying[4].Length; i++)
+                                        {
+                                            voxelFrames[0][i].x += 20;
+                                            voxelFrames[0][i].y += 20;
+                                        }*/
+                    Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
+
+                    voxelFrames = VoxelLogic.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
+
+                    for (int f = 0; f < 16; f++)
+                    {
+                        List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                        int[,] taken = new int[120, 120];
+                        taken.Fill(-1);
+                        for (int i = 0; i < voxelFrames[f].Length; i++)
+                        {
+                            // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
+                            if (voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                            {
+                                //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                continue;
+                            }
+                            altered.Add(voxelFrames[f][i]);
+                        }
+                        flying[f] = altered.ToArray();
+                    }
+                    int color = 0;
+
+                    for (int d = 0; d < 4; d++)
+                    {
+                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                        for (int frame = 0; frame < 16; frame++)
+                        {
+                            Bitmap b = renderHugeSmart(flying[frame], d, color, frame);
+                            Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            Graphics g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 28, -36, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Attack_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                            b = renderHugeSmart(receive[frame], d, color, frame);
+                            b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 28, -36, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Receive_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                        }
+                    }
+
+
+                    bin.Close();
+                }
+                else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+                    MagicaVoxelData[][] firing = VoxelLogic.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w],
+                        VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
+
+                    int color = 0;
+                    for (int d = 0; d < 4; d++)
+                    {
+                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                        for (int frame = 0; frame < 16; frame++)
+                        {
+                            Bitmap b = renderHugeSmart(firing[frame], d, color, frame);
+                            Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            Graphics g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 28, -36, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Attack_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                            b = renderHugeSmart(receive[frame], d, color, frame);
+                            b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 28, -36, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Receive_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                        }
+                    }
+
+                    bin.Close();
+                }
+                else continue;
+            }
+
+        }
+
+
         private static void processReceiving()
         {
             string folder = ("ortho/frames");
@@ -8342,7 +8524,7 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(filename, FileMode.Open));
             bin.Close();
             MagicaVoxelData[] parsed;
-            string folder = ("indexed");
+            string folder = ("ortho_adj/indexed");
 
             for (int w = 0; w < 2; w++)
             {
@@ -8353,10 +8535,10 @@ namespace AssetsPV
                     parsed = VoxelLogic.FromMagicaRaw(bin);
                     for (int f = 0; f < 4; f++)
                     { //"color" + i + "/"
-                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "S", f, 4), "indexed/" + u + "_Firing_face0" + "_" + f + ".png");
-                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "W", f, 4), "indexed/" + u + "_Firing_face1" + "_" + f + ".png");
-                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "N", f, 4), "indexed/" + u + "_Firing_face2" + "_" + f + ".png");
-                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "E", f, 4), "indexed/" + u + "_Firing_face3" + "_" + f + ".png");
+                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "S", f, 4), "ortho_adj/indexed/" + u + "_Firing_face0" + "_" + f + ".png");
+                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "W", f, 4), "ortho_adj/indexed/" + u + "_Firing_face1" + "_" + f + ".png");
+                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "N", f, 4), "ortho_adj/indexed/" + u + "_Firing_face2" + "_" + f + ".png");
+                        CreateChannelBitmap(processSingleOutlined(parsed, 7, "E", f, 4), "ortho_adj/indexed/" + u + "_Firing_face3" + "_" + f + ".png");
                     }
                     bin.Close();
                 }
@@ -8520,7 +8702,7 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin);
             MagicaVoxelData[][] explode = FieryExplosion(parsed, false);
-            string folder = ("indexed");
+            string folder = ("ortho_adj/indexed");
 
             for (int d = 0; d < 4; d++)
             {
@@ -8783,6 +8965,42 @@ namespace AssetsPV
 
         }
 
+        public static void processUnitChannelPartial(string u)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+            if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
+            {
+                framelimit = 2;
+            }
+
+            string folder = ("ortho_adj/indexed");//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < 4; f++)
+            { //"color" + i + "/"
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "S", f, framelimit, u), "ortho_adj/indexed/" + u + "_face0" + "_" + f + ".png"); //se
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "W", f, framelimit, u), "ortho_adj/indexed/" + u + "_face1" + "_" + f + ".png"); //se
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "N", f, framelimit, u), "ortho_adj/indexed/" + u + "_face2" + "_" + f + ".png"); //se
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "E", f, framelimit, u), "ortho_adj/indexed/" + u + "_face3" + "_" + f + ".png"); //se
+            }
+
+            bin.Close();
+
+            processFiringChannelPartial(u);
+
+            processExplosionChannelPartial(u);
+
+        }
+
 
         private static void processUnitOutlinedW(string u)
         {
@@ -8954,12 +9172,12 @@ namespace AssetsPV
 
                 Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
                 Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
-                CreateChannelBitmap(b, "indexed/" + Terrains[i] + ".png", 9);
-                CreateChannelBitmap(bold, "indexed/" + Terrains[i] + "_bold.png", 9);
+                CreateChannelBitmap(b, "ortho_adj/indexed/" + Terrains[i] + ".png", 9);
+                CreateChannelBitmap(bold, "ortho_adj/indexed/" + Terrains[i] + "_bold.png", 9);
                 /*for(int c = 0; c < 8; c++)
                 {
-                    CreateChannelBitmap(b, "indexed/" + Terrains[i] +"_color"+ c + ".png", 9);
-                    CreateChannelBitmap(bold, "indexed/" + Terrains[i] + "_bold_color" + c + ".png", 9);
+                    CreateChannelBitmap(b, "ortho_adj/indexed/" + Terrains[i] +"_color"+ c + ".png", 9);
+                    CreateChannelBitmap(bold, "ortho_adj/indexed/" + Terrains[i] + "_bold_color" + c + ".png", 9);
                 }*/
             }
         }
@@ -8972,13 +9190,13 @@ namespace AssetsPV
             MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
             int framelimit = 4;
 
-            System.IO.Directory.CreateDirectory("indexed"); //("color" + i);
+            System.IO.Directory.CreateDirectory("ortho_adj/indexed"); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "indexed/" + u + "_face0" + "_" + f + ".png");
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SW", f, framelimit), "indexed/" + u + "_face1" + "_" + f + ".png");
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "indexed/" + u + "_face2" + "_" + f + ".png");
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NE", f, framelimit), "indexed/" + u + "_face3" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "ortho_adj/indexed/" + u + "_face0" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SW", f, framelimit), "ortho_adj/indexed/" + u + "_face1" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "ortho_adj/indexed/" + u + "_face2" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NE", f, framelimit), "ortho_adj/indexed/" + u + "_face3" + "_" + f + ".png");
             }
             bin.Close();
         }
@@ -8995,13 +9213,13 @@ namespace AssetsPV
                 framelimit = 2;
             }
 
-            System.IO.Directory.CreateDirectory("indexed"); //("color" + i);
+            System.IO.Directory.CreateDirectory("ortho_adj/indexed"); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "indexed/" + u + "_face0" + "_" + f + ".png");
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SW", f, framelimit), "indexed/" + u + "_face1" + "_" + f + ".png");
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "indexed/" + u + "_face2" + "_" + f + ".png");
-                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NE", f, framelimit), "indexed/" + u + "_face3" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "ortho_adj/indexed/" + u + "_face0" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "SW", f, framelimit), "ortho_adj/indexed/" + u + "_face1" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "ortho_adj/indexed/" + u + "_face2" + "_" + f + ".png");
+                CreateChannelBitmap(processSingleOutlined(parsed, 0, "NE", f, framelimit), "ortho_adj/indexed/" + u + "_face3" + "_" + f + ".png");
             }
             bin.Close();
 
@@ -9021,7 +9239,7 @@ namespace AssetsPV
                 {
                     for (int f = 0; f < framelimit; f++)
                     {
-                        CreateChannelBitmap(processSingleLargeFrame(flyover[f], 7, d, f), "indexed/" + u + "_Flyover_face" + d + "_" + f + ".png");
+                        CreateChannelBitmap(processSingleLargeFrame(flyover[f], 7, d, f), "ortho_adj/indexed/" + u + "_Flyover_face" + d + "_" + f + ".png");
                     }
 
                     bin.Close();
@@ -9544,35 +9762,41 @@ namespace AssetsPV
             VoxelLogic.Initialize();
 
             System.IO.Directory.CreateDirectory("Palettes");
-            System.IO.Directory.CreateDirectory("indexed");
             System.IO.Directory.CreateDirectory("junk");
             System.IO.Directory.CreateDirectory("ortho_adj");
-            /*
+            System.IO.Directory.CreateDirectory("ortho_adj/indexed");
+            System.IO.Directory.CreateDirectory("indexed");
+            
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
+            InitializeXPalette();
+            VoxelLogic.InitializeXPalette();
 
             for (int c = 0; c < 8; c++)
             {
-                renderOnlyColors(c).Save("PaletteColor" + c + ".png", ImageFormat.Png);
-                renderOnlyTerrainColors(c).Save("PaletteTerrainColor" + c + ".png", ImageFormat.Png);
+                TallVoxels.renderOnlyColorsX(c).Save("PaletteColor" + c + ".png", ImageFormat.Png);
+                TallVoxels.renderOnlyTerrainColors(c).Save("PaletteTerrainColor" + c + ".png", ImageFormat.Png);
             }
 
             Madden();
-            renderOnlyColors(7).Save("PaletteCrazy.png", ImageFormat.Png);
-            */
-            //            InitializePalettes();
+            VoxelLogic.Madden();
+            InitializeXPalette();
+            VoxelLogic.InitializeXPalette();
+            TallVoxels.renderOnlyColorsX(7).Save("PaletteCrazy.png", ImageFormat.Png);
+            InitializeXPalette();
+            VoxelLogic.InitializeXPalette();
+            
+            TallVoxels.InitializePalettes();
             //            Madden();
-            //processTerrainChannel();
+            TallVoxels.processTerrainChannelDouble();
             //makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
-            InitializeXPalette();
-            InitializeWPalette();
+            //InitializeWPalette();
 
-            VoxelLogic.InitializeXPalette();
-            VoxelLogic.InitializeWPalette();
-
+            //VoxelLogic.InitializeWPalette();
+            /*
             processReceivingDouble();
             TallVoxels.processReceivingDouble();
-
+            */
             //processUnitOutlinedWDouble("Person");
             //processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
@@ -9916,52 +10140,55 @@ namespace AssetsPV
 
 
             //processUnitOutlined("Block");
-            /*
-            Madden();
-            processMedalChannel("Medal_P");
+            
+//            Madden();
+            /*processMedalChannel("Medal_P");
             processMedalChannel("Medal_S");
             processMedalChannel("Medal_T");
-            
-            processUnitChannel("Plane");
-            processUnitChannel("Plane_P");
-            processUnitChannel("Plane_S");
-            processUnitChannel("Plane_T");
+            */
 
-            processUnitChannel("Copter");
-            processUnitChannel("Copter_P");
-            processUnitChannel("Copter_S");
-            processUnitChannel("Copter_T");
-            
-            processUnitChannel("Infantry");
-            processUnitChannel("Infantry_P");
-            processUnitChannel("Infantry_S");
-            processUnitChannel("Infantry_T");
+            /*
+            TallVoxels.processUnitChannelPartial("Plane");
+            TallVoxels.processUnitChannelPartial("Plane_P");
+            TallVoxels.processUnitChannelPartial("Plane_S");
+            TallVoxels.processUnitChannelPartial("Plane_T");
 
-            processUnitChannel("Artillery");
-            processUnitChannel("Artillery_P");
-            processUnitChannel("Artillery_S");
-            processUnitChannel("Artillery_T");
-
-            processUnitChannel("Tank");
-            processUnitChannel("Tank_P");
-            processUnitChannel("Tank_S");
-            processUnitChannel("Tank_T");
-
-            processUnitChannel("Supply");
-            processUnitChannel("Supply_P");
-            processUnitChannel("Supply_S");
-            processUnitChannel("Supply_T");
+            TallVoxels.processUnitChannelPartial("Copter");
+            TallVoxels.processUnitChannelPartial("Copter_P");
+            TallVoxels.processUnitChannelPartial("Copter_S");
+            TallVoxels.processUnitChannelPartial("Copter_T");
             
-            processUnitChannel("City");
-            processUnitChannel("Factory");
-            processUnitChannel("Airport");
-            processUnitChannel("Laboratory");
-            processUnitChannel("Castle");
-            processUnitChannel("Estate");
+            TallVoxels.processUnitChannelPartial("Infantry");
+            TallVoxels.processUnitChannelPartial("Infantry_P");
+            TallVoxels.processUnitChannelPartial("Infantry_S");
+            TallVoxels.processUnitChannelPartial("Infantry_T");
+
+            TallVoxels.processUnitChannelPartial("Artillery");
+            TallVoxels.processUnitChannelPartial("Artillery_P");
+            TallVoxels.processUnitChannelPartial("Artillery_S");
+            TallVoxels.processUnitChannelPartial("Artillery_T");
+
+            TallVoxels.processUnitChannelPartial("Tank");
+            TallVoxels.processUnitChannelPartial("Tank_P");
+            TallVoxels.processUnitChannelPartial("Tank_S");
+            TallVoxels.processUnitChannelPartial("Tank_T");
+
+            TallVoxels.processUnitChannelPartial("Supply");
+            TallVoxels.processUnitChannelPartial("Supply_P");
+             
+            TallVoxels.processUnitChannelPartial("Supply_S");
+            TallVoxels.processUnitChannelPartial("Supply_T");
             
+            TallVoxels.processUnitChannelPartial("City");
+            TallVoxels.processUnitChannelPartial("Factory");
+            TallVoxels.processUnitChannelPartial("Airport");
+            TallVoxels.processUnitChannelPartial("Laboratory");
+            TallVoxels.processUnitChannelPartial("Castle");
+            TallVoxels.processUnitChannelPartial("Estate");
+            */
 
             //File.WriteAllText("FiringPositions.txt", log.ToString());
-*/
+
             /*
             processUnitOutlined("Infantry");
             processUnitOutlined("Infantry_P");

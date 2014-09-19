@@ -678,7 +678,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.251F+xcolors[current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.31F+xcolors[current_color][2],  0, 0},
-   new float[] {0,  0,  0,  flat_alpha, 0},
+   new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                 }
                 else if (current_color / 8 == 10) //lights
@@ -691,7 +691,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                 }
-
                 else
                 {
                     colorMatrix = new ColorMatrix(new float[][]{ 
@@ -1377,7 +1376,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 switch (i)
                 {
                     case 22: alpha = 0F; break;
-                    case 18: alpha = flat_alpha; break;
+
                     case 17: alpha = flat_alpha; break;
                     case 13: alpha = flat_alpha; break;
                     case 14: alpha = spin_alpha_0; break;

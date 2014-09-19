@@ -267,6 +267,232 @@ Ruins	purple-gray
             return b;
         }
 
+        public static Bitmap drawPixelsFlatDouble(int color)
+        {
+            Bitmap b = new Bitmap(256, 180, PixelFormat.Format32bppArgb);
+            Bitmap bold = new Bitmap(256, 180, PixelFormat.Format32bppArgb);
+            Graphics g = Graphics.FromImage(b);
+            Graphics gBold = Graphics.FromImage(bold);
+            //Image image = new Bitmap("cube_large.png");
+            Image image = new Bitmap("cube_soft.png");
+            //            Image gray = new Bitmap("cube_gray_soft.png");
+            //Image reversed = new Bitmap("cube_reversed.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 4;
+
+            int[,] shades = new int[64, 64];
+            int depth = (int)(flatcolors[color][3]);
+
+            for (int y = 63; y >= 0; y--)
+            {
+                for (int x = 0; x <= 63; x++)
+                {
+                    if ((y >= 60 || y <= 3) && (x < 32 + depth) && (x > 32 - depth) && (Math.Abs(32 - x) + depth) % 2 == 1)
+                    {
+                        shades[x, y] = 2;
+                    }
+
+                    else if ((x >= 60 || x <= 3) && (y < 32 + depth) && (y > 32 - depth) && (Math.Abs(32 - y) + depth) % 2 == 1)// && (y % 2 == 1)
+                    {
+                        shades[x, y] = 2;
+                    }
+                    else
+                    {
+                        shades[x, y] = (x == 0 || y == 0 || x == 63 || y == 63) ? 0 : (r.Next(40) == 0) ? r.Next(2) : 1;
+                    }
+                }
+            }
+
+
+
+            //g.DrawImage(image, 10, 10, width, height);
+            float merged = (flatcolors[color][0] + flatcolors[color][1] + flatcolors[color][2]) * 0.45F;
+
+
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {(merged + flatcolors[color][0]) * 0.5F,  0,  0,  0, 0},
+   new float[] {0,  (merged + flatcolors[color][1]) * 0.5F,  0,  0, 0},
+   new float[] {0,  0,  (merged + flatcolors[color][2]) * 0.5F,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+            ColorMatrix colorMatrixDark = new ColorMatrix(new float[][]{ 
+   new float[] {merged*0.3F + flatcolors[color][0] * 0.5F,  0,  0,  0, 0},
+   new float[] {0,  merged*0.3F + flatcolors[color][1] * 0.52F,  0,  0, 0},
+   new float[] {0,  0,  merged*0.3F + flatcolors[color][2] * 0.58F,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+            ColorMatrix colorMatrixBright = new ColorMatrix(new float[][]{ 
+   new float[] {merged*0.55F + flatcolors[color][0] * 0.85F,  0,  0,  0, 0},
+   new float[] {0,  merged*0.55F + flatcolors[color][1] * 0.85F,  0,  0, 0},
+   new float[] {0,  0,  merged*0.55F + flatcolors[color][2] * 0.85F,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+
+            ColorMatrix[] mats = new ColorMatrix[] { colorMatrixDark, colorMatrix, colorMatrixBright };
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+
+
+
+
+            imageAttributes.SetColorMatrix(colorMatrixDark, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            for (int z = 1; z < depth; z++)
+            {
+                for (int x = 0; x <= 63; x++)
+                {
+                    g.DrawImage(
+                   image,
+                   new Rectangle((x + 0) * 2, 180 - 64 - 0 - 0 + x - z * 3, width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                   0, 0,        // upper-left corner of source rectangle 
+                   width,       // width of source rectangle
+                   height,      // height of source rectangle
+                   GraphicsUnit.Pixel,
+                   imageAttributes);
+                }
+                for (int y = 63; y >= 0; y--)
+                {
+                    g.DrawImage(
+                   image,
+                   new Rectangle((63 + y) * 2, 180 - 64 - 0 - y + 63 - z * 3, width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                   0, 0,        // upper-left corner of source rectangle 
+                   width,       // width of source rectangle
+                   height,      // height of source rectangle
+                   GraphicsUnit.Pixel,
+                   imageAttributes);
+
+                }
+            }
+
+            //            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            for (int z = 1; z < depth; z++)
+            {
+                for (int x = 0; x <= 63; x++)
+                {
+                    gBold.DrawImage(
+                    image,
+                    new Rectangle((x + 0) * 2, 180 - 64 - 0 - 0 + x - z * 3, width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                    0, 0,        // upper-left corner of source rectangle
+                    width,       // width of source rectangle
+                    height,      // height of source rectangle
+                    GraphicsUnit.Pixel,
+                    imageAttributes);
+                }
+                for (int y = 63; y >= 0; y--)
+                {
+                    gBold.DrawImage(
+                    image,
+                    new Rectangle((63 + y) * 2, 180 - 64 - 0 - y + 63 - z * 3, width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                    0, 0,        // upper-left corner of source rectangle 
+                    width,       // width of source rectangle
+                    height,      // height of source rectangle
+                    GraphicsUnit.Pixel,
+                    imageAttributes);
+                }
+            }
+
+
+            for (int y = 63; y >= 0; y--)
+            {
+                for (int x = 0; x <= 63; x++)
+                {
+                    imageAttributes.SetColorMatrix(mats[shades[x, y]], ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                    //if ((y >= 30 || y <= 1) && (x < 16 + depth) && (x > 16 - depth) && (Math.Abs(16 - x) + depth) % 2 == 1)
+                    //{
+
+                    //    float[] power = new float[] { 0.4F, 0.6F }; //, 0.4F, 0.7F, 0.4F, 0.8F
+                    //    //                        float[] power = new float[] { 0.3F, 0.6F, 0.32F, 0.65F, 0.34F, 0.7F, 0.36F, 0.75F, 0.38F, 0.8F };
+                    //    int dist = (Math.Abs(16 - x) + depth) % 2;
+                    //    //int dist = ((x - 8)/2) % 10;
+
+                    //    imageAttributes.SetColorMatrix(
+                    //       colorMatrixBright,
+                    //       ColorMatrixFlag.Default,
+                    //       ColorAdjustType.Bitmap);
+                    //}
+                    //else if ((x >= 30 || x <= 1) && (y < 16 + depth) && (y > 16 - depth) && (Math.Abs(16 - y) + depth) % 2 == 1)// && (y % 2 == 1)
+                    //{
+                    //    float[] power = new float[] { 0.4F, 0.6F }; //, 0.5F, 0.8F, 0.5F, 0.8F,
+                    //    //                        float[] power = new float[] { 0.4F, 0.6F, 0.4F, 0.7F, 0.4F, 0.8F };
+                    //    int dist = (Math.Abs(16 - y) + depth) % 2;
+                    //    imageAttributes.SetColorMatrix(
+                    //       colorMatrixBright,
+                    //       ColorMatrixFlag.Default,
+                    //       ColorAdjustType.Bitmap);
+                    //}
+                    //else
+                    //{
+                    //    imageAttributes.SetColorMatrix(
+                    //        (x == 0 || y == 0 || x == 31 || y == 31) ? colorMatrixDark : colorMatrix,
+                    //        //(x == z || y == z || x == 31 - z || y == 31 - z) ? colorMatrixDark : colorMatrix,
+                    //       ColorMatrixFlag.Default,
+                    //       ColorAdjustType.Bitmap);
+                    //}
+                    g.DrawImage(
+                   image,
+                   new Rectangle((x + y) * 2, 180 - 64 - 0 - y + x - depth * 3, width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                   0, 0,        // upper-left corner of source rectangle 
+                   width,       // width of source rectangle
+                   height,      // height of source rectangle
+                   GraphicsUnit.Pixel,
+                   imageAttributes);
+
+                    ///////////////
+                    ///////////////BRIGHT VERSION CODE
+                    ///////////////
+                    if ((y >= 56 || y <= 6) && (x < 32 + depth) && (x > 32 - depth) && (Math.Abs(32 - x) + depth) % 2 == 1)
+                    {
+
+                        //                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.5F, 0.8F, 0.5F, 0.8F,
+                        //                        float[] power = new float[] { 0.3F, 0.6F, 0.32F, 0.65F, 0.34F, 0.7F, 0.36F, 0.75F, 0.38F, 0.8F };
+                        int dist = (Math.Abs(32 - x) + depth) % 2;
+                        //int dist = ((x - 8)/2) % 10;
+
+                        imageAttributes.SetColorMatrix(
+                           colorMatrixBright,
+                           ColorMatrixFlag.Default,
+                           ColorAdjustType.Bitmap);
+                    }
+                    else if ((x >= 56 || x <= 6) && (y < 32 + depth) && (y > 32 - depth) && (Math.Abs(32 - y) + depth) % 2 == 1)
+                    {
+                        //                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.4F, 0.7F, 0.4F, 0.8F 
+                        int dist = (Math.Abs(32 - y) + depth) % 2;
+                        imageAttributes.SetColorMatrix(
+                           colorMatrixBright,
+                           ColorMatrixFlag.Default,
+                           ColorAdjustType.Bitmap);
+                    }
+                    else
+                    {
+                        imageAttributes.SetColorMatrix(
+                            (x <= 6 || y <= 6 || x >= 56 || y >= 56) ? colorMatrixDark : mats[shades[x, y]],
+                            //(x == z || y == z || x == 31 - z || y == 31 - z) ? colorMatrixDark : colorMatrix,
+                           ColorMatrixFlag.Default,
+                           ColorAdjustType.Bitmap);
+                    }
+                    gBold.DrawImage(
+                    image,
+                    new Rectangle((x + y) * 2, 180 - 64 - 0 - y + x - depth * 3, width, height),  // destination rectangle 
+                        //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                    0, 0,        // upper-left corner of source rectangle 
+                    width,       // width of source rectangle
+                    height,      // height of source rectangle
+                    GraphicsUnit.Pixel,
+                    imageAttributes);
+                }
+            }
+            System.IO.Directory.CreateDirectory("Terrain");
+            b.Save("Terrain/" + terrainnames[color] + ".png");
+            bold.Save("Terrain/" + terrainnames[color] + "_bold.png");
+            return b;
+        }
         public static Bitmap drawPixelsFlat(int color)
         {
             Bitmap b = new Bitmap(128, 90, PixelFormat.Format32bppArgb);
@@ -281,7 +507,7 @@ Ruins	purple-gray
             int width = 4;
             int height = 4;
 
-            int[,] shades = new int[32,32];
+            int[,] shades = new int[32, 32];
             int depth = (int)(flatcolors[color][3]);
 
             for (int y = 31; y >= 0; y--)
@@ -329,7 +555,7 @@ Ruins	purple-gray
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
-            ColorMatrix[] mats = new ColorMatrix[] { colorMatrixDark, colorMatrix, colorMatrixBright};
+            ColorMatrix[] mats = new ColorMatrix[] { colorMatrixDark, colorMatrix, colorMatrixBright };
             imageAttributes.SetColorMatrix(
                colorMatrix,
                ColorMatrixFlag.Default,
@@ -450,7 +676,7 @@ Ruins	purple-gray
                     if ((y >= 28 || y <= 3) && (x < 16 + depth) && (x > 16 - depth) && (Math.Abs(16 - x) + depth) % 2 == 1)
                     {
 
-//                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.5F, 0.8F, 0.5F, 0.8F,
+                        //                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.5F, 0.8F, 0.5F, 0.8F,
                         //                        float[] power = new float[] { 0.3F, 0.6F, 0.32F, 0.65F, 0.34F, 0.7F, 0.36F, 0.75F, 0.38F, 0.8F };
                         int dist = (Math.Abs(16 - x) + depth) % 2;
                         //int dist = ((x - 8)/2) % 10;
@@ -462,7 +688,7 @@ Ruins	purple-gray
                     }
                     else if ((x >= 28 || x <= 3) && (y < 16 + depth) && (y > 16 - depth) && (Math.Abs(16 - y) + depth) % 2 == 1)
                     {
-//                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.4F, 0.7F, 0.4F, 0.8F 
+                        //                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.4F, 0.7F, 0.4F, 0.8F 
                         int dist = (Math.Abs(16 - y) + depth) % 2;
                         imageAttributes.SetColorMatrix(
                            colorMatrixBright,
@@ -472,7 +698,7 @@ Ruins	purple-gray
                     else
                     {
                         imageAttributes.SetColorMatrix(
-                            (x <= 3 || y <= 3 || x >= 28 || y >= 28) ? colorMatrixDark : mats[shades[x,y]],
+                            (x <= 3 || y <= 3 || x >= 28 || y >= 28) ? colorMatrixDark : mats[shades[x, y]],
                             //(x == z || y == z || x == 31 - z || y == 31 - z) ? colorMatrixDark : colorMatrix,
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
@@ -492,94 +718,94 @@ Ruins	purple-gray
             b.Save("Terrain/" + terrainnames[color] + ".png");
             bold.Save("Terrain/" + terrainnames[color] + "_bold.png");
 
-//            Bitmap normal = new Bitmap("Terrain/" + terrainnames[color] + ".png");
-//            Bitmap dim = new Bitmap(128, 100, PixelFormat.Format32bppArgb);
-//            g = Graphics.FromImage(dim);
-//            imageAttributes.SetColorMatrix(
-//                           new ColorMatrix(new float[][]{ 
-//   new float[] {0.7F,  0,  0,  0, 0},
-//   new float[] {0,  0.7F,  0,  0, 0},
-//   new float[] {0,  0,  0.7F,  0, 0},
-//   new float[] {0,  0,  0,  1F, 0},
-//   new float[] {0, 0, 0, 0, 1F}}),
-//                           ColorMatrixFlag.Default,
-//                           ColorAdjustType.Bitmap);
-//            g.DrawImage(normal,
-//                   new Rectangle(0, 0, 128, 100),  // destination rectangle 
-//                //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
-//                   0, 0,        // upper-left corner of source rectangle 
-//                   128,       // width of source rectangle
-//                   100,      // height of source rectangle
-//                   GraphicsUnit.Pixel,
-//                   imageAttributes);
-////            dim.Save("Terrain/" + terrainnames[color] + "_dim.png");
+            //            Bitmap normal = new Bitmap("Terrain/" + terrainnames[color] + ".png");
+            //            Bitmap dim = new Bitmap(128, 100, PixelFormat.Format32bppArgb);
+            //            g = Graphics.FromImage(dim);
+            //            imageAttributes.SetColorMatrix(
+            //                           new ColorMatrix(new float[][]{ 
+            //   new float[] {0.7F,  0,  0,  0, 0},
+            //   new float[] {0,  0.7F,  0,  0, 0},
+            //   new float[] {0,  0,  0.7F,  0, 0},
+            //   new float[] {0,  0,  0,  1F, 0},
+            //   new float[] {0, 0, 0, 0, 1F}}),
+            //                           ColorMatrixFlag.Default,
+            //                           ColorAdjustType.Bitmap);
+            //            g.DrawImage(normal,
+            //                   new Rectangle(0, 0, 128, 100),  // destination rectangle 
+            //                //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+            //                   0, 0,        // upper-left corner of source rectangle 
+            //                   128,       // width of source rectangle
+            //                   100,      // height of source rectangle
+            //                   GraphicsUnit.Pixel,
+            //                   imageAttributes);
+            ////            dim.Save("Terrain/" + terrainnames[color] + "_dim.png");
 
-//            Bitmap[] spectrum = { new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
-//                                   new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb),
-//                                   new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
-//                                   new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb)};
-//            for (int faction = 0; faction < 8; faction++)
-//            {
-//                g = Graphics.FromImage(spectrum[faction]);
-//                imageAttributes.SetColorMatrix(
-//               new ColorMatrix(new float[][]{ 
-//   new float[] {0.5F,  0,  0,  0, 0},
-//   new float[] {0,  0.5F,  0,  0, 0},
-//   new float[] {0,  0,  0.5F,  0, 0},
-//   new float[] {0,  0,     0,  1F, 0},
-//   new float[] {0.55F*(0.22F+PlusVoxels.colors[32 + faction][0]), 0.55F*(0.251F+PlusVoxels.colors[32 + faction][1]), 0.55F*(0.31F+PlusVoxels.colors[32 + faction][2]), 0, 1F}}),
-//                               ColorMatrixFlag.Default,
-//                               ColorAdjustType.Bitmap);
-//                g.DrawImage(normal,
-//                       new Rectangle(0, 0, 128, 100),  // destination rectangle 
-//                    //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
-//                       0, 0,        // upper-left corner of source rectangle 
-//                       128,       // width of source rectangle
-//                       100,      // height of source rectangle
-//                       GraphicsUnit.Pixel,
-//                       imageAttributes);
+            //            Bitmap[] spectrum = { new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
+            //                                   new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb),
+            //                                   new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
+            //                                   new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb)};
+            //            for (int faction = 0; faction < 8; faction++)
+            //            {
+            //                g = Graphics.FromImage(spectrum[faction]);
+            //                imageAttributes.SetColorMatrix(
+            //               new ColorMatrix(new float[][]{ 
+            //   new float[] {0.5F,  0,  0,  0, 0},
+            //   new float[] {0,  0.5F,  0,  0, 0},
+            //   new float[] {0,  0,  0.5F,  0, 0},
+            //   new float[] {0,  0,     0,  1F, 0},
+            //   new float[] {0.55F*(0.22F+PlusVoxels.colors[32 + faction][0]), 0.55F*(0.251F+PlusVoxels.colors[32 + faction][1]), 0.55F*(0.31F+PlusVoxels.colors[32 + faction][2]), 0, 1F}}),
+            //                               ColorMatrixFlag.Default,
+            //                               ColorAdjustType.Bitmap);
+            //                g.DrawImage(normal,
+            //                       new Rectangle(0, 0, 128, 100),  // destination rectangle 
+            //                    //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+            //                       0, 0,        // upper-left corner of source rectangle 
+            //                       128,       // width of source rectangle
+            //                       100,      // height of source rectangle
+            //                       GraphicsUnit.Pixel,
+            //                       imageAttributes);
 
-     //           spectrum[faction].Save("Terrain/" + terrainnames[color] + "_color" + faction + ".png");
-//            }
+            //           spectrum[faction].Save("Terrain/" + terrainnames[color] + "_color" + faction + ".png");
+            //            }
 
 
-//            spectrum = new Bitmap[]{ new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
-//                                     new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb),
-//                                     new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
-//                                     new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb)};
-//            for (int faction = 0; faction < 8; faction++)
-//            {
-//                g = Graphics.FromImage(spectrum[faction]);
-//                imageAttributes.SetColorMatrix(
-//               new ColorMatrix(new float[][]{ 
-//   new float[] {0.5F,  0,  0,  0, 0},
-//   new float[] {0,  0.5F,  0,  0, 0},
-//   new float[] {0,  0,  0.5F,  0, 0},
-//   new float[] {0,  0,     0,  1F, 0},
-//   new float[] {0.55F*(0.22F+PlusVoxels.colors[32 + faction][0]), 0.55F*(0.251F+PlusVoxels.colors[32 + faction][1]), 0.55F*(0.31F+PlusVoxels.colors[32 + faction][2]), 0, 1F}}),
-//               ColorMatrixFlag.Default,
-//               ColorAdjustType.Bitmap);
+            //            spectrum = new Bitmap[]{ new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
+            //                                     new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb),
+            //                                     new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb), 
+            //                                     new Bitmap(128, 100, PixelFormat.Format32bppArgb), new Bitmap(128, 100, PixelFormat.Format32bppArgb)};
+            //            for (int faction = 0; faction < 8; faction++)
+            //            {
+            //                g = Graphics.FromImage(spectrum[faction]);
+            //                imageAttributes.SetColorMatrix(
+            //               new ColorMatrix(new float[][]{ 
+            //   new float[] {0.5F,  0,  0,  0, 0},
+            //   new float[] {0,  0.5F,  0,  0, 0},
+            //   new float[] {0,  0,  0.5F,  0, 0},
+            //   new float[] {0,  0,     0,  1F, 0},
+            //   new float[] {0.55F*(0.22F+PlusVoxels.colors[32 + faction][0]), 0.55F*(0.251F+PlusVoxels.colors[32 + faction][1]), 0.55F*(0.31F+PlusVoxels.colors[32 + faction][2]), 0, 1F}}),
+            //               ColorMatrixFlag.Default,
+            //               ColorAdjustType.Bitmap);
 
-//                /*            imageAttributes.SetColorMatrix(
-//                                           new ColorMatrix(new float[][]{ 
-//                   new float[] {0.22F+PlusVoxels.colors[32 + faction][0],  0,  0,  0, 0},
-//                   new float[] {0,  0.251F+PlusVoxels.colors[32 + faction][1],  0,  0, 0},
-//                   new float[] {0,  0,  0.31F+PlusVoxels.colors[32 + faction][2],  0, 0},
-//                   new float[] {0,  0,  0,  1F, 0},
-//                   new float[] {0, 0, 0, 0, 1F}}),
-//                                           ColorMatrixFlag.Default,
-//                                           ColorAdjustType.Bitmap);*/
-//                g.DrawImage(bold,
-//                       new Rectangle(0, 0, 128, 100),  // destination rectangle 
-//                    //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
-//                       0, 0,        // upper-left corner of source rectangle 
-//                       128,       // width of source rectangle
-//                       100,      // height of source rectangle
-//                       GraphicsUnit.Pixel,
-//                       imageAttributes);
+            //                /*            imageAttributes.SetColorMatrix(
+            //                                           new ColorMatrix(new float[][]{ 
+            //                   new float[] {0.22F+PlusVoxels.colors[32 + faction][0],  0,  0,  0, 0},
+            //                   new float[] {0,  0.251F+PlusVoxels.colors[32 + faction][1],  0,  0, 0},
+            //                   new float[] {0,  0,  0.31F+PlusVoxels.colors[32 + faction][2],  0, 0},
+            //                   new float[] {0,  0,  0,  1F, 0},
+            //                   new float[] {0, 0, 0, 0, 1F}}),
+            //                                           ColorMatrixFlag.Default,
+            //                                           ColorAdjustType.Bitmap);*/
+            //                g.DrawImage(bold,
+            //                       new Rectangle(0, 0, 128, 100),  // destination rectangle 
+            //                    //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+            //                       0, 0,        // upper-left corner of source rectangle 
+            //                       128,       // width of source rectangle
+            //                       100,      // height of source rectangle
+            //                       GraphicsUnit.Pixel,
+            //                       imageAttributes);
 
-////                spectrum[faction].Save("Terrain/" + terrainnames[color] + "_bold_color" + faction + ".png");
-//            }
+            ////                spectrum[faction].Save("Terrain/" + terrainnames[color] + "_bold_color" + faction + ".png");
+            //            }
             //AlterChannels(1, 1, 1);
             //        public static ShaderProgram Bright = AlterChannels(1.35f, 1.35f, 1.35f);
             //public static ShaderProgram[] Spectrum = { AlterChannels(1.4f, 0.8f, 0.8f), AlterChannels(1.4f, 1.4f, 0.7f), AlterChannels(0.8f, 1.4f, 0.8f), AlterChannels(0.85f, 0.85f, 1.4f)};

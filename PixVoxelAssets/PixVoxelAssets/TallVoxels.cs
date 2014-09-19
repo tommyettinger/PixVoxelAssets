@@ -4249,7 +4249,6 @@ namespace AssetsPV
             IntPtr ptr = bmpData.Scan0;
 
             // Declare an array to hold the bytes of the bitmap. 
-            // int numBytes = bmp.Width * bmp.Height * 3; 
             int numBytes = bmpData.Stride * bmp.Height;
             byte[] argbValues = new byte[numBytes];
             argbValues.Fill<byte>(0);
@@ -4327,7 +4326,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4415,8 +4414,8 @@ namespace AssetsPV
                     if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 8]) { argbValues[i - bmpData.Stride * 2 + 8] = 255; argbValues[i - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 3] = 0; }
                     if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 4]) { argbValues[i - bmpData.Stride * 2 + 4] = 255; argbValues[i - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 3] = 0; }
                     if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 4]) { argbValues[i - bmpData.Stride * 2 - 4] = 255; argbValues[i - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 3] = 0; }
-                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; } 
-                    
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; }
+
                     /*
                     outlineValues[i + 4] = 255;
                     outlineValues[i - 4] = 255;
@@ -4571,7 +4570,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4657,7 +4656,7 @@ namespace AssetsPV
                     if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 8]) { argbValues[i - bmpData.Stride * 2 + 8] = 255; argbValues[i - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 3] = 0; }
                     if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 4]) { argbValues[i - bmpData.Stride * 2 + 4] = 255; argbValues[i - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 3] = 0; }
                     if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 4]) { argbValues[i - bmpData.Stride * 2 - 4] = 255; argbValues[i - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 3] = 0; }
-                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; } 
+                    if (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; }
 
                     /*
                     outlineValues[i + 4] = 255;
@@ -5187,7 +5186,7 @@ namespace AssetsPV
         }
 
 
-        private static Bitmap renderOnlyTerrainColors()
+        public static Bitmap renderOnlyTerrainColors()
         {
             Bitmap b = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage((Image)b);
@@ -5268,7 +5267,7 @@ namespace AssetsPV
             }
             return b;
         }
-        private static Bitmap renderOnlyTerrainColors(int faction)
+        public static Bitmap renderOnlyTerrainColors(int faction)
         {
             Bitmap b = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage((Image)b);
@@ -5298,7 +5297,8 @@ namespace AssetsPV
                    imageAttributes);
             return b;
         }
-        private static Bitmap renderOnlyColors(int faction)
+
+        public static Bitmap renderOnlyColors(int faction)
         {
             Bitmap b = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage((Image)b);
@@ -5416,6 +5416,74 @@ namespace AssetsPV
                imageAttributes);
 
             return b;
+        }
+        public static Bitmap renderOnlyColorsX(int faction)
+        {
+            Bitmap bmp = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            for (int v = 0; v < 10; v++)
+            {
+                int current_color = v * 8;
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int x = 0; x < 16; x++)
+                    {
+                        argbValues[4 * (1 + 3 * v) + x + bmpData.Stride * y] = VoxelLogic.xrendered[current_color + faction][y * 16 + x];
+                    }
+                }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int x = 0; x < 16; x++)
+                    {
+                        argbValues[4 * (1 + 3 * (10 + i)) + x + bmpData.Stride * y] = VoxelLogic.xrendered[168 + i * 8 + faction][y * 16 + x];
+                    }
+                }
+            }
+            for (int v = 11; v < 21; v++)
+            {
+                int current_color = v * 8;
+                
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int x = 0; x < 16; x++)
+                    {
+                        argbValues[4 * (1 + 3 * (3 + v)) + x + bmpData.Stride * y] = VoxelLogic.xrendered[current_color + faction][y * 16 + x];
+                    }
+                }
+            }
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 16; x++)
+                {
+                    argbValues[4 * (1 + 3 * 24) + x + bmpData.Stride * y] = (byte)((x%4 == 3) ? 255 : 0);
+                }
+            }
+
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+
         }
 
         private static void processUnitBasic(string u)
@@ -5743,6 +5811,38 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+        }
+        public static void processExplosionChannelPartial(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, true);
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDouble(parsed, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("indexed");
+            int color = 0;
+            for (int d = 0; d < 4; d++)
+            {
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                for (int frame = 0; frame < 8; frame++)
+                {
+                    Bitmap b = renderHugeSmart(explode[frame], d, color, frame);
+                    Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                    Graphics g2 = Graphics.FromImage(b2);
+                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                    b.Dispose();
+                    g2.DrawImage(b3, 0, 0, 248, 308);
+                    CreateChannelBitmap(b2, folder + "/" + u + "_Explode_face" + d + "_" + frame + ".png");
+                    b2.Dispose();
+                    g2.Dispose();
+                    b3.Dispose();
+                }
+            }
 
             bin.Close();
         }
@@ -6141,6 +6241,150 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + u + "_attack_" + w + "_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
+            }
+
+        }
+        public static void processFiringChannelPartial(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            string filename = u + "_Part_X.vox";
+            BinaryReader bin = new BinaryReader(File.Open(filename, FileMode.Open));
+            bin.Close();
+            MagicaVoxelData[] parsed;
+            string folder = ("indexed");
+
+            for (int w = 0; w < 2; w++)
+            {
+                if ((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
+                {
+                    filename = u + "_Firing_Part_X.vox";
+                }
+                if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    MagicaVoxelData[][] flying = VoxelLogic.Flyover(parsed);
+                    MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(7, VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
+                    MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+                    //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
+                        flying[i].CopyTo(voxelFrames[i], 0);
+                    }
+                    /*                    for (int i = 0; i < flying[4].Length; i++)
+                                        {
+                                            voxelFrames[0][i].x += 20;
+                                            voxelFrames[0][i].y += 20;
+                                        }*/
+                    Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
+
+                    voxelFrames = VoxelLogic.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
+
+                    for (int f = 0; f < 16; f++)
+                    {
+                        List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                        int[,] taken = new int[120, 120];
+                        taken.Fill(-1);
+                        for (int i = 0; i < voxelFrames[f].Length; i++)
+                        {
+                            // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
+                            if (voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                            {
+                                //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                continue;
+                            }
+                            altered.Add(voxelFrames[f][i]);
+                        }
+                        flying[f] = altered.ToArray();
+                    }
+                    int color = 0;
+
+                    for (int d = 0; d < 4; d++)
+                    {
+                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                        for (int frame = 0; frame < 16; frame++)
+                        {
+                            Bitmap b = renderHugeSmart(flying[frame], d, color, frame);
+                            Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            Graphics g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 0, 0, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Attack_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                            b = renderHugeSmart(receive[frame], d, color, frame);
+                            b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 0, 0, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Receive_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                        }
+                    }
+
+
+                    bin.Close();
+                }
+                else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+                    MagicaVoxelData[][] firing = VoxelLogic.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w],
+                        VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
+
+                    int color = 0;
+                    for (int d = 0; d < 4; d++)
+                    {
+                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                        for (int frame = 0; frame < 16; frame++)
+                        {
+                            Bitmap b = renderHugeSmart(firing[frame], d, color, frame);
+                            Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            Graphics g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 0, 0, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Attack_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                            b = renderHugeSmart(receive[frame], d, color, frame);
+                            b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            g2 = Graphics.FromImage(b2);
+                            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                            b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                            b.Dispose();
+                            g2.DrawImage(b3, 0, 0, 248, 308);
+
+                            CreateChannelBitmap(b2, folder + "/" + u + "_Receive_" + w + "_face" + d + "_" + (frame) + ".png");
+                            b2.Dispose();
+                            g2.Dispose();
+                            b3.Dispose();
+
+                        }
+                    }
+
+                    bin.Close();
+                }
+                else continue;
             }
 
         }
@@ -6730,21 +6974,8 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
-
-        public static void processUnitOutlinedPartial(string u)
-        {
-
-            Console.WriteLine("Processing: " + u);
-            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
-
-            for (int i = 0; i < parsed.Length; i++)
-            {
-                parsed[i].x += 10;
-                parsed[i].y += 10;
-            }
-            int framelimit = 4;
-            if (!VoxelLogic.UnitLookup.ContainsKey(u)) //used for the testing Block model
+        /*
+                    if (!VoxelLogic.UnitLookup.ContainsKey(u)) //used for the testing Block model
             {
                 framelimit = 4;
                 for (int i = 0; i < 8; i++)
@@ -6792,7 +7023,22 @@ namespace AssetsPV
                 Process.Start(starter).WaitForExit();
                 return;
             }
-            else if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
+
+         */
+        public static void processUnitOutlinedPartial(string u)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+            if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
             {
                 framelimit = 2;
             }
@@ -6841,6 +7087,23 @@ namespace AssetsPV
             for (int i = 0; i < 11; i++)
             {
                 PlusPaletteDraw.drawPixelsFlat(i);
+
+                Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
+                Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
+                CreateChannelBitmap(b, "indexed/" + Terrains[i] + ".png", 9);
+                CreateChannelBitmap(bold, "indexed/" + Terrains[i] + "_bold.png", 9);
+                /*for(int c = 0; c < 8; c++)
+                {
+                    CreateChannelBitmap(b, "indexed/" + Terrains[i] +"_color"+ c + ".png", 9);
+                    CreateChannelBitmap(bold, "indexed/" + Terrains[i] + "_bold_color" + c + ".png", 9);
+                }*/
+            }
+        }
+        public static void processTerrainChannelDouble()
+        {
+            for (int i = 0; i < 11; i++)
+            {
+                PlusPaletteDraw.drawPixelsFlatDouble(i);
 
                 Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
                 Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
@@ -6919,6 +7182,43 @@ namespace AssetsPV
             }
 
         }
+        public static void processUnitChannelPartial(string u)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
+
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+            if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
+            {
+                framelimit = 2;
+            }
+
+            string folder = ("indexed");//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < 4; f++)
+            { //"color" + i + "/"
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "SE", f, framelimit, u), "indexed/" + u + "_face0" + "_" + f + ".png"); //se
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "SW", f, framelimit, u), "indexed/" + u + "_face1" + "_" + f + ".png"); //se
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "NW", f, framelimit, u), "indexed/" + u + "_face2" + "_" + f + ".png"); //se
+                CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "NE", f, framelimit, u), "indexed/" + u + "_face3" + "_" + f + ".png"); //se
+            }
+
+
+            bin.Close();
+
+            processFiringChannelPartial(u);
+
+            processExplosionChannelPartial(u);
+
+        }
+
         /*        private static void processBases()
                 {
                     BinaryReader[] powers = new BinaryReader[8];
@@ -7289,7 +7589,7 @@ namespace AssetsPV
         }
         static Bitmap makeFlatTiling()
         {
-            Bitmap b = new Bitmap(128 * 16, 32 * 32);
+            Bitmap b = new Bitmap(256 * 8, 64 * 16);
             Graphics g = Graphics.FromImage(b);
 
             Bitmap[] tilings = new Bitmap[10];
@@ -7737,12 +8037,12 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-            //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
+            makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
             //            processUnitOutlinedDouble("Block");
 
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
-//            processUnitOutlinedWDouble("Person");
+            //            processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
