@@ -8280,7 +8280,7 @@ namespace AssetsPV
             string folder = ("ortho_adj/frames");
 
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            for (int i = 6; i < 7; i++)
+            for (int i = 7; i < 8; i++)
             {
                 if (i == 2) continue;
                 for (int s = 0; s < 4; s++)
