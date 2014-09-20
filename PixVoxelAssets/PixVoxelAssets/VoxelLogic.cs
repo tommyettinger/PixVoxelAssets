@@ -3918,6 +3918,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 voxelFrames = weaponAnimationsDouble[CurrentWeapons[unit][weapon]](voxelFrames, unit);
             }
+            sizex = 120;
+            sizey = 120;
+            sizez = 120;
             for (int f = 0; f < parsedFrames.Length; f++)
             {
                 voxelFrames[f] = PlaceShadows(voxelFrames[f].ToList()).ToArray();

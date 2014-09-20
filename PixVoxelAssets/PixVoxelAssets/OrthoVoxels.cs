@@ -5827,7 +5827,7 @@ namespace AssetsPV
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
             int height = 4;
-            float[][] flatcolors = PlusPaletteDraw.flatcolors;
+            float[][] flatcolors = TallPaletteDraw.flatcolors;
             for (int color = 0; color < 11; color++)
             {
                 //g.DrawImage(image, 10, 10, width, height);
@@ -7666,7 +7666,7 @@ namespace AssetsPV
         {
             for (int i = 0; i < 11; i++)
             {
-                PlusPaletteDraw.drawPixelsFlat(i);
+                TallPaletteDraw.drawPixelsFlat(i);
 
                 Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
                 Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
@@ -8113,7 +8113,7 @@ namespace AssetsPV
             Bitmap[] tilings = new Bitmap[10];
             for (int i = 0; i < 10; i++)
             {
-                tilings[i] = PlusPaletteDraw.drawPixelsFlat(i);
+                tilings[i] = TallPaletteDraw.drawPixelsFlat(i);
             }
             int[,] grid = new int[17, 33];
             Random r = new Random();

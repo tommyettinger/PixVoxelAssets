@@ -6971,7 +6971,7 @@ namespace AssetsPV
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
             int height = 4;
-            float[][] flatcolors = PlusPaletteDraw.flatcolors;
+            float[][] flatcolors = TallPaletteDraw.flatcolors;
             for (int color = 0; color < 11; color++)
             {
                 //g.DrawImage(image, 10, 10, width, height);
@@ -9168,7 +9168,7 @@ namespace AssetsPV
         {
             for (int i = 0; i < 11; i++)
             {
-                PlusPaletteDraw.drawPixelsFlat(i);
+                TallPaletteDraw.drawPixelsFlat(i);
 
                 Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
                 Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
@@ -9615,7 +9615,7 @@ namespace AssetsPV
             Bitmap[] tilings = new Bitmap[10];
             for (int i = 0; i < 10; i++)
             {
-                tilings[i] = PlusPaletteDraw.drawPixelsFlat(i);
+                tilings[i] = TallPaletteDraw.drawPixelsFlat(i);
             }
             int[,] grid = new int[17, 33];
             Random r = new Random();
@@ -9766,7 +9766,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("ortho_adj");
             System.IO.Directory.CreateDirectory("ortho_adj/indexed");
             System.IO.Directory.CreateDirectory("indexed");
-            
+
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
@@ -9787,8 +9787,10 @@ namespace AssetsPV
             
             TallVoxels.InitializePalettes();
             //            Madden();
-            TallVoxels.processTerrainChannelDouble();
-            //makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
+  //          TallVoxels.processTerrainChannelDouble();
+ 
+//            TallVoxels.makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
+//            makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
             //InitializeWPalette();
 
@@ -10147,7 +10149,11 @@ namespace AssetsPV
             processMedalChannel("Medal_T");
             */
 
-            /*
+            TallVoxels.processUnitChannelPartial("Infantry");
+            TallVoxels.processUnitChannelPartial("Infantry_P");
+            TallVoxels.processUnitChannelPartial("Infantry_S");
+            TallVoxels.processUnitChannelPartial("Infantry_T");
+
             TallVoxels.processUnitChannelPartial("Plane");
             TallVoxels.processUnitChannelPartial("Plane_P");
             TallVoxels.processUnitChannelPartial("Plane_S");
@@ -10158,11 +10164,6 @@ namespace AssetsPV
             TallVoxels.processUnitChannelPartial("Copter_S");
             TallVoxels.processUnitChannelPartial("Copter_T");
             
-            TallVoxels.processUnitChannelPartial("Infantry");
-            TallVoxels.processUnitChannelPartial("Infantry_P");
-            TallVoxels.processUnitChannelPartial("Infantry_S");
-            TallVoxels.processUnitChannelPartial("Infantry_T");
-
             TallVoxels.processUnitChannelPartial("Artillery");
             TallVoxels.processUnitChannelPartial("Artillery_P");
             TallVoxels.processUnitChannelPartial("Artillery_S");
@@ -10175,7 +10176,6 @@ namespace AssetsPV
 
             TallVoxels.processUnitChannelPartial("Supply");
             TallVoxels.processUnitChannelPartial("Supply_P");
-             
             TallVoxels.processUnitChannelPartial("Supply_S");
             TallVoxels.processUnitChannelPartial("Supply_T");
             
@@ -10185,7 +10185,7 @@ namespace AssetsPV
             TallVoxels.processUnitChannelPartial("Laboratory");
             TallVoxels.processUnitChannelPartial("Castle");
             TallVoxels.processUnitChannelPartial("Estate");
-            */
+            
 
             //File.WriteAllText("FiringPositions.txt", log.ToString());
 

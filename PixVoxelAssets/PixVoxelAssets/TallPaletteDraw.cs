@@ -10,7 +10,7 @@ using System.Drawing.Imaging;
 namespace AssetsPV
 {
 
-    class PlusPaletteDraw
+    class TallPaletteDraw
     {
         public static Random r = new Random();
         private static float[][] colors = null;
@@ -489,9 +489,24 @@ Ruins	purple-gray
                 }
             }
             System.IO.Directory.CreateDirectory("Terrain");
-            b.Save("Terrain/" + terrainnames[color] + ".png");
-            bold.Save("Terrain/" + terrainnames[color] + "_bold.png");
-            return b;
+            Bitmap b2 = new Bitmap(128, 90, PixelFormat.Format32bppArgb);
+            Graphics g2 = Graphics.FromImage(b2);
+            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            Bitmap b3 = bold.Clone(new Rectangle(0, 0, 256, 180), b.PixelFormat);
+            g2.DrawImage(b3, 0, 0, 128, 90);
+            b2.Save("Terrain/" + terrainnames[color] + "_bold.png");
+
+            b2 = new Bitmap(128, 90, PixelFormat.Format32bppArgb);
+            g2 = Graphics.FromImage(b2);
+            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            b3 = b.Clone(new Rectangle(0, 0, 256, 180), b.PixelFormat);
+            g2.DrawImage(b3, 0, 0, 128, 90);
+            b2.Save("Terrain/" + terrainnames[color] + ".png");
+            b.Dispose();
+            g2.Dispose();
+            b3.Dispose();
+
+            return b2;
         }
         public static Bitmap drawPixelsFlat(int color)
         {

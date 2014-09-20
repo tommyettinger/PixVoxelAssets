@@ -13,7 +13,7 @@ namespace AssetsPV
 {
     public class TallVoxels
     {
-        private static Random r = new Random(PlusPaletteDraw.r.Next());
+        private static Random r = new Random(TallPaletteDraw.r.Next());
         public static StringBuilder log = new StringBuilder();
         public static string[] Directions = { "SE", "SW", "NW", "NE" };
         public static string[] Terrains = new string[]
@@ -4230,7 +4230,7 @@ namespace AssetsPV
                                     + i +
                                     bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
              */
-            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+            return 4 * ((x + y) * 2 + 12 + ((current_color == 136) ? jitter - 1 : 0))
                                     + innerX +
                                     stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
         }
@@ -5196,7 +5196,7 @@ namespace AssetsPV
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
             int height = 4;
-            float[][] flatcolors = PlusPaletteDraw.flatcolors;
+            float[][] flatcolors = TallPaletteDraw.flatcolors;
             for (int color = 0; color < 11; color++)
             {
                 //g.DrawImage(image, 10, 10, width, height);
@@ -6277,7 +6277,7 @@ namespace AssetsPV
                                             voxelFrames[0][i].x += 20;
                                             voxelFrames[0][i].y += 20;
                                         }*/
-                    Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
+                    //Console.WriteLine("X: " + voxelFrames[0].Min(mvd => mvd.x) + ", Y: " + voxelFrames[0].Min(mvd => mvd.y));
 
                     voxelFrames = VoxelLogic.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u]);
 
@@ -6311,8 +6311,8 @@ namespace AssetsPV
                             Graphics g2 = Graphics.FromImage(b2);
                             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                             Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
-                            b.Dispose();
                             g2.DrawImage(b3, 0, 0, 248, 308);
+                            b.Dispose();
 
                             CreateChannelBitmap(b2, folder + "/" + u + "_Attack_" + w + "_face" + d + "_" + (frame) + ".png");
                             b2.Dispose();
@@ -6324,8 +6324,8 @@ namespace AssetsPV
                             g2 = Graphics.FromImage(b2);
                             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                             b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
-                            b.Dispose();
                             g2.DrawImage(b3, 0, 0, 248, 308);
+                            b.Dispose();
 
                             CreateChannelBitmap(b2, folder + "/" + u + "_Receive_" + w + "_face" + d + "_" + (frame) + ".png");
                             b2.Dispose();
@@ -6358,11 +6358,11 @@ namespace AssetsPV
                             Graphics g2 = Graphics.FromImage(b2);
                             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                             Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
-                            b.Dispose();
                             g2.DrawImage(b3, 0, 0, 248, 308);
+                            b2.Save("junk/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
 
                             CreateChannelBitmap(b2, folder + "/" + u + "_Attack_" + w + "_face" + d + "_" + (frame) + ".png");
-                            b2.Dispose();
+                            b.Dispose();
                             g2.Dispose();
                             b3.Dispose();
 
@@ -7086,7 +7086,7 @@ namespace AssetsPV
         {
             for (int i = 0; i < 11; i++)
             {
-                PlusPaletteDraw.drawPixelsFlat(i);
+                TallPaletteDraw.drawPixelsFlat(i);
 
                 Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
                 Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
@@ -7103,7 +7103,7 @@ namespace AssetsPV
         {
             for (int i = 0; i < 11; i++)
             {
-                PlusPaletteDraw.drawPixelsFlatDouble(i);
+                TallPaletteDraw.drawPixelsFlatDouble(i);
 
                 Bitmap b = new Bitmap("Terrain/" + Terrains[i] + ".png");
                 Bitmap bold = new Bitmap("Terrain/" + Terrains[i] + "_bold.png");
@@ -7445,15 +7445,15 @@ namespace AssetsPV
         private static Bitmap[] processFloor(string u)
         {
             BinaryReader bin = new BinaryReader(File.Open(u + "_P.vox", FileMode.Open));
-            PlusPaletteDraw.MagicaVoxelDataPaletted[] parsed = PlusPaletteDraw.FromMagica(bin);
+            TallPaletteDraw.MagicaVoxelDataPaletted[] parsed = TallPaletteDraw.FromMagica(bin);
 
 
             System.IO.Directory.CreateDirectory(u);
             Bitmap[] bits = new Bitmap[] {
-                PlusPaletteDraw.renderPixels(parsed, "SE"),
-                PlusPaletteDraw.renderPixels(parsed, "SW"),
-                PlusPaletteDraw.renderPixels(parsed, "NW"),
-                PlusPaletteDraw.renderPixels(parsed, "NE")
+                TallPaletteDraw.renderPixels(parsed, "SE"),
+                TallPaletteDraw.renderPixels(parsed, "SW"),
+                TallPaletteDraw.renderPixels(parsed, "NW"),
+                TallPaletteDraw.renderPixels(parsed, "NE")
             };
             /*Random r = new Random();
             Bitmap b = new Bitmap(80,40);
@@ -7587,15 +7587,15 @@ namespace AssetsPV
 
             return path;
         }
-        static Bitmap makeFlatTiling()
+        public static Bitmap makeFlatTiling()
         {
-            Bitmap b = new Bitmap(256 * 8, 64 * 16);
+            Bitmap b = new Bitmap(128 * 16, 32 * 32);
             Graphics g = Graphics.FromImage(b);
 
             Bitmap[] tilings = new Bitmap[10];
             for (int i = 0; i < 10; i++)
             {
-                tilings[i] = PlusPaletteDraw.drawPixelsFlat(i);
+                tilings[i] = TallPaletteDraw.drawPixelsFlatDouble(i);
             }
             int[,] grid = new int[17, 33];
             Random r = new Random();
