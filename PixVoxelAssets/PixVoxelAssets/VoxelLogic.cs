@@ -525,7 +525,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //7 hair
             new float[] {0.0F,0.2F,0.0F,1F},
             //8 skin contrast
-            new float[] {0.23F,0.4F,0.0F,1F},
+            new float[] {0.4F,0.05F,-0.1F,1F},
             //9 skin
             new float[] {0.45F,0.57F,0.35F,1F},
             //10 eyes shine
