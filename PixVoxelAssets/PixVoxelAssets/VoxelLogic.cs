@@ -447,7 +447,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static float[][][] wpalettes = new float[][][]
             {
-                new float[][] {
+                new float[][] { //brown hair
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.15F,0.0F,1F},
             //1 shoes, boots, brown leather
@@ -477,7 +477,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.6F,0.6F,0.6F,1F},
             },
-            new float[][] {
+            new float[][] { //blonde hair
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.15F,0.0F,1F},
             //1 shoes, boots, brown leather
@@ -507,7 +507,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.6F,0.6F,0.6F,1F},
             },
-            new float[][] {
+            new float[][] { //zombie
             //0 shoes, boots, brown leather contrast
             new float[] {0.3F,0.1F,0.0F,1F},
             //1 shoes, boots, brown leather
@@ -537,7 +537,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.4F,0.4F,0.4F,1F},
             },
-            new float[][] {
+            new float[][] {//ninja
             //0 shoes, boots, brown leather contrast
             new float[] {0.2F,0.0F,0.0F,1F},
             //1 shoes, boots, brown leather
@@ -567,7 +567,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.7F,0.75F,0.85F,1F},
             },
-            new float[][] {
+            new float[][] {//shogun
             //0 white cloth
             new float[] {0.85F,0.8F,0.9F,1F},
             //1 shoes, boots, black socks
@@ -597,7 +597,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.7F,0.75F,0.85F,1F},
             },
-            new float[][] {
+            new float[][] {//samurai
             //0 white cloth
             new float[] {0.85F,0.8F,0.9F,1F},
             //1 shoes, boots, black socks
@@ -627,8 +627,38 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.75F,0.8F,0.9F,1F},
             },
+            new float[][] {//skeleton
+            //0 bone highlight
+            new float[] {0.5F,0.45F,0.35F,1F},
+            //1 bones
+            new float[] {0.85F,0.85F,0.7F,1F},
+            //2 pants, jeans contrast
+            new float[] {0F,0F,0F,0F},
+            //3 pants, jeans
+            new float[] {0.6F,0.55F,0.3F,1F},
+            //4 shirt contrast
+            new float[] {0F,0F,0F,0F},
+            //5 shirt
+            new float[] {0.44F,0.36F,0.33F,1F},
+            //6 hair contrast
+            new float[] {0.1F,0.25F,0.05F,1F},
+            //7 hair
+            new float[] {0.0F,0.2F,0.0F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.05F,-0.1F,1F},
+            //9 skin
+            new float[] {0.45F,0.57F,0.35F,1F},
+            //10 eyes shine
+            new float[] {1.4F,0.6F,0.4F,1F},
+            //11 eyes
+            new float[] {0.8F,0.15F,0.0F,1F},
+            //12 metal contrast
+            new float[] {0.4F,0.7F,0.4F,1F},
+            //13 metal
+            new float[] {0.4F,0.4F,0.4F,1F},
+            },
         };
-        public const int wcolorcount = 14, wpalettecount = 6;
+        public const int wcolorcount = 14, wpalettecount = 7;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;

@@ -36,7 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallVoxels</StartupObject>
+    <StartupObject>AssetsPV.OrthoVoxels</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -169,6 +169,9 @@
     </None>
     <None Include="Shinobi_Large_W_archive.vox" />
     <None Include="Shinobi_Unarmed_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Skeleton_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Supply_Part_X.vox">

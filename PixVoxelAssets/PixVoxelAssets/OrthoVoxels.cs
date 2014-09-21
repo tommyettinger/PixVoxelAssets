@@ -8282,11 +8282,12 @@ namespace AssetsPV
             InitializeXPalette();
             InitializeWPalette();
             
-            processUnitOutlinedWDouble("Person");
+/*            processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
-            processUnitOutlinedWDouble("Lord");
+            processUnitOutlinedWDouble("Lord");*/
             processUnitOutlinedWDouble("Zombie");
+            processUnitOutlinedWDouble("Skeleton");
             
             /*
             processUnitOutlinedPartial("Copter");

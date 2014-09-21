@@ -7651,7 +7651,7 @@ namespace AssetsPV
             }
 
             int extreme = 0;
-            switch (r.Next(5))
+            switch (2) //r.Next(5)
             {
                 case 0: extreme = 7;
                     break;
@@ -7716,7 +7716,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < 17; i++)
                 {
-                    g.DrawImageUnscaled(tilings[grid[i, j]], (128 * i) - ((j % 2 == 0) ? 0 : 64), (32 * j) - 32 + 12 - 32);
+                    g.DrawImageUnscaled(tilings[grid[i, j]], (128 * i) - ((j % 2 == 0) ? 0 : 64), (32 * j) - 32 + 8 - 32);
                 }
             }
             return b;
@@ -8026,17 +8026,18 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-            //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
+            makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
             //            processUnitOutlinedDouble("Block");
 
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
             //            processUnitOutlinedWDouble("Person");
-            processUnitOutlinedWDouble("Person");
+            /*processUnitOutlinedWDouble("Person");
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
-            processUnitOutlinedWDouble("Lord");
+            processUnitOutlinedWDouble("Lord");*/
             processUnitOutlinedWDouble("Zombie");
+            processUnitOutlinedWDouble("Skeleton");
 
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
