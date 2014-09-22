@@ -211,7 +211,7 @@ namespace AssetsPV
 
                     Graphics g = Graphics.FromImage((Image)b);
 
-                    if (current_color == 31)
+                    if (current_color == 25)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
@@ -223,11 +223,11 @@ namespace AssetsPV
                     else if (VoxelLogic.wpalettes[p][current_color][3] == 0F)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
-   new float[] {0,  0,  0,  0F, 0},
-   new float[] {0, 0, 0, 0, 1F}});
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 1F}});
                     }
                     else if (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)
                     {
@@ -238,17 +238,6 @@ namespace AssetsPV
    new float[] {0,  0,  0,  VoxelLogic.flat_alpha, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
-                    else if (current_color == 20) //lights
-                    {
-                        float lightCalc = 0.06F;
-                        colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0] + lightCalc,  0,  0,  0, 0},
-   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1] + lightCalc,  0,  0, 0},
-   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2] + lightCalc,  0, 0},
-   new float[] {0,  0,  0,  1F, 0},
-   new float[] {0, 0, 0, 0, 1F}});
-                    }
-
                     else
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
@@ -262,9 +251,13 @@ namespace AssetsPV
                        colorMatrix,
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
-                    g.DrawImage((current_color == 20) ? spin :
-                       (VoxelLogic.wpalettes[p][current_color][3] == 1F || current_color / 8 == 23 || current_color / 8 == 25 || current_color / 8 == 26) ? image :
+                    g.DrawImage((current_color >= 21 && current_color <= 24) ? spin :
+                       (VoxelLogic.wpalettes[p][current_color][3] == 1F || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.waver_alpha) ? image :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha) ? flat : spin,
+                        /*(current_color == 20) ? spin :
+                       (VoxelLogic.wpalettes[p][current_color][3] == 1F || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.waver_alpha || 
+                       current_color / 8 == 23 || current_color / 8 == 25 || current_color / 8 == 26) ? image :
+                       (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha) ? flat : spin*/
                        new Rectangle(0, 0,
                            width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
@@ -4671,7 +4664,29 @@ namespace AssetsPV
              */
             return 4 * (y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
                  + innerX +
-                stride * (180*2 - 60*2 - 3 + x - z * 2 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
+                stride * (180 * 2 - 60 * 2 - 3 + x - z * 2 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
+        }
+        private static int voxelToPixelLargeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+            4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)
+             */
+            return 4 * (y * 2 + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+                 + innerX +
+                stride * (182 - 60 - 3 + x - z * 2 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
+        }
+        private static int voxelToPixelHugeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+             4 * (vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0))
+                             + i +
+                           bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+             */
+            return 4 * (y * 2 + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+                 + innerX +
+                stride * (180 * 2 - 60 * 2 - 3 + x - z * 2 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
         }
 
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame)
@@ -5457,28 +5472,18 @@ namespace AssetsPV
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
-                /*else if (current_color >= 168)
-                {
-                    continue;
-                }*/
-                //should never be executed yet
-                else if (false && (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80))
+                else if (current_color >= 17 && current_color <= 24)
                 {
                     int mod_color = current_color;
-                    /*if (current_color == 80) //lights
+                    if (current_color == 21) //lights
                     {
-                        mod_color = 168 + frame * 8;
-                    }*/
+                        mod_color = 21 + frame % 4;
+                    }
                     for (int j = 0; j < 3; j++)
                     {
                         for (int i = 0; i < 8; i++)
                         {
-                            /*
-                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
-                             + i +
-                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
-                             */
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = wcurrent[mod_color][i + j * 8];
@@ -5488,13 +5493,13 @@ namespace AssetsPV
                         }
                     }
                 }
-                else if (current_color == 31)
+                else if (current_color == 25)
                 {
                     for (int j = 0; j < 3; j++)
                     {
                         for (int i = 0; i < 8; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
 
                             if (shadowValues[p] == 0)
                             {
@@ -5509,7 +5514,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 8; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = wcurrent[current_color][i + j * 8];
@@ -7377,7 +7382,7 @@ namespace AssetsPV
                 bin.Close();
                 return;
             }
-            else if (false)
+            else if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
             {
                 framelimit = 2;
             }
@@ -7703,7 +7708,7 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
             int framelimit = 4;
-            if (false)
+            if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
             {
                 framelimit = 2;
             }
@@ -8288,6 +8293,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord");*/
             processUnitOutlinedWDouble("Zombie");
             processUnitOutlinedWDouble("Skeleton");
+            processUnitOutlinedWDouble("Skeleton_Spear");
             
             /*
             processUnitOutlinedPartial("Copter");

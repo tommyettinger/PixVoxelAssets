@@ -4234,6 +4234,28 @@ namespace AssetsPV
                                     + innerX +
                                     stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
         }
+        private static int voxelToPixelLargeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+             4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                    + i +
+                                    bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)
+             */
+            return 4 * ((x + y) * 2 + 4 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+                + innerX +
+                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
+        }
+        private static int voxelToPixelHugeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        {
+            /*
+4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                    + i +
+                                    bmpData.Stride * (600 - 120 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+             */
+            return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+                                    + innerX +
+                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
+        }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -4793,23 +4815,19 @@ namespace AssetsPV
             {
                 int current_color = (253 - vx.color) / 4;
                 int p = 0;
-                if (current_color >= VoxelLogic.wcolors.Length)
+                if (current_color >= VoxelLogic.wcolorcount)
                     continue;
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
-                else if (current_color >= 168)
-                {
-                    continue;
-                }
-                else if (false && (current_color == 152 || current_color == 160 || current_color == 136 || current_color == 80))
+                else if (current_color >= 17 && current_color <= 24)
                 {
                     int mod_color = current_color;
-                    /*if (current_color == 80) //lights
+                    if (current_color == 21) //lights
                     {
-                        mod_color = 168 + frame * 8;
-                    }*/
+                        mod_color = 21 + frame % 4;
+                    }
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4820,7 +4838,7 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
@@ -4830,13 +4848,13 @@ namespace AssetsPV
                         }
                     }
                 }
-                else if (current_color == 31)
+                else if (current_color == 25)
                 {
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
 
                             if (shadowValues[p] == 0)
                             {
@@ -4853,7 +4871,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
 
                             if (argbValues[p] == 0)
                             {
@@ -4898,7 +4916,7 @@ namespace AssetsPV
 
             for (int i = 3; i < numBytes; i += 4)
             {
-                if (outlineValues[i] > 0 || (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha))
+                if (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha) //outlineValues[i] > 0 ||
                     argbValues[i] = 255;
             }
 
@@ -7651,7 +7669,7 @@ namespace AssetsPV
             }
 
             int extreme = 0;
-            switch (2) //r.Next(5)
+            switch (r.Next(5))
             {
                 case 0: extreme = 7;
                     break;
@@ -8026,7 +8044,7 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-            makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
+            //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
             //            processUnitOutlinedDouble("Block");
 
             VoxelLogic.InitializeXPalette();
@@ -8038,6 +8056,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord");*/
             processUnitOutlinedWDouble("Zombie");
             processUnitOutlinedWDouble("Skeleton");
+            processUnitOutlinedWDouble("Skeleton_Spear");
 
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
