@@ -862,9 +862,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //9 skin
             new float[] {0.45F,0.57F,0.35F,1F},
             //10 eyes shine
-            new float[] {1.4F,0.6F,0.4F,1F},
+            new float[] {0.5F,0F,-0.05F,1F},
             //11 eyes
-            new float[] {0.8F,0.15F,0.0F,1F},
+            new float[] {0.75F,0.15F,0.05F,1F},
             //12 metal contrast
             new float[] {0.4F,0.7F,0.4F,1F},
             //13 metal
