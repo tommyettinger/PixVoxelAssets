@@ -4673,7 +4673,7 @@ namespace AssetsPV
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)
              */
-            return 4 * (y * 2 + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+            return 4 * (y * 2 + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                  + innerX +
                 stride * (182 - 60 - 3 + x - z * 2 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
         }
@@ -4684,7 +4684,7 @@ namespace AssetsPV
                              + i +
                            bmpData.Stride * (180 * 2 - 60 * 2 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
              */
-            return 4 * (y * 2 + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+            return 4 * (y * 2 + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                  + innerX +
                 stride * (180 * 2 - 60 * 2 - 3 + x - z * 2 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
         }
@@ -5472,13 +5472,10 @@ namespace AssetsPV
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
-                else if (current_color >= 17 && current_color <= 24)
+                else if (current_color >= 17 && current_color <= 20)
                 {
                     int mod_color = current_color;
-                    if (current_color == 21) //lights
-                    {
-                        mod_color = 21 + frame % 4;
-                    }
+                    
                     for (int j = 0; j < 3; j++)
                     {
                         for (int i = 0; i < 8; i++)
@@ -5510,14 +5507,19 @@ namespace AssetsPV
                 }
                 else
                 {
+                    int mod_color = current_color;
+                    if (current_color >= 21 && current_color <= 24) //lights
+                    {
+                        mod_color = 21 + frame % 4;
+                    }
                     for (int j = 0; j < 3; j++)
                     {
                         for (int i = 0; i < 8; i++)
                         {
-                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
-                                argbValues[p] = wcurrent[current_color][i + j * 8];
+                                argbValues[p] = wcurrent[mod_color][i + j * 8];
                                 zbuffer[p] = vx.z;
                                 xbuffer[p] = vx.x;
                             }
@@ -7633,7 +7635,7 @@ namespace AssetsPV
                 parsed[i].x += 10;
                 parsed[i].y += 10;
             }
-            int framelimit = 1;
+            int framelimit = 4;
 
             for (int i = 0; i < VoxelLogic.wpalettecount; i++)
             {
@@ -7652,11 +7654,12 @@ namespace AssetsPV
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
-            for (int i = 0; i < VoxelLogic.wpalettecount ; i++)
-                s += "ortho/palette" + i + "/" + u + "_Large_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho/gifs/" + u + "_Large_animated.gif";
-            Process.Start(startInfo).WaitForExit();
-            
+            for (int i = 0; i < VoxelLogic.wpalettecount; i++)
+            {
+                s = "ortho/palette" + i + "/" + u + "_Large_face* ";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho/gifs/palette" + i + "_" + u + "_Large_animated.gif";
+                Process.Start(startInfo).WaitForExit();
+            }
             bin.Close();
 
             //            processExplosion(u);
@@ -8294,7 +8297,8 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Zombie");
             processUnitOutlinedWDouble("Skeleton");
             processUnitOutlinedWDouble("Skeleton_Spear");
-            
+            processUnitOutlinedWDouble("Spirit");
+
             /*
             processUnitOutlinedPartial("Copter");
             processUnitOutlinedPartial("Copter_P");
