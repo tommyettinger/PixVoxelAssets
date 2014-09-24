@@ -4824,7 +4824,7 @@ namespace AssetsPV
                 else if (current_color >= 17 && current_color <= 20)
                 {
                     int mod_color = current_color;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -5466,7 +5466,7 @@ namespace AssetsPV
             for (int v = 11; v < 21; v++)
             {
                 int current_color = v * 8;
-                
+
                 for (int y = 0; y < 4; y++)
                 {
                     for (int x = 0; x < 16; x++)
@@ -5480,7 +5480,7 @@ namespace AssetsPV
             {
                 for (int x = 0; x < 16; x++)
                 {
-                    argbValues[4 * (1 + 3 * 24) + x + bmpData.Stride * y] = (byte)((x%4 == 3) ? 255 : 0);
+                    argbValues[4 * (1 + 3 * 24) + x + bmpData.Stride * y] = (byte)((x % 4 == 3) ? 255 : 0);
                 }
             }
 
@@ -6982,6 +6982,50 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
+        public static void processUnitOutlinedWDouble(string u, int palette)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit);
+                    b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "palette" + palette + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+
+            //            processFiringDouble(u);
+
+            //            processExplosionDouble(u);
+
+        }
+
         /*
                     if (!VoxelLogic.UnitLookup.ContainsKey(u)) //used for the testing Block model
             {
@@ -8055,10 +8099,11 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");*/
-            processUnitOutlinedWDouble("Zombie");
-            processUnitOutlinedWDouble("Skeleton");
-            processUnitOutlinedWDouble("Skeleton_Spear");
-            processUnitOutlinedWDouble("Spirit");
+            processUnitOutlinedWDouble("Zombie", 2);
+            processUnitOutlinedWDouble("Skeleton", 6);
+            processUnitOutlinedWDouble("Skeleton_Spear", 6);
+            processUnitOutlinedWDouble("Spirit", 7);
+            processUnitOutlinedWDouble("Wraith", 8);
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
             //processUnitOutlinedPartial("Copter_S");

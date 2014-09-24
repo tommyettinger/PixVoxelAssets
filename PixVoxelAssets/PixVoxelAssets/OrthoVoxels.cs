@@ -5000,7 +5000,7 @@ namespace AssetsPV
                     if (current_color == 136 && r.Next(7) < 2)
                         continue;
                     int mod_color = current_color + faction;
-                    
+
                     for (int j = 0; j < 3; j++)
                     {
                         for (int i = 0; i < 8; i++)
@@ -5475,7 +5475,7 @@ namespace AssetsPV
                 else if (current_color >= 17 && current_color <= 20)
                 {
                     int mod_color = current_color;
-                    
+
                     for (int j = 0; j < 3; j++)
                     {
                         for (int i = 0; i < 8; i++)
@@ -7649,7 +7649,7 @@ namespace AssetsPV
                     }
                 }
             }
-            
+
             System.IO.Directory.CreateDirectory("ortho/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -7660,6 +7660,46 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho/gifs/palette" + i + "_" + u + "_Large_animated.gif";
                 Process.Start(startInfo).WaitForExit();
             }
+            bin.Close();
+
+            //            processExplosion(u);
+
+            //            processFiring(u);
+        }
+        private static void processUnitOutlinedWDouble(string u, int palette)
+        {
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+
+
+            string folder = ("ortho/palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit).Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("ortho/gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "ortho/palette" + palette + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " ortho/gifs/palette" + palette + "_" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
             bin.Close();
 
             //            processExplosion(u);
@@ -8289,16 +8329,17 @@ namespace AssetsPV
 
             InitializeXPalette();
             InitializeWPalette();
-            
-/*            processUnitOutlinedWDouble("Person");
-            processUnitOutlinedWDouble("Shinobi");
-            processUnitOutlinedWDouble("Shinobi_Unarmed");
-            processUnitOutlinedWDouble("Lord");*/
-            processUnitOutlinedWDouble("Zombie");
-            processUnitOutlinedWDouble("Skeleton");
-            processUnitOutlinedWDouble("Skeleton_Spear");
-            processUnitOutlinedWDouble("Spirit");
 
+            /*            processUnitOutlinedWDouble("Person");
+                        processUnitOutlinedWDouble("Shinobi");
+                        processUnitOutlinedWDouble("Shinobi_Unarmed");
+                        processUnitOutlinedWDouble("Lord");*/
+
+            processUnitOutlinedWDouble("Zombie", 2);
+            processUnitOutlinedWDouble("Skeleton", 6);
+            processUnitOutlinedWDouble("Skeleton_Spear", 6);
+            processUnitOutlinedWDouble("Spirit", 7);
+            processUnitOutlinedWDouble("Wraith", 8);
             /*
             processUnitOutlinedPartial("Copter");
             processUnitOutlinedPartial("Copter_P");
