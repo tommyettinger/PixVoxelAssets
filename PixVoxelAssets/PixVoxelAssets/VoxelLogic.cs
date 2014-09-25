@@ -898,6 +898,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             },
+
             new float[][] {//7 spirit
             //0 white cloth
             new float[] {0.85F,0.8F,0.9F,1F},
@@ -956,7 +957,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             },
-            new float[][] {//7 spirit
+
+            new float[][] {//8 wraith
             //0 white cloth
             new float[] {0.85F,0.8F,0.9F,1F},
             //1 shoes, boots, black socks
@@ -987,7 +989,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.65F,0.7F,1F},
             //14 flowing rags contrast
             new float[] {0.15F,0.15F,0.15F,waver_alpha},
-            //5 flowing rags
+            //15 flowing rags
             new float[] {0.3F,0.3F,0.3F,waver_alpha},
             //16 inner shadow
             new float[] {0.13F,0.10F,0.04F,1F},
@@ -1014,8 +1016,68 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             },
+            
+            new float[][] { //9 cinder
+            //0 shoes, boots, brown leather contrast
+            new float[] {0.3F,0.1F,0.0F,1F},
+            //1 shoes, boots, brown leather
+            new float[] {0.4F,0.18F,0.0F,1F},
+            //2 pants, jeans contrast
+            new float[] {0.0F,-0.15F,-0.15F,1F},
+            //3 pants, jeans
+            new float[] {0.15F,-0.05F,-0.1F,1F},
+            //4 shirt contrast
+            new float[] {0.15F,0.0F,-0.1F,1F},
+            //5 shirt
+            new float[] {0.25F,0.05F,-0.05F,1F},
+            //6 hair contrast
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.3F,-0.05F,-0.1F,1F},
+            //9 skin
+            new float[] {0.6F,0.15F,0.0F,1F},
+            //10 eyes shine
+            new float[] {1.3F,0.9F,0.4F,1F},
+            //11 eyes
+            new float[] {1.15F,1.1F,0.25F,1F},
+            //12 metal contrast
+            new float[] {0.75F,0.45F,-0.1F,1F},
+            //13 metal
+            new float[] {0.75F,0.45F,-0.1F,1F},
+            //14 flowing clothes contrast
+            new float[] {0.2F,0.0F,-0.05F,waver_alpha},
+            //15 flowing clothes
+            new float[] {0.3F,0.05F,0.0F,waver_alpha},
+            //16 inner shadow
+            new float[] {0.13F,0.10F,0.04F,1F},
+            //17 smoke
+            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            //21 glow frame 0
+            new float[] {0.95F,0.9F,0.45F,1F},
+            //22 glow frame 1
+            new float[] {1.15F,1.1F,0.65F,1F},
+            //23 glow frame 2
+            new float[] {0.95F,0.9F,0.45F,1F},
+            //24 glow frame 3
+            new float[] {0.75F,0.7F,0.25F,1F},
+            //25 shadow
+            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            //26 mud
+            new float[] {0.2F,0.4F,0.3F,1F},
+            //27 water
+            new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            },
+
         };
-        public const int wcolorcount = 28, wpalettecount = 9;
+        public const int wcolorcount = 28, wpalettecount = 10;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;
@@ -1244,7 +1306,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        colorMatrix,
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
-                    g.DrawImage((current_color >= 21 && current_color <= 24) ? spin :
+                    g.DrawImage((current_color >= 18 && current_color <= 24) ? spin :
                        (VoxelLogic.wpalettes[p][current_color][3] == 1F || VoxelLogic.wpalettes[p][current_color][3] == waver_alpha) ? image :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha) ? flat : spin,
                        new Rectangle(0, 0,
