@@ -8120,6 +8120,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Spirit", 7);
             processUnitOutlinedWDouble("Wraith", 8);
             processUnitOutlinedWDouble("Cinder", 9);
+            processUnitOutlinedWDouble("Spectral_Knight", 7);
 
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
@@ -8130,6 +8131,8 @@ namespace AssetsPV
             OrthoVoxels.processUnitOutlinedWDouble("Spirit", 7);
             OrthoVoxels.processUnitOutlinedWDouble("Wraith", 8);
             OrthoVoxels.processUnitOutlinedWDouble("Cinder", 9);
+            OrthoVoxels.processUnitOutlinedWDouble("Spectral_Knight", 7);
+
             //processUnitOutlinedPartial("Copter");
             //processUnitOutlinedPartial("Copter_P");
             //processUnitOutlinedPartial("Copter_S");

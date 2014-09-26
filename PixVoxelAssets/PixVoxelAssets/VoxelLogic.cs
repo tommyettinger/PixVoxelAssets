@@ -913,7 +913,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //5 shirt
             new float[] {1.1F,1.1F,1.1F,1F},
             //6 hair contrast
-            new float[] {0.7F,0.8F,0.9F,1F},
+            new float[] {0.65F,0.55F,0.35F,1F},
             //7 hair
             new float[] {0.6F,0.6F,0.6F,1F},
             //8 skin contrast
@@ -925,9 +925,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //11 eyes
             new float[] {0.5F,0.7F,1.0F,1F},
             //12 metal contrast
-            new float[] {0.5F,0.8F,0.85F,1F},
+            new float[] {1.0F,0.9F,0.5F,1F},
             //13 metal
-            new float[] {0.4F,0.65F,0.7F,1F},
+            new float[] {0.7F,0.8F,0.85F,1F},
             //14 flowing rags contrast
             new float[] {0.9F,0.9F,0.9F,waver_alpha},
             //15 flowing rags
@@ -1018,10 +1018,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             },
             
             new float[][] { //9 cinder
-            //0 shoes, boots, brown leather contrast
-            new float[] {0.3F,0.1F,0.0F,1F},
-            //1 shoes, boots, brown leather
-            new float[] {0.4F,0.18F,0.0F,1F},
+            //0 bone highlight
+            new float[] {0.1F,0.05F,0.05F,1F},
+            //1 bones
+            new float[] {0.5F,0.5F,0.35F,1F},
             //2 pants, jeans contrast
             new float[] {0.0F,-0.15F,-0.15F,1F},
             //3 pants, jeans
@@ -1035,13 +1035,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //7 hair
             new float[] {0.15F,0.05F,-0.05F,1F},
             //8 skin contrast
-            new float[] {0.3F,-0.05F,-0.1F,1F},
+            new float[] {0.2F,-0.05F,-0.1F,1F},
             //9 skin
             new float[] {0.6F,0.15F,0.0F,1F},
             //10 eyes shine
-            new float[] {1.3F,0.9F,0.4F,1F},
+            new float[] {0.4F,0.85F,1.2F,1F},
             //11 eyes
-            new float[] {1.15F,1.1F,0.25F,1F},
+            new float[] {0.25F,0.7F,1.05F,1F},
             //12 metal contrast
             new float[] {0.75F,0.45F,-0.1F,1F},
             //13 metal
