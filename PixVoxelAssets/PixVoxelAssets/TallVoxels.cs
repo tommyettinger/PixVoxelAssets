@@ -4890,8 +4890,8 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 zbuffer[p] = vx.z + vx.x - vx.y;
+                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color + Math.Abs((frame + zbuffer[p] + vx.x) % 5) : mod_color)][i + j * 16];
                             }
                         }
                     }
@@ -4944,6 +4944,229 @@ namespace AssetsPV
                     argbValues[i - 1] = bareValues[i - 1];
                     argbValues[i - 0] = bareValues[i - 0];
                 }*/
+                if (argbValues[i] == 0 && shadowValues[i] > 0)
+                {
+                    argbValues[i - 3] = shadowValues[i - 3];
+                    argbValues[i - 2] = shadowValues[i - 2];
+                    argbValues[i - 1] = shadowValues[i - 1];
+                    argbValues[i - 0] = shadowValues[i - 0];
+                }
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+        private static Bitmap renderWSmartHuge(MagicaVoxelData[] voxels, int facing, int palette, int frame, int maxFrames, bool still)
+        {
+            Bitmap bmp = new Bitmap(248*2, 308*2, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] shadowValues = new byte[numBytes];
+            shadowValues.Fill<byte>(0);
+            byte[] outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+            byte[] bareValues = new byte[numBytes];
+            bareValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill<bool>(false);
+            int xSize = 120, ySize = 120;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch (facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            int[] zbuffer = new int[numBytes];
+            zbuffer.Fill<int>(-999);
+
+            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
+            if (still) jitter = 0;
+            foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 128 - v.y + v.z * 128 * 128 - (((253 - v.color) / 4 == 25) ? 128 * 128 * 128 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
+            {
+                int current_color = (253 - vx.color) / 4;
+                int p = 0;
+                if (current_color >= VoxelLogic.wcolorcount)
+                    continue;
+                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
+                    continue;
+                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
+                    continue;
+                else if (current_color >= 17 && current_color <= 20)
+                {
+                    int mod_color = current_color;
+                    if (mod_color == 17 && r.Next(7) < 2) //smoke
+                        continue;
+                    if (current_color == 18) //yellow fire
+                    {
+                        if (r.Next(3) > 0)
+                        {
+                            mod_color += r.Next(3);
+                        }
+                    }
+                    else if (current_color == 19) // orange fire
+                    {
+                        if (r.Next(5) < 4)
+                        {
+                            mod_color -= r.Next(3);
+                        }
+                    }
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            /*
+                             &&
+                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                                + i +
+                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
+                             */
+                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
+                                //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
+                                barePositions[p] = true;
+                            }
+                        }
+                    }
+                }
+                else if (current_color == 25)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+
+                            if (shadowValues[p] == 0)
+                            {
+                                shadowValues[p] = VoxelLogic.wcurrent[current_color][i + j * 16];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    int mod_color = current_color;
+                    if (current_color >= 21 && current_color <= 24) //lights
+                    {
+                        mod_color = 21 + frame % 4;
+                    }
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+
+                            if (argbValues[p] == 0)
+                            {
+                                zbuffer[p] = vx.z + vx.x - vx.y;
+                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color + Math.Abs((frame + zbuffer[p] + vx.x) % 5) : mod_color)][i + j * 16];
+
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 255 * VoxelLogic.waver_alpha && barePositions[i] == false)
+                {
+                    if (barePositions[i + 4] == false && zbuffer[i] - 2 > zbuffer[i + 4]) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = 0; argbValues[i + 4 - 2] = 0; argbValues[i + 4 - 3] = 0; }
+                    if (barePositions[i - 4] == false && zbuffer[i] - 2 > zbuffer[i - 4]) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = 0; argbValues[i - 4 - 2] = 0; argbValues[i - 4 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride]) { argbValues[i + bmpData.Stride] = 255; argbValues[i + bmpData.Stride - 1] = 0; argbValues[i + bmpData.Stride - 2] = 0; argbValues[i + bmpData.Stride - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride]) { argbValues[i - bmpData.Stride] = 255; argbValues[i - bmpData.Stride - 1] = 0; argbValues[i - bmpData.Stride - 2] = 0; argbValues[i - bmpData.Stride - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride + 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4]) { argbValues[i + bmpData.Stride + 4] = 255; argbValues[i + bmpData.Stride + 4 - 1] = 0; argbValues[i + bmpData.Stride + 4 - 2] = 0; argbValues[i + bmpData.Stride + 4 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride - 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 4]) { argbValues[i - bmpData.Stride - 4] = 255; argbValues[i - bmpData.Stride - 4 - 1] = 0; argbValues[i - bmpData.Stride - 4 - 2] = 0; argbValues[i - bmpData.Stride - 4 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride - 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = 0; argbValues[i + bmpData.Stride - 4 - 2] = 0; argbValues[i + bmpData.Stride - 4 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride + 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = 0; argbValues[i - bmpData.Stride + 4 - 2] = 0; argbValues[i - bmpData.Stride + 4 - 3] = 0; }
+
+                    if (barePositions[i + 8] == false && zbuffer[i] - 2 > zbuffer[i + 8]) { argbValues[i + 8] = 255; argbValues[i + 8 - 1] = 0; argbValues[i + 8 - 2] = 0; argbValues[i + 8 - 3] = 0; }
+                    if (barePositions[i - 8] == false && zbuffer[i] - 2 > zbuffer[i - 8]) { argbValues[i - 8] = 255; argbValues[i - 8 - 1] = 0; argbValues[i - 8 - 2] = 0; argbValues[i - 8 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride * 2] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2]) { argbValues[i + bmpData.Stride * 2] = 255; argbValues[i + bmpData.Stride * 2 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride * 2] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2]) { argbValues[i - bmpData.Stride * 2] = 255; argbValues[i - bmpData.Stride * 2 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride + 8] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 8]) { argbValues[i + bmpData.Stride + 8] = 255; argbValues[i + bmpData.Stride + 8 - 1] = 0; argbValues[i + bmpData.Stride + 8 - 2] = 0; argbValues[i + bmpData.Stride + 8 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride + 8] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 8]) { argbValues[i - bmpData.Stride + 8] = 255; argbValues[i - bmpData.Stride + 8 - 1] = 0; argbValues[i - bmpData.Stride + 8 - 2] = 0; argbValues[i - bmpData.Stride + 8 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride - 8] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 8]) { argbValues[i + bmpData.Stride - 8] = 255; argbValues[i + bmpData.Stride - 8 - 1] = 0; argbValues[i + bmpData.Stride - 8 - 2] = 0; argbValues[i + bmpData.Stride - 8 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride - 8] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 8]) { argbValues[i - bmpData.Stride - 8] = 255; argbValues[i - bmpData.Stride - 8 - 1] = 0; argbValues[i - bmpData.Stride - 8 - 2] = 0; argbValues[i - bmpData.Stride - 8 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride * 2 + 8] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 + 8]) { argbValues[i + bmpData.Stride * 2 + 8] = 255; argbValues[i + bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i + bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i + bmpData.Stride * 2 + 8 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride * 2 + 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 + 4]) { argbValues[i + bmpData.Stride * 2 + 4] = 255; argbValues[i + bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i + bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i + bmpData.Stride * 2 + 4 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride * 2 - 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 - 4]) { argbValues[i + bmpData.Stride * 2 - 4] = 255; argbValues[i + bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 4 - 3] = 0; }
+                    if (barePositions[i + bmpData.Stride * 2 - 8] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride * 2 - 8]) { argbValues[i + bmpData.Stride * 2 - 8] = 255; argbValues[i + bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i + bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i + bmpData.Stride * 2 - 8 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride * 2 + 8] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 8]) { argbValues[i - bmpData.Stride * 2 + 8] = 255; argbValues[i - bmpData.Stride * 2 + 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 8 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride * 2 + 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 + 4]) { argbValues[i - bmpData.Stride * 2 + 4] = 255; argbValues[i - bmpData.Stride * 2 + 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 + 4 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride * 2 - 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 4]) { argbValues[i - bmpData.Stride * 2 - 4] = 255; argbValues[i - bmpData.Stride * 2 - 4 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 4 - 3] = 0; }
+                    if (barePositions[i - bmpData.Stride * 2 - 8] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride * 2 - 8]) { argbValues[i - bmpData.Stride * 2 - 8] = 255; argbValues[i - bmpData.Stride * 2 - 8 - 1] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 2] = 0; argbValues[i - bmpData.Stride * 2 - 8 - 3] = 0; }
+                }
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 0 && argbValues[i] <= 255 * VoxelLogic.flat_alpha) //outlineValues[i] > 0 ||
+                    argbValues[i] = 255;
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                /*                if (argbValues[i] == 0 && bareValues[i] > 0)
+                                {
+                                    argbValues[i - 3] = bareValues[i - 3];
+                                    argbValues[i - 2] = bareValues[i - 2];
+                                    argbValues[i - 1] = bareValues[i - 1];
+                                    argbValues[i - 0] = bareValues[i - 0];
+                                }*/
                 if (argbValues[i] == 0 && shadowValues[i] > 0)
                 {
                     argbValues[i - 3] = shadowValues[i - 3];
@@ -5559,6 +5782,22 @@ namespace AssetsPV
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
+            g2.Dispose();
+            return b2;
+        }
+        private static Bitmap processSingleOutlinedWQuad(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames)
+        {
+            Graphics g;
+            Bitmap b;
+            Bitmap b2 = new Bitmap(168, 208, PixelFormat.Format32bppArgb);
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, false);
+            g = Graphics.FromImage(b);
+            Graphics g2 = Graphics.FromImage(b2);
+            g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), -40, -80, 248, 308);
             g2.Dispose();
             return b2;
         }
@@ -7040,6 +7279,49 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
+        public static void processUnitOutlinedWQuad(string u, int palette)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 20;
+                parsed[i].y += 20;
+            }
+            int framelimit = 4;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWQuad(parsed, palette, dir, f, framelimit);
+                    b.Save(folder + "/" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "palette" + palette + "/" + u + "_Huge_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Huge_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+
+            //            processFiringDouble(u);
+
+            //            processExplosionDouble(u);
+
+        }
 
         /*
                     if (!VoxelLogic.UnitLookup.ContainsKey(u)) //used for the testing Block model
@@ -8114,6 +8396,8 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");*/
+            processUnitOutlinedWQuad("Nodebpe", 10);
+
             processUnitOutlinedWDouble("Zombie", 2);
             processUnitOutlinedWDouble("Skeleton", 6);
             processUnitOutlinedWDouble("Skeleton_Spear", 6);
@@ -8125,6 +8409,8 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
             OrthoVoxels.InitializeWPalette();
+            OrthoVoxels.processUnitOutlinedWQuad("Nodebpe", 10);
+
             OrthoVoxels.processUnitOutlinedWDouble("Zombie", 2);
             OrthoVoxels.processUnitOutlinedWDouble("Skeleton", 6);
             OrthoVoxels.processUnitOutlinedWDouble("Skeleton_Spear", 6);

@@ -139,8 +139,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         private static Random r = new Random();
         public static float flat_alpha = 0.77F;
         public static float waver_alpha = 0.83F;
-        public static float spin_alpha_0 = 0.88F;
-        public static float spin_alpha_1 = 0.99F;
+        public static float spin_alpha_0 = 0.85F;
+        public static float spin_alpha_1 = 0.87F;
+        public static float fuzz_alpha = 0.91F;
         public static float[][] xcolors = new float[][]
         {
             //0 tires, tread
@@ -482,6 +483,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
         };
 
         public static float[][][] wpalettes = new float[][][]
@@ -543,6 +556,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] { //1 blonde hair
@@ -602,6 +627,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] { //2 zombie
@@ -661,6 +698,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] {//3 ninja
@@ -720,6 +769,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] {//4 shogun
@@ -779,6 +840,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] {//5 samurai
@@ -838,6 +911,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
             
             new float[][] {//6 skeleton
@@ -897,6 +982,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] {//7 spirit
@@ -956,6 +1053,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
             new float[][] {//8 wraith
@@ -1015,6 +1124,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
             
             new float[][] { //9 cinder
@@ -1074,10 +1195,92 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.2F,0.4F,0.3F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            //29 fuzz deep
+            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
+            },
+            new float[][] { //10 nodebpe
+            //0 bone highlight
+            new float[] {0.5F,0.45F,0.35F,1F},
+            //1 bones
+            new float[] {0.85F,0.85F,0.7F,1F},
+            //2 legs contrast
+            new float[] {0.65F,0.35F,-0.05F,1F},
+            //3 legs
+            new float[] {0.85F,0.65F,0.05F,1F},
+            //4 fur contrast
+            new float[] {0.6F,0.35F,0.15F,1F},
+            //5 fur
+            new float[] {0.83F,0.3F,0.05F,1F},
+            //6 hair contrast
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.6F,0.1F,0.15F,1F},
+            //9 skin
+            new float[] {1.1F,0.75F,0.3F,1F},
+            //10 eyes shine
+            new float[] {0.9F,1.2F,0.9F,1F},
+            //11 eyes
+            new float[] {0.3F,0.75F,0.25F,1F},
+            //12 metal contrast
+            new float[] {0.75F,0.45F,-0.1F,1F},
+            //13 metal
+            new float[] {0.75F,0.45F,-0.1F,1F},
+            //14 flowing clothes contrast
+            new float[] {0.2F,0.0F,-0.05F,waver_alpha},
+            //15 flowing clothes
+            new float[] {0.3F,0.05F,0.0F,waver_alpha},
+            //16 inner shadow
+            new float[] {0.13F,0.10F,0.04F,1F},
+            //17 smoke
+            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            //21 glow frame 0
+            new float[] {0.95F,0.9F,0.45F,1F},
+            //22 glow frame 1
+            new float[] {1.15F,1.1F,0.65F,1F},
+            //23 glow frame 2
+            new float[] {0.95F,0.9F,0.45F,1F},
+            //24 glow frame 3
+            new float[] {0.75F,0.7F,0.25F,1F},
+            //25 shadow
+            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            //26 mud
+            new float[] {0.2F,0.4F,0.3F,1F},
+            //27 water
+            new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.74F,0.18F,-0.05F,fuzz_alpha},
+            //29 fuzz lowlight
+            new float[] {0.5F,0.1F,-0.05F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.24F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.27F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.88F,0.3F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
 
         };
-        public const int wcolorcount = 28, wpalettecount = 10;
+        public const int wcolorcount = 34, wpalettecount = 11;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;
