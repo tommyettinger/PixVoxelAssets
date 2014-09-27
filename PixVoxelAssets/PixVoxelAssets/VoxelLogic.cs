@@ -1218,9 +1218,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //3 legs
             new float[] {0.85F,0.65F,0.05F,1F},
             //4 fur contrast
-            new float[] {0.6F,0.35F,0.15F,1F},
+            new float[] {0.5F,0.15F,-0.09F,1F},
             //5 fur
-            new float[] {0.83F,0.3F,0.05F,1F},
+            new float[] {0.6F,0.2F,-0.05F,1F},
             //6 hair contrast
             new float[] {0.15F,0.05F,-0.05F,1F},
             //7 hair
@@ -1266,15 +1266,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.74F,0.18F,-0.05F,fuzz_alpha},
+            new float[] {0.64F,0.14F,-0.05F,fuzz_alpha},
             //29 fuzz lowlight
-            new float[] {0.5F,0.1F,-0.05F,fuzz_alpha},
+            new float[] {0.4F,0.0F,-0.09F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.79F,0.24F,0.0F,fuzz_alpha},
+            new float[] {0.69F,0.2F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.83F,0.27F,0.05F,fuzz_alpha},
+            new float[] {0.73F,0.23F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.88F,0.3F,0.1F,fuzz_alpha},
+            new float[] {0.8F,0.3F,0.1F,fuzz_alpha},
             //33 fuzz lightest
             new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             },
