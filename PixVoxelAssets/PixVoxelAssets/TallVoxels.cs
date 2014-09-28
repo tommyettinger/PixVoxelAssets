@@ -4891,7 +4891,8 @@ namespace AssetsPV
                             if (argbValues[p] == 0)
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color + Math.Abs((frame + zbuffer[p] + vx.x) % 5) : mod_color)][i + j * 16];
+                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                    Math.Abs((frame + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                             }
                         }
                     }
@@ -5113,7 +5114,8 @@ namespace AssetsPV
                             if (argbValues[p] == 0)
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color + Math.Abs((frame + zbuffer[p] + vx.x) % 5) : mod_color)][i + j * 16];
+                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                    Math.Abs((frame + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
 
                             }
                         }
@@ -7322,6 +7324,72 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
+        public static void processUnitOutlinedWalkQuad(string u, int palette)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Walk_0_Huge_W.vox", FileMode.Open));
+            MagicaVoxelData[][] parsed = new MagicaVoxelData[4][];
+            parsed[0] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            bin = new BinaryReader(File.Open(u + "_Walk_1_Huge_W.vox", FileMode.Open));
+            parsed[1] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            bin = new BinaryReader(File.Open(u + "_Walk_2_Huge_W.vox", FileMode.Open));
+            parsed[2] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            bin = new BinaryReader(File.Open(u + "_Walk_3_Huge_W.vox", FileMode.Open));
+            parsed[3] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                for (int j = 0; j < parsed[i].Length; j++)
+                {
+                    parsed[i][j].x += 20;
+                    parsed[i][j].y += 20;
+
+                }
+            }
+            int framelimit = 8;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWQuad(parsed[f % 4], palette, dir, f, framelimit);
+                    b.Save(folder + "/" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+            for (int dir = 0; dir < 4; dir++ )
+            {
+                for (int i = 0; i < framelimit; i++)
+                {
+                    s += "palette" + palette + "/" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
+                }
+            }
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Walk_Huge_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+
+            //            processFiringDouble(u);
+
+            //            processExplosionDouble(u);
+
+        }
 
         /*
                     if (!VoxelLogic.UnitLookup.ContainsKey(u)) //used for the testing Block model
@@ -8397,6 +8465,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");*/
             processUnitOutlinedWQuad("Nodebpe", 10);
+            processUnitOutlinedWalkQuad("Nodebpe", 10);
 
             processUnitOutlinedWDouble("Zombie", 2);
             processUnitOutlinedWDouble("Skeleton", 6);

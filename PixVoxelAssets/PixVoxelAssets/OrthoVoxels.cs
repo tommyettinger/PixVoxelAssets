@@ -5535,8 +5535,8 @@ namespace AssetsPV
                             {
                                 zbuffer[p] = vx.z;
                                 xbuffer[p] = vx.x;
-                                argbValues[p] = wcurrent[((current_color == 28 || current_color == 29) ? mod_color + Math.Abs((frame + vx.x + vx.x + vx.y + vx.z) % 5) : mod_color)][i + j * 8];
-
+                                argbValues[p] = wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                    Math.Abs((frame + vx.x + vx.x + vx.y + vx.z) % (((frame + vx.x * 4 + vx.y * 3 + vx.z * 2) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 8];
                             }
                         }
                     }
@@ -5761,7 +5761,8 @@ namespace AssetsPV
                             {
                                 zbuffer[p] = vx.z;
                                 xbuffer[p] = vx.x;
-                                argbValues[p] = wcurrent[((current_color == 28 || current_color == 29) ? mod_color + Math.Abs((frame + vx.x + vx.x + vx.y + vx.z) % 5) : mod_color)][i + j * 8];
+                                argbValues[p] = wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                    Math.Abs((frame + vx.x + vx.x + vx.y + vx.z) % (((frame + vx.x * 4 + vx.y * 3 + vx.z * 2) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 8];
                             }
                         }
                     }
