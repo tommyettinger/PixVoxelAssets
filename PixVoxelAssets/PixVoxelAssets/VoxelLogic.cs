@@ -1289,7 +1289,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //3 hat
             new float[] {0.25F,0.05F,0.45F,1F},
             //4 robes contrast
-            new float[] {0.35F,0.1F,0.3F,1F},
+            new float[] {0.4F,0.1F,0.3F,1F},
             //5 robes
             new float[] {0.3F,0.15F,0.5F,1F},
             //6 hair contrast
@@ -1301,15 +1301,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //9 skin
             new float[] {1.1F,0.75F,0.3F,1F},
             //10 eyes shine
-            new float[] {0.55F,0.35F,0.75F,1F},
-            //11 eyes
             new float[] {1.05F,0.8F,1.2F,1F},
+            //11 eyes
+            new float[] {0.1F,-0.05F,0.25F,1F},
             //12 metal contrast
             new float[] {0.5F,0.85F,0.95F,1F},
             //13 metal
             new float[] {0.75F,0.95F,1.15F,1F},
             //14 flowing clothes contrast
-            new float[] {0.35F,0.1F,0.3F,waver_alpha},
+            new float[] {0.4F,0.1F,0.3F,waver_alpha},
             //15 flowing clothes
             new float[] {0.3F,0.15F,0.5F,waver_alpha},
             //16 inner shadow

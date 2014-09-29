@@ -8480,7 +8480,7 @@ namespace AssetsPV
             OrthoVoxels.InitializeXPalette();
             OrthoVoxels.InitializeWPalette();
             OrthoVoxels.processUnitOutlinedWQuad("Nodebpe", 10);
-
+            OrthoVoxels.processUnitOutlinedWDouble("Tassar", 11);
             OrthoVoxels.processUnitOutlinedWDouble("Zombie", 2);
             OrthoVoxels.processUnitOutlinedWDouble("Skeleton", 6);
             OrthoVoxels.processUnitOutlinedWDouble("Skeleton_Spear", 6);
