@@ -8466,6 +8466,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord");*/
             processUnitOutlinedWQuad("Nodebpe", 10);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
+            processUnitOutlinedWDouble("Tassar", 11);
 
             processUnitOutlinedWDouble("Zombie", 2);
             processUnitOutlinedWDouble("Skeleton", 6);
