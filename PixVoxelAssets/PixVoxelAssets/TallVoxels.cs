@@ -4234,7 +4234,7 @@ namespace AssetsPV
                                     + innerX +
                                     stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
         }
-        private static int voxelToPixelLargeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        private static int voxelToPixelLargeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
         {
             /*
              4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
@@ -4243,9 +4243,10 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 4 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
+                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : (still) ? 0 : jitter) + innerY);
+            //((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter)
         }
-        private static int voxelToPixelHugeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        private static int voxelToPixelHugeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
         {
             /*
 4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
@@ -4254,7 +4255,7 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
-                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : 0) + innerY);
+                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
@@ -4739,7 +4740,7 @@ namespace AssetsPV
 
             return bmp;
         }
-        private static Bitmap renderWSmart(MagicaVoxelData[] voxels, int facing, int palette, int frame)
+        private static Bitmap renderWSmart(MagicaVoxelData[] voxels, int facing, int palette, int frame, int maxFrames, bool still)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
@@ -4811,6 +4812,8 @@ namespace AssetsPV
             zbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            if (maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
+
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - (((253 - v.color) / 4 == 25) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = (253 - vx.color) / 4;
@@ -4850,7 +4853,7 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
-                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
@@ -4866,7 +4869,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter, still);
 
                             if (shadowValues[p] == 0)
                             {
@@ -4886,7 +4889,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
 
                             if (argbValues[p] == 0)
                             {
@@ -5073,7 +5076,7 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
-                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
@@ -5089,7 +5092,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter, still);
 
                             if (shadowValues[p] == 0)
                             {
@@ -5109,7 +5112,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
 
                             if (argbValues[p] == 0)
                             {
@@ -5771,7 +5774,7 @@ namespace AssetsPV
             return b[1];
         }
 
-        private static Bitmap processSingleOutlinedWDouble(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames)
+        private static Bitmap processSingleOutlinedWDouble(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
             Graphics g;
             Bitmap b;
@@ -5779,7 +5782,7 @@ namespace AssetsPV
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
-            b = renderWSmart(parsed, dir, palette, frame);
+            b = renderWSmart(parsed, dir, palette, frame, maxFrames, still);
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -5787,7 +5790,7 @@ namespace AssetsPV
             g2.Dispose();
             return b2;
         }
-        private static Bitmap processSingleOutlinedWQuad(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames)
+        private static Bitmap processSingleOutlinedWQuad(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
             Graphics g;
             Bitmap b;
@@ -5795,7 +5798,7 @@ namespace AssetsPV
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
-            b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, false);
+            b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still);
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -7214,7 +7217,7 @@ namespace AssetsPV
                 { //"color" + i + "/"
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processSingleOutlinedWDouble(parsed, i, dir, f, framelimit);
+                        Bitmap b = processSingleOutlinedWDouble(parsed, i, dir, f, framelimit, false);
                         b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -7258,7 +7261,7 @@ namespace AssetsPV
             { //"color" + i + "/"
                 for (int dir = 0; dir < 4; dir++)
                 {
-                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit);
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, false);
                     b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
@@ -7281,7 +7284,50 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
-        public static void processUnitOutlinedWQuad(string u, int palette)
+        public static void processUnitOutlinedWDouble(string u, int palette, bool still)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
+                    b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "palette" + palette + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+
+            //            processFiringDouble(u);
+
+            //            processExplosionDouble(u);
+
+        }
+        public static void processUnitOutlinedWQuad(string u, int palette, bool still)
         {
 
             Console.WriteLine("Processing: " + u);
@@ -7301,7 +7347,7 @@ namespace AssetsPV
             { //"color" + i + "/"
                 for (int dir = 0; dir < 4; dir++)
                 {
-                    Bitmap b = processSingleOutlinedWQuad(parsed, palette, dir, f, framelimit);
+                    Bitmap b = processSingleOutlinedWQuad(parsed, palette, dir, f, framelimit, still);
                     b.Save(folder + "/" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
@@ -7318,6 +7364,72 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();
 
             bin.Close();
+
+            //            processFiringDouble(u);
+
+            //            processExplosionDouble(u);
+
+        }
+        public static void processUnitOutlinedWalkDouble(string u, int palette)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Walk_0_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[][] parsed = new MagicaVoxelData[4][];
+            parsed[0] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            bin = new BinaryReader(File.Open(u + "_Walk_1_Large_W.vox", FileMode.Open));
+            parsed[1] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            bin = new BinaryReader(File.Open(u + "_Walk_2_Large_W.vox", FileMode.Open));
+            parsed[2] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            bin = new BinaryReader(File.Open(u + "_Walk_3_Large_W.vox", FileMode.Open));
+            parsed[3] = VoxelLogic.FromMagica(bin);
+            bin.Close();
+
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                for (int j = 0; j < parsed[i].Length; j++)
+                {
+                    parsed[i][j].x += 10;
+                    parsed[i][j].y += 10;
+
+                }
+            }
+            int framelimit = 8;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed[f % 4], palette, dir, f, framelimit, true);
+                    b.Save(folder + "/" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+            for (int dir = 0; dir < 4; dir++)
+            {
+                for (int i = 0; i < framelimit; i++)
+                {
+                    s += "palette" + palette + "/" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
+                }
+            }
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Walk_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
 
             //            processFiringDouble(u);
 
@@ -7363,7 +7475,7 @@ namespace AssetsPV
             { //"color" + i + "/"
                 for (int dir = 0; dir < 4; dir++)
                 {
-                    Bitmap b = processSingleOutlinedWQuad(parsed[f % 4], palette, dir, f, framelimit);
+                    Bitmap b = processSingleOutlinedWQuad(parsed[f % 4], palette, dir, f, framelimit, true);
                     b.Save(folder + "/" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
@@ -7374,7 +7486,7 @@ namespace AssetsPV
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
-            for (int dir = 0; dir < 4; dir++ )
+            for (int dir = 0; dir < 4; dir++)
             {
                 for (int i = 0; i < framelimit; i++)
                 {
@@ -8464,17 +8576,19 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");*/
-            processUnitOutlinedWQuad("Nodebpe", 10);
+            /*
+            processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
-            processUnitOutlinedWDouble("Tassar", 11);
+            processUnitOutlinedWDouble("Tassar", 11, false);
+            processUnitOutlinedWalkDouble("Tassar", 11);
 
-            processUnitOutlinedWDouble("Zombie", 2);
-            processUnitOutlinedWDouble("Skeleton", 6);
-            processUnitOutlinedWDouble("Skeleton_Spear", 6);
-            processUnitOutlinedWDouble("Spirit", 7);
-            processUnitOutlinedWDouble("Wraith", 8);
-            processUnitOutlinedWDouble("Cinder", 9);
-            processUnitOutlinedWDouble("Spectral_Knight", 7);
+            processUnitOutlinedWDouble("Zombie", 2, true);
+            processUnitOutlinedWDouble("Skeleton", 6, true);
+            processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
+            processUnitOutlinedWDouble("Spirit", 7, false);
+            processUnitOutlinedWDouble("Wraith", 8, false);
+            processUnitOutlinedWDouble("Cinder", 9, true);
+            processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
@@ -8488,11 +8602,11 @@ namespace AssetsPV
             OrthoVoxels.processUnitOutlinedWDouble("Wraith", 8);
             OrthoVoxels.processUnitOutlinedWDouble("Cinder", 9);
             OrthoVoxels.processUnitOutlinedWDouble("Spectral_Knight", 7);
-
-            //processUnitOutlinedPartial("Copter");
-            //processUnitOutlinedPartial("Copter_P");
-            //processUnitOutlinedPartial("Copter_S");
-            //processUnitOutlinedPartial("Copter_T");
+            */
+            processUnitOutlinedPartial("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
             //processUnitOutlinedPartial("Infantry");
             //processUnitOutlinedPartial("Infantry_P");
             //processUnitOutlinedPartial("Infantry_S");
@@ -8509,8 +8623,10 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Supply_P");
             //processUnitOutlinedPartial("Supply_S");
             //processUnitOutlinedPartial("Supply_T");
-            //processUnitOutlinedPartial("Plane");
-            //processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane");
+            processUnitOutlinedPartial("Plane_P");
+            processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
 
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
             //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");

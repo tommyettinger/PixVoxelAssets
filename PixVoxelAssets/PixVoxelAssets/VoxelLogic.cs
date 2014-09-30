@@ -1303,7 +1303,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //10 eyes shine
             new float[] {1.05F,0.8F,1.2F,1F},
             //11 eyes
-            new float[] {0.1F,-0.05F,0.25F,1F},
+            new float[] {0.05F,-0.05F,0.35F,1F},
             //12 metal contrast
             new float[] {0.5F,0.85F,0.95F,1F},
             //13 metal
@@ -2253,7 +2253,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                     if (mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136)
                     {
-                        zMove = f * 0.6f;
+                        zMove = (f - 1) * 1.8f;
+                        xMove = (float)(r.NextDouble() * 2.0 - 1.0);
+                        yMove = (float)(r.NextDouble() * 2.0 - 1.0);
                     }
                     else
                     {
@@ -2283,20 +2285,20 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             yMove = ((midY[v.z] + r.Next(3) - minY[v.z] + v.y) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         //                            yMove = ((0 + (v.y - midY[v.z] + r.Next(3))) * 0.8F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); // / 300F) * (v.z + 5); //-5 +
                         if (minZ > 0)
-                            zMove = ((v.z) * (1 - f) / 8F);
+                            zMove = ((v.z) * (1 - f) / 6F);
                         else
                             zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.8F;
                     }
                     if (xMove > 0)
                     {
-                        float nv = (v.x + (xMove * f / 7)) - Math.Abs((yMove * f / 15));
+                        float nv = (v.x + (xMove * f / 7)) - Math.Abs((yMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.x = (byte)(Math.Floor(nv));
                     }
                     else if (xMove < 0)
                     {
-                        float nv = (v.x + (xMove * f / 7)) + Math.Abs((yMove * f / 15));
+                        float nv = (v.x + (xMove * f / 7)) + Math.Abs((yMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.x = (byte)(Math.Floor(nv));
@@ -2309,14 +2311,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     if (yMove > 0)
                     {
-                        float nv = (v.y + (yMove * f / 8)) - Math.Abs((xMove * f / 15));
+                        float nv = (v.y + (yMove * f / 8)) - Math.Abs((xMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.y = (byte)(Math.Floor(nv));
                     }
                     else if (yMove < 0)
                     {
-                        float nv = (v.y + (yMove * f / 8)) + Math.Abs((xMove * f / 15));
+                        float nv = (v.y + (yMove * f / 8)) + Math.Abs((xMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.y = (byte)(Math.Floor(nv));
@@ -2456,7 +2458,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     float xMove = 0, yMove = 0, zMove = 0;
                     if (mvd.color == 249 - 152 || mvd.color == 249 - 160 || mvd.color == 249 - 136)
                     {
-                        zMove = f * 2.5f;
+                        zMove = f * 0.6f;
+                        xMove = (float)(r.NextDouble() * 2.0 - 1.0);
+                        yMove = (float)(r.NextDouble() * 2.0 - 1.0);
                     }
                     else
                     {
@@ -2493,14 +2497,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                     if (xMove > 0)
                     {
-                        float nv = (v.x + (xMove / (0.1f * (f + 5)))) - Math.Abs((yMove / (0.15f * (f + 5))));
+                        float nv = (v.x + (xMove / (0.1f * (f + 5)))) - Math.Abs((yMove / (0.15f * (f + 5)))) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.x = (byte)(Math.Floor(nv));
                     }
                     else if (xMove < 0)
                     {
-                        float nv = (v.x + (xMove / (0.1f * (f + 5)))) + Math.Abs((yMove / (0.15f * (f + 5))));
+                        float nv = (v.x + (xMove / (0.1f * (f + 5)))) + Math.Abs((yMove / (0.15f * (f + 5)))) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.x = (byte)(Math.Floor(nv));
@@ -2513,7 +2517,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     if (yMove > 0)
                     {
-                        float nv = (v.y + (yMove / (0.15f * (f + 5)))) - Math.Abs((xMove / (0.2f * (f + 5))));
+                        float nv = (v.y + (yMove / (0.15f * (f + 5)))) - Math.Abs((xMove / (0.2f * (f + 5)))) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0)
                         {
                             nv = 0;
@@ -2528,7 +2532,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     else if (yMove < 0)
                     {
-                        float nv = (v.y + (yMove / (0.15f * (f + 5)))) + Math.Abs((xMove / (0.2f * (f + 5))));
+                        float nv = (v.y + (yMove / (0.15f * (f + 5)))) + Math.Abs((xMove / (0.2f * (f + 5)))) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0)
                         {
                             nv = 0;
