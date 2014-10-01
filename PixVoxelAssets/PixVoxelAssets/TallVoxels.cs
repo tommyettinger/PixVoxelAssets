@@ -8576,11 +8576,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Shinobi");
             processUnitOutlinedWDouble("Shinobi_Unarmed");
             processUnitOutlinedWDouble("Lord");*/
-            /*
+            
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Tassar", 11, false);
             processUnitOutlinedWalkDouble("Tassar", 11);
+            processUnitOutlinedWDouble("Ilapa", 12, true);
 
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
@@ -8595,6 +8596,8 @@ namespace AssetsPV
             OrthoVoxels.InitializeWPalette();
             OrthoVoxels.processUnitOutlinedWQuad("Nodebpe", 10);
             OrthoVoxels.processUnitOutlinedWDouble("Tassar", 11);
+            OrthoVoxels.processUnitOutlinedWDouble("Ilapa", 12);
+
             OrthoVoxels.processUnitOutlinedWDouble("Zombie", 2);
             OrthoVoxels.processUnitOutlinedWDouble("Skeleton", 6);
             OrthoVoxels.processUnitOutlinedWDouble("Skeleton_Spear", 6);
@@ -8602,11 +8605,11 @@ namespace AssetsPV
             OrthoVoxels.processUnitOutlinedWDouble("Wraith", 8);
             OrthoVoxels.processUnitOutlinedWDouble("Cinder", 9);
             OrthoVoxels.processUnitOutlinedWDouble("Spectral_Knight", 7);
-            */
-            processUnitOutlinedPartial("Copter");
-            processUnitOutlinedPartial("Copter_P");
-            processUnitOutlinedPartial("Copter_S");
-            processUnitOutlinedPartial("Copter_T");
+            
+            //processUnitOutlinedPartial("Copter");
+            //processUnitOutlinedPartial("Copter_P");
+            //processUnitOutlinedPartial("Copter_S");
+            //processUnitOutlinedPartial("Copter_T");
             //processUnitOutlinedPartial("Infantry");
             //processUnitOutlinedPartial("Infantry_P");
             //processUnitOutlinedPartial("Infantry_S");
@@ -8623,10 +8626,10 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Supply_P");
             //processUnitOutlinedPartial("Supply_S");
             //processUnitOutlinedPartial("Supply_T");
-            processUnitOutlinedPartial("Plane");
-            processUnitOutlinedPartial("Plane_P");
-            processUnitOutlinedPartial("Plane_S");
-            processUnitOutlinedPartial("Plane_T");
+            //processUnitOutlinedPartial("Plane");
+            //processUnitOutlinedPartial("Plane_P");
+            //processUnitOutlinedPartial("Plane_S");
+            //processUnitOutlinedPartial("Plane_T");
 
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
             //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
