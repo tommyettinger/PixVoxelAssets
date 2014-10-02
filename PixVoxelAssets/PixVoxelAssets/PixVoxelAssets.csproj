@@ -124,6 +124,18 @@
     <None Include="Ilapa_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Ilapa_Walk_0_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Ilapa_Walk_1_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Ilapa_Walk_2_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Ilapa_Walk_3_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Infantry_Firing_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

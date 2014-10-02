@@ -1373,7 +1373,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //9 skin
             new float[] {0.9F,0.85F,0.7F,1F},
             //10 eyes shine
-            new float[] {1.1F,0.5F,1.1F,1F},
+            new float[] {0.9F,0.65F,1.3F,1F},
             //11 eyes
             new float[] {0.05F,-0.05F,0.1F,1F},
             //12 metal contrast

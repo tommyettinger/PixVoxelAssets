@@ -8582,6 +8582,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Tassar", 11, false);
             processUnitOutlinedWalkDouble("Tassar", 11);
             processUnitOutlinedWDouble("Ilapa", 12, true);
+            processUnitOutlinedWalkDouble("Ilapa", 12);
 
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
