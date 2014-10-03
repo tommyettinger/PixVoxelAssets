@@ -7931,7 +7931,7 @@ namespace AssetsPV
         {
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
 
             MagicaVoxelData[][] explode = FieryExplosion(parsed, ((VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile) ? false : true));
@@ -7999,7 +7999,7 @@ namespace AssetsPV
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] flying = Flyover(parsed);
                     MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
                     //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -8063,7 +8063,7 @@ namespace AssetsPV
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] firing = makeFiringAnimation(parsed, VoxelLogic.UnitLookup[u], w);
                     for (int color = 0; color < 8; color++)
                     {
@@ -8131,7 +8131,7 @@ namespace AssetsPV
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] flying = VoxelLogic.Flyover(parsed);
                     MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
                     //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -8270,7 +8270,7 @@ namespace AssetsPV
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] flying = VoxelLogic.Flyover(parsed);
                     MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(7, VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
                     MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
@@ -8532,7 +8532,7 @@ namespace AssetsPV
                 {
                     filename = u + "_Firing_X.vox";
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     for (int f = 0; f < 4; f++)
                     { //"color" + i + "/"
                         CreateChannelBitmap(processSingleOutlined(parsed, 7, "S", f, 4), "ortho_adj/indexed/" + u + "_Firing_face0" + "_" + f + ".png");
@@ -8545,7 +8545,7 @@ namespace AssetsPV
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] flying = Flyover(parsed);
                     MagicaVoxelData[][] receive = makeReceiveAnimation(7, VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
                     MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
@@ -8600,7 +8600,7 @@ namespace AssetsPV
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin);
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] firing = makeFiringAnimation(parsed, VoxelLogic.UnitLookup[u], w);
                     MagicaVoxelData[][] receive = makeReceiveAnimation(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w], VoxelLogic.CurrentWeaponReceptions[VoxelLogic.UnitLookup[u]][w]);
 
@@ -8700,7 +8700,7 @@ namespace AssetsPV
         {
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             MagicaVoxelData[][] explode = FieryExplosion(parsed, false);
             string folder = ("ortho_adj/indexed");
 
@@ -8720,7 +8720,7 @@ namespace AssetsPV
             {
                 Console.WriteLine("Processing: " + u + " Firing");
                 bin = new BinaryReader(File.Open(u + "_Firing_X.vox", FileMode.Open));
-                parsed = VoxelLogic.FromMagicaRaw(bin);
+                parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                 explode = FieryExplosion(parsed, false);
 
                 for (int d = 0; d < 4; d++)
@@ -9232,7 +9232,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + " Flyover");
                 log.AppendLine(u + " Flyover");
                 bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-                parsed = VoxelLogic.FromMagicaRaw(bin);
+                parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                 MagicaVoxelData[][] flyover = Flyover(parsed);
                 framelimit = 16;
                 for (int d = 0; d < 4; d++)
