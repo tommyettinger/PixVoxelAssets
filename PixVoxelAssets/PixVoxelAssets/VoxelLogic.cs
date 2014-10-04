@@ -3186,16 +3186,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 40 * 2; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
                 int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
                 int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -3243,19 +3243,26 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         //for higher values: center - (between 9 and 11) - distance from current voxel x to edge x, times variable based on height
                         if (v.x > midX[v.z])
-                            xMove = ((midX[v.z] - r.Next(3) - ((blowback) ? 9 : 0) - (maxX[v.z] - v.x)) * 0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
+                            xMove = ((midX[v.z] - r.Next(3) - ((blowback) ? 9 : 0) - (maxX[v.z] - v.x)) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
                         //for lower values: distance from current voxel x to center - (between 6 to 8), times variable based on height
                         else if (v.x < midX[v.z])
-                            xMove = ((midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0) - minX[v.z] + v.x) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                            xMove = ((midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0) - minX[v.z] + v.x) * -0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
                         if (v.y > midY[v.z])
                             yMove = ((midY[v.z] - r.Next(3) - (maxY[v.z] - v.y)) * 0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         else if (v.y < midY[v.z])
                             yMove = ((midY[v.z] + r.Next(3) - minY[v.z] + v.y) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         if (minZ > 0)
-                            zMove = ((v.z) * (1 - f) / 6F);
+                            zMove = ((v.z) * (1 - f) / 8F);
                         else
                             zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.8F;
                     }
+
+
+                    if (xMove > 20) xMove = 20;
+                    if (xMove < -20) xMove = -20;
+                    if (yMove > 20) yMove = 20;
+                    if (yMove < -20) yMove = -20;
+
                     if (xMove > 0)
                     {
                         float nv = (v.x + (xMove * f / 7)) - Math.Abs((yMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
@@ -3278,14 +3285,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     if (yMove > 0)
                     {
-                        float nv = (v.y + (yMove * f / 8)) - Math.Abs((xMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
+                        float nv = (v.y + (yMove * f / 7)) - Math.Abs((xMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.y = (byte)(Math.Floor(nv));
                     }
                     else if (yMove < 0)
                     {
-                        float nv = (v.y + (yMove * f / 8)) + Math.Abs((xMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
+                        float nv = (v.y + (yMove * f / 7)) + Math.Abs((xMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
                         if (nv < 0) nv = 0;
                         if (nv > 119) nv = 119;
                         mvd.y = (byte)(Math.Floor(nv));
@@ -3330,9 +3337,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 40 * 2; level++)
                 {
                     minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
                     maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
@@ -3342,14 +3349,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 40 * 2; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 || v.color == 253 - 17 * 4 || v.color < 253 - 47 * 4) ? 100 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 || v.color == 253 - 17 * 4 || v.color < 253 - 47 * 4) ? 0 : 1));
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -3396,10 +3405,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else
                     {
                         if (v.x > midX[v.z])
-                            xMove = ((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.5F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
+                            xMove = ((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
                         //for lower values: distance from current voxel x to center - (between 7 to 10), times variable based on height
                         else if (v.x < midX[v.z])
-                            xMove = ((midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0) - minX[v.z] + v.x) * -0.5F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                            xMove = ((midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0) - minX[v.z] + v.x) * -0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
                         //           60                                             40        50
 
                         if (v.y > midY[v.z])
@@ -3410,8 +3419,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (f < 5 && minZ == 0)
                             zMove = (v.z / ((maxZ + 1) * (0.2F))) * (4 - f) * 0.6F;
                         else
-                            zMove = (1 - f * 1.5F);
+                            zMove = (1 - f * 0.9F);
                     }
+
+                    if (xMove > 20) xMove = 20;
+                    if (xMove < -20) xMove = -20;
+                    if (yMove > 20) yMove = 20;
+                    if (yMove < -20) yMove = -20;
 
                     if (xMove > 0)
                     {
@@ -3584,9 +3598,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
 
                 int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
                 int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -3634,10 +3648,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         //for higher values: center - (between 9 and 11) - distance from current voxel x to edge x, times variable based on height
                         if (v.x > midX[v.z])
-                            xMove = ((midX[v.z] - r.Next(3) - ((blowback) ? 9 : 0) - (maxX[v.z] - v.x)) * 0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
+                            xMove = ((midX[v.z] - r.Next(3) - ((blowback) ? 9 : 0) - (maxX[v.z] - v.x)) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
                         //for lower values: distance from current voxel x to center - (between 6 to 8), times variable based on height
                         else if (v.x < midX[v.z])
-                            xMove = ((midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0) - minX[v.z] + v.x) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                            xMove = ((midX[v.z] + r.Next(3) - ((blowback) ? 8 : 0) - minX[v.z] + v.x) * -0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
                         if (v.y > midY[v.z])
                             yMove = ((midY[v.z] - r.Next(3) - (maxY[v.z] - v.y)) * 0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         else if (v.y < midY[v.z])
@@ -3647,6 +3661,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else
                             zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.8F;
                     }
+
+                    if (xMove > 20) xMove = 20;
+                    if (xMove < -20) xMove = -20;
+                    if (yMove > 20) yMove = 20;
+                    if (yMove < -20) yMove = -20;
+
                     if (xMove > 0)
                     {
                         float nv = (v.x + (xMove * f / 7)) - Math.Abs((yMove * f / 15)) + (float)(r.NextDouble() * 2.0 - 1.0);
@@ -3733,32 +3753,33 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 voxelFrames[f - 1].CopyTo(vls, 0);
                 voxelFrames[f - 1].CopyTo(working, 0);
 
-                int[] minX = new int[160];
-                int[] maxX = new int[160];
-                float[] midX = new float[160];
-                for (int level = 0; level < 160; level++)
+                int[] minX = new int[80];
+                int[] maxX = new int[80];
+                float[] midX = new float[80];
+                for (int level = 0; level < 80; level++)
                 {
                     minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
                     maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
-                int[] minY = new int[160];
-                int[] maxY = new int[160];
-                float[] midY = new float[160];
-                for (int level = 0; level < 160; level++)
+                int[] minY = new int[80];
+                int[] maxY = new int[80];
+                float[] midY = new float[80];
+                for (int level = 0; level < 80; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
-                        v.color == 253 - 17 * 4 || v.color < 253 - 19 * 4 || v.color < 253 - 18 * 4 || v.color < 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
-
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 || v.color == 253 - 17 * 4 || v.color < 253 - 47 * 4) ? 100 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 || v.color == 253 - 17 * 4 || v.color < 253 - 47 * 4) ? 0 : 1));
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -3805,10 +3826,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else
                     {
                         if (v.x > midX[v.z])
-                            xMove = ((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.5F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
+                            xMove = ((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
                         //for lower values: distance from current voxel x to center - (between 7 to 10), times variable based on height
                         else if (v.x < midX[v.z])
-                            xMove = ((midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0) - minX[v.z] + v.x) * -0.5F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                            xMove = ((midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0) - minX[v.z] + v.x) * -0.5F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
                         //           60                                             40        50
 
                         if (v.y > midY[v.z])
@@ -3821,6 +3842,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else
                             zMove = (1 - f * 1.5F);
                     }
+
+                    if (xMove > 20) xMove = 20;
+                    if (xMove < -20) xMove = -20;
+                    if (yMove > 20) yMove = 20;
+                    if (yMove < -20) yMove = -20;
 
                     if (xMove > 0)
                     {

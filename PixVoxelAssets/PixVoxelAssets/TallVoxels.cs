@@ -4835,6 +4835,8 @@ namespace AssetsPV
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
+                else if (VoxelLogic.wcolors[current_color][3] == 0F) 
+                    continue;
                 else if (current_color >= 17 && current_color <= 20)
                 {
                     int mod_color = current_color;
@@ -5057,6 +5059,8 @@ namespace AssetsPV
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
+                    continue;
+                else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
                 else if (current_color >= 17 && current_color <= 20)
                 {
@@ -5281,6 +5285,8 @@ namespace AssetsPV
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
+                    continue;
+                else if (VoxelLogic.wcolors[current_color][3] == 0F) 
                     continue;
                 else if (current_color >= 17 && current_color <= 20)
                 {
@@ -6355,7 +6361,7 @@ namespace AssetsPV
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
 
             for (int d = 0; d < 4; d++)
@@ -6409,7 +6415,7 @@ namespace AssetsPV
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
 
             for (int d = 0; d < 4; d++)
@@ -8914,23 +8920,21 @@ namespace AssetsPV
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
             //            processUnitOutlinedWDouble("Person");
-            
+            /*
             processUnitOutlinedWDouble("Person", 0, true);
             processUnitOutlinedWDouble("Person", 1, true);
             processUnitOutlinedWDouble("Shinobi", 3, true);
             processUnitOutlinedWDouble("Shinobi_Unarmed", 3, true);
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
-            
+            */
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Tassar", 11, false);
             processUnitOutlinedWalkDouble("Tassar", 11);
-
-            
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
-
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
@@ -8938,6 +8942,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
+            */
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
