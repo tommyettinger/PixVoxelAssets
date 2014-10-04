@@ -1258,11 +1258,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //17 smoke
             new float[] {0.14F,0.14F,0.02F,waver_alpha},
             //18 yellow fire
-            new float[] {1.25F,1.1F,0.45F,1F},
+            new float[] {0.65F,1.1F,1.15F,1F},
             //19 orange fire
-            new float[] {1.25F,0.7F,0.3F,1F},
+            new float[] {0.35F,1.2F,1.05F,1F},
             //20 sparks
-            new float[] {1.3F,1.2F,0.85F,1F},
+            new float[] {0.8F,1.2F,1.25F,1F},
             //21 glow frame 0
             new float[] {0.55F,0.9F,0.95F,1F},
             //22 glow frame 1
@@ -1357,11 +1357,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //17 smoke
             new float[] {0.14F,0.14F,0.02F,waver_alpha},
             //18 yellow fire
-            new float[] {1.25F,1.1F,0.45F,1F},
+            new float[] {0.85F,0.4F,0.95F,1F},
             //19 orange fire
-            new float[] {1.25F,0.7F,0.3F,1F},
+            new float[] {0.7F,0.3F,0.85F,1F},
             //20 sparks
-            new float[] {1.3F,1.2F,0.85F,1F},
+            new float[] {1.15F,0.6F,1.25F,1F},
             //21 glow frame 0
             new float[] {1.0F,0.75F,0.7F,1F},
             //22 glow frame 1
@@ -1654,9 +1654,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //17 smoke
             new float[] {0.14F,0.14F,0.02F,waver_alpha},
             //18 yellow fire
-            new float[] {1.25F,1.1F,0.45F,1F},
+            new float[] {0.6F,1.25F,0.95F,1F},
             //19 orange fire
-            new float[] {1.25F,0.7F,0.3F,1F},
+            new float[] {0.5F,0.9F,1.0F,1F},
             //20 sparks
             new float[] {1.3F,1.2F,0.85F,1F},
             //21 glow frame 0
@@ -3252,7 +3252,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else if (v.y < midY[v.z])
                             yMove = ((midY[v.z] + r.Next(3) - minY[v.z] + v.y) * -0.6F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
                         if (minZ > 0)
-                            zMove = ((v.z) * (1 - f) / 8F);
+                            zMove = ((v.z) * (1 - f) / 6F);
                         else
                             zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.8F;
                     }
@@ -3419,7 +3419,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (f < 5 && minZ == 0)
                             zMove = (v.z / ((maxZ + 1) * (0.2F))) * (4 - f) * 0.6F;
                         else
-                            zMove = (1 - f * 0.9F);
+                            zMove = (1 - f * 1.5F);
                     }
 
                     if (xMove > 20) xMove = 20;
