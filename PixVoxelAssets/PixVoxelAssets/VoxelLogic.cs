@@ -1883,7 +1883,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //33 fuzz lightest
             new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             //34 gore
-            new float[] {0.75F,0.15F,0.05F,1F},
+            new float[] {0.9F,0.5F,0.0F,1F},
             //35 glass
             new float[] {0.4F,0.4F,0.3F,0F},
             //36 placeholder

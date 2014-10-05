@@ -8929,7 +8929,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Guard", 5, true);
 
             processUnitOutlinedWDouble("Kurguiv", 13, false);
-
+            processUnitOutlinedWalkDouble("Kurguiv", 13);
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Tassar", 11, false);
