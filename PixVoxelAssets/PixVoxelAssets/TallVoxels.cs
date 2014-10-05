@@ -8920,21 +8920,23 @@ namespace AssetsPV
             VoxelLogic.InitializeXPalette();
             VoxelLogic.InitializeWPalette();
             //            processUnitOutlinedWDouble("Person");
-            
+
             processUnitOutlinedWDouble("Person", 0, true);
             processUnitOutlinedWDouble("Person", 1, true);
             processUnitOutlinedWDouble("Shinobi", 3, true);
             processUnitOutlinedWDouble("Shinobi_Unarmed", 3, true);
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
-            
+
+            processUnitOutlinedWDouble("Kurguiv", 13, false);
+
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Tassar", 11, false);
             processUnitOutlinedWalkDouble("Tassar", 11);
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
-            
+
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
@@ -8942,7 +8944,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-            
+          
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
