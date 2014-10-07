@@ -4835,7 +4835,7 @@ namespace AssetsPV
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
-                else if (VoxelLogic.wcolors[current_color][3] == 0F) 
+                else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
                 else if (current_color >= 17 && current_color <= 20)
                 {
@@ -5286,7 +5286,7 @@ namespace AssetsPV
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
                     continue;
-                else if (VoxelLogic.wcolors[current_color][3] == 0F) 
+                else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
                 else if (current_color >= 17 && current_color <= 20)
                 {
@@ -8928,10 +8928,18 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
+            processUnitOutlinedWDouble("Human_Male", 16, true);
+            processUnitOutlinedWalkDouble("Human_Male", 16);
+            /*            processUnitOutlinedWDouble("Human_Male", 15, true);
+                        processUnitOutlinedWalkDouble("Human_Male", 15);
+                        processUnitOutlinedWDouble("Human_Male", 17, true);
+                        processUnitOutlinedWalkDouble("Human_Male", 17);
             processUnitOutlinedWDouble("Human_Male", 0, true);
             processUnitOutlinedWalkDouble("Human_Male", 0);
-            processUnitOutlinedWDouble("Human_Male", 1, true);
-            processUnitOutlinedWalkDouble("Human_Male", 1);
+                        processUnitOutlinedWDouble("Human_Male", 1, true);
+                        processUnitOutlinedWalkDouble("Human_Male", 1);
+             */
+            /*
             processUnitOutlinedWDouble("Kurguiv", 13, false);
             processUnitOutlinedWalkDouble("Kurguiv", 13);
             processUnitOutlinedWQuad("Nodebpe", 10, true);
@@ -8940,6 +8948,8 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Tassar", 11);
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
+            processUnitOutlinedWDouble("Erezdo", 14, true);
+            */
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
