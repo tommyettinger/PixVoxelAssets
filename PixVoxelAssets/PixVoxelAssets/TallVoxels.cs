@@ -8322,7 +8322,7 @@ namespace AssetsPV
         private static Bitmap[] processFloor(string u)
         {
             BinaryReader bin = new BinaryReader(File.Open(u + "_P.vox", FileMode.Open));
-            TallPaletteDraw.MagicaVoxelDataPaletted[] parsed = TallPaletteDraw.FromMagica(bin);
+            MagicaVoxelData[] parsed = TallPaletteDraw.FromMagica(bin);
 
 
             System.IO.Directory.CreateDirectory(u);
