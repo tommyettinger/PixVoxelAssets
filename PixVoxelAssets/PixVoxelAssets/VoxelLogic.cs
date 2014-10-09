@@ -1915,7 +1915,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             new float[][] { //14 erezdo
             //0 armor contrast
-            new float[] {0.95F,0.75F,0.35F,1F},
+            new float[] {0.8F,-0.05F,0.05F,1F},
             //1 armor
             new float[] {0.15F,0.15F,0.15F,1F},
             //2 stone/crystal contrast
@@ -1945,7 +1945,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //14 cape contrast
             new float[] {0.9F,0.72F,0.15F,waver_alpha},
             //15 cape
-            new float[] {0.8F,-0.05F,0.05F,waver_alpha},
+            new float[] {0.7F,0.0F,0.1F,waver_alpha},
             //16 inner shadow
             new float[] {0.13F,0.10F,0.04F,1F},
             //17 smoke

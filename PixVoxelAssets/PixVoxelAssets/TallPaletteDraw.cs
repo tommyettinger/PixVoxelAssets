@@ -349,16 +349,16 @@ Ruins	purple-gray
                 jitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
-                int current_color = 248 - vx.color;
+                int current_color = 249 - vx.color + 3; //249 - vx.color;
                 int p = 0;
                 if ((frame % 2 != 0) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.spin_alpha_1)
                     continue;
-                else if (current_color >= 168)
+/*                else if (current_color >= 168)
                 {
                     continue;
-                }
+                }*/
                 else if (current_color == 152 || current_color == 160 || current_color == 136)// || current_color == 104 || current_color == 112) // || current_color == 80
                 {
 
