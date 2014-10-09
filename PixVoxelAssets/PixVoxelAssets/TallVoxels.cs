@@ -8949,10 +8949,11 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Tassar", 11);
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
-            */
             processUnitOutlinedWDouble("Erezdo", 14, true);
             processUnitOutlinedWalkDouble("Erezdo", 14);
-            
+            */
+            processUnitOutlinedWDouble("Cerpali", 18, true);
+
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
