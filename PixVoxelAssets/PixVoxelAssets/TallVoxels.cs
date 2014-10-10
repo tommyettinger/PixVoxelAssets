@@ -8953,6 +8953,7 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Erezdo", 14);
             */
             processUnitOutlinedWDouble("Cerpali", 18, true);
+            processUnitOutlinedWalkDouble("Cerpali", 18);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
