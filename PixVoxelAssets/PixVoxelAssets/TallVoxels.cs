@@ -8951,10 +8951,10 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Ilapa", 12);
             processUnitOutlinedWDouble("Erezdo", 14, true);
             processUnitOutlinedWalkDouble("Erezdo", 14);
-            */
             processUnitOutlinedWDouble("Cerpali", 18, true);
             processUnitOutlinedWalkDouble("Cerpali", 18);
-
+            */
+            processUnitOutlinedWQuad("Vashk", 19, true);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
