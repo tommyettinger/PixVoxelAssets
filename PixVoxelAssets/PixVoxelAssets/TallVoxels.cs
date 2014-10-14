@@ -6040,6 +6040,7 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still);
+            //b.Save("palette" + palette + "/" + "Kaiju" + "_Gigantic_face" + dir + "_" + f + ".png", ImageFormat.Png);
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -6368,7 +6369,7 @@ namespace AssetsPV
             {
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
 
-                for (int frame = 0; frame < 8; frame++)
+                for (int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
                     Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -6395,7 +6396,7 @@ namespace AssetsPV
 
             for (int d = 0; d < 4; d++)
             {
-                for (int frame = 0; frame < 8; frame++)
+                for (int frame = 0; frame < 12; frame++)
                 {
                     s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
                 }
@@ -6422,7 +6423,7 @@ namespace AssetsPV
             {
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
 
-                for (int frame = 0; frame < 8; frame++)
+                for (int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartMassive(explode[frame], d, palette, frame, 8, true);
                     Bitmap b2 = new Bitmap(328, 408, PixelFormat.Format32bppArgb);
@@ -6448,7 +6449,7 @@ namespace AssetsPV
 
             for (int d = 0; d < 4; d++)
             {
-                for (int frame = 0; frame < 8; frame++)
+                for (int frame = 0; frame < 12; frame++)
                 {
                     s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png ";
                 }
@@ -8928,7 +8929,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-            /*
+            
             processUnitOutlinedWDouble("Human_Male", 15, true);
             processUnitOutlinedWalkDouble("Human_Male", 15);
             processUnitOutlinedWDouble("Human_Male", 16, true);
@@ -8939,8 +8940,10 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Male", 0);
             processUnitOutlinedWDouble("Human_Male", 1, true);
             processUnitOutlinedWalkDouble("Human_Male", 1);
-            */
+            
             /*
+            processUnitOutlinedWQuad("Nodebpe", 10, true);
+            processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Kurguiv", 13, false);
             processUnitOutlinedWalkDouble("Kurguiv", 13);
             processUnitOutlinedWQuad("Nodebpe", 10, true);
@@ -8952,8 +8955,9 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Erezdo", 14, true);
             processUnitOutlinedWalkDouble("Erezdo", 14);
             processUnitOutlinedWQuad("Vashk", 19, true);
-            */
+            
             processUnitOutlinedWDouble("Cerpali", 18, true);
+            */
             //processUnitOutlinedWalkDouble("Cerpali2", 18);
             
             /*
