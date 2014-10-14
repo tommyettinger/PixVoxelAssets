@@ -8929,7 +8929,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-            
+            /*
             processUnitOutlinedWDouble("Human_Male", 15, true);
             processUnitOutlinedWalkDouble("Human_Male", 15);
             processUnitOutlinedWDouble("Human_Male", 16, true);
@@ -8940,8 +8940,6 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Male", 0);
             processUnitOutlinedWDouble("Human_Male", 1, true);
             processUnitOutlinedWalkDouble("Human_Male", 1);
-            
-            
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Kurguiv", 13, false);
@@ -8953,10 +8951,11 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
             processUnitOutlinedWDouble("Erezdo", 14, true);
-            processUnitOutlinedWalkDouble("Erezdo", 14);
+            processUnitOutlinedWalkDouble("Erezdo", 14);*/
             processUnitOutlinedWQuad("Vashk", 19, true);
+            processUnitOutlinedWalkQuad("Vashk", 19);
             
-            processUnitOutlinedWDouble("Cerpali", 18, true);
+            //processUnitOutlinedWDouble("Cerpali", 18, true);
             
             //processUnitOutlinedWalkDouble("Cerpali2", 18);
             
