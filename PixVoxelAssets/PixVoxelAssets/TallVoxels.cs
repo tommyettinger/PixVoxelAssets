@@ -8941,7 +8941,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Human_Male", 1, true);
             processUnitOutlinedWalkDouble("Human_Male", 1);
             
-            /*
+            
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Kurguiv", 13, false);
@@ -8957,7 +8957,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Vashk", 19, true);
             
             processUnitOutlinedWDouble("Cerpali", 18, true);
-            */
+            
             //processUnitOutlinedWalkDouble("Cerpali2", 18);
             
             /*

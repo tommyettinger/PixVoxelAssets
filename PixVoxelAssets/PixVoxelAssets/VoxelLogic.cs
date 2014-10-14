@@ -4057,7 +4057,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else if (minZ > 0)
                             zMove = ((v.z) * (1 - f) / 6F);
                         else
-                            zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.9F;
+                            zMove = (v.z / ((maxZ + 1 + midZ) * (0.15F))) * (4 - f) * 1.1F;
                     }
 
                     if (xMove > 20) xMove = 20;
@@ -4229,7 +4229,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else if (f < 6 && minZ == 0)
                             zMove = (v.z / ((maxZ + 1) * (0.2F))) * (5 - f) * 0.6F;
                         else
-                            zMove = (1 - f * 1.5F);
+                            zMove = (1 - f * 1.85F);
                     }
                     if (v.z <= 1 && f >= 10)
                     {
@@ -4481,7 +4481,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else if (minZ > 0)
                             zMove = ((v.z) * (1 - f) / 6F);
                         else
-                            zMove = (v.z / ((maxZ + 1) * (0.3F))) * (4 - f) * 0.9F;
+                            zMove = (v.z / ((maxZ + 1 + midZ) * (0.15F))) * (4 - f) * 1.1F;
                     }
 
                     if (xMove > 20) xMove = 20;
@@ -4670,7 +4670,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else if (f < 6 && minZ == 0)
                             zMove = (v.z / ((maxZ + 1) * (0.2F))) * (5 - f) * 0.6F;
                         else
-                            zMove = (1 - f * 1.5F);
+                            zMove = (1 - f * 1.85F);
                     }
                     if (v.z <= 1 && f >= 10)
                     {
