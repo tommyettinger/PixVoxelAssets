@@ -8953,11 +8953,21 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Erezdo", 14, true);
             processUnitOutlinedWalkDouble("Erezdo", 14);
             processUnitOutlinedWQuad("Vashk", 19, true);
-            processUnitOutlinedWalkQuad("Vashk", 19);*/
-            
+            processUnitOutlinedWalkQuad("Vashk", 19);
             processUnitOutlinedWDouble("Cerpali", 18, true);
             processUnitOutlinedWalkDouble("Cerpali", 18);
-            
+            */
+
+            processUnitOutlinedWDouble("Human_Female", 15, true);
+            processUnitOutlinedWalkDouble("Human_Female", 15);
+            processUnitOutlinedWDouble("Human_Female", 16, true);
+            processUnitOutlinedWalkDouble("Human_Female", 16);
+            processUnitOutlinedWDouble("Human_Female", 17, true);
+            processUnitOutlinedWalkDouble("Human_Female", 17);
+            processUnitOutlinedWDouble("Human_Female", 0, true);
+            processUnitOutlinedWalkDouble("Human_Female", 0);
+            processUnitOutlinedWDouble("Human_Female", 1, true);
+            processUnitOutlinedWalkDouble("Human_Female", 1);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
