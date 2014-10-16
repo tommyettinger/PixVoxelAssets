@@ -8951,13 +8951,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
             processUnitOutlinedWDouble("Erezdo", 14, true);
-            processUnitOutlinedWalkDouble("Erezdo", 14);*/
+            processUnitOutlinedWalkDouble("Erezdo", 14);
             processUnitOutlinedWQuad("Vashk", 19, true);
-            processUnitOutlinedWalkQuad("Vashk", 19);
+            processUnitOutlinedWalkQuad("Vashk", 19);*/
             
-            //processUnitOutlinedWDouble("Cerpali", 18, true);
-            
-            //processUnitOutlinedWalkDouble("Cerpali2", 18);
+            processUnitOutlinedWDouble("Cerpali", 18, true);
+            processUnitOutlinedWalkDouble("Cerpali", 18);
             
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
