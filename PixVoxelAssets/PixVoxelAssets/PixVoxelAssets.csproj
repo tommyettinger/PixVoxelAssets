@@ -253,6 +253,9 @@
     <None Include="Laboratory_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Lomuk_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Lord_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

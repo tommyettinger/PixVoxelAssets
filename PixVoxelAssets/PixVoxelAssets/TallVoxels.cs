@@ -8956,8 +8956,6 @@ namespace AssetsPV
             processUnitOutlinedWalkQuad("Vashk", 19);
             processUnitOutlinedWDouble("Cerpali", 18, true);
             processUnitOutlinedWalkDouble("Cerpali", 18);
-            */
-
             processUnitOutlinedWDouble("Human_Female", 15, true);
             processUnitOutlinedWalkDouble("Human_Female", 15);
             processUnitOutlinedWDouble("Human_Female", 16, true);
@@ -8968,6 +8966,9 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Female", 0);
             processUnitOutlinedWDouble("Human_Female", 1, true);
             processUnitOutlinedWalkDouble("Human_Female", 1);
+            */
+            processUnitOutlinedWDouble("Lomuk", 20, false);
+
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
