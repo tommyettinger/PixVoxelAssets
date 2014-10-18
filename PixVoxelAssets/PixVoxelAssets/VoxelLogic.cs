@@ -640,9 +640,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //5 shirt
             new float[] {0.5F,0.6F,0.7F,1F},
             //6 hair contrast
-            new float[] {0.7F,0.5F,0.25F,1F},
+            new float[] {0.8F,0.65F,0.2F,1F},
             //7 hair
-            new float[] {0.65F,0.6F,0.2F,1F},
+            new float[] {0.7F,0.65F,0.35F,1F},
             //8 skin contrast
             new float[] {0.82F,0.5F,0.1F,1F},
             //9 skin
