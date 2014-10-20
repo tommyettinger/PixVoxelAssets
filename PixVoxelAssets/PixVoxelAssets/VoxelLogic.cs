@@ -2714,9 +2714,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //1 spikes
             new float[] {0.8F,0.8F,0.55F,1F},
             //2 scales contrast
-            new float[] {0.05F,0.2F,0.0F,1F},
+            new float[] {0.0F,0.01F,-0.09F,1F},
             //3 scales
-            new float[] {0.2F,0.35F,0.05F,1F},
+            new float[] {0.2F,0.25F,0.15F,1F},
             //4 clothing contrast
             new float[] {0.2F,0.1F,0.05F,1F},
             //5 clothing
