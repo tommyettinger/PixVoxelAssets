@@ -8969,9 +8969,10 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Female", 1);
             processUnitOutlinedWDouble("Lomuk", 20, false);
             processUnitOutlinedWalkDouble("Lomuk", 20);
-            */
             processUnitOutlinedWDouble("Glarosp", 21, true);
-            processUnitOutlinedWalkDouble("Glarosp", 21);
+            processUnitOutlinedWalkDouble("Glarosp", 21);*/
+
+            processUnitOutlinedWDouble("Pelmir", 22, true);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
