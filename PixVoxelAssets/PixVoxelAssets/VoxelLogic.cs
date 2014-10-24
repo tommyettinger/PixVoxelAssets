@@ -3016,7 +3016,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //3 clothing
             new float[] {0.4F,0.35F,0.85F,1F},
             //4 body, fins contrast
-            new float[] {0.45F,0.4F,0.35F,1F},
+            new float[] {0.42F,0.32F,0.27F,1F},
             //5 body, fins
             new float[] {0.6F,0.55F,0.5F,1F},
             //6 hair contrast
@@ -3036,7 +3036,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.7F,0.85F,0.9F,1F},
             //14 trunktacles contrast
-            new float[] {0.45F,0.42F,0.37F,waver_alpha},
+            new float[] {0.42F,0.37F,0.32F,waver_alpha},
             //15 trunktacles
             new float[] {0.6F,0.57F,0.52F,waver_alpha},
             //16 inner shadow
