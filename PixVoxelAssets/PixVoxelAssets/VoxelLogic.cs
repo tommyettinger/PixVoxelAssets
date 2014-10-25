@@ -138,6 +138,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         private static Random r = new Random();
         public static float flat_alpha = 0.77F;
+        public static float borderless_flat_alpha = 0.78F;
+        public static float borderless_alpha = 0.79F;
         public static float waver_alpha = 0.83F;
         public static float spin_alpha_0 = 0.85F;
         public static float spin_alpha_1 = 0.87F;
@@ -3105,8 +3107,107 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             },
             
+            new float[][] { //25 eidolon (light)
+            //0 feet contrast
+            new float[] {0.25F,0.2F,0.15F,1F},
+            //1 feet
+            new float[] {0.35F,0.3F,0.25F,1F},
+            //2 clothing contrast
+            new float[] {0.5F,0.25F,0.75F,1F},
+            //3 clothing
+            new float[] {0.4F,0.35F,0.85F,1F},
+            //4 body, fins contrast
+            new float[] {0.42F,0.32F,0.27F,1F},
+            //5 body, fins
+            new float[] {0.6F,0.55F,0.5F,1F},
+            //6 hair contrast
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.35F,0.0F,0.05F,1F},
+            //9 skin
+            new float[] {0.6F,0.5F,0.65F,1F},
+            //10 eyes shine
+            new float[] {0.7F,0.9F,0.95F,1F},
+            //11 eyes
+            new float[] {0.05F,0.1F,0.1F,1F},
+            //12 metal contrast
+            new float[] {0.9F,1.05F,1.1F,1F},
+            //13 metal
+            new float[] {0.7F,0.85F,0.9F,1F},
+            //14 wavering solids contrast
+            new float[] {0.42F,0.37F,0.32F,waver_alpha},
+            //15 wavering solids
+            new float[] {0.6F,0.57F,0.52F,waver_alpha},
+            //16 inner shadow
+            new float[] {0.13F,0.10F,0.04F,1F},
+            //17 smoke
+            new float[] {0.8F,0.8F,0.7F,borderless_alpha},
+            //18 yellow fire
+            new float[] {0.9F,0.88F,0.65F,1F},
+            //19 orange fire
+            new float[] {0.8F,0.75F,0.5F,1F},
+            //20 sparks
+            new float[] {0.9F,0.9F,0.7F,1F},
+            //21 glow frame 0
+            new float[] {0.9F,0.9F,0.7F,borderless_alpha},
+            //22 glow frame 1
+            new float[] {1.05F,1.05F,0.8F,borderless_alpha},
+            //23 glow frame 2
+            new float[] {0.9F,0.9F,0.7F,borderless_alpha},
+            //24 glow frame 3
+            new float[] {0.8F,0.8F,0.6F,borderless_alpha},
+            //25 shadow
+            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            //26 mud
+            new float[] {0.2F,0.4F,0.3F,1F},
+            //27 water
+            new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.74F,0.3F,-0.05F,fuzz_alpha},
+            //29 fuzz lowlight
+            new float[] {0.5F,0.2F,-0.09F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.34F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.38F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.9F,0.45F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {1.05F,0.65F,0.15F,fuzz_alpha},
+            //34 gore
+            new float[] {0.4F,0.55F,0.6F,1F},
+            //35 glass
+            new float[] {0.65F,0.65F,0.5F,borderless_alpha},
+            //36 placeholder
+            new float[] {0F,0F,0F,0F},
+            //37 placeholder
+            new float[] {0F,0F,0F,0F},
+            //38 placeholder
+            new float[] {0F,0F,0F,0F},
+            //39 placeholder
+            new float[] {0F,0F,0F,0F},
+            //40 placeholder
+            new float[] {0F,0F,0F,0F},
+            //41 placeholder
+            new float[] {0F,0F,0F,0F},
+            //42 placeholder
+            new float[] {0F,0F,0F,0F},
+            //43 placeholder
+            new float[] {0F,0F,0F,0F},
+            //44 placeholder
+            new float[] {0F,0F,0F,0F},
+            //45 placeholder
+            new float[] {0F,0F,0F,0F},
+            //46 placeholder
+            new float[] {0F,0F,0F,0F},
+            //47 total transparent
+            new float[] {0F,0F,0F,0F},
+            },
+            
         };
-        public const int wcolorcount = 48, wpalettecount = 25;
+        public const int wcolorcount = 48, wpalettecount = 26;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;
@@ -3703,9 +3804,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if (-1 == taken[voxelData[i].x, voxelData[i].y]
                      && (voxelData[i].color > 253 - 21 * 4 || voxelData[i].color < 253 - 24 * 4)
                      && voxelData[i].color != 253 - 25 * 4 && voxelData[i].color != 253 - 27 * 4
-                     && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4
+                     && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4 && voxelData[i].color != 253 - 20 * 4
                      && voxelData[i].color > 253 - 47 * 4)
                 {
+                    Console.Write(voxelData[i].color  + ", ");
                     MagicaVoxelData vox = new MagicaVoxelData();
                     vox.x = voxelData[i].x;
                     vox.y = voxelData[i].y;
@@ -4505,7 +4607,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c >= 21 && c <= 24) //lights
-                        mvd.color = 253 - 12 * 4; //metal contrast color for broken lights
+                        mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
                         mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
                     /*
@@ -4675,7 +4777,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c >= 21 && c <= 24) //lights
-                        mvd.color = 253 - 12 * 4; //metal contrast color for broken lights
+                        mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
                         mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
                     /*
@@ -4929,7 +5031,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c >= 21 && c <= 24) //lights
-                        mvd.color = 253 - 12 * 4; //metal contrast color for broken lights
+                        mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
                         mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
                     /*
@@ -5116,7 +5218,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c >= 21 && c <= 24) //lights
-                        mvd.color = 253 - 12 * 4; //metal contrast color for broken lights
+                        mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
                         mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
                     /*

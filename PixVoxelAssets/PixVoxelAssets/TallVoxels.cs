@@ -4906,7 +4906,8 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                zbuffer[p] = vx.z + vx.x - vx.y;
+                                if (VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_alpha && VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_flat_alpha)
+                                    zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                             }
@@ -5131,7 +5132,9 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                zbuffer[p] = vx.z + vx.x - vx.y;
+
+                                if (VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_alpha && VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_flat_alpha)
+                                    zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
 
@@ -5357,7 +5360,8 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                zbuffer[p] = vx.z + vx.x - vx.y;
+                                if (VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_alpha && VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_flat_alpha)
+                                    zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
 
@@ -7349,7 +7353,7 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             int framelimit = 1;
 
             for (int i = 0; i < 3; i++)
@@ -7638,7 +7642,7 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -8974,7 +8978,8 @@ namespace AssetsPV
 
 //            processUnitOutlinedWDouble("Pelmir", 22, true);
 //            processUnitOutlinedWDouble("Uljir", 23, true);
-            processUnitOutlinedWDouble("Sfyst", 24, true);
+//            processUnitOutlinedWDouble("Sfyst", 24, true);
+            processUnitOutlinedWDouble("Eidolon_Light", 25, false);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
