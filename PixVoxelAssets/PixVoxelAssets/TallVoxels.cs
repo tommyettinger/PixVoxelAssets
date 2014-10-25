@@ -4856,6 +4856,13 @@ namespace AssetsPV
                             mod_color -= r.Next(3);
                         }
                     }
+                    else if (current_color == 20) // sparks
+                    {
+                        if (r.Next(5) > 0)
+                        {
+                            mod_color -= r.Next(3);
+                        }
+                    }
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -4896,7 +4903,7 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
-                        mod_color = 21 + frame % 4;
+                        mod_color = 21 + ((current_color + frame) % 4);
                     }
                     for (int j = 0; j < 4; j++)
                     {
@@ -5122,7 +5129,7 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
-                        mod_color = 21 + frame % 4;
+                        mod_color = 21 + ((current_color + frame) % 4);
                     }
                     for (int j = 0; j < 4; j++)
                     {
@@ -5350,7 +5357,7 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
-                        mod_color = 21 + frame % 4;
+                        mod_color = 21 + ((current_color + frame) % 4);
                     }
                     for (int j = 0; j < 4; j++)
                     {
@@ -8980,6 +8987,7 @@ namespace AssetsPV
 //            processUnitOutlinedWDouble("Uljir", 23, true);
 //            processUnitOutlinedWDouble("Sfyst", 24, true);
             processUnitOutlinedWDouble("Eidolon_Light", 25, false);
+            processUnitOutlinedWDouble("Eidolon_Atomic", 26, false);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
