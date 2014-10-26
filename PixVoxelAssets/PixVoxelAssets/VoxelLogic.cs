@@ -4006,7 +4006,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                      && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4 && voxelData[i].color != 253 - 20 * 4
                      && voxelData[i].color > 253 - 47 * 4)
                 {
-                    Console.Write(voxelData[i].color  + ", ");
+//                    Console.Write(voxelData[i].color  + ", ");
                     MagicaVoxelData vox = new MagicaVoxelData();
                     vox.x = voxelData[i].x;
                     vox.y = voxelData[i].y;

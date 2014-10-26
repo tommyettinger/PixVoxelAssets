@@ -8992,8 +8992,8 @@ namespace AssetsPV
 //            processUnitOutlinedWDouble("Pelmir", 22, true);
 //            processUnitOutlinedWDouble("Uljir", 23, true);
 //            processUnitOutlinedWDouble("Sfyst", 24, true);
-            processUnitOutlinedWDouble("Eidolon_Light", 25, false);
-            processUnitOutlinedWDouble("Eidolon_Atomic", 26, false);
+//            processUnitOutlinedWDouble("Eidolon_Light", 25, false);
+//            processUnitOutlinedWDouble("Eidolon_Atomic", 26, false);
             processUnitOutlinedWDouble("Eidolon_Dark", 27, false);
 
             /*
