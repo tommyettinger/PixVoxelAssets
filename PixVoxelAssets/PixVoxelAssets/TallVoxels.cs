@@ -4876,9 +4876,11 @@ namespace AssetsPV
                             p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0)
                             {
+                                if (VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
+                                    zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
-                                barePositions[p] = true;
+                                barePositions[p] = !(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                             }
                         }
                     }
@@ -4913,8 +4915,7 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                if (VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_alpha && VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_flat_alpha)
-                                    zbuffer[p] = vx.z + vx.x - vx.y;
+                                zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                             }
@@ -5102,9 +5103,13 @@ namespace AssetsPV
                             p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0)
                             {
+
+                                //if (VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
+                                //    zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 barePositions[p] = true;
+                                // !(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                             }
                         }
                     }
@@ -5139,9 +5144,7 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-
-                                if (VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_alpha && VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_flat_alpha)
-                                    zbuffer[p] = vx.z + vx.x - vx.y; 
+                                zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
 
@@ -5327,12 +5330,16 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
+
                             p = voxelToPixelMassiveW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0)
                             {
+                                //if (VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
+                                //    zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 barePositions[p] = true;
+                                //!(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                             }
                         }
                     }
@@ -5367,8 +5374,7 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                if (VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_alpha && VoxelLogic.wcolors[current_color][3] != VoxelLogic.borderless_flat_alpha)
-                                    zbuffer[p] = vx.z + vx.x - vx.y; 
+                                zbuffer[p] = vx.z + vx.x - vx.y; 
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
 
@@ -8988,6 +8994,7 @@ namespace AssetsPV
 //            processUnitOutlinedWDouble("Sfyst", 24, true);
             processUnitOutlinedWDouble("Eidolon_Light", 25, false);
             processUnitOutlinedWDouble("Eidolon_Atomic", 26, false);
+            processUnitOutlinedWDouble("Eidolon_Dark", 27, false);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
