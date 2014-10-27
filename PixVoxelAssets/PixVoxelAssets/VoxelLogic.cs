@@ -3404,6 +3404,105 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             },
             
+            new float[][] { //28 eidolon (kinetic)
+            //0 feet contrast
+            new float[] {0.25F,0.2F,0.15F,1F},
+            //1 feet
+            new float[] {0.35F,0.3F,0.25F,1F},
+            //2 clothing contrast
+            new float[] {0.5F,0.25F,0.75F,1F},
+            //3 clothing
+            new float[] {0.4F,0.35F,0.85F,1F},
+            //4 body, fins contrast
+            new float[] {0.42F,0.32F,0.27F,1F},
+            //5 body, fins
+            new float[] {0.6F,0.55F,0.5F,1F},
+            //6 hair contrast
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.35F,0.0F,0.05F,1F},
+            //9 skin
+            new float[] {0.6F,0.5F,0.65F,1F},
+            //10 eyes shine
+            new float[] {0.7F,0.9F,0.95F,1F},
+            //11 eyes
+            new float[] {0.05F,0.1F,0.1F,1F},
+            //12 metal contrast
+            new float[] {0.9F,1.05F,1.1F,1F},
+            //13 metal
+            new float[] {0.7F,0.85F,0.9F,1F},
+            //14 wavering solids contrast
+            new float[] {0.3F,0.3F,0.3F,waver_alpha},
+            //15 wavering solids
+            new float[] {0.45F,0.45F,0.45F,waver_alpha},
+            //16 inner shadow
+            new float[] {0.13F,0.10F,0.04F,1F},
+            //17 smoke
+            new float[] {0.35F,0.35F,0.5F,bordered_alpha},
+            //18 yellow fire
+            new float[] {0.4F,0.45F,0.9F,bordered_alpha},
+            //19 orange fire
+            new float[] {0.3F,0.95F,0.5F,bordered_alpha},
+            //20 sparks
+            new float[] {0.95F,0.95F,0.95F,bordered_alpha},
+            //21 glow frame 0
+            new float[] {0.6F,0.7F,0.7F,bordered_alpha},
+            //22 glow frame 1
+            new float[] {0.75F,0.85F,0.85F,bordered_alpha},
+            //23 glow frame 2
+            new float[] {0.6F,0.7F,0.7F,bordered_alpha},
+            //24 glow frame 3
+            new float[] {0.45F,0.55F,0.55F,bordered_alpha},
+            //25 shadow
+            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            //26 mud
+            new float[] {0.2F,0.4F,0.3F,1F},
+            //27 water
+            new float[] {0.4F,0.6F,0.9F,flat_alpha},
+            //28 fuzz deepest
+            new float[] {0.74F,0.3F,-0.05F,fuzz_alpha},
+            //29 fuzz lowlight
+            new float[] {0.5F,0.2F,-0.09F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.34F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.38F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.9F,0.45F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {1.05F,0.65F,0.15F,fuzz_alpha},
+            //34 gore
+            new float[] {0.4F,0.55F,0.6F,1F},
+            //35 glass
+            new float[] {0.18F,0.13F,0.2F,bordered_alpha},
+            //36 moving debris contrast, even frames 
+            new float[] {0.7F,0.2F,0.2F,spin_alpha_0},
+            //37 moving debris, even frames
+            new float[] {0.65F,0.65F,0.65F,spin_alpha_0},
+            //38 moving debris contrast, odd frames
+            new float[] {0.7F,0.2F,0.2F,spin_alpha_1},
+            //39 moving debris, odd frames
+            new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
+            //40 flickering phantom            
+            new float[] {0.7F,0.8F,0.8F,spin_alpha_0},
+            //41 placeholder
+            new float[] {0F,0F,0F,0F},
+            //42 placeholder
+            new float[] {0F,0F,0F,0F},
+            //43 placeholder
+            new float[] {0F,0F,0F,0F},
+            //44 placeholder
+            new float[] {0F,0F,0F,0F},
+            //45 placeholder
+            new float[] {0F,0F,0F,0F},
+            //46 placeholder
+            new float[] {0F,0F,0F,0F},
+            //47 total transparent
+            new float[] {0F,0F,0F,0F},
+            },
+            
         };
         public static int wcolorcount = 48, wpalettecount = 0;
 
@@ -3569,7 +3668,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             Image image = new Bitmap("cube_soft.png");
             Image flat = new Bitmap("flat_soft.png");
-            Image spin = new Bitmap("spin_soft.png");
+            Image shine = new Bitmap("spin_soft.png");
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
             int height = 4;
@@ -3598,13 +3697,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     if (current_color == 25)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0.22F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wpalettes[p][current_color][2],  0, 0},
    new float[] {0,  0,  0,  1, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
-                    else if (VoxelLogic.wpalettes[p][current_color][3] == 0F)
+                    else if (wpalettes[p][current_color][3] == 0F)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {0,  0,  0,  0, 0},
@@ -3613,21 +3712,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 1F}});
                     }
-                    else if (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)
+                    else if (wpalettes[p][current_color][3] == VoxelLogic.flat_alpha)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0.22F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wpalettes[p][current_color][2],  0, 0},
    new float[] {0,  0,  0,  VoxelLogic.flat_alpha, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
                     else
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
-   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
-   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
-   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0.22F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wpalettes[p][current_color][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -3635,9 +3734,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        colorMatrix,
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
-                    g.DrawImage((current_color >= 18 && current_color <= 24) ? spin :
-                       (VoxelLogic.wpalettes[p][current_color][3] == 1F || VoxelLogic.wpalettes[p][current_color][3] == waver_alpha) ? image :
-                       (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha) ? flat : spin,
+                    g.DrawImage((current_color >= 18 && current_color <= 24) ? shine :
+                       (wpalettes[p][current_color][3] == 1F || wpalettes[p][current_color][3] == waver_alpha
+                        || wpalettes[p][current_color][3] == fuzz_alpha || wpalettes[p][current_color][3] == bordered_alpha
+                         || wpalettes[p][current_color][3] == spin_alpha_0 || wpalettes[p][current_color][3] == spin_alpha_1) ? image :
+                       (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine,
                        new Rectangle(0, 0,
                            width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 

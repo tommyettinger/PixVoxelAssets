@@ -148,6 +148,9 @@
     <None Include="Eidolon_Dark_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Eidolon_Kinetic_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Eidolon_Light_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
