@@ -3331,9 +3331,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //11 eyes
             new float[] {0.05F,0.1F,0.1F,1F},
             //12 metal contrast
-            new float[] {0.9F,1.05F,1.1F,1F},
+            new float[] {0.09F,0.06F,0.0F,1F},
             //13 metal
-            new float[] {0.7F,0.85F,0.9F,1F},
+            new float[] {0.13F,0.10F,0.04F,1F},
             //14 wavering solids contrast
             new float[] {0.42F,0.37F,0.32F,waver_alpha},
             //15 wavering solids
