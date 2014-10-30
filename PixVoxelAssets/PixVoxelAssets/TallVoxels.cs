@@ -8994,12 +8994,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Sfyst", 24, true);
             processUnitOutlinedWDouble("Eidolon_Light", 25, false);
             processUnitOutlinedWDouble("Eidolon_Atomic", 26, false);
-            */
             processUnitOutlinedWDouble("Eidolon_Dark", 27, false);
-            /*
             processUnitOutlinedWDouble("Eidolon_Kinetic", 28, false);
             processUnitOutlinedWDouble("Eidolon_Fire", 29, false);
             */
+            processUnitOutlinedWDouble("Eidolon_Cold", 30, false);
+
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
