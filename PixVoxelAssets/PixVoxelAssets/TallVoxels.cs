@@ -4243,7 +4243,7 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 4 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : (still) ? 0 : jitter) + innerY);
+                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? -2 : (still) ? 0 : jitter) + innerY);
             //((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter)
         }
         private static int voxelToPixelHugeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
@@ -4255,7 +4255,7 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
-                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : (still) ? 0 : jitter) + innerY);
+                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelMassiveW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
         {
@@ -4266,7 +4266,7 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
-                                    stride * (800 - 160 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : (still) ? 0 : jitter) + innerY);
+                                    stride * (800 - 160 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
@@ -4903,6 +4903,8 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
+                    if (mod_color == 27 && r.Next(7) < 2) //water
+                        continue;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
                         mod_color = 21 + ((current_color + frame) % 4);
@@ -5132,6 +5134,8 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
+                    if (mod_color == 27 && r.Next(7) < 2) //water
+                        continue;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
                         mod_color = 21 + ((current_color + frame) % 4);
@@ -5362,6 +5366,8 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
+                    if (mod_color == 27 && r.Next(7) < 2) //water
+                        continue;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
                         mod_color = 21 + ((current_color + frame) % 4);
@@ -8997,8 +9003,9 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Dark", 27, false);
             processUnitOutlinedWDouble("Eidolon_Kinetic", 28, false);
             processUnitOutlinedWDouble("Eidolon_Fire", 29, false);
-            */
             processUnitOutlinedWDouble("Eidolon_Cold", 30, false);
+            */
+            processUnitOutlinedWDouble("Eidolon_Water", 31, false);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);

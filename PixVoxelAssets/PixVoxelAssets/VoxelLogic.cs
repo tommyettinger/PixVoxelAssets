@@ -3701,6 +3701,105 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             },
             
+            new float[][] { //31 eidolon (water)
+            //0 feet contrast
+            new float[] {0.25F,0.2F,0.15F,1F},
+            //1 feet
+            new float[] {0.35F,0.3F,0.25F,1F},
+            //2 clothing contrast
+            new float[] {0.5F,0.25F,0.75F,1F},
+            //3 clothing
+            new float[] {0.4F,0.35F,0.85F,1F},
+            //4 body, fins contrast
+            new float[] {0.42F,0.32F,0.27F,1F},
+            //5 body, fins
+            new float[] {0.6F,0.55F,0.5F,1F},
+            //6 hair contrast
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {0.15F,0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.35F,0.0F,0.05F,1F},
+            //9 skin
+            new float[] {0.6F,0.5F,0.65F,1F},
+            //10 eyes shine
+            new float[] {0.7F,0.9F,0.95F,1F},
+            //11 eyes
+            new float[] {0.05F,0.1F,0.1F,1F},
+            //12 metal contrast
+            new float[] {0.9F,1.05F,1.1F,1F},
+            //13 metal
+            new float[] {0.7F,0.85F,0.9F,1F},
+            //14 wavering solids contrast
+            new float[] {0.8F,0.95F,1.05F,waver_alpha},
+            //15 wavering solids
+            new float[] {0.9F,1.1F,1.2F,waver_alpha},
+            //16 inner shadow
+            new float[] {0.13F,0.10F,0.04F,1F},
+            //17 smoke
+            new float[] {0.2F,0.55F,0.7F,bordered_alpha},
+            //18 yellow fire
+            new float[] {0.25F,0.65F,0.8F,bordered_alpha},
+            //19 orange fire
+            new float[] {0.2F,0.8F,0.75F,bordered_alpha},
+            //20 sparks
+            new float[] {0.6F,0.85F,0.9F,bordered_alpha},
+            //21 glow frame 0
+            new float[] {0.15F,0.4F,0.65F,bordered_alpha},
+            //22 glow frame 1
+            new float[] {0.25F,0.55F,0.8F,bordered_alpha},
+            //23 glow frame 2
+            new float[] {0.15F,0.4F,0.65F,bordered_alpha},
+            //24 glow frame 3
+            new float[] {0.05F,0.25F,0.5F,bordered_alpha},
+            //25 shadow
+            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            //26 mud
+            new float[] {0.2F,0.4F,0.3F,1F},
+            //27 water
+            new float[] {0.4F,0.6F,0.9F,bordered_alpha},
+            //28 fuzz deepest
+            new float[] {0.74F,0.3F,-0.05F,fuzz_alpha},
+            //29 fuzz lowlight
+            new float[] {0.5F,0.2F,-0.09F,fuzz_alpha},
+            //30 fuzz mid-deep
+            new float[] {0.79F,0.34F,0.0F,fuzz_alpha},
+            //31 fuzz mid-light
+            new float[] {0.83F,0.38F,0.05F,fuzz_alpha},
+            //32 fuzz light
+            new float[] {0.9F,0.45F,0.1F,fuzz_alpha},
+            //33 fuzz lightest
+            new float[] {1.05F,0.65F,0.15F,fuzz_alpha},
+            //34 gore
+            new float[] {0.4F,0.55F,0.6F,1F},
+            //35 glass
+            new float[] {0.15F,0.45F,0.6F,bordered_alpha},
+            //36 moving debris contrast, even frames 
+            new float[] {0.7F,0.2F,0.2F,spin_alpha_0},
+            //37 moving debris, even frames
+            new float[] {0.65F,0.65F,0.65F,spin_alpha_0},
+            //38 moving debris contrast, odd frames
+            new float[] {0.7F,0.2F,0.2F,spin_alpha_1},
+            //39 moving debris, odd frames
+            new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
+            //40 flickering phantom            
+            new float[] {0.7F,0.8F,0.8F,spin_alpha_0},
+            //41 placeholder
+            new float[] {0F,0F,0F,0F},
+            //42 placeholder
+            new float[] {0F,0F,0F,0F},
+            //43 placeholder
+            new float[] {0F,0F,0F,0F},
+            //44 placeholder
+            new float[] {0F,0F,0F,0F},
+            //45 placeholder
+            new float[] {0F,0F,0F,0F},
+            //46 placeholder
+            new float[] {0F,0F,0F,0F},
+            //47 total transparent
+            new float[] {0F,0F,0F,0F},
+            },
+            
         };
         public static int wcolorcount = 48, wpalettecount = 0;
 
@@ -5063,9 +5162,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
-                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -5075,16 +5174,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
-                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -5103,6 +5202,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 47 * 4; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
+                    else if (c == 27)
+                        mvd.color = 253 - 27 * 4; //water stays water
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
@@ -5233,9 +5334,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
-                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -5245,16 +5346,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
-                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -5273,6 +5374,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 47 * 4; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
+                    else if (c == 27)
+                        mvd.color = 253 - 27 * 4; //water stays water
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
@@ -5487,9 +5590,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.x * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.x * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
-                    maxX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.x * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.x * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -5499,16 +5602,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.y * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.y * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 10000 : 1));
-                    maxY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.y * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.y * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -5527,6 +5630,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 47 * 4; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
+                    else if (c == 27)
+                        mvd.color = 253 - 27 * 4; //water stays water
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
@@ -5675,9 +5780,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
-                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -5687,15 +5792,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
-                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
                     v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || v.color == 253 - 27 * 4 ||
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
                     v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -5714,6 +5819,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 47 * 4; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
+                    else if (c == 27)
+                        mvd.color = 253 - 27 * 4; //water stays water
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
