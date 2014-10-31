@@ -4905,6 +4905,8 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if (mod_color == 27 && r.Next(7) < 2) //water
                         continue;
+                    if (mod_color == 40 && r.Next(11) < 8) //rare sparks
+                        continue;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
                         mod_color = 21 + ((current_color + frame) % 4);
@@ -5135,6 +5137,8 @@ namespace AssetsPV
                 {
                     int mod_color = current_color;
                     if (mod_color == 27 && r.Next(7) < 2) //water
+                        continue;
+                    if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
@@ -5367,6 +5371,8 @@ namespace AssetsPV
                 {
                     int mod_color = current_color;
                     if (mod_color == 27 && r.Next(7) < 2) //water
+                        continue;
+                    if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
                     if (current_color >= 21 && current_color <= 24) //lights
                     {
@@ -9004,8 +9010,9 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Kinetic", 28, false);
             processUnitOutlinedWDouble("Eidolon_Fire", 29, false);
             processUnitOutlinedWDouble("Eidolon_Cold", 30, false);
-            */
             processUnitOutlinedWDouble("Eidolon_Water", 31, false);
+            */
+            processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
