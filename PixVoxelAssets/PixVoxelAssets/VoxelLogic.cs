@@ -3882,7 +3882,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //39 moving debris, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {0.9F,0.65F,0.95F,spin_alpha_0},
+            new float[] {0.95F,0.95F,0.7F,spin_alpha_0},
             //41 placeholder
             new float[] {0F,0F,0F,0F},
             //42 placeholder
