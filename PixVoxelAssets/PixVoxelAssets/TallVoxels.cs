@@ -9011,8 +9011,10 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Fire", 29, false);
             processUnitOutlinedWDouble("Eidolon_Cold", 30, false);
             processUnitOutlinedWDouble("Eidolon_Water", 31, false);
-            */
             processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
+
+            */
+            processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
