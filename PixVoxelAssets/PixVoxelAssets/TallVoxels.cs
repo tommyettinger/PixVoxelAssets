@@ -9012,9 +9012,10 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Cold", 30, false);
             processUnitOutlinedWDouble("Eidolon_Water", 31, false);
             processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
+            processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
 
             */
-            processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
+            processUnitOutlinedWDouble("Eidolon_Air", 34, false);
 
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
