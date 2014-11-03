@@ -4129,7 +4129,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             for (int current_color = 0; current_color < 168; current_color++)
             {
                 Bitmap b =
-                new Bitmap(4, 4, PixelFormat.Format32bppArgb);
+                new Bitmap(height, width, PixelFormat.Format32bppArgb);
 
                 Graphics g = Graphics.FromImage((Image)b);
 
@@ -4258,14 +4258,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         private static byte[][][] storeColorCubesW()
         {
             wpalettecount = wpalettes.Length;
-            byte[, ,] cubes = new byte[wpalettecount, wcolorcount, 64];
+            byte[, ,] cubes = new byte[wpalettecount, wcolorcount, 80];
 
             Image image = new Bitmap("cube_soft.png");
             Image flat = new Bitmap("flat_soft.png");
             Image shine = new Bitmap("spin_soft.png");
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
-            int height = 4;
+            int height = 5;
             float[][] colorMatrixElements = { 
    new float[] {1F, 0,  0,  0,  0},
    new float[] {0, 1F,  0,  0,  0},
@@ -4341,15 +4341,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        height,      // height of source rectangle
                        GraphicsUnit.Pixel,
                        imageAttributes);
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < width; i++)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[p, current_color, i * 4 + j * 16 + 0] = c.B;
-                            cubes[p, current_color, i * 4 + j * 16 + 1] = c.G;
-                            cubes[p, current_color, i * 4 + j * 16 + 2] = c.R;
-                            cubes[p, current_color, i * 4 + j * 16 + 3] = c.A;
+                            cubes[p, current_color, i * 4 + j * 4 * width + 0] = c.B;
+                            cubes[p, current_color, i * 4 + j * 4 * width + 1] = c.G;
+                            cubes[p, current_color, i * 4 + j * 4 * width + 2] = c.R;
+                            cubes[p, current_color, i * 4 + j * 4 * width + 3] = c.A;
                         }
                     }
                 }
@@ -4404,8 +4404,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 cubes2[i] = new byte[wcolorcount][];
                 for (int c = 0; c < wcolorcount; c++)
                 {
-                    cubes2[i][c] = new byte[64];
-                    for (int j = 0; j < 64; j++)
+                    cubes2[i][c] = new byte[80];
+                    for (int j = 0; j < 80; j++)
                     {
                         cubes2[i][c][j] = cubes[i, c, j];
                     }
@@ -8451,6 +8451,23 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 voxelFrames[f].CopyTo(frames[16 - f], 0);
             }
             return frames;
+        }
+        public static string VoxToJSON(List<MagicaVoxelData> data, int palette)
+        {
+            StringBuilder sb = new StringBuilder(1024 * 1024);
+
+            wcolors = wpalettes[palette];
+            wcurrent = wrendered[palette];
+            sb.Append("{\n");
+            foreach(MagicaVoxelData vox in data)
+            {
+                sb.Append("    \"" + vox.x + "," + vox.y + "," + vox.z + String.Format("\": \"0x{0:X2}{1:X2}{2:X2}\",\t",
+                    wcurrent[(253 - vox.color) / 4][2], wcurrent[(253 - vox.color) / 4][1], wcurrent[(253 - vox.color) / 4][0]));
+            }
+            sb.Remove(sb.Length - 2, 1);
+            sb.Replace("\t", "\n");
+            sb.Append("}\n");
+            return sb.ToString();
         }
     }
 }

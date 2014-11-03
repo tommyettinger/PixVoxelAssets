@@ -4883,7 +4883,7 @@ namespace AssetsPV
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 barePositions[p] = !(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
-                                    outlineValues[p] = (VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2 < 255) ? (byte)(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2) : (byte)255;
+                                    outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];//(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2 < 255) ? (byte)(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2) : (byte)255;
 
                             }
                         }
@@ -4927,7 +4927,7 @@ namespace AssetsPV
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
-                                    outlineValues[p] = (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
                             }
                         }
@@ -5124,7 +5124,7 @@ namespace AssetsPV
                                 barePositions[p] = true;
                                 // !(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
-                                    outlineValues[p] = (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
                         }
                     }
@@ -5167,7 +5167,7 @@ namespace AssetsPV
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
-                                    outlineValues[p] = (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
                         }
                     }
@@ -5362,7 +5362,7 @@ namespace AssetsPV
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
                                 barePositions[p] = true;
                                 if (!barePositions[p] && outlineValues[p] == 0)
-                                    outlineValues[p] = (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64]; // (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                                 //!(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                             }
                         }
@@ -5406,7 +5406,7 @@ namespace AssetsPV
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
-                                    outlineValues[p] = (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
                             }
                         }
@@ -8978,7 +8978,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-            
+            /*
+            File.WriteAllText("zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("zombie" + "_Large_W.vox", FileMode.Open))), 2));
+            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
+            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
+            */
+
             processUnitOutlinedWDouble("Human_Male", 15, true);
             processUnitOutlinedWalkDouble("Human_Male", 15);
             processUnitOutlinedWDouble("Human_Male", 16, true);
@@ -9033,7 +9038,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Water", 31, false);
             processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
-
+            
             
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
 
