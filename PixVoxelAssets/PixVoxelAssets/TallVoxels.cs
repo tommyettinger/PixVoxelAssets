@@ -8983,7 +8983,7 @@ namespace AssetsPV
             File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             */
-
+            /*
             processUnitOutlinedWDouble("Human_Male", 15, true);
             processUnitOutlinedWalkDouble("Human_Male", 15);
             processUnitOutlinedWDouble("Human_Male", 16, true);
@@ -9038,11 +9038,9 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Water", 31, false);
             processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
-            
-            
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
-
-            /*
+            */
+            
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
@@ -9050,7 +9048,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-          */
+          
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
