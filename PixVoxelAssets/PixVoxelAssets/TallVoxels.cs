@@ -8983,7 +8983,12 @@ namespace AssetsPV
             File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             */
-            /*
+
+            processUnitOutlinedWQuad("Nodebpe", 10, true);
+            processUnitOutlinedWalkQuad("Nodebpe", 10);
+            processUnitOutlinedWQuad("Vashk", 19, true);
+            processUnitOutlinedWalkQuad("Vashk", 19);
+
             processUnitOutlinedWDouble("Human_Male", 15, true);
             processUnitOutlinedWalkDouble("Human_Male", 15);
             processUnitOutlinedWDouble("Human_Male", 16, true);
@@ -8998,8 +9003,6 @@ namespace AssetsPV
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Kurguiv", 13, false);
             processUnitOutlinedWalkDouble("Kurguiv", 13);
-            processUnitOutlinedWQuad("Nodebpe", 10, true);
-            processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Tassar", 11, false);
             processUnitOutlinedWalkDouble("Tassar", 11);
             processUnitOutlinedWDouble("Ilapa", 12, true);
@@ -9039,7 +9042,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
-            */
+            
             
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDouble("Skeleton", 6, true);
