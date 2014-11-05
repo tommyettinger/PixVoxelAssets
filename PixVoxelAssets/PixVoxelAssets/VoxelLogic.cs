@@ -780,8 +780,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.75F,0.7F,0.25F,1F},
             //25 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
-            //26 mud
-            new float[] {0.2F,0.4F,0.3F,1F},
+            //26 bright color
+            new float[] {1.1F,0.3F,0.2F,1F},
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
@@ -810,18 +810,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
             //47 total transparent
             new float[] {0F,0F,0F,0F},
             },
@@ -4851,6 +4851,65 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 return bod.ToArray();
             }
             return PlaceShadows(bod).ToArray();
+        }
+        public static List<MagicaVoxelData> AssembleHatToModel(BinaryReader body, string hatClass)
+        {
+            BinaryReader hbin = new BinaryReader(File.Open(hatClass + "_Hat_W.vox", FileMode.Open));
+            List<MagicaVoxelData> hat = FromMagicaRaw(hbin).ToList();
+            List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
+            hbin.Close();
+            MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 255 };
+            MagicaVoxelData hatPlug = new MagicaVoxelData { color = 255 };
+            
+            /*
+            List<byte> knownColors = new List<byte>(50);
+            if (!knownColors.Contains(mvd.color))
+            {
+                knownColors.Add(mvd.color);
+                Console.Write(253 - mvd.color);
+                if ((253 - mvd.color) % 4 != 0) Console.Write("!!!  ");
+                else Console.Write(", ");
+            }
+            */
+            foreach (MagicaVoxelData mvd in bod)
+            {
+                
+                if (mvd.color > 253 - 47 * 4 && (254 - mvd.color) % 4 == 0)
+                {
+                    bodyPlug = mvd;
+                    bodyPlug.color--;
+                    break;
+                }
+            }
+            if (bodyPlug.color == 255)
+                return bod;
+            foreach (MagicaVoxelData mvd in hat)
+            {
+                if (mvd.color > 253 - 47 * 4 && (254 - mvd.color) % 4 == 0)
+                {
+                    hatPlug = mvd;
+                    hatPlug.color--;
+                    break;
+                }
+            }
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(hat.Count + bod.Count);
+            for (int i = 0; i < hat.Count; i++)
+            {
+                MagicaVoxelData mvd = hat[i];
+                mvd.x += (byte)(bodyPlug.x - hatPlug.x);
+                mvd.y += (byte)(bodyPlug.y - hatPlug.y);
+                mvd.z += (byte)(bodyPlug.z - hatPlug.z);
+                working.Add(mvd);
+            }
+            for (int i = 0; i < working.Count; i++)
+            {
+                if ((254 - working[i].color) % 4 == 0)
+                    working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
+            }
+            bod.AddRange(working);
+            
+            return bod;
+            
         }
 
 

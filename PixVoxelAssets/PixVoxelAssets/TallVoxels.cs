@@ -6457,6 +6457,60 @@ namespace AssetsPV
 
             bin.Close();
         }
+        public static void processFieryExplosionDoubleWHat(string u, int palette, string hat)
+        {
+            Console.WriteLine("Processing: " + u + " " + hat);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.AssembleHatToModel(bin, hat).ToArray();
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("frames");
+
+            for (int d = 0; d < 4; d++)
+            {
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
+                    Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+
+                    //                        b.Save("temp.png", ImageFormat.Png);
+                    Graphics g2 = Graphics.FromImage(b2);
+                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                    b.Dispose();
+                    g2.DrawImage(b3, 0, 0, 248, 308);
+
+                    b2.Save(folder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    b2.Dispose();
+                    g2.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            for (int d = 0; d < 4; d++)
+            {
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    s += folder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
+                }
+            }
+
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_explosion_animated.gif";
+            Console.WriteLine("Running convert.exe ...");
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+        }
         public static void processFieryExplosionQuadW(string u, int palette)
         {
             Console.WriteLine("Processing: " + u);
@@ -7952,6 +8006,51 @@ namespace AssetsPV
             }
 
          */
+
+        public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
+        {
+
+            Console.WriteLine("Processing: " + u + " " + hat);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.AssembleHatToModel(bin, hat)).ToArray();
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
+                    b.Save(folder + "/" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "palette" + palette + "/" + u + "_" + hat + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            bin.Close();
+
+            //            processFiringDouble(u);
+
+            processFieryExplosionDoubleWHat(u, palette, hat);
+
+        }
+
         public static void processUnitOutlinedPartial(string u)
         {
 
@@ -8983,7 +9082,7 @@ namespace AssetsPV
             File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             */
-
+            /*
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Vashk", 19, true);
@@ -9042,16 +9141,17 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Electric", 32, false);
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
-            
-            
+            */
             processUnitOutlinedWDouble("Zombie", 2, true);
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
+            /*
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
             processUnitOutlinedWDouble("Spirit", 7, false);
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-          
+          */
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
