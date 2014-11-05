@@ -9144,14 +9144,23 @@ namespace AssetsPV
             */
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
-            /*
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
+
             processUnitOutlinedWDouble("Skeleton", 6, true);
+            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Witch");
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
+            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Witch");
             processUnitOutlinedWDouble("Spirit", 7, false);
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Witch");
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-          */
+          
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();

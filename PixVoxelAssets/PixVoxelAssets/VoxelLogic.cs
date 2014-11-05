@@ -427,9 +427,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},*/
         };
 
-        public static float[][] wcolors = new float[][]
-        {
-//0 shoes, boots, brown leather contrast
+        public static float[][] wcolors =
+            new float[][] { //default to brown hair
+            //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.15F,0.0F,1F},
             //1 shoes, boots, brown leather
             new float[] {0.45F,0.25F,0.1F,1F},
@@ -442,9 +442,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //5 shirt
             new float[] {0.3F,0.55F,0.3F,1F},
             //6 hair contrast
-            new float[] {0.35F,0.1F,-0.05F,1F},
+            new float[] {0.3F,0.05F,0.0F,1F},
             //7 hair
-            new float[] {0.45F,0.2F,0.0F,1F},
+            new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
             new float[] {0.77F,0.45F,0.05F,1F},
             //9 skin
@@ -511,21 +511,33 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
-            new float[] {0F,0F,0F,0F},
-        };
+            };
 
         public static float[][][] wpalettes = new float[][][]
             {
@@ -612,19 +624,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -711,19 +735,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -822,7 +858,19 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.75F,0.55F,0.4F,1F},
             //46 always tan
             new float[] {0.9F,0.7F,0.55F,1F},
-            //47 total transparent
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -909,19 +957,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1008,19 +1068,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1107,19 +1179,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1206,19 +1290,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1294,7 +1390,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //34 gore
             new float[] {0.9F,1.0F,1.1F,1F},
             //35 glass
-            new float[] {0.5F,0.8F,1.1F,1F},
+            new float[] {0.5F,0.8F,0.9F,1F},
             //36 placeholder
             new float[] {0F,0F,0F,0F},
             //37 placeholder
@@ -1305,19 +1401,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1393,7 +1501,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //34 gore
             new float[] {0.57F,-0.05F,-0.1F,1F},
             //35 glass
-            new float[] {0.5F,0.8F,1.1F,1F},
+            new float[] {0.4F,0.2F,0.45F,1F},
             //36 placeholder
             new float[] {0F,0F,0F,0F},
             //37 placeholder
@@ -1404,19 +1512,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1503,19 +1623,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1602,19 +1734,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1701,19 +1845,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1800,19 +1956,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1899,19 +2067,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1998,19 +2178,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2097,19 +2289,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2196,19 +2400,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -2295,19 +2511,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2497,19 +2725,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -2596,19 +2836,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2695,19 +2947,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2794,19 +3058,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2893,19 +3169,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2992,19 +3280,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3091,19 +3391,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3190,19 +3502,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3289,19 +3613,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3388,19 +3724,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3487,19 +3835,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering phantom
             new float[] {0.4F,0.95F,0.0F,spin_alpha_0},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3586,19 +3946,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering phantom            
             new float[] {0.7F,0.8F,0.8F,spin_alpha_0},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3685,19 +4057,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering phantom            
             new float[] {0.7F,0.8F,0.8F,spin_alpha_0},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3784,19 +4168,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering phantom            
             new float[] {0.7F,0.8F,0.8F,spin_alpha_0},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3883,19 +4279,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
             new float[] {0.95F,0.95F,0.7F,spin_alpha_0},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3982,19 +4390,31 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering phantom            
             new float[] {0.7F,0.8F,0.8F,spin_alpha_0},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4081,24 +4501,36 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.45F,0.55F,0.55F,spin_alpha_1},
             //40 flickering phantom
             new float[] {0.6F,0.65F,0.7F,bordered_alpha},
-            //41 placeholder
-            new float[] {0F,0F,0F,0F},
-            //42 placeholder
-            new float[] {0F,0F,0F,0F},
-            //43 placeholder
-            new float[] {0F,0F,0F,0F},
-            //44 placeholder
-            new float[] {0F,0F,0F,0F},
-            //45 placeholder
-            new float[] {0F,0F,0F,0F},
-            //46 placeholder
-            new float[] {0F,0F,0F,0F},
-            //47 total transparent
+            //41 always green contrast
+            new float[] {0.15F,0.65F,0.05F,1F},
+            //42 always green
+            new float[] {0.25F,0.8F,0.15F,1F},
+            //43 always brown contrast
+            new float[] {0.4F,0.25F,0.1F,1F},
+            //44 always brown
+            new float[] {0.55F,0.4F,0.25F,1F},
+            //45 always tan contrast
+            new float[] {0.75F,0.55F,0.4F,1F},
+            //46 always tan
+            new float[] {0.9F,0.7F,0.55F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.1F,0.05F,1F},
+            //52 always red
+            new float[] {1.1F,0.25F,0.2F,1F},
+            //53 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
         };
-        public static int wcolorcount = 48, wpalettecount = 0;
+        public static int wcolorcount = 0, wpalettecount = 0;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;
@@ -4255,9 +4687,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
+        public static byte clear = 255;
         private static byte[][][] storeColorCubesW()
         {
             wpalettecount = wpalettes.Length;
+            wcolorcount = wpalettes[0].Length;
+            clear = (byte)(253 - (wcolorcount - 1) * 4);
             byte[, ,] cubes = new byte[wpalettecount, wcolorcount, 80];
 
             Image image = new Bitmap("cube_soft.png");
@@ -4699,7 +5134,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                      && (voxelData[i].color > 253 - 21 * 4 || voxelData[i].color < 253 - 24 * 4)
                      && voxelData[i].color != 253 - 25 * 4 && voxelData[i].color != 253 - 27 * 4 && voxelData[i].color != 253 - 40 * 4
                      && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4 && voxelData[i].color != 253 - 20 * 4
-                     && voxelData[i].color > 253 - 47 * 4)
+                     && voxelData[i].color > 257 - wcolorcount * 4)
                 {
 //                    Console.Write(voxelData[i].color  + ", ");
                     MagicaVoxelData vox = new MagicaVoxelData();
@@ -4873,8 +5308,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             */
             foreach (MagicaVoxelData mvd in bod)
             {
-                
-                if (mvd.color > 253 - 47 * 4 && (254 - mvd.color) % 4 == 0)
+
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
                 {
                     bodyPlug = mvd;
                     bodyPlug.color--;
@@ -4885,7 +5320,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 return bod;
             foreach (MagicaVoxelData mvd in hat)
             {
-                if (mvd.color > 253 - 47 * 4 && (254 - mvd.color) % 4 == 0)
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
                 {
                     hatPlug = mvd;
                     hatPlug.color--;
@@ -5518,10 +5953,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
-                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 ||
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 ||
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
@@ -5531,16 +5966,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 40 * 2; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
                 int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
                 int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -5552,10 +5987,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = (byte)((r.Next(1 + f) == 0) ? 253 - 34 * 4 : (r.Next(8) == 0) ? 253 - 19 * 4 : v.color); //random transform to guts
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(18) == 0) ? 253 - 19 * 4 : v.color); //random transform to orange fire
-                    else if (c >= 47) //clear and markers
-                        mvd.color = 253 - 47 * 4; //clear stays clear
+                    else if (c >= wcolorcount - 1) //clear and markers
+                        mvd.color = clear; //clear stays clear
                     else if (c == 16)
-                        mvd.color = 253 - 47 * 4; //clear inner shadow
+                        mvd.color = clear; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
@@ -5565,19 +6000,19 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
-                        mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(3) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 36) //rotor contrast
                         mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
                     else if (c == 37) //rotor
                         mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
                     else if (c == 38 || c == 39)
-                        mvd.color = 253 - 47 * 4; //clear non-active rotors
+                        mvd.color = clear; //clear non-active rotors
                     else if (c == 19) //orange fire
                         mvd.color = (byte)((r.Next(3) <= 1) ? 253 - 18 * 4 : ((r.Next(5) == 0) ? 253 - 17 * 4 : v.color)); //random transform to yellow fire or smoke
                     else if (c == 18) //yellow fire
                         mvd.color = (byte)((r.Next(4) <= 1) ? 253 - 19 * 4 : ((r.Next(4) == 0) ? 253 - 20 * 4 : v.color)); //random transform to orange fire or sparks
                     else if (c == 20) //sparks
-                        mvd.color = (byte)((r.Next(4) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(4) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 17)
                         mvd.color = v.color; // smoke stays smoke
                     else
@@ -5624,12 +6059,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -5639,12 +6074,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -5653,12 +6088,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.x < 0)
                         {
                             mvd.x = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (v.x > 119)
                         {
                             mvd.x = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.x = v.x;
                     }
@@ -5668,12 +6103,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
@@ -5683,12 +6118,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
@@ -5697,12 +6132,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.y < 0)
                         {
                             mvd.y = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (v.y > 119)
                         {
                             mvd.y = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.y = v.y;
                     }
@@ -5740,9 +6175,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 40 * 2; level++)
                 {
                     minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
                     maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
@@ -5752,16 +6187,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 40 * 2; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
                 int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
                 int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -5774,9 +6209,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to orange fire
                     else if (c >= 47) //clear and markers
-                        mvd.color = (byte)253 - 47 * 4; //clear stays clear
+                        mvd.color = (byte)clear; //clear stays clear
                     else if (c == 16)
-                        mvd.color = 253 - 47 * 4; //clear inner shadow
+                        mvd.color = clear; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
@@ -5786,21 +6221,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
-                        mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(3) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 36) //rotor contrast
                         mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
                     else if (c == 37) //rotor
                         mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
                     else if (c == 38 || c == 39)
-                        mvd.color = 253 - 47 * 4; //clear non-active rotors
+                        mvd.color = clear; //clear non-active rotors
                     else if (c == 19) //orange fire
                         mvd.color = (byte)((r.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 18 * 4 : ((r.Next(3) == 0) ? 253 - 17 * 4 : v.color))); //random transform to yellow fire or smoke
                     else if (c == 18) //yellow fire
                         mvd.color = (byte)((r.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 19 * 4 : ((r.Next(4) == 0) ? 253 - 17 * 4 : ((r.Next(4) == 0) ? 253 - 20 * 4 : v.color)))); //random transform to orange fire, smoke, or sparks
                     else if (c == 20) //sparks
-                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : 253 - 47 * 4); //random transform to clear
+                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : clear); //random transform to clear
                     else if (c == 17) //smoke
-                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? 253 - 47 * 4 : 253 - 17 * 4); //random transform to clear
+                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? clear : 253 - 17 * 4); //random transform to clear
                     else
                         mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19*4) : v.color); //random transform to orange or yellow fire
                     
@@ -5865,12 +6300,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -5882,12 +6317,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -5896,12 +6331,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.x < 0)
                         {
                             mvd.x = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (v.x > 119)
                         {
                             mvd.x = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.x = v.x;
                     }
@@ -5912,12 +6347,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
@@ -5928,12 +6363,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Ceiling(nv));
                     }
@@ -5942,12 +6377,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.y < 0)
                         {
                             mvd.y = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (v.y > 119)
                         {
                             mvd.y = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.y = v.y;
                     }
@@ -5962,7 +6397,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv > 79)
                         {
                             nv = 79;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.z = (byte)Math.Round(nv);
                     }
@@ -5996,7 +6431,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                          && (voxelFrames[f][i].color > 253 - 21 * 4 || voxelFrames[f][i].color < 253 - 24 * 4)
                          && voxelFrames[f][i].color != 253 - 25 * 4 && voxelFrames[f][i].color != 253 - 27 * 4
                          && voxelFrames[f][i].color != 253 - 17 * 4 && voxelFrames[f][i].color != 253 - 18 * 4 && voxelFrames[f][i].color != 253 - 19 * 4
-                         && voxelFrames[f][i].color > 253 - 47 * 4)
+                         && voxelFrames[f][i].color > 257 - wcolorcount * 4)
                     {
                         MagicaVoxelData vox = new MagicaVoxelData();
                         vox.x = voxelFrames[f][i].x;
@@ -6047,9 +6482,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 120; level++)
                 {
                     minX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.x * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
                     maxX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.x * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
@@ -6059,16 +6494,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 120; level++)
                 {
                     minY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.y * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 10000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 10000 : 1));
                     maxY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.y * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
                 int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 2000 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
                 int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -6081,9 +6516,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(18) == 0) ? 253 - 19 * 4 : v.color); //random transform to orange fire
                     else if (c >= 47) //clear and markers
-                        mvd.color = 253 - 47 * 4; //clear stays clear
+                        mvd.color = clear; //clear stays clear
                     else if (c == 16)
-                        mvd.color = 253 - 47 * 4; //clear inner shadow
+                        mvd.color = clear; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
@@ -6093,19 +6528,19 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
-                        mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(3) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 36) //rotor contrast
                         mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
                     else if (c == 37) //rotor
                         mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
                     else if (c == 38 || c == 39)
-                        mvd.color = 253 - 47 * 4; //clear non-active rotors
+                        mvd.color = clear; //clear non-active rotors
                     else if (c == 19) //orange fire
                         mvd.color = (byte)((r.Next(3) <= 1) ? 253 - 18 * 4 : ((r.Next(5) == 0) ? 253 - 17 * 4 : v.color)); //random transform to yellow fire or smoke
                     else if (c == 18) //yellow fire
                         mvd.color = (byte)((r.Next(4) <= 1) ? 253 - 19 * 4 : ((r.Next(4) == 0) ? 253 - 20 * 4 : v.color)); //random transform to orange fire or sparks
                     else if (c == 20) //sparks
-                        mvd.color = (byte)((r.Next(4) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(4) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 17)
                         mvd.color = v.color; // smoke stays smoke
                     else
@@ -6153,12 +6588,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -6168,12 +6603,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -6182,12 +6617,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.x < 0)
                         {
                             mvd.x = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else if (v.x > 159)
                         {
                             mvd.x = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.x = v.x;
                     }
@@ -6197,12 +6632,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
@@ -6212,12 +6647,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
@@ -6226,12 +6661,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.y < 0)
                         {
                             mvd.y = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else if (v.y > 159)
                         {
                             mvd.y = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.y = v.y;
                     }
@@ -6269,9 +6704,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 120; level++)
                 {
                     minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
                     maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
@@ -6281,15 +6716,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int level = 0; level < 120; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
-                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                        v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
                 int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
-                    v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 100 : 1));
+                    v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
                 int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
-                    v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 253 - 47 * 4) ? 0 : 1));
+                    v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
                 int iter = 0;
@@ -6302,9 +6737,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to orange fire
                     else if (c >= 47) //clear and markers
-                        mvd.color = (byte)253 - 47 * 4; //clear stays clear
+                        mvd.color = (byte)clear; //clear stays clear
                     else if (c == 16)
-                        mvd.color = 253 - 47 * 4; //clear inner shadow
+                        mvd.color = clear; //clear inner shadow
                     else if (c == 25)
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
@@ -6314,21 +6749,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c >= 21 && c <= 24) //lights
                         mvd.color = 253 - 35 * 4; //glass color for broken lights
                     else if (c == 35) //windows
-                        mvd.color = (byte)((r.Next(3) == 0) ? 253 - 47 * 4 : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(3) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 36) //rotor contrast
                         mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
                     else if (c == 37) //rotor
                         mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
                     else if (c == 38 || c == 39)
-                        mvd.color = 253 - 47 * 4; //clear non-active rotors
+                        mvd.color = clear; //clear non-active rotors
                     else if (c == 19) //orange fire
                         mvd.color = (byte)((r.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 18 * 4 : ((r.Next(3) == 0) ? 253 - 17 * 4 : v.color))); //random transform to yellow fire or smoke
                     else if (c == 18) //yellow fire
                         mvd.color = (byte)((r.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 19 * 4 : ((r.Next(4) == 0) ? 253 - 17 * 4 : ((r.Next(4) == 0) ? 253 - 20 * 4 : v.color)))); //random transform to orange fire, smoke, or sparks
                     else if (c == 20) //sparks
-                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : 253 - 47 * 4); //random transform to clear
+                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : clear); //random transform to clear
                     else if (c == 17) //smoke
-                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? 253 - 47 * 4 : 253 - 17 * 4); //random transform to clear
+                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? clear : 253 - 17 * 4); //random transform to clear
                     else
                         mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18*4 : 19*4) : v.color); //random transform to orange or yellow fire //(f >= 6) ? 253 - 17*4 :
 
@@ -6379,12 +6814,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -6394,12 +6829,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.x = (byte)(Math.Floor(nv));
                     }
@@ -6408,12 +6843,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.x < 0)
                         {
                             mvd.x = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else if (v.x > 159)
                         {
                             mvd.x = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.x = v.x;
                     }
@@ -6423,12 +6858,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Floor(nv));
                     }
@@ -6438,12 +6873,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv < 0)
                         {
                             nv = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         if (nv > 159)
                         {
                             nv = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.y = (byte)(Math.Ceiling(nv));
                     }
@@ -6452,12 +6887,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (v.y < 0)
                         {
                             mvd.y = 0;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else if (v.y > 159)
                         {
                             mvd.y = 159;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         else mvd.y = v.y;
                     }
@@ -6472,7 +6907,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (nv > 119)
                         {
                             nv = 119;
-                            mvd.color = 253 - 47 * 4;
+                            mvd.color = clear;
                         }
                         mvd.z = (byte)Math.Round(nv);
                     }
@@ -6506,7 +6941,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                          && (voxelFrames[f][i].color > 253 - 21 * 4 || voxelFrames[f][i].color < 253 - 24 * 4)
                          && voxelFrames[f][i].color != 253 - 25 * 4 && voxelFrames[f][i].color != 253 - 27 * 4
                          && voxelFrames[f][i].color != 253 - 17 * 4 && voxelFrames[f][i].color != 253 - 18 * 4 && voxelFrames[f][i].color != 253 - 19 * 4
-                         && voxelFrames[f][i].color > 253 - 47 * 4)
+                         && voxelFrames[f][i].color > 257 - wcolorcount * 4)
                     {
                         MagicaVoxelData vox = new MagicaVoxelData();
                         vox.x = voxelFrames[f][i].x;
