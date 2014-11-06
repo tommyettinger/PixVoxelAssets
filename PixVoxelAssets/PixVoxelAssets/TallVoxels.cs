@@ -9145,20 +9145,24 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
-
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Scout");
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Berserker");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Witch");
+            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Scout");
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Berserker");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Witch");
+            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Scout");
             processUnitOutlinedWDouble("Spirit", 7, false);
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Witch");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Scout");
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
           
             /*
