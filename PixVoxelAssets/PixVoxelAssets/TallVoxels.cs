@@ -6029,7 +6029,7 @@ namespace AssetsPV
         private static void processUnitBasic(string u)
         {
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadows(VoxelLogic.FromMagicaRaw(bin)).ToArray();
 
             for (int i = 0; i < 8; i++)
             {
@@ -6040,7 +6040,7 @@ namespace AssetsPV
                     b.Save(u + "/color" + i + "_face" + face + "_" + Directions[face] + "_frame" + 0 + "_.png", ImageFormat.Png);
                 }
             }
-            bin.Close();
+            //bin.Close();
 
         }
         private static Bitmap processSingleOutlinedW(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames)
@@ -6257,7 +6257,7 @@ namespace AssetsPV
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
         }
 
         public static void processExplosionDouble(string u)
@@ -6313,7 +6313,7 @@ namespace AssetsPV
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
         }
         public static void processExplosionPartial(string u)
         {
@@ -6369,7 +6369,7 @@ namespace AssetsPV
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
         }
         public static void processExplosionChannelPartial(string u)
         {
@@ -6401,7 +6401,7 @@ namespace AssetsPV
                 }
             }
 
-            bin.Close();
+            //bin.Close();
         }
         public static void processFieryExplosionDoubleW(string u, int palette)
         {
@@ -6455,7 +6455,7 @@ namespace AssetsPV
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
         }
         public static void processFieryExplosionDoubleWHat(string u, int palette, string hat)
         {
@@ -6509,7 +6509,7 @@ namespace AssetsPV
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
         }
         public static void processFieryExplosionQuadW(string u, int palette)
         {
@@ -6562,7 +6562,7 @@ namespace AssetsPV
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
         }
 
         private static void processFiring(string u)
@@ -6642,7 +6642,7 @@ namespace AssetsPV
                         }
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -6673,7 +6673,7 @@ namespace AssetsPV
                         }
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else continue;
 
@@ -6775,7 +6775,7 @@ namespace AssetsPV
                         }
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -6807,7 +6807,7 @@ namespace AssetsPV
                             }
                         }
                     }
-                    bin.Close();
+                    //bin.Close();
                 }
                 else continue;
 
@@ -6908,7 +6908,7 @@ namespace AssetsPV
                         }
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -6938,7 +6938,7 @@ namespace AssetsPV
                             }
                         }
                     }
-                    bin.Close();
+                    //bin.Close();
                 }
                 else continue;
 
@@ -7054,7 +7054,7 @@ namespace AssetsPV
                     }
 
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -7100,7 +7100,7 @@ namespace AssetsPV
                         }
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else continue;
             }
@@ -7249,7 +7249,7 @@ namespace AssetsPV
                         CreateChannelBitmap(processSingleOutlined(parsed, 7, "NW", f, 4), "indexed/" + u + "_Firing_face2" + "_" + f + ".png");
                         CreateChannelBitmap(processSingleOutlined(parsed, 7, "NE", f, 4), "indexed/" + u + "_Firing_face3" + "_" + f + ".png");
                     }
-                    bin.Close();
+                    //bin.Close();
                 }
                 if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
@@ -7304,7 +7304,7 @@ namespace AssetsPV
                         }
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
@@ -7325,7 +7325,7 @@ namespace AssetsPV
                     }
 
 
-                    bin.Close();
+                    //bin.Close();
                 }
                 else continue;
             }
@@ -7423,7 +7423,7 @@ namespace AssetsPV
                 }
             }
 
-            bin.Close();
+            //bin.Close();
 
             if (File.Exists(u + "_Firing_X.vox"))
             {
@@ -7442,7 +7442,7 @@ namespace AssetsPV
                     }
                 }
 
-                bin.Close();
+                //bin.Close();
 
             }
         }
@@ -7478,7 +7478,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_animated.gif";
             Process.Start(startInfo).WaitForExit();
             */
-            bin.Close();
+            //bin.Close();
 
             //            processExplosion(u);
 
@@ -7490,7 +7490,7 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadows(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             int framelimit = 4;
             if (!VoxelLogic.UnitLookup.ContainsKey(u))
             {
@@ -7505,7 +7505,7 @@ namespace AssetsPV
                     }
                     b.Save("color" + i + "_" + u + ".png", ImageFormat.Png);
                 }
-                bin.Close();
+                //bin.Close();
                 return;
             }
             else if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
@@ -7538,7 +7538,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             processExplosion(u);
 
@@ -7550,7 +7550,7 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadows(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -7571,7 +7571,7 @@ namespace AssetsPV
                         b.Dispose();
                     }
                 }
-                bin.Close();
+                //bin.Close();
 
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
@@ -7641,7 +7641,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             processFiringDouble(u);
 
@@ -7686,7 +7686,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + i + "_" + u + "_Large_animated.gif";
                 Process.Start(startInfo).WaitForExit();
             }
-            bin.Close();
+            //bin.Close();
 
             //            processFiringDouble(u);
 
@@ -7729,7 +7729,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             //            processFiringDouble(u);
 
@@ -7772,7 +7772,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             //            processFiringDouble(u);
 
@@ -7815,7 +7815,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             //            processFiringDouble(u);
 
@@ -7829,19 +7829,19 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(u + "_Walk_0_Large_W.vox", FileMode.Open));
             MagicaVoxelData[][] parsed = new MagicaVoxelData[4][];
             parsed[0] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             bin = new BinaryReader(File.Open(u + "_Walk_1_Large_W.vox", FileMode.Open));
             parsed[1] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             bin = new BinaryReader(File.Open(u + "_Walk_2_Large_W.vox", FileMode.Open));
             parsed[2] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             bin = new BinaryReader(File.Open(u + "_Walk_3_Large_W.vox", FileMode.Open));
             parsed[3] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -7895,19 +7895,19 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(u + "_Walk_0_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[][] parsed = new MagicaVoxelData[4][];
             parsed[0] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             bin = new BinaryReader(File.Open(u + "_Walk_1_Huge_W.vox", FileMode.Open));
             parsed[1] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             bin = new BinaryReader(File.Open(u + "_Walk_2_Huge_W.vox", FileMode.Open));
             parsed[2] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             bin = new BinaryReader(File.Open(u + "_Walk_3_Huge_W.vox", FileMode.Open));
             parsed[3] = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
-            bin.Close();
+            //bin.Close();
 
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -8043,7 +8043,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             //            processFiringDouble(u);
 
@@ -8100,7 +8100,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            bin.Close();
+            //bin.Close();
 
             processFiringPartial(u);
 
@@ -8148,7 +8148,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u);
             log.AppendLine(u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             int framelimit = 4;
 
             System.IO.Directory.CreateDirectory("indexed"); //("color" + i);
@@ -8159,7 +8159,7 @@ namespace AssetsPV
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "indexed/" + u + "_face2" + "_" + f + ".png");
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "NE", f, framelimit), "indexed/" + u + "_face3" + "_" + f + ".png");
             }
-            bin.Close();
+            //bin.Close();
         }
         public static void processUnitChannel(string u)
         {
@@ -8167,7 +8167,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u);
             log.AppendLine(u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_X.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadows(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             int framelimit = 4;
             if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
             {
@@ -8182,7 +8182,7 @@ namespace AssetsPV
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "indexed/" + u + "_face2" + "_" + f + ".png");
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "NE", f, framelimit), "indexed/" + u + "_face3" + "_" + f + ".png");
             }
-            bin.Close();
+            ///bin.Close();
 
             processChannelFiring(u);
 
@@ -8203,7 +8203,7 @@ namespace AssetsPV
                         CreateChannelBitmap(processSingleLargeFrame(flyover[f], 7, d, f), "indexed/" + u + "_Flyover_face" + d + "_" + f + ".png");
                     }
 
-                    bin.Close();
+                    //bin.Close();
                 }
             }
 
@@ -8237,7 +8237,7 @@ namespace AssetsPV
             }
 
 
-            bin.Close();
+            //bin.Close();
 
             processFiringChannelPartial(u);
 
@@ -8758,6 +8758,137 @@ namespace AssetsPV
             }
             return b;
         }
+        public static Bitmap makeFlatTilingSmall()
+        {
+            Bitmap b = new Bitmap(88 * 16, 22 * 32);
+            Graphics g = Graphics.FromImage(b);
+
+            Bitmap[] tilings = new Bitmap[10];
+            for (int i = 0; i < 10; i++)
+            {
+                tilings[i] = TallPaletteDraw.drawPixelsFlatSmall(i);
+            }
+            int[,] grid = new int[17, 33];
+            Random r = new Random();
+
+            int[,] takenLocations = new int[17, 33];
+            for (int i = 0; i < 17; i++)
+            {
+                for (int j = 0; j < 33; j++)
+                {
+                    takenLocations[i, j] = 0;
+                    grid[i, j] = 0;
+                }
+            }
+            List<Tuple<int, int>> p = getSoftPath(10, 33);
+            foreach (Tuple<int, int> t in p)
+            {
+                grid[t.Item1 + 6, t.Item2] = 9;
+                takenLocations[t.Item1 + 6, t.Item2] = 1;
+            }
+            int numMountains = r.Next(17, 30);
+            int iter = 0;
+            int rx = r.Next(15) + 1, ry = r.Next(30) + 2;
+            do
+            {
+                if (takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
+                {
+                    takenLocations[rx, ry] = 2;
+                    grid[rx, ry] = r.Next(4, 6);
+                    int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
+                    int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
+                    if (xdir <= 1) xdir++;
+                    if (xdir >= 15) xdir--;
+                    rx = xdir;
+                    ry = ry + ydir;
+
+                }
+                else
+                {
+                    rx = r.Next(15) + 1;
+                    ry = r.Next(30) + 2;
+                }
+                iter++;
+            } while (iter < numMountains);
+
+            List<Tuple<int, int>> h = getHardPath(17, 13);
+            foreach (Tuple<int, int> t in h)
+            {
+                grid[t.Item1, t.Item2 + 6] = 8;
+                takenLocations[t.Item1, t.Item2 + 6] = 4;
+            }
+
+            int extreme = 0;
+            switch (r.Next(5))
+            {
+                case 0: extreme = 7;
+                    break;
+                case 1: extreme = 2;
+                    break;
+                case 2: extreme = 2;
+                    break;
+                case 3: extreme = 1;
+                    break;
+                case 4: extreme = 1;
+                    break;
+            }
+            for (int i = 1; i < 16; i++)
+            {
+                for (int j = 2; j < 31; j++)
+                {
+                    for (int v = 0; v < 3; v++)
+                    {
+
+                        int[] adj = { 0, 0, 0, 0,
+                                        0,0,0,0,
+                                    0, 0, 0, 0, };
+                        adj[0] = grid[i, j + 1];
+                        adj[1] = grid[i, j - 1];
+                        if (j % 2 == 0)
+                        {
+                            adj[2] = grid[i + 1, j + 1];
+                            adj[3] = grid[i + 1, j - 1];
+                        }
+                        else
+                        {
+                            adj[2] = grid[i - 1, j + 1];
+                            adj[3] = grid[i - 1, j - 1];
+                        }
+                        adj[4] = grid[i, j + 2];
+                        adj[5] = grid[i, j - 2];
+                        adj[6] = grid[i + 1, j];
+                        adj[7] = grid[i - 1, j];
+                        int likeliest = 0;
+                        if (!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+                            likeliest = extreme;
+                        if ((adj.Contains(2) && r.Next(4) == 0))
+                            likeliest = extreme;
+                        if (extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+                            likeliest = extreme;
+                        if ((adj.Contains(1) && r.Next(5) > 1) || r.Next(4) == 0)
+                            likeliest = r.Next(2) * 2 + 1;
+                        if (adj.Contains(5) && r.Next(3) == 0)
+                            likeliest = r.Next(4, 6);
+                        if (r.Next(45) == 0)
+                            likeliest = 6;
+                        if (takenLocations[i, j] == 0)
+                        {
+                            grid[i, j] = likeliest;
+                        }
+                    }
+                }
+            }
+
+
+            for (int j = 0; j < 33; j++)
+            {
+                for (int i = 0; i < 17; i++)
+                {
+                    g.DrawImageUnscaled(tilings[grid[i, j]], (88 * i) - ((j % 2 == 0) ? 0 : 44), (22 * j) - 22 - 1 - 22);
+                }
+            }
+            return b;
+        }
         static Bitmap makeTiling()
         {
 
@@ -9064,6 +9195,7 @@ namespace AssetsPV
             //processReceiving();
 
             //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
+            //makeFlatTilingSmall().Save("tiling_small.png", ImageFormat.Png);
             //            processUnitOutlinedDouble("Block");
 
             VoxelLogic.InitializeXPalette();
@@ -9078,10 +9210,30 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Guard", 5, true);
             */
             /*
-            File.WriteAllText("zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("zombie" + "_Large_W.vox", FileMode.Open))), 2));
-            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
-            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
+            File.WriteAllText("Zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), 2));
+            File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));
+            File.WriteAllText("Zombie_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Witch"), 2));
+            File.WriteAllText("Zombie_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Captain"), 2));
+            File.WriteAllText("Zombie_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Scout"), 2));
+            File.WriteAllText("Skeleton.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open))), 6));
+            File.WriteAllText("Skeleton_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)), "Berserker"), 6));
+            File.WriteAllText("Skeleton_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)), "Witch"), 6));
+            File.WriteAllText("Skeleton_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)), "Captain"), 6));
+            File.WriteAllText("Skeleton_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)), "Scout"), 6));
+            File.WriteAllText("Spirit.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Spirit" + "_Large_W.vox", FileMode.Open))), 7));
+            File.WriteAllText("Spirit_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Spirit" + "_Large_W.vox", FileMode.Open)), "Berserker"), 7));
+            File.WriteAllText("Spirit_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Spirit" + "_Large_W.vox", FileMode.Open)), "Witch"), 7));
+            File.WriteAllText("Spirit_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Spirit" + "_Large_W.vox", FileMode.Open)), "Captain"), 7));
+            File.WriteAllText("Spirit_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Spirit" + "_Large_W.vox", FileMode.Open)), "Scout"), 7));
+            File.WriteAllText("Cinder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open))), 9));
+            File.WriteAllText("Cinder_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Berserker"), 9));
+            File.WriteAllText("Cinder_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Witch"), 9));
+            File.WriteAllText("Cinder_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Captain"), 9));
+            File.WriteAllText("Cinder_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Scout"), 9));
             */
+//            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
+//            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
+            
             /*
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
@@ -9142,29 +9294,72 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             */
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Scout");
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Berserker");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Witch");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Scout");
+            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Berserker");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Witch");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Scout");
+            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Captain");
             processUnitOutlinedWDouble("Spirit", 7, false);
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Witch");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Scout");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-          
+            */
+
+            processUnitOutlinedWDouble("Generic_Male", 0, true);
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Male", 1, true);
+            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Male", 15, true);
+            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Male", 16, true);
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Male", 17, true);
+            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Captain");
+            /*
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
+            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
+            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Captain");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
+            */
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
