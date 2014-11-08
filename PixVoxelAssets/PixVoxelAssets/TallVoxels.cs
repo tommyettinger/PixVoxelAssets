@@ -9209,7 +9209,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-            /*
+            
             File.WriteAllText("Zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), 2));
             File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));
             File.WriteAllText("Zombie_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Witch"), 2));
@@ -9230,7 +9230,33 @@ namespace AssetsPV
             File.WriteAllText("Cinder_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Witch"), 9));
             File.WriteAllText("Cinder_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Captain"), 9));
             File.WriteAllText("Cinder_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Cinder" + "_Large_W.vox", FileMode.Open)), "Scout"), 9));
-            */
+
+            File.WriteAllText("Brown_Hair_Male.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), 0));
+            File.WriteAllText("Brown_Hair_Male_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Berserker"), 0));
+            File.WriteAllText("Brown_Hair_Male_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Witch"), 0));
+            File.WriteAllText("Brown_Hair_Male_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Captain"), 0));
+            File.WriteAllText("Brown_Hair_Male_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Scout"), 0));
+            File.WriteAllText("Light_Hair_Male.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), 1));
+            File.WriteAllText("Light_Hair_Male_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Berserker"), 1));
+            File.WriteAllText("Light_Hair_Male_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Witch"), 1));
+            File.WriteAllText("Light_Hair_Male_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Captain"), 1));
+            File.WriteAllText("Light_Hair_Male_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Scout"), 1));
+            File.WriteAllText("Gold_Skin_Male.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), 15));
+            File.WriteAllText("Gold_Skin_Male_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Berserker"), 15));
+            File.WriteAllText("Gold_Skin_Male_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Witch"), 15));
+            File.WriteAllText("Gold_Skin_Male_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Captain"), 15));
+            File.WriteAllText("Gold_Skin_Male_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Scout"), 15));
+            File.WriteAllText("Dark_Skin_Male.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), 16));
+            File.WriteAllText("Dark_Skin_Male_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Berserker"), 16));
+            File.WriteAllText("Dark_Skin_Male_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Witch"), 16));
+            File.WriteAllText("Dark_Skin_Male_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Captain"), 16));
+            File.WriteAllText("Dark_Skin_Male_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Scout"), 16));
+            File.WriteAllText("Brown_Skin_Male.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), 17));
+            File.WriteAllText("Brown_Skin_Male_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Berserker"), 17));
+            File.WriteAllText("Brown_Skin_Male_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Witch"), 17));
+            File.WriteAllText("Brown_Skin_Male_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Captain"), 17));
+            File.WriteAllText("Brown_Skin_Male_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Scout"), 17));
+            
 //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
 //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             
@@ -9323,7 +9349,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
             */
-
+            /*
             processUnitOutlinedWDouble("Generic_Male", 0, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Witch");
@@ -9353,6 +9379,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Witch");
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Scout");
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Captain");
+            */
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
