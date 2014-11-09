@@ -9256,6 +9256,32 @@ namespace AssetsPV
             File.WriteAllText("Brown_Skin_Male_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Witch"), 17));
             File.WriteAllText("Brown_Skin_Male_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Captain"), 17));
             File.WriteAllText("Brown_Skin_Male_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)), "Scout"), 17));
+
+            File.WriteAllText("Brown_Hair_Female.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), 0));
+            File.WriteAllText("Brown_Hair_Female_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Berserker"), 0));
+            File.WriteAllText("Brown_Hair_Female_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Witch"), 0));
+            File.WriteAllText("Brown_Hair_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 0));
+            File.WriteAllText("Brown_Hair_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 0));
+            File.WriteAllText("Light_Hair_Female.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), 1));
+            File.WriteAllText("Light_Hair_Female_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Berserker"), 1));
+            File.WriteAllText("Light_Hair_Female_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Witch"), 1));
+            File.WriteAllText("Light_Hair_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 1));
+            File.WriteAllText("Light_Hair_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 1));
+            File.WriteAllText("Gold_Skin_Female.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), 15));
+            File.WriteAllText("Gold_Skin_Female_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Berserker"), 15));
+            File.WriteAllText("Gold_Skin_Female_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Witch"), 15));
+            File.WriteAllText("Gold_Skin_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 15));
+            File.WriteAllText("Gold_Skin_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 15));
+            File.WriteAllText("Dark_Skin_Female.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), 16));
+            File.WriteAllText("Dark_Skin_Female_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Berserker"), 16));
+            File.WriteAllText("Dark_Skin_Female_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Witch"), 16));
+            File.WriteAllText("Dark_Skin_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 16));
+            File.WriteAllText("Dark_Skin_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 16));
+            File.WriteAllText("Brown_Skin_Female.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), 17));
+            File.WriteAllText("Brown_Skin_Female_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Berserker"), 17));
+            File.WriteAllText("Brown_Skin_Female_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Witch"), 17));
+            File.WriteAllText("Brown_Skin_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 17));
+            File.WriteAllText("Brown_Skin_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 17));
             
 //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
 //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
@@ -9320,7 +9346,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             */
-            /*
+            
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9348,8 +9374,8 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Scout");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-            */
-            /*
+            
+            
             processUnitOutlinedWDouble("Generic_Male", 0, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Witch");
@@ -9379,7 +9405,36 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Witch");
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Scout");
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Captain");
-            */
+            
+            processUnitOutlinedWDouble("Generic_Female", 0, true);
+            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Female", 1, true);
+            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Female", 15, true);
+            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Female", 16, true);
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Captain");
+
+            processUnitOutlinedWDouble("Generic_Female", 17, true);
+            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Witch");
+            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Scout");
+            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");

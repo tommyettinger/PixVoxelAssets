@@ -9103,21 +9103,47 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return frames;
         }
+        /*
+         
+		function hasSixNeighbors(x, y, z) {
+			return data[(x - 1) + "," + (y) + "," + (z)] && data[(x + 1) + "," + (y) + "," + (z)]
+				&& data[(x) + "," + (y - 1) + "," + (z)] && data[(x) + "," + (y + 1) + "," + (z)]
+				&& data[(x) + "," + (y) + "," + (z - 1)] //&& data[(x) + "," + (y) + "," + (z + 1)];
+		}
+         */
         public static string VoxToJSON(List<MagicaVoxelData> data, int palette)
         {
             StringBuilder sb = new StringBuilder(1024 * 1024);
 
             wcolors = wpalettes[palette];
             wcurrent = wrendered[palette];
+            Dictionary<Tuple<int, int, int>, string> voxels = new Dictionary<Tuple<int, int, int>, string>(data.Count);
             sb.Append("{\n");
-            foreach(MagicaVoxelData vox in data)
+            foreach (MagicaVoxelData vox in data)
             {
-                sb.Append("    \"" + vox.x + "," + vox.y + "," + vox.z + String.Format("\": \"0x{0:X2}{1:X2}{2:X2}\",\t",
+                if(voxels.ContainsKey(Tuple.Create(vox.x + 0, vox.y + 0, vox.z + 0)))
+                    continue;
+                voxels.Add(Tuple.Create(vox.x + 0, vox.y + 0, vox.z + 0), String.Format("{0:X2}{1:X2}{2:X2}",
                     wcurrent[(253 - vox.color) / 4][2], wcurrent[(253 - vox.color) / 4][1], wcurrent[(253 - vox.color) / 4][0]));
             }
-            sb.Remove(sb.Length - 2, 1);
-            sb.Replace("\t", "\n");
-            sb.Append("}\n");
+            foreach (Tuple<int, int, int> vox in voxels.Keys)
+            {
+                if (voxels.ContainsKey(Tuple.Create(vox.Item1 - 1, vox.Item2, vox.Item3)) && voxels.ContainsKey(Tuple.Create(vox.Item1 + 1, vox.Item2, vox.Item3)) &&
+                    voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2 - 1, vox.Item3)) && voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2 + 1, vox.Item3)) &&
+                    voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2, vox.Item3 - 1))
+                    ) continue;
+                byte faces = 0;
+                if (!voxels.ContainsKey(Tuple.Create(vox.Item1 - 1, vox.Item2, vox.Item3))) faces |= 1;
+                if (!voxels.ContainsKey(Tuple.Create(vox.Item1 + 1, vox.Item2, vox.Item3))) faces |= 2;
+                if (!voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2 - 1, vox.Item3))) faces |= 4;
+                if (!voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2 + 1, vox.Item3))) faces |= 8;
+                if (!voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2, vox.Item3 - 1))) faces |= 16;
+                if (!voxels.ContainsKey(Tuple.Create(vox.Item1, vox.Item2, vox.Item3 + 1))) faces |= 32;
+                sb.Append("\"" + vox.Item1 + "," + vox.Item2 + "," + vox.Item3 + "\":\"" + String.Format("{0:X2}", faces) + " " + voxels[vox] + "\",");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            //sb.Replace("\t", "\n");
+            sb.Append("\n}\n");
             return sb.ToString();
         }
     }
