@@ -599,17 +599,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
             //29 fuzz deep
-            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
             //33 fuzz lightest
-            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
+            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -710,17 +710,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
             //29 fuzz deep
-            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
             //33 fuzz lightest
-            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
+            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -2264,17 +2264,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
             //29 fuzz deep
-            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
             //33 fuzz lightest
-            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
+            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -2375,17 +2375,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
             //29 fuzz deep
-            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
             //33 fuzz lightest
-            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
+            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -2486,17 +2486,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.7F,0.11F,-0.05F,fuzz_alpha},
+            new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
             //29 fuzz deep
-            new float[] {0.74F,0.16F,-0.05F,fuzz_alpha},
+            new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.79F,0.19F,0.0F,fuzz_alpha},
+            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.83F,0.22F,0.05F,fuzz_alpha},
+            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.88F,0.25F,0.1F,fuzz_alpha},
+            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
             //33 fuzz lightest
-            new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
+            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass

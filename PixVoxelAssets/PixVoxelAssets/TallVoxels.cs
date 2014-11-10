@@ -9346,7 +9346,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             */
-            
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9435,13 +9435,27 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Witch");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Scout");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
-            /*
+             * */
+            
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Captain");
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
-            */
+
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Captain");
+
+            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Captain");
+            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
+
+            
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
