@@ -15,7 +15,7 @@ namespace AssetsPV
     {
         public static Random r = new Random();
         private static byte[][] colors = null;
-        
+
         public static float[][] flatcolors = new float[][]
         {
             //plains
@@ -40,6 +40,31 @@ namespace AssetsPV
             new float[] {0F,0.2F,0.85F,2F},
             //building base
             new float[] {0.55F,0.55F,0.55F,8F},
+        };
+        public static float[][] drabcolors = new float[][]
+        {
+            //plains
+            new float[] {0.55F,0.62F,0.48F,2F},
+            //forest
+            new float[] {0.3F,0.4F,0.28F,6F},
+            //desert
+            new float[] {0.627F,0.604F,0.416F,2F},
+            //jungle
+            new float[] {0.192F,0.294F,0.263F,6F},
+            //hills
+            new float[] {0.565F,0.498F,0.404F,10F},
+            //mountains
+            new float[] {0.671F,0.682F,0.698F,12F},
+            //ruins
+            new float[] {0.600F,0.518F,0.580F,8F},
+            //tundra
+            new float[] {0.77F,0.85F,0.85F,4F},
+            //road
+            new float[] {0.451F,0.451F,0.451F,4F},
+            //river
+            new float[] {0.255F,0.298F,0.435F,2F},
+            //building base
+            new float[] {0.51F,0.51F,0.51F,8F},
         };
         private static string[] terrainnames = new string[]
         {
@@ -780,8 +805,12 @@ Ruins	purple-gray
         }
         public static Bitmap drawPixelsFlatSmall(int color)
         {
-            Bitmap b = new Bitmap(88*2, 70*2, PixelFormat.Format32bppArgb);
-            Bitmap bold = new Bitmap(88*2, 70*2, PixelFormat.Format32bppArgb);
+            flatcolors = drabcolors;
+            int horiz = 96 * 2;
+            int vert = 96 * 2;
+            int ticks = 48;
+            Bitmap b = new Bitmap(horiz, vert, PixelFormat.Format32bppArgb);
+            Bitmap bold = new Bitmap(horiz, vert, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(b);
             Graphics gBold = Graphics.FromImage(bold);
             //Image image = new Bitmap("cube_large.png");
@@ -791,27 +820,28 @@ Ruins	purple-gray
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
             int height = 4;
+            int halfticks = ticks / 2;
+            int[,] shades = new int[ticks, ticks];
+            int depth = 12;//(int)(flatcolors[color][3]);
 
-            int[,] shades = new int[44, 44];
-            int depth = (int)(flatcolors[color][3]);
-
-            for (int y = 43; y >= 0; y--)
+            for (int y = ticks - 1; y >= 0; y--)
             {
-                for (int x = 0; x <= 43; x++)
+                for (int x = 0; x <= ticks - 1; x++)
                 {
-                    if ((y >= 40 || y <= 3) && (x < 22 + depth) && (x > 22 - depth) && (Math.Abs(22 - x) + depth) % 2 == 1)
+                    /*
+                    if ((y >= ticks - 4 || y <= 3) && (x < halfticks + depth) && (x > halfticks - depth) && (Math.Abs(halfticks - x) + depth) % 2 == 1)
                     {
                         shades[x, y] = 2;
                     }
 
-                    else if ((x >= 40 || x <= 3) && (y < 22 + depth) && (y > 22 - depth) && (Math.Abs(22 - y) + depth) % 2 == 1)// && (y % 2 == 1)
+                    else if ((x >= ticks - 4 || x <= 3) && (y < halfticks + depth) && (y > halfticks - depth) && (Math.Abs(halfticks - y) + depth) % 2 == 1)
                     {
                         shades[x, y] = 2;
                     }
                     else
-                    {
-                        shades[x, y] = (x == 0 || y == 0 || x == 43 || y == 43) ? 0 : (r.Next(40) == 0) ? r.Next(2) : 1;
-                    }
+                    {*/
+                        shades[x, y] = (x == 0 || y == 0 || x == ticks - 1 || y == ticks - 1) ? 0 : (r.Next(40) == 0) ? r.Next(2) : 1;
+                    //}
                 }
             }
 
@@ -820,7 +850,8 @@ Ruins	purple-gray
             //g.DrawImage(image, 10, 10, width, height);
             float merged = (flatcolors[color][0] + flatcolors[color][1] + flatcolors[color][2]) * 0.45F;
 
-
+            /*
+            
             ColorMatrix colorMatrix = new ColorMatrix(new float[][]{ 
    new float[] {(merged + flatcolors[color][0]) * 0.5F,  0,  0,  0, 0},
    new float[] {0,  (merged + flatcolors[color][1]) * 0.5F,  0,  0, 0},
@@ -840,6 +871,27 @@ Ruins	purple-gray
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
 
+             */
+
+            ColorMatrix colorMatrixDark = new ColorMatrix(new float[][]{ 
+   new float[] {flatcolors[color][0], 0,  0,  0, 0},
+   new float[] {0, flatcolors[color][1],  0,  0, 0},
+   new float[] {0,  0, flatcolors[color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {-0.05F, -0.05F, -0.05F, 0, 1F}});
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]{ 
+   new float[] {flatcolors[color][0], 0,  0,  0, 0},
+   new float[] {0, flatcolors[color][1],  0,  0, 0},
+   new float[] {0,  0, flatcolors[color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] { 0.05F,  0.05F,  0.05F, 0, 1F}});
+            ColorMatrix colorMatrixBright = new ColorMatrix(new float[][]{ 
+   new float[] {flatcolors[color][0], 0,  0,  0, 0},
+   new float[] {0, flatcolors[color][1],  0,  0, 0},
+   new float[] {0,  0, flatcolors[color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] { 0.2F,  0.2F,  0.2F, 0, 1F}});
+
             ColorMatrix[] mats = new ColorMatrix[] { colorMatrixDark, colorMatrix, colorMatrixBright };
             imageAttributes.SetColorMatrix(
                colorMatrix,
@@ -852,11 +904,11 @@ Ruins	purple-gray
             imageAttributes.SetColorMatrix(colorMatrixDark, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             for (int z = 1; z < depth; z++)
             {
-                for (int x = 0; x <= 43; x++)
+                for (int x = 0; x <= ticks - 1; x++)
                 {
                     g.DrawImage(
                    image,
-                   new Rectangle((x + 0) * 2, 140 - 44 - 0 - 0 + x - z * 3, width, height),  // destination rectangle 
+                   new Rectangle((x + 0) * 2, vert - ticks - 0 - 0 + x - z * 3, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
                    width,       // width of source rectangle
@@ -864,11 +916,11 @@ Ruins	purple-gray
                    GraphicsUnit.Pixel,
                    imageAttributes);
                 }
-                for (int y = 43; y >= 0; y--)
+                for (int y = ticks - 1; y >= 0; y--)
                 {
                     g.DrawImage(
                    image,
-                   new Rectangle((43 + y) * 2, 140 - 44 - 0 - y + 43 - z * 3, width, height),  // destination rectangle 
+                   new Rectangle((ticks - 1 + y) * 2, vert - y - 1 - z * 3, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
                    width,       // width of source rectangle
@@ -882,11 +934,11 @@ Ruins	purple-gray
             //            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             for (int z = 1; z < depth; z++)
             {
-                for (int x = 0; x <= 43; x++)
+                for (int x = 0; x <= ticks - 1; x++)
                 {
                     gBold.DrawImage(
                     image,
-                    new Rectangle((x + 0) * 2, 140 - 44 - 0 - 0 + x - z * 3, width, height),  // destination rectangle 
+                    new Rectangle((x + 0) * 2, vert - ticks - 0 - 0 + x - z * 3, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                     0, 0,        // upper-left corner of source rectangle
                     width,       // width of source rectangle
@@ -894,11 +946,11 @@ Ruins	purple-gray
                     GraphicsUnit.Pixel,
                     imageAttributes);
                 }
-                for (int y = 43; y >= 0; y--)
+                for (int y = ticks - 1; y >= 0; y--)
                 {
                     gBold.DrawImage(
                     image,
-                    new Rectangle((43 + y) * 2, 140 - 44 - 0 - y + 43 - z * 3, width, height),  // destination rectangle 
+                    new Rectangle((ticks - 1 + y) * 2, vert - y - 1 - z * 3, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                     0, 0,        // upper-left corner of source rectangle 
                     width,       // width of source rectangle
@@ -909,15 +961,15 @@ Ruins	purple-gray
             }
 
 
-            for (int y = 43; y >= 0; y--)
+            for (int y = ticks - 1; y >= 0; y--)
             {
-                for (int x = 0; x <= 43; x++)
+                for (int x = 0; x <= ticks - 1; x++)
                 {
                     imageAttributes.SetColorMatrix(mats[shades[x, y]], ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                     
                     g.DrawImage(
                    image,
-                   new Rectangle((x + y) * 2, 140 - 44 - 0 - y + x - depth * 3, width, height),  // destination rectangle 
+                   new Rectangle((x + y) * 2, vert - ticks - 0 - y + x - depth * 3, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
                    width,       // width of source rectangle
@@ -926,14 +978,19 @@ Ruins	purple-gray
                    imageAttributes);
 
                     ///////////////
-                    ///////////////BRIGHT VERSION CODE
+                    ///////////////BOLD VERSION CODE
                     ///////////////
-                    if ((y >= 36 || y <= 6) && (x < 22 + depth) && (x > 22 - depth) && (Math.Abs(22 - x) + depth) % 2 == 1)
+                    imageAttributes.SetColorMatrix(
+                        (x <= 6 || y <= 6 || x >= ticks - 8 || y >= ticks - 8) ? colorMatrixDark : mats[shades[x, y]],
+                        //(x == z || y == z || x == 31 - z || y == 31 - z) ? colorMatrixDark : colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    /*if ((y >= ticks - 8 || y <= 6) && (x < halfticks + depth) && (x > halfticks - depth) && (Math.Abs(halfticks - x) + depth) % 2 == 1)
                     {
 
                         //                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.5F, 0.8F, 0.5F, 0.8F,
                         //                        float[] power = new float[] { 0.3F, 0.6F, 0.32F, 0.65F, 0.34F, 0.7F, 0.36F, 0.75F, 0.38F, 0.8F };
-                        int dist = (Math.Abs(22 - x) + depth) % 2;
+                        int dist = (Math.Abs(halfticks - x) + depth) % 2;
                         //int dist = ((x - 8)/2) % 10;
 
                         imageAttributes.SetColorMatrix(
@@ -941,10 +998,10 @@ Ruins	purple-gray
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
                     }
-                    else if ((x >= 36 || x <= 6) && (y < 22 + depth) && (y > 22 - depth) && (Math.Abs(22 - y) + depth) % 2 == 1)
+                    else if ((x >= ticks - 8 || x <= 6) && (y < halfticks + depth) && (y > halfticks - depth) && (Math.Abs(halfticks - y) + depth) % 2 == 1)
                     {
                         //                        float[] power = new float[] { 0.5F, 0.8F }; //, 0.4F, 0.7F, 0.4F, 0.8F 
-                        int dist = (Math.Abs(22 - y) + depth) % 2;
+                        int dist = (Math.Abs(halfticks - y) + depth) % 2;
                         imageAttributes.SetColorMatrix(
                            colorMatrixBright,
                            ColorMatrixFlag.Default,
@@ -957,10 +1014,10 @@ Ruins	purple-gray
                             //(x == z || y == z || x == 31 - z || y == 31 - z) ? colorMatrixDark : colorMatrix,
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
-                    }
+                    }*/
                     gBold.DrawImage(
                     image,
-                    new Rectangle((x + y) * 2, 140 - 44 - 0 - y + x - depth * 3, width, height),  // destination rectangle 
+                    new Rectangle((x + y) * 2, vert - ticks - 0 - y + x - depth * 3, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                     0, 0,        // upper-left corner of source rectangle 
                     width,       // width of source rectangle
@@ -970,18 +1027,18 @@ Ruins	purple-gray
                 }
             }
             System.IO.Directory.CreateDirectory("Terrain_Small");
-            Bitmap b2 = new Bitmap(88, 70, PixelFormat.Format32bppArgb);
+            Bitmap b2 = new Bitmap(horiz / 2, vert / 2, PixelFormat.Format32bppArgb);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            Bitmap b3 = bold.Clone(new Rectangle(0, 0, 88*2, 70*2), b.PixelFormat);
-            g2.DrawImage(b3, 0, 0, 88, 70);
+            Bitmap b3 = bold.Clone(new Rectangle(0, 0, horiz, vert), b.PixelFormat);
+            g2.DrawImage(b3, 0, 0, horiz / 2, vert / 2);
             b2.Save("Terrain_Small/" + terrainnames[color] + "_bold.png");
 
-            b2 = new Bitmap(88, 70, PixelFormat.Format32bppArgb);
+            b2 = new Bitmap(horiz / 2, vert / 2, PixelFormat.Format32bppArgb);
             g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            b3 = b.Clone(new Rectangle(0, 0, 88*2, 70*2), b.PixelFormat);
-            g2.DrawImage(b3, 0, 0, 88, 70);
+            b3 = b.Clone(new Rectangle(0, 0, horiz, vert), b.PixelFormat);
+            g2.DrawImage(b3, 0, 0, horiz / 2, vert / 2);
             b2.Save("Terrain_Small/" + terrainnames[color] + ".png");
             b.Dispose();
             g2.Dispose();

@@ -8760,7 +8760,7 @@ namespace AssetsPV
         }
         public static Bitmap makeFlatTilingSmall()
         {
-            Bitmap b = new Bitmap(88 * 16, 22 * 32);
+            Bitmap b = new Bitmap(96 * 16, 24 * 32);
             Graphics g = Graphics.FromImage(b);
 
             Bitmap[] tilings = new Bitmap[10];
@@ -8884,7 +8884,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < 17; i++)
                 {
-                    g.DrawImageUnscaled(tilings[grid[i, j]], (88 * i) - ((j % 2 == 0) ? 0 : 44), (22 * j) - 22 - 1 - 22);
+                    g.DrawImageUnscaled(tilings[grid[i, j]], (96 * i) - ((j % 2 == 0) ? 0 : 48), (24 * j) - 24 - 7 - 24);
                 }
             }
             return b;
@@ -9195,7 +9195,14 @@ namespace AssetsPV
             //processReceiving();
 
             //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
-            //makeFlatTilingSmall().Save("tiling_small.png", ImageFormat.Png);
+            makeFlatTilingSmall().Save("tiling_small.png", ImageFormat.Png);
+            /*
+            processUnitOutlinedWDouble("Zombie", 2, true);
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
+            processUnitOutlinedWDouble("Generic_Male", 0, true);
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
+            */
+            
             //            processUnitOutlinedDouble("Block");
 
             VoxelLogic.InitializeXPalette();
@@ -9209,7 +9216,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-            
+            /*
             File.WriteAllText("Zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), 2));
             File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));
             File.WriteAllText("Zombie_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Witch"), 2));
@@ -9282,7 +9289,7 @@ namespace AssetsPV
             File.WriteAllText("Brown_Skin_Female_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Witch"), 17));
             File.WriteAllText("Brown_Skin_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 17));
             File.WriteAllText("Brown_Skin_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 17));
-            
+            */
 //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
 //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             
@@ -9436,7 +9443,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Scout");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
              * */
-            
+            /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Captain");
@@ -9454,8 +9461,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Captain");
             processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Captain");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
-
-            
+            */
             /*
             System.IO.Directory.CreateDirectory("ortho");
             OrthoVoxels.InitializeXPalette();
