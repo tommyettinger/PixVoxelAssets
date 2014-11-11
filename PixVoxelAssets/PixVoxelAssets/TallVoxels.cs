@@ -9195,7 +9195,7 @@ namespace AssetsPV
             //processReceiving();
 
             //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
-            makeFlatTilingSmall().Save("tiling_small.png", ImageFormat.Png);
+            //makeFlatTilingSmall().Save("tiling_small.png", ImageFormat.Png);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
@@ -9353,6 +9353,8 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             */
+            processUnitOutlinedWDouble("Eidolon_Time", 35, false);
+
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
