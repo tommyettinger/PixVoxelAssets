@@ -6372,7 +6372,7 @@ namespace AssetsPV
                 {
                     System.IO.Directory.CreateDirectory(folder); //("color" + i);
 
-                    for (int frame = 0; frame < 8; frame++)
+                    for (int frame = 0; frame < 12; frame++)
                     {
                         Bitmap b = renderHugeSmart(explode[frame], d, color, frame);
                         Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -6400,7 +6400,7 @@ namespace AssetsPV
             {
                 for (int d = 0; d < 4; d++)
                 {
-                    for (int frame = 0; frame < 8; frame++)
+                    for (int frame = 0; frame < 12; frame++)
                     {
                         s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
                     }
