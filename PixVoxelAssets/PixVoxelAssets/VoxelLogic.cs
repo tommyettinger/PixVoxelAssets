@@ -5240,6 +5240,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     continue;
                 }
+                if (voxelData[i].color > 257 - wcolorcount * 4 && (254 - voxelData[i].color) % 4 == 0)
+                {
+                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1)};
+                }
                 voxelsAltered.Add(voxelData[i]);
                 if (-1 == taken[voxelData[i].x, voxelData[i].y]
                      && (voxelData[i].color > 253 - 21 * 4 || voxelData[i].color < 253 - 24 * 4)
@@ -9751,5 +9755,44 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             sb.Append("\n}\n");
             return sb.ToString();
         }
+
+        public static List<MagicaVoxelData> GetHeadVoxels(BinaryReader body, string hatClass)
+        {
+            List<MagicaVoxelData> ret = new List<MagicaVoxelData>(2);
+            BinaryReader hbin = new BinaryReader(File.Open(hatClass + "_Hat_W.vox", FileMode.Open));
+            List<MagicaVoxelData> hat = FromMagicaRaw(hbin).ToList();
+            List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
+            MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 255 };
+            MagicaVoxelData hatPlug = new MagicaVoxelData { color = 255 };
+            foreach (MagicaVoxelData mvd in bod)
+            {
+
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                {
+                    bodyPlug = mvd;
+                    bodyPlug.x += 10;
+                    bodyPlug.y += 10;
+                    bodyPlug.color--;
+                    break;
+                }
+            }
+            if (bodyPlug.color == 255)
+                return bod;
+            foreach (MagicaVoxelData mvd in hat)
+            {
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                {
+                    hatPlug = mvd;
+                    hatPlug.x += 10;
+                    hatPlug.y += 10;
+                    hatPlug.color--;
+                    break;
+                }
+            }
+            ret.Add(bodyPlug);
+            ret.Add(hatPlug);
+            return ret;
+        }
+        
     }
 }
