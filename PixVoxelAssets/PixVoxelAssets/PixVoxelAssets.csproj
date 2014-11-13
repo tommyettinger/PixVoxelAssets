@@ -503,6 +503,9 @@
     <Content Include="flat_soft.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="montage.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="spin_ortho.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

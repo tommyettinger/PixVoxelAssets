@@ -7299,6 +7299,26 @@ namespace AssetsPV
                         }
                     }
                 }
+                System.IO.Directory.CreateDirectory("strips_iso");
+//                System.IO.Directory.CreateDirectory("strips_ortho");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"montage.exe");
+                startInfo.UseShellExecute = false;
+                string st = "";
+                for (int color = 0; color < ((i > 4) ? 8 : 2); color++)
+                {
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        for (int strength = 0; strength < 4; strength++)
+                        {
+                            st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
+                            startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_iso/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
+                            Process.Start(startInfo).WaitForExit();
+                            //st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
+                            //startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_ortho/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
+                            //Process.Start(startInfo).WaitForExit();
+                        }
+                    }
+                }
                 /*
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -9442,8 +9462,8 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-            //makeFlatTiling().Save("tiling_flat.png", ImageFormat.Png);
-            makeFlatTilingSmall().Save("tiling_small.png", ImageFormat.Png);
+            makeFlatTiling().Save("tiling_128x64.png", ImageFormat.Png);
+            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
@@ -9602,7 +9622,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             */
-            
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9699,6 +9719,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Witch");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Scout");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Captain");
+            */
             /*
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
