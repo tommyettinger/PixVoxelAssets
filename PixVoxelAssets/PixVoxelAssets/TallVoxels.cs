@@ -9462,8 +9462,8 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-            makeFlatTiling().Save("tiling_128x64.png", ImageFormat.Png);
-            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
+//            makeFlatTiling().Save("tiling_128x64.png", ImageFormat.Png);
+//            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
@@ -9712,18 +9712,18 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Witch");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Scout");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
-           
+           */
 
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Berserker");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Witch");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Scout");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Captain");
-            */
-            /*
+            
+            
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
-            */
+            
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");

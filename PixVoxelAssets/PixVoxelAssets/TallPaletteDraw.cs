@@ -35,7 +35,7 @@ namespace AssetsPV
             //tundra
             new float[] {0.8F,1F,1F,4F},
             //road
-            new float[] {0.5F,0.5F,0.5F,4F},
+            new float[] {0.5F,0.5F,0.5F,2F},
             //river
             new float[] {0F,0.2F,0.85F,2F},
             //building base

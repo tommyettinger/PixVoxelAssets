@@ -16,27 +16,27 @@ namespace AssetsPV
         public static float[][] flatcolors = new float[][]
         {
             //plains
-            new float[] {0.63F,0.92F,0.3F,3F},
+            new float[] {0.63F,0.92F,0.3F,2F},
             //forest
-            new float[] {0.2F,0.7F,0.15F,3F},
+            new float[] {0.2F,0.7F,0.15F,6F},
             //desert
-            new float[] {1F,0.9F,0.0F,3F},
+            new float[] {1F,0.9F,0.0F,2F},
             //jungle
-            new float[] {0F,0.5F,0.35F,3F},
+            new float[] {0F,0.5F,0.35F,6F},
             //hills
-            new float[] {0.9F,0.6F,0.15F,7F},
+            new float[] {0.9F,0.6F,0.15F,10F},
             //mountains
-            new float[] {0.7F,0.75F,0.82F,7F},
+            new float[] {0.7F,0.75F,0.82F,12F},
             //ruins
-            new float[] {0.8F,0.4F,0.7F,5F},
+            new float[] {0.8F,0.4F,0.7F,8F},
             //tundra
-            new float[] {0.8F,1F,1F,3F},
+            new float[] {0.8F,1F,1F,4F},
             //road
-            new float[] {0.5F,0.5F,0.5F,5F},
+            new float[] {0.5F,0.5F,0.5F,2F},
             //river
-            new float[] {0F,0.2F,0.85F,1F},
+            new float[] {0F,0.2F,0.85F,2F},
             //building base
-            new float[] {0.55F,0.55F,0.55F,5F},
+            new float[] {0.55F,0.55F,0.55F,8F},
         };
         private static string[] terrainnames = new string[]
         {
@@ -220,8 +220,8 @@ Ruins	purple-gray
 
         public static Bitmap drawPixelsFlat(int color)
         {
-            Bitmap b = new Bitmap(64, 48, PixelFormat.Format32bppArgb);
-            Bitmap bold = new Bitmap(64, 48, PixelFormat.Format32bppArgb);
+            Bitmap b = new Bitmap(64, 64, PixelFormat.Format32bppArgb);
+            Bitmap bold = new Bitmap(64, 64, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(b);
             Graphics gBold = Graphics.FromImage(bold);
             //Image image = new Bitmap("cube_large.png");
@@ -297,7 +297,7 @@ Ruins	purple-gray
                 {
                     g.DrawImage(
                    image,
-                   new Rectangle(y * 2, 48 - 3 - z * 2, width, height),  // destination rectangle 
+                   new Rectangle(y * 2, 64 - 3 - z * 2, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
                    width,       // width of source rectangle
@@ -314,7 +314,7 @@ Ruins	purple-gray
                 {
                     gBold.DrawImage(
                    image,
-                   new Rectangle(y * 2, 48 - 3 - z * 2, width, height),  // destination rectangle 
+                   new Rectangle(y * 2, 64 - 3 - z * 2, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
                    width,       // width of source rectangle
@@ -363,7 +363,7 @@ Ruins	purple-gray
                     //}
                     g.DrawImage(
                    image,
-                   new Rectangle(y * 2, 48 - 32 + x - depth * 2, width, height),  // destination rectangle 
+                   new Rectangle(y * 2, 64 - 32 + x - depth * 2, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                    0, 0,        // upper-left corner of source rectangle 
                    width,       // width of source rectangle
@@ -406,7 +406,7 @@ Ruins	purple-gray
                     }
                     gBold.DrawImage(
                     image,
-                    new Rectangle(y * 2, 48 - 32 + x - depth * 2, width, height),  // destination rectangle 
+                    new Rectangle(y * 2, 64 - 32 + x - depth * 2, width, height),  // destination rectangle 
                         //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
                     0, 0,        // upper-left corner of source rectangle 
                     width,       // width of source rectangle

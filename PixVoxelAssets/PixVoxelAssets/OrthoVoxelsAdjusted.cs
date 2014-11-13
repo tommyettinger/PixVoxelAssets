@@ -9570,8 +9570,29 @@ namespace AssetsPV
 
             return b;
         }
-
         static Bitmap makeFlatTiling()
+        {
+            Bitmap[] tilings = new Bitmap[10];
+            for (int i = 0; i < 10; i++)
+            {
+                tilings[i] = OrthoPaletteDraw.drawPixelsFlat(i);
+            }
+            Bitmap b = new Bitmap(64 * 20, 32 * 20);
+            Graphics tiling = Graphics.FromImage(b);
+
+            LocalMap lm = new LocalMap(20, 20);
+            for (int j = 0; j < 20; j++)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    tiling.DrawImageUnscaled(tilings[lm.Land[i, j]], (64 * i), (32 * j) - 32 + 4);
+                }
+            }
+
+            return b;
+        }
+
+        static Bitmap makeFlatTilingBad()
         {
             Bitmap b = new Bitmap(128 * 16, 32 * 32);
             Graphics g = Graphics.FromImage(b);
@@ -9579,7 +9600,7 @@ namespace AssetsPV
             Bitmap[] tilings = new Bitmap[10];
             for (int i = 0; i < 10; i++)
             {
-                tilings[i] = TallPaletteDraw.drawPixelsFlat(i);
+                tilings[i] = OrthoPaletteDraw.drawPixelsFlat(i);
             }
             int[,] grid = new int[17, 33];
             Random r = new Random();
@@ -9754,16 +9775,16 @@ namespace AssetsPV
             //            Madden();
   //          TallVoxels.processTerrainChannelDouble();
  
-//            TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
-//            makeTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
+            TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
+            makeFlatTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
             //InitializeWPalette();
 
             //VoxelLogic.InitializeWPalette();
-            
+            /*
             processReceivingDouble();
             TallVoxels.processReceivingDouble();
-            
+            */
             //processUnitOutlinedWDouble("Person");
             //processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
