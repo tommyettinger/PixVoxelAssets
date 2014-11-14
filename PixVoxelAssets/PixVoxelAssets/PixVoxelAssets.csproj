@@ -36,7 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallVoxels</StartupObject>
+    <StartupObject>AssetsPV.OrthoVoxelsAdjusted</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -134,6 +134,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="City_Part_X.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Civilian_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Copter_Part_X.vox">
@@ -366,6 +369,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Plane_S_Part_X.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Plane_T_Low_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Plane_T_Part_X.vox">

@@ -6248,7 +6248,7 @@ namespace AssetsPV
                     break;
             }
 
-            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
+            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
             // o = renderOutlineLarge(parsed, d, color, frame);
             g = Graphics.FromImage(b);
 
@@ -7311,7 +7311,7 @@ namespace AssetsPV
                         for (int strength = 0; strength < 4; strength++)
                         {
                             st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
-                            startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_iso/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
+                            startInfo.Arguments = st + " -background none -mode Concatenate -tile x1 strips_iso/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
                             Process.Start(startInfo).WaitForExit();
                             //st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
                             //startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_ortho/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
@@ -8128,7 +8128,7 @@ namespace AssetsPV
 
          */
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
-        public static void processUnitOutlinedWDoubleHatData(string u, int palette, bool still, string hat)
+        public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
 
             Console.WriteLine("Processing: " + u + " " + hat);
@@ -8138,66 +8138,48 @@ namespace AssetsPV
 
             string folder = ("palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
-            int xSize = 60, ySize = 60;
-            for (int f = 0; f < framelimit; f++)
+
+            Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+            int stride = bmpData.Stride;
+            bmp.UnlockBits(bmpData);
+            bmp.Dispose();
+
+            for (int dir = 0; dir < 4; dir++)
             {
-                for (int dir = 0; dir < 4; dir++)
+                for (int f = 0; f < framelimit; f++)
                 {
-                    switch (dir)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            for (int i = 0; i < headpoints.Length; i++)
-                            {
-                                byte tempX = (byte)(headpoints[i].x - (xSize / 2));
-                                byte tempY = (byte)(headpoints[i].y - (ySize / 2));
-                                headpoints[i].x = (byte)((tempY) + (ySize / 2));
-                                headpoints[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
-                                headpoints[i].z = headpoints[i].z;
-                                headpoints[i].color = headpoints[i].color;
-                            }
-                            break;
-                        case 2:
-                            for (int i = 0; i < headpoints.Length; i++)
-                            {
-                                byte tempX = (byte)(headpoints[i].x - (xSize / 2));
-                                byte tempY = (byte)(headpoints[i].y - (ySize / 2));
-                                headpoints[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
-                                headpoints[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
-                                headpoints[i].z = headpoints[i].z;
-                                headpoints[i].color = headpoints[i].color;
-                            }
-                            break;
-                        case 3:
-                            for (int i = 0; i < headpoints.Length; i++)
-                            {
-                                byte tempX = (byte)(headpoints[i].x - (xSize / 2));
-                                byte tempY = (byte)(headpoints[i].y - (ySize / 2));
-                                headpoints[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
-                                headpoints[i].y = (byte)(tempX + (xSize / 2));
-                                headpoints[i].z = headpoints[i].z;
-                                headpoints[i].color = headpoints[i].color;
-                            }
-                            break;
-                    }
-                    Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
-
-                    PixelFormat pxf = PixelFormat.Format32bppArgb;
-
-                    Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                    BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
 
                     int jitter = (((f % 4) % 3) + ((f % 4) / 3)) * 2;
                     if (framelimit >= 8) jitter = ((f % 8 > 4) ? 4 - ((f % 8) ^ 4) : f % 8);
-                    int pixcoord = voxelToPixelLargeW(0, 0, headpoints[0].x, headpoints[0].y, headpoints[0].z, (byte)(253 - headpoints[0].color) / 4, bmpData.Stride, jitter, still) / 4;
+                    int body_coord = voxelToPixelLargeW(0, 0, headpoints[0 + dir * 2].x, headpoints[0 + dir * 2].y, headpoints[0 + dir * 2].z, (byte)(253 - headpoints[0 + dir * 2].color) / 4, stride, jitter, still) / 4;
                     model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        ((pixcoord % (bmpData.Stride / 4) - 32) / 2) + ", y " + (108 - ((pixcoord / (bmpData.Stride / 4) - 78) / 2)));
-                    pixcoord = voxelToPixelLargeW(0, 0, headpoints[1].x, headpoints[1].y, headpoints[1].z, (byte)(253 - headpoints[1].color) / 4, bmpData.Stride, jitter, still) / 4;
+                        ((body_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((body_coord / (stride / 4) - 78) / 2)));
+                    int hat_coord = voxelToPixelLargeW(0, 0, headpoints[1 + dir * 2].x, headpoints[1 + dir * 2].y, headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
                     hat_headpoints.AppendLine("HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        ((pixcoord % (bmpData.Stride / 4) - 32) / 2) + ", y " + (108 - ((pixcoord / (bmpData.Stride / 4) - 78) / 2)));
-                    bmp.UnlockBits(bmpData);
-                    bmp.Dispose();
+                        ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
+
+                    Graphics hat_graphics;
+                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((palette == 7 || palette == 8) ? 7 : 0) + "/" + ((palette == 7 || palette == 8) ? "Spirit_" : "Generic_Male_")
+                     + hat + "_Hat_face" + dir + "_" + f + ".png"));
+                    Bitmap body_image = new Bitmap(Image.FromFile("palette" + palette + "/" + u + "_Large_face" + dir + "_" + f + ".png"));
+
+                    VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+                    VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+                    hat_graphics = Graphics.FromImage(hat_image);
+                    Graphics body_graphics = Graphics.FromImage(body_image);
+                    body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
+                         (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)), 88, 108);
+                    body_graphics.Dispose();
+                    body_image.Save("palette" + palette + "/" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png");
+                    hat_graphics.Dispose();
+                    hat_image.Dispose();
+                    body_image.Dispose();
                 }
             }
             /*
@@ -8232,7 +8214,7 @@ namespace AssetsPV
 
             processFieryExplosionDoubleWHat(u, palette, hat);
             */
-
+            /*
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -8252,11 +8234,75 @@ namespace AssetsPV
                     b.Dispose();
                 }
             }
+            */
+        }
+        public static void processWDoubleHat(string u, int palette, string hat)
+        {
 
+            Console.WriteLine("Processing: " + hat);
+            BinaryReader bin;
+            int framelimit = 4;
+
+            string folder = ("palette" + palette);
+            System.IO.Directory.CreateDirectory(folder);
+            
+            /*
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
+                    b.Save(folder + "/" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "palette" + palette + "/" + u + "_" + hat + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            //bin.Close();
+
+            //            processFiringDouble(u);
+
+            processFieryExplosionDoubleWHat(u, palette, hat);
+            */
+            
+            bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+                if ((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color = VoxelLogic.clear;
+            }
+
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, true);
+                    b.Save(folder + "/" + u + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Dispose();
+                }
+            }
+            
         }
 
 
-        public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
+        public static void processUnitOutlinedWDoubleHatModel(string u, int palette, bool still, string hat)
         {
 
             Console.WriteLine("Processing: " + u + " " + hat);
@@ -8332,7 +8378,7 @@ namespace AssetsPV
                 parsed[i].y += 10;
             }
             int framelimit = 4;
-            if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
+            if (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
             {
                 framelimit = 2;
             }
@@ -8369,8 +8415,8 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();
             
             //bin.Close();
-
-            processFiringPartial(u);
+            if (VoxelLogic.UnitLookup.ContainsKey(u))
+                processFiringPartial(u);
 
             processExplosionPartial(u);
 
@@ -9622,7 +9668,17 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             */
-            /*
+
+            processWDoubleHat("Generic_Male", 0, "Berserker");
+            processWDoubleHat("Generic_Male", 0, "Witch");
+            processWDoubleHat("Generic_Male", 0, "Scout");
+            processWDoubleHat("Generic_Male", 0, "Captain");
+
+            processWDoubleHat("Spirit", 7, "Berserker");
+            processWDoubleHat("Spirit", 7, "Witch");
+            processWDoubleHat("Spirit", 7, "Scout");
+            processWDoubleHat("Spirit", 7, "Captain");
+
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9712,7 +9768,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Witch");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Scout");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
-           */
+           
 
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Berserker");

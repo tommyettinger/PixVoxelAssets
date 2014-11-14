@@ -9791,6 +9791,57 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             ret.Add(bodyPlug);
             ret.Add(hatPlug);
+            MagicaVoxelData[] headpoints = ret.ToArray();
+            int xSize = 60, ySize = 60;
+            for (int dir = 1; dir < 4; dir++)
+            {
+
+                switch (dir)
+                {
+                    case 1:
+                        for (int i = 0; i < headpoints.Length; i++)
+                        {
+                            byte tempX = (byte)(headpoints[i].x - (xSize / 2));
+                            byte tempY = (byte)(headpoints[i].y - (ySize / 2));
+                            ret.Add(new MagicaVoxelData
+                            {
+                                x = (byte)((tempY) + (ySize / 2)),
+                                y = (byte)((tempX * -1) + (xSize / 2) - 1),
+                                z = headpoints[i].z,
+                                color = headpoints[i].color
+                            });
+                        }
+                        break;
+                    case 2:
+                        for (int i = 0; i < headpoints.Length; i++)
+                        {
+                            byte tempX = (byte)(headpoints[i].x - (xSize / 2));
+                            byte tempY = (byte)(headpoints[i].y - (ySize / 2));
+                            ret.Add(new MagicaVoxelData
+                            {
+                                x = (byte)((tempX * -1) + (xSize / 2) - 1),
+                                y = (byte)((tempY * -1) + (ySize / 2) - 1),
+                                z = headpoints[i].z,
+                                color = headpoints[i].color
+                            });
+                        }
+                        break;
+                    case 3:
+                        for (int i = 0; i < headpoints.Length; i++)
+                        {
+                            byte tempX = (byte)(headpoints[i].x - (xSize / 2));
+                            byte tempY = (byte)(headpoints[i].y - (ySize / 2));
+                            ret.Add(new MagicaVoxelData
+                            {
+                                x = (byte)((tempY * -1) + (ySize / 2) - 1),
+                                y = (byte)(tempX + (xSize / 2)),
+                                z = headpoints[i].z,
+                                color = headpoints[i].color
+                            });
+                        }
+                        break;
+                }
+            }
             return ret;
         }
         

@@ -7727,7 +7727,7 @@ namespace AssetsPV
                     break;
             }
 
-            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
+            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
             //b.Save("junk/" + "color" + color + "_" + u + "_Large_face" + d + "_" + frame + ".png", ImageFormat.Png);
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
@@ -7783,7 +7783,7 @@ namespace AssetsPV
             MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, true);
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
 
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDouble(parsed, ((VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile) ? false : true));
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDouble(parsed, !(VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
             string folder = ("ortho_adj/frames");
             for (int color = 0; color < 8; color++)
             {
@@ -8869,6 +8869,15 @@ namespace AssetsPV
                         Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit, u);
                         b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
+                        b = processSingleOutlinedDouble(parsed, i, "W", f, framelimit, u);
+                        b.Save(folder + "/" + u + "_Large_face1" + "_" + f + ".png", ImageFormat.Png); //sw
+                        b.Dispose();
+                        b = processSingleOutlinedDouble(parsed, i, "N", f, framelimit, u);
+                        b.Save(folder + "/" + u + "_Large_face2" + "_" + f + ".png", ImageFormat.Png); //nw
+                        b.Dispose();
+                        b = processSingleOutlinedDouble(parsed, i, "E", f, framelimit, u);
+                        b.Save(folder + "/" + u + "_Large_face3" + "_" + f + ".png", ImageFormat.Png); //ne
+                        b.Dispose();
                     }
                 }
                 //bin.Close();
@@ -8881,6 +8890,9 @@ namespace AssetsPV
                     arrgs += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
                 starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " ortho_adj/gifs/" + u + "_Large_animated.gif";
                 Process.Start(starter).WaitForExit();
+
+
+                processExplosionPartial(u);
 
                 return;
             }
@@ -9775,8 +9787,8 @@ namespace AssetsPV
             //            Madden();
   //          TallVoxels.processTerrainChannelDouble();
  
-            TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
-            makeFlatTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
+            //TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
+            //makeFlatTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
             //InitializeWPalette();
 
@@ -9839,6 +9851,14 @@ namespace AssetsPV
             processEightWayAnimation("Copter_T");
             */
             /*
+            processUnitOutlinedPartial("Civilian");
+            TallVoxels.processUnitOutlinedPartial("Civilian");
+            processAnimationMontage("Civilian");
+             */
+            processUnitOutlinedPartial("Plane_T_Low");
+            TallVoxels.processUnitOutlinedPartial("Plane_T_Low");
+            processAnimationMontage("Plane_T_Low");
+/*            
             //processUnitOutlinedPartial("Infantry");
             //TallVoxels.processUnitOutlinedPartial("Infantry");
             processAnimationMontage("Infantry");
@@ -10279,10 +10299,10 @@ namespace AssetsPV
                 for (int dir = 0; dir < 4; dir++)
                 {
                     s = "color" + i + "/" + u + "_Large_face" + dir + "* ";
-                    startInfo.Arguments = s + " -mode Concatenate -tile x1 strips_iso/color" + i + "_" + u + "_stand_face" + dir + ".png";
+                    startInfo.Arguments = s + " -background none -mode Concatenate -tile x1 strips_iso/color" + i + "_" + u + "_stand_face" + dir + ".png";
                     Process.Start(startInfo).WaitForExit();
                     s = "ortho_adj/color" + i + "/" + u + "_Large_face" + dir + "* ";
-                    startInfo.Arguments = s + " -mode Concatenate -tile x1 strips_ortho/color" + i + "_" + u + "_stand_face" + dir + ".png";
+                    startInfo.Arguments = s + " -background none -mode Concatenate -tile x1 strips_ortho/color" + i + "_" + u + "_stand_face" + dir + ".png";
                     Process.Start(startInfo).WaitForExit();
                 }
             }
@@ -10293,10 +10313,10 @@ namespace AssetsPV
                 for (int dir = 0; dir < 4; dir++)
                 {
                     s = "frames/" + "color" + i + "_" + u + "_Large_face" + dir + "_fiery_explode_%d.png[0-11] ";
-                    startInfo.Arguments = s + " -mode Concatenate -tile x1 strips_iso/color" + i + "_" + u + "_explode_face" + dir + ".png";
+                    startInfo.Arguments = s + " -background none -mode Concatenate -tile x1 strips_iso/color" + i + "_" + u + "_explode_face" + dir + ".png";
                     Process.Start(startInfo).WaitForExit();
                     s = "ortho_adj/frames/color" + i + "_" + u + "_Large_face" + dir + "_fiery_explode_%d.png[0-11] ";
-                    startInfo.Arguments = s + " -mode Concatenate -tile x1 strips_ortho/color" + i + "_" + u + "_explode_face" + dir + ".png";
+                    startInfo.Arguments = s + " -background none -mode Concatenate -tile x1 strips_ortho/color" + i + "_" + u + "_explode_face" + dir + ".png";
                     Process.Start(startInfo).WaitForExit();
                 }
             }
@@ -10317,7 +10337,7 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();*/
             for (int w = 0; w < 2; w++)
             {
-                if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                if (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
 
                     s = "";
@@ -10326,10 +10346,10 @@ namespace AssetsPV
                         for (int dir = 0; dir < 4; dir++)
                         {
                             s = "frames/" + "color" + i + "_" + u + "_Large_face" + dir + "_attack_" + w + "_%d.png[0-15] ";
-                            startInfo.Arguments = s + " -mode Concatenate -tile x1 strips_iso/color" + i + "_" + u + "_attack" + w + "_face" + dir + ".png";
+                            startInfo.Arguments = s + " -background none -mode Concatenate -tile x1 strips_iso/color" + i + "_" + u + "_attack" + w + "_face" + dir + ".png";
                             Process.Start(startInfo).WaitForExit();
                             s = "ortho_adj/frames/color" + i + "_" + u + "_Large_face" + dir + "_attack_" + w + "_%d.png[0-15] ";
-                            startInfo.Arguments = s + " -mode Concatenate -tile x1 strips_ortho/color" + i + "_" + u + "_attack" + w + "_face" + dir + ".png";
+                            startInfo.Arguments = s + " -background none -mode Concatenate -tile x1 strips_ortho/color" + i + "_" + u + "_attack" + w + "_face" + dir + ".png";
                             Process.Start(startInfo).WaitForExit();
                         }
                     }
