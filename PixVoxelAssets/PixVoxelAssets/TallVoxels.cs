@@ -8127,10 +8127,15 @@ namespace AssetsPV
             }
 
          */
+        private static bool render_hat_gifs = true;
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
         public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
-
+            if (render_hat_gifs)
+            {
+                processUnitOutlinedWDoubleHatModel(u, palette, still, hat);
+                return;
+        }
             Console.WriteLine("Processing: " + u + " " + hat);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] headpoints = VoxelLogic.GetHeadVoxels(bin, hat).ToArray();
@@ -9679,6 +9684,12 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Scout");
             processWDoubleHat("Spirit", 7, "Captain");
 
+            processUnitOutlinedWDouble("Ghoul", 39, true);
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Witch");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Scout");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Captain");
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9775,7 +9786,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Witch");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Scout");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Captain");
-            
+            */
             
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());

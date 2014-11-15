@@ -8449,7 +8449,7 @@ namespace AssetsPV
                             //startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_iso/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
                             //Process.Start(startInfo).WaitForExit();
                             st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
-                            startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_ortho/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
+                            startInfo.Arguments = st + " -background none -mode Concatenate -tile x1 strips_ortho/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
                             Process.Start(startInfo).WaitForExit();
                         }
                     }
@@ -9793,10 +9793,10 @@ namespace AssetsPV
             //InitializeWPalette();
 
             //VoxelLogic.InitializeWPalette();
-            /*
+            
             processReceivingDouble();
             TallVoxels.processReceivingDouble();
-            */
+            
             //processUnitOutlinedWDouble("Person");
             //processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
