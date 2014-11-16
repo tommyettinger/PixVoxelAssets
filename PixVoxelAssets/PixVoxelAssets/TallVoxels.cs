@@ -4936,6 +4936,10 @@ namespace AssetsPV
                 int p = 0;
                 if (current_color >= VoxelLogic.wcolorcount)
                     continue;
+
+                if (current_color >= 21 && current_color <= 24)
+                    current_color = 21 + ((current_color + frame) % 4);
+
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
@@ -5015,10 +5019,7 @@ namespace AssetsPV
                         continue;
                     if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
-                    if (current_color >= 21 && current_color <= 24) //lights
-                    {
-                        mod_color = 21 + ((current_color + frame) % 4);
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -5175,6 +5176,10 @@ namespace AssetsPV
                 int p = 0;
                 if (current_color >= VoxelLogic.wcolorcount)
                     continue;
+
+                if (current_color >= 21 && current_color <= 24)
+                    current_color = 21 + ((current_color + frame) % 4);
+
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
@@ -5248,10 +5253,7 @@ namespace AssetsPV
                         continue;
                     if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
-                    if (current_color >= 21 && current_color <= 24) //lights
-                    {
-                        mod_color = 21 + ((current_color + frame) % 4);
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -5414,6 +5416,10 @@ namespace AssetsPV
                 int p = 0;
                 if (current_color >= VoxelLogic.wcolorcount)
                     continue;
+                
+                if (current_color >= 21 && current_color <= 24)
+                    current_color = 21 + ((current_color + frame) % 4);
+                
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
@@ -5487,10 +5493,7 @@ namespace AssetsPV
                         continue;
                     if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
-                    if (current_color >= 21 && current_color <= 24) //lights
-                    {
-                        mod_color = 21 + ((current_color + frame) % 4);
-                    }
+                    
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)

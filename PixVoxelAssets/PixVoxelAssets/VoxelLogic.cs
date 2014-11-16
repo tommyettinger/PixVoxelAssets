@@ -5017,13 +5017,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //20 sparks
             new float[] {1.3F,1.2F,0.85F,1F},
             //21 glow frame 0
-            new float[] {0.95F,0.9F,0.45F,1F},
+            new float[] {0.6F,0.0F,-0.1F,bordered_alpha},
             //22 glow frame 1
-            new float[] {1.15F,1.1F,0.65F,1F},
+            new float[] {0F,0F,0F,0F},
             //23 glow frame 2
-            new float[] {0.95F,0.9F,0.45F,1F},
+            new float[] {0F,0F,0F,0F},
             //24 glow frame 3
-            new float[] {0.75F,0.7F,0.25F,1F},
+            new float[] {0F,0F,0F,0F},
             //25 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //26 bright color
@@ -5043,7 +5043,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //33 fuzz lightest
             new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
-            new float[] {0.67F,0.05F,-0.1F,1F},
+            new float[] {0.6F,0.0F,-0.1F,1F},
             //35 glass
             new float[] {0.5F,0.8F,1.1F,1F},
             //36 placeholder
