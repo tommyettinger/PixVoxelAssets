@@ -465,6 +465,9 @@
     <None Include="Vashk_Walk_3_Huge_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Wight_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Witch_Hat_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

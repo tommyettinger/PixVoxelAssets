@@ -9676,7 +9676,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             */
-
+            //render_hat_gifs = false;
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9687,12 +9687,18 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Scout");
             processWDoubleHat("Spirit", 7, "Captain");
 
+            processUnitOutlinedWDouble("Wight", 40, true);
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Scout");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Captain");
+            /*
             processUnitOutlinedWDouble("Ghoul", 39, true);
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Witch");
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Scout");
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Captain");
-            /*
+            
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
