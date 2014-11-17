@@ -9692,7 +9692,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Scout");
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Captain");
-            /*
+            
             processUnitOutlinedWDouble("Ghoul", 39, true);
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Witch");
@@ -9795,7 +9795,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Witch");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Scout");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Captain");
-            */
+            
             
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
