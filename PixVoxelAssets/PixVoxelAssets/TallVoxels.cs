@@ -6534,6 +6534,7 @@ namespace AssetsPV
                     b2.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                     b2.Dispose();
                     g2.Dispose();
+                    b3.Dispose();
                 }
             }
 
@@ -6557,9 +6558,73 @@ namespace AssetsPV
 
             //bin.Close();
         }
-        public static void processFieryExplosionDoubleWHat(string u, int palette, string hat)
+        public static void processFieryExplosionDoubleWHat(string u, int palette, string hat, MagicaVoxelData[] headpoints)
         {
             Console.WriteLine("Processing: " + u + " " + hat);
+            Stream body = File.Open(u + "_Large_W.vox", FileMode.Open);
+            BinaryReader bin = new BinaryReader(body);
+            int framelimit = 12;
+
+            string folder = ("frames");//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+            int stride = bmpData.Stride;
+            bmp.UnlockBits(bmpData);
+            Bitmap hat_image = new Bitmap(bmp);
+            Bitmap body_image = new Bitmap(bmp);
+            Graphics body_graphics = Graphics.FromImage(body_image);
+            Graphics hat_graphics = Graphics.FromImage(hat_image);
+            for (int dir = 0; dir < 4; dir++)
+            {
+                int minimum_z = headpoints[0 + dir * 2].z + 16;
+
+                for (int f = 0; f < framelimit; f++)
+                {
+
+                    int jitter = (((f % 4) % 3) + ((f % 4) / 3)) * 2;
+                    if (framelimit >= 8) jitter = ((f % 8 > 4) ? 4 - ((f % 8) ^ 4) : f % 8);
+                    minimum_z += (10 - ((f * f > 22) ? 22 : f*f)) * 7 / 5;
+                    if (minimum_z <= 0) minimum_z = 0;
+                    int body_coord = voxelToPixelHugeW(0, 0, headpoints[0 + dir * 2].x, headpoints[0 + dir * 2].y + ((minimum_z == 0) ? 0 : (jitter - 2) * 2),
+                        minimum_z, (byte)(253 - headpoints[0 + dir * 2].color) / 4, stride, jitter, true) / 4;
+                    model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+                        ((body_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((body_coord / (stride / 4) - 78) / 2)));
+                    int hat_coord = voxelToPixelLargeW(0, 0, headpoints[1 + dir * 2].x, headpoints[1 + dir * 2].y,
+                        headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
+                    hat_headpoints.AppendLine("EXPLODE_HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+                        ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
+                    Image h2 = Image.FromFile("palette" + ((palette == 7 || palette == 8) ? 7 : 0) + "/" + ((palette == 7 || palette == 8) ? "Spirit_" : "Generic_Male_")
+                     + hat + "_Hat_face" + dir + "_" + (f%4) + ".png");
+                    hat_image = new Bitmap(h2);
+                    h2.Dispose();
+                    Image b2 = Image.FromFile(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
+                    body_image = new Bitmap(b2);
+                    b2.Dispose();
+                    VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+                    VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+                    hat_graphics = Graphics.FromImage(hat_image);
+                    body_graphics = Graphics.FromImage(body_image);
+                    body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    body_graphics.DrawImage(hat_image, 80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
+                         40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                    body_image.Save(folder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_fiery_explode_" + f + ".png", ImageFormat.Png);
+
+                }
+            }
+
+            body_graphics.Dispose();
+            hat_graphics.Dispose();
+            hat_image.Dispose();
+            body_image.Dispose();
+            bmp.Dispose();
+            body.Close();
+            bin.Close();
+            /*
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.AssembleHatToModel(bin, hat).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
@@ -6592,6 +6657,7 @@ namespace AssetsPV
             }
 
 
+            */
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8130,15 +8196,15 @@ namespace AssetsPV
             }
 
          */
-        private static bool render_hat_gifs = true;
+        private static bool render_hat_gifs = false;
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
         public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
-            if (render_hat_gifs)
+/*          if (render_hat_gifs)
             {
                 processUnitOutlinedWDoubleHatModel(u, palette, still, hat);
                 return;
-        }
+            }*/
             Console.WriteLine("Processing: " + u + " " + hat);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] headpoints = VoxelLogic.GetHeadVoxels(bin, hat).ToArray();
@@ -8205,7 +8271,7 @@ namespace AssetsPV
                     b.Dispose();
                 }
             }
-
+            */
 
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8220,8 +8286,8 @@ namespace AssetsPV
 
             //            processFiringDouble(u);
 
-            processFieryExplosionDoubleWHat(u, palette, hat);
-            */
+            processFieryExplosionDoubleWHat(u, palette, hat, headpoints);
+            
             /*
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
@@ -8350,7 +8416,7 @@ namespace AssetsPV
 
             //            processFiringDouble(u);
 
-            processFieryExplosionDoubleWHat(u, palette, hat);
+            //processFieryExplosionDoubleWHat(u, palette, hat);
 
 
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
@@ -9676,7 +9742,11 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             */
+            //            processUnitOutlinedWDouble("Mutant", 41, true);
+
+
             //render_hat_gifs = false;
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9686,7 +9756,8 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Witch");
             processWDoubleHat("Spirit", 7, "Scout");
             processWDoubleHat("Spirit", 7, "Captain");
-
+            
+            
             processUnitOutlinedWDouble("Wight", 40, true);
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
