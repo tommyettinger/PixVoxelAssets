@@ -8238,7 +8238,7 @@ namespace AssetsPV
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
 
                     Graphics hat_graphics;
-                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((palette == 7 || palette == 8) ? 7 : 0) + "/" + ((palette == 7 || palette == 8) ? "Spirit_" : "Generic_Male_")
+                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
                      + hat + "_Hat_face" + dir + "_" + f + ".png"));
                     Bitmap body_image = new Bitmap(Image.FromFile("palette" + palette + "/" + u + "_Large_face" + dir + "_" + f + ".png"));
 
@@ -9761,7 +9761,16 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Mystic");
             processWDoubleHat("Spirit", 7, "Wizard");
 
-            
+
+            processUnitOutlinedWDouble("Spectre", 42, false);
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Berserker");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Witch");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Scout");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Captain");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Mystic");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Wizard");
+
+            /*
             processUnitOutlinedWDouble("Wight", 40, true);
             //processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
             //processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
@@ -9913,7 +9922,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Wizard");
 
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-
+            */
             
             //File.WriteAllText("bodies.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());

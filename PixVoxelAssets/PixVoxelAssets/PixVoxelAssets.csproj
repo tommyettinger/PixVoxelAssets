@@ -408,6 +408,9 @@
     <None Include="Spectral_Knight_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Spectre_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Spirit_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
