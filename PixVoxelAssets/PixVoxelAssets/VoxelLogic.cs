@@ -5685,10 +5685,40 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         try
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[current_color][i * 4 + j * width * 4 + 0] = c.B;
-                            cubes[current_color][i * 4 + j * width * 4 + 1] = c.G;
-                            cubes[current_color][i * 4 + j * width * 4 + 2] = c.R;
-                            cubes[current_color][i * 4 + j * width * 4 + 3] = c.A;
+                            double h = 0.0, s = 1.0, v = 1.0;
+                            if (!(current_color / 8 == 10 || current_color / 8 == 13 || current_color / 8 == 14) &&
+                                (xcolors[current_color][3] == 1F || current_color / 8 == 15 || current_color / 8 == 16))
+                            {
+                                if (j == 0)
+                                {
+                                    ColorToHSV(c, out h, out s, out v);
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.1), v);
+                                }
+                                else if (i >= width / 2 || j == height - 1)
+                                {
+                                    ColorToHSV(c, out h, out s, out v);
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * 0.8));
+                                }
+                                else
+                                {
+                                    ColorToHSV(c, out h, out s, out v);
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * 0.95));
+                                }
+                            }
+                            if (c.A != 0)
+                            {
+                                cubes[current_color][i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                                cubes[current_color][i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                                cubes[current_color][i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[current_color][i * 4 + j * width * 4 + 3] = c.A;
+                            }
+                            else
+                            {
+                                cubes[current_color][i * 4 + j * width * 4 + 0] = 0;
+                                cubes[current_color][i * 4 + j * width * 4 + 1] = 0;
+                                cubes[current_color][i * 4 + j * width * 4 + 2] = 0;
+                                cubes[current_color][i * 4 + j * width * 4 + 3] = 0;
+                            }
                         }
                         catch (Exception e)
                         {
@@ -5735,9 +5765,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         for (int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 0] = c.B;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 1] = c.G;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 2] = c.R;
+                            
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
                             cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 3] = c.A;
                         }
                     }
@@ -5843,7 +5874,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0.22F+wpalettes[p][current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.251F+wpalettes[p][current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.31F+wpalettes[p][current_color][2],  0, 0},
-   new float[] {0,  0,  0,  VoxelLogic.flat_alpha, 0},
+   new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
                     else
@@ -5859,7 +5890,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        colorMatrix,
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
-                    Image which_image = (current_color >= 18 && current_color <= 24) ? shine :
+                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F) ? shine :
                        (wpalettes[p][current_color][3] == 1F || wpalettes[p][current_color][3] == waver_alpha
                         || wpalettes[p][current_color][3] == fuzz_alpha || wpalettes[p][current_color][3] == bordered_alpha
                          || wpalettes[p][current_color][3] == spin_alpha_0 || wpalettes[p][current_color][3] == spin_alpha_1) ? image :
@@ -5897,10 +5928,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * 0.95));
                                 }
                             }
-                            cubes[p, current_color, i * 4 + j * 4 * width + 0] = Math.Max((byte)1, c.B);
-                            cubes[p, current_color, i * 4 + j * 4 * width + 1] = Math.Max((byte)1, c.G);
-                            cubes[p, current_color, i * 4 + j * 4 * width + 2] = Math.Max((byte)1, c.R);
-                            cubes[p, current_color, i * 4 + j * 4 * width + 3] = 255;
+
+                            if (c.A != 0)
+                            {
+                                cubes[p,current_color,i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                                cubes[p,current_color,i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                                cubes[p,current_color,i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[p,current_color,i * 4 + j * width * 4 + 3] = c.A;
+                            }
+                            else
+                            {
+                                cubes[p, current_color, i * 4 + j * 4 * width + 0] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 1] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 2] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 3] = 0;
+                            }
                         }
                     }
                 }

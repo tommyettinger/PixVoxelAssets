@@ -117,10 +117,40 @@ namespace AssetsPV
                         try
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[current_color][i * 4 + j * width * 4 + 0] = c.B;
-                            cubes[current_color][i * 4 + j * width * 4 + 1] = c.G;
-                            cubes[current_color][i * 4 + j * width * 4 + 2] = c.R;
-                            cubes[current_color][i * 4 + j * width * 4 + 3] = c.A;
+                            double h = 0.0, s = 1.0, v = 1.0;
+                            if (!(current_color / 8 == 10 || current_color / 8 == 12 || current_color / 8 == 13 || current_color / 8 == 14) &&
+                                (VoxelLogic.xcolors[current_color][3] == 1F || current_color / 8 == 15 || current_color / 8 == 16))
+                            {
+                                if (j == 0)
+                                {
+                                    VoxelLogic.ColorToHSV(c, out h, out s, out v);
+                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.1), v);
+                                }
+                                else if (j == height - 1)
+                                {
+                                    VoxelLogic.ColorToHSV(c, out h, out s, out v);
+                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * 0.8));
+                                }
+                                else
+                                {
+                                    VoxelLogic.ColorToHSV(c, out h, out s, out v);
+                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * 0.95));
+                                }
+                            }
+                            if (c.A != 0)
+                            {
+                                cubes[current_color][i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                                cubes[current_color][i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                                cubes[current_color][i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[current_color][i * 4 + j * width * 4 + 3] = 255;
+                            }
+                            else
+                            {
+                                cubes[current_color][i * 4 + j * width * 4 + 0] = 0;
+                                cubes[current_color][i * 4 + j * width * 4 + 1] = 0;
+                                cubes[current_color][i * 4 + j * width * 4 + 2] = 0;
+                                cubes[current_color][i * 4 + j * width * 4 + 3] = 0;
+                            }
                         }
                         catch (Exception e)
                         {
@@ -167,10 +197,10 @@ namespace AssetsPV
                         for (int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 0] = c.B;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 1] = c.G;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 2] = c.R;
-                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 3] = c.A;
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                            cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 3] = 255;
                         }
                     }
                 }
@@ -7811,7 +7841,7 @@ namespace AssetsPV
                     }
                 }
             }
-            
+            /*
             System.IO.Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -7829,7 +7859,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " ortho_adj/gifs/" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-            
+            */
 //            bin.Close();
         }
         public static void processExplosionChannelPartial(string u)
@@ -8171,7 +8201,7 @@ namespace AssetsPV
                     //bin.Close();
                 }
                 else continue;
-                
+                /*
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -8189,7 +8219,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " ortho_adj/gifs/" + u + "_attack_" + w + "_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-                
+             */   
             }
 
         }
@@ -8435,7 +8465,7 @@ namespace AssetsPV
                     }
                 }
 //                System.IO.Directory.CreateDirectory("strips_iso");
-                System.IO.Directory.CreateDirectory("strips_ortho");
+                /*System.IO.Directory.CreateDirectory("strips_ortho");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"montage.exe");
                 startInfo.UseShellExecute = false;
                 string st = "";
@@ -8454,7 +8484,7 @@ namespace AssetsPV
                         }
                     }
                 }
-
+                */
                 /*
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8881,7 +8911,7 @@ namespace AssetsPV
                     }
                 }
                 //bin.Close();
-
+                /*
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
                 starter.UseShellExecute = false;
@@ -8890,7 +8920,7 @@ namespace AssetsPV
                     arrgs += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
                 starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " ortho_adj/gifs/" + u + "_Large_animated.gif";
                 Process.Start(starter).WaitForExit();
-
+                */
 
                 processExplosionPartial(u);
 
@@ -8923,7 +8953,7 @@ namespace AssetsPV
                 }
 
             }
-            
+            /*
             System.IO.Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8932,7 +8962,7 @@ namespace AssetsPV
                 s += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " ortho_adj/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+            */
             //bin.Close();
 
             processFiringPartial(u);
@@ -9850,106 +9880,105 @@ namespace AssetsPV
             processUnitOutlinedPartial("Copter_T");
             processEightWayAnimation("Copter_T");
             */
-            /*
+            
             processUnitOutlinedPartial("Civilian");
             TallVoxels.processUnitOutlinedPartial("Civilian");
-            processAnimationMontage("Civilian");
-             */
-            processUnitOutlinedPartial("Plane_T_Low");
+            //processEightWayAnimation("Civilian");
+             
+/*            processUnitOutlinedPartial("Plane_T_Low");
             TallVoxels.processUnitOutlinedPartial("Plane_T_Low");
-            processAnimationMontage("Plane_T_Low");
-/*            
-            //processUnitOutlinedPartial("Infantry");
-            //TallVoxels.processUnitOutlinedPartial("Infantry");
-            processAnimationMontage("Infantry");
-            //processUnitOutlinedPartial("Infantry_P");
-            //TallVoxels.processUnitOutlinedPartial("Infantry_P");
-            processAnimationMontage("Infantry_P");
-            //processUnitOutlinedPartial("Infantry_S");
-            //TallVoxels.processUnitOutlinedPartial("Infantry_S");
-            processAnimationMontage("Infantry_S");
-            //processUnitOutlinedPartial("Infantry_T");
-            //TallVoxels.processUnitOutlinedPartial("Infantry_T");
-            processAnimationMontage("Infantry_T");
-            //processUnitOutlinedPartial("Tank");
-            //TallVoxels.processUnitOutlinedPartial("Tank");
-            processAnimationMontage("Tank");
-            //processUnitOutlinedPartial("Tank_P");
-            //TallVoxels.processUnitOutlinedPartial("Tank_P");
-            processAnimationMontage("Tank_P");
-            //processUnitOutlinedPartial("Tank_S");
-            //TallVoxels.processUnitOutlinedPartial("Tank_S");
-            processAnimationMontage("Tank_S");
-            //processUnitOutlinedPartial("Tank_T");
-            //TallVoxels.processUnitOutlinedPartial("Tank_T");
-            processAnimationMontage("Tank_T");
-            //processUnitOutlinedPartial("Artillery");
-            //TallVoxels.processUnitOutlinedPartial("Artillery");
-            processAnimationMontage("Artillery");
-            //processUnitOutlinedPartial("Artillery_P");
-            //TallVoxels.processUnitOutlinedPartial("Artillery_P");
-            processAnimationMontage("Artillery_P");
-            //processUnitOutlinedPartial("Artillery_S");
-            //TallVoxels.processUnitOutlinedPartial("Artillery_S");
-            processAnimationMontage("Artillery_S");
-            //processUnitOutlinedPartial("Artillery_T");
-            //TallVoxels.processUnitOutlinedPartial("Artillery_T");
-            processAnimationMontage("Artillery_T");
-            //processUnitOutlinedPartial("Supply");
-            //TallVoxels.processUnitOutlinedPartial("Supply");
-            processAnimationMontage("Supply");
-            //processUnitOutlinedPartial("Supply_P");
-            //TallVoxels.processUnitOutlinedPartial("Supply_P");
-            processAnimationMontage("Supply_P");
-            //processUnitOutlinedPartial("Supply_S");
-            //TallVoxels.processUnitOutlinedPartial("Supply_S");
-            processAnimationMontage("Supply_S");
-            //processUnitOutlinedPartial("Supply_T");
-            //TallVoxels.processUnitOutlinedPartial("Supply_T");
-            processAnimationMontage("Supply_T");
-            //processUnitOutlinedPartial("Copter");
-            //TallVoxels.processUnitOutlinedPartial("Copter");
-            processAnimationMontage("Copter");
-            //processUnitOutlinedPartial("Copter_P");
-            //TallVoxels.processUnitOutlinedPartial("Copter_P");
-            processAnimationMontage("Copter_P");
-            //processUnitOutlinedPartial("Copter_S");
-            //TallVoxels.processUnitOutlinedPartial("Copter_S");
-            processAnimationMontage("Copter_S");
-            //processUnitOutlinedPartial("Copter_T");
-            //TallVoxels.processUnitOutlinedPartial("Copter_T");
-            processAnimationMontage("Copter_T");
-            //processUnitOutlinedPartial("Plane");
-            //TallVoxels.processUnitOutlinedPartial("Plane");
-            processAnimationMontage("Plane");
-            //processUnitOutlinedPartial("Plane_P");
-            //TallVoxels.processUnitOutlinedPartial("Plane_P");
-            processAnimationMontage("Plane_P");
-            //processUnitOutlinedPartial("Plane_S");
-            //TallVoxels.processUnitOutlinedPartial("Plane_S");
-            processAnimationMontage("Plane_S");
-            //processUnitOutlinedPartial("Plane_T");
-            //TallVoxels.processUnitOutlinedPartial("Plane_T");
-            processAnimationMontage("Plane_T");
-            
-            //processUnitOutlinedPartial("Airport");
-            //TallVoxels.processUnitOutlinedPartial("Airport");
-            processAnimationMontage("Airport");
-            //processUnitOutlinedPartial("City");
-            //TallVoxels.processUnitOutlinedPartial("City");
-            processAnimationMontage("City");
-            //processUnitOutlinedPartial("Factory");
-            //TallVoxels.processUnitOutlinedPartial("Factory");
-            processAnimationMontage("Factory");
-            //processUnitOutlinedPartial("Laboratory");
-            //TallVoxels.processUnitOutlinedPartial("Laboratory");
-            processAnimationMontage("Laboratory");
-            //processUnitOutlinedPartial("Castle");
-            //TallVoxels.processUnitOutlinedPartial("Castle");
-            processAnimationMontage("Castle");
-            //processUnitOutlinedPartial("Estate");
-            //TallVoxels.processUnitOutlinedPartial("Estate");
-            processAnimationMontage("Estate");
+            processAnimationMontage("Plane_T_Low");*/
+            processUnitOutlinedPartial("Infantry");
+            TallVoxels.processUnitOutlinedPartial("Infantry");
+            processEightWayAnimation("Infantry");
+            processUnitOutlinedPartial("Infantry_P");
+            TallVoxels.processUnitOutlinedPartial("Infantry_P");
+            processEightWayAnimation("Infantry_P");
+            processUnitOutlinedPartial("Infantry_S");
+            TallVoxels.processUnitOutlinedPartial("Infantry_S");
+            //processEightWayAnimation("Infantry_S");
+            processUnitOutlinedPartial("Infantry_T");
+            TallVoxels.processUnitOutlinedPartial("Infantry_T");
+            //processEightWayAnimation("Infantry_T");
+            processUnitOutlinedPartial("Tank");
+            TallVoxels.processUnitOutlinedPartial("Tank");
+            //processEightWayAnimation("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            TallVoxels.processUnitOutlinedPartial("Tank_P");
+            //processEightWayAnimation("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            TallVoxels.processUnitOutlinedPartial("Tank_S");
+            //processEightWayAnimation("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            TallVoxels.processUnitOutlinedPartial("Tank_T");
+            //processEightWayAnimation("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            TallVoxels.processUnitOutlinedPartial("Artillery");
+            //processEightWayAnimation("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            TallVoxels.processUnitOutlinedPartial("Artillery_P");
+            //processEightWayAnimation("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            TallVoxels.processUnitOutlinedPartial("Artillery_S");
+            //processEightWayAnimation("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+            TallVoxels.processUnitOutlinedPartial("Artillery_T");
+            //processEightWayAnimation("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            TallVoxels.processUnitOutlinedPartial("Supply");
+            //processEightWayAnimation("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            TallVoxels.processUnitOutlinedPartial("Supply_P");
+            //processEightWayAnimation("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            TallVoxels.processUnitOutlinedPartial("Supply_S");
+            //processEightWayAnimation("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
+            TallVoxels.processUnitOutlinedPartial("Supply_T");
+            //processEightWayAnimation("Supply_T");
+            processUnitOutlinedPartial("Copter");
+            TallVoxels.processUnitOutlinedPartial("Copter");
+            //processEightWayAnimation("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            TallVoxels.processUnitOutlinedPartial("Copter_P");
+            //processEightWayAnimation("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            TallVoxels.processUnitOutlinedPartial("Copter_S");
+            //processEightWayAnimation("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
+            TallVoxels.processUnitOutlinedPartial("Copter_T");
+            //processEightWayAnimation("Copter_T");
+            processUnitOutlinedPartial("Plane");
+            TallVoxels.processUnitOutlinedPartial("Plane");
+            //processEightWayAnimation("Plane");
+            processUnitOutlinedPartial("Plane_P");
+            TallVoxels.processUnitOutlinedPartial("Plane_P");
+            processEightWayAnimation("Plane_P");
+            processUnitOutlinedPartial("Plane_S");
+            TallVoxels.processUnitOutlinedPartial("Plane_S");
+            //processEightWayAnimation("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
+            TallVoxels.processUnitOutlinedPartial("Plane_T");
+            //processEightWayAnimation("Plane_T");
+
+            processUnitOutlinedPartial("Airport");
+            TallVoxels.processUnitOutlinedPartial("Airport");
+            //processEightWayAnimation("Airport");
+            processUnitOutlinedPartial("City");
+            TallVoxels.processUnitOutlinedPartial("City");
+            //processEightWayAnimation("City");
+            processUnitOutlinedPartial("Factory");
+            TallVoxels.processUnitOutlinedPartial("Factory");
+            processEightWayAnimation("Factory");
+            processUnitOutlinedPartial("Laboratory");
+            TallVoxels.processUnitOutlinedPartial("Laboratory");
+            //processEightWayAnimation("Laboratory");
+            processUnitOutlinedPartial("Castle");
+            TallVoxels.processUnitOutlinedPartial("Castle");
+            //processEightWayAnimation("Castle");
+            processUnitOutlinedPartial("Estate");
+            TallVoxels.processUnitOutlinedPartial("Estate");
+            //processEightWayAnimation("Estate");
             
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");

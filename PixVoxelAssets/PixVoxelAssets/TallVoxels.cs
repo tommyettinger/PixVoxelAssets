@@ -7108,7 +7108,7 @@ namespace AssetsPV
                     //bin.Close();
                 }
                 else continue;
-                
+                /*
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -7126,7 +7126,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + u + "_attack_" + w + "_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-                
+             */   
             }
 
         }
@@ -7369,6 +7369,7 @@ namespace AssetsPV
                         }
                     }
                 }
+                /*
                 System.IO.Directory.CreateDirectory("strips_iso");
 //                System.IO.Directory.CreateDirectory("strips_ortho");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"montage.exe");
@@ -7389,6 +7390,7 @@ namespace AssetsPV
                         }
                     }
                 }
+                */
                 /*
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8479,7 +8481,7 @@ namespace AssetsPV
                 }
 
             }
-            
+            /*
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8488,7 +8490,7 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+            */
             //bin.Close();
             if (VoxelLogic.UnitLookup.ContainsKey(u))
                 processFiringPartial(u);
@@ -9682,7 +9684,7 @@ namespace AssetsPV
 //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
 //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             
-            
+            /*
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Vashk", 19, true);
@@ -9746,7 +9748,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
-            
+            */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
 
