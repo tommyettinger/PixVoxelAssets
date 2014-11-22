@@ -130,13 +130,13 @@ namespace AssetsPV
                                 {
                                     VoxelLogic.ColorToHSV(c, out h, out s, out v);
                                     c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v *
-                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.1 : 0.8)));
+                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.0 : 0.8)));
                                 }
                                 else
                                 {
                                     VoxelLogic.ColorToHSV(c, out h, out s, out v);
                                     c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v *
-                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.15 : 0.95)));
+                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.0 : 0.95)));
                                 }
                             }
                             if (c.A != 0)
@@ -7843,7 +7843,7 @@ namespace AssetsPV
                     }
                 }
             }
-            /*
+            
             System.IO.Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -7861,7 +7861,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " ortho_adj/gifs/" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-            */
+            
 //            bin.Close();
         }
         public static void processExplosionChannelPartial(string u)
@@ -8203,7 +8203,7 @@ namespace AssetsPV
                     //bin.Close();
                 }
                 else continue;
-                /*
+                
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -8221,7 +8221,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " ortho_adj/gifs/" + u + "_attack_" + w + "_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-             */   
+                
             }
 
         }
@@ -8487,7 +8487,7 @@ namespace AssetsPV
                     }
                 }
                 */
-                /*
+                
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -8510,7 +8510,7 @@ namespace AssetsPV
                     Console.WriteLine("Args: " + st);
                     Process.Start(startInfo).WaitForExit();
                 }
-                */
+                
             }
         }
         private static void processChannelFiring(string u)
@@ -8913,7 +8913,7 @@ namespace AssetsPV
                     }
                 }
                 //bin.Close();
-                /*
+                
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
                 starter.UseShellExecute = false;
@@ -8922,7 +8922,7 @@ namespace AssetsPV
                     arrgs += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
                 starter.Arguments = "-dispose background -delay 25 -loop 0 " + arrgs + " ortho_adj/gifs/" + u + "_Large_animated.gif";
                 Process.Start(starter).WaitForExit();
-                */
+                
 
                 processExplosionPartial(u);
 
@@ -8955,7 +8955,7 @@ namespace AssetsPV
                 }
 
             }
-            /*
+            
             System.IO.Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8964,7 +8964,7 @@ namespace AssetsPV
                 s += "ortho_adj/color" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " ortho_adj/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
 
             processFiringPartial(u);
@@ -9029,7 +9029,7 @@ namespace AssetsPV
                     }
                 }
             }
-            /*
+            
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -9038,7 +9038,7 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             bin.Close();
 
             //            processExplosion(u);
@@ -9066,7 +9066,7 @@ namespace AssetsPV
                 s += "ortho_adj/color" + i + "/" + u + "_Large_face3* ";
             }
             int delay = 25;
-            if (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
+            if (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile)
                 delay = 50;
             startInfo.Arguments = "-dispose background -delay " + delay + " -loop 0 " + s + " 8way/gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
@@ -9088,7 +9088,7 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();
             for (int w = 0; w < 2; w++)
             {
-                if (VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                if (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
                     s = "";
                     for (int i = 0; i < 8; i++)
@@ -9826,9 +9826,6 @@ namespace AssetsPV
 
             //VoxelLogic.InitializeWPalette();
             
-            processReceivingDouble();
-            TallVoxels.processReceivingDouble();
-            
             //processUnitOutlinedWDouble("Person");
             //processUnitOutlinedWDouble("Shinobi");
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
@@ -9882,14 +9879,16 @@ namespace AssetsPV
             processUnitOutlinedPartial("Copter_T");
             processEightWayAnimation("Copter_T");
             */
-            
-            processUnitOutlinedPartial("Civilian");
-            TallVoxels.processUnitOutlinedPartial("Civilian");
-            //processEightWayAnimation("Civilian");
-             
-/*            processUnitOutlinedPartial("Plane_T_Low");
+            /*
+            processUnitOutlinedPartial("Plane_T_Low");
             TallVoxels.processUnitOutlinedPartial("Plane_T_Low");
-            processAnimationMontage("Plane_T_Low");*/
+            processAnimationMontage("Plane_T_Low");
+            
+             */
+//            processUnitOutlinedPartial("Civilian");
+//            TallVoxels.processUnitOutlinedPartial("Civilian");
+            processEightWayAnimation("Civilian");
+            /* 
             processUnitOutlinedPartial("Infantry");
             TallVoxels.processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");
@@ -9982,6 +9981,11 @@ namespace AssetsPV
             TallVoxels.processUnitOutlinedPartial("Estate");
             //processEightWayAnimation("Estate");
             
+            
+            processReceivingDouble();
+            TallVoxels.processReceivingDouble();
+            
+
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi_Unarmed");
