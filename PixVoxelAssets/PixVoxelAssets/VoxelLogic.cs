@@ -1233,9 +1233,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             
             new float[][] {//6 skeleton
             //0 bone highlight
-            new float[] {0.5F,0.45F,0.35F,1F},
+            new float[] {0.55F,0.5F,0.4F,1F},
             //1 bones
-            new float[] {0.85F,0.85F,0.7F,1F},
+            new float[] {0.9F,0.9F,0.75F,1F},
             //2 pants, jeans contrast
             new float[] {0F,0F,0F,0F},
             //3 pants, jeans
@@ -5697,12 +5697,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 else if (i >= width / 2 || j == height - 1)
                                 {
                                     ColorToHSV(c, out h, out s, out v);
-                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * 0.8));
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((xcolors[current_color][0] + xcolors[current_color][1] + xcolors[current_color][2] > 2.5) ? 1.0 : 0.8)));
                                 }
                                 else
                                 {
                                     ColorToHSV(c, out h, out s, out v);
-                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * 0.95));
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((xcolors[current_color][0] + xcolors[current_color][1] + xcolors[current_color][2] > 2.5) ? 1.0 : 0.95)));
                                 }
                             }
                             if (c.A != 0)
@@ -5920,12 +5920,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 else if (i >= width / 2 || j == height - 1)
                                 {
                                     ColorToHSV(c, out h, out s, out v);
-                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * 0.8));
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.8)));
                                 }
                                 else
                                 {
                                     ColorToHSV(c, out h, out s, out v);
-                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * 0.95));
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
                                 }
                             }
 

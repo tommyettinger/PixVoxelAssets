@@ -129,12 +129,14 @@ namespace AssetsPV
                                 else if (j == height - 1)
                                 {
                                     VoxelLogic.ColorToHSV(c, out h, out s, out v);
-                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * 0.8));
+                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v *
+                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.1 : 0.8)));
                                 }
                                 else
                                 {
                                     VoxelLogic.ColorToHSV(c, out h, out s, out v);
-                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * 0.95));
+                                    c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v *
+                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.15 : 0.95)));
                                 }
                             }
                             if (c.A != 0)

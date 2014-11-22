@@ -9769,7 +9769,16 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Mystic");
             processWDoubleHat("Spirit", 7, "Wizard");
             processWDoubleHat("Spirit", 7, "Provocateur");
-            
+
+            processUnitOutlinedWDouble("Spirit", 7, false);
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Mystic");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Wizard");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Provocateur");
+
             processUnitOutlinedWDouble("Spectre", 42, false);
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Berserker");
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Witch");
@@ -9823,15 +9832,6 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Mystic");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Wizard");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Provocateur");
-
-            processUnitOutlinedWDouble("Spirit", 7, false);
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Mystic");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Wizard");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Provocateur");
 
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
