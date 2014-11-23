@@ -535,13 +535,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 total transparent
+            //53 always violet contrast
+            new float[] {0.4F,0.1F,0.3F,1F},
+            //54 always violet
+            new float[] {0.3F,0.15F,0.5F,1F},
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             };
 
         public static float[][][] wpalettes = new float[][][]
             {
-            new float[][] { //0 brown hair
+                        new float[][] { //0 brown hair
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.15F,0.0F,1F},
             //1 shoes, boots, brown leather
@@ -652,7 +660,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -767,7 +779,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -882,7 +898,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -997,7 +1017,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1112,7 +1136,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1227,7 +1255,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1342,7 +1374,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1457,7 +1493,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1572,7 +1612,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1687,7 +1731,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1802,7 +1850,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -1917,7 +1969,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2032,7 +2088,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2147,7 +2207,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -2262,7 +2326,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2377,7 +2445,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2492,7 +2564,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -2607,7 +2683,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -2825,7 +2905,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -2940,7 +3024,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3055,7 +3143,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3170,7 +3262,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3285,7 +3381,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3400,7 +3500,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3515,7 +3619,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3630,7 +3738,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3745,7 +3857,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3860,7 +3976,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -3975,7 +4095,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4090,7 +4214,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4205,7 +4333,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4320,7 +4452,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4435,7 +4571,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4550,7 +4690,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4665,7 +4809,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4780,7 +4928,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -4895,7 +5047,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -5010,7 +5166,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -5125,7 +5285,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -5240,7 +5404,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -5355,7 +5523,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
             
@@ -5470,7 +5642,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -5585,15 +5761,19 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
             new float[][] {//43 mummy
             //0 wrappings contrast
-            new float[] {0.7F,0.65F,0.6F,1F},
+            new float[] {0.58F,0.55F,0.35F,1F},
             //1 wrappings
-            new float[] {0.9F,0.87F,0.75F,1F},
+            new float[] {0.77F,0.72F,0.55F,1F},
             //2 pants, jeans contrast
             new float[] {0F,0F,0F,0F},
             //3 pants, jeans
@@ -5619,9 +5799,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //13 metal
             new float[] {0.7F,0.6F,0.5F,1F},
             //14 flowing clothes contrast
-            new float[] {0.7F,0.65F,0.6F,waver_alpha},
+            new float[] {0.65F,0.6F,0.45F,waver_alpha},
             //15 flowing clothes
-            new float[] {0.9F,0.87F,0.75F,waver_alpha},
+            new float[] {0.8F,0.75F,0.62F,waver_alpha},
             //16 inner shadow
             new float[] {0.13F,0.10F,0.04F,1F},
             //17 smoke
@@ -5700,7 +5880,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.4F,0.1F,0.3F,1F},
             //54 always violet
             new float[] {0.3F,0.15F,0.5F,1F},
-            //55 total transparent
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 total transparent
             new float[] {0F,0F,0F,0F},
             },
         };
