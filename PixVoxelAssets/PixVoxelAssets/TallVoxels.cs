@@ -9683,7 +9683,7 @@ namespace AssetsPV
             */
 //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
 //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            
+            /*
             
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
@@ -9748,12 +9748,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
-            
+            */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
 
             //render_hat_gifs = false;
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9770,42 +9770,15 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Wizard");
             processWDoubleHat("Spirit", 7, "Provocateur");
 
-            processUnitOutlinedWDouble("Spirit", 7, false);
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Mystic");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Wizard");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Provocateur");
-
-            processUnitOutlinedWDouble("Spectre", 42, false);
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Berserker");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Witch");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Scout");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Captain");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Mystic");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Wizard");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Provocateur");
-
-            processUnitOutlinedWDouble("Wight", 40, true);
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Scout");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Captain");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Provocateur");
-
-            processUnitOutlinedWDouble("Ghoul", 39, true);
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Witch");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Scout");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Captain");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Provocateur");
-
+            processUnitOutlinedWDouble("Mummy", 43, true);
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Witch");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Scout");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Captain");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Mystic");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Wizard");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Provocateur");
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9832,15 +9805,15 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Mystic");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Wizard");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Provocateur");
-
-            processUnitOutlinedWDouble("Cinder", 9, true);
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Witch");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Scout");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Provocateur");
+            
+            processUnitOutlinedWDouble("Spirit", 7, false);
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Mystic");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Wizard");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Provocateur");
 
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Berserker");
@@ -9851,6 +9824,42 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Wizard");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Provocateur");
             
+            processUnitOutlinedWDouble("Cinder", 9, true);
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Witch");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Scout");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Mystic");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Wizard");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Provocateur");
+
+            processUnitOutlinedWDouble("Ghoul", 39, true);
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Witch");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Scout");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Captain");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Mystic");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Wizard");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Provocateur");
+            
+            processUnitOutlinedWDouble("Wight", 40, true);
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Scout");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Captain");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Mystic");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Wizard");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Provocateur");
+
+            processUnitOutlinedWDouble("Spectre", 42, false);
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Berserker");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Witch");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Scout");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Captain");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Mystic");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Wizard");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Provocateur");
+
             
             processUnitOutlinedWDouble("Generic_Male", 0, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
@@ -9945,11 +9954,11 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Provocateur");
 
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-            */
             
-            //File.WriteAllText("bodies.txt", model_headpoints.ToString());
-            //File.WriteAllText("hats.txt", hat_headpoints.ToString());
-
+            
+            File.WriteAllText("bodies.txt", model_headpoints.ToString());
+            File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            */
             
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
