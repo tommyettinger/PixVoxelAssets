@@ -9683,7 +9683,6 @@ namespace AssetsPV
             */
 //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
 //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            /*
             
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
@@ -9697,13 +9696,10 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Male", 1);
             processUnitOutlinedWDouble("Human_Male", 15, true);
             processUnitOutlinedWalkDouble("Human_Male", 15);
-            
             processUnitOutlinedWDouble("Human_Male", 16, true);
             processUnitOutlinedWalkDouble("Human_Male", 16);
             processUnitOutlinedWDouble("Human_Male", 17, true);
             processUnitOutlinedWalkDouble("Human_Male", 17);
-            processUnitOutlinedWQuad("Nodebpe", 10, true);
-            processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWDouble("Kurguiv", 13, false);
             processUnitOutlinedWalkDouble("Kurguiv", 13);
             processUnitOutlinedWDouble("Tassar", 11, false);
@@ -9712,8 +9708,6 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Ilapa", 12);
             processUnitOutlinedWDouble("Erezdo", 14, true);
             processUnitOutlinedWalkDouble("Erezdo", 14);
-            processUnitOutlinedWQuad("Vashk", 19, true);
-            processUnitOutlinedWalkQuad("Vashk", 19);
             processUnitOutlinedWDouble("Cerpali", 18, true);
             processUnitOutlinedWalkDouble("Cerpali", 18);
             
@@ -9724,7 +9718,6 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Female", 1);
             processUnitOutlinedWDouble("Human_Female", 15, true);
             processUnitOutlinedWalkDouble("Human_Female", 15);
-            
             processUnitOutlinedWDouble("Human_Female", 16, true);
             processUnitOutlinedWalkDouble("Human_Female", 16);
             processUnitOutlinedWDouble("Human_Female", 17, true);
@@ -9748,12 +9741,13 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Earth", 33, true);
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
-            */
+            processUnitOutlinedWDouble("Eidolon_Space", 36, false);
+            
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
 
             //render_hat_gifs = false;
-            
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9979,7 +9973,7 @@ namespace AssetsPV
             
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
-            
+            */
             
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");

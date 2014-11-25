@@ -4974,11 +4974,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //17 smoke
             new float[] {0.0F,-0.03F,-0.09F,bordered_alpha},
             //18 yellow fire
-            new float[] {1.4F,1.4F,1.4F,bordered_alpha},
+            new float[] {0.15F,0.15F,0.15F,bordered_alpha},
             //19 orange fire
             new float[] {0.0F,0.0F,0.0F,bordered_alpha},
             //20 sparks
-            new float[] {0.15F,0.15F,0.15F,bordered_alpha},
+            new float[] {0.75F,0.2F,0.9F,bordered_alpha},
             //21 glow frame 0
             new float[] {0.7F,0.7F,0.7F,bordered_alpha},
             //22 glow frame 1
@@ -4992,7 +4992,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //26 mud
             new float[] {0.45F,0.25F,0.15F,bordered_flat_alpha},
             //27 water
-            new float[] {0.4F,0.6F,0.9F,bordered_alpha},
+            new float[] {0.1F,0.1F,0.1F,bordered_alpha},
             //28 earth deepest
             new float[] {0.3F,0.1F,0.0F,fuzz_alpha},
             //29 earth lowlight
@@ -5017,8 +5017,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.15F,0.2F,0.2F,spin_alpha_1},
             //39 moving debris, odd frames
             new float[] {0.45F,0.55F,0.55F,spin_alpha_1},
-            //40 flickering phantom
-            new float[] {0.98F,0.82F,0.5F,bordered_alpha},
+            //40 flickering stars
+            new float[] {1.2F,1.1F,0.85F,bordered_alpha},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -5995,7 +5995,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 else if (i >= width / 2 || j == height - 1)
                                 {
                                     ColorToHSV(c, out h, out s, out v);
-                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((xcolors[current_color][0] + xcolors[current_color][1] + xcolors[current_color][2] > 2.5) ? 1.0 : 0.8)));
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((xcolors[current_color][0] + xcolors[current_color][1] + xcolors[current_color][2] > 2.5) ? 1.0 : 0.85)));
                                 }
                                 else
                                 {
@@ -6218,7 +6218,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 else if (i >= width / 2 || j == height - 1)
                                 {
                                     ColorToHSV(c, out h, out s, out v);
-                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.8)));
+                                    c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
                                 }
                                 else
                                 {

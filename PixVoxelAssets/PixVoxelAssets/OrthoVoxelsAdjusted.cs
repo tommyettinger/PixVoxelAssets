@@ -130,7 +130,7 @@ namespace AssetsPV
                                 {
                                     VoxelLogic.ColorToHSV(c, out h, out s, out v);
                                     c = VoxelLogic.ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v *
-                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.0 : 0.8)));
+                                        ((VoxelLogic.xcolors[current_color][0] + VoxelLogic.xcolors[current_color][1] + VoxelLogic.xcolors[current_color][2] > 2.5) ? 1.0 : 0.85)));
                                 }
                                 else
                                 {
