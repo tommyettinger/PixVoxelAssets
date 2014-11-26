@@ -4673,7 +4673,7 @@ namespace AssetsPV
                                 argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
                                 barePositions[p] = true;
                                 //bareValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
-                                
+
                             }
                         }
                     }
@@ -4946,6 +4946,21 @@ namespace AssetsPV
                     continue;
                 else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
+                else if (VoxelLogic.wcolors[current_color][3] == VoxelLogic.eraser_alpha)
+                {
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 3; i < 16; i += 4)
+                        {
+                            p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter, still);
+                            if (argbValues[p] == 0)
+                            {
+                                argbValues[p] = 7;
+                            }
+                        }
+                    }
+                }
                 else if (current_color >= 17 && current_color <= 20)
                 {
                     int mod_color = current_color;
@@ -4972,18 +4987,19 @@ namespace AssetsPV
                             mod_color -= r.Next(3);
                         }
                     }
+
+                    /*
+                     &&
+                        bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
+                        + i +
+                        bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
+                     */
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            /*
-                             &&
-                                bareValues[4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
-                                + i +
-                                bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
-                             */
                             p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
-                            if (argbValues[p] == 0)
+                            if (argbValues[p] == 0 && argbValues[(p / 4) + 3] != 7)
                             {
                                 if (VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                     zbuffer[p] = vx.z + vx.x - vx.y;
@@ -5019,14 +5035,14 @@ namespace AssetsPV
                         continue;
                     if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
                         {
                             p = voxelToPixelLargeW(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter, still);
 
-                            if (argbValues[p] == 0)
+                            if (argbValues[p] == 0 && argbValues[(p / 4) + 3] != 7)
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
@@ -5038,6 +5054,12 @@ namespace AssetsPV
                         }
                     }
                 }
+            }
+
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] == 7)
+                    argbValues[i] = 0;
             }
             for (int i = 3; i < numBytes; i += 4)
             {
@@ -5074,6 +5096,8 @@ namespace AssetsPV
 
             for (int i = 3; i < numBytes; i += 4)
             {
+                if (argbValues[i] == 7)
+                    argbValues[i] = 0;
                 if (argbValues[i] > 0) // && argbValues[i] <= 255 * VoxelLogic.flat_alpha
                     argbValues[i] = 255;
                 if (outlineValues[i] == 255) argbValues[i] = 255;
@@ -5253,7 +5277,7 @@ namespace AssetsPV
                         continue;
                     if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -5262,7 +5286,7 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                zbuffer[p] = vx.z + vx.x - vx.y; 
+                                zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
@@ -5416,10 +5440,10 @@ namespace AssetsPV
                 int p = 0;
                 if (current_color >= VoxelLogic.wcolorcount)
                     continue;
-                
+
                 if (current_color >= 21 && current_color <= 24)
                     current_color = 21 + ((current_color + frame) % 4);
-                
+
                 if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
                     continue;
                 else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
@@ -5493,7 +5517,7 @@ namespace AssetsPV
                         continue;
                     if (mod_color == 40 && r.Next(11) < 8) //rare sparks
                         continue;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -5502,7 +5526,7 @@ namespace AssetsPV
 
                             if (argbValues[p] == 0)
                             {
-                                zbuffer[p] = vx.z + vx.x - vx.y; 
+                                zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
@@ -6451,7 +6475,7 @@ namespace AssetsPV
                     }
                 }
             }
-            
+
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -6469,7 +6493,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-            
+
             //bin.Close();
         }
         public static void processExplosionChannelPartial(string u)
@@ -6589,7 +6613,7 @@ namespace AssetsPV
 
                     int jitter = (((f % 4) % 3) + ((f % 4) / 3)) * 2;
                     if (framelimit >= 8) jitter = ((f % 8 > 4) ? 4 - ((f % 8) ^ 4) : f % 8);
-                    minimum_z += (10 - ((f * f > 22) ? 22 : f*f)) * 7 / 5;
+                    minimum_z += (10 - ((f * f > 22) ? 22 : f * f)) * 7 / 5;
                     if (minimum_z <= 0) minimum_z = 0;
                     int body_coord = voxelToPixelHugeW(0, 0, headpoints[0 + dir * 2].x, headpoints[0 + dir * 2].y + ((minimum_z == 0) ? 0 : (jitter - 2) * 2),
                         minimum_z, (byte)(253 - headpoints[0 + dir * 2].color) / 4, stride, jitter, true) / 4;
@@ -6599,8 +6623,8 @@ namespace AssetsPV
                         headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
                     hat_headpoints.AppendLine("EXPLODE_HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
-                    Image h2 = Image.FromFile("palette" + ((palette == 7 || palette == 8) ? 7 : 0) + "/" + ((palette == 7 || palette == 8) ? "Spirit_" : "Generic_Male_")
-                     + hat + "_Hat_face" + dir + "_" + (f%4) + ".png");
+                    Image h2 = Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (palette == 7 || palette == 8) ? 7 : 0) + "/" + ((palette == 7 || palette == 8) ? "Spirit_" : "Generic_Male_")
+                     + hat + "_Hat_face" + dir + "_" + (f % 4) + ".png");
                     hat_image = new Bitmap(h2);
                     h2.Dispose();
                     Image b2 = Image.FromFile(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
@@ -7108,7 +7132,7 @@ namespace AssetsPV
                     //bin.Close();
                 }
                 else continue;
-                
+
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -7126,7 +7150,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + u + "_attack_" + w + "_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-                
+
             }
 
         }
@@ -7391,7 +7415,7 @@ namespace AssetsPV
                     }
                 }
                 */
-                
+
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -7414,7 +7438,7 @@ namespace AssetsPV
                     Console.WriteLine("Args: " + st);
                     Process.Start(startInfo).WaitForExit();
                 }
-                
+
             }
         }
         private static void processChannelFiring(string u)
@@ -7659,7 +7683,7 @@ namespace AssetsPV
                 }
 
             }
-            
+
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -7668,7 +7692,7 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + u + "_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+
             //bin.Close();
 
             //            processExplosion(u);
@@ -8203,11 +8227,11 @@ namespace AssetsPV
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
         public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
-/*          if (render_hat_gifs)
-            {
-                processUnitOutlinedWDoubleHatModel(u, palette, still, hat);
-                return;
-            }*/
+            /*          if (render_hat_gifs)
+                        {
+                            processUnitOutlinedWDoubleHatModel(u, palette, still, hat);
+                            return;
+                        }*/
             Console.WriteLine("Processing: " + u + " " + hat);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] headpoints = VoxelLogic.GetHeadVoxels(bin, hat).ToArray();
@@ -8241,7 +8265,7 @@ namespace AssetsPV
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
 
                     Graphics hat_graphics;
-                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
+                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
                      + hat + "_Hat_face" + dir + "_" + f + ".png"));
                     Bitmap body_image = new Bitmap(Image.FromFile("palette" + palette + "/" + u + "_Large_face" + dir + "_" + f + ".png"));
 
@@ -8290,7 +8314,7 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionDoubleWHat(u, palette, hat, headpoints);
-            
+
             /*
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
@@ -8322,7 +8346,7 @@ namespace AssetsPV
 
             string folder = ("palette" + palette);
             System.IO.Directory.CreateDirectory(folder);
-            
+
             /*
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -8355,7 +8379,7 @@ namespace AssetsPV
 
             processFieryExplosionDoubleWHat(u, palette, hat);
             */
-            
+
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -8375,7 +8399,7 @@ namespace AssetsPV
                     b.Dispose();
                 }
             }
-            
+
         }
 
 
@@ -9585,15 +9609,15 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-//            makeFlatTiling().Save("tiling_128x64.png", ImageFormat.Png);
-//            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
+            //            makeFlatTiling().Save("tiling_128x64.png", ImageFormat.Png);
+            //            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDouble("Generic_Male", 0, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
             */
-            
+
             //            processUnitOutlinedDouble("Block");
 
             VoxelLogic.InitializeXPalette();
@@ -9681,9 +9705,9 @@ namespace AssetsPV
             File.WriteAllText("Brown_Skin_Female_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Captain"), 17));
             File.WriteAllText("Brown_Skin_Female_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)), "Scout"), 17));
             */
-//            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
-//            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            
+            //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
+            //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
+            /*
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Vashk", 19, true);
@@ -9742,12 +9766,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             processUnitOutlinedWDouble("Eidolon_Space", 36, false);
-            
+            */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
 
             //render_hat_gifs = false;
-            /*
+
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9756,6 +9780,7 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Wizard");
             processWDoubleHat("Generic_Male", 0, "Provocateur");
             processWDoubleHat("Generic_Male", 0, "Noble");
+            processWDoubleHat("Generic_Male", 44, "Woodsman");
 
             processWDoubleHat("Spirit", 7, "Berserker");
             processWDoubleHat("Spirit", 7, "Witch");
@@ -9763,17 +9788,9 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Captain");
             processWDoubleHat("Spirit", 7, "Mystic");
             processWDoubleHat("Spirit", 7, "Wizard");
+            processWDoubleHat("Spirit", 7, "Provocateur");
             processWDoubleHat("Spirit", 7, "Noble");
-
-            processUnitOutlinedWDouble("Mummy", 43, true);
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Witch");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Scout");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Captain");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Noble");
+            processWDoubleHat("Spirit", 44, "Woodsman");
 
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
@@ -9784,6 +9801,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Wizard");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Noble");
+            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Woodsman");
 
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Berserker");
@@ -9794,6 +9812,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Wizard");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Noble");
+            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Woodsman");
 
             processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Berserker");
@@ -9804,6 +9823,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Wizard");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Noble");
+            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Woodsman");
 
             processUnitOutlinedWDouble("Spirit", 7, false);
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
@@ -9814,6 +9834,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Wizard");
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Provocateur");
             processUnitOutlinedWDoubleHat("Spirit", 7, false, "Noble");
+            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Woodsman");
 
             processUnitOutlinedWDouble("Wraith", 8, false);
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Berserker");
@@ -9824,6 +9845,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Wizard");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Provocateur");
             processUnitOutlinedWDoubleHat("Wraith", 8, false, "Noble");
+            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Woodsman");
 
             processUnitOutlinedWDouble("Cinder", 9, true);
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
@@ -9834,6 +9856,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Wizard");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Cinder", 9, true, "Noble");
+            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Woodsman");
 
             processUnitOutlinedWDouble("Ghoul", 39, true);
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
@@ -9844,6 +9867,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Wizard");
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Noble");
+            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Woodsman");
 
             processUnitOutlinedWDouble("Wight", 40, true);
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
@@ -9854,6 +9878,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Wizard");
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Wight", 40, true, "Noble");
+            processUnitOutlinedWDoubleHat("Wight", 40, true, "Woodsman");
 
             processUnitOutlinedWDouble("Spectre", 42, false);
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Berserker");
@@ -9864,6 +9889,18 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Wizard");
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Provocateur");
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Noble");
+            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Woodsman");
+
+            processUnitOutlinedWDouble("Mummy", 43, true);
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Witch");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Scout");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Captain");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Mystic");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Wizard");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Provocateur");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Noble");
+            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Woodsman");
 
 
             processUnitOutlinedWDouble("Generic_Male", 0, true);
@@ -9875,6 +9912,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Male", 1, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Berserker");
@@ -9885,6 +9923,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Male", 15, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Berserker");
@@ -9895,6 +9934,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Male", 16, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Berserker");
@@ -9905,6 +9945,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Male", 17, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Berserker");
@@ -9915,6 +9956,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Female", 0, true);
             processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Berserker");
@@ -9925,6 +9967,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Female", 1, true);
             processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Berserker");
@@ -9935,6 +9978,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Female", 15, true);
             processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Berserker");
@@ -9945,7 +9989,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Noble");
-
+            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Woodsman");
 
             processUnitOutlinedWDouble("Generic_Female", 16, true);
             processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Berserker");
@@ -9956,6 +10000,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Woodsman");
 
 
             processUnitOutlinedWDouble("Generic_Female", 17, true);
@@ -9967,14 +10012,14 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Wizard");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Noble");
+            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Woodsman");
 
-            processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-            
-            
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
-            */
-            
+
+            processUnitOutlinedWDouble("Spectral_Knight", 7, false);
+
+
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
