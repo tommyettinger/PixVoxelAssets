@@ -9766,14 +9766,14 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Air", 34, false);
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             processUnitOutlinedWDouble("Eidolon_Space", 36, false);
-            */
-            //            processUnitOutlinedWDouble("Mutant", 41, true);
             processUnitOutlinedWDouble("Robot_Construction", 38, true);
-
+*/
+            //            processUnitOutlinedWDouble("Mutant", 41, true);
+            
 
             //render_hat_gifs = false;
 
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9793,7 +9793,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Provocateur");
             processWDoubleHat("Spirit", 7, "Noble");
             processWDoubleHat("Spirit", 44, "Woodsman");
-
+            /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
@@ -9892,7 +9892,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Provocateur");
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Noble");
             processUnitOutlinedWDoubleHat("Spectre", 42, false, "Woodsman");
-
+            
             processUnitOutlinedWDouble("Mummy", 43, true);
             processUnitOutlinedWDoubleHat("Mummy", 43, true, "Berserker");
             processUnitOutlinedWDoubleHat("Mummy", 43, true, "Witch");
@@ -9903,8 +9903,19 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Mummy", 43, true, "Provocateur");
             processUnitOutlinedWDoubleHat("Mummy", 43, true, "Noble");
             processUnitOutlinedWDoubleHat("Mummy", 43, true, "Woodsman");
+            */
+            processUnitOutlinedWDouble("Drowned", 45, true);
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Berserker");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Witch");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Scout");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Captain");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Mystic");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Wizard");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Provocateur");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Noble");
+            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Woodsman");
 
-
+            /*
             processUnitOutlinedWDouble("Generic_Male", 0, true);
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
             processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Witch");
