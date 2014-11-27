@@ -5252,17 +5252,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             },
 
             new float[][] { //38 robot construction paint
-            //0 shoes, boots, brown leather contrast
-            new float[] {0.7F,0.65F,0.5F,1F},
-            //1 shoes, boots, brown leather
-            new float[] {0.8F,0.75F,0.7F,1F},
-            //2 pants, jeans contrast
-            new float[] {0.8F,0.75F,0.2F,1F},
-            //3 pants, jeans
-            new float[] {1.0F,0.92F,0.3F,1F},
-            //4 shirt contrast
+            //0 tires, treads contrast
+            new float[] {0.2F,0.2F,0.15F,1F},
+            //1 tires, treads
+            new float[] {0.3F,0.3F,0.25F,1F},
+            //2 main paint contrast
+            new float[] {0.65F,0.5F,0.1F,1F},
+            //3 main paint
+            new float[] {0.8F,0.65F,0.2F,1F},
+            //4 odd paint contrast
             new float[] {0.8F,0.3F,0.0F,1F},
-            //5 shirt
+            //5 odd paint
             new float[] {0.9F,0.45F,0.05F,1F},
             //6 wires contrast
             new float[] {0.6F,0.52F,0.25F,1F},
@@ -5273,9 +5273,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //9 skin
             new float[] {0.89F,0.69F,0.32F,1F},
             //10 eyes shine
-            new float[] {1.4F,1.4F,0.9F,1F},
+            new float[] {1.1F,1.1F,1.4F,1F},
             //11 eyes
-            new float[] {0.5F,0.45F,0.15F,1F},
+            new float[] {0.25F,0.25F,0.35F,1F},
             //12 metal contrast
             new float[] {0.7F,0.85F,1.1F,1F},
             //13 metal
@@ -5295,13 +5295,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //20 sparks
             new float[] {1.3F,1.2F,0.85F,1F},
             //21 glow frame 0
-            new float[] {0.9F,0.9F,0.9F,1F},
+            new float[] {1.3F,0.6F,0.2F,1F},
             //22 glow frame 1
-            new float[] {1.2F,1.2F,1.2F,1F},
+            new float[] {1.5F,0.75F,0.35F,1F},
             //23 glow frame 2
-            new float[] {0.9F,0.9F,0.9F,1F},
+            new float[] {1.3F,0.6F,0.2F,1F},
             //24 glow frame 3
-            new float[] {0.75F,0.75F,0.75F,1F},
+            new float[] {1.1F,0.45F,0.05F,1F},
             //25 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //26 bright color

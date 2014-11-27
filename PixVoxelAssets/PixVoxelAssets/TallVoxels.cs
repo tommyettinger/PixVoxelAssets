@@ -9768,10 +9768,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Space", 36, false);
             */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
+            processUnitOutlinedWDouble("Robot_Construction", 38, true);
 
 
             //render_hat_gifs = false;
 
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10018,7 +10020,7 @@ namespace AssetsPV
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
 
             processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-
+            */
 
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
