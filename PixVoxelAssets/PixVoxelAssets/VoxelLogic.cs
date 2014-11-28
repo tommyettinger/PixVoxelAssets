@@ -521,9 +521,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -642,9 +642,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -763,9 +763,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -884,9 +884,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1005,9 +1005,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1126,9 +1126,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1247,9 +1247,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1368,9 +1368,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1489,9 +1489,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1610,9 +1610,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1731,9 +1731,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1852,9 +1852,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -1973,9 +1973,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2094,9 +2094,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2215,9 +2215,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2336,9 +2336,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2457,9 +2457,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2578,9 +2578,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2699,9 +2699,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -2923,9 +2923,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3044,9 +3044,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3165,9 +3165,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3286,9 +3286,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3407,9 +3407,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3528,9 +3528,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3649,9 +3649,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3770,9 +3770,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -3891,9 +3891,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4012,9 +4012,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4133,9 +4133,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4254,9 +4254,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4375,9 +4375,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4496,9 +4496,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4617,9 +4617,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4738,9 +4738,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4859,9 +4859,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -4980,9 +4980,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5101,9 +5101,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5222,9 +5222,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5343,9 +5343,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5464,9 +5464,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5585,9 +5585,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5706,9 +5706,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5827,9 +5827,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -5948,9 +5948,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -6069,9 +6069,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
@@ -6190,9 +6190,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //44 always brown
             new float[] {0.55F,0.4F,0.25F,1F},
             //45 always tan contrast
-            new float[] {0.75F,0.55F,0.4F,1F},
+            new float[] {0.7F,0.55F,0.3F,1F},
             //46 always tan
-            new float[] {0.9F,0.7F,0.55F,1F},
+            new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
             new float[] {0.0F,-0.03F,-0.09F,1F},
             //48 always black
