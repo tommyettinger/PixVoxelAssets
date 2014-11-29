@@ -9799,6 +9799,7 @@ namespace AssetsPV
 
             
             processUnitOutlinedWDouble("Zombie", 2, true);
+            
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Scout");
@@ -9809,7 +9810,7 @@ namespace AssetsPV
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Noble");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Woodsman");
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Sheriff");
-
+            
             processUnitOutlinedWDouble("Skeleton", 6, true);
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Berserker");
             processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Witch");
