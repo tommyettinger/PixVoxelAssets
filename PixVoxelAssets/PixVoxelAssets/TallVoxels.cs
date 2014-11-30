@@ -9799,286 +9799,68 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Sheriff");
             processWDoubleHat("Spirit", 7, "Thief");
 
+            string[] classes = new string[] { 
+            /*  "Berserker"
+            , "Witch"
+            , "Scout"
+            , "Captain"
+            , "Mystic"
+            , "Wizard"
+            , "Provocateur"
+            , "Noble"
+            , "Woodsman"
+            , "Sheriff"
+            ,*/ 
+            "Thief"};
+
+            //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
+
+            processHats("Zombie", 2, true, classes);
+
+            processHats("Skeleton", 6, true, classes);
+
+            processHats("Skeleton_Spear", 6, true, classes);
             
-            processUnitOutlinedWDouble("Zombie", 2, true);
+            processHats("Spirit", 7, false, classes);
+
+            processHats("Wraith", 8, false, classes);
             
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Witch");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Scout");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Noble");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
+            processHats("Cinder", 9, true, classes);
             
-            processUnitOutlinedWDouble("Skeleton", 6, true);
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Witch");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Scout");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Captain");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Noble");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Skeleton", 6, true, "Thief");
-
-            processUnitOutlinedWDouble("Skeleton_Spear", 6, true);
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Witch");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Scout");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Captain");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Noble");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Skeleton_Spear", 6, true, "Thief");
-
-            processUnitOutlinedWDouble("Spirit", 7, false);
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Berserker");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Witch");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Scout");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Captain");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Mystic");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Wizard");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Provocateur");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Noble");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Woodsman");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Sheriff");
-            processUnitOutlinedWDoubleHat("Spirit", 7, false, "Thief");
-
-            processUnitOutlinedWDouble("Wraith", 8, false);
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Berserker");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Witch");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Scout");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Captain");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Mystic");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Wizard");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Provocateur");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Noble");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Woodsman");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Sheriff");
-            processUnitOutlinedWDoubleHat("Wraith", 8, false, "Thief");
-
-            processUnitOutlinedWDouble("Cinder", 9, true);
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Witch");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Scout");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Captain");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Noble");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Cinder", 9, true, "Thief");
-
-            processUnitOutlinedWDouble("Ghoul", 39, true);
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Witch");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Scout");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Captain");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Noble");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Ghoul", 39, true, "Thief");
-
-            processUnitOutlinedWDouble("Wight", 40, true);
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Witch");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Scout");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Captain");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Noble");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Wight", 40, true, "Thief");
-
-            processUnitOutlinedWDouble("Spectre", 42, false);
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Berserker");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Witch");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Scout");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Captain");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Mystic");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Wizard");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Provocateur");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Noble");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Woodsman");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Sheriff");
-            processUnitOutlinedWDoubleHat("Spectre", 42, false, "Thief");
+            processHats("Ghoul", 39, true, classes);
             
-            processUnitOutlinedWDouble("Mummy", 43, true);
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Witch");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Scout");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Captain");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Noble");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Mummy", 43, true, "Thief");
+            processHats("Wight", 40, true, classes);
             
-            processUnitOutlinedWDouble("Drowned", 45, true);
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Witch");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Scout");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Captain");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Noble");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Drowned", 45, true, "Thief");
-
+            processHats("Spectre", 42, false, classes);
             
-            processUnitOutlinedWDouble("Generic_Male", 0, true);
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Male", 0, true, "Thief");
+            processHats("Mummy", 43, true, classes);
+            
+            processHats("Drowned", 45, true, classes);
+            
 
-            processUnitOutlinedWDouble("Generic_Male", 1, true);
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Male", 1, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Male", 15, true);
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Male", 15, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Male", 16, true);
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Male", 16, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Male", 17, true);
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Male", 17, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Female", 0, true);
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Female", 0, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Female", 1, true);
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Female", 1, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Female", 15, true);
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Female", 15, true, "Thief");
-
-            processUnitOutlinedWDouble("Generic_Female", 16, true);
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Female", 16, true, "Thief");
-
-
-            processUnitOutlinedWDouble("Generic_Female", 17, true);
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Berserker");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Witch");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Scout");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Captain");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Mystic");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Wizard");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Provocateur");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Noble");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Woodsman");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Sheriff");
-            processUnitOutlinedWDoubleHat("Generic_Female", 17, true, "Thief");
-
+            processHats("Generic_Male", 0, true, classes);
+            
+            processHats("Generic_Male", 1, true, classes);
+            
+            processHats("Generic_Male", 15, true, classes);
+            
+            processHats("Generic_Male", 16, true, classes);
+            
+            processHats("Generic_Male", 17, true, classes);
+            
+            processHats("Generic_Female", 0, true, classes);
+            
+            processHats("Generic_Female", 1, true, classes);
+            
+            processHats("Generic_Female", 15, true, classes);
+            
+            processHats("Generic_Female", 16, true, classes);
+            
+            processHats("Generic_Female", 17, true, classes);
+            /*
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
-
+            */
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
             
 
@@ -10280,6 +10062,21 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();
             */
 
+        }
+
+        private static void processHats(string u, int palette, bool hover, string[] classes)
+        {
+            processUnitOutlinedWDouble(u, palette, hover);
+
+            foreach(string s in classes)
+            {
+                processUnitOutlinedWDoubleHat(u, palette, hover, s);
+            }
+            string doc = File.ReadAllText("Template.html");
+            string html = String.Format(doc, palette, u);
+
+            System.IO.Directory.CreateDirectory("html");
+            File.WriteAllText("html/" + u + ".html", html);
         }
     }
 }
