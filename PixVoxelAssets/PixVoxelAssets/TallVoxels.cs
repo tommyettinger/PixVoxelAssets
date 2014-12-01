@@ -9785,6 +9785,7 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 44, "Woodsman");
             processWDoubleHat("Generic_Male", 0, "Sheriff");
             processWDoubleHat("Generic_Male", 0, "Thief");
+            processWDoubleHat("Generic_Male", 0, "Merchant");
 
 
             processWDoubleHat("Spirit", 7, "Berserker");
@@ -9798,9 +9799,10 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 44, "Woodsman");
             processWDoubleHat("Spirit", 7, "Sheriff");
             processWDoubleHat("Spirit", 7, "Thief");
+            processWDoubleHat("Spirit", 7, "Merchant");
 
             string[] classes = new string[] { 
-            /*  "Berserker"
+              "Berserker"
             , "Witch"
             , "Scout"
             , "Captain"
@@ -9810,11 +9812,11 @@ namespace AssetsPV
             , "Noble"
             , "Woodsman"
             , "Sheriff"
-            ,*/ 
-            "Thief"};
+            , "Thief"
+            , "Merchant"};
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-
+            
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -9838,25 +9840,25 @@ namespace AssetsPV
             processHats("Drowned", 45, true, classes);
             
 
-            processHats("Generic_Male", 0, true, classes);
+            processHats("Generic_Male", 0, true, classes, "Living_Men_A");
             
-            processHats("Generic_Male", 1, true, classes);
+            processHats("Generic_Male", 1, true, classes, "Living_Men_B");
             
-            processHats("Generic_Male", 15, true, classes);
+            processHats("Generic_Male", 15, true, classes, "Living_Men_C");
             
-            processHats("Generic_Male", 16, true, classes);
+            processHats("Generic_Male", 16, true, classes, "Living_Men_D");
             
-            processHats("Generic_Male", 17, true, classes);
+            processHats("Generic_Male", 17, true, classes, "Living_Men_E");
             
-            processHats("Generic_Female", 0, true, classes);
+            processHats("Generic_Female", 0, true, classes, "Living_Women_A");
             
-            processHats("Generic_Female", 1, true, classes);
+            processHats("Generic_Female", 1, true, classes, "Living_Women_B");
             
-            processHats("Generic_Female", 15, true, classes);
+            processHats("Generic_Female", 15, true, classes, "Living_Women_C");
             
-            processHats("Generic_Female", 16, true, classes);
+            processHats("Generic_Female", 16, true, classes, "Living_Women_D");
             
-            processHats("Generic_Female", 17, true, classes);
+            processHats("Generic_Female", 17, true, classes, "Living_Women_E");
             /*
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
@@ -10066,17 +10068,36 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
+            /*
             processUnitOutlinedWDouble(u, palette, hover);
 
-            foreach(string s in classes)
+            foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
+            */
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
             System.IO.Directory.CreateDirectory("html");
             File.WriteAllText("html/" + u + ".html", html);
+        }
+
+        private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
+        {
+            /*
+            processUnitOutlinedWDouble(u, palette, hover);
+
+            foreach (string s in classes)
+            {
+                processUnitOutlinedWDoubleHat(u, palette, hover, s);
+            }
+            */
+            string doc = File.ReadAllText("Template.html");
+            string html = String.Format(doc, palette, u);
+
+            System.IO.Directory.CreateDirectory("html");
+            File.WriteAllText("html/" + alternateName + ".html", html);
         }
     }
 }
