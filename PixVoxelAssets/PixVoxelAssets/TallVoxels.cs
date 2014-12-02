@@ -9773,7 +9773,7 @@ namespace AssetsPV
 
             //render_hat_gifs = false;
 
-            
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9800,7 +9800,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Sheriff");
             processWDoubleHat("Spirit", 7, "Thief");
             processWDoubleHat("Spirit", 7, "Merchant");
-
+            */
             string[] classes = new string[] { 
               "Berserker"
             , "Witch"
@@ -9814,6 +9814,8 @@ namespace AssetsPV
             , "Sheriff"
             , "Thief"
             , "Merchant"};
+
+            processUnitOutlinedWQuad("Grass", 47, true);
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
             /*
@@ -9838,10 +9840,10 @@ namespace AssetsPV
             processHats("Mummy", 43, true, classes);
             
             processHats("Drowned", 45, true, classes);
-            */
+            
             processHats("Banshee", 46, false, classes);
 
-            /*
+            
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
             
             processHats("Generic_Male", 1, true, classes, "Living_Men_B");
