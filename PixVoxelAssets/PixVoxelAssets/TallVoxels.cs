@@ -9816,7 +9816,7 @@ namespace AssetsPV
             , "Merchant"};
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-            
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -9838,8 +9838,10 @@ namespace AssetsPV
             processHats("Mummy", 43, true, classes);
             
             processHats("Drowned", 45, true, classes);
-            
+            */
+            processHats("Banshee", 46, false, classes);
 
+            /*
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
             
             processHats("Generic_Male", 1, true, classes, "Living_Men_B");
@@ -9859,6 +9861,7 @@ namespace AssetsPV
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
             
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
+            */
             /*
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
@@ -10068,14 +10071,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
-            /*
+            
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            */
+            
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10085,14 +10088,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
-            /*
+            
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            */
+            
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
