@@ -9816,6 +9816,7 @@ namespace AssetsPV
             , "Merchant"};
 
             processUnitOutlinedWQuad("Grass", 47, true);
+            processUnitOutlinedWQuad("Tree", 47, true);
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
             /*
@@ -9863,8 +9864,8 @@ namespace AssetsPV
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
             
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
-            */
-            /*
+            
+            
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
             */

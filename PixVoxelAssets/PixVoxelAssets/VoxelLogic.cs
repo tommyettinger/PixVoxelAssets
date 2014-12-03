@@ -6342,7 +6342,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             
             new float[][] { //47 grass and plants
             //0 dry bark contrast
-            new float[] {0.35F,0.18F,0.05F,1F},
+            new float[] {0.25F,0.13F,0.03F,1F},
             //1 dry bark
             new float[] {0.45F,0.33F,0.15F,1F},
             //2 green leaves contrast
