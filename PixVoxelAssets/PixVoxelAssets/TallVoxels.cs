@@ -9815,8 +9815,9 @@ namespace AssetsPV
             , "Thief"
             , "Merchant"};
 
-            processUnitOutlinedWQuad("Grass", 47, true);
+            //processUnitOutlinedWQuad("Grass", 47, true);
             processUnitOutlinedWQuad("Tree", 47, true);
+            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
             /*

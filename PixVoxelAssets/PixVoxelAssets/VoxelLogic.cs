@@ -11683,8 +11683,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 if(voxels.ContainsKey(Tuple.Create(vox.x + 0, vox.y + 0, vox.z + 0)))
                     continue;
+                int mod_color = (253 - vox.color) / 4;
+                int depth = vox.z + vox.x - vox.y;
+                mod_color = ((mod_color == 28 || mod_color == 29) ? mod_color +
+                                    ((depth + vox.x) % (((depth + vox.x + vox.y + vox.z) % 4 == 0) ? 5 : 4)) : mod_color);
                 voxels.Add(Tuple.Create(vox.x + 0, vox.y + 0, vox.z + 0), String.Format("{0:X2}{1:X2}{2:X2}",
-                    wcurrent[(253 - vox.color) / 4][2], wcurrent[(253 - vox.color) / 4][1], wcurrent[(253 - vox.color) / 4][0]));
+                    wcurrent[mod_color][2], wcurrent[mod_color][1], wcurrent[mod_color][0]));
             }
             foreach (Tuple<int, int, int> vox in voxels.Keys)
             {
