@@ -9816,8 +9816,10 @@ namespace AssetsPV
             , "Merchant"};
 
             //processUnitOutlinedWQuad("Grass", 47, true);
-            processUnitOutlinedWQuad("Tree", 47, true);
-            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
+            //processUnitOutlinedWQuad("Tree", 47, true);
+            processUnitOutlinedWQuad("Boulder", 48, true);
+//            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
+            File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
             /*

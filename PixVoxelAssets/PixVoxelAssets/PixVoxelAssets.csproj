@@ -94,6 +94,9 @@
     <None Include="Block_Large_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Boulder_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Captain_Hat_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
