@@ -6463,13 +6463,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             new float[][] { //48 stones
             //0 stone contrast
-            new float[] {0.55F,0.5F,0.45F,1F},
+            new float[] {0.45F,0.4F,0.35F,1F},
             //1 stone
-            new float[] {0.7F,0.65F,0.6F,1F},
-            //2 green leaves contrast
-            new float[] {0.05F,0.35F,0.0F,1F},
-            //3 green leaves
-            new float[] {0.15F,0.55F,0.1F,1F},
+            new float[] {0.65F,0.6F,0.55F,1F},
+            //2 mud/dirt contrast
+            new float[] {0.55F,0.43F,0.32F,1F},
+            //3 mud/dirt
+            new float[] {0.7F,0.55F,0.45F,1F},
             //4 grassy ground contrast
             new float[] {0.22F,0.6F,0.05F,1F},
             //5 grassy ground
