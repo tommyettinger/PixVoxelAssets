@@ -8442,7 +8442,7 @@ namespace AssetsPV
                 for (int s = 0; s < 4; s++)
                 {
                     MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(i, s + 1);
-                    for (int color = 0; color < ((i > 4) ? 8 : 2); color++)
+                    for (int color = 0; color < ((i == 6) ? 8 : 2); color++)
                     {
                         for (int d = 0; d < 4; d++)
                         {

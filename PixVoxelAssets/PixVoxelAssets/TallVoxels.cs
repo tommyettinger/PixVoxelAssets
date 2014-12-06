@@ -7369,7 +7369,7 @@ namespace AssetsPV
                 for (int s = 0; s < 4; s++)
                 {
                     MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(i, s + 1);
-                    for (int color = 0; color < ((i > 4) ? 8 : 2); color++)
+                    for (int color = 0; color < ((i == 6) ? 8 : 2); color++)
                     {
                         for (int d = 0; d < 4; d++)
                         {
@@ -9819,6 +9819,7 @@ namespace AssetsPV
             //processUnitOutlinedWQuad("Tree", 47, true);
            // processUnitOutlinedWQuad("Boulder", 48, true);
             processUnitOutlinedWQuad("Wall_Straight", 49, true);
+            processUnitOutlinedWQuad("Wall_Cross", 49, true);
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
