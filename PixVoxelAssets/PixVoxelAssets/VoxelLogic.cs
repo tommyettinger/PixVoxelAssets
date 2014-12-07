@@ -9263,6 +9263,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static MagicaVoxelData[][] FieryExplosionQuadW(MagicaVoxelData[] voxels, bool blowback)
         {
+            return FieryExplosionQuadW(voxels, blowback, false);
+        }
+        public static MagicaVoxelData[][] FieryExplosionQuadW(MagicaVoxelData[] voxels, bool blowback, bool shadowless)
+        {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[13][];
             voxelFrames[0] = new MagicaVoxelData[voxels.Length];
             voxels.CopyTo(voxelFrames[0], 0);
@@ -9739,7 +9743,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
 
                     altered.Add(voxelFrames[f][i]);
-                    if (-1 == taken[voxelFrames[f][i].x, voxelFrames[f][i].y]
+                    if (!shadowless && -1 == taken[voxelFrames[f][i].x, voxelFrames[f][i].y]
                          && (voxelFrames[f][i].color > 253 - 21 * 4 || voxelFrames[f][i].color < 253 - 24 * 4)
                          && voxelFrames[f][i].color != 253 - 25 * 4 && voxelFrames[f][i].color != 253 - 27 * 4
                          && voxelFrames[f][i].color != 253 - 17 * 4 && voxelFrames[f][i].color != 253 - 18 * 4 && voxelFrames[f][i].color != 253 - 19 * 4

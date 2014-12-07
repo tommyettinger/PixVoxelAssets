@@ -6755,6 +6755,59 @@ namespace AssetsPV
 
             //bin.Close();
         }
+        public static void processFieryExplosionQuadW(string u, int palette, bool shadowless)
+        {
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, shadowless); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("frames");
+
+            for (int d = 0; d < 4; d++)
+            {
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    Bitmap b = renderWSmartMassive(explode[frame], d, palette, frame, 8, true);
+                    Bitmap b2 = new Bitmap(328, 408, PixelFormat.Format32bppArgb);
+
+                    //                        b.Save("temp.png", ImageFormat.Png);
+                    Graphics g2 = Graphics.FromImage(b2);
+                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    Bitmap b3 = b.Clone(new Rectangle(0, 0, 328 * 2, 408 * 2), b.PixelFormat);
+                    b.Dispose();
+                    g2.DrawImage(b3, 0, 0, 328, 408);
+
+                    b2.Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    b2.Dispose();
+                    g2.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            for (int d = 0; d < 4; d++)
+            {
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png ";
+                }
+            }
+
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_explosion_animated.gif";
+            Console.WriteLine("Running convert.exe ...");
+            Process.Start(startInfo).WaitForExit();
+
+            //bin.Close();
+        }
 
         private static void processFiring(string u)
         {
@@ -8037,6 +8090,49 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionQuadW(u, palette);
+
+        }
+        public static void processUnitOutlinedWQuad(string u, int palette, bool still, bool shadowless)
+        {
+
+            Console.WriteLine("Processing: " + u);
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = (shadowless) ? VoxelLogic.FromMagicaRaw(bin).ToArray() : VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 20;
+                parsed[i].y += 20;
+            }
+            int framelimit = 4;
+
+
+            string folder = ("palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //"color" + i + "/"
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWQuad(parsed, palette, dir, f, framelimit, still);
+                    b.Save(folder + "/" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = "palette" + palette + "/" + u + "_Huge_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Huge_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            //bin.Close();
+
+            //            processFiringDouble(u);
+
+            processFieryExplosionQuadW(u, palette, shadowless);
 
         }
         public static void processUnitOutlinedWalkDouble(string u, int palette)
@@ -9817,10 +9913,18 @@ namespace AssetsPV
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
-           // processUnitOutlinedWQuad("Boulder", 48, true);
+            // processUnitOutlinedWQuad("Boulder", 48, true);
+            processUnitOutlinedWQuad("Door_Closed", 49, true);
+            processUnitOutlinedWQuad("Door_Open", 49, true);
             processUnitOutlinedWQuad("Wall_Straight", 49, true);
             processUnitOutlinedWQuad("Wall_Cross", 49, true);
+            processUnitOutlinedWQuad("Wall_Tee", 49, true);
             processUnitOutlinedWQuad("Wall_Corner", 49, true);
+            processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
+
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
