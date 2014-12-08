@@ -5046,7 +5046,7 @@ namespace AssetsPV
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
-                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
@@ -5288,7 +5288,7 @@ namespace AssetsPV
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
-                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
@@ -5528,7 +5528,7 @@ namespace AssetsPV
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
-                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 if (outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
@@ -9865,7 +9865,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Robot_Construction", 38, true);
 */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
-            
+
 
             //render_hat_gifs = false;
 
@@ -9914,7 +9914,15 @@ namespace AssetsPV
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
             // processUnitOutlinedWQuad("Boulder", 48, true);
-            processUnitOutlinedWQuad("Door_Closed", 49, true);
+/*            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);*/
+            processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
+//            processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
+/*            processUnitOutlinedWQuad("Door_Closed", 49, true);
             processUnitOutlinedWQuad("Door_Open", 49, true);
             processUnitOutlinedWQuad("Wall_Straight", 49, true);
             processUnitOutlinedWQuad("Wall_Cross", 49, true);
@@ -9924,10 +9932,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
-
+            */
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 

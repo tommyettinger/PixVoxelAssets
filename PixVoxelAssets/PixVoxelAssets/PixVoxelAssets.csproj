@@ -428,6 +428,21 @@
     <None Include="Roof_Flat_Huge_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Roof_Solid_Corner_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Roof_Solid_Corner_Off_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Roof_Solid_Flat_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Roof_Solid_Straight_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Roof_Solid_Straight_Off_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Roof_Straight_Huge_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
