@@ -9924,6 +9924,9 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
 
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
