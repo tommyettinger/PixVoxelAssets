@@ -9795,7 +9795,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("ortho_adj");
             System.IO.Directory.CreateDirectory("ortho_adj/indexed");
             System.IO.Directory.CreateDirectory("indexed");
-            /*
+            // /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
@@ -9811,7 +9811,7 @@ namespace AssetsPV
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
             TallVoxels.renderOnlyColorsX(7).Save("PaletteCrazy.png", ImageFormat.Png);
-            */
+            // */
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
             
@@ -9885,6 +9885,7 @@ namespace AssetsPV
             processAnimationMontage("Plane_T_Low");
             
              */
+            /*
             //processUnitOutlinedPartial("Civilian");
             //TallVoxels.processUnitOutlinedPartial("Civilian");
             processEightWayAnimation("Civilian");
@@ -9980,7 +9981,7 @@ namespace AssetsPV
             //processUnitOutlinedPartial("Estate");
             //TallVoxels.processUnitOutlinedPartial("Estate");
             processEightWayAnimation("Estate");
-            
+            */
             
 //            processReceivingDouble();
 //            TallVoxels.processReceivingDouble();
@@ -10189,7 +10190,7 @@ namespace AssetsPV
             processMedalChannel("Medal_S");
             processMedalChannel("Medal_T");
             */
-            /*
+            
             TallVoxels.processUnitChannelPartial("Infantry");
             TallVoxels.processUnitChannelPartial("Infantry_P");
             TallVoxels.processUnitChannelPartial("Infantry_S");
@@ -10226,7 +10227,7 @@ namespace AssetsPV
             TallVoxels.processUnitChannelPartial("Laboratory");
             TallVoxels.processUnitChannelPartial("Castle");
             TallVoxels.processUnitChannelPartial("Estate");
-            */
+            
 
             //File.WriteAllText("FiringPositions.txt", log.ToString());
 

@@ -6745,7 +6745,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.251F+xcolors[current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.31F+xcolors[current_color][2],  0, 0},
-   new float[] {0,  0,  0,  1, 0},
+   new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                 }
                 else if (xcolors[current_color][3] == flat_alpha)

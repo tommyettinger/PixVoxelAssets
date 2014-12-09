@@ -46,12 +46,8 @@ namespace AssetsPV
                     bmp = new Bitmap("PaletteColor" + c + ".png");
                 }
                 SDPalettes[c] = new List<Color>();
-                for (int i = 0; i < bmp.Width; i += (i % 3) + 1)
+                for (int i = 0; i < bmp.Width; i++)
                 {
-                    SDPalettes[c].Add(bmp.GetPixel(i, 3));
-                    //}
-                    //for (int i = 1; i < bmp.Width; i += 3)
-                    //{
                     SDPalettes[c].Add(bmp.GetPixel(i, 0));
                 }
                 for (int cl = 0; cl < SDPalettes[c].Count; cl++)
@@ -5852,14 +5848,14 @@ namespace AssetsPV
 
         public static Bitmap renderOnlyTerrainColors()
         {
-            Bitmap b = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
+            Bitmap b = new Bitmap(128, 5, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage((Image)b);
             Image image = new Bitmap("cube_soft.png");
             //            Image gray = new Bitmap("cube_gray_soft.png");
             //Image reversed = new Bitmap("cube_reversed.png");
             ImageAttributes imageAttributes = new ImageAttributes();
             int width = 4;
-            int height = 4;
+            int height = 5;
             float[][] flatcolors = TallPaletteDraw.flatcolors;
             for (int color = 0; color < 11; color++)
             {
@@ -5929,11 +5925,57 @@ namespace AssetsPV
                    GraphicsUnit.Pixel,
                    imageAttributes);
             }
-            return b;
+
+            Bitmap bmp = new Bitmap(256, 1, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+
+            for (int v = 0; v < 33; v++)
+            {
+                Color color = b.GetPixel(1 + 3 * v, 0);
+                argbValues[4 * 4 * v + 0 + 0 + 4] = color.B;
+                argbValues[4 * 4 * v + 1 + 0 + 4] = color.G;
+                argbValues[4 * 4 * v + 2 + 0 + 4] = color.R;
+                argbValues[4 * 4 * v + 3 + 0 + 4] = color.A;
+                color = b.GetPixel(1 + 3 * v, 1);
+                argbValues[4 * 4 * v + 0 + 4 + 4] = color.B;
+                argbValues[4 * 4 * v + 1 + 4 + 4] = color.G;
+                argbValues[4 * 4 * v + 2 + 4 + 4] = color.R;
+                argbValues[4 * 4 * v + 3 + 4 + 4] = color.A;
+                color = b.GetPixel(3 + 3 * v, 1);
+                argbValues[4 * 4 * v + 0 + 8 + 4] = color.B;
+                argbValues[4 * 4 * v + 1 + 8 + 4] = color.G;
+                argbValues[4 * 4 * v + 2 + 8 + 4] = color.R;
+                argbValues[4 * 4 * v + 3 + 8 + 4] = color.A;
+                color = b.GetPixel(1 + 3 * v, 4);
+                argbValues[4 * 4 * v + 0 + 12 + 4] = color.B;
+                argbValues[4 * 4 * v + 1 + 12 + 4] = color.G;
+                argbValues[4 * 4 * v + 2 + 12 + 4] = color.R;
+                argbValues[4 * 4 * v + 3 + 12 + 4] = color.A;
+            }
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
         }
         public static Bitmap renderOnlyTerrainColors(int faction)
         {
-            Bitmap b = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
+            Bitmap b = new Bitmap(256, 1, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage((Image)b);
             Bitmap image = new Bitmap("PaletteTerrain.png");
             //            Image gray = new Bitmap("cube_gray_soft.png");
@@ -6083,7 +6125,7 @@ namespace AssetsPV
         }
         public static Bitmap renderOnlyColorsX(int faction)
         {
-            Bitmap bmp = new Bitmap(128, 4, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(256, 1, PixelFormat.Format32bppArgb);
 
             // Specify a pixel format.
             PixelFormat pxf = PixelFormat.Format32bppArgb;
@@ -6102,43 +6144,41 @@ namespace AssetsPV
             for (int v = 0; v < 10; v++)
             {
                 int current_color = v * 8;
-                for (int y = 0; y < 4; y++)
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int x = 0; x < 16; x++)
-                    {
-                        argbValues[4 * (1 + 3 * v) + x + bmpData.Stride * y] = VoxelLogic.xrendered[current_color + faction][y * 16 + x];
-                    }
+                    argbValues[4 * 4 * v + i + 0 + 4] = VoxelLogic.xrendered[current_color + faction][0 + i];
+                    argbValues[4 * 4 * v + i + 4 + 4] = VoxelLogic.xrendered[current_color + faction][32 + i];
+                    argbValues[4 * 4 * v + i + 8 + 4] = VoxelLogic.xrendered[current_color + faction][40 + i];
+                    argbValues[4 * 4 * v + i + 12 + 4] = VoxelLogic.xrendered[current_color + faction][64 + i];
                 }
             }
-            for (int i = 0; i < 4; i++)
+            for (int v = 0; v < 4; v++)
             {
-                for (int y = 0; y < 4; y++)
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int x = 0; x < 16; x++)
-                    {
-                        argbValues[4 * (1 + 3 * (10 + i)) + x + bmpData.Stride * y] = VoxelLogic.xrendered[168 + i * 8 + faction][y * 16 + x];
-                    }
+                    argbValues[4 * 4 * (v + 10) + i + 0 + 4] = VoxelLogic.xrendered[168 + v * 8 + faction][0 + i];
+                    argbValues[4 * 4 * (v + 10) + i + 4 + 4] = VoxelLogic.xrendered[168 + v * 8 + faction][32 + i];
+                    argbValues[4 * 4 * (v + 10) + i + 8 + 4] = VoxelLogic.xrendered[168 + v * 8 + faction][40 + i];
+                    argbValues[4 * 4 * (v + 10) + i + 12 + 4] = VoxelLogic.xrendered[168 + v * 8 + faction][64 + i];
                 }
             }
             for (int v = 11; v < 21; v++)
             {
                 int current_color = v * 8;
-
-                for (int y = 0; y < 4; y++)
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int x = 0; x < 16; x++)
-                    {
-                        argbValues[4 * (1 + 3 * (3 + v)) + x + bmpData.Stride * y] = VoxelLogic.xrendered[current_color + faction][y * 16 + x];
-                    }
+                    argbValues[4 * 4 * (v + 3) + i + 0 + 4] = VoxelLogic.xrendered[current_color + faction][0 + i];
+                    argbValues[4 * 4 * (v + 3) + i + 4 + 4] = VoxelLogic.xrendered[current_color + faction][32 + i];
+                    argbValues[4 * 4 * (v + 3) + i + 8 + 4] = VoxelLogic.xrendered[current_color + faction][40 + i];
+                    argbValues[4 * 4 * (v + 3) + i + 12 + 4] = VoxelLogic.xrendered[current_color + faction][64 + i];
                 }
             }
-
-            for (int y = 0; y < 4; y++)
+            for (int i = 0; i < 4; i++)
             {
-                for (int x = 0; x < 16; x++)
-                {
-                    argbValues[4 * (1 + 3 * 24) + x + bmpData.Stride * y] = (byte)((x % 4 == 3) ? 255 : 0);
-                }
+                argbValues[4 * 4 * 24 + i + 0 + 4] = (byte)((i % 4 == 3) ? 255 : 0);
+                argbValues[4 * 4 * 24 + i + 4 + 4] = (byte)((i % 4 == 3) ? 255 : 0);
+                argbValues[4 * 4 * 24 + i + 8 + 4] = (byte)((i % 4 == 3) ? 255 : 0);
+                argbValues[4 * 4 * 24 + i + 12 + 4] = (byte)((i % 4 == 3) ? 255 : 0);
             }
 
             Marshal.Copy(argbValues, 0, ptr, numBytes);
@@ -6197,8 +6237,9 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still);
-            //b.Save("palette" + palette + "/" + "Still_Frame" + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png);
-            g = Graphics.FromImage(b);
+            string folder = "palette" + palette + "_big";
+            System.IO.Directory.CreateDirectory(folder);
+            b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
@@ -6214,7 +6255,9 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still);
-            //b.Save("palette" + palette + "/" + "Kaiju" + "_Gigantic_face" + dir + "_" + f + ".png", ImageFormat.Png);
+            string folder = "palette" + palette + "_big";
+            System.IO.Directory.CreateDirectory(folder);
+            b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png);
             g = Graphics.FromImage(b);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -6546,6 +6589,9 @@ namespace AssetsPV
                 for (int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
+                    string folder2 = "palette" + palette + "_big";
+                    System.IO.Directory.CreateDirectory(folder2);
+                    b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
                     Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
 
@@ -8319,7 +8365,6 @@ namespace AssetsPV
             }
 
          */
-        private static bool render_hat_gifs = false;
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
         public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
@@ -9686,21 +9731,24 @@ namespace AssetsPV
         {
             VoxelLogic.Initialize();
 
-            //            System.IO.Directory.CreateDirectory("Palettes");
-            //            System.IO.Directory.CreateDirectory("indexed");
-            /*
+            VoxelLogic.InitializeXPalette();
+            VoxelLogic.InitializeWPalette();
+
+            System.IO.Directory.CreateDirectory("Palettes");
+            System.IO.Directory.CreateDirectory("indexed");
+
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
             for (int c = 0; c < 8; c++)
             {
-                renderOnlyColors(c).Save("PaletteColor" + c + ".png", ImageFormat.Png);
+                renderOnlyColorsX(c).Save("PaletteColor" + c + ".png", ImageFormat.Png);
                 renderOnlyTerrainColors(c).Save("PaletteTerrainColor" + c + ".png", ImageFormat.Png);
             }
 
-            Madden();
-            renderOnlyColors(7).Save("PaletteCrazy.png", ImageFormat.Png);
-            */
-            //InitializePalettes();
+            VoxelLogic.Madden();
+            renderOnlyColorsX(7).Save("PaletteCrazy.png", ImageFormat.Png);
+
+            InitializePalettes();
             //            Madden();
             //processTerrainChannel();
             //processReceiving();
@@ -9716,8 +9764,6 @@ namespace AssetsPV
 
             //            processUnitOutlinedDouble("Block");
 
-            VoxelLogic.InitializeXPalette();
-            VoxelLogic.InitializeWPalette();
             //            processUnitOutlinedWDouble("Person");
             /*
             processUnitOutlinedWDouble("Person", 0, true);
@@ -9863,11 +9909,10 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Eidolon_Time", 35, false);
             processUnitOutlinedWDouble("Eidolon_Space", 36, false);
             processUnitOutlinedWDouble("Robot_Construction", 38, true);
-*/
+            */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
 
-            //render_hat_gifs = false;
 
             /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
@@ -9914,27 +9959,28 @@ namespace AssetsPV
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
             // processUnitOutlinedWQuad("Boulder", 48, true);
-/*            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);*/
-            processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
-//            processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
-/*            processUnitOutlinedWQuad("Door_Closed", 49, true);
-            processUnitOutlinedWQuad("Door_Open", 49, true);
-            processUnitOutlinedWQuad("Wall_Straight", 49, true);
-            processUnitOutlinedWQuad("Wall_Cross", 49, true);
-            processUnitOutlinedWQuad("Wall_Tee", 49, true);
-            processUnitOutlinedWQuad("Wall_Corner", 49, true);
-            processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-            */
+            /*            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
+                        processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
+             */
+            /*            processUnitOutlinedWQuad("Door_Closed", 49, true);
+                        processUnitOutlinedWQuad("Door_Open", 49, true);
+                        processUnitOutlinedWQuad("Wall_Straight", 49, true);
+                        processUnitOutlinedWQuad("Wall_Cross", 49, true);
+                        processUnitOutlinedWQuad("Wall_Tee", 49, true);
+                        processUnitOutlinedWQuad("Wall_Corner", 49, true);
+                        processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
+                        processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
+                        processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
+                        processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
+                        */
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
-           // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
+            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
             /*
@@ -9988,7 +10034,7 @@ namespace AssetsPV
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
             */
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
-            
+
 
             /*
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Captain");
@@ -10192,14 +10238,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
-            
+
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            
+
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10209,14 +10255,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
-            
+
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            
+
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
