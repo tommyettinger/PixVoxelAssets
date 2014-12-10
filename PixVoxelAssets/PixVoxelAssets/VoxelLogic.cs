@@ -11960,10 +11960,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static void VoxToBVX(List<MagicaVoxelData> data, string filename, int size)
         {
             byte[][][] voxels = new byte[size][][];
-            for (int x = 0; x < size; x++ )
+            for (int x = 0; x < size; x++)
             {
                 voxels[x] = new byte[size][];
-                for(int y = 0; y < size; y++)
+                for (int y = 0; y < size; y++)
                 {
                     voxels[x][y] = new byte[size];
                     voxels[x][y].Fill((byte)255);
@@ -11986,6 +11986,32 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                 }
             }
+        }
+        public static List<MagicaVoxelData> readBVX(string filename)
+        {
+            int size = 40;
+            List<MagicaVoxelData> voxels = new List<MagicaVoxelData>(size * size * size);
+            if (File.Exists(filename))
+            {
+                using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
+                {
+                    int total = (int)(reader.BaseStream.Length);
+                    size = (int)(Math.Round(Math.Pow(total, 1.0/3.0)));
+                    byte[] bins = reader.ReadBytes(total);
+                    for (byte z = 0; z < size; z++)
+                    {
+                        for (byte y = 0; y < size; y++)
+                        {
+                            for (byte x = 0; x < size; x++)
+                            {
+                                if (bins[z * size * size + y * size + x] != 255)
+                                    voxels.Add(new MagicaVoxelData { x = x, y = y, z = z, color = (byte)(253 - 4 * bins[z * size * size + y * size + x]) });
+                            }
+                        }
+                    }
+                }
+            }
+            return voxels;
         }
 
         public static List<MagicaVoxelData> GetHeadVoxels(BinaryReader body, string hatClass)

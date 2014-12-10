@@ -9775,12 +9775,13 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Guard", 5, true);
             */
             generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie.bvx", 40);
+            //VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie.bvx", 40);
 
+            File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
 
-            /*
+            
             File.WriteAllText("Zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), 2));
-            File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));
+            /*File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));
             File.WriteAllText("Zombie_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Witch"), 2));
             File.WriteAllText("Zombie_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Captain"), 2));
             File.WriteAllText("Zombie_Scout.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Scout"), 2));
