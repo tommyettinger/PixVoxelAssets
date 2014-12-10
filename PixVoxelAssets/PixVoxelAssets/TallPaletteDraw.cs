@@ -23,7 +23,7 @@ namespace AssetsPV
             //forest
             new float[] {0.2F,0.7F,0.15F,6F},
             //desert
-            new float[] {1F,0.9F,0.0F,2F},
+            new float[] {1F,0.9F,0.4F,2F},
             //jungle
             new float[] {0F,0.5F,0.35F,6F},
             //hills

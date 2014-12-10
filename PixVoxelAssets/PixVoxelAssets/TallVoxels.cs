@@ -5868,7 +5868,7 @@ namespace AssetsPV
    new float[] {0,  (merged + flatcolors[color][1]) * 0.5F,  0,  0, 0},
    new float[] {0,  0,  (merged + flatcolors[color][2]) * 0.5F,  0, 0},
    new float[] {0,  0,  0,  1F, 0},
-   new float[] {0.2F, 0.2F, 0.2F, 0, 1F}});
+   new float[] {0, 0, 0, 0, 1F}});
                 ColorMatrix colorMatrixDark = new ColorMatrix(new float[][]{ 
    new float[] {merged*0.3F + flatcolors[color][0] * 0.5F,  0,  0,  0, 0},
    new float[] {0,  merged*0.3F + flatcolors[color][1] * 0.52F,  0,  0, 0},
@@ -9774,7 +9774,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-
+            generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie.bvx", 40);
 
 
@@ -10274,5 +10274,48 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("html");
             File.WriteAllText("html/" + alternateName + ".html", html);
         }
+        private static Bitmap generateVoxelSpritesheet()
+        {
+            Bitmap bmp = new Bitmap(1024, 1024, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+
+            for (int y = 0; y < VoxelLogic.wrendered.Length; y++)
+            {
+                for (int x = 0; x < VoxelLogic.wrendered[0].Length; x++)
+                {
+                    for (int i = 0; i < 80; i++)
+                    {
+                        if(i < 80)
+                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = VoxelLogic.wrendered[y][x][i];
+                        else if(i % 4 == 3)
+                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = 255;
+                    }
+
+                }
+            }
+
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+        }
+
     }
 }

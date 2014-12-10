@@ -9817,7 +9817,7 @@ namespace AssetsPV
             
             TallVoxels.InitializePalettes();
             //            Madden();
-  //          TallVoxels.processTerrainChannelDouble();
+            TallVoxels.processTerrainChannelDouble();
  
             //TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
             //makeFlatTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
