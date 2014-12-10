@@ -11927,7 +11927,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             sb.Append("{\n");
             foreach (MagicaVoxelData vox in data)
             {
-                if(voxels.ContainsKey(Tuple.Create(vox.x + 0, vox.y + 0, vox.z + 0)))
+                if (voxels.ContainsKey(Tuple.Create(vox.x + 0, vox.y + 0, vox.z + 0)))
                     continue;
                 int mod_color = (253 - vox.color) / 4;
                 int depth = vox.z + vox.x - vox.y;
@@ -11955,6 +11955,37 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //sb.Replace("\t", "\n");
             sb.Append("\n}\n");
             return sb.ToString();
+        }
+
+        public static void VoxToBVX(List<MagicaVoxelData> data, string filename, int size)
+        {
+            byte[][][] voxels = new byte[size][][];
+            for (int x = 0; x < size; x++ )
+            {
+                voxels[x] = new byte[size][];
+                for(int y = 0; y < size; y++)
+                {
+                    voxels[x][y] = new byte[size];
+                    voxels[x][y].Fill((byte)255);
+                }
+            }
+            foreach (MagicaVoxelData vox in data)
+            {
+                voxels[vox.x][vox.y][vox.z] = (byte)((253 - vox.color) / 4);
+            }
+            using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+            {
+                for (int z = 0; z < size; z++)
+                {
+                    for (int y = 0; y < size; y++)
+                    {
+                        for (int x = 0; x < size; x++)
+                        {
+                            writer.Write(voxels[x][y][z]);
+                        }
+                    }
+                }
+            }
         }
 
         public static List<MagicaVoxelData> GetHeadVoxels(BinaryReader body, string hatClass)

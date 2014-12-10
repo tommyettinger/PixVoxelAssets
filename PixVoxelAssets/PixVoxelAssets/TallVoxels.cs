@@ -5868,7 +5868,7 @@ namespace AssetsPV
    new float[] {0,  (merged + flatcolors[color][1]) * 0.5F,  0,  0, 0},
    new float[] {0,  0,  (merged + flatcolors[color][2]) * 0.5F,  0, 0},
    new float[] {0,  0,  0,  1F, 0},
-   new float[] {0, 0, 0, 0, 1F}});
+   new float[] {0.2F, 0.2F, 0.2F, 0, 1F}});
                 ColorMatrix colorMatrixDark = new ColorMatrix(new float[][]{ 
    new float[] {merged*0.3F + flatcolors[color][0] * 0.5F,  0,  0,  0, 0},
    new float[] {0,  merged*0.3F + flatcolors[color][1] * 0.52F,  0,  0, 0},
@@ -5925,7 +5925,7 @@ namespace AssetsPV
                    GraphicsUnit.Pixel,
                    imageAttributes);
             }
-
+            b.Save("terrain_junk.png", ImageFormat.Png);
             Bitmap bmp = new Bitmap(256, 1, PixelFormat.Format32bppArgb);
 
             // Specify a pixel format.
@@ -6553,7 +6553,7 @@ namespace AssetsPV
             {
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
 
-                for (int frame = 0; frame < 8; frame++)
+                for (int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderHugeSmart(explode[frame], d, color, frame);
                     Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -9736,7 +9736,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("Palettes");
             System.IO.Directory.CreateDirectory("indexed");
-
+            /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
             for (int c = 0; c < 8; c++)
@@ -9749,6 +9749,7 @@ namespace AssetsPV
             renderOnlyColorsX(7).Save("PaletteCrazy.png", ImageFormat.Png);
 
             InitializePalettes();
+            */
             //            Madden();
             //processTerrainChannel();
             //processReceiving();
@@ -9773,6 +9774,10 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
+
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie.bvx", 40);
+
+
             /*
             File.WriteAllText("Zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), 2));
             File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));

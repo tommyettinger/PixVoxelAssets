@@ -9796,7 +9796,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("ortho_adj/indexed");
             System.IO.Directory.CreateDirectory("indexed");
             // /*
-            renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
+            TallVoxels.renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
 
@@ -10190,7 +10190,7 @@ namespace AssetsPV
             processMedalChannel("Medal_S");
             processMedalChannel("Medal_T");
             */
-            
+            /*
             TallVoxels.processUnitChannelPartial("Infantry");
             TallVoxels.processUnitChannelPartial("Infantry_P");
             TallVoxels.processUnitChannelPartial("Infantry_S");
@@ -10227,7 +10227,7 @@ namespace AssetsPV
             TallVoxels.processUnitChannelPartial("Laboratory");
             TallVoxels.processUnitChannelPartial("Castle");
             TallVoxels.processUnitChannelPartial("Estate");
-            
+            */
 
             //File.WriteAllText("FiringPositions.txt", log.ToString());
 
