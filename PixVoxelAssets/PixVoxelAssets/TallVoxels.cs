@@ -8646,7 +8646,7 @@ namespace AssetsPV
                 }
 
             }
-            /*
+            
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8655,7 +8655,7 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
             if (VoxelLogic.UnitLookup.ContainsKey(u))
                 processFiringPartial(u);

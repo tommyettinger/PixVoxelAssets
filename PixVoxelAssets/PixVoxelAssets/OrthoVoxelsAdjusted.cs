@@ -9795,7 +9795,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("ortho_adj");
             System.IO.Directory.CreateDirectory("ortho_adj/indexed");
             System.IO.Directory.CreateDirectory("indexed");
-            // /*
+            /*
             TallVoxels.renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
@@ -9811,13 +9811,13 @@ namespace AssetsPV
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
             TallVoxels.renderOnlyColorsX(7).Save("PaletteCrazy.png", ImageFormat.Png);
-            // */
+            */
             InitializeXPalette();
             VoxelLogic.InitializeXPalette();
             
             TallVoxels.InitializePalettes();
             //            Madden();
-            TallVoxels.processTerrainChannelDouble();
+//            TallVoxels.processTerrainChannelDouble();
  
             //TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
             //makeFlatTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
@@ -9831,6 +9831,12 @@ namespace AssetsPV
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
             //processUnitOutlinedWDouble("Lord");
             //processUnitOutlinedWDouble("Guard");
+
+            TallVoxels.processUnitOutlinedPartial("Boat");
+            processUnitOutlinedPartial("Boat");
+//            TallVoxels.processUnitOutlinedPartial("Boat");
+            processEightWayAnimation("Boat");
+
             /*
             processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");

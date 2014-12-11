@@ -37,9 +37,11 @@ namespace AssetsPV
             //road
             new float[] {0.5F,0.5F,0.5F,2F},
             //river
-            new float[] {0F,0.2F,0.85F,2F},
+            new float[] {0.2F,0.4F,0.95F,2F},
             //building base
             new float[] {0.55F,0.55F,0.55F,8F},
+            //sea
+            new float[] {0F,0.3F,0.75F,2F},
         };
         public static float[][] drabcolors = new float[][]
         {
@@ -62,9 +64,11 @@ namespace AssetsPV
             //road
             new float[] {0.451F,0.451F,0.451F,4F},
             //river
-            new float[] {0.255F,0.298F,0.435F,2F},
+            new float[] {0.285F,0.338F,0.485F,2F},
             //building base
             new float[] {0.51F,0.51F,0.51F,8F},
+            //sea
+            new float[] {0.225F,0.328F,0.385F,2F},
         };
         private static string[] terrainnames = new string[]
         {

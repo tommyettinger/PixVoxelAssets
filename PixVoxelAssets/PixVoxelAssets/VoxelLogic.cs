@@ -27,13 +27,13 @@ namespace AssetsPV
 
     public enum MovementType
     {
-        Foot, Treads, TreadsAmphi, Wheels, WheelsTraverse, Flight, Immobile
+        Foot, Treads, TreadsAmphi, Wheels, WheelsTraverse, Flight, Naval, Immobile
     }
     class VoxelLogic
     {
         public static string[] Terrains = new string[]
         {"Plains","Forest","Desert","Jungle","Hills"
-        ,"Mountains","Ruins","Tundra","Road","River", "Basement"};
+        ,"Mountains","Ruins","Tundra","Road","River", "Basement", "Sea"};
 
         public static string[] CurrentUnits = {
 "Infantry", "Infantry_P", "Infantry_S", "Infantry_T",
@@ -42,10 +42,11 @@ namespace AssetsPV
 "Plane", "Plane_P", "Plane_S", "Plane_T",
 "Supply", "Supply_P", "Supply_S", "Supply_T",
 "Copter", "Copter_P", "Copter_S", "Copter_T", 
+"Boat", "Boat_P", "Boat_S", "Boat_T", 
 "City", "Factory", "Airport", "Laboratory", "Castle", "Estate"};
-        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(30), TerrainLookup = new Dictionary<string, int>(10);
-        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(30), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
-        public static List<int>[] TerrainToUnits = new List<int>[30];
+        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(34), TerrainLookup = new Dictionary<string, int>(10);
+        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(34), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
+        public static List<int>[] TerrainToUnits = new List<int>[34];
         public static Dictionary<int, List<MovementType>> TerrainToMobilities = new Dictionary<int, List<MovementType>>();
         public static int[] CurrentSpeeds = {
 3, 3, 5, 3,
@@ -54,6 +55,7 @@ namespace AssetsPV
 7, 5, 9, 8,
 5, 5, 6, 6,
 7, 5, 8, 7, 
+7, 4, 8, 5, 
 0,0,0,0,0,0};
         public static int[][] CurrentWeapons = {
 new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
@@ -62,6 +64,7 @@ new int[] {3, 1}, new int[] {3, 1}, new int[] {1, -1}, new int[] {1, 3},
 new int[] {1, -1}, new int[] {-1, 7}, new int[] {5, -1}, new int[] {5, -1},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
 new int[] {-1, -1}, new int[] {1, 5}, new int[] {1, -1}, new int[] {-1, -1},
+new int[] {1, -1}, new int[] {3, -1}, new int[] {2, 6}, new int[] {2, 6},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}
 };
         public static int[][] CurrentWeaponReceptions = {
@@ -71,6 +74,7 @@ new int[] {2, 1}, new int[] {4, 2}, new int[] {2, -1}, new int[] {1, 2},
 new int[] {2, -1}, new int[] {-1, 4}, new int[] {1, -1}, new int[] {2, -1},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
 new int[] {-1, -1}, new int[] {2, 2}, new int[] {2, -1}, new int[] {-1, -1},
+new int[] {2, -1}, new int[] {4, -1}, new int[] {1, 3}, new int[] {2, 4},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}
 };
         public static MovementType[] CurrentMobilities = {
@@ -80,6 +84,7 @@ MovementType.Treads, MovementType.Treads, MovementType.Treads, MovementType.Trea
 MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flight,
 MovementType.Wheels, MovementType.Treads, MovementType.TreadsAmphi, MovementType.Wheels,
 MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flight, 
+MovementType.Naval, MovementType.Naval, MovementType.Naval, MovementType.Naval, 
 MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, 
                                                          };
 
@@ -102,7 +107,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 MobilityToUnits[CurrentMobilities[i]].Add(i);
             }
             MobilityToTerrains[MovementType.Flight] =
-                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11 };
             MobilityToTerrains[MovementType.Foot] =
                 new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             MobilityToTerrains[MovementType.Treads] =
@@ -113,6 +118,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 new List<int>() { 0, 2, 7, 8, };
             MobilityToTerrains[MovementType.WheelsTraverse] =
                 new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
+            MobilityToTerrains[MovementType.Naval] =
+                new List<int>() { 9, 11};
             MobilityToTerrains[MovementType.Immobile] =
                 new List<int>() { };
 
