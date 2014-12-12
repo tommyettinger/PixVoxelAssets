@@ -9831,11 +9831,13 @@ namespace AssetsPV
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
             //processUnitOutlinedWDouble("Lord");
             //processUnitOutlinedWDouble("Guard");
-
+            /*
             TallVoxels.processUnitOutlinedPartial("Boat");
             processUnitOutlinedPartial("Boat");
-//            TallVoxels.processUnitOutlinedPartial("Boat");
-            processEightWayAnimation("Boat");
+            processEightWayAnimation("Boat");*/
+            TallVoxels.processUnitOutlinedPartial("Boat_P");
+            processUnitOutlinedPartial("Boat_P");
+            processEightWayAnimation("Boat_P");
 
             /*
             processUnitOutlinedPartial("Infantry");

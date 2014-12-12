@@ -64,7 +64,7 @@ new int[] {3, 1}, new int[] {3, 1}, new int[] {1, -1}, new int[] {1, 3},
 new int[] {1, -1}, new int[] {-1, 7}, new int[] {5, -1}, new int[] {5, -1},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
 new int[] {-1, -1}, new int[] {1, 5}, new int[] {1, -1}, new int[] {-1, -1},
-new int[] {1, -1}, new int[] {3, -1}, new int[] {2, 6}, new int[] {2, 6},
+new int[] {1, -1}, new int[] {4, -1}, new int[] {2, 6}, new int[] {2, 6},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}
 };
         public static int[][] CurrentWeaponReceptions = {

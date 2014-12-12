@@ -97,6 +97,9 @@
     <None Include="Boat_Part_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Boat_P_Part_X.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Boulder_Huge_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
