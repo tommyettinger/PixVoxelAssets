@@ -9837,10 +9837,13 @@ namespace AssetsPV
             processEightWayAnimation("Boat");
             TallVoxels.processUnitOutlinedPartial("Boat_P");
             processUnitOutlinedPartial("Boat_P");
-            processEightWayAnimation("Boat_P");*/
+            processEightWayAnimation("Boat_P");
             TallVoxels.processUnitOutlinedPartial("Boat_S");
             processUnitOutlinedPartial("Boat_S");
-            processEightWayAnimation("Boat_S");
+            processEightWayAnimation("Boat_S");*/
+            TallVoxels.processUnitOutlinedPartial("Boat_T");
+            processUnitOutlinedPartial("Boat_T");
+            processEightWayAnimation("Boat_T");
 
             /*
             processUnitOutlinedPartial("Infantry");

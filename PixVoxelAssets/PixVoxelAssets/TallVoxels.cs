@@ -4210,14 +4210,16 @@ namespace AssetsPV
             }
             return b;
         }
-        private static int voxelToPixelLarge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        private static int voxelToPixelLarge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int xjitter, int yjitter)
         {
             /*
              4 * ((vx.x + vx.y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0))
                                     + i +
                                     bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)
              */
-            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? jitter - 1 : 0)) + innerX + stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + innerY);
+            return 4 * ((x + y) * 2 + 4 + ((current_color == 136) ? xjitter - 1 : 0))
+                + innerX +
+                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : yjitter) + innerY);
         }
         private static int voxelToPixelHuge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
         {
@@ -4335,9 +4337,10 @@ namespace AssetsPV
             int[] zbuffer = new int[numBytes];
             zbuffer.Fill<int>(-999);
 
-            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            int yjitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            int xjitter = yjitter;
             if (still)
-                jitter = 0;
+                yjitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - ((v.color == 249 - 96) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
@@ -4367,7 +4370,7 @@ namespace AssetsPV
                                 + i +
                                 bmpData.Stride * (300 - 60 - vx.y + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : jitter) + j)] == 0
                              */
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, xjitter, yjitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = VoxelLogic.xrendered[mod_color][i + j * 16];
@@ -4383,7 +4386,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color + faction, bmpData.Stride, xjitter, yjitter);
                             if (shadowValues[p] == 0)
                             {
                                 shadowValues[p] = VoxelLogic.xrendered[current_color + faction][i + j * 16];
@@ -4402,7 +4405,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, xjitter, yjitter);
 
                             if (argbValues[p] == 0)
                             {
@@ -6319,7 +6322,7 @@ namespace AssetsPV
                     break;
             }
 
-            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] == MovementType.Immobile));
+            b = renderLargeSmart(parsed, d, color, frame, (VoxelLogic.UnitLookup.ContainsKey(u) && VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight));
             // o = renderOutlineLarge(parsed, d, color, frame);
             g = Graphics.FromImage(b);
 
