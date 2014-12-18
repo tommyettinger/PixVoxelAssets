@@ -531,6 +531,12 @@
     <None Include="Tassar_Walk_3_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Terrain_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Terrain_Special_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Thief_Hat_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

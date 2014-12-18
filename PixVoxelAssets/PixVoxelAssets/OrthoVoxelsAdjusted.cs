@@ -4690,12 +4690,13 @@ namespace AssetsPV
             }
             return b;
         }
+        /*
         private static byte[] outlineValues = new byte[64];
         private static void setOutline(byte x, byte y, byte z, byte[, ,] outlined, int stride, int jitter)
         {
             bool[, ,] adjacent = new bool[3, 3, 3];
 
-            if (outlined[x, y, z] == 255) return;
+            if (out-lined[x, y, z] == 255) return;
             int current_color = outlined[x, y, z];
             for (int x2 = -1; x2 < 2; x2++)
             {
@@ -4929,11 +4930,11 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            /*
-                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
-                             + i +
-                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
-                             */
+                            
+                           //  vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                           //  + i +
+                           //bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+                             
                             p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
@@ -5102,17 +5103,17 @@ namespace AssetsPV
 
             return bmp;
         }
-
-        private static int voxelToPixelLarge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
+        */
+        private static int voxelToPixelLarge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int xjitter, int yjitter)
         {
             /*
             4 * (vx.y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
                              + i +
                            bmpData.Stride * (308 - 60 - 8 + vx.x - vx.z * 3 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + j)
              */
-            return 4 * (y * 3 + 6 + ((current_color == 136) ? jitter - 1 : 0))
+            return 4 * (y * 3 + 6 + ((current_color == 136) ? xjitter - 1 : 0))
                  + innerX +
-                stride * (308 - 60 - 8 + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : jitter) + innerY);
+                stride * (308 - 60 - 8 + x - z * 3 - ((VoxelLogic.xcolors[current_color][3] == VoxelLogic.flat_alpha) ? -3 : yjitter) + innerY);
         }
 
         private static int voxelToPixelHuge(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter)
@@ -5331,9 +5332,10 @@ namespace AssetsPV
                 }
             }*/
 
-            int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            int yjitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
+            int xjitter = yjitter;
             if (still)
-                jitter = 0;
+                yjitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 128 + v.y + v.z * 128 * 128 - ((v.color == 249 - 96) ? 128 * 128 * 128 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
                 int current_color = 249 - vx.color;
@@ -5361,7 +5363,7 @@ namespace AssetsPV
                              + i +
                            bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
                              */
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, xjitter, yjitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = xrendered[mod_color][i + j * 12];
@@ -5380,7 +5382,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, current_color, bmpData.Stride, xjitter, yjitter);
 
                             if (shadowValues[p] == 0)
                             {
@@ -5400,7 +5402,7 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
+                            p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, xjitter, yjitter);
                             if (argbValues[p] == 0)
                             {
                                 argbValues[p] = xrendered[mod_color][i + j * 12];
@@ -6020,7 +6022,7 @@ namespace AssetsPV
 
             return bmp;
         }
-
+        /*
         private static Bitmap renderLargeSmartArchive(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -6117,11 +6119,11 @@ namespace AssetsPV
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            /*
-                             vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
-                             + i +
-                           bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
-                             */
+                           
+                           //  vx.y * 2 + 2 + ((current_color == 136) ? jitter - 1 : 0)
+                           //  + i +
+                           //bmpData.Stride * (182 - 60 - 3 + vx.x - vx.z * 2 - ((VoxelLogic.xcolors[current_color + faction][3] == VoxelLogic.flat_alpha) ? -2 : 0) + j)
+                             
                             p = voxelToPixelLarge(i, j, vx.x, vx.y, vx.z, mod_color, bmpData.Stride, jitter);
                             if (argbValues[p] == 0)
                             {
@@ -6226,7 +6228,7 @@ namespace AssetsPV
 
             return bmp;
         }
-
+        */
 
         private static Bitmap[] renderW(MagicaVoxelData[] voxels, int facing, int frame, int maxFrames)
         {
@@ -9831,20 +9833,7 @@ namespace AssetsPV
             //processUnitOutlinedWDouble("Shinobi_Unarmed");
             //processUnitOutlinedWDouble("Lord");
             //processUnitOutlinedWDouble("Guard");
-            /*
-            TallVoxels.processUnitOutlinedPartial("Boat");
-            processUnitOutlinedPartial("Boat");
-            processEightWayAnimation("Boat");
-            TallVoxels.processUnitOutlinedPartial("Boat_P");
-            processUnitOutlinedPartial("Boat_P");
-            processEightWayAnimation("Boat_P");
-            TallVoxels.processUnitOutlinedPartial("Boat_S");
-            processUnitOutlinedPartial("Boat_S");
-            processEightWayAnimation("Boat_S");*/
-            TallVoxels.processUnitOutlinedPartial("Boat_T");
-            processUnitOutlinedPartial("Boat_T");
-            processEightWayAnimation("Boat_T");
-
+            
             /*
             processUnitOutlinedPartial("Infantry");
             processEightWayAnimation("Infantry");
@@ -9899,103 +9888,115 @@ namespace AssetsPV
             processAnimationMontage("Plane_T_Low");
             
              */
-            /*
-            //processUnitOutlinedPartial("Civilian");
-            //TallVoxels.processUnitOutlinedPartial("Civilian");
-            processEightWayAnimation("Civilian");
-            
-            //processUnitOutlinedPartial("Infantry");
-            //TallVoxels.processUnitOutlinedPartial("Infantry");
-            processEightWayAnimation("Infantry");
-            //processUnitOutlinedPartial("Infantry_P");
-            //TallVoxels.processUnitOutlinedPartial("Infantry_P");
-            processEightWayAnimation("Infantry_P");
-            //processUnitOutlinedPartial("Infantry_S");
-            //TallVoxels.processUnitOutlinedPartial("Infantry_S");
-            processEightWayAnimation("Infantry_S");
-            //processUnitOutlinedPartial("Infantry_T");
-            //TallVoxels.processUnitOutlinedPartial("Infantry_T");
-            processEightWayAnimation("Infantry_T");
-            //processUnitOutlinedPartial("Tank");
-            //TallVoxels.processUnitOutlinedPartial("Tank");
-            processEightWayAnimation("Tank");
-            //processUnitOutlinedPartial("Tank_P");
-            //TallVoxels.processUnitOutlinedPartial("Tank_P");
-            processEightWayAnimation("Tank_P");
-            //processUnitOutlinedPartial("Tank_S");
-            //TallVoxels.processUnitOutlinedPartial("Tank_S");
-            processEightWayAnimation("Tank_S");
-            //processUnitOutlinedPartial("Tank_T");
-            //TallVoxels.processUnitOutlinedPartial("Tank_T");
-            processEightWayAnimation("Tank_T");
-            //processUnitOutlinedPartial("Artillery");
-            //TallVoxels.processUnitOutlinedPartial("Artillery");
-            processEightWayAnimation("Artillery");
-            //processUnitOutlinedPartial("Artillery_P");
-            //TallVoxels.processUnitOutlinedPartial("Artillery_P");
-            processEightWayAnimation("Artillery_P");
-            //processUnitOutlinedPartial("Artillery_S");
-            //TallVoxels.processUnitOutlinedPartial("Artillery_S");
-            processEightWayAnimation("Artillery_S");
-            //processUnitOutlinedPartial("Artillery_T");
-            //TallVoxels.processUnitOutlinedPartial("Artillery_T");
-            processEightWayAnimation("Artillery_T");
-            //processUnitOutlinedPartial("Supply");
-            //TallVoxels.processUnitOutlinedPartial("Supply");
-            processEightWayAnimation("Supply");
-            //processUnitOutlinedPartial("Supply_P");
-            //TallVoxels.processUnitOutlinedPartial("Supply_P");
-            processEightWayAnimation("Supply_P");
-            //processUnitOutlinedPartial("Supply_S");
-            //TallVoxels.processUnitOutlinedPartial("Supply_S");
-            processEightWayAnimation("Supply_S");
-            //processUnitOutlinedPartial("Supply_T");
-            //TallVoxels.processUnitOutlinedPartial("Supply_T");
-            processEightWayAnimation("Supply_T");
-            //processUnitOutlinedPartial("Copter");
-            //TallVoxels.processUnitOutlinedPartial("Copter");
-            processEightWayAnimation("Copter");
-            //processUnitOutlinedPartial("Copter_P");
-            //TallVoxels.processUnitOutlinedPartial("Copter_P");
-            processEightWayAnimation("Copter_P");
-            //processUnitOutlinedPartial("Copter_S");
-            //TallVoxels.processUnitOutlinedPartial("Copter_S");
-            processEightWayAnimation("Copter_S");
-            //processUnitOutlinedPartial("Copter_T");
-            //TallVoxels.processUnitOutlinedPartial("Copter_T");
-            processEightWayAnimation("Copter_T");
-            //processUnitOutlinedPartial("Plane");
-            //TallVoxels.processUnitOutlinedPartial("Plane");
-            processEightWayAnimation("Plane");
-            //processUnitOutlinedPartial("Plane_P");
-            //TallVoxels.processUnitOutlinedPartial("Plane_P");
-            processEightWayAnimation("Plane_P");
-            //processUnitOutlinedPartial("Plane_S");
-            //TallVoxels.processUnitOutlinedPartial("Plane_S");
-            processEightWayAnimation("Plane_S");
-            //processUnitOutlinedPartial("Plane_T");
-            //TallVoxels.processUnitOutlinedPartial("Plane_T");
-            processEightWayAnimation("Plane_T");
 
-            //processUnitOutlinedPartial("Airport");
-            //TallVoxels.processUnitOutlinedPartial("Airport");
+            processUnitOutlinedPartial("Civilian");
+            TallVoxels.processUnitOutlinedPartial("Civilian");
+            processEightWayAnimation("Civilian");
+
+            processUnitOutlinedPartial("Infantry");
+            TallVoxels.processUnitOutlinedPartial("Infantry");
+            processEightWayAnimation("Infantry");
+            processUnitOutlinedPartial("Infantry_P");
+            TallVoxels.processUnitOutlinedPartial("Infantry_P");
+            processEightWayAnimation("Infantry_P");
+            processUnitOutlinedPartial("Infantry_S");
+            TallVoxels.processUnitOutlinedPartial("Infantry_S");
+            processEightWayAnimation("Infantry_S");
+            processUnitOutlinedPartial("Infantry_T");
+            TallVoxels.processUnitOutlinedPartial("Infantry_T");
+            processEightWayAnimation("Infantry_T");
+            processUnitOutlinedPartial("Tank");
+            TallVoxels.processUnitOutlinedPartial("Tank");
+            processEightWayAnimation("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            TallVoxels.processUnitOutlinedPartial("Tank_P");
+            processEightWayAnimation("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            TallVoxels.processUnitOutlinedPartial("Tank_S");
+            processEightWayAnimation("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            TallVoxels.processUnitOutlinedPartial("Tank_T");
+            processEightWayAnimation("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            TallVoxels.processUnitOutlinedPartial("Artillery");
+            processEightWayAnimation("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            TallVoxels.processUnitOutlinedPartial("Artillery_P");
+            processEightWayAnimation("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            TallVoxels.processUnitOutlinedPartial("Artillery_S");
+            processEightWayAnimation("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+            TallVoxels.processUnitOutlinedPartial("Artillery_T");
+            processEightWayAnimation("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            TallVoxels.processUnitOutlinedPartial("Supply");
+            processEightWayAnimation("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            TallVoxels.processUnitOutlinedPartial("Supply_P");
+            processEightWayAnimation("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            TallVoxels.processUnitOutlinedPartial("Supply_S");
+            processEightWayAnimation("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
+            TallVoxels.processUnitOutlinedPartial("Supply_T");
+            processEightWayAnimation("Supply_T");
+            processUnitOutlinedPartial("Copter");
+            TallVoxels.processUnitOutlinedPartial("Copter");
+            processEightWayAnimation("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            TallVoxels.processUnitOutlinedPartial("Copter_P");
+            processEightWayAnimation("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            TallVoxels.processUnitOutlinedPartial("Copter_S");
+            processEightWayAnimation("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
+            TallVoxels.processUnitOutlinedPartial("Copter_T");
+            processEightWayAnimation("Copter_T");
+            processUnitOutlinedPartial("Plane");
+            TallVoxels.processUnitOutlinedPartial("Plane");
+            processEightWayAnimation("Plane");
+            processUnitOutlinedPartial("Plane_P");
+            TallVoxels.processUnitOutlinedPartial("Plane_P");
+            processEightWayAnimation("Plane_P");
+            processUnitOutlinedPartial("Plane_S");
+            TallVoxels.processUnitOutlinedPartial("Plane_S");
+            processEightWayAnimation("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
+            TallVoxels.processUnitOutlinedPartial("Plane_T");
+            processEightWayAnimation("Plane_T");
+            processUnitOutlinedPartial("Boat");
+            TallVoxels.processUnitOutlinedPartial("Boat");
+            processEightWayAnimation("Boat");
+            processUnitOutlinedPartial("Boat_P");
+            TallVoxels.processUnitOutlinedPartial("Boat_P");
+            processEightWayAnimation("Boat_P");
+            processUnitOutlinedPartial("Boat_S");
+            TallVoxels.processUnitOutlinedPartial("Boat_S");
+            processEightWayAnimation("Boat_S");
+            processUnitOutlinedPartial("Boat_T");
+            TallVoxels.processUnitOutlinedPartial("Boat_T");
+            processEightWayAnimation("Boat_T");
+
+            processUnitOutlinedPartial("Airport");
+            TallVoxels.processUnitOutlinedPartial("Airport");
             processEightWayAnimation("Airport");
-            //processUnitOutlinedPartial("City");
-            //TallVoxels.processUnitOutlinedPartial("City");
+            processUnitOutlinedPartial("City");
+            TallVoxels.processUnitOutlinedPartial("City");
             processEightWayAnimation("City");
-            //processUnitOutlinedPartial("Factory");
-            //TallVoxels.processUnitOutlinedPartial("Factory");
+            processUnitOutlinedPartial("Factory");
+            TallVoxels.processUnitOutlinedPartial("Factory");
             processEightWayAnimation("Factory");
-            //processUnitOutlinedPartial("Laboratory");
-            //TallVoxels.processUnitOutlinedPartial("Laboratory");
+            processUnitOutlinedPartial("Laboratory");
+            TallVoxels.processUnitOutlinedPartial("Laboratory");
             processEightWayAnimation("Laboratory");
-            //processUnitOutlinedPartial("Castle");
-            //TallVoxels.processUnitOutlinedPartial("Castle");
+            processUnitOutlinedPartial("Castle");
+            TallVoxels.processUnitOutlinedPartial("Castle");
             processEightWayAnimation("Castle");
-            //processUnitOutlinedPartial("Estate");
-            //TallVoxels.processUnitOutlinedPartial("Estate");
+            processUnitOutlinedPartial("Estate");
+            TallVoxels.processUnitOutlinedPartial("Estate");
             processEightWayAnimation("Estate");
-            */
+            
             
 //            processReceivingDouble();
 //            TallVoxels.processReceivingDouble();

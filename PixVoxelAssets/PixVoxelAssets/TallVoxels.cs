@@ -6233,16 +6233,16 @@ namespace AssetsPV
 
         private static Bitmap processSingleOutlinedWDouble(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
-            Graphics g;
             Bitmap b;
             Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still);
-            string folder = "palette" + palette + "_big";
+            /*string folder = "palette" + palette + "_big";
             System.IO.Directory.CreateDirectory(folder);
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
+            */
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
@@ -6251,17 +6251,16 @@ namespace AssetsPV
         }
         private static Bitmap processSingleOutlinedWQuad(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
-            Graphics g;
             Bitmap b;
             Bitmap b2 = new Bitmap(168, 208, PixelFormat.Format32bppArgb);
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still);
-            string folder = "palette" + palette + "_big";
+            /*string folder = "palette" + palette + "_big";
             System.IO.Directory.CreateDirectory(folder);
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png);
-            g = Graphics.FromImage(b);
+            */
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), -40, -80, 248, 308);
@@ -9778,12 +9777,20 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Guard", 5, true);
             */
             generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
-            //VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie.bvx", 40);
-
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie.bvx", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open))), "Skeleton.bvx", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), "Male.bvx", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), "Female.bvx", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain.bvx", 48);
+            for(int i = 50; i <= 60; i++)
+            {
+                processUnitOutlinedWQuad("Terrain", i, true);
+            }
+            /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
-
             
             File.WriteAllText("Zombie.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), 2));
+            */
             /*File.WriteAllText("Zombie_Berserker.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Berserker"), 2));
             File.WriteAllText("Zombie_Witch.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Witch"), 2));
             File.WriteAllText("Zombie_Captain.json", VoxelLogic.VoxToJSON(VoxelLogic.AssembleHatToModel(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)), "Captain"), 2));
@@ -10304,10 +10311,23 @@ namespace AssetsPV
                 {
                     for (int i = 0; i < 80; i++)
                     {
-                        if(i < 80)
-                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = VoxelLogic.wrendered[y][x][i];
-                        else if(i % 4 == 3)
-                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = 255;
+                        if (i < 64) //only upper 4 rows
+                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] =
+                                VoxelLogic.wrendered[y][x][i];
+                        else if ((x == 25 || (x >= 17 && x <= 20)) &&
+                                !(VoxelLogic.wpalettes[y][x][3] == VoxelLogic.bordered_alpha ||
+                                  VoxelLogic.wpalettes[y][x][3] == VoxelLogic.bordered_flat_alpha))
+                        {
+                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] =
+                                VoxelLogic.wrendered[y][x][i % 4];
+                        }
+                        else
+                        {
+                            argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] =
+                                VoxelLogic.wrendered[y][x][i];
+                        }
+
+                        //argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = 255;
                     }
 
                 }

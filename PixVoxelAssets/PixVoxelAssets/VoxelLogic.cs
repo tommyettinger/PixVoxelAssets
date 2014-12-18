@@ -437,7 +437,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static float[][] wcolors =
             new float[][] { //default to brown hair
-            //0 shoes, boots, brown leather contrast
+                        //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.15F,0.0F,1F},
             //1 shoes, boots, brown leather
             new float[] {0.45F,0.25F,0.1F,1F},
@@ -454,9 +454,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
-            new float[] {0.77F,0.45F,0.05F,1F},
+            new float[] {0.8F,0.5F,0.12F,1F},
             //9 skin
-            new float[] {0.87F,0.65F,0.3F,1F},
+            new float[] {0.93F,0.74F,0.39F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -551,7 +551,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 total transparent
+            //57 eraser
+            new float[] {0F,0F,0F,eraser_alpha},
+            //58 total transparent
             new float[] {0F,0F,0F,0F},
             };
 
@@ -6709,6 +6711,117 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //58 total transparent
             new float[] {0F,0F,0F,0F},
             },
+            
+            new float[][] { //50 plains
+            //terrain dark
+            new float[] {0.63F,0.92F,0.3F,1F},
+            //terrain mid
+            new float[] {0.63F,0.92F,0.3F,1F},
+            //terrain light
+            new float[] {0.63F,0.92F,0.3F,1F},
+            //terrain highlight
+            new float[] {0.63F,0.92F,0.3F,1F},
+            },
+            new float[][] { //51 forest
+            //terrain dark
+            new float[] {0.2F,0.7F,0.15F,1F},
+            //terrain mid
+            new float[] {0.2F,0.7F,0.15F,1F},
+            //terrain light
+            new float[] {0.2F,0.7F,0.15F,1F},
+            //terrain highlight
+            new float[] {0.2F,0.7F,0.15F,1F},
+            },
+            new float[][] { //52 desert
+            //terrain dark
+            new float[] {1F,0.9F,0.4F,1F},
+            //terrain mid
+            new float[] {1F,0.9F,0.4F,1F},
+            //terrain light
+            new float[] {1F,0.9F,0.4F,1F},
+            //terrain highlight
+            new float[] {1F,0.9F,0.4F,1F},
+            },
+            new float[][] { //53 jungle
+            //terrain dark
+            new float[] {0F,0.5F,0.35F,1F},
+            //terrain mid
+            new float[] {0F,0.5F,0.35F,1F},
+            //terrain light
+            new float[] {0F,0.5F,0.35F,1F},
+            //terrain highlight
+            new float[] {0F,0.5F,0.35F,1F},
+            },
+            new float[][] { //54 hills
+            //terrain dark
+            new float[] {0.9F,0.6F,0.15F,1F},
+            //terrain mid
+            new float[] {0.9F,0.6F,0.15F,1F},
+            //terrain light
+            new float[] {0.9F,0.6F,0.15F,1F},
+            //terrain highlight
+            new float[] {0.9F,0.6F,0.15F,1F},
+            },
+            new float[][] { //55 mountains
+            //terrain dark
+            new float[] {0.7F,0.75F,0.82F,1F},
+            //terrain mid
+            new float[] {0.7F,0.75F,0.82F,1F},
+            //terrain light
+            new float[] {0.7F,0.75F,0.82F,1F},
+            //terrain highlight
+            new float[] {0.7F,0.75F,0.82F,1F},
+            },
+            new float[][] { //56 ruins
+            //terrain dark
+            new float[] {0.6F,0.53F,0.61F,1F},
+            //terrain mid
+            new float[] {0.6F,0.53F,0.61F,1F},
+            //terrain light
+            new float[] {0.6F,0.53F,0.61F,1F},
+            //terrain highlight
+            new float[] {0.6F,0.53F,0.61F,1F},
+            },
+            new float[][] { //57 tundra
+            //terrain dark
+            new float[] {0.8F,1F,1F,1F},
+            //terrain mid
+            new float[] {0.8F,1F,1F,1F},
+            //terrain light
+            new float[] {0.8F,1F,1F,1F},
+            //terrain highlight
+            new float[] {0.8F,1F,1F,1F},
+            },
+            new float[][] { //58 road
+            //terrain dark
+            new float[] {0.5F,0.5F,0.5F,1F},
+            //terrain mid
+            new float[] {0.5F,0.5F,0.5F,1F},
+            //terrain light
+            new float[] {0.5F,0.5F,0.5F,1F},
+            //terrain highlight
+            new float[] {0.5F,0.5F,0.5F,1F},
+            },
+            new float[][] { //59 river
+            //terrain dark
+            new float[] {0.2F,0.4F,0.95F,1F},
+            //terrain mid
+            new float[] {0.2F,0.4F,0.95F,1F},
+            //terrain light
+            new float[] {0.2F,0.4F,0.95F,1F},
+            //terrain highlight
+            new float[] {0.2F,0.4F,0.95F,1F},
+            },
+            new float[][] { //60 sea
+            //terrain dark
+            new float[] {0F,0.3F,0.75F,1F},
+            //terrain mid
+            new float[] {0F,0.3F,0.75F,1F},
+            //terrain light
+            new float[] {0F,0.3F,0.75F,1F},
+            //terrain highlight
+            new float[] {0F,0.3F,0.75F,1F},
+            },
 
         };
         public static int wcolorcount = 0, wpalettecount = 0;
@@ -6965,13 +7078,40 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                ColorAdjustType.Bitmap);
             for (int p = 0; p < wpalettecount; p++)
             {
+                if(p >= 50 && p <= 60)
+                {
+                    float[][] temp = new float[wcolorcount][];
+                    temp[0] = wpalettes[p][0];
+                    temp[0][0] -= 0.4f;
+                    temp[0][1] -= 0.4f;
+                    temp[0][2] -= 0.4f;
+
+                    temp[1] = wpalettes[p][1];
+                    temp[1][0] -= 0.25f;
+                    temp[1][1] -= 0.25f;
+                    temp[1][2] -= 0.25f;
+                    temp[2] = wpalettes[p][2];
+                    temp[2][0] -= 0.1f;
+                    temp[2][1] -= 0.1f;
+                    temp[2][2] -= 0.1f;
+
+                    temp[3] = wpalettes[p][3];
+                    temp[3][0] += 0.05f;
+                    temp[3][1] += 0.05f;
+                    temp[3][2] += 0.05f;
+                    for (int c = 4; c < wcolorcount; c++)
+                    {
+                        temp[c] = wcolors[c];
+                    }
+                    wpalettes[p] = temp;
+                }
                 for (int current_color = 0; current_color < wcolorcount; current_color++)
                 {
                     Bitmap b =
                     new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
                     Graphics g = Graphics.FromImage((Image)b);
-
+                    
                     if (current_color == 25)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
@@ -11740,9 +11880,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     launchers.Add(mvd);
                 }
             }
-            int maxY = 0;// launchers.Max(v => v.y);
-            int minY = 0;// launchers.Max(v => v.y);
-            float midY = 0;// (maxY + minY) / 2F;
             MagicaVoxelData launcher = launchers.RandomElement();
 //            MagicaVoxelData trail = trails.RandomElement();
             for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
