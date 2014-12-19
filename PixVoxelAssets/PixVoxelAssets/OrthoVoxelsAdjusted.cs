@@ -8489,7 +8489,7 @@ namespace AssetsPV
                     }
                 }
                 */
-                
+                /*
                 System.IO.Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -8512,6 +8512,7 @@ namespace AssetsPV
                     Console.WriteLine("Args: " + st);
                     Process.Start(startInfo).WaitForExit();
                 }
+                */
                 
             }
         }
@@ -9618,12 +9619,12 @@ namespace AssetsPV
         }
         static Bitmap makeFlatTiling()
         {
-            Bitmap[] tilings = new Bitmap[10];
-            for (int i = 0; i < 10; i++)
+            Bitmap[] tilings = new Bitmap[12];
+            for (int i = 0; i < 12; i++)
             {
-                tilings[i] = OrthoPaletteDraw.drawPixelsFlat(i);
+                tilings[i] = OrthoPaletteDraw.drawPixelsFlatDouble(i);
             }
-            Bitmap b = new Bitmap(64 * 20, 32 * 20);
+            Bitmap b = new Bitmap(90 * 20, 30 * 20);
             Graphics tiling = Graphics.FromImage(b);
 
             LocalMap lm = new LocalMap(20, 20);
@@ -9631,7 +9632,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < 20; i++)
                 {
-                    tiling.DrawImageUnscaled(tilings[lm.Land[i, j]], (64 * i), (32 * j) - 32 + 4);
+                    tiling.DrawImageUnscaled(tilings[lm.Land[i, j]], (90 * i), (30 * j) - 60 + 3);
                 }
             }
 
@@ -9820,10 +9821,12 @@ namespace AssetsPV
             TallVoxels.InitializePalettes();
             //            Madden();
 //            TallVoxels.processTerrainChannelDouble();
- 
-            //TallVoxels.makeFlatTiling().Save("tiling_iso_flat.png", ImageFormat.Png);
-            //makeFlatTiling().Save("tiling_ortho_flat.png", ImageFormat.Png);
 
+            for (int i = 0; i < 10; i++)
+            {
+                //TallVoxels.makeFlatTiling().Save("sample_iso_map_"+i+".png", ImageFormat.Png);
+                makeFlatTiling().Save("sample_ortho_map_" + i + ".png", ImageFormat.Png);
+            }
             //InitializeWPalette();
 
             //VoxelLogic.InitializeWPalette();
@@ -9888,7 +9891,7 @@ namespace AssetsPV
             processAnimationMontage("Plane_T_Low");
             
              */
-
+            /*
             processUnitOutlinedPartial("Civilian");
             TallVoxels.processUnitOutlinedPartial("Civilian");
             processEightWayAnimation("Civilian");
@@ -9996,11 +9999,11 @@ namespace AssetsPV
             processUnitOutlinedPartial("Estate");
             TallVoxels.processUnitOutlinedPartial("Estate");
             processEightWayAnimation("Estate");
-            
-            
-//            processReceivingDouble();
-//            TallVoxels.processReceivingDouble();
-            
+            */
+            /*
+            processReceivingDouble();
+            TallVoxels.processReceivingDouble();
+            */
 
             //TallVoxels.processUnitOutlinedWDouble("Person");
             //TallVoxels.processUnitOutlinedWDouble("Shinobi");

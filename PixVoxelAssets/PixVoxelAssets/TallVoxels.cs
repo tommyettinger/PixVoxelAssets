@@ -7516,7 +7516,7 @@ namespace AssetsPV
                     }
                 }
                 */
-
+                /*
                 System.IO.Directory.CreateDirectory("gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -7539,7 +7539,7 @@ namespace AssetsPV
                     Console.WriteLine("Args: " + st);
                     Process.Start(startInfo).WaitForExit();
                 }
-
+                */
             }
         }
         private static void processChannelFiring(string u)
@@ -9102,7 +9102,7 @@ namespace AssetsPV
 
             List<Tuple<int, int>> path = new List<Tuple<int, int>>();
             int x;
-            int initial_y = (r.Next(6, (height * 2) - 4) / 2) + 1;
+            int initial_y = (r.Next(3, height - 4) /2) * 2 + 1;
             int y = initial_y;
             int midpoint = width / 2;
             int dir = (r.Next(2) == 0) ? -1 : 1;
@@ -9176,8 +9176,8 @@ namespace AssetsPV
             Bitmap b = new Bitmap(128 * 16, 32 * 32);
             Graphics g = Graphics.FromImage(b);
 
-            Bitmap[] tilings = new Bitmap[10];
-            for (int i = 0; i < 10; i++)
+            Bitmap[] tilings = new Bitmap[12];
+            for (int i = 0; i < 12; i++)
             {
                 tilings[i] = TallPaletteDraw.drawPixelsFlatDouble(i);
             }

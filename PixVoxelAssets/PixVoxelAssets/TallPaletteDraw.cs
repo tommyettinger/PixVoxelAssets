@@ -83,6 +83,7 @@ namespace AssetsPV
             ,"Road"
             ,"River"
             ,"Basement"
+            ,"Sea"
             
         };
         /*
