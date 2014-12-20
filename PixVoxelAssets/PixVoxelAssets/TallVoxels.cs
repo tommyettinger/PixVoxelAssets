@@ -1238,7 +1238,7 @@ namespace AssetsPV
         //174 AA Gun
         //175 Machine Gun
         //176 Handgun
-        public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "AA_Gun", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb" };
+        public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "Torpedo", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb" };
         public static MagicaVoxelData[][] HandgunAnimation(MagicaVoxelData[][] parsedFrames, int unit)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -7466,7 +7466,6 @@ namespace AssetsPV
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             for (int i = 0; i < 8; i++)
             {
-                if (i == 2) continue;
                 for (int s = 0; s < 4; s++)
                 {
                     MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(i, s + 1);
