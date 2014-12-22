@@ -12287,7 +12287,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
 
                 bool visible = false;
-                int currentX = 0, currentY = 0, width = size * 4 + 8, height = size * 4 + 8;
+                int currentX = 0, currentY = 0, width = size * 4 + 8, height = size * 5 + 8;
                 byte[,] edgebuffer = new byte[width, height];
                 //int[,] parentbuffer = new int[width, height];
                 short[,] zbuffer = new short[width, height];
@@ -12295,8 +12295,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 edgebuffer.Fill(255);
                 //parentbuffer.Fill(-9999);
                 List<byte> culled = new List<byte>(total);
-                List<MagicaVoxelData> culledStructs = new List<MagicaVoxelData>(total);
-                List<Tuple<byte, byte, byte>> culledPositions = new List<Tuple<byte, byte, byte>>(total);
+                //List<MagicaVoxelData> culledStructs = new List<MagicaVoxelData>(total);
+                //List<Tuple<byte, byte, byte>> culledPositions = new List<Tuple<byte, byte, byte>>(total);
                 for (byte z = (byte)(size - 1); z >= 0 && z != 255; z--)
                 {
                     for (byte x = (byte)(size - 1); x >= 0 && x != 255; x--)
@@ -12304,7 +12304,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         for (byte y = 0; y < size; y++)
                         {
                             currentX = (x + y) * 2;
-                            currentY = y - x + z * 3;
+                            currentY = size + y - x + z * 3;
                             if (turned[x, y, z] == 255 || currentX < 0 || currentY < 0 || currentX >= width || currentY >= height)
                                 continue;
                             for (int ix = 0; ix < 4; ix++)
@@ -12322,12 +12322,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             }
                             if (visible)
                             {
-                                culled.Add(x);
-                                culled.Add(y);
-                                culled.Add(z);
                                 culled.Add(turned[x, y, z]);
-                                culledStructs.Add(new MagicaVoxelData { x = x, y = y, z = z, color = turned[x, y, z] });
-                                culledPositions.Add(Tuple.Create(x, y, z));
+                                culled.Add(z);
+                                culled.Add(y);
+                                culled.Add(x);
+                                //culledStructs.Add(new MagicaVoxelData { x = x, y = y, z = z, color = turned[x, y, z] });
+                                //culledPositions.Add(Tuple.Create(x, y, z));
                                 visible = false;
                             }
                         }
