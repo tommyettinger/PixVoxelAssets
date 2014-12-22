@@ -12215,21 +12215,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static void VoxToBVX(List<MagicaVoxelData> data, string filename, int size)
         {
-            byte[][][] voxels = new byte[size][][];
-            for (int x = 0; x < size; x++)
-            {
-                voxels[x] = new byte[size][];
-                for (int y = 0; y < size; y++)
-                {
-                    voxels[x][y] = new byte[size];
-                    voxels[x][y].Fill((byte)255);
-                }
-            }
+            System.IO.Directory.CreateDirectory("vx_models");
+            System.IO.Directory.CreateDirectory("vx_models/" + filename);
+            int total = data.Count;
+            byte[,,] voxels = new byte[size,size,size];
+            voxels.Fill((byte)255);
             foreach (MagicaVoxelData vox in data)
             {
-                voxels[vox.x][vox.y][vox.z] = (byte)((253 - vox.color) / 4);
+                voxels[vox.x,vox.y,vox.z] = (byte)((253 - vox.color) / 4);
             }
-            using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+            using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + filename + "/" + filename + ".bvx", FileMode.Create)))
             {
                 for (int z = 0; z < size; z++)
                 {
@@ -12237,9 +12232,201 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         for (int x = 0; x < size; x++)
                         {
-                            writer.Write(voxels[x][y][z]);
+                            writer.Write(voxels[x,y,z]);
                         }
                     }
+                }
+            }
+            foreach (string dir in new string[] { "SE", "SW", "NW", "NE" })
+            {
+                byte[,,] turned = voxels.Replicate();
+
+                switch (dir)
+                {
+                    case "SE":
+                        break;
+                    case "SW":
+                        for (int z = 0; z < size; z++)
+                        {
+                            for (int y = 0; y < size; y++)
+                            {
+                                for (int x = 0; x < size; x++)
+                                {
+                                    int newX = y, newY = size - x - 1;
+                                    turned[newX, newY, z] = voxels[x, y, z];
+                                }
+                            }
+                        }
+                        break;
+                    case "NW":
+                        for (int z = 0; z < size; z++)
+                        {
+                            for (int y = 0; y < size; y++)
+                            {
+                                for (int x = 0; x < size; x++)
+                                {
+                                    int newX = size - x - 1, newY = size - y - 1;
+                                    turned[newX, newY, z] = voxels[x, y, z];
+                                }
+                            }
+                        }
+                        break;
+                    case "NE":
+                        for (int z = 0; z < size; z++)
+                        {
+                            for (int y = 0; y < size; y++)
+                            {
+                                for (int x = 0; x < size; x++)
+                                {
+                                    int newX = size - y - 1, newY = x;
+                                    turned[newX, newY, z] = voxels[x, y, z];
+                                }
+                            }
+                        }
+                        break;
+                }
+
+                bool visible = false;
+                int currentX = 0, currentY = 0, width = size * 4 + 8, height = size * 4 + 8;
+                byte[,] edgebuffer = new byte[width, height];
+                //int[,] parentbuffer = new int[width, height];
+                short[,] zbuffer = new short[width, height];
+                zbuffer.Fill(-9999);
+                edgebuffer.Fill(255);
+                //parentbuffer.Fill(-9999);
+                List<byte> culled = new List<byte>(total);
+                List<MagicaVoxelData> culledStructs = new List<MagicaVoxelData>(total);
+                List<Tuple<byte, byte, byte>> culledPositions = new List<Tuple<byte, byte, byte>>(total);
+                for (byte z = (byte)(size - 1); z >= 0 && z != 255; z--)
+                {
+                    for (byte x = (byte)(size - 1); x >= 0 && x != 255; x--)
+                    {
+                        for (byte y = 0; y < size; y++)
+                        {
+                            currentX = (x + y) * 2;
+                            currentY = y - x + z * 3;
+                            if (turned[x, y, z] == 255 || currentX < 0 || currentY < 0 || currentX >= width || currentY >= height)
+                                continue;
+                            for (int ix = 0; ix < 4; ix++)
+                            {
+                                for (int iy = 0; iy < 4; iy++)
+                                {
+                                    if (edgebuffer[ix + currentX, iy + currentY] == 255)
+                                    {
+                                        edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
+                                        zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
+                                        //parentbuffer[ix + currentX, iy + currentY] = (int)((z << 16) | (y << 8) | x);
+                                        visible = true;
+                                    }
+                                }
+                            }
+                            if (visible)
+                            {
+                                culled.Add(x);
+                                culled.Add(y);
+                                culled.Add(z);
+                                culled.Add(turned[x, y, z]);
+                                culledStructs.Add(new MagicaVoxelData { x = x, y = y, z = z, color = turned[x, y, z] });
+                                culledPositions.Add(Tuple.Create(x, y, z));
+                                visible = false;
+                            }
+                        }
+                    }
+                }
+                /*
+                byte[, ,] deeper = turned.Replicate();
+                foreach(Tuple<byte, byte, byte> bbb in culledPositions)
+                {
+                    deeper[bbb.Item1, bbb.Item2, bbb.Item3] = 255;
+                }
+
+
+                visible = false;
+                currentX = 0;
+                currentY = 0;
+                //int[,] parentbuffer = new int[width, height];
+                zbuffer = new short[width, height];
+                zbuffer.Fill(-9999);
+                edgebuffer.Fill(255);
+                //parentbuffer.Fill(-9999);
+                for (byte z = (byte)(size - 1); z >= 0; z--)
+                {
+                    for (byte x = (byte)(size - 1); x >= 0; x--)
+                    {
+                        for (byte y = 0; y < size; y++)
+                        {
+                            currentX = (x + y) * 2;
+                            currentY = y - x + z * 3;
+                            if (turned[x, y, z] == 255 || currentX < 0 || currentY < 0 || currentX >= width || currentY >= height)
+                                continue;
+                            for (int ix = 0; ix < 4; ix++)
+                            {
+                                for (int iy = 0; iy < 4; iy++)
+                                {
+                                    if (edgebuffer[ix + currentX, iy + currentY] == 255)
+                                    {
+                                        edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
+                                        zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
+                                        //parentbuffer[ix + currentX, iy + currentY] = (int)((z << 16) | (y << 8) | x);
+                                        visible = true;
+                                    }
+                                }
+                            }
+                            if (visible)
+                            {
+                                culled.Add(x);
+                                culled.Add(y);
+                                culled.Add(z);
+                                culled.Add(turned[x, y, z]);
+                                culledStructs.Add(new MagicaVoxelData { x = x, y = y, z = z, color = turned[x, y, z] });
+                                culledPositions.Add(Tuple.Create(x, y, z));
+                                visible = false;
+                            }
+                        }
+                    }
+                }
+
+                
+                foreach(MagicaVoxelData v in culledStructs)
+                {
+                    currentX = (v.x + v.y) * 2;
+                    currentY = v.y - v.x + v.z * 3;
+                    //int vz = Math.Max(v.z - 1, 0);
+                    //int vy = (2*currentY + currentX - 2*vz * 3)/4;
+                    //int vx = (2 * height - 2 * currentY + currentX + 2 * vz * 3) / 4;
+                }
+                 
+              */
+                using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + filename + "/" + 
+                    filename + "_[" + size + "]_" + dir + ".cvx", FileMode.Create)))
+                {
+                    culled.Reverse();
+                    writer.Write(culled.ToArray());
+                }
+                byte[] edges = new byte[width * height];
+                edges.Fill((byte)(255));
+
+                for (byte y = 2; y < height - 3; y++)
+                {
+                    for (byte x = 2; x < width - 3; x++)
+                    {
+                        for (int ix = -2; ix <= 2; ix += 2)
+                        {
+                            for (int iy = -2; iy <= 2; iy += 2)
+                            {
+                                if (!(ix == 0 && iy == 0) && zbuffer[x, y] - 2 > zbuffer[x + ix, y + iy])
+                                {
+                                    edges[(y + iy) * width + x + ix] = (zbuffer[x + ix, y + iy] == -9999) ? (byte)254 : edgebuffer[x, y];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + filename + "/" + 
+                    filename + "_[" + width + "x" + height + "]_" + dir + ".evx", FileMode.Create)))
+                {
+                    writer.Write(edges.ToArray());
                 }
             }
         }
@@ -12267,6 +12454,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                 }
             }
+
             return voxels;
         }
 

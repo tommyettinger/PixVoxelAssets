@@ -59,7 +59,35 @@ namespace AssetsPV
             }
             return mat;
         }
-        public static T[,,] Fill<T>(this T[,,] mat, T item)
+        public static byte[,] Fill(this byte[,] mat, byte item)
+        {
+            if (mat.Length == 0)
+                return mat;
+
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+                for (int j = 0; j < mat.GetLength(1); j++)
+                {
+                    mat[i, j] = item;
+                }
+            }
+            return mat;
+        }
+        public static short[,] Fill(this short[,] mat, short item)
+        {
+            if (mat.Length == 0)
+                return mat;
+
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+                for (int j = 0; j < mat.GetLength(1); j++)
+                {
+                    mat[i, j] = item;
+                }
+            }
+            return mat;
+        }
+        public static T[, ,] Fill<T>(this T[, ,] mat, T item)
         {
             if (mat.Length == 0)
                 return mat;
@@ -87,5 +115,56 @@ namespace AssetsPV
             }
             return arr;
         }
+
+        public static T[, ,] Replicate<T>(this T[, ,] mat)
+        {
+            if (mat.Length == 0)
+                return new T[0, 0, 0];
+            int xs = mat.GetLength(0), ys = mat.GetLength(1), zs = mat.GetLength(2);
+            T[, ,] dupe = new T[xs, ys, zs];
+
+            for (int i = 0; i < xs; i++)
+            {
+                for (int j = 0; j < ys; j++)
+                {
+                    for (int k = 0; k < zs; k++)
+                    {
+                        dupe[i, j, k] = mat[i, j, k];
+                    }
+                }
+            }
+            return dupe;
+        }
+        public static T[,] Replicate<T>(this T[,] mat)
+        {
+            if (mat.Length == 0)
+                return new T[0, 0];
+            int xs = mat.GetLength(0), ys = mat.GetLength(1);
+            T[,] dupe = new T[xs, ys];
+
+            for (int i = 0; i < xs; i++)
+            {
+                for (int j = 0; j < ys; j++)
+                {
+                    dupe[i, j] = mat[i, j];
+                }
+
+            }
+            return dupe;
+        }
+        public static T[] Replicate<T>(this T[] mat)
+        {
+            if (mat.Length == 0)
+                return new T[0];
+            int xs = mat.Length;
+            T[] dupe = new T[xs];
+
+            for (int i = 0; i < xs; i++)
+            {
+                    dupe[i] = mat[i];
+            }
+            return dupe;
+        }
+
     }   
 }
