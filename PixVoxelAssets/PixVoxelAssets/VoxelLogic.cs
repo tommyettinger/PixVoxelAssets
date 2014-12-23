@@ -12304,7 +12304,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         for (byte y = 0; y < size; y++)
                         {
                             currentX = (x + y) * 2;
-                            currentY = size + y - x + z * 3;
+                            currentY = size + 4 + y - x + z * 3;
                             if (turned[x, y, z] == 255 || currentX < 0 || currentY < 0 || currentX >= width || currentY >= height)
                                 continue;
                             for (int ix = 0; ix < 4; ix++)
@@ -12313,10 +12313,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 {
                                     if (edgebuffer[ix + currentX, iy + currentY] == 255)
                                     {
-                                        edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
                                         zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
-                                        //parentbuffer[ix + currentX, iy + currentY] = (int)((z << 16) | (y << 8) | x);
                                         visible = true;
+                                        //if (!(ix == 0 && iy == 0) && !(ix == 3 && iy == 0) && !(ix == 0 && iy == 3) && !(ix == 3 && iy == 3))
+                                        edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
+                                        
                                     }
                                 }
                             }
@@ -12406,18 +12407,23 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 byte[] edges = new byte[width * height];
                 edges.Fill((byte)(255));
 
-                for (byte y = 2; y < height - 3; y++)
+                for (byte y = 0; y < height; y++)
                 {
-                    for (byte x = 2; x < width - 3; x++)
+                    for (byte x = 0; x < width; x++)
                     {
-                        for (int ix = -2; ix <= 2; ix += 2)
+                        for (int ix = -2; ix <= 2; ix++)
                         {
-                            for (int iy = -2; iy <= 2; iy += 2)
+                            for (int iy = -2; iy <= 2; iy++)
                             {
-                                if (!(ix == 0 && iy == 0) && zbuffer[x, y] - 2 > zbuffer[x + ix, y + iy])
+                                if (x + ix < 0 || x + ix >= width || y + iy < 0 || y + iy >= height)
                                 {
-                                    edges[(y + iy) * width + x + ix] = (zbuffer[x + ix, y + iy] == -9999) ? (byte)254 : edgebuffer[x, y];
+                                    if (zbuffer[x, y] > -9999) edges[(height - y) * width + x] = (byte)254;
                                 }
+                                else if (zbuffer[x, y] - 2 > zbuffer[x + ix, y + iy]) // &&!(ix == 0 && iy == 0) && !(ix == -2 && iy == -2) && !(ix == 2 && iy == -2) && !(ix == -2 && iy == 2) && !(ix == 2 && iy == 2)
+                                {
+                                    edges[(height - y - iy) * width + x + ix] = (zbuffer[x + ix, y + iy] == -9999 && edgebuffer[x + ix, y + iy] == 255) ? (byte)254 : edgebuffer[x, y];
+                                }
+
                             }
                         }
                     }
