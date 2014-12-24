@@ -9776,10 +9776,10 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Guard", 5, true);
             */
             generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open))), "Zombie", 40);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open))), "Skeleton", 40);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open))), "Male", 40);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open))), "Female", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)))), "Zombie", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)))), "Skeleton", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)))), "Male", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)))), "Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
             /*
             for(int i = 50; i <= 60; i++)
@@ -10311,10 +10311,15 @@ namespace AssetsPV
                 {
                     for (int i = 0; i < 80; i++)
                     {
-                        if (i < 64) //only upper 4 rows
+                        if(VoxelLogic.wpalettes[y][x][3] == VoxelLogic.flat_alpha)
+                        {
+                            if (i < 32 || i >= 64) continue;
+                            argbValues[(y * 5 + (i-32) / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = VoxelLogic.wrendered[y][x][i];
+                        }
+                        else if (i < 64) //only upper 4 rows
                             argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] =
                                 VoxelLogic.wrendered[y][x][i];
-                        else if ((x == 25 || (x >= 17 && x <= 20)) &&
+                        else if ((x >= 17 && x <= 20) &&
                                 !(VoxelLogic.wpalettes[y][x][3] == VoxelLogic.bordered_alpha ||
                                   VoxelLogic.wpalettes[y][x][3] == VoxelLogic.bordered_flat_alpha))
                         {

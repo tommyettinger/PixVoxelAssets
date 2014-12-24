@@ -12237,6 +12237,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                 }
             }
+            /*
             foreach (string dir in new string[] { "SE", "SW", "NW", "NE" })
             {
                 byte[,,] turned = voxels.Replicate();
@@ -12313,10 +12314,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 {
                                     if (edgebuffer[ix + currentX, iy + currentY] == 255)
                                     {
-                                        zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
                                         visible = true;
                                         //if (!(ix == 0 && iy == 0) && !(ix == 3 && iy == 0) && !(ix == 0 && iy == 3) && !(ix == 3 && iy == 3))
-                                        edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
+                                        if (wcolors[turned[x, y, z]][3] != flat_alpha)
+                                        {
+                                            zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
+                                            edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
+                                        }
                                         
                                     }
                                 }
@@ -12397,7 +12401,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     //int vx = (2 * height - 2 * currentY + currentX + 2 * vz * 3) / 4;
                 }
                  
-              */
+              * /
                 using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + filename + "/" + 
                     filename + "_[" + size + "]_" + dir + ".cvx", FileMode.Create)))
                 {
@@ -12435,6 +12439,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     writer.Write(edges.ToArray());
                 }
             }
+            */
         }
         public static List<MagicaVoxelData> readBVX(string filename)
         {
