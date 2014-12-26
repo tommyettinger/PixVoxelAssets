@@ -9776,11 +9776,12 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Guard", 5, true);
             */
             generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
+            /*
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)))), "Zombie", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)))), "Skeleton", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)))), "Male", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)))), "Female", 40);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);*/
             /*
             for(int i = 50; i <= 60; i++)
             {
@@ -9928,6 +9929,7 @@ namespace AssetsPV
             */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
+            processUnitOutlinedWDouble("Ceglia", 61, true);
 
 
             /*
