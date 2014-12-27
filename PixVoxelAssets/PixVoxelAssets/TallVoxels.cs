@@ -6591,9 +6591,10 @@ namespace AssetsPV
                 for (int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
-                    string folder2 = "palette" + palette + "_big";
+/*                    string folder2 = "palette" + palette + "_big";
                     System.IO.Directory.CreateDirectory(folder2);
                     b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
+*/
                     Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
 
@@ -9929,7 +9930,8 @@ namespace AssetsPV
             */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
-            processUnitOutlinedWDouble("Ceglia", 61, true);
+//            processUnitOutlinedWDouble("Ceglia", 61, true);
+            processUnitOutlinedWQuad("Oah", 62, true);
 
 
             /*

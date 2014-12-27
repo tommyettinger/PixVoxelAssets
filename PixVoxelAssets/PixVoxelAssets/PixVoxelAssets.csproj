@@ -404,6 +404,9 @@
     <None Include="Nodebpe_Walk_3_Huge_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Oah_Huge_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Pangolin_Custom.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
