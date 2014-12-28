@@ -6591,10 +6591,10 @@ namespace AssetsPV
                 for (int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
-/*                    string folder2 = "palette" + palette + "_big";
-                    System.IO.Directory.CreateDirectory(folder2);
-                    b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
-*/
+                    /*                    string folder2 = "palette" + palette + "_big";
+                                        System.IO.Directory.CreateDirectory(folder2);
+                                        b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
+                    */
                     Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
 
@@ -6672,8 +6672,9 @@ namespace AssetsPV
                         headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
                     hat_headpoints.AppendLine("EXPLODE_HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
-                    Image h2 = Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (palette == 7 || palette == 8) ? 7 : 0) + "/" + ((palette == 7 || palette == 8) ? "Spirit_" : "Generic_Male_")
-                     + hat + "_Hat_face" + dir + "_" + (f % 4) + ".png");
+                    Image h2 = Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" +
+                        ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
+                        + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f % 4) + ".png");
                     hat_image = new Bitmap(h2);
                     h2.Dispose();
                     Image b2 = Image.FromFile(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
@@ -8408,8 +8409,9 @@ namespace AssetsPV
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
 
                     Graphics hat_graphics;
-                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
-                     + hat + "_Hat_face" + dir + "_" + f + ".png"));
+                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" +
+                        ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
+                        + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f) + ".png"));
                     Bitmap body_image = new Bitmap(Image.FromFile("palette" + palette + "/" + u + "_Large_face" + dir + "_" + f + ".png"));
 
                     VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
@@ -8648,7 +8650,7 @@ namespace AssetsPV
                 }
 
             }
-            
+
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8657,7 +8659,7 @@ namespace AssetsPV
                 s += "color" + i + "/" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay " + ((framelimit != 4) ? 32 : 25) + " -loop 0 " + s + " gifs/" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+
             //bin.Close();
             if (VoxelLogic.UnitLookup.ContainsKey(u))
                 processFiringPartial(u);
@@ -9102,7 +9104,7 @@ namespace AssetsPV
 
             List<Tuple<int, int>> path = new List<Tuple<int, int>>();
             int x;
-            int initial_y = (r.Next(3, height - 4) /2) * 2 + 1;
+            int initial_y = (r.Next(3, height - 4) / 2) * 2 + 1;
             int y = initial_y;
             int midpoint = width / 2;
             int dir = (r.Next(2) == 0) ? -1 : 1;
@@ -9930,11 +9932,11 @@ namespace AssetsPV
             */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
-//            processUnitOutlinedWDouble("Ceglia", 61, true);
-            processUnitOutlinedWQuad("Oah", 62, true);
+            //            processUnitOutlinedWDouble("Ceglia", 61, true);
+            //            processUnitOutlinedWQuad("Oah", 62, true);
 
 
-            /*
+
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9947,6 +9949,7 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Sheriff");
             processWDoubleHat("Generic_Male", 0, "Thief");
             processWDoubleHat("Generic_Male", 0, "Merchant");
+            processWDoubleHat("Generic_Male", 49, "Farmer");
 
 
             processWDoubleHat("Spirit", 7, "Berserker");
@@ -9961,9 +9964,10 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Sheriff");
             processWDoubleHat("Spirit", 7, "Thief");
             processWDoubleHat("Spirit", 7, "Merchant");
-            */
+            processWDoubleHat("Spirit", 49, "Farmer");
+
             string[] classes = new string[] { 
-              "Berserker"
+              /*"Berserker"
             , "Witch"
             , "Scout"
             , "Captain"
@@ -9974,85 +9978,87 @@ namespace AssetsPV
             , "Woodsman"
             , "Sheriff"
             , "Thief"
-            , "Merchant"};
+            , "Merchant"*/
+            "Farmer"};
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
             // processUnitOutlinedWQuad("Boulder", 48, true);
-            /*            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
-                        processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
-             */
-            /*            processUnitOutlinedWQuad("Door_Closed", 49, true);
-                        processUnitOutlinedWQuad("Door_Open", 49, true);
-                        processUnitOutlinedWQuad("Wall_Straight", 49, true);
-                        processUnitOutlinedWQuad("Wall_Cross", 49, true);
-                        processUnitOutlinedWQuad("Wall_Tee", 49, true);
-                        processUnitOutlinedWQuad("Wall_Corner", 49, true);
-                        processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
-                        processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
-                        processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
-                        processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-                        */
+            /*
+            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
+
+            processUnitOutlinedWQuad("Door_Closed", 49, true);
+            processUnitOutlinedWQuad("Door_Open", 49, true);
+            processUnitOutlinedWQuad("Wall_Straight", 49, true);
+            processUnitOutlinedWQuad("Wall_Cross", 49, true);
+            processUnitOutlinedWQuad("Wall_Tee", 49, true);
+            processUnitOutlinedWQuad("Wall_Corner", 49, true);
+            processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
+            */
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-            /*
+
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
 
             processHats("Skeleton_Spear", 6, true, classes);
-            
+
             processHats("Spirit", 7, false, classes);
 
             processHats("Wraith", 8, false, classes);
-            
+
             processHats("Cinder", 9, true, classes);
-            
+
             processHats("Ghoul", 39, true, classes);
-            
+
             processHats("Wight", 40, true, classes);
-            
+
             processHats("Spectre", 42, false, classes);
-            
+
             processHats("Mummy", 43, true, classes);
-            
+
             processHats("Drowned", 45, true, classes);
-            
+
             processHats("Banshee", 46, false, classes);
 
-            
+
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
-            
+
             processHats("Generic_Male", 1, true, classes, "Living_Men_B");
-            
+
             processHats("Generic_Male", 15, true, classes, "Living_Men_C");
-            
+
             processHats("Generic_Male", 16, true, classes, "Living_Men_D");
-            
+
             processHats("Generic_Male", 17, true, classes, "Living_Men_E");
-            
+
             processHats("Generic_Female", 0, true, classes, "Living_Women_A");
-            
+
             processHats("Generic_Female", 1, true, classes, "Living_Women_B");
-            
+
             processHats("Generic_Female", 15, true, classes, "Living_Women_C");
-            
+
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
-            
+
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
-            
-            
+
+
             File.WriteAllText("bodies.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
-            */
+
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 
 
@@ -10258,14 +10264,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
-
+            /*
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-
+            */
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10275,14 +10281,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
-
+            /*
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-
+            */
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10315,10 +10321,10 @@ namespace AssetsPV
                 {
                     for (int i = 0; i < 80; i++)
                     {
-                        if(VoxelLogic.wpalettes[y][x][3] == VoxelLogic.flat_alpha)
+                        if (VoxelLogic.wpalettes[y][x][3] == VoxelLogic.flat_alpha)
                         {
                             if (i < 32 || i >= 64) continue;
-                            argbValues[(y * 5 + (i-32) / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = VoxelLogic.wrendered[y][x][i];
+                            argbValues[(y * 5 + (i - 32) / 16) * bmpData.Stride + x * 4 * 4 + i % 16] = VoxelLogic.wrendered[y][x][i];
                         }
                         else if (i < 64) //only upper 4 rows
                             argbValues[(y * 5 + i / 16) * bmpData.Stride + x * 4 * 4 + i % 16] =

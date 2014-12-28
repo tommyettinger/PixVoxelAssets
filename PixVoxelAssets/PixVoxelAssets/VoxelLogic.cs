@@ -6649,15 +6649,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.5F,0.5F,0.35F,fuzz_alpha},
+            new float[] {0.5F,0.45F,0.3F,fuzz_alpha},
             //29 fuzz deep            
             new float[] {0.6F,0.55F,0.39F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.7F,0.7F,0.43F,fuzz_alpha},
+            new float[] {0.7F,0.65F,0.43F,fuzz_alpha},
             //31 fuzz mid-light
             new float[] {0.8F,0.75F,0.47F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.9F,0.95F,0.51F,fuzz_alpha},
+            new float[] {0.9F,0.85F,0.51F,fuzz_alpha},
             //33 fuzz lightest
             new float[] {0.95F,0.9F,0.55F,fuzz_alpha},
             //34 gore
