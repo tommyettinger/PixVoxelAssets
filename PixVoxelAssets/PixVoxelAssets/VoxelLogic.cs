@@ -6946,13 +6946,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             new float[][] { //62 oah
             //0 obsidian contrast
-            new float[] {0.3F,0.3F,0.3F,1F},
+            new float[] {0.1F,0.07F,0.03F,1F},
             //1 obsidian
-            new float[] {0.45F,0.45F,0.45F,1F},
+            new float[] {0.25F,0.22F,0.18F,1F},
             //2 cannon contrast
-            new float[] {0.15F,0.5F,0.5F,1F},
+            new float[] {0.12F,0.3F,0.3F,1F},
             //3 cannon
-            new float[] {0.3F,0.65F,0.65F,1F},
+            new float[] {0.25F,0.45F,0.45F,1F},
             //4 arms contrast
             new float[] {0.3F,0.0F,-0.1F,1F},
             //5 arms
