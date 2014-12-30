@@ -9967,7 +9967,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 49, "Farmer");
 
             string[] classes = new string[] { 
-              /*"Berserker"
+              "Berserker"
             , "Witch"
             , "Scout"
             , "Captain"
@@ -9978,8 +9978,8 @@ namespace AssetsPV
             , "Woodsman"
             , "Sheriff"
             , "Thief"
-            , "Merchant"*/
-            "Farmer"};
+            , "Merchant"
+            , "Farmer"};
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
@@ -10009,7 +10009,7 @@ namespace AssetsPV
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10054,11 +10054,22 @@ namespace AssetsPV
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
 
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
+            */
 
 
-            File.WriteAllText("bodies.txt", model_headpoints.ToString());
-            File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            processHats("Bulky_Male", 0, true, classes, "Bulky_Men_A");
 
+            processHats("Bulky_Male", 1, true, classes, "Bulky_Men_B");
+
+            processHats("Bulky_Male", 15, true, classes, "Bulky_Men_C");
+
+            processHats("Bulky_Male", 16, true, classes, "Bulky_Men_D");
+
+            processHats("Bulky_Male", 17, true, classes, "Bulky_Men_E");
+
+//            File.WriteAllText("bodies.txt", model_headpoints.ToString());
+//            File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 
 
@@ -10264,14 +10275,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
-            /*
+            
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            */
+            
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10281,14 +10292,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
-            /*
+            
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            */
+            
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
