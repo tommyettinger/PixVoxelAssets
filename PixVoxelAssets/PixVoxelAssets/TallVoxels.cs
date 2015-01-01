@@ -10054,9 +10054,8 @@ namespace AssetsPV
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
 
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
-            */
-
-
+            
+            
             processHats("Bulky_Male", 0, true, classes, "Bulky_Men_A");
 
             processHats("Bulky_Male", 1, true, classes, "Bulky_Men_B");
@@ -10066,6 +10065,17 @@ namespace AssetsPV
             processHats("Bulky_Male", 16, true, classes, "Bulky_Men_D");
 
             processHats("Bulky_Male", 17, true, classes, "Bulky_Men_E");
+            */
+
+            processHats("Bulky_Female", 0, true, classes, "Bulky_Women_A");
+
+            processHats("Bulky_Female", 1, true, classes, "Bulky_Women_B");
+
+            processHats("Bulky_Female", 15, true, classes, "Bulky_Women_C");
+
+            processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
+
+            processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
 
 //            File.WriteAllText("bodies.txt", model_headpoints.ToString());
 //            File.WriteAllText("hats.txt", hat_headpoints.ToString());
