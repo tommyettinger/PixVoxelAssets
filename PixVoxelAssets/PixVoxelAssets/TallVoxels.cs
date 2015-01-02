@@ -9741,7 +9741,8 @@ namespace AssetsPV
             , "Thief"
             , "Merchant"
             , "Farmer"
-            , */"Officer"
+            , "Officer"
+            ,  */"Dervish"
         };
 
         /// <summary>
@@ -9968,6 +9969,7 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Merchant");
             processWDoubleHat("Generic_Male", 49, "Farmer");
             processWDoubleHat("Generic_Male", 0, "Officer");
+            processWDoubleHat("Generic_Male", 0, "Dervish");
 
 
             processWDoubleHat("Spirit", 7, "Berserker");
@@ -9984,6 +9986,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Merchant");
             processWDoubleHat("Spirit", 49, "Farmer");
             processWDoubleHat("Spirit", 7, "Officer");
+            processWDoubleHat("Spirit", 7, "Dervish");
 
 
             //processUnitOutlinedWQuad("Grass", 47, true);
