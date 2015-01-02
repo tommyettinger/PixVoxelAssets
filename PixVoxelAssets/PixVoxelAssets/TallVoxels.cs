@@ -9727,6 +9727,23 @@ namespace AssetsPV
             return b;
         }
 
+        static string[] classes = new string[] { 
+              /*"Berserker"
+            , "Witch"
+            , "Scout"
+            , "Captain"
+            , "Mystic"
+            , "Wizard"
+            , "Provocateur"
+            , "Noble"
+            , "Woodsman"
+            , "Sheriff"
+            , "Thief"
+            , "Merchant"
+            , "Farmer"
+            , */"Officer"
+        };
+
         /// <summary>
         /// This will take a long time to run.  It should produce a ton of assets and an animated gif preview.
         /// </summary>
@@ -9950,6 +9967,7 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Thief");
             processWDoubleHat("Generic_Male", 0, "Merchant");
             processWDoubleHat("Generic_Male", 49, "Farmer");
+            processWDoubleHat("Generic_Male", 0, "Officer");
 
 
             processWDoubleHat("Spirit", 7, "Berserker");
@@ -9965,21 +9983,8 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Thief");
             processWDoubleHat("Spirit", 7, "Merchant");
             processWDoubleHat("Spirit", 49, "Farmer");
+            processWDoubleHat("Spirit", 7, "Officer");
 
-            string[] classes = new string[] { 
-              "Berserker"
-            , "Witch"
-            , "Scout"
-            , "Captain"
-            , "Mystic"
-            , "Wizard"
-            , "Provocateur"
-            , "Noble"
-            , "Woodsman"
-            , "Sheriff"
-            , "Thief"
-            , "Merchant"
-            , "Farmer"};
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
@@ -10009,7 +10014,7 @@ namespace AssetsPV
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-            /*
+            
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10065,7 +10070,7 @@ namespace AssetsPV
             processHats("Bulky_Male", 16, true, classes, "Bulky_Men_D");
 
             processHats("Bulky_Male", 17, true, classes, "Bulky_Men_E");
-            */
+            
 
             processHats("Bulky_Female", 0, true, classes, "Bulky_Women_A");
 
