@@ -9955,7 +9955,7 @@ namespace AssetsPV
             //            processUnitOutlinedWQuad("Oah", 62, true);
 
 
-
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -9990,11 +9990,12 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Officer");
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
-
+            */
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
-            // processUnitOutlinedWQuad("Boulder", 48, true);
+            //processUnitOutlinedWQuad("Boulder", 48, true);
+            processUnitOutlinedWQuad("Rubble", 48, true);
             /*
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
@@ -10020,7 +10021,7 @@ namespace AssetsPV
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-            
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10087,7 +10088,7 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-
+            */
 //            File.WriteAllText("bodies.txt", model_headpoints.ToString());
 //            File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
