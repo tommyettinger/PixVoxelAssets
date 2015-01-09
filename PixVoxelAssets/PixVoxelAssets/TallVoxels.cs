@@ -9803,7 +9803,16 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)))), "Skeleton", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Male" + "_Large_W.vox", FileMode.Open)))), "Male", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)))), "Female", 40);
-            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);*/
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
+            */
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Male" + "_Large_W.vox", FileMode.Open)))), "Human_Male", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Female" + "_Large_W.vox", FileMode.Open)))), "Human_Female", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Lomuk" + "_Large_W.vox", FileMode.Open)))), "Lomuk", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tassar" + "_Large_W.vox", FileMode.Open)))), "Tassar", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Glarosp" + "_Large_W.vox", FileMode.Open)))), "Glarosp", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Sfyst" + "_Large_W.vox", FileMode.Open)))), "Sfyst", 40);
+            VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
+            
             /*
             for(int i = 50; i <= 60; i++)
             {
@@ -9995,7 +10004,7 @@ namespace AssetsPV
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
             //processUnitOutlinedWQuad("Boulder", 48, true);
-            processUnitOutlinedWQuad("Rubble", 48, true);
+            //processUnitOutlinedWQuad("Rubble", 48, true);
             /*
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
