@@ -8024,7 +8024,7 @@ namespace AssetsPV
             int framelimit = 4;
 
 
-            string folder = ("palette" + palette);//"color" + i;
+            string folder = (altFolder + "palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
@@ -8042,8 +8042,8 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = "palette" + palette + "/" + u + "_Large_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Large_animated.gif";
+            s = folder + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             //bin.Close();
@@ -8069,7 +8069,7 @@ namespace AssetsPV
             int framelimit = 4;
 
 
-            string folder = ("palette" + palette);//"color" + i;
+            string folder = (altFolder + "palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
@@ -8083,12 +8083,13 @@ namespace AssetsPV
 
 
             System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = "palette" + palette + "/" + u + "_Large_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Large_animated.gif";
+            s = folder + "/" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             //bin.Close();
@@ -8112,7 +8113,7 @@ namespace AssetsPV
             int framelimit = 4;
 
 
-            string folder = ("palette" + palette);//"color" + i;
+            string folder = (altFolder + "palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
@@ -8130,8 +8131,8 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = "palette" + palette + "/" + u + "_Huge_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Huge_animated.gif";
+            s = folder + "/" + u + "_Huge_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             //bin.Close();
@@ -8173,8 +8174,8 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = "palette" + palette + "/" + u + "_Huge_face* ";
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Huge_animated.gif";
+            s = folder + "/" + u + "_Huge_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
             //bin.Close();
@@ -8224,7 +8225,7 @@ namespace AssetsPV
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed[f % 4], palette, dir, f, framelimit, true);
-                    b.Save(folder + "/" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(altFolder + folder + "/" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
@@ -8238,10 +8239,10 @@ namespace AssetsPV
             {
                 for (int i = 0; i < framelimit; i++)
                 {
-                    s += "palette" + palette + "/" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
+                    s += altFolder + "palette" + palette + "/" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
                 }
             }
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Walk_Large_animated.gif";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
 
@@ -8290,7 +8291,7 @@ namespace AssetsPV
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWQuad(parsed[f % 4], palette, dir, f, framelimit, true);
-                    b.Save(folder + "/" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(altFolder + folder + "/" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
@@ -8304,10 +8305,10 @@ namespace AssetsPV
             {
                 for (int i = 0; i < framelimit; i++)
                 {
-                    s += "palette" + palette + "/" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
+                    s += altFolder + "palette" + palette + "/" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
                 }
             }
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_Walk_Huge_animated.gif";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
 
@@ -9745,7 +9746,7 @@ namespace AssetsPV
             ,  "Dervish"
             ,  */"Thug"
         };
-
+        public static string altFolder = "";
         /// <summary>
         /// This will take a long time to run.  It should produce a ton of assets and an animated gif preview.
         /// </summary>
@@ -9755,14 +9756,47 @@ namespace AssetsPV
             VoxelLogic.Initialize();
 
             VoxelLogic.InitializeXPalette();
-            VoxelLogic.wpalettes = AlternatePalettes.wpalettes;
-            VoxelLogic.InitializeWPalette();
+            VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
+            altFolder = "beast/scheme0";
+//            VoxelLogic.InitializeWPalette();
 
             System.IO.Directory.CreateDirectory("Palettes");
             System.IO.Directory.CreateDirectory("indexed");
 
-            processUnitOutlinedWDouble("Wolf", 5, true);
+            System.IO.Directory.CreateDirectory("beast");
 
+            for (int p = 1; p < AlternatePalettes.schemes.Length; p++)
+            {
+                VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
+                altFolder = "beast/scheme" + p + "/";
+                VoxelLogic.InitializeWPalette();
+
+                System.IO.Directory.CreateDirectory("beast/scheme" + p);
+
+                processUnitOutlinedWDouble("Generic_Male", 0, true);
+                processUnitOutlinedWDouble("Generic_Male", 1, true);
+                processUnitOutlinedWDouble("Generic_Male", 2, true);
+                processUnitOutlinedWDouble("Generic_Male", 3, true);
+                processUnitOutlinedWDouble("Generic_Male", 4, true);
+                processUnitOutlinedWDouble("Generic_Female", 0, true);
+                processUnitOutlinedWDouble("Generic_Female", 1, true);
+                processUnitOutlinedWDouble("Generic_Female", 2, true);
+                processUnitOutlinedWDouble("Generic_Female", 3, true);
+                processUnitOutlinedWDouble("Generic_Female", 4, true);
+
+                processUnitOutlinedWDouble("Bulky_Male", 0, true);
+                processUnitOutlinedWDouble("Bulky_Male", 1, true);
+                processUnitOutlinedWDouble("Bulky_Male", 2, true);
+                processUnitOutlinedWDouble("Bulky_Male", 3, true);
+                processUnitOutlinedWDouble("Bulky_Male", 4, true);
+                processUnitOutlinedWDouble("Bulky_Female", 0, true);
+                processUnitOutlinedWDouble("Bulky_Female", 1, true);
+                processUnitOutlinedWDouble("Bulky_Female", 2, true);
+                processUnitOutlinedWDouble("Bulky_Female", 3, true);
+                processUnitOutlinedWDouble("Bulky_Female", 4, true);
+
+                processUnitOutlinedWDouble("Wolf", 5, true);
+            }
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
