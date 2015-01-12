@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternatePalettes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IOrderedDictionary.cs" />
     <Compile Include="LocalMap.cs" />
@@ -621,6 +622,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Wizard_Hat_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Wolf_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Woodsman_Hat_W.vox">

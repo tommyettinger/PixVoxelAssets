@@ -9755,10 +9755,14 @@ namespace AssetsPV
             VoxelLogic.Initialize();
 
             VoxelLogic.InitializeXPalette();
+            VoxelLogic.wpalettes = AlternatePalettes.wpalettes;
             VoxelLogic.InitializeWPalette();
 
             System.IO.Directory.CreateDirectory("Palettes");
             System.IO.Directory.CreateDirectory("indexed");
+
+            processUnitOutlinedWDouble("Wolf", 5, true);
+
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
@@ -9797,7 +9801,7 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Lord", 4, true);
             processUnitOutlinedWDouble("Guard", 5, true);
             */
-            generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
+            //generateVoxelSpritesheet().Save("voxels.png", ImageFormat.Png);
             /*
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Zombie" + "_Large_W.vox", FileMode.Open)))), "Zombie", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Skeleton" + "_Large_W.vox", FileMode.Open)))), "Skeleton", 40);
@@ -9805,6 +9809,7 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)))), "Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
             */
+            /*
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Male" + "_Large_W.vox", FileMode.Open)))), "Human_Male", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Female" + "_Large_W.vox", FileMode.Open)))), "Human_Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Lomuk" + "_Large_W.vox", FileMode.Open)))), "Lomuk", 40);
@@ -9812,7 +9817,7 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Glarosp" + "_Large_W.vox", FileMode.Open)))), "Glarosp", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Sfyst" + "_Large_W.vox", FileMode.Open)))), "Sfyst", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
-            
+            */
             /*
             for(int i = 50; i <= 60; i++)
             {
@@ -10339,7 +10344,7 @@ namespace AssetsPV
         }
         private static Bitmap generateVoxelSpritesheet()
         {
-            Bitmap bmp = new Bitmap(1024, 1024, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(512, 512, PixelFormat.Format32bppArgb);
 
             // Specify a pixel format.
             PixelFormat pxf = PixelFormat.Format32bppArgb;

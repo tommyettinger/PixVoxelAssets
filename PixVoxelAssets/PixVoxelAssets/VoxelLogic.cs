@@ -12575,6 +12575,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             currentY = size + 4 + y - x + z * 3;
                             if (turned[x, y, z] == 255 || currentX < 0 || currentY < 0 || currentX >= width || currentY >= height)
                                 continue;
+
+                            var pos = Tuple.Create(x, y, z);
+
                             for (int ix = 0; ix < 4; ix++)
                             {
                                 for (int iy = 0; iy < 4; iy++)
@@ -12587,7 +12590,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         {
                                             zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
                                             edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
-                                            posbuffer[ix + currentX, iy + currentY] = Tuple.Create(x, y, z);
+                                            posbuffer[ix + currentX, iy + currentY] = pos;
                                         }
                                         
                                     }
@@ -12599,7 +12602,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 culled.Add(z);
                                 culled.Add(y);
                                 culled.Add(x);
-                                culledStructs.Add(Tuple.Create(x, y, z), new TotalVoxel(x, y, z, turned[x, y, z], new byte[6], size));
+                                culledStructs.Add(pos, new TotalVoxel(x, y, z, turned[x, y, z], new byte[6], size));
                                 //culledPositions.Add(Tuple.Create(x, y, z));
                                 visible = false;
                             }
@@ -12611,16 +12614,22 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     int x = kv.Value.screenX;
                     int y = kv.Value.screenY;
                     int iter = 0;
-                    byte[] bits = new byte[6];
+                    byte[] bits = new byte[6]{0, 0, 0, 0, 0, 0};
                     for (int iy = -2; iy < 6; iy++)
                     {
                         for (int ix = -2; ix < 6; ix++)
                         {
-                            if (!(x + ix < 0 || x + ix >= width || y + iy < 0 || y + iy >= height || (ix >= 0 && ix <= 3 && iy >= 0 && iy <= 3)) &&
-                                zbuffer[x, y] - 2 > zbuffer[x + ix, y + iy] && posbuffer[x + ix, y + iy] != null && posbuffer[x + ix, y + iy] == kv.Key &&
-                                edgebuffer[x, y] != 255)
+                            if (!(x + ix < 0 || x + ix >= width || y + iy < 0 || y + iy >= height || (ix >= 0 && ix <= 3 && iy >= 0 && iy <= 3)))
                             {
-                                bits[5 - iter / 8] |= (byte)(1 << (iter % 8));
+                                if (zbuffer[x, y] - 2 > zbuffer[x + ix, y + iy] && posbuffer[x + ix, y + iy] != null
+                                    //&& posbuffer[x + ix, y + iy].Item1 == kv.Key.Item1
+                                    //&& posbuffer[x + ix, y + iy].Item2 == kv.Key.Item2
+                                    //&& posbuffer[x + ix, y + iy].Item3 == kv.Key.Item3
+                                    && edgebuffer[x, y] != 255
+                                    && edgebuffer[x + ix, y + iy] == kv.Value.color)
+                                {
+                                    bits[5 - iter / 8] |= (byte)(1 << (iter % 8));
+                                }
                                 iter++;
                             }
                         }
@@ -12632,7 +12641,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     totalStructs.Add(kv.Value.x);
                 }
 
-                using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + filename + "/" +
+                using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + // filename + "/" +
                     filename + "_[" + size + "]_" + dir + ".tvx", FileMode.Create)))
                 {
                     totalStructs.Reverse();
