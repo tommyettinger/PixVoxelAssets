@@ -6613,7 +6613,7 @@ namespace AssetsPV
             }
 
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -6626,7 +6626,7 @@ namespace AssetsPV
                 }
             }
 
-            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_explosion_animated.gif";
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
@@ -6799,7 +6799,7 @@ namespace AssetsPV
                 }
             }
 
-            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_explosion_animated.gif";
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
@@ -6852,7 +6852,7 @@ namespace AssetsPV
                 }
             }
 
-            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_explosion_animated.gif";
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
 
@@ -9765,7 +9765,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("beast");
 
-            for (int p = 1; p < AlternatePalettes.schemes.Length; p++)
+            for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
