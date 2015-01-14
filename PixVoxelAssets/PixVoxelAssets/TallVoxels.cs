@@ -9772,7 +9772,7 @@ namespace AssetsPV
                 VoxelLogic.InitializeWPalette();
 
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
-
+                /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
                 processUnitOutlinedWDouble("Generic_Male", 2, true);
@@ -9794,8 +9794,9 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 2, true);
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
-
+                */
                 processUnitOutlinedWDouble("Wolf", 5, true);
+                processUnitOutlinedWDouble("Drakeling", 6, false);
             }
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
