@@ -12873,6 +12873,42 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             ret.Add(hat.OrderBy(md => md.z).First());
             return ret;
         }
-        
+
+        public delegate List<MagicaVoxelData> Augmenter(MagicaVoxelData initial);
+        public static MagicaVoxelData AlterVoxel(MagicaVoxelData initial, int xModifier, int yModifier, int zModifier, int color)
+        {
+            return new MagicaVoxelData {
+                x = (byte)((initial.x + xModifier < 0) ? 0 : initial.x + xModifier),
+                y = (byte)((initial.y + yModifier < 0) ? 0 : initial.y + yModifier),
+                z = (byte)((initial.z + zModifier < 0) ? 0 : initial.z + zModifier),
+                color = (byte)(253 - (color * 4)) };
+        }
+        public static MagicaVoxelData AlterVoxel(MagicaVoxelData initial, int color)
+        {
+            return new MagicaVoxelData { x = initial.x, y = initial.y, z = initial.z, color = (byte)(253 - (color * 4)) };
+        }
+        public static List<MagicaVoxelData> FireAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            if (((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && r.Next(9) == 0)
+            {
+                int waver = r.Next(3) - 1;
+                if (r.Next(2) == 0) waver = 0;
+                return new List<MagicaVoxelData> { AlterVoxel(initial, 18), AlterVoxel(initial, 0, 0, 1, 19), AlterVoxel(initial, 0, waver, 1, 19),
+                    AlterVoxel(initial, 0, waver, 2, 17) }; //, AlterVoxel(initial, 0, waver*2, 2, 17), AlterVoxel(initial, 0, waver*2, 3, 17)
+            }
+            else return new List<MagicaVoxelData> { initial };
+        }
+        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string,Augmenter>{ {"Fire", FireAugmenter} };
+        public static List<MagicaVoxelData> ElementalAugment(List<MagicaVoxelData> voxels, Augmenter converter)
+        {
+            List<MagicaVoxelData> ret = new List<MagicaVoxelData>(voxels.Count * 2);
+            foreach(MagicaVoxelData vox in voxels)
+            {
+                ret.AddRange(converter(vox));
+            }
+            return ret;
+        }
+
     }
 }
