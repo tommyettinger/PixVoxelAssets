@@ -9212,12 +9212,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 foreach (MagicaVoxelData v in vls)
                 {
                     MagicaVoxelData mvd = new MagicaVoxelData();
-                    int c = (253 - v.color) / 4;
+                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + VoxelLogic.wcolorcount : (253 - v.color) / 4;
                     if (c == 8 || c == 9) //flesh
                         mvd.color = (byte)((r.Next(1 + f) == 0) ? 253 - 34 * 4 : (r.Next(8) == 0) ? 253 - 19 * 4 : v.color); //random transform to guts
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(18) == 0) ? 253 - 19 * 4 : v.color); //random transform to orange fire
-                    else if (c >= wcolorcount - 1) //clear and markers
+                    else if (c == wcolorcount - 1) //clear
                         mvd.color = clear; //clear stays clear
                     else if (c == 16)
                         mvd.color = clear; //clear inner shadow
@@ -9225,6 +9225,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
                         mvd.color = 253 - 27 * 4; //water stays water
+                    else if (c >= wcolorcount && c < wcolorcount + 5)
+                        mvd.color = v.color; // falling water stays falling water
                     else if (c == 40)
                         mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
                     else if (c >= 21 && c <= 24) //lights
@@ -9433,12 +9435,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 foreach (MagicaVoxelData v in vls)
                 {
                     MagicaVoxelData mvd = new MagicaVoxelData();
-                    int c = (253 - v.color) / 4;
+                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + VoxelLogic.wcolorcount : (253 - v.color) / 4;
                     if (c == 8 || c == 9) //flesh
                         mvd.color = (byte)((r.Next(f) == 0) ? 253 - 34 * 4 : (r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to guts
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to orange fire
-                    else if (c >= 47) //clear and markers
+                    else if (c == wcolorcount - 1) //clear and markers
                         mvd.color = (byte)clear; //clear stays clear
                     else if (c == 16)
                         mvd.color = clear; //clear inner shadow
@@ -9446,6 +9448,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
                         mvd.color = 253 - 27 * 4; //water stays water
+                    else if (c >= wcolorcount && c < wcolorcount + 5)
+                        mvd.color = (byte)(255 - (c - wcolorcount) * 4); // falling water stays falling water
                     else if (c == 40)
                         mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
                     else if (c >= 21 && c <= 24) //lights
@@ -9744,12 +9748,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 foreach (MagicaVoxelData v in vls)
                 {
                     MagicaVoxelData mvd = new MagicaVoxelData();
-                    int c = (253 - v.color) / 4;
+                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + wcolorcount : (253 - v.color) / 4;
                     if (c == 8 || c == 9) //flesh
                         mvd.color = (byte)((r.Next(1 + f) == 0) ? 253 - 34 * 4 : (r.Next(8) == 0) ? 253 - 19 * 4 : v.color); //random transform to guts
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(18) == 0) ? 253 - 19 * 4 : v.color); //random transform to orange fire
-                    else if (c >= 47) //clear and markers
+                    else if (c == wcolorcount - 1) //clear and markers
                         mvd.color = clear; //clear stays clear
                     else if (c == 16)
                         mvd.color = clear; //clear inner shadow
@@ -9757,6 +9761,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
                         mvd.color = 253 - 27 * 4; //water stays water
+                    else if (c >= wcolorcount && c < wcolorcount + 5)
+                        mvd.color = (byte)(255 - (c - wcolorcount) * 4); // falling water stays falling water
                     else if (c == 40)
                         mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
                     else if (c >= 21 && c <= 24) //lights
@@ -9965,12 +9971,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 foreach (MagicaVoxelData v in vls)
                 {
                     MagicaVoxelData mvd = new MagicaVoxelData();
-                    int c = (253 - v.color) / 4;
+                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + wcolorcount : (253 - v.color) / 4;
                     if (c == 8 || c == 9) //flesh
                         mvd.color = (byte)((r.Next(f) == 0) ? 253 - 34 * 4 : (r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to guts
                     else if (c == 34) //guts
                         mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to orange fire
-                    else if (c >= 47) //clear and markers
+                    else if (c == wcolorcount - 1) //clear and markers
                         mvd.color = (byte)clear; //clear stays clear
                     else if (c == 16)
                         mvd.color = clear; //clear inner shadow
@@ -9978,6 +9984,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = 253 - 25 * 4; //shadow stays shadow
                     else if (c == 27)
                         mvd.color = 253 - 27 * 4; //water stays water
+                    else if (c >= wcolorcount && c < wcolorcount + 5)
+                        mvd.color = (byte)(255 - (c - wcolorcount) * 4); // falling water stays falling water
                     else if (c == 40)
                         mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
                     else if (c >= 21 && c <= 24) //lights
@@ -12971,7 +12979,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             else return new List<MagicaVoxelData> { initial };
         }
-        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { //{ "Fire", FireAugmenter },
+        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { { "Fire", FireAugmenter },
                                                                                                      { "Water", WaterAugmenter } };
         public static List<MagicaVoxelData> ElementalAugment(List<MagicaVoxelData> voxels, Augmenter converter)
         {
