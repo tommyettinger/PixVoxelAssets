@@ -1723,5 +1723,23 @@ namespace AssetsPV
             };
 
         public static float[][][][] schemes = new float[][][][] { scheme0, scheme1 };
+
+        static AlternatePalettes()
+        {
+            VoxelLogic.wcolorcount = schemes[0][0].Length;
+            for (int s = 0; s < schemes.Length; s++)
+            {
+                for (int p = 0; p < schemes[s].Length; p++)
+                {
+                    if (p >= 50 && p <= 60)
+                        continue;
+                    float[] drip = schemes[s][p][27], transp = schemes[s][p][VoxelLogic.wcolorcount - 1];
+                    drip[3] = 1F;
+                    schemes[s][p] = schemes[s][p].Concat(new float[][] { drip, transp, transp, transp, drip}).ToArray();
+                }
+            }
+        }
+
+
     }
 }

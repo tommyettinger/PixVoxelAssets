@@ -141,7 +141,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             MobilityToTerrains[MovementType.WheelsTraverse] =
                 new List<int>() { 0, 1, 2, 3, 6, 7, 8 };
             MobilityToTerrains[MovementType.Naval] =
-                new List<int>() { 9, 11};
+                new List<int>() { 9, 11 };
             MobilityToTerrains[MovementType.Immobile] =
                 new List<int>() { };
 
@@ -7263,7 +7263,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         for (int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
-                            
+
                             cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
                             cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
                             cubes[88 + current_color + (8 * frame)][i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
@@ -7313,13 +7313,28 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
         public static byte clear = 255;
-        public static int[] drabPalettes = {47};
-        private static byte[][][] storeColorCubesW()
+        public static int[] drabPalettes = { 47 };
+
+        static VoxelLogic()
         {
             wpalettecount = wpalettes.Length;
             wcolorcount = wpalettes[0].Length;
             clear = (byte)(253 - (wcolorcount - 1) * 4);
-            byte[, ,] cubes = new byte[wpalettecount, wcolorcount, 80];
+            for (int p = 0; p < wpalettecount; p++)
+            {
+                if (p >= 50 && p <= 60)
+                    continue;
+                float[] drip = wpalettes[p][27], transp = wpalettes[p][wcolorcount - 1];
+                drip[3] = 1F;
+                wpalettes[p] = wpalettes[p].Concat(new float[][] { drip, transp, transp, transp, drip }).ToArray();
+            }
+        }
+
+        private static byte[][][] storeColorCubesW()
+        {
+            wpalettecount = wpalettes.Length;
+//            wcolorcount = wpalettes[0].Length;
+            byte[, ,] cubes = new byte[wpalettecount, wpalettes[0].Length, 80];
 
             Image image = new Bitmap("cube_soft.png");
             Image flat = new Bitmap("flat_soft.png");
@@ -7340,11 +7355,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                colorMatrix,
                ColorMatrixFlag.Default,
                ColorAdjustType.Bitmap);
-            for (int p = 0; p < wpalettecount; p++)
+            for (int p = 0; p < wpalettes.Length; p++)
             {
-                if(p >= 50 && p <= 60)
+                if (p >= 50 && p <= 60)
                 {
-                    float[][] temp = new float[wcolorcount][];
+                    float[][] temp = new float[wpalettes[0].Length][];
                     temp[0] = wpalettes[p][0];
                     temp[0][0] -= 0.4f;
                     temp[0][1] -= 0.4f;
@@ -7363,19 +7378,19 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     temp[3][0] += 0.05f;
                     temp[3][1] += 0.05f;
                     temp[3][2] += 0.05f;
-                    for (int c = 4; c < wcolorcount; c++)
+                    for (int c = 4; c < wpalettes[0].Length; c++)
                     {
                         temp[c] = wcolors[c];
                     }
                     wpalettes[p] = temp;
                 }
-                for (int current_color = 0; current_color < wcolorcount; current_color++)
+                for (int current_color = 0; current_color < wpalettes[0].Length; current_color++)
                 {
                     Bitmap b =
                     new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
                     Graphics g = Graphics.FromImage((Image)b);
-                    
+
                     if (current_color == 25)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{ 
@@ -7488,10 +7503,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                             if (c.A != 0)
                             {
-                                cubes[p,current_color,i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
-                                cubes[p,current_color,i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
-                                cubes[p,current_color,i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
-                                cubes[p,current_color,i * 4 + j * width * 4 + 3] = c.A;
+                                cubes[p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 3] = c.A;
                             }
                             else
                             {
@@ -7548,11 +7563,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     }
                                 }*/
             }
-            byte[][][] cubes2 = new byte[wpalettecount][][];
-            for (int i = 0; i < wpalettecount; i++)
+            byte[][][] cubes2 = new byte[wpalettes.Length][][];
+            for (int i = 0; i < wpalettes.Length; i++)
             {
-                cubes2[i] = new byte[wcolorcount][];
-                for (int c = 0; c < wcolorcount; c++)
+                cubes2[i] = new byte[wpalettes[0].Length][];
+                for (int c = 0; c < wpalettes[0].Length; c++)
                 {
                     cubes2[i][c] = new byte[80];
                     for (int j = 0; j < 80; j++)
@@ -7848,7 +7863,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
                 if (voxelData[i].color > 257 - wcolorcount * 4 && (254 - voxelData[i].color) % 4 == 0)
                 {
-                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1)};
+                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
                 }
                 voxelsAltered.Add(voxelData[i]);
                 if (-1 == taken[voxelData[i].x, voxelData[i].y]
@@ -7857,7 +7872,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                      && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4 && voxelData[i].color != 253 - 20 * 4
                      && voxelData[i].color > 257 - wcolorcount * 4)
                 {
-//                    Console.Write(voxelData[i].color  + ", ");
+                    //                    Console.Write(voxelData[i].color  + ", ");
                     MagicaVoxelData vox = new MagicaVoxelData();
                     vox.x = voxelData[i].x;
                     vox.y = voxelData[i].y;
@@ -8016,7 +8031,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             hbin.Close();
             MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 255 };
             MagicaVoxelData hatPlug = new MagicaVoxelData { color = 255 };
-            
+
             /*
             List<byte> knownColors = new List<byte>(50);
             if (!knownColors.Contains(mvd.color))
@@ -8063,9 +8078,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
             bod.AddRange(working);
-            
+
             return bod;
-            
+
         }
 
 
@@ -9145,7 +9160,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return frames;
         }
-        
+
         public static MagicaVoxelData[][] FieryExplosionDoubleW(MagicaVoxelData[] voxels, bool blowback)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[13][];
@@ -9180,16 +9195,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
-                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -9231,7 +9246,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 17)
                         mvd.color = v.color; // smoke stays smoke
                     else
-                        mvd.color = (byte)((r.Next(9 - f) == 0) ? 253 - ((r.Next(4) == 0) ? 18*4 : 19*4) : v.color); //random transform to orange or yellow fire
+                        mvd.color = (byte)((r.Next(9 - f) == 0) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19 * 4) : v.color); //random transform to orange or yellow fire
                     float xMove = 0, yMove = 0, zMove = 0;
 
                     if (mvd.color == 253 - 19 * 4 || mvd.color == 253 - 18 * 4 || mvd.color == 253 - 17 * 4)
@@ -9329,7 +9344,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     else if (yMove < 0)
                     {
-                        float nv = v.y - (float)r.NextDouble()*((yMove / magnitude) * f / -0.3F) + (float)(r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(r.NextDouble() * 2.0 - 1.0));
+                        float nv = v.y - (float)r.NextDouble() * ((yMove / magnitude) * f / -0.3F) + (float)(r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(r.NextDouble() * 2.0 - 1.0));
                         if (nv < 0)
                         {
                             nv = 0;
@@ -9389,9 +9404,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
-                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -9401,16 +9416,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[40 * 2];
                 for (int level = 0; level < 40 * 2; level++)
                 {
-                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
-                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -9452,8 +9467,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 17) //smoke
                         mvd.color = (byte)((r.Next(10) + 3 <= f) ? clear : 253 - 17 * 4); //random transform to clear
                     else
-                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19*4) : v.color); //random transform to orange or yellow fire
-                    
+                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19 * 4) : v.color); //random transform to orange or yellow fire
+
                     float xMove = 0, yMove = 0, zMove = 0;
                     if (mvd.color == 253 - 19 * 4 || mvd.color == 253 - 18 * 4 || mvd.color == 253 - 17 * 4)
                     {
@@ -9505,13 +9520,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     if (xMove < -20) xMove = -20;
                     if (yMove > 20) yMove = 20;
                     if (yMove < -20) yMove = -20;
-                   // float magnitude = Math.Abs(xMove) + Math.Abs(yMove);
+                    // float magnitude = Math.Abs(xMove) + Math.Abs(yMove);
                     float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
 
                     if (xMove > 0)
                     {
                         float nv = v.x + (float)r.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
-//                        float nv = (float)(v.x + Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(r.NextDouble() * 2.0 - 1.0));
+                        //                        float nv = (float)(v.x + Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(r.NextDouble() * 2.0 - 1.0));
                         if (nv < 0)
                         {
                             nv = 0;
@@ -9700,9 +9715,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.x * ((v.color == 253 - 25 * 4 || 
+                    minX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.x * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
-                    maxX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.x * ((v.color == 253 - 25 * 4 || 
+                    maxX[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.x * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -9712,16 +9727,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.y * ((v.color == 253 - 25 * 4 || 
+                    minY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 255, y = 255, z = 255, color = 153 }).Min(v => v.y * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 10000 : 1));
-                    maxY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.y * ((v.color == 253 - 25 * 4 || 
+                    maxY[level] = vls.Where(v => v.z == level).DefaultIfEmpty(new MagicaVoxelData { x = 0, y = 0, z = 0, color = 153 }).Max(v => v.y * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
 
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 2000 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -9922,9 +9937,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midX = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
-                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
@@ -9934,15 +9949,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 float[] midY = new float[120];
                 for (int level = 0; level < 120; level++)
                 {
-                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
-                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 || 
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color == 253 - 25 * 4 ||
                         v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                     midY[level] = (maxY[level] + minY[level]) / 2F;
                 }
-                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int minZ = vls.Min(v => v.z * ((v.color == 253 - 25 * 4 ||
                     v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 100 : 1));
-                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 || 
+                int maxZ = vls.Max(v => v.z * ((v.color == 253 - 25 * 4 ||
                     v.color == 253 - 17 * 4 || v.color == 253 - 19 * 4 || v.color == 253 - 18 * 4 || v.color <= 257 - wcolorcount * 4) ? 0 : 1));
                 float midZ = (maxZ + minZ) / 2F;
 
@@ -9984,7 +9999,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 17) //smoke
                         mvd.color = (byte)((r.Next(10) + 3 <= f) ? clear : 253 - 17 * 4); //random transform to clear
                     else
-                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18*4 : 19*4) : v.color); //random transform to orange or yellow fire //(f >= 6) ? 253 - 17*4 :
+                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19 * 4) : v.color); //random transform to orange or yellow fire //(f >= 6) ? 253 - 17*4 :
 
                     float xMove = 0, yMove = 0, zMove = 0;
                     if (mvd.color == 253 - 19 * 4 || mvd.color == 253 - 18 * 4 || mvd.color == 253 - 17 * 4)
@@ -10500,9 +10515,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if (x % 2 == 1)
                         {
                             vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x + x - 1 - length), y = (byte)(start.y + y), z = (byte)((start.z - 2 - length < 0) ? 0 : start.z - 2 - length), color = (byte)(249 - 72) },
-                                new MagicaVoxelData { x = (byte)(start.x + x - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length), y = (byte)(start.y + y),
-                                                      z = (byte)((start.z - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length < 0) ? 0 : (start.z - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length)),
-                                                      color = (byte)(249 - 72)
+                                new MagicaVoxelData
+                                {
+                                    x = (byte)(start.x + x - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length),
+                                    y = (byte)(start.y + y),
+                                    z = (byte)((start.z - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length < 0) ? 0 : (start.z - ((y > 0 && y < 3 && x < 2) ? 10 : 6) - length)),
+                                    color = (byte)(249 - 72)
                                 },
                                 (y > 0 && y < 3 && x > 0) ? 249 - 160 : 249 - 152));
                         }
@@ -10520,9 +10538,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     if (z % 2 == 1)
                     {
                         vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)((start.z + z - 1 - length < 0) ? 0 : start.z + z - 1 - length), color = (byte)(249 - 72) },
-                            new MagicaVoxelData { x = (byte)(start.x - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length), y = (byte)(start.y + y),
-                                z = (byte)((start.z + z - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length < 0) ? 0 : (start.z + z - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length)), 
-                                color = (byte)(249 - 72) },
+                            new MagicaVoxelData
+                            {
+                                x = (byte)(start.x - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length),
+                                y = (byte)(start.y + y),
+                                z = (byte)((start.z + z - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length < 0) ? 0 : (start.z + z - ((y > 0 && y < 3 && z < 2) ? 10 : 6) - length)),
+                                color = (byte)(249 - 72)
+                            },
                             (y > 0 && y < 3 && z < 2) ? 249 - 160 : 249 - 152));
                     }
                 }
@@ -10535,9 +10557,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)((start.z - 2 - length < 0) ? 0 : start.z - 2 - length), color = (byte)(249 - 72) }, 249 - 72));
 
                     vox.AddRange(generateStraightLine(new MagicaVoxelData { x = (byte)(start.x - 2 - length), y = (byte)(start.y + y), z = (byte)((start.z - 2 - length < 0) ? 0 : start.z - 2 - length), color = (byte)(249 - 160) },
-                        new MagicaVoxelData { x = (byte)(start.x - 2 - ((y > 0 && y < 3) ? 10 : 6) - length), y = (byte)(start.y + y),
-                                              z = (byte)((start.z - ((y > 0 && y < 3) ? 10 : 6) - length < 0) ? 0 : (start.z - ((y > 0 && y < 3) ? 10 : 6) - length)), 
-                            color = (byte)(249 - 160) },
+                        new MagicaVoxelData
+                        {
+                            x = (byte)(start.x - 2 - ((y > 0 && y < 3) ? 10 : 6) - length),
+                            y = (byte)(start.y + y),
+                            z = (byte)((start.z - ((y > 0 && y < 3) ? 10 : 6) - length < 0) ? 0 : (start.z - ((y > 0 && y < 3) ? 10 : 6) - length)),
+                            color = (byte)(249 - 160)
+                        },
                         249 - 160));
                 }
             }
@@ -12145,7 +12171,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
             }
             MagicaVoxelData launcher = launchers.RandomElement();
-//            MagicaVoxelData trail = trails.RandomElement();
+            //            MagicaVoxelData trail = trails.RandomElement();
             for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
                 extra[f] = new List<MagicaVoxelData>(20);
@@ -12482,11 +12508,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             System.IO.Directory.CreateDirectory("vx_models");
             System.IO.Directory.CreateDirectory("vx_models/" + filename);
             int total = data.Count;
-            byte[,,] voxels = new byte[size,size,size];
+            byte[, ,] voxels = new byte[size, size, size];
             voxels.Fill((byte)255);
             foreach (MagicaVoxelData vox in data)
             {
-                voxels[vox.x,vox.y,vox.z] = (byte)((253 - vox.color) / 4);
+                voxels[vox.x, vox.y, vox.z] = (byte)((253 - vox.color) / 4);
             }
             /*
             using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + filename + "/" + filename + ".bvx", FileMode.Create)))
@@ -12502,10 +12528,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                 }
             }*/
-            
+
             foreach (string dir in new string[] { "SE", "SW", "NW", "NE" })
             {
-                byte[,,] turned = voxels.Replicate();
+                byte[, ,] turned = voxels.Replicate();
 
                 switch (dir)
                 {
@@ -12592,7 +12618,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                             edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
                                             posbuffer[ix + currentX, iy + currentY] = pos;
                                         }
-                                        
+
                                     }
                                 }
                             }
@@ -12609,12 +12635,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }
                     }
                 }
-                foreach(var kv in culledStructs)
+                foreach (var kv in culledStructs)
                 {
                     int x = kv.Value.screenX;
                     int y = kv.Value.screenY;
                     int iter = 0;
-                    byte[] bits = new byte[6]{0, 0, 0, 0, 0, 0};
+                    byte[] bits = new byte[6] { 0, 0, 0, 0, 0, 0 };
                     for (int iy = -2; iy < 6; iy++)
                     {
                         for (int ix = -2; ix < 6; ix++)
@@ -12750,7 +12776,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
                 */
             }
-            
+
         }
         public static List<MagicaVoxelData> readBVX(string filename)
         {
@@ -12761,7 +12787,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
                 {
                     int total = (int)(reader.BaseStream.Length);
-                    size = (int)(Math.Round(Math.Pow(total, 1.0/3.0)));
+                    size = (int)(Math.Round(Math.Pow(total, 1.0 / 3.0)));
                     byte[] bins = reader.ReadBytes(total);
                     for (byte z = 0; z < size; z++)
                     {
@@ -12877,15 +12903,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public delegate List<MagicaVoxelData> Augmenter(MagicaVoxelData initial);
         public static MagicaVoxelData AlterVoxel(MagicaVoxelData initial, int xModifier, int yModifier, int zModifier, int color)
         {
-            return new MagicaVoxelData {
+            return new MagicaVoxelData
+            {
                 x = (byte)((initial.x + xModifier < 0) ? 0 : initial.x + xModifier),
                 y = (byte)((initial.y + yModifier < 0) ? 0 : initial.y + yModifier),
                 z = (byte)((initial.z + zModifier < 0) ? 0 : initial.z + zModifier),
-                color = (byte)(253 - (color * 4)) };
+                color = (byte)(color)
+            };
         }
         public static MagicaVoxelData AlterVoxel(MagicaVoxelData initial, int color)
         {
-            return new MagicaVoxelData { x = initial.x, y = initial.y, z = initial.z, color = (byte)(253 - (color * 4)) };
+            return new MagicaVoxelData { x = initial.x, y = initial.y, z = initial.z, color = (byte)color };
         }
         public static List<MagicaVoxelData> FireAugmenter(MagicaVoxelData initial)
         {
@@ -12894,16 +12922,61 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 int waver = r.Next(3) - 1;
                 if (r.Next(2) == 0) waver = 0;
-                return new List<MagicaVoxelData> { AlterVoxel(initial, 18), AlterVoxel(initial, 0, 0, 1, 19), AlterVoxel(initial, 0, waver, 1, 19),
-                    AlterVoxel(initial, 0, waver, 2, 17) }; //, AlterVoxel(initial, 0, waver*2, 2, 17), AlterVoxel(initial, 0, waver*2, 3, 17)
+                return new List<MagicaVoxelData> { AlterVoxel(initial, 253 - 18 * 4), AlterVoxel(initial, 0, 0, 1, 253 - 19 * 4), AlterVoxel(initial, 0, waver, 1, 253 - 19 * 4),
+                    AlterVoxel(initial, 0, waver, 2, 253 - 17 * 4) }; //, AlterVoxel(initial, 0, waver*2, 2, 17), AlterVoxel(initial, 0, waver*2, 3, 17)
             }
             else return new List<MagicaVoxelData> { initial };
         }
-        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string,Augmenter>{ {"Fire", FireAugmenter} };
+        public static List<MagicaVoxelData> WaterAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            if ((((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && color % 2 == 0 && r.Next(11) == 0))
+            {
+                List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
+                for (int i = 1; i <= initial.z; i++)
+                {
+                    l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((3 - (i % 4)) * 4)));
+                }
+                l.AddRange(new MagicaVoxelData[] {
+                    AlterVoxel(initial, -1, 0, -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 1, 0,  -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 0, -1, -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 0, 1,  -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 0, 0,  -initial.z, 253 - 27 * 4) });
+                return l;
+            }
+            else if (color == 34)
+            {
+                if (r.Next(30) == 0)
+                {
+                    List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
+                    
+                    for (int i = 1; i <= initial.z; i++)
+                    {
+                        l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((3 - (i % 4)) * 4)));
+                    }
+                    l.AddRange(new MagicaVoxelData[] {
+                    AlterVoxel(initial, -1, 0, -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 1, 0,  -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 0, -1, -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 0, 1,  -initial.z, 253 - 27 * 4),
+                    AlterVoxel(initial, 0, 0,  -initial.z, 253 - 27 * 4) });
+                    return l;
+                }
+                else
+                {
+                    return new List<MagicaVoxelData> { AlterVoxel(initial, 255 - 4 * 4) };
+                }
+
+            }
+            else return new List<MagicaVoxelData> { initial };
+        }
+        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { //{ "Fire", FireAugmenter },
+                                                                                                     { "Water", WaterAugmenter } };
         public static List<MagicaVoxelData> ElementalAugment(List<MagicaVoxelData> voxels, Augmenter converter)
         {
             List<MagicaVoxelData> ret = new List<MagicaVoxelData>(voxels.Count * 2);
-            foreach(MagicaVoxelData vox in voxels)
+            foreach (MagicaVoxelData vox in voxels)
             {
                 ret.AddRange(converter(vox));
             }
