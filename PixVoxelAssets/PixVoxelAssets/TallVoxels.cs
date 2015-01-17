@@ -9912,10 +9912,13 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
+/*
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
-                processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
+                processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);*/
+                processUnitOutlinedWDouble("Beetle", 7, true);
+                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
             }
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
