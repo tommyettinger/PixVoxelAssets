@@ -48,15 +48,15 @@ namespace AssetsPV
             //plains
             new float[] {0.55F,0.62F,0.48F,2F},
             //forest
-            new float[] {0.3F,0.4F,0.28F,6F},
+            new float[] {0.28F,0.48F,0.22F,6F},
             //desert
-            new float[] {0.627F,0.604F,0.416F,2F},
+            new float[] {0.727F,0.694F,0.38F,2F},
             //jungle
             new float[] {0.192F,0.294F,0.263F,6F},
             //hills
-            new float[] {0.565F,0.498F,0.404F,10F},
+            new float[] {0.62F,0.42F,0.28F,10F},
             //mountains
-            new float[] {0.671F,0.682F,0.698F,12F},
+            new float[] {0.721F,0.732F,0.748F,12F},
             //ruins
             new float[] {0.600F,0.518F,0.580F,8F},
             //tundra
@@ -808,7 +808,7 @@ Ruins	purple-gray
 
             return b2;
         }
-        public static Bitmap drawPixelsFlatSmall(int color)
+        public static Bitmap drawPixelsFlatDrab(int color)
         {
             flatcolors = drabcolors;
             int horiz = 96 * 2;

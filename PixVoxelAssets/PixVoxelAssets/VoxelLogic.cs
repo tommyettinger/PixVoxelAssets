@@ -166,14 +166,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         };
 
         private static Random r = new Random();
-        public static float flat_alpha = 0.77F;
-        public static float bordered_flat_alpha = 0.78F;
-        public static float bordered_alpha = 0.79F;
-        public static float waver_alpha = 0.83F;
-        public static float spin_alpha_0 = 0.85F;
-        public static float spin_alpha_1 = 0.87F;
-        public static float fuzz_alpha = 0.91F;
-        public static float eraser_alpha = -0.1F;
+        public const float flat_alpha = 0.77F;
+        public const float bordered_flat_alpha = 0.78F;
+        public const float bordered_alpha = 0.79F;
+        public const float waver_alpha = 0.83F;
+        public const float spin_alpha_0 = 0.85F;
+        public const float spin_alpha_1 = 0.87F;
+        public const float flash_alpha_0 = 0.86F;
+        public const float flash_alpha_1 = 0.88F;
+        public const float fuzz_alpha = 0.91F;
+        public const float eraser_alpha = -0.1F;
         public static float[][] xcolors = new float[][]
         {
             //0 tires, tread
@@ -7323,10 +7325,37 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             for (int p = 0; p < wpalettecount; p++)
             {
                 if (p >= 50 && p <= 60)
-                    continue;
-                float[] drip = wpalettes[p][27], transp = wpalettes[p][wcolorcount - 1];
+                {
+                    float[][] temp = new float[wpalettes[0].Length][];
+                    temp[0] = wpalettes[p][0];
+                    temp[0][0] -= 0.4f;
+                    temp[0][1] -= 0.4f;
+                    temp[0][2] -= 0.4f;
+
+                    temp[1] = wpalettes[p][1];
+                    temp[1][0] -= 0.25f;
+                    temp[1][1] -= 0.25f;
+                    temp[1][2] -= 0.25f;
+                    temp[2] = wpalettes[p][2];
+                    temp[2][0] -= 0.1f;
+                    temp[2][1] -= 0.1f;
+                    temp[2][2] -= 0.1f;
+
+                    temp[3] = wpalettes[p][3];
+                    temp[3][0] += 0.05f;
+                    temp[3][1] += 0.05f;
+                    temp[3][2] += 0.05f;
+                    for (int c = 4; c < wpalettes[0].Length; c++)
+                    {
+                        temp[c] = wpalettes[0][c];
+                    }
+                    wpalettes[p] = temp;
+                }
+                float[] drip = wpalettes[p][27].ToArray(), transp = wpalettes[p][wcolorcount - 1];
                 drip[3] = 1F;
-                wpalettes[p] = wpalettes[p].Concat(new float[][] { drip, transp, transp, transp, drip }).ToArray();
+                float[] zap = wpalettes[p][40].ToArray();
+                zap[3] = spin_alpha_1;
+                wpalettes[p] = wpalettes[p].Concat(new float[][] { drip, transp, transp, transp, drip, zap }).ToArray();
             }
         }
 
@@ -7357,33 +7386,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                ColorAdjustType.Bitmap);
             for (int p = 0; p < wpalettes.Length; p++)
             {
-                if (p >= 50 && p <= 60)
-                {
-                    float[][] temp = new float[wpalettes[0].Length][];
-                    temp[0] = wpalettes[p][0];
-                    temp[0][0] -= 0.4f;
-                    temp[0][1] -= 0.4f;
-                    temp[0][2] -= 0.4f;
-
-                    temp[1] = wpalettes[p][1];
-                    temp[1][0] -= 0.25f;
-                    temp[1][1] -= 0.25f;
-                    temp[1][2] -= 0.25f;
-                    temp[2] = wpalettes[p][2];
-                    temp[2][0] -= 0.1f;
-                    temp[2][1] -= 0.1f;
-                    temp[2][2] -= 0.1f;
-
-                    temp[3] = wpalettes[p][3];
-                    temp[3][0] += 0.05f;
-                    temp[3][1] += 0.05f;
-                    temp[3][2] += 0.05f;
-                    for (int c = 4; c < wpalettes[0].Length; c++)
-                    {
-                        temp[c] = wcolors[c];
-                    }
-                    wpalettes[p] = temp;
-                }
                 for (int current_color = 0; current_color < wpalettes[0].Length; current_color++)
                 {
                     Bitmap b =
@@ -7852,12 +7854,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static List<MagicaVoxelData> PlaceShadowsW(List<MagicaVoxelData> voxelData)
         {
-            int[,] taken = new int[sizex, sizey];
+            int[,] taken = new int[sizex + 20, sizey + 20];
             taken.Fill(-1);
             List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 9 / 8);
             for (int i = 0; i < voxelData.Count; i++)
             {
-                if (voxelData[i].x >= sizex || voxelData[i].y >= sizey)
+                if (voxelData[i].x >= sizex + 20 || voxelData[i].y >= sizey + 20)
                 {
                     continue;
                 }
@@ -7868,7 +7870,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 voxelsAltered.Add(voxelData[i]);
                 if (-1 == taken[voxelData[i].x, voxelData[i].y]
                      && (voxelData[i].color > 253 - 21 * 4 || voxelData[i].color < 253 - 24 * 4)
-                     && voxelData[i].color != 253 - 25 * 4 && voxelData[i].color != 253 - 27 * 4 && voxelData[i].color != 253 - 40 * 4
+                     && voxelData[i].color != 253 - 25 * 4 && voxelData[i].color != 253 - 27 * 4 && voxelData[i].color != 253 - 40 * 4 && voxelData[i].color != 255 - 5 * 4
                      && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4 && voxelData[i].color != 253 - 20 * 4
                      && voxelData[i].color > 257 - wcolorcount * 4)
                 {
@@ -12913,16 +12915,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         {
             return new MagicaVoxelData
             {
-                x = (byte)((initial.x + xModifier < 0) ? 0 : initial.x + xModifier),
-                y = (byte)((initial.y + yModifier < 0) ? 0 : initial.y + yModifier),
-                z = (byte)((initial.z + zModifier < 0) ? 0 : initial.z + zModifier),
+                x = (byte)((initial.x + xModifier < 0) ? 0 : (initial.x + xModifier > 255) ? 255 : initial.x + xModifier),
+                y = (byte)((initial.y + yModifier < 0) ? 0 : (initial.y + yModifier > 255) ? 255 : initial.y + yModifier),
+                z = (byte)((initial.z + zModifier < 0) ? 0 : (initial.z + zModifier > 255) ? 255 : initial.z + zModifier),
                 color = (byte)(color)
             };
         }
+
         public static MagicaVoxelData AlterVoxel(MagicaVoxelData initial, int color)
         {
             return new MagicaVoxelData { x = initial.x, y = initial.y, z = initial.z, color = (byte)color };
         }
+
         public static List<MagicaVoxelData> FireAugmenter(MagicaVoxelData initial)
         {
             int color = (253 - initial.color) / 4;
@@ -12935,6 +12939,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             else return new List<MagicaVoxelData> { initial };
         }
+
         public static List<MagicaVoxelData> WaterAugmenter(MagicaVoxelData initial)
         {
             int color = (253 - initial.color) / 4;
@@ -12979,16 +12984,42 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             else return new List<MagicaVoxelData> { initial };
         }
-        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { { "Fire", FireAugmenter },
-                                                                                                     { "Water", WaterAugmenter } };
+
+        public static List<MagicaVoxelData> ShockAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            if (((color >= 2 && color <= 9) || (color >= 28 && color <= 33)) && r.Next(5) == 0)
+            {
+                return new List<MagicaVoxelData> { initial, AlterVoxel(initial, r.Next(7) - r.Next(7), r.Next(7) - r.Next(7), r.Next(7) - r.Next(7), 253 - 40 * 4),
+                                                            AlterVoxel(initial, r.Next(7) - r.Next(7), r.Next(7) - r.Next(7), r.Next(7) - r.Next(7), 255 - 5 * 4),
+                                                            AlterVoxel(initial, r.Next(9) - r.Next(9), r.Next(9) - r.Next(9), r.Next(9) - r.Next(9), 253 - 40 * 4),
+                                                            AlterVoxel(initial, r.Next(9) - r.Next(9), r.Next(9) - r.Next(9), r.Next(9) - r.Next(9), 255 - 5 * 4) };
+            }
+            else return new List<MagicaVoxelData> { initial };
+        }
+
+        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { { "Shock", ShockAugmenter },
+                                                                                                     { "Fire", FireAugmenter },
+                                                                                                     { "Water", WaterAugmenter } ,
+                                                                                                   };
         public static List<MagicaVoxelData> ElementalAugment(List<MagicaVoxelData> voxels, Augmenter converter)
         {
+            MagicaVoxelData[] parsed = voxels.ToArray();
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+                if ((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
             List<MagicaVoxelData> ret = new List<MagicaVoxelData>(voxels.Count * 2);
-            foreach (MagicaVoxelData vox in voxels)
+            foreach (MagicaVoxelData vox in parsed)
             {
                 ret.AddRange(converter(vox));
             }
+
             return ret;
+
         }
 
     }

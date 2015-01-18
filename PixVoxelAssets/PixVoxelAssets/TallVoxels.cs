@@ -4942,9 +4942,9 @@ namespace AssetsPV
                 if (current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
 
-                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_1))
                     continue;
                 else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
@@ -5033,9 +5033,9 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (mod_color == 27 && r.Next(7) < 2) //water
+                    if ((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                         continue;
-                    if (mod_color == 40 && r.Next(11) < 8) //rare sparks
+                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5) && r.Next(11) < 8) //rare sparks
                         continue;
 
                     for (int j = 0; j < 4; j++)
@@ -5049,7 +5049,8 @@ namespace AssetsPV
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
-                                if (outlineValues[p] == 0)
+                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
+                                if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
                             }
@@ -5209,9 +5210,9 @@ namespace AssetsPV
                 if (current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
 
-                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_1))
                     continue;
                 else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
@@ -5278,9 +5279,9 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (mod_color == 27 && r.Next(7) < 2) //water
+                    if ((mod_color == 27 || mod_color ==  VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                         continue;
-                    if (mod_color == 40 && r.Next(11) < 8) //rare sparks
+                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5) && r.Next(11) < 8) //rare sparks
                         continue;
 
                     for (int j = 0; j < 4; j++)
@@ -5294,7 +5295,8 @@ namespace AssetsPV
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
-                                if (outlineValues[p] == 0)
+                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
+                                if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
                         }
@@ -5452,9 +5454,9 @@ namespace AssetsPV
                 if (current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
 
-                if ((frame % 2 != 0) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0)
+                if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
-                else if ((frame % 2 != 1) && VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1)
+                else if ((frame % 2 != 1) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_1))
                     continue;
                 else if (VoxelLogic.wcolors[current_color][3] == 0F)
                     continue;
@@ -5521,9 +5523,9 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (mod_color == 27 && r.Next(7) < 2) //water
+                    if ((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                         continue;
-                    if (mod_color == 40 && r.Next(11) < 8) //rare sparks
+                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5) && r.Next(11) < 8) //rare sparks
                         continue;
 
                     for (int j = 0; j < 4; j++)
@@ -5537,7 +5539,8 @@ namespace AssetsPV
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
-                                if (outlineValues[p] == 0)
+                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
+                                if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
                             }
@@ -8130,13 +8133,7 @@ namespace AssetsPV
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug.Value);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
-                for (int i = 0; i < parsed.Length; i++)
-                {
-                    parsed[i].x += 10;
-                    parsed[i].y += 10;
-                    if ((254 - parsed[i].color) % 4 == 0)
-                        parsed[i].color--;
-                }
+                
                 int framelimit = 4;
 
 
@@ -9436,7 +9433,7 @@ namespace AssetsPV
             }
             return b;
         }
-        public static Bitmap makeFlatTilingSmall()
+        public static Bitmap makeFlatTilingDrab()
         {
             Bitmap b = new Bitmap(96 * 16, 24 * 32);
             Graphics g = Graphics.FromImage(b);
@@ -9444,7 +9441,7 @@ namespace AssetsPV
             Bitmap[] tilings = new Bitmap[10];
             for (int i = 0; i < 10; i++)
             {
-                tilings[i] = TallPaletteDraw.drawPixelsFlatSmall(i);
+                tilings[i] = TallPaletteDraw.drawPixelsFlatDrab(i);
             }
             int[,] grid = new int[17, 33];
             Random r = new Random();
@@ -9873,15 +9870,16 @@ namespace AssetsPV
             VoxelLogic.Initialize();
 
             VoxelLogic.InitializeXPalette();
-            VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
+            //VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
             altFolder = "beast/scheme0";
-//            VoxelLogic.InitializeWPalette();
+            
+            //makeFlatTilingDrab();
 
             System.IO.Directory.CreateDirectory("Palettes");
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
-
+            
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
@@ -9912,14 +9910,16 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
-/*
+
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
-                processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);*/
+                processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
                 processUnitOutlinedWDouble("Beetle", 7, true);
                 processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
             }
+            VoxelLogic.InitializeWPalette();
+
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
