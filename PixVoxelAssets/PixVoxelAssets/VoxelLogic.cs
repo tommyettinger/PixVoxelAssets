@@ -7605,7 +7605,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         private static byte[][][] storeColorCubesW()
         {
             wpalettecount = wpalettes.Length;
-//            wcolorcount = wpalettes[0].Length;
+            //            wcolorcount = wpalettes[0].Length;
             byte[, ,] cubes = new byte[wpalettecount, wpalettes[0].Length, 80];
 
             Image image = new Bitmap("cube_soft.png");
@@ -13191,7 +13191,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
                 for (int i = 1; i <= initial.z; i += 2)
                 {
-                    l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((3 - ((i/2) % 4)) * 4)));
+                    l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((3 - ((i / 2) % 4)) * 4)));
                 }
                 l.AddRange(new MagicaVoxelData[] {
                     AlterVoxel(initial, -1, 0, -initial.z, 253 - 27 * 4),
@@ -13206,10 +13206,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if (r.Next(30) == 0)
                 {
                     List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
-                    
+
                     for (int i = 1; i <= initial.z; i += 2)
                     {
-                        l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((3 - ((i/2) % 4)) * 4)));
+                        l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((3 - ((i / 2) % 4)) * 4)));
                     }
                     l.AddRange(new MagicaVoxelData[] {
                     AlterVoxel(initial, -1, 0, -initial.z, 253 - 27 * 4),
@@ -13241,7 +13241,75 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             else return new List<MagicaVoxelData> { initial };
         }
 
-        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { { "Shock", ShockAugmenter },
+        public static List<MagicaVoxelData> EarthAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            int startZ = initial.z;
+            if (startZ < 6)
+            {
+                return new List<MagicaVoxelData> {
+                    AlterVoxel(initial, 0, 0, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 1, 0, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 0, 1, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, -1, 0, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 0, -1, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, -1, -1, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 1, -1, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, -1, 1, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 1, 1, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 2, 0, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 0, 2, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, -2, 0, -startZ, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, 0, -2, -startZ, 253 - (43 + r.Next(2)) * 4),
+                };
+            }
+            startZ -= 6;
+            if ((((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && r.Next(9) == 0))
+            {
+                int newcolor = new int[] { 253 - 43 * 4, 253 - 43 * 4, 253 - 43 * 4, 253 - 44 * 4, 253 - 44 * 4, 253 - 44 * 4, 253 - 45 * 4, 253 - 46 * 4 }.RandomElement();
+                List<MagicaVoxelData> l = new List<MagicaVoxelData> {
+                    AlterVoxel(initial, 0, 0, -6, newcolor),
+                    AlterVoxel(initial, 1, 0, -6, newcolor),
+                    AlterVoxel(initial, 0, 1, -6, newcolor),
+                    AlterVoxel(initial, -1, 0, -6, newcolor),
+                    AlterVoxel(initial, 0, -1, -6, newcolor),
+                    AlterVoxel(initial, 0, 0, -7, newcolor),
+                    AlterVoxel(initial, 0, 0, -5, newcolor),
+
+                };
+                /*int xmove = r.Next(3) - 1, ymove = r.Next(3) - 1, zmove = r.Next(3) - 1, totalmove = 0;
+                switch(r.Next(6))
+                {
+                    case 0: totalmove = 2 + r.Next(6); xmove = totalmove;
+                        break;
+                    case 1: totalmove = -2 - r.Next(6); xmove = totalmove;
+                        break;
+                    case 2: totalmove = 2 + r.Next(6); ymove = totalmove;
+                        break;
+                    case 3: totalmove = -2 - r.Next(6); ymove = totalmove;
+                        break;
+                    case 4: totalmove = 2 + r.Next(6); zmove = totalmove;
+                        break;
+                    case 5: totalmove = -2 - r.Next(6); zmove = totalmove;
+                        break;
+                }
+                Bresenham3D line = new Bresenham3D(AlterVoxel(initial, 0, 0, -6, 253 - (43 + r.Next(2)) * 4),
+                    AlterVoxel(initial, xmove, ymove, -6 + zmove, 253 - (43 + r.Next(2)) * 4));
+                int size = Math.Abs(totalmove);
+                foreach (MagicaVoxelData ln in line)
+                {
+                    l.AddRange(randomFill(ln.x - size / 4, ln.y - size / 4, ln.z - size / 4, size / 2, size / 2, size / 2,
+                        new int[] { 253 - 43 * 4, 253 - 43 * 4, 253 - 43 * 4, 253 - 44* 4, 253 - 44 * 4, 253 - 44 * 4, 253 - 45 * 4, 253 - 46 * 4, }));
+                    size -= r.Next(2);
+                    if (size <= 0) size = 1;
+                }
+                */
+                return l;
+            }
+            else return new List<MagicaVoxelData> { AlterVoxel(initial, 0, 0, -6, initial.color) };
+        }
+        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { { "Earth", EarthAugmenter },
+                                                                                                     { "Shock", ShockAugmenter },
                                                                                                      { "Fire", FireAugmenter },
                                                                                                      { "Water", WaterAugmenter } ,
                                                                                                    };

@@ -9870,8 +9870,6 @@ namespace AssetsPV
             VoxelLogic.Initialize();
 
             VoxelLogic.InitializeXPalette();
-            //VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
-            //altFolder = "beast/scheme0";
             
             //makeFlatTilingDrab();
 
@@ -9879,14 +9877,14 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
-            /*
+            
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
 
-                System.IO.Directory.CreateDirectory("beast/scheme" + p);*/
+                System.IO.Directory.CreateDirectory("beast/scheme" + p);
                 /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
@@ -9910,16 +9908,16 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
-                /*
+                
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
                 processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
                 processUnitOutlinedWDouble("Beetle", 7, true);
-                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);*/
-                /*processUnitOutlinedWDouble("Hawk", 8, false);
+                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
+                processUnitOutlinedWDouble("Hawk", 8, false);
                 processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
-            }*/
+            }
         
             VoxelLogic.InitializeWPalette();
 
@@ -10129,7 +10127,7 @@ namespace AssetsPV
             //            processUnitOutlinedWQuad("Oah", 62, true);
 
 
-            
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10164,7 +10162,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Officer");
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
-            
+            */
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
@@ -10195,7 +10193,6 @@ namespace AssetsPV
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-            processHats("Husk", 64, true, classes);
 
             /*
             processHats("Zombie", 2, true, classes);
@@ -10223,6 +10220,8 @@ namespace AssetsPV
             processHats("Banshee", 46, false, classes);
 
             processHats("Damned", 63, true, classes);
+
+            processHats("Husk", 64, true, classes);
 
             
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
