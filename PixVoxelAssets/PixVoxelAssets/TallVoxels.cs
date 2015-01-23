@@ -9908,7 +9908,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
-                
+                /*
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
@@ -9916,7 +9916,9 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Beetle", 7, true);
                 processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
                 processUnitOutlinedWDouble("Hawk", 8, false);
-                processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
+                processUnitOutlinedWDoubleAugmented("Hawk", 8, false);*/
+                processUnitOutlinedWDouble("Crab", 9, true);
+                processUnitOutlinedWDoubleAugmented("Crab", 9, true);
             }
         
             VoxelLogic.InitializeWPalette();
