@@ -2467,7 +2467,23 @@ namespace AssetsPV
                     drip[3] = 1F;
                     float[] zap = schemes[s][p][40].ToArray();
                     zap[3] = flash_alpha_1;
-                    schemes[s][p] = schemes[s][p].Concat(new float[][] { drip, transp, transp, transp, drip, zap}).ToArray();
+                    float[] dark = new float[] { 0.0f, -0.03f, -0.09f, 1f }, violet = new float[] { 0.55f, 0.05f, 0.65f, 1f };
+                    schemes[s][p] = schemes[s][p].Concat(new float[][] {
+                        drip, //0 moving water
+                        transp, //1
+                        transp, //2
+                        transp, //3
+                        drip, //4 lots of water
+                        zap, //5 flickering zap
+                        dark, //6 moving darkblob
+                        transp, //7
+                        transp, //8
+                        transp, //9
+                        dark, //10 darkblob on the ground, still
+                        violet, //11 violet, will move with unit
+                        dark, //12 darkblob on the unit, will move with unit
+
+                    }).ToArray();
                 }
             }
         }

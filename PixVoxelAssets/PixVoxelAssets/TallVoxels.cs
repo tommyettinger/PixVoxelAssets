@@ -4241,7 +4241,9 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 4 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? -2 : (still) ? 0 : jitter) + innerY);
+                stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
+                || current_color == VoxelLogic.wcolorcount + 10)
+                ? -2 : (still) ? 0 : jitter) + innerY);
             //((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter)
         }
         private static int voxelToPixelHugeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
@@ -4253,7 +4255,9 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
-                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? -2 : (still) ? 0 : jitter) + innerY);
+                                    stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
+                                    || current_color == VoxelLogic.wcolorcount + 10)
+                                    ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelMassiveW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
         {
@@ -4264,7 +4268,9 @@ namespace AssetsPV
              */
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
-                                    stride * (800 - 160 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? -2 : (still) ? 0 : jitter) + innerY);
+                                    stride * (800 - 160 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
+                                    || current_color == VoxelLogic.wcolorcount + 10)
+                                    ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
         {
@@ -4941,6 +4947,8 @@ namespace AssetsPV
 
                 if (current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
+                if (current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
+                    current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
 
                 if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
@@ -5209,6 +5217,8 @@ namespace AssetsPV
                     current_color = 21 + ((current_color + frame) % 4);
                 if (current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
+                if (current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
+                    current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
 
                 if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
@@ -5453,6 +5463,8 @@ namespace AssetsPV
 
                 if (current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
+                if (current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
+                    current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
 
                 if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
@@ -9908,7 +9920,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
-                /*
+                
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
@@ -9916,7 +9928,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Beetle", 7, true);
                 processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
                 processUnitOutlinedWDouble("Hawk", 8, false);
-                processUnitOutlinedWDoubleAugmented("Hawk", 8, false);*/
+                processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
                 processUnitOutlinedWDouble("Crab", 9, true);
                 processUnitOutlinedWDoubleAugmented("Crab", 9, true);
             }

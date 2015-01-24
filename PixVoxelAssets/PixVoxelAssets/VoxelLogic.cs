@@ -13308,7 +13308,69 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             else return new List<MagicaVoxelData> { AlterVoxel(initial, 0, 0, -6, initial.color) };
         }
-        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { { "Earth", EarthAugmenter },
+
+        private static int mod(int k, int n)
+        {
+            return ((k %= n) < 0) ? k + n : k;
+        }
+        public static List<MagicaVoxelData> DarkAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            if ((((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && color % 2 == 0 && r.Next(9) == 0))
+            {
+                List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
+                l.Add(AlterVoxel(initial, 255 - 12 * 4));
+                for (int i = -8; i <= initial.z; i++)
+                {
+                    if (i == 0) continue;
+                    l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((6 + mod(i, 4)) * 4)));
+                }
+                l.AddRange(new MagicaVoxelData[] {
+                    AlterVoxel(initial, -1, 0, -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 1, 0,  -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 0, -1, -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 0, 1,  -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, -1, -1, -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 1, -1,  -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, -1, -1, -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 1, 1,  -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, -2, 0, -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 2, 0,  -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 0, -2, -initial.z, 255 - 10 * 4),
+                    AlterVoxel(initial, 0, 2,  -initial.z, 255 - 10 * 4),
+
+                    AlterVoxel(initial, -1, -1, -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, 1, -1,  -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, -1, -1, -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, 1, 1,  -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, -2, 0, -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, 2, 0,  -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, 0, -2, -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, 0, 2,  -initial.z, 255 - (10 + r.Next(4) / 3 ) * 4),
+                    AlterVoxel(initial, 0, 0,  -initial.z, 255 - 10 * 4) });
+                return l;
+            }
+            else if (color != 10 && color != 11)
+            {
+                return new List<MagicaVoxelData> { AlterVoxel(initial, 255 - 12 * 4) };
+            }
+            else if (color == 11)
+            {
+                return new List<MagicaVoxelData> { AlterVoxel(initial, 255 - 11 * 4) };
+            }
+            else
+            {
+                return new List<MagicaVoxelData> { initial };
+            }
+
+        }
+
+
+
+
+        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { 
+                                                                                                     { "Dark", DarkAugmenter } ,
+                                                                                                     { "Earth", EarthAugmenter },
                                                                                                      { "Shock", ShockAugmenter },
                                                                                                      { "Fire", FireAugmenter },
                                                                                                      { "Water", WaterAugmenter } ,
