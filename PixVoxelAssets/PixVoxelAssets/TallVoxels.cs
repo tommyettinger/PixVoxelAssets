@@ -9855,7 +9855,7 @@ namespace AssetsPV
         }
 
         static string[] classes = new string[] { 
-              /*"Berserker"
+              "Berserker"
             , "Witch"
             , "Scout"
             , "Captain"
@@ -9871,7 +9871,7 @@ namespace AssetsPV
             , "Officer"
             , "Dervish"
             , "Thug"
-            ,*/ "Bishop"
+            , "Bishop"
         };
         public static string altFolder = "";
         /// <summary>
@@ -9982,7 +9982,7 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)))), "Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
             */
-            /*
+            
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Male" + "_Large_W.vox", FileMode.Open)))), "Human_Male", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Female" + "_Large_W.vox", FileMode.Open)))), "Human_Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Lomuk" + "_Large_W.vox", FileMode.Open)))), "Lomuk", 40);
@@ -9990,7 +9990,7 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Glarosp" + "_Large_W.vox", FileMode.Open)))), "Glarosp", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Sfyst" + "_Large_W.vox", FileMode.Open)))), "Sfyst", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
-            */
+            
             /*
             for(int i = 50; i <= 60; i++)
             {
@@ -10143,6 +10143,38 @@ namespace AssetsPV
 
 
             
+
+            //processUnitOutlinedWQuad("Grass", 47, true);
+            //processUnitOutlinedWQuad("Tree", 47, true);
+            //processUnitOutlinedWQuad("Boulder", 48, true);
+            //processUnitOutlinedWQuad("Rubble", 48, true);
+            /*
+            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
+            processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
+
+            processUnitOutlinedWQuad("Door_Closed", 49, true);
+            processUnitOutlinedWQuad("Door_Open", 49, true);
+            processUnitOutlinedWQuad("Wall_Straight", 49, true);
+            processUnitOutlinedWQuad("Wall_Cross", 49, true);
+            processUnitOutlinedWQuad("Wall_Tee", 49, true);
+            processUnitOutlinedWQuad("Wall_Corner", 49, true);
+            processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
+            processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
+            */
+            //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
+            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
+
+            //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
+
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10179,38 +10211,6 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            
-
-            //processUnitOutlinedWQuad("Grass", 47, true);
-            //processUnitOutlinedWQuad("Tree", 47, true);
-            //processUnitOutlinedWQuad("Boulder", 48, true);
-            //processUnitOutlinedWQuad("Rubble", 48, true);
-            /*
-            processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Flat", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Straight", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Corner", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Straight_Off", 49, true, true);
-            processUnitOutlinedWQuad("Roof_Solid_Corner_Off", 49, true, true);
-
-            processUnitOutlinedWQuad("Door_Closed", 49, true);
-            processUnitOutlinedWQuad("Door_Open", 49, true);
-            processUnitOutlinedWQuad("Wall_Straight", 49, true);
-            processUnitOutlinedWQuad("Wall_Cross", 49, true);
-            processUnitOutlinedWQuad("Wall_Tee", 49, true);
-            processUnitOutlinedWQuad("Wall_Corner", 49, true);
-            processUnitOutlinedWQuad("Wall_Straight_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
-            processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-            */
-            //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
-            // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
-
-            //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-
             
             processHats("Zombie", 2, true, classes);
 
@@ -10282,9 +10282,9 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-            
-                        File.WriteAllText("bodies.txt", model_headpoints.ToString());
-            File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            */
+            //File.WriteAllText("bodies.txt", model_headpoints.ToString());
+            //File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 

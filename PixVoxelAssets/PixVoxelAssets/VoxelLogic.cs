@@ -40,7 +40,7 @@ namespace AssetsPV
             this.x = (byte)x;
             this.y = (byte)y;
             this.z = (byte)z;
-            screenX = (x + y) * 2;
+            screenX = (x + y) * 2 + 4;
             screenY = size + 4 + y - x + z * 3;
             this.color = (byte)color;
             this.edges = edges;
@@ -12841,83 +12841,86 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 edgebuffer.Fill(255);
                 //parentbuffer.Fill(-9999);
                 List<byte> culled = new List<byte>(total * 4);
-                OrderedDictionary<Tuple<byte, byte, byte>, TotalVoxel> culledStructs = new OrderedDictionary<Tuple<byte, byte, byte>, TotalVoxel>();
+                List<TotalVoxel> culledStructs = new List<TotalVoxel>(total);
                 List<byte> totalStructs = new List<byte>(total * 10);
                 //List<Tuple<byte, byte, byte>> culledPositions = new List<Tuple<byte, byte, byte>>(total);
-                for (byte z = (byte)(size - 1); z >= 0 && z != 255; z--)
+                for (int z = size - 1; z >= 0; z--)
                 {
-                    for (byte x = (byte)(size - 1); x >= 0 && x != 255; x--)
+                    for (int x = size - 1; x >= 0; x--)
                     {
-                        for (byte y = 0; y < size; y++)
+                        for (int y = 0; y < size; y++)
                         {
-                            currentX = (x + y) * 2;
+                            currentX = (x + y) * 2 + 4;
                             currentY = size + 4 + y - x + z * 3;
                             if (turned[x, y, z] == 255 || currentX < 0 || currentY < 0 || currentX >= width || currentY >= height)
                                 continue;
 
-                            var pos = Tuple.Create(x, y, z);
+                            var pos = Tuple.Create((byte)x, (byte)y, (byte)z);
 
                             for (int ix = 0; ix < 4; ix++)
                             {
                                 for (int iy = 0; iy < 4; iy++)
                                 {
-                                    if (edgebuffer[ix + currentX, iy + currentY] == 255)
+                                    if (edgebuffer[ix + currentX, iy + currentY] >= 255)
                                     {
                                         visible = true;
                                         //if (!(ix == 0 && iy == 0) && !(ix == 3 && iy == 0) && !(ix == 0 && iy == 3) && !(ix == 3 && iy == 3))
                                         if (wcolors[turned[x, y, z]][3] != flat_alpha)
                                         {
-                                            zbuffer[ix + currentX, iy + currentY] = (short)(z + x - y);
+                                            zbuffer[ix + currentX, iy + currentY] = (short)(-z - x + y);
                                             edgebuffer[ix + currentX, iy + currentY] = turned[x, y, z];
                                             posbuffer[ix + currentX, iy + currentY] = pos;
                                         }
-
                                     }
                                 }
                             }
                             if (visible)
                             {
                                 culled.Add(turned[x, y, z]);
-                                culled.Add(z);
-                                culled.Add(y);
-                                culled.Add(x);
-                                culledStructs.Add(pos, new TotalVoxel(x, y, z, turned[x, y, z], new byte[6], size));
+                                culled.Add((byte)z);
+                                culled.Add((byte)y);
+                                culled.Add((byte)x);
+                                culledStructs.Add(new TotalVoxel(x, y, z, turned[x, y, z], new byte[6], size));
                                 //culledPositions.Add(Tuple.Create(x, y, z));
                                 visible = false;
                             }
                         }
                     }
                 }
-                foreach (var kv in culledStructs)
+
+                foreach (var st in culledStructs)
                 {
-                    int x = kv.Value.screenX;
-                    int y = kv.Value.screenY;
+                    int x = st.screenX;
+                    int y = st.screenY;
                     int iter = 0;
                     byte[] bits = new byte[6] { 0, 0, 0, 0, 0, 0 };
                     for (int iy = -2; iy < 6; iy++)
                     {
                         for (int ix = -2; ix < 6; ix++)
                         {
-                            if (!(x + ix < 0 || x + ix >= width || y + iy < 0 || y + iy >= height || (ix >= 0 && ix <= 3 && iy >= 0 && iy <= 3)))
+                            if (ix >= 0 && ix <= 3 && iy >= 0 && iy <= 3)
+                                continue;
+                            if (!(x + ix < 0 || x + ix >= width || y + iy < 0 || y + iy >= height))
                             {
-                                if (zbuffer[x, y] - 2 > zbuffer[x + ix, y + iy] && posbuffer[x + ix, y + iy] != null
-                                    //&& posbuffer[x + ix, y + iy].Item1 == kv.Key.Item1
-                                    //&& posbuffer[x + ix, y + iy].Item2 == kv.Key.Item2
-                                    //&& posbuffer[x + ix, y + iy].Item3 == kv.Key.Item3
+                                if (zbuffer[x, y] - 7 > zbuffer[x + ix, y + iy] /* && posbuffer[x + ix, y + iy] != null
+                                    && posbuffer[x, y].Item1 == st.x
+                                    && posbuffer[x, y].Item2 == st.y
+                                    && posbuffer[x, y].Item3 == st.z*/
                                     && edgebuffer[x, y] != 255
-                                    && edgebuffer[x + ix, y + iy] == kv.Value.color)
+                                    //&& edgebuffer[x + ix, y + iy] == st.color
+                                    )
                                 {
-                                    bits[5 - iter / 8] |= (byte)(1 << (iter % 8));
+                                    bits[iter / 8] |= (byte)(1 << (iter % 8)); //5 - iter / 8
                                 }
-                                iter++;
                             }
+                            iter++;
                         }
                     }
                     totalStructs.AddRange(bits);
-                    totalStructs.Add(kv.Value.color);
-                    totalStructs.Add(kv.Value.z);
-                    totalStructs.Add(kv.Value.y);
-                    totalStructs.Add(kv.Value.x);
+                    totalStructs.Add(st.color);
+                    totalStructs.Add(st.z);
+                    totalStructs.Add(st.y);
+                    totalStructs.Add(st.x);
                 }
 
                 using (BinaryWriter writer = new BinaryWriter(File.Open("vx_models/" + // filename + "/" +
