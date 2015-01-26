@@ -9855,7 +9855,7 @@ namespace AssetsPV
         }
 
         static string[] classes = new string[] { 
-              "Berserker"
+              /*"Berserker"
             , "Witch"
             , "Scout"
             , "Captain"
@@ -9871,6 +9871,7 @@ namespace AssetsPV
             , "Officer"
             , "Dervish"
             , "Thug"
+            ,*/ "Bishop"
         };
         public static string altFolder = "";
         /// <summary>
@@ -9889,7 +9890,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
-            
+            /*
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
@@ -9919,7 +9920,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 2, true);
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
-                */
+                * /
                 
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
@@ -9932,7 +9933,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Crab", 9, true);
                 processUnitOutlinedWDoubleAugmented("Crab", 9, true);
             }
-        
+        */
             VoxelLogic.InitializeWPalette();
 
             /*
@@ -10141,7 +10142,7 @@ namespace AssetsPV
             //            processUnitOutlinedWQuad("Oah", 62, true);
 
 
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10158,6 +10159,7 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Officer");
             processWDoubleHat("Generic_Male", 0, "Dervish");
             processWDoubleHat("Generic_Male", 0, "Thug");
+            processWDoubleHat("Generic_Male", 0, "Bishop");
 
 
             processWDoubleHat("Spirit", 7, "Berserker");
@@ -10176,7 +10178,8 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Officer");
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
-            */
+            processWDoubleHat("Spirit", 7, "Bishop");
+            
 
             //processUnitOutlinedWQuad("Grass", 47, true);
             //processUnitOutlinedWQuad("Tree", 47, true);
@@ -10208,7 +10211,7 @@ namespace AssetsPV
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            /*
+            
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10279,9 +10282,9 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-            */
-            //            File.WriteAllText("bodies.txt", model_headpoints.ToString());
-//            File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            
+                        File.WriteAllText("bodies.txt", model_headpoints.ToString());
+            File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 

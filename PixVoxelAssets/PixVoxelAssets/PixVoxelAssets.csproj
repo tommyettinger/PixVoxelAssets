@@ -97,6 +97,9 @@
     <None Include="Berserker_Hat_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Bishop_Hat_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Block_Large_X.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
