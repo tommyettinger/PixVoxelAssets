@@ -9890,7 +9890,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
-            /*
+            
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
@@ -9920,8 +9920,8 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 2, true);
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
-                * /
-                
+                */
+                /*
                 processUnitOutlinedWDouble("Wolf", 5, true);
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
@@ -9931,9 +9931,12 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Hawk", 8, false);
                 processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
                 processUnitOutlinedWDouble("Crab", 9, true);
-                processUnitOutlinedWDoubleAugmented("Crab", 9, true);
+                processUnitOutlinedWDoubleAugmented("Crab", 9, true);*/
+                processUnitOutlinedWDouble("Goblin", 10, true);
+                processUnitOutlinedWDoubleAugmented("Goblin", 10, true);
+
             }
-        */
+        
             VoxelLogic.InitializeWPalette();
 
             /*
@@ -9982,7 +9985,7 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Generic_Female" + "_Large_W.vox", FileMode.Open)))), "Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
             */
-            
+            /*
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Male" + "_Large_W.vox", FileMode.Open)))), "Human_Male", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Human_Female" + "_Large_W.vox", FileMode.Open)))), "Human_Female", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Lomuk" + "_Large_W.vox", FileMode.Open)))), "Lomuk", 40);
@@ -9990,7 +9993,7 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Glarosp" + "_Large_W.vox", FileMode.Open)))), "Glarosp", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Sfyst" + "_Large_W.vox", FileMode.Open)))), "Sfyst", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
-            
+            */
             /*
             for(int i = 50; i <= 60; i++)
             {
