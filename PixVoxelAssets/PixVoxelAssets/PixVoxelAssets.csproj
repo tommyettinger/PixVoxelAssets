@@ -295,6 +295,9 @@
     <None Include="Goblin_Large_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Goblin_Shaman_Large_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Grass_Huge_W.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

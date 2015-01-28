@@ -9875,7 +9875,7 @@ namespace AssetsPV
         };
         public static string altFolder = "";
         /// <summary>
-        /// This will take a long time to run.  It should produce a ton of assets and an animated gif preview.
+        /// This will take a long time to run.  It should produce a ton of assets.
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -9893,6 +9893,7 @@ namespace AssetsPV
             
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
+                
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
@@ -9931,9 +9932,12 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Hawk", 8, false);
                 processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
                 processUnitOutlinedWDouble("Crab", 9, true);
-                processUnitOutlinedWDoubleAugmented("Crab", 9, true);*/
+                processUnitOutlinedWDoubleAugmented("Crab", 9, true);
                 processUnitOutlinedWDouble("Goblin", 10, true);
-                processUnitOutlinedWDoubleAugmented("Goblin", 10, true);
+                processUnitOutlinedWDoubleAugmented("Goblin", 10, true);*/
+
+                processUnitOutlinedWDouble("Goblin_Shaman", 10, true);
+                processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
 
             }
         
