@@ -9893,12 +9893,13 @@ namespace AssetsPV
             
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
-                
+                /*
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
 
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
+                */
                 /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
@@ -9934,11 +9935,10 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Crab", 9, true);
                 processUnitOutlinedWDoubleAugmented("Crab", 9, true);
                 processUnitOutlinedWDouble("Goblin", 10, true);
-                processUnitOutlinedWDoubleAugmented("Goblin", 10, true);*/
-
+                processUnitOutlinedWDoubleAugmented("Goblin", 10, true);
                 processUnitOutlinedWDouble("Goblin_Shaman", 10, true);
                 processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
-
+                */
             }
         
             VoxelLogic.InitializeWPalette();
@@ -10155,6 +10155,7 @@ namespace AssetsPV
             //processUnitOutlinedWQuad("Tree", 47, true);
             //processUnitOutlinedWQuad("Boulder", 48, true);
             //processUnitOutlinedWQuad("Rubble", 48, true);
+            processUnitOutlinedWQuad("Headstone", 48, true);
             /*
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
