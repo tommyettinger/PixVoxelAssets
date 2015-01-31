@@ -175,6 +175,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public const float flash_alpha_0 = 0.86F;
         public const float flash_alpha_1 = 0.88F;
         public const float fuzz_alpha = 0.91F;
+        public const float gloss_alpha = 0.92F;
         public const float eraser_alpha = -0.1F;
         public static float[][] xcolors = new float[][]
         {
@@ -7687,7 +7688,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorAdjustType.Bitmap);
                     Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F) ? shine :
                        (wpalettes[p][current_color][3] == 1F || wpalettes[p][current_color][3] == waver_alpha
-                        || wpalettes[p][current_color][3] == fuzz_alpha || wpalettes[p][current_color][3] == bordered_alpha
+                        || wpalettes[p][current_color][3] == fuzz_alpha || wpalettes[p][current_color][3] == bordered_alpha || wpalettes[p][current_color][3] == gloss_alpha
                          || wpalettes[p][current_color][3] == spin_alpha_0 || wpalettes[p][current_color][3] == spin_alpha_1) ? image :
                        (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine;
                     g.DrawImage(which_image,

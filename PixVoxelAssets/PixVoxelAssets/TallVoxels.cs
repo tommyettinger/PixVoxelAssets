@@ -5055,8 +5055,18 @@ namespace AssetsPV
                             if (argbValues[p] == 0 && argbValues[(p / 4) + 3] != 7)
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
-                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] + 160, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] + 160, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else
+                                {
+                                    argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                        Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                }
                                 barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
@@ -5303,8 +5313,18 @@ namespace AssetsPV
                             if (argbValues[p] == 0)
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
-                                    Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] + 160, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] + 160, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else
+                                {
+                                    argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                        Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                }
                                 barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
@@ -5549,8 +5569,18 @@ namespace AssetsPV
                             if (argbValues[p] == 0)
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
+                                if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] + 160, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] + 160, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else
+                                {
+                                    argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                }
                                 barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
@@ -9893,13 +9923,13 @@ namespace AssetsPV
             
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
-                /*
+                
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
 
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
-                */
+                
                 /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
@@ -9928,8 +9958,6 @@ namespace AssetsPV
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
                 processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
-                processUnitOutlinedWDouble("Beetle", 7, true);
-                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
                 processUnitOutlinedWDouble("Hawk", 8, false);
                 processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
                 processUnitOutlinedWDouble("Crab", 9, true);
@@ -9939,6 +9967,10 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Goblin_Shaman", 10, true);
                 processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
                 */
+                processUnitOutlinedWDouble("Beetle", 7, true);
+                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
+                processUnitOutlinedWDouble("Ant", 11, true);
+                processUnitOutlinedWDoubleAugmented("Ant", 11, true);
             }
         
             VoxelLogic.InitializeWPalette();
@@ -10155,7 +10187,7 @@ namespace AssetsPV
             //processUnitOutlinedWQuad("Tree", 47, true);
             //processUnitOutlinedWQuad("Boulder", 48, true);
             //processUnitOutlinedWQuad("Rubble", 48, true);
-            processUnitOutlinedWQuad("Headstone", 48, true);
+            //processUnitOutlinedWQuad("Headstone", 48, true);
             /*
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
