@@ -9958,6 +9958,8 @@ namespace AssetsPV
                 processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processUnitOutlinedWDouble("Drakeling", 6, false);
                 processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
+                processUnitOutlinedWDouble("Beetle", 7, true);
+                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
                 processUnitOutlinedWDouble("Hawk", 8, false);
                 processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
                 processUnitOutlinedWDouble("Crab", 9, true);
@@ -9966,11 +9968,11 @@ namespace AssetsPV
                 processUnitOutlinedWDoubleAugmented("Goblin", 10, true);
                 processUnitOutlinedWDouble("Goblin_Shaman", 10, true);
                 processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
-                */
-                processUnitOutlinedWDouble("Beetle", 7, true);
-                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
                 processUnitOutlinedWDouble("Ant", 11, true);
                 processUnitOutlinedWDoubleAugmented("Ant", 11, true);
+                */
+                processUnitOutlinedWDouble("Bee", 12, false);
+                processUnitOutlinedWDoubleAugmented("Bee", 12, false);
             }
         
             VoxelLogic.InitializeWPalette();
