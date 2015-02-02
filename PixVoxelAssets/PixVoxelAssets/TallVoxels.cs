@@ -9970,9 +9970,11 @@ namespace AssetsPV
                 processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
                 processUnitOutlinedWDouble("Ant", 11, true);
                 processUnitOutlinedWDoubleAugmented("Ant", 11, true);
-                */
                 processUnitOutlinedWDouble("Bee", 12, false);
-                processUnitOutlinedWDoubleAugmented("Bee", 12, false);
+                processUnitOutlinedWDoubleAugmented("Bee", 12, false);*/
+                processUnitOutlinedWDouble("Eye_Tyrant", 13, false);
+                processUnitOutlinedWDoubleAugmented("Eye_Tyrant", 13, false);
+
             }
         
             VoxelLogic.InitializeWPalette();
