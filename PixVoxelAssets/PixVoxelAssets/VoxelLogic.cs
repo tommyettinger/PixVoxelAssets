@@ -13190,7 +13190,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static List<MagicaVoxelData> WaterAugmenter(MagicaVoxelData initial)
         {
             int color = (253 - initial.color) / 4;
-            if ((((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && color % 2 == 0 && r.Next(11) == 0))
+            if ((((color >= 0 && color <= 6) || (color >= 28 && color <= 33)) && color % 2 == 0 && r.Next(11) == 0))
             {
                 List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
                 for (int i = 1; i <= initial.z; i += 2)
