@@ -12,6 +12,7 @@ namespace AssetsPV
         public const float fuzz_alpha = VoxelLogic.fuzz_alpha;
         public const float waver_alpha = VoxelLogic.waver_alpha;
         public const float bordered_alpha = VoxelLogic.bordered_alpha;
+        public const float borderless_alpha = VoxelLogic.borderless_alpha;
         public const float eraser_alpha = VoxelLogic.eraser_alpha;
         public const float spin_alpha_0 = VoxelLogic.spin_alpha_0;
         public const float spin_alpha_1 = VoxelLogic.spin_alpha_1;
@@ -103,7 +104,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -224,7 +225,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -345,7 +346,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -466,7 +467,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -587,7 +588,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -708,7 +709,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -829,7 +830,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -950,7 +951,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1071,7 +1072,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1192,7 +1193,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1314,7 +1315,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1435,7 +1436,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1556,7 +1557,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.6F,0.6F,0.45F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1677,7 +1678,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1798,7 +1799,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1919,7 +1920,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2048,7 +2049,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2169,7 +2170,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2290,7 +2291,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2411,7 +2412,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2532,7 +2533,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2653,7 +2654,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2774,7 +2775,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -2895,7 +2896,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3016,7 +3017,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3137,7 +3138,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3258,7 +3259,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3379,7 +3380,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3500,7 +3501,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.4F,0.35F,0.2F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3621,7 +3622,7 @@ namespace AssetsPV
             //39 placeholder
             new float[] {0F,0F,0F,0F},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3742,7 +3743,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3863,7 +3864,7 @@ namespace AssetsPV
             //39 flapping wings, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {1.15F,1.15F,0.6F,flash_alpha_0},
+            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -3921,7 +3922,8 @@ namespace AssetsPV
                     zap[3] = flash_alpha_1;
                     float[] dark = new float[] { 0.0f + s * 0.20f, -0.03f + s * 0.17f, -0.09f + s * 0.22f, 1f }
                         , violet = new float[] { 0.55f, 0.05f, 0.65f, 1f }
-                        , deepviolet = new float[] { 0.3f, 0.05f, 0.4f, 1f };
+                        , deepviolet = new float[] { 0.3f, 0.05f, 0.4f, 1f }
+                        , shiny = new float[] {1.3f, 1.3f, 0.8f, borderless_alpha};
                     schemes[s][p] = schemes[s][p].Concat(new float[][] {
                         drip, //0 moving water
                         transp, //1
@@ -3937,6 +3939,10 @@ namespace AssetsPV
                         violet, //11 violet, will move with unit
                         dark, //12 darkness on the unit, will move with unit
                         deepviolet, //13 deep violet, will move with unit
+                        shiny, //14 bright light bit
+                        transp, //15
+                        transp, //16
+                        transp, //17
 
                     }).ToArray();
                 }

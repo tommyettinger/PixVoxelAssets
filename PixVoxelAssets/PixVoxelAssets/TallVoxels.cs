@@ -4949,6 +4949,8 @@ namespace AssetsPV
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
                 if (current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
                     current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
+                if (current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
+                    current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
 
                 if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
@@ -5067,7 +5069,7 @@ namespace AssetsPV
                                     argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                         Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 }
-                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
+                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.borderless_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
@@ -5229,6 +5231,8 @@ namespace AssetsPV
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
                 if (current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
                     current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
+                if (current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
+                    current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
 
                 if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
@@ -5325,7 +5329,7 @@ namespace AssetsPV
                                     argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                         Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 }
-                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
+                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.borderless_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
@@ -5485,6 +5489,8 @@ namespace AssetsPV
                     current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
                 if (current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
                     current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
+                if (current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
+                    current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
 
                 if ((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
@@ -5581,7 +5587,7 @@ namespace AssetsPV
                                     argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
                                     Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 }
-                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1);
+                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.borderless_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.wcurrent[mod_color][i + 64];// (argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
@@ -9953,31 +9959,31 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
-                /*
-                processUnitOutlinedWDouble("Wolf", 5, true);
-                processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
-                processUnitOutlinedWDouble("Drakeling", 6, false);
-                processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
-                processUnitOutlinedWDouble("Beetle", 7, true);
-                processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
-                processUnitOutlinedWDouble("Hawk", 8, false);
-                processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
-                processUnitOutlinedWDouble("Crab", 9, true);
-                processUnitOutlinedWDoubleAugmented("Crab", 9, true);
-                processUnitOutlinedWDouble("Goblin", 10, true);
-                processUnitOutlinedWDoubleAugmented("Goblin", 10, true);
-                processUnitOutlinedWDouble("Goblin_Shaman", 10, true);
-                processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
-                processUnitOutlinedWDouble("Ant", 11, true);
-                processUnitOutlinedWDoubleAugmented("Ant", 11, true);
-                processUnitOutlinedWDouble("Bee", 12, false);
-                processUnitOutlinedWDoubleAugmented("Bee", 12, false);
-                processUnitOutlinedWDouble("Eye_Tyrant", 13, false);
-                processUnitOutlinedWDoubleAugmented("Eye_Tyrant", 13, false);
-                processUnitOutlinedWDouble("Centipede", 14, true);
-                processUnitOutlinedWDoubleAugmented("Centipede", 14, true);*/
-                processUnitOutlinedWDouble("Sand_Worm", 15, true);
-                processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
+                
+                processAugments("Wolf", 5, true);
+                //processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
+                processAugments("Drakeling", 6, false);
+                //processUnitOutlinedWDoubleAugmented("Drakeling", 6, false);
+                processAugments("Beetle", 7, true);
+                //processUnitOutlinedWDoubleAugmented("Beetle", 7, true);
+                processAugments("Hawk", 8, false);
+                //processUnitOutlinedWDoubleAugmented("Hawk", 8, false);
+                processAugments("Crab", 9, true);
+                //processUnitOutlinedWDoubleAugmented("Crab", 9, true);
+                processAugments("Goblin", 10, true);
+                //processUnitOutlinedWDoubleAugmented("Goblin", 10, true);
+                processAugments("Goblin_Shaman", 10, true);
+                //processUnitOutlinedWDoubleAugmented("Goblin_Shaman", 10, true);
+                processAugments("Ant", 11, true);
+                //processUnitOutlinedWDoubleAugmented("Ant", 11, true);
+                processAugments("Bee", 12, false);
+                //processUnitOutlinedWDoubleAugmented("Bee", 12, false);
+                processAugments("Eye_Tyrant", 13, false);
+                //processUnitOutlinedWDoubleAugmented("Eye_Tyrant", 13, false);
+                processAugments("Centipede", 14, true);
+                //processUnitOutlinedWDoubleAugmented("Centipede", 14, true);
+                processAugments("Sand_Worm", 15, true);
+                //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
             }
         
             VoxelLogic.InitializeWPalette();
@@ -10538,14 +10544,14 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
-            
+
             processUnitOutlinedWDouble(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            
+
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10569,6 +10575,35 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("html");
             File.WriteAllText("html/" + alternateName + ".html", html);
         }
+
+        private static void processAugments(string u, int palette, bool hover)
+        {
+
+            processUnitOutlinedWDouble(u, palette, hover);
+            processUnitOutlinedWDoubleAugmented(u, palette, hover);
+
+            string doc = File.ReadAllText("AugmentTemplate.html");
+            string html = String.Format(doc, palette, u);
+
+            System.IO.Directory.CreateDirectory("beast");
+            System.IO.Directory.CreateDirectory("beast/html");
+            File.WriteAllText("beast/html/" + u + ".html", html);
+        }
+
+        private static void processAugments(string u, int palette, bool hover, string alternateName)
+        {
+
+            processUnitOutlinedWDouble(u, palette, hover);
+            processUnitOutlinedWDoubleAugmented(u, palette, hover);
+
+            string doc = File.ReadAllText("AugmentTemplate.html");
+            string html = String.Format(doc, palette, u);
+
+            System.IO.Directory.CreateDirectory("beast");
+            System.IO.Directory.CreateDirectory("beast/html");
+            File.WriteAllText("beast/html/" + alternateName + ".html", html);
+        }
+
         private static Bitmap generateVoxelSpritesheet()
         {
             Bitmap bmp = new Bitmap(512, 512, PixelFormat.Format32bppArgb);

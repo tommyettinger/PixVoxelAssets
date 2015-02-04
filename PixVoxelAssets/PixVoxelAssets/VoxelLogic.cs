@@ -176,6 +176,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public const float flash_alpha_1 = 0.88F;
         public const float fuzz_alpha = 0.91F;
         public const float gloss_alpha = 0.92F;
+        public const float borderless_alpha = 0.93F;
         public const float eraser_alpha = -0.1F;
         public static float[][] xcolors = new float[][]
         {
@@ -13369,10 +13370,52 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         }
 
+
+        public static List<MagicaVoxelData> LightAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            if (color != 34)
+            {
+                List<MagicaVoxelData> l = new List<MagicaVoxelData>(6);
+                l.Add(initial);
+                int b = initial.z % 4;
+                l.Add(AlterVoxel(initial, 1, 0, 1, 255 - ((17 - b) * 4)));
+                l.Add(AlterVoxel(initial, 0, 1, 1, 255 - ((17 - b) * 4)));
+                l.Add(AlterVoxel(initial, -1, 0, 1, 255 - ((17 - b) * 4)));
+                l.Add(AlterVoxel(initial, 0, -1, 1, 255 - ((17 - b) * 4)));
+                //for (int i = 1; i <= initial.z && i <= 7; i++)
+                //{ //((b) % 4)
+                //if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 0, 0, -1, 255 - ((17 - b) * 4))); //down
+                /*
+                if (r.Next(2) == 0) l.Add(AlterVoxel(initial, 0, 0, 1, 255 - ((17 - b) * 4))); //up
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 1, 0, 0, 255 - ((17 - b) * 4))); //forward
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, -1, 0, 0, 255 - ((17 - b) * 4))); //backward
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 0, 1, 0, 255 - ((17 - b) * 4))); //right hand
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 0, -1, 0, 255 - ((17 - b) * 4))); //left hand
+                 * */
+                //}
+                return l;
+            }
+            /*else if (color == 34)
+            {
+                if (r.Next(3) == 0)
+                {
+                    return new List<MagicaVoxelData> { };
+                }
+                else
+                {
+                    return new List<MagicaVoxelData> { initial };
+                }
+
+            }*/
+            else return new List<MagicaVoxelData> { initial };
+        }
+
         public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { 
+                                                                                                     { "Light", LightAugmenter } ,
+                                                                                                     { "Shock", ShockAugmenter },
                                                                                                      { "Dark", DarkAugmenter } ,
                                                                                                      { "Earth", EarthAugmenter },
-                                                                                                     { "Shock", ShockAugmenter },
                                                                                                      { "Fire", FireAugmenter },
                                                                                                      { "Water", WaterAugmenter } ,
                                                                                                    };

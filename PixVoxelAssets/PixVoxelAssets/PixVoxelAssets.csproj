@@ -686,6 +686,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AugmentTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="black_outline_ortho.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
