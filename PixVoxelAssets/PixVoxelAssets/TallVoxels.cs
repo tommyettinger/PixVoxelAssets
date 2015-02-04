@@ -9921,7 +9921,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("beast");
             
-            for (int p = 1; p < AlternatePalettes.schemes.Length; p++)
+            for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
@@ -9973,9 +9973,11 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bee", 12, false);
                 processUnitOutlinedWDoubleAugmented("Bee", 12, false);
                 processUnitOutlinedWDouble("Eye_Tyrant", 13, false);
-                processUnitOutlinedWDoubleAugmented("Eye_Tyrant", 13, false);*/
+                processUnitOutlinedWDoubleAugmented("Eye_Tyrant", 13, false);
                 processUnitOutlinedWDouble("Centipede", 14, true);
-                processUnitOutlinedWDoubleAugmented("Centipede", 14, true);
+                processUnitOutlinedWDoubleAugmented("Centipede", 14, true);*/
+                processUnitOutlinedWDouble("Sand_Worm", 15, true);
+                processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
             }
         
             VoxelLogic.InitializeWPalette();
