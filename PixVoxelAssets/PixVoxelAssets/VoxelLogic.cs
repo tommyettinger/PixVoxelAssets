@@ -13269,7 +13269,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 };
             }
             startZ -= 6;
-            if ((((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && r.Next(9) == 0))
+            if ((((color >= 0 && color <= 7) || (color >= 28 && color <= 33)) && r.Next(9) == 0))
             {
                 int newcolor = new int[] { 253 - 43 * 4, 253 - 43 * 4, 253 - 43 * 4, 253 - 44 * 4, 253 - 44 * 4, 253 - 44 * 4, 253 - 45 * 4, 253 - 46 * 4 }.RandomElement();
                 List<MagicaVoxelData> l = new List<MagicaVoxelData> {
@@ -13321,7 +13321,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static List<MagicaVoxelData> DarkAugmenter(MagicaVoxelData initial)
         {
             int color = (253 - initial.color) / 4;
-            if ((((color >= 2 && color <= 7) || (color >= 28 && color <= 33)) && color % 2 == 0 && r.Next(11) == 0))
+            if ((((color >= 0 && color <= 7) || (color >= 28 && color <= 33)) && color % 2 == 0 && r.Next(11) == 0))
             {
                 List<MagicaVoxelData> l = new List<MagicaVoxelData>(32);
                 l.Add(AlterVoxel(initial, 255 - 12 * 4));
@@ -13411,7 +13411,47 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             else return new List<MagicaVoxelData> { initial };
         }
 
-        public static Dictionary<String, Augmenter> Augmenters = new Dictionary<string, Augmenter> { 
+        public static List<MagicaVoxelData> AirAugmenter(MagicaVoxelData initial)
+        {
+            int color = (253 - initial.color) / 4;
+            if (((color >= 0 && color < 7) || (color >= 28 && color < 33)) && color % 2 == 0)
+            {
+                List<MagicaVoxelData> l = new List<MagicaVoxelData>(6);
+                l.Add(AlterVoxel(initial, 0, 0, 4, initial.color));
+                if (r.Next(15) < 1)
+                {
+                    l.Add(AlterVoxel(initial, 1, 0, 3 - r.Next(4), 255 - (18 * 4)));
+                    l.Add(AlterVoxel(initial, 0, 1, 3 - r.Next(4), 255 - (19 * 4)));
+                    l.Add(AlterVoxel(initial, -1, 0, 3 - r.Next(4), 255 - (18 * 4)));
+                    l.Add(AlterVoxel(initial, 0, -1, 3 - r.Next(4), 255 - (19 * 4)));
+                }
+                if(r.Next(8) < 3)
+                {
+                    l.Add(AlterVoxel(initial, r.Next(3) - 1, r.Next(3) - 1, -initial.z + r.Next(2), 255 - (20 * 4)));
+                    l.Add(AlterVoxel(initial, 2*(r.Next(3) - 1), 2*(r.Next(3) - 1), -initial.z + r.Next(2) + 1, 255 - (20 * 4)));
+//                    l.Add(AlterVoxel(initial, 2*(r.Next(3) - 1), 2*(r.Next(3) - 1), -initial.z + r.Next(2) + 1, 255 - (20 * 4)));
+                }
+                //for (int i = 1; i <= initial.z && i <= 7; i++)
+                //{ //((b) % 4)
+                //if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 0, 0, -1, 255 - ((17 - b) * 4))); //down
+                /*
+                if (r.Next(2) == 0) l.Add(AlterVoxel(initial, 0, 0, 1, 255 - ((17 - b) * 4))); //up
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 1, 0, 0, 255 - ((17 - b) * 4))); //forward
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, -1, 0, 0, 255 - ((17 - b) * 4))); //backward
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 0, 1, 0, 255 - ((17 - b) * 4))); //right hand
+                if (r.Next(3) == 0) l.Add(AlterVoxel(initial, 0, -1, 0, 255 - ((17 - b) * 4))); //left hand
+                 * */
+                //}
+                return l;
+            }
+            else if (color == 34)
+            {
+                return new List<MagicaVoxelData> { AlterVoxel(initial, 0, 0, 4, 255 - (21 * 4)) };
+            }
+            else return new List<MagicaVoxelData> { AlterVoxel(initial, 0, 0, 4, initial.color) };
+        }
+
+        public static Dictionary<string, Augmenter> Augmenters = new Dictionary<string, Augmenter> { 
                                                                                                      { "Light", LightAugmenter } ,
                                                                                                      { "Shock", ShockAugmenter },
                                                                                                      { "Dark", DarkAugmenter } ,

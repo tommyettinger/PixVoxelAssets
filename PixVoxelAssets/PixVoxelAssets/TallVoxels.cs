@@ -4242,7 +4242,7 @@ namespace AssetsPV
             return 4 * ((x + y) * 2 + 4 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
                 stride * (300 - 60 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
-                || current_color == VoxelLogic.wcolorcount + 10)
+                || current_color == VoxelLogic.wcolorcount + 10 || current_color == VoxelLogic.wcolorcount + 20)
                 ? -2 : (still) ? 0 : jitter) + innerY);
             //((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha) ? -2 : jitter)
         }
@@ -4256,7 +4256,7 @@ namespace AssetsPV
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
                                     stride * (600 - 120 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
-                                    || current_color == VoxelLogic.wcolorcount + 10)
+                                    || current_color == VoxelLogic.wcolorcount + 10 || current_color == VoxelLogic.wcolorcount + 20)
                                     ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelMassiveW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
@@ -4269,7 +4269,7 @@ namespace AssetsPV
             return 4 * ((x + y) * 2 + 12 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                                     + innerX +
                                     stride * (800 - 160 - y + x - z * 3 - ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
-                                    || current_color == VoxelLogic.wcolorcount + 10)
+                                    || current_color == VoxelLogic.wcolorcount + 10 || current_color == VoxelLogic.wcolorcount + 20)
                                     ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
@@ -5045,7 +5045,7 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if ((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                         continue;
-                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5) && r.Next(11) < 8) //rare sparks
+                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
                         continue;
 
                     for (int j = 0; j < 4; j++)
@@ -5305,7 +5305,7 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if ((mod_color == 27 || mod_color ==  VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                         continue;
-                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5) && r.Next(11) < 8) //rare sparks
+                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
                         continue;
 
                     for (int j = 0; j < 4; j++)
@@ -5563,7 +5563,7 @@ namespace AssetsPV
                     int mod_color = current_color;
                     if ((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                         continue;
-                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5) && r.Next(11) < 8) //rare sparks
+                    if ((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
                         continue;
 
                     for (int j = 0; j < 4; j++)
@@ -8213,6 +8213,47 @@ namespace AssetsPV
                 //            processFiringDouble(u);
 
                 processFieryExplosionDoubleW(u, newModel, palette);
+            }
+            {
+                VoxelLogic.Augmenter aug = VoxelLogic.AirAugmenter;
+                string u = unit + "_" + "Air";
+                Console.WriteLine("Processing: " + u);
+                BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
+                List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug);
+                MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
+
+                int framelimit = 4;
+
+
+                string folder = (altFolder + "palette" + palette);//"color" + i;
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                for (int f = 0; f < framelimit; f++)
+                { //"color" + i + "/"
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, false);
+                        b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Dispose();
+                    }
+                }
+
+
+                System.IO.Directory.CreateDirectory("gifs");
+                System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+
+                s = folder + "/" + u + "_Large_face* ";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
+                Process.Start(startInfo).WaitForExit();
+
+                //bin.Close();
+
+                //            processFiringDouble(u);
+
+                processFieryExplosionDoubleW(u, newModel, palette);
+
             }
         }
         public static void processUnitOutlinedWDouble(string u, int palette, bool still)

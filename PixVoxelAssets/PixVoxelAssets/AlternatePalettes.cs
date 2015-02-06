@@ -3923,7 +3923,10 @@ namespace AssetsPV
                     float[] dark = new float[] { 0.0f + s * 0.20f, -0.03f + s * 0.17f, -0.09f + s * 0.22f, 1f }
                         , violet = new float[] { 0.55f, 0.05f, 0.65f, 1f }
                         , deepviolet = new float[] { 0.3f, 0.05f, 0.4f, 1f }
-                        , shiny = new float[] {1.3f, 1.3f, 0.8f, borderless_alpha};
+                        , shiny = new float[] { 1.3f, 1.3f, 0.8f, borderless_alpha }
+                        , windy0 = new float[] { 0.95f, 0.85f, 0.65f, flash_alpha_0 }
+                        , windy1 = new float[] { 0.95f, 0.85f, 0.65f, flash_alpha_1 }
+                        , flurry = new float[] { 0.99f, 0.9f, 0.7f, borderless_alpha};
                     schemes[s][p] = schemes[s][p].Concat(new float[][] {
                         drip, //0 moving water
                         transp, //1
@@ -3943,6 +3946,10 @@ namespace AssetsPV
                         transp, //15
                         transp, //16
                         transp, //17
+                        windy0, //18 spinning wind frame 0
+                        windy1, //19 spinning wind frame 1
+                        flurry, //20 randomly appearing lighter dust on ground
+                        flurry, //21 randomly appearing lighter mist inside something
 
                     }).ToArray();
                 }
