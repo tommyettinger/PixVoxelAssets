@@ -7560,7 +7560,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
         public static byte clear = 255;
-        public static int[] drabPalettes = { 47 };
+        public static int[] drabPalettes = { 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
         static VoxelLogic()
         {
@@ -7715,17 +7715,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     if (j == 0)
                                     {
                                         ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV(h, s * 0.45, v * 0.9);
+                                        c = ColorFromHSV(h, s * 0.6, v * 0.96);
                                     }
                                     else if (i >= width / 2 || j == height - 1)
                                     {
                                         ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV(h, s * 0.7, Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.7)));
+                                        c = ColorFromHSV(h, s * 0.8, v * 0.85);
                                     }
                                     else
                                     {
                                         ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV(h, s * 0.55, Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.8)));
+                                        c = ColorFromHSV(h, s * 0.7, v * 0.92);
                                     }
                                 }
                                 else
