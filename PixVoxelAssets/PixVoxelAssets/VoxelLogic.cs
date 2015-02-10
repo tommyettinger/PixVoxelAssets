@@ -7560,7 +7560,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
         public static byte clear = 255;
-        public static int[] drabPalettes = { 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
+        public static int[] drabPalettes = { 47, 48,     50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
         static VoxelLogic()
         {
@@ -8127,6 +8127,49 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     vox.color = 249 - 96;
                     taken[vox.x, vox.y] = voxelsAltered.Count();
                     voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered;
+        }
+        public static List<MagicaVoxelData> PlaceBloodPoolW(List<MagicaVoxelData> voxelData)
+        {
+            int[,] taken = new int[sizex + 20, sizey + 20];
+            taken.Fill(-1);
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 11 / 8);
+            for (int i = 0; i < voxelData.Count; i++)
+            {
+                if (voxelData[i].x >= sizex + 20 || voxelData[i].y >= sizey + 20)
+                {
+                    continue;
+                }
+                if (voxelData[i].color > 257 - wcolorcount * 4 && (254 - voxelData[i].color) % 4 == 0)
+                {
+                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = clear }; // color = (byte)(voxelData[i].color - 1)
+                }
+                voxelsAltered.Add(voxelData[i]);
+                if (-1 == taken[voxelData[i].x, voxelData[i].y]
+                     && voxelData[i].color == 253 - 34 * 4)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    for(int floor_x = -4; floor_x <= 4; floor_x++)
+                    {
+                        for(int floor_y = -4; floor_y <= 4; floor_y++)
+                        {
+                            if (Math.Abs(floor_x) + Math.Abs(floor_y) <= 5 &&
+                                voxelData[i].x + floor_x >= 0 && voxelData[i].x + floor_x < sizex + 20 &&
+                                voxelData[i].y + floor_y >= 0 && voxelData[i].y + floor_y < sizey + 20)
+                            {
+                                MagicaVoxelData vox = new MagicaVoxelData();
+                                vox.x = (byte)(voxelData[i].x + floor_x);
+                                vox.y = (byte)(voxelData[i].y + floor_y);
+                                vox.z = 0;
+                                vox.color = 253 - 34 * 4;
+                                taken[vox.x, vox.y] = voxelsAltered.Count();
+                                voxelsAltered.Add(vox);
+                            }
+                        }
+
+                    }
                 }
             }
             return voxelsAltered;

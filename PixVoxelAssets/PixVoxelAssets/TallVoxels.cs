@@ -6794,8 +6794,8 @@ namespace AssetsPV
                         headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
                     hat_headpoints.AppendLine("EXPLODE_HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
-                    Image h2 = Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" +
-                        ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
+                    Image h2 = Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/"
+                        // + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
                         + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f % 4) + ".png");
                     hat_image = new Bitmap(h2);
                     h2.Dispose();
@@ -7682,7 +7682,7 @@ namespace AssetsPV
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     for (int f = 0; f < 4; f++)
-                    { //"color" + i + "/"
+                    { //
                         CreateChannelBitmap(processSingleOutlined(parsed, 7, "SE", f, 4), "indexed/" + u + "_Firing_face0" + "_" + f + ".png");
                         CreateChannelBitmap(processSingleOutlined(parsed, 7, "SW", f, 4), "indexed/" + u + "_Firing_face1" + "_" + f + ".png");
                         CreateChannelBitmap(processSingleOutlined(parsed, 7, "NW", f, 4), "indexed/" + u + "_Firing_face2" + "_" + f + ".png");
@@ -7899,7 +7899,7 @@ namespace AssetsPV
                 string folder = ("palette" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
-                { //"color" + i + "/"
+                { //
                     for (int dir = 0; dir < 4; dir++)
                     {
                         processSingleOutlinedW(parsed, i, dir, f, framelimit).Save(folder + "/" + u + "_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
@@ -7957,7 +7957,7 @@ namespace AssetsPV
                 string folder = ("color" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
-                { //"color" + i + "/"
+                { //
 
                     processSingleOutlined(parsed, i, "SE", f, framelimit).Save(folder + "/" + u + "_face0" + "_" + f + ".png", ImageFormat.Png); //se
                     processSingleOutlined(parsed, i, "SW", f, framelimit).Save(folder + "/" + u + "_face1" + "_" + f + ".png", ImageFormat.Png); //sw
@@ -8054,7 +8054,7 @@ namespace AssetsPV
                 string folder = ("color" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
-                { //"color" + i + "/"
+                { //
                     Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
@@ -8087,6 +8087,7 @@ namespace AssetsPV
             processExplosionDouble(u);
 
         }
+        /*
         public static void processUnitOutlinedWDouble(string u)
         {
 
@@ -8105,7 +8106,7 @@ namespace AssetsPV
                 string folder = ("palette" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
-                { //"color" + i + "/"
+                { //
                     for (int dir = 0; dir < 4; dir++)
                     {
                         Bitmap b = processSingleOutlinedWDouble(parsed, i, dir, f, framelimit, false);
@@ -8132,6 +8133,7 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
+        */
         public static void processUnitOutlinedWDouble(string u, int palette)
         {
 
@@ -8149,11 +8151,11 @@ namespace AssetsPV
             string folder = (altFolder + "palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, false);
-                    b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
             }
@@ -8164,7 +8166,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = folder + "/" + u + "_Large_face* ";
+            s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
@@ -8191,11 +8193,11 @@ namespace AssetsPV
                 string folder = (altFolder + "palette" + palette);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
-                { //"color" + i + "/"
+                { //
                     for (int dir = 0; dir < 4; dir++)
                     {
                         Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
-                        b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
                 }
@@ -8207,7 +8209,7 @@ namespace AssetsPV
                 startInfo.UseShellExecute = false;
                 string s = "";
 
-                s = folder + "/" + u + "_Large_face* ";
+                s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
                 startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
                 Process.Start(startInfo).WaitForExit();
 
@@ -8231,11 +8233,11 @@ namespace AssetsPV
                 string folder = (altFolder + "palette" + palette);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
-                { //"color" + i + "/"
+                { //
                     for (int dir = 0; dir < 4; dir++)
                     {
                         Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, false);
-                        b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
                 }
@@ -8247,7 +8249,7 @@ namespace AssetsPV
                 startInfo.UseShellExecute = false;
                 string s = "";
 
-                s = folder + "/" + u + "_Large_face* ";
+                s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
                 startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
                 Process.Start(startInfo).WaitForExit();
 
@@ -8278,11 +8280,11 @@ namespace AssetsPV
             string folder = (altFolder + "palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
-                    b.Save(folder + "/" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
             }
@@ -8294,7 +8296,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = folder + "/" + u + "_Large_face* ";
+            s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
@@ -8308,7 +8310,7 @@ namespace AssetsPV
         public static void processUnitOutlinedWQuad(string u, int palette, bool still)
         {
 
-            Console.WriteLine("Processing: " + u);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -8322,11 +8324,11 @@ namespace AssetsPV
             string folder = (altFolder + "palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWQuad(parsed, palette, dir, f, framelimit, still);
-                    b.Save(folder + "/" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
             }
@@ -8337,7 +8339,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = folder + "/" + u + "_Huge_face* ";
+            s = folder + "/palette" + palette + "_" + u + "_Huge_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
             */
@@ -8365,11 +8367,11 @@ namespace AssetsPV
             string folder = ("palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWQuad(parsed, palette, dir, f, framelimit, still);
-                    b.Save(folder + "/" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
             }
@@ -8380,7 +8382,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = folder + "/" + u + "_Huge_face* ";
+            s = folder + "/palette" + palette + "_" + u + "_Huge_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
@@ -8427,11 +8429,11 @@ namespace AssetsPV
             string folder = ("palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed[f % 4], palette, dir, f, framelimit, true);
-                    b.Save(altFolder + folder + "/" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(altFolder + folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
@@ -8445,7 +8447,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < framelimit; i++)
                 {
-                    s += altFolder + "palette" + palette + "/" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
+                    s += altFolder + "palette" + palette + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
                 }
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Large_animated.gif";
@@ -8493,11 +8495,11 @@ namespace AssetsPV
             string folder = ("palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWQuad(parsed[f % 4], palette, dir, f, framelimit, true);
-                    b.Save(altFolder + folder + "/" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(altFolder + folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
@@ -8511,7 +8513,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < framelimit; i++)
                 {
-                    s += altFolder + "palette" + palette + "/" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
+                    s += altFolder + "palette" + palette + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
                 }
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Huge_animated.gif";
@@ -8575,6 +8577,55 @@ namespace AssetsPV
             }
 
          */
+
+        public static void processUnitOutlinedWDoubleDead(string u, int palette, bool still)
+        {
+
+            Console.WriteLine("Processing: " + u + " Dead");
+            BinaryReader bin = new BinaryReader(File.Open(u + "_Dead_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.PlaceBloodPoolW(VoxelLogic.FromMagicaRaw(bin))).ToArray();
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+                if ((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+            int framelimit = 4;
+
+
+            string folder = (altFolder + "palette" + palette);//"color" + i;
+            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            for (int f = 0; f < framelimit; f++)
+            { //
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Dead_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = folder + "/palette" + palette + "_" + u + "_Dead_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Dead_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            //bin.Close();
+
+            //            processFiringDouble(u);
+
+            //processFieryExplosionDoubleW(u, palette);
+
+        }
+        
+
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
         public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
@@ -8616,10 +8667,10 @@ namespace AssetsPV
                         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
 
                     Graphics hat_graphics;
-                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/" +
-                        ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
+                    Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/"
+                        // + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
                         + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f) + ".png"));
-                    Bitmap body_image = new Bitmap(Image.FromFile("palette" + palette + "/" + u + "_Large_face" + dir + "_" + f + ".png"));
+                    Bitmap body_image = new Bitmap(Image.FromFile("palette" + palette + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png"));
 
                     VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
                     VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
@@ -8629,7 +8680,7 @@ namespace AssetsPV
                     body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
                          (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)), 88, 108);
                     body_graphics.Dispose();
-                    body_image.Save("palette" + palette + "/" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png");
+                    body_image.Save("palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png");
                     hat_graphics.Dispose();
                     hat_image.Dispose();
                     body_image.Dispose();
@@ -8642,7 +8693,7 @@ namespace AssetsPV
                 parsed[i].y += 10;
             }
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
@@ -8657,7 +8708,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = "palette" + palette + "/" + u + "_" + hat + "_Large_face* ";
+            s = "palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
@@ -8679,7 +8730,7 @@ namespace AssetsPV
             }
 
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, true);
@@ -8706,7 +8757,7 @@ namespace AssetsPV
                 parsed[i].y += 10;
             }
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
@@ -8743,11 +8794,11 @@ namespace AssetsPV
             }
 
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, true);
-                    b.Save(folder + "/" + u + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(folder + "/" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
@@ -8772,11 +8823,11 @@ namespace AssetsPV
             string folder = ("palette" + palette);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
-                    b.Save(folder + "/" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Save(folder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
             }
@@ -8787,7 +8838,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = "palette" + palette + "/" + u + "_" + hat + "_Large_face* ";
+            s = "palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
@@ -8807,11 +8858,11 @@ namespace AssetsPV
             }
 
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, true);
-                    b.Save(folder + "/" + u + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(folder + "/palette" + palette + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
@@ -8841,7 +8892,7 @@ namespace AssetsPV
                 string folder = ("color" + i);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < 4; f++)
-                { //"color" + i + "/"
+                { //
                     Bitmap b = processSingleOutlinedDouble(parsed, i, "SE", f, framelimit, u);
                     b.Save(folder + "/" + u + "_Large_face0" + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
@@ -8920,7 +8971,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("indexed"); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "indexed/" + u + "_face0" + "_" + f + ".png");
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "SW", f, framelimit), "indexed/" + u + "_face1" + "_" + f + ".png");
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "indexed/" + u + "_face2" + "_" + f + ".png");
@@ -8943,7 +8994,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("indexed"); //("color" + i);
             for (int f = 0; f < framelimit; f++)
-            { //"color" + i + "/"
+            { //
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "indexed/" + u + "_face0" + "_" + f + ".png");
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "SW", f, framelimit), "indexed/" + u + "_face1" + "_" + f + ".png");
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "NW", f, framelimit), "indexed/" + u + "_face2" + "_" + f + ".png");
@@ -8996,7 +9047,7 @@ namespace AssetsPV
             string folder = ("indexed");//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < 4; f++)
-            { //"color" + i + "/"
+            { //
                 CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "SE", f, framelimit, u), "indexed/" + u + "_face0" + "_" + f + ".png"); //se
                 CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "SW", f, framelimit, u), "indexed/" + u + "_face1" + "_" + f + ".png"); //se
                 CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "NW", f, framelimit, u), "indexed/" + u + "_face2" + "_" + f + ".png"); //se
@@ -9979,8 +10030,8 @@ namespace AssetsPV
                 VoxelLogic.InitializeWPalette();
 
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
-                */
-                /*
+                
+                
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
                 processUnitOutlinedWDouble("Generic_Male", 2, true);
@@ -10002,8 +10053,8 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 2, true);
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
-                */
-                /*
+                
+                
                 processAugments("Wolf", 5, true);
                 //processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processAugments("Drakeling", 6, false);
@@ -10088,11 +10139,11 @@ namespace AssetsPV
             VoxelLogic.VoxToBVX(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Sfyst" + "_Large_W.vox", FileMode.Open)))), "Sfyst", 40);
             VoxelLogic.VoxToBVX(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Terrain" + "_Special_W.vox", FileMode.Open))), "Terrain", 48);
             */
-            
+            /*
             for(int i = 50; i <= 60; i++)
             {
                 processUnitOutlinedWQuad("Terrain", i, true);
-            }
+            }*/
             /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
             
@@ -10240,12 +10291,13 @@ namespace AssetsPV
 
 
             
-
+            /*
             processUnitOutlinedWQuad("Grass", 47, true);
             processUnitOutlinedWQuad("Tree", 47, true);
             processUnitOutlinedWQuad("Boulder", 48, true);
             processUnitOutlinedWQuad("Rubble", 48, true);
             processUnitOutlinedWQuad("Headstone", 48, true);
+            */
             /*
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
@@ -10272,7 +10324,7 @@ namespace AssetsPV
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10309,12 +10361,12 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
 
-            processHats("Skeleton_Spear", 6, true, classes);
+            //processHats("Skeleton_Spear", 6, true, classes);
 
             processHats("Spirit", 7, false, classes);
 
@@ -10358,7 +10410,7 @@ namespace AssetsPV
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
 
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
-            
+            */
             
             processHats("Bulky_Male", 0, true, classes, "Bulky_Men_A");
 
@@ -10380,7 +10432,7 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-            */
+            
             //File.WriteAllText("bodies.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
@@ -10591,6 +10643,7 @@ namespace AssetsPV
         {
 
             processUnitOutlinedWDouble(u, palette, hover);
+            processUnitOutlinedWDoubleDead(u, palette, hover);
 
             foreach (string s in classes)
             {
@@ -10608,6 +10661,7 @@ namespace AssetsPV
         {
             
             processUnitOutlinedWDouble(u, palette, hover);
+            processUnitOutlinedWDoubleDead(u, palette, hover);
 
             foreach (string s in classes)
             {
