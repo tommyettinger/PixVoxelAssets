@@ -10291,7 +10291,7 @@ namespace AssetsPV
 
 
             
-            
+            /*
             processUnitOutlinedWQuad("Grass", 47, true);
             processUnitOutlinedWQuad("Tree", 47, true);
             processUnitOutlinedWQuad("Boulder", 48, true);
@@ -10318,13 +10318,13 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-            
+            */
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10361,7 +10361,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10389,7 +10389,7 @@ namespace AssetsPV
             processHats("Damned", 63, true, classes);
 
             processHats("Husk", 64, true, classes);
-
+            
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
             
             processHats("Generic_Male", 1, true, classes, "Living_Men_B");
@@ -10432,6 +10432,17 @@ namespace AssetsPV
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
             */
+
+            processHats("Armored_Male", 0, true, classes, "Armored_Men_A");
+
+            processHats("Armored_Male", 1, true, classes, "Armored_Men_B");
+
+            processHats("Armored_Male", 15, true, classes, "Armored_Men_C");
+
+            processHats("Armored_Male", 16, true, classes, "Armored_Men_D");
+
+            processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
+            
             //File.WriteAllText("bodies.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
@@ -10660,7 +10671,7 @@ namespace AssetsPV
         {
             
             processUnitOutlinedWDouble(u, palette, hover);
-            processUnitOutlinedWDoubleDead(u, palette, hover);
+            //processUnitOutlinedWDoubleDead(u, palette, hover);
             
             foreach (string s in classes)
             {
