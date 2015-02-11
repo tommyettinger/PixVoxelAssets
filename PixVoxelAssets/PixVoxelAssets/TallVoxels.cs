@@ -6697,7 +6697,7 @@ namespace AssetsPV
         }
         public static void processFieryExplosionDoubleW(string u, List<MagicaVoxelData> newModel, int palette)
         {
-            Console.WriteLine("Processing: " + u);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
             //BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = newModel.ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
@@ -6756,7 +6756,7 @@ namespace AssetsPV
         }
         public static void processFieryExplosionDoubleWHat(string u, int palette, string hat, MagicaVoxelData[] headpoints)
         {
-            Console.WriteLine("Processing: " + u + " " + hat);
+            Console.WriteLine("Processing: " + u + " " + hat + ", palette " + palette);
             Stream body = File.Open(u + "_Large_W.vox", FileMode.Open);
             BinaryReader bin = new BinaryReader(body);
             int framelimit = 12;
@@ -6876,7 +6876,7 @@ namespace AssetsPV
         }
         public static void processFieryExplosionQuadW(string u, int palette)
         {
-            Console.WriteLine("Processing: " + u);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
@@ -6907,7 +6907,7 @@ namespace AssetsPV
                 }
             }
 
-            /*
+            
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -6924,12 +6924,12 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
         }
         public static void processFieryExplosionQuadW(string u, int palette, bool shadowless)
         {
-            Console.WriteLine("Processing: " + u);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
@@ -8182,7 +8182,7 @@ namespace AssetsPV
             foreach (var aug in VoxelLogic.Augmenters)
             {
                 string u = unit + "_" + aug.Key;
-                Console.WriteLine("Processing: " + u);
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug.Value);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
@@ -8222,7 +8222,7 @@ namespace AssetsPV
             {
                 VoxelLogic.Augmenter aug = VoxelLogic.AirAugmenter;
                 string u = unit + "_" + "Air";
-                Console.WriteLine("Processing: " + u);
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
@@ -8264,7 +8264,7 @@ namespace AssetsPV
         public static void processUnitOutlinedWDouble(string u, int palette, bool still)
         {
 
-            Console.WriteLine("Processing: " + u);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -8333,7 +8333,7 @@ namespace AssetsPV
                 }
             }
 
-            /*
+            
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8342,7 +8342,7 @@ namespace AssetsPV
             s = folder + "/palette" + palette + "_" + u + "_Huge_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
 
             //            processFiringDouble(u);
@@ -8353,7 +8353,7 @@ namespace AssetsPV
         public static void processUnitOutlinedWQuad(string u, int palette, bool still, bool shadowless)
         {
 
-            Console.WriteLine("Processing: " + u);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = (shadowless) ? VoxelLogic.FromMagicaRaw(bin).ToArray() : VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -10291,14 +10291,14 @@ namespace AssetsPV
 
 
             
-            /*
+            
             processUnitOutlinedWQuad("Grass", 47, true);
             processUnitOutlinedWQuad("Tree", 47, true);
             processUnitOutlinedWQuad("Boulder", 48, true);
             processUnitOutlinedWQuad("Rubble", 48, true);
             processUnitOutlinedWQuad("Headstone", 48, true);
-            */
-            /*
+            
+            
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
             processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
@@ -10318,13 +10318,13 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-            */
+            
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10361,7 +10361,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            /*
+            
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10390,9 +10390,8 @@ namespace AssetsPV
 
             processHats("Husk", 64, true, classes);
 
-            
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
-
+            
             processHats("Generic_Male", 1, true, classes, "Living_Men_B");
 
             processHats("Generic_Male", 15, true, classes, "Living_Men_C");
@@ -10400,9 +10399,9 @@ namespace AssetsPV
             processHats("Generic_Male", 16, true, classes, "Living_Men_D");
 
             processHats("Generic_Male", 17, true, classes, "Living_Men_E");
-
+            
             processHats("Generic_Female", 0, true, classes, "Living_Women_A");
-
+            
             processHats("Generic_Female", 1, true, classes, "Living_Women_B");
 
             processHats("Generic_Female", 15, true, classes, "Living_Women_C");
@@ -10410,10 +10409,10 @@ namespace AssetsPV
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
 
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
-            */
+            
             
             processHats("Bulky_Male", 0, true, classes, "Bulky_Men_A");
-
+            
             processHats("Bulky_Male", 1, true, classes, "Bulky_Men_B");
 
             processHats("Bulky_Male", 15, true, classes, "Bulky_Men_C");
@@ -10424,7 +10423,7 @@ namespace AssetsPV
             
 
             processHats("Bulky_Female", 0, true, classes, "Bulky_Women_A");
-
+            
             processHats("Bulky_Female", 1, true, classes, "Bulky_Women_B");
 
             processHats("Bulky_Female", 15, true, classes, "Bulky_Women_C");
@@ -10432,7 +10431,7 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-            
+            */
             //File.WriteAllText("bodies.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
@@ -10643,7 +10642,7 @@ namespace AssetsPV
         {
 
             processUnitOutlinedWDouble(u, palette, hover);
-            processUnitOutlinedWDoubleDead(u, palette, hover);
+            //processUnitOutlinedWDoubleDead(u, palette, hover);
 
             foreach (string s in classes)
             {
@@ -10662,13 +10661,13 @@ namespace AssetsPV
             
             processUnitOutlinedWDouble(u, palette, hover);
             processUnitOutlinedWDoubleDead(u, palette, hover);
-
+            
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
             
-            string doc = File.ReadAllText("Template.html");
+            string doc = File.ReadAllText("LivingTemplate.html");
             string html = String.Format(doc, palette, u);
 
             System.IO.Directory.CreateDirectory("html");
