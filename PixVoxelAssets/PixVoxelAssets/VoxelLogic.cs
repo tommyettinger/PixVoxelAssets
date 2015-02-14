@@ -7414,8 +7414,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             new float[] {0F,0F,0F,0F},
             //39 placeholder
             new float[] {0F,0F,0F,0F},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 flickering sparks
+            new float[] {0.45F,-0.05F,0.4F,borderless_alpha},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
