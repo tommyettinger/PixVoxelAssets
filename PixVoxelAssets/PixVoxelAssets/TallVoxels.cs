@@ -10324,7 +10324,7 @@ namespace AssetsPV
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10361,7 +10361,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -10431,7 +10431,7 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-            
+            */
 
             processHats("Armored_Male", 0, true, classes, "Armored_Men_A");
 
@@ -10442,7 +10442,7 @@ namespace AssetsPV
             processHats("Armored_Male", 16, true, classes, "Armored_Men_D");
 
             processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
-            */
+            
             processUnitOutlinedWDouble("Necromancer", 65, true);
 
             //File.WriteAllText("bodies.txt", model_headpoints.ToString());
@@ -10671,10 +10671,10 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
-            /*
-            processUnitOutlinedWDouble(u, palette, hover);
-            //processUnitOutlinedWDoubleDead(u, palette, hover);
             
+            processUnitOutlinedWDouble(u, palette, hover);
+            processUnitOutlinedWDoubleDead(u, palette, hover);
+            /*
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
