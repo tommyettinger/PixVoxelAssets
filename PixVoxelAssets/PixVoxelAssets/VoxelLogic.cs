@@ -9645,9 +9645,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 35) //windows
                         mvd.color = (byte)((r.Next(3) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 36) //rotor contrast
-                        mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
+                        mvd.color = 253 - 0 * 4; //"foot contrast" or "raw metal contrast" color for broken rotors contrast
                     else if (c == 37) //rotor
-                        mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
+                        mvd.color = 253 - 1 * 4; //"foot" or "raw metal" color for broken rotors
                     else if (c == 38 || c == 39)
                         mvd.color = clear; //clear non-active rotors
                     else if (c == 19) //orange fire

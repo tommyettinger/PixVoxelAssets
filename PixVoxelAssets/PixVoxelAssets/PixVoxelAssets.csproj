@@ -292,6 +292,9 @@
     <None Include="Farmer_Hat_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Full_Mecha_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Generic_Female_Dead_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

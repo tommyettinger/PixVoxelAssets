@@ -10081,8 +10081,12 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
                 */
             }
-        
+            VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
+            altFolder = "mecha/";
+            System.IO.Directory.CreateDirectory("mecha");
+
             VoxelLogic.InitializeWPalette();
+            processUnitOutlinedWDouble("Full_Mecha", 0, true);
 
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
@@ -10324,7 +10328,7 @@ namespace AssetsPV
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -10361,6 +10365,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
+            */
             /*
             processHats("Zombie", 2, true, classes);
 
@@ -10431,7 +10436,7 @@ namespace AssetsPV
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
 
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
-            */
+            
 
             processHats("Armored_Male", 0, true, classes, "Armored_Men_A");
 
@@ -10442,8 +10447,8 @@ namespace AssetsPV
             processHats("Armored_Male", 16, true, classes, "Armored_Men_D");
 
             processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
-            
-            processUnitOutlinedWDouble("Necromancer", 65, true);
+            */
+            //processUnitOutlinedWDouble("Necromancer", 65, true);
 
             //File.WriteAllText("bodies.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
