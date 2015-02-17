@@ -8191,6 +8191,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             return PlaceShadows(voxelData).ToArray();
         }
+
+        public static List<MagicaVoxelData> readPart(string file)
+        {
+            if (file == null)
+                return new List<MagicaVoxelData>();
+            BinaryReader bin = new BinaryReader(File.Open(file + "_Part_W.vox", FileMode.Open));
+            List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
+            bin.Close();
+            return raw;
+        }
         public static List<MagicaVoxelData> PlaceShadows(List<MagicaVoxelData> voxelData)
         {
             int[,] taken = new int[sizex, sizey];
@@ -8245,7 +8255,42 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     vox.x = voxelData[i].x;
                     vox.y = voxelData[i].y;
                     vox.z = (byte)(0);
-                    vox.color = 249 - 96;
+                    vox.color = 253 - 100;
+                    taken[vox.x, vox.y] = voxelsAltered.Count();
+                    voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered;
+        }
+        public static List<MagicaVoxelData> PlaceShadowsPartialW(List<MagicaVoxelData> voxelData)
+        {
+            int[,] taken = new int[sizex + 20, sizey + 20];
+            taken.Fill(-1);
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 9 / 8);
+            for (int i = 0; i < voxelData.Count; i++)
+            {
+                if (voxelData[i].x >= sizex + 20 || voxelData[i].y >= sizey + 20)
+                {
+                    continue;
+                }
+                if ((254 - voxelData[i].color) % 4 == 0) //voxelData[i].color > 257 - wcolorcount * 4 && 
+                {
+                    continue;
+//                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
+                }
+                voxelsAltered.Add(voxelData[i]);
+                if (-1 == taken[voxelData[i].x, voxelData[i].y]
+                     && (voxelData[i].color > 253 - 21 * 4 || voxelData[i].color < 253 - 24 * 4)
+                     && voxelData[i].color != 253 - 25 * 4 && voxelData[i].color != 253 - 27 * 4 && voxelData[i].color != 253 - 40 * 4 && voxelData[i].color != 255 - 5 * 4
+                     && voxelData[i].color != 253 - 17 * 4 && voxelData[i].color != 253 - 18 * 4 && voxelData[i].color != 253 - 19 * 4 && voxelData[i].color != 253 - 20 * 4
+                     && voxelData[i].color > 257 - wcolorcount * 4)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = (byte)(0);
+                    vox.color = 253 - 100;
                     taken[vox.x, vox.y] = voxelsAltered.Count();
                     voxelsAltered.Add(vox);
                 }
@@ -8392,8 +8437,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static MagicaVoxelData[] AssembleHeadToBody(BinaryReader body, bool raw)
         {
-            List<MagicaVoxelData> head = FromMagicaRaw(new BinaryReader(File.Open("Head_Part_X.vox", FileMode.Open))).ToList();
-            List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
+            List<MagicaVoxelData> head = FromMagicaRaw(new BinaryReader(File.Open("Head_Part_X.vox", FileMode.Open)));
+            List<MagicaVoxelData> bod = FromMagicaRaw(body);
             MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 255 };
             MagicaVoxelData headPlug = new MagicaVoxelData { color = 255 };
             foreach (MagicaVoxelData mvd in bod)
@@ -8440,8 +8485,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             List<MagicaVoxelData> hat = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
             hbin.Close();
-            MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 255 };
-            MagicaVoxelData hatPlug = new MagicaVoxelData { color = 255 };
+            MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 0 };
+            MagicaVoxelData hatPlug = new MagicaVoxelData { color = 0 };
 
             /*
             List<byte> knownColors = new List<byte>(50);
@@ -8463,7 +8508,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     break;
                 }
             }
-            if (bodyPlug.color == 255)
+            if (bodyPlug.color == 0)
                 return bod;
             foreach (MagicaVoxelData mvd in hat)
             {
@@ -8495,6 +8540,103 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
 
 
+        public static List<MagicaVoxelData> MergeVoxels(IEnumerable<MagicaVoxelData> plug, IEnumerable<MagicaVoxelData> socket, int matchColor)
+        {
+            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
+            List<MagicaVoxelData> plugList = plug.ToList(), socketList = socket.ToList();
+            /*
+            List<byte> knownColors = new List<byte>(50);
+            if (!knownColors.Contains(mvd.color))
+            {
+                knownColors.Add(mvd.color);
+                Console.Write(253 - mvd.color);
+                if ((253 - mvd.color) % 4 != 0) Console.Write("!!!  ");
+                else Console.Write(", ");
+            }
+            */
+            if (socketList.Count == 0)
+                return plugList;
+            else if (plugList.Count == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in socket)
+            {
+
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    plugMatcher = mvd;
+                    plugMatcher.color--;
+                    break;
+                }
+            }
+            if (plugMatcher.color == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in plugList)
+            {
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    socketMatcher = mvd;
+                    socketMatcher.color--;
+                    break;
+                }
+            }
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(plugList.Count + socketList.Count);
+            for (int i = 0; i < plugList.Count; i++)
+            {
+                MagicaVoxelData mvd = plugList[i];
+                mvd.x += (byte)(plugMatcher.x - socketMatcher.x);
+                mvd.y += (byte)(plugMatcher.y - socketMatcher.y);
+                mvd.z += (byte)(plugMatcher.z - socketMatcher.z);
+                working.Add(mvd);
+            }
+            socketList.AddRange(working);
+
+            return socketList;
+
+        }
+        public static List<MagicaVoxelData> RotatePitch(List<MagicaVoxelData> voxels, int amount, int xSize, int zSize)
+        {
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Count];
+            switch (amount)
+            {
+                case 0:
+                    vls = voxels.ToArray();
+                    break;
+                case 1:
+                    for (int i = 0; i < vls.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempZ = (byte)(voxels[i].z - (zSize / 2));
+                        vls[i].x = (byte)((tempZ) + (zSize / 2));
+                        vls[i].z = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = voxels[i].y;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < vls.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempZ = (byte)(voxels[i].z - (zSize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = (byte)((tempZ * -1) + (zSize / 2) - 1);
+                        vls[i].y = voxels[i].y;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < vls.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempZ = (byte)(voxels[i].z - (zSize / 2));
+                        vls[i].x = (byte)((tempZ * -1) + (zSize / 2) - 1);
+                        vls[i].z = (byte)(tempX + (xSize / 2));
+                        vls[i].y = voxels[i].y;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            return vls.ToList();
+        }
         public static void Madden()
         {
             for (int i = 0; i < 256; i++)
