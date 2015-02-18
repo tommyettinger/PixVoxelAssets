@@ -6788,12 +6788,12 @@ namespace AssetsPV
                     if (minimum_z <= 0) minimum_z = 0;
                     int body_coord = voxelToPixelHugeW(0, 0, headpoints[0 + dir * 2].x, headpoints[0 + dir * 2].y + ((minimum_z == 0) ? 0 : (jitter - 2) * 2),
                         minimum_z, (byte)(253 - headpoints[0 + dir * 2].color) / 4, stride, jitter, true) / 4;
-                    model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        ((body_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((body_coord / (stride / 4) - 78) / 2)));
+               //     model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+               //         ((body_coord % (stride / 4) - 32) / 2 + 80) + ", y " + (308 - ((body_coord / (stride / 4) - (308 - 90)) / 2)));
                     int hat_coord = voxelToPixelLargeW(0, 0, headpoints[1 + dir * 2].x, headpoints[1 + dir * 2].y,
                         headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
-                    hat_headpoints.AppendLine("EXPLODE_HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
+               //     hat_headpoints.AppendLine("EXPLODE_HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+               //         ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
                     Image h2 = Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/"
                         // + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
                         + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f % 4) + ".png");
@@ -6809,6 +6809,9 @@ namespace AssetsPV
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     body_graphics.DrawImage(hat_image, 80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
                          40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                    model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+                        (80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))) +
+                        ", y " + (40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2))));
                     body_image.Save(folder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_fiery_explode_" + f + ".png", ImageFormat.Png);
 
                 }
@@ -6855,6 +6858,7 @@ namespace AssetsPV
 
 
             */
+            /*
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -6871,7 +6875,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-
+            */
             //bin.Close();
         }
         public static void processFieryExplosionQuadW(string u, int palette)
@@ -8867,11 +8871,11 @@ namespace AssetsPV
                     int jitter = (((f % 4) % 3) + ((f % 4) / 3)) * 2;
                     if (framelimit >= 8) jitter = ((f % 8 > 4) ? 4 - ((f % 8) ^ 4) : f % 8);
                     int body_coord = voxelToPixelLargeW(0, 0, headpoints[0 + dir * 2].x, headpoints[0 + dir * 2].y, headpoints[0 + dir * 2].z, (byte)(253 - headpoints[0 + dir * 2].color) / 4, stride, jitter, still) / 4;
-                    model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        ((body_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((body_coord / (stride / 4) - 78) / 2)));
+                    //model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+                    //    ((body_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((body_coord / (stride / 4) - 78) / 2)));
                     int hat_coord = voxelToPixelLargeW(0, 0, headpoints[1 + dir * 2].x, headpoints[1 + dir * 2].y, headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
-                    hat_headpoints.AppendLine("HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
+                    //hat_headpoints.AppendLine("HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+                    //    ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
 
                     Graphics hat_graphics;
                     Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/"
@@ -8886,6 +8890,9 @@ namespace AssetsPV
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
                          (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)), 88, 108);
+                    model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+                        (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))
+                        + ", y " + (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)));
                     body_graphics.Dispose();
                     body_image.Save("palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png");
                     hat_graphics.Dispose();
@@ -8909,7 +8916,7 @@ namespace AssetsPV
                 }
             }
             */
-
+            /*
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8918,7 +8925,7 @@ namespace AssetsPV
             s = "palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
             //bin.Close();
 
             //            processFiringDouble(u);
@@ -10288,23 +10295,25 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
                 */
             }
+            
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
-
+            
             VoxelLogic.InitializeWPalette();
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
 /*            processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
             processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka");
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
-            processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");*/
+            processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
+*/
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
-
+            
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
@@ -10629,7 +10638,7 @@ namespace AssetsPV
             processHats("Generic_Female", 15, true, classes, "Living_Women_C");
 
             processHats("Generic_Female", 16, true, classes, "Living_Women_D");
-
+            
             processHats("Generic_Female", 17, true, classes, "Living_Women_E");
             
             
@@ -10651,12 +10660,12 @@ namespace AssetsPV
             processHats("Bulky_Female", 15, true, classes, "Bulky_Women_C");
 
             processHats("Bulky_Female", 16, true, classes, "Bulky_Women_D");
-
+            
             processHats("Bulky_Female", 17, true, classes, "Bulky_Women_E");
             
 
             processHats("Armored_Male", 0, true, classes, "Armored_Men_A");
-
+            
             processHats("Armored_Male", 1, true, classes, "Armored_Men_B");
 
             processHats("Armored_Male", 15, true, classes, "Armored_Men_C");
@@ -10667,7 +10676,7 @@ namespace AssetsPV
             */
             //processUnitOutlinedWDouble("Necromancer", 65, true);
 
-            //File.WriteAllText("bodies.txt", model_headpoints.ToString());
+            File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
@@ -10875,15 +10884,15 @@ namespace AssetsPV
 
         private static void processHats(string u, int palette, bool hover, string[] classes)
         {
-            /*
-            processUnitOutlinedWDouble(u, palette, hover);
+            
+            //processUnitOutlinedWDouble(u, palette, hover);
             //processUnitOutlinedWDoubleDead(u, palette, hover);
 
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            */
+            
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -10894,14 +10903,14 @@ namespace AssetsPV
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
             
-            processUnitOutlinedWDouble(u, palette, hover);
-            processUnitOutlinedWDoubleDead(u, palette, hover);
-            /*
+            //processUnitOutlinedWDouble(u, palette, hover);
+            //processUnitOutlinedWDoubleDead(u, palette, hover);
+            
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            */
+            
             string doc = File.ReadAllText("LivingTemplate.html");
             string html = String.Format(doc, palette, u);
 
