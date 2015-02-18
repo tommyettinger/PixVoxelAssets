@@ -8593,6 +8593,51 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return socketList;
 
         }
+        public static List<MagicaVoxelData> RotateYaw(List<MagicaVoxelData> voxels, int amount, int xSize, int ySize)
+        {
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Count];
+            switch (amount)
+            {
+                case 0:
+                    vls = voxels.ToArray();
+                    break;
+                case 1:
+                    for (int i = 0; i < vls.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < vls.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < vls.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            return vls.ToList();
+
+        }
         public static List<MagicaVoxelData> RotatePitch(List<MagicaVoxelData> voxels, int amount, int xSize, int zSize)
         {
             MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Count];

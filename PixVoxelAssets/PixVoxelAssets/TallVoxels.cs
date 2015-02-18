@@ -8311,7 +8311,7 @@ namespace AssetsPV
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null)
         {
 
-            Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string,List<MagicaVoxelData>>
+            Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
             { {"Legs", VoxelLogic.readPart(legs + "_Legs")},
                 {"Torso", VoxelLogic.readPart(torso + "_Torso")},
                  {"Left_Arm", VoxelLogic.readPart(left_arm + "_Left_Arm")},
@@ -8452,6 +8452,67 @@ namespace AssetsPV
                 }
             }
         }
+        public static void processUnitOutlinedWMechaAiming(string moniker = "Mark_Zero", bool still = true,
+            string legs = "Armored", string torso = "Armored", string left_arm = "Armored_Aiming", string right_arm = "Armored_Aiming", string head = "Armored_Aiming", string left_weapon = null, string right_weapon = "Rifle")
+        {
+
+            Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
+            { {"Legs", VoxelLogic.readPart(legs + "_Legs")},
+                {"Torso", VoxelLogic.readPart(torso + "_Torso")},
+                 {"Left_Arm", VoxelLogic.readPart(left_arm + "_Left_Arm")},
+                 {"Right_Arm", VoxelLogic.readPart(right_arm + "_Right_Arm")},
+                 {"Head",  VoxelLogic.readPart(head + "_Head")},
+                 {"Left_Weapon", VoxelLogic.readPart(left_weapon)},
+                 {"Right_Weapon", VoxelLogic.readPart(right_weapon)}
+            };
+            List<MagicaVoxelData> work = VoxelLogic.MergeVoxels(components["Head"], components["Torso"], 0);
+            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), work, 2);
+            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4), work, 3);
+            work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
+
+            work = VoxelLogic.RotateYaw(work, 1, 40, 40);
+            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsPartialW(work).ToArray();
+            for (int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            int framelimit = 4;
+
+            for (int palette = 0; palette < VoxelLogic.wpalettecount; palette++)
+            {
+                Console.WriteLine("Processing: " + moniker + ", palette " + palette);
+                string folder = (altFolder + "palette" + palette);//"color" + i;
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                for (int f = 0; f < framelimit; f++)
+                { //
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
+                        b.Save(folder + "/palette" + palette + "_" + moniker + "_Firing_Both_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                        b.Dispose();
+                    }
+                }
+
+
+                System.IO.Directory.CreateDirectory("gifs");
+                System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+
+                s = folder + "/palette" + palette + "_" + moniker + "_Firing_Both_Large_face* ";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Firing_Both_Large_animated.gif";
+                Process.Start(startInfo).WaitForExit();
+
+                //bin.Close();
+
+                //            processFiringDouble(u);
+
+                //processFieryExplosionDoubleW(moniker, work.ToList(), palette);
+            }
+        }
+        
         
         public static void processUnitOutlinedWQuad(string u, int palette, bool still)
         {
@@ -10241,6 +10302,8 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
+            processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
+            processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
 
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
