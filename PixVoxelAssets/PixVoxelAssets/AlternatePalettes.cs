@@ -3953,13 +3953,13 @@ namespace AssetsPV
             //20 sparks
             new float[] {1.3F,1.2F,0.85F,1F},
             //21 glow frame 0
-            new float[] {1.1F,0.95F,0.5F,1F},
+            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
             //22 glow frame 1
-            new float[] {1.25F,1.1F,0.65F,1F},
+            new float[] {1.25F,1.15F,0.8F,borderless_alpha},
             //23 glow frame 2
-            new float[] {1.1F,0.95F,0.5F,1F},
+            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
             //24 glow frame 3
-            new float[] {0.95F,0.8F,0.35F,1F},
+            new float[] {0.95F,0.85F,0.5F,borderless_alpha},
             //25 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //26 oil
@@ -3991,7 +3991,7 @@ namespace AssetsPV
             //39 spinning objects, odd frames
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 flickering sparks
-            new float[] {0.93F,0.83F,1.4F,borderless_alpha},
+            new float[] {1.3F,1.3F,0.9F,borderless_alpha},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green

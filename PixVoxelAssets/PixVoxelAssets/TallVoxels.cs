@@ -10233,10 +10233,14 @@ namespace AssetsPV
 
             VoxelLogic.InitializeWPalette();
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
-            processUnitOutlinedWMecha(left_weapon: "Bazooka");
-            processUnitOutlinedWMechaFiring(left_weapon: "Bazooka");
+/*            processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
+            processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka");
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
-            processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
+            processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");*/
+            processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
+            processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
+            processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
+            processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
 
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
