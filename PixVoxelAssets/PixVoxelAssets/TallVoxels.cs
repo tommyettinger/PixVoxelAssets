@@ -10302,7 +10302,13 @@ namespace AssetsPV
             
             VoxelLogic.InitializeWPalette();
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
-/*            processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
+            processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
+            processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
+            /*
+            processUnitOutlinedWMecha(moniker: "Vox_Nihilus", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
+            processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
+
+            processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
             processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka");
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
@@ -10310,10 +10316,9 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-*/
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
-            
+            */
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
@@ -10676,7 +10681,7 @@ namespace AssetsPV
             */
             //processUnitOutlinedWDouble("Necromancer", 65, true);
 
-            File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
+            //File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
