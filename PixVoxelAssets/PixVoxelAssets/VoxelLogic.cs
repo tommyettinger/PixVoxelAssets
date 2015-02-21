@@ -7682,7 +7682,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[][] wcurrent;
         public static byte clear = 255;
         public static int[] subtlePalettes = { 47, 48,     50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
-            drabPalettes = { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
+            drabPalettes = {};// { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
         static VoxelLogic()
         {
@@ -8578,7 +8578,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 return plugList;
             else if (plugList.Count == 0)
                 return socketList;
-            foreach (MagicaVoxelData mvd in socket)
+            foreach (MagicaVoxelData mvd in plug)
             {
 
                 if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
@@ -8590,7 +8590,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             if (plugMatcher.color == 0)
                 return socketList;
-            foreach (MagicaVoxelData mvd in plugList)
+            foreach (MagicaVoxelData mvd in socket)
             {
                 if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
                 {
@@ -8603,13 +8603,74 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             for (int i = 0; i < plugList.Count; i++)
             {
                 MagicaVoxelData mvd = plugList[i];
-                mvd.x += (byte)(plugMatcher.x - socketMatcher.x);
-                mvd.y += (byte)(plugMatcher.y - socketMatcher.y);
-                mvd.z += (byte)(plugMatcher.z - socketMatcher.z);
+                mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
+                mvd.y = (byte)(mvd.y - plugMatcher.y + socketMatcher.y);
+                mvd.z = (byte)(mvd.z - plugMatcher.z + socketMatcher.z);
                 working.Add(mvd);
             }
             socketList.AddRange(working);
+            return socketList;
 
+        }
+        public static List<MagicaVoxelData> MergeVoxels(IEnumerable<MagicaVoxelData> plug, IEnumerable<MagicaVoxelData> socket, int matchColor, int removeColor, int replaceColor)
+        {
+            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
+            List<MagicaVoxelData> plugList = plug.ToList(), socketList = socket.ToList();
+            /*
+            List<byte> knownColors = new List<byte>(50);
+            foreach (MagicaVoxelData mvd in plug.Concat(socket))
+            {
+                if (!knownColors.Contains(mvd.color))
+                {
+                    knownColors.Add(mvd.color);
+                    Console.Write(253 - mvd.color);
+                    if ((253 - mvd.color) % 4 != 0) Console.Write("!!!  ");
+                    else Console.Write(", ");
+                }
+            }*/
+            
+            if (socketList.Count == 0)
+                return plugList;
+            else if (plugList.Count == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in plug)
+            {
+
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    plugMatcher = mvd;
+                    plugMatcher.color--;
+                    break;
+                }
+            }
+            if (plugMatcher.color == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in socket)
+            {
+                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    socketMatcher = mvd;
+                    socketMatcher.color--;
+                    break;
+                }
+            }
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(plugList.Count + socketList.Count);
+            for (int i = 0; i < plugList.Count; i++)
+            {
+                MagicaVoxelData mvd = plugList[i];
+                mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
+                mvd.y = (byte)(mvd.y - plugMatcher.y + socketMatcher.y);
+                mvd.z = (byte)(mvd.z - plugMatcher.z + socketMatcher.z);
+                working.Add(mvd);
+            }
+            socketList.AddRange(working);
+            for (int i = 0; i < socketList.Count; i++)
+            {
+                if(254 - socketList[i].color == removeColor * 4)
+                {
+                    socketList[i] = new MagicaVoxelData { x = socketList[i].x, y = socketList[i].y, z = socketList[i].z, color = (byte)replaceColor};
+                }
+            }
             return socketList;
 
         }

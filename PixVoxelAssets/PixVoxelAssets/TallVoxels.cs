@@ -4937,7 +4937,7 @@ namespace AssetsPV
 
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128 - (((253 - v.color) / 4 == 25) ? 64 * 128 * 64 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
-                int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : (253 - vx.color) / 4;
+                int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - VoxelLogic.clear) / 4 : (253 - vx.color) / 4;
                 int p = 0;
                 if ((255 - vx.color) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
                     continue;
@@ -5221,7 +5221,7 @@ namespace AssetsPV
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 128 - v.y + v.z * 128 * 128 - (((253 - v.color) / 4 == 25) ? 128 * 128 * 128 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
 
-                int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : (253 - vx.color) / 4;
+                int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - VoxelLogic.clear) / 4 : (253 - vx.color) / 4;
                 int p = 0;
                 if ((255 - vx.color) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
                     continue;
@@ -5479,7 +5479,7 @@ namespace AssetsPV
             if (still) jitter = 0;
             foreach (MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 256 - v.y + v.z * 256 * 256 - (((253 - v.color) / 4 == 25) ? 256 * 256 * 256 : 0))) //voxelData[i].x + voxelData[i].z * 32 + voxelData[i].y * 32 * 128
             {
-                int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : (253 - vx.color) / 4;
+                int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - VoxelLogic.clear) / 4 : (253 - vx.color) / 4;
                 int p = 0;
                 if ((255 - vx.color) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
                     continue;
@@ -6302,15 +6302,17 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still);
-            /*string folder = "palette" + palette + "_big";
-            System.IO.Directory.CreateDirectory(folder);
-            b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
-            */
+            
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
             g2.Dispose();
             return b2;
+
+            /*string folder = "palette" + palette + "_big";
+            System.IO.Directory.CreateDirectory(folder);
+            b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
+            */
         }
         private static Bitmap processSingleOutlinedWQuad(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
@@ -8325,8 +8327,8 @@ namespace AssetsPV
                  {"Right_Weapon", VoxelLogic.readPart(right_weapon)}
             };
             List<MagicaVoxelData> work = VoxelLogic.MergeVoxels(components["Head"], components["Torso"], 0);
-            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), work, 2);
-            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4), work, 3);
+            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4, 6, VoxelLogic.clear), work, 2);
+            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
             work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
 
             MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsPartialW(work).ToArray();
@@ -8371,8 +8373,20 @@ namespace AssetsPV
             }
         }
         public static void processUnitOutlinedWMechaFiring(string moniker = "Maku", bool still = true,
-            string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null)
+            string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null,
+            string left_projectile = "Autofire", string right_projectile = "Autofire")
         {
+            Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+            int stride = bmpData.Stride;
+            bmp.UnlockBits(bmpData);
+            bmp.Dispose();
+
+
             for (int combo = 0; combo < 3; combo++)
             {
                 string firing_name = "Firing_Left";
@@ -8385,35 +8399,57 @@ namespace AssetsPV
                  {"Left_Weapon", VoxelLogic.readPart(left_weapon)},
                  {"Right_Weapon", VoxelLogic.readPart(right_weapon)}
             };
-                List<MagicaVoxelData> work = VoxelLogic.MergeVoxels(components["Head"], components["Torso"], 0);
+                List<MagicaVoxelData> work = VoxelLogic.MergeVoxels(components["Head"], components["Torso"], 0),
+                    right_projectors = new List<MagicaVoxelData>(1), left_projectors = new List<MagicaVoxelData>(1);
+                MagicaVoxelData bogus = new MagicaVoxelData{x=255, y=255, z=255,color=255}, right_projector = bogus, left_projector = bogus ;
                 switch(combo)
                 {
                     case 0: if (right_weapon != null)
                         {
                             firing_name = "Firing_Right";
                             work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), 3, 40, 40), work, 2);
-                            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4), work, 3);
+                            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
+                            
                         }
                         else continue;
                         break;
                     case 1: if (left_weapon != null)
                         {
-                            work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4), 3, 40, 40), work, 3);
-                            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), work, 2);
+                            work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4), 3, 40, 40), work, 3);
+                            work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4, 6, VoxelLogic.clear), work, 2);
                         }
                         else continue;
                         break;
                     case 2: if (left_weapon != null && right_weapon != null)
                         {
                             firing_name = "Firing_Both";
-                            work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4), 3, 40, 40), work, 3);
                             work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), 3, 40, 40), work, 2);
+                            work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4), 3, 40, 40), work, 3);
                         }
                         else continue;
                         break;
                 }
                 work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
-
+                try
+                {
+                    right_projector = work.First(m => (254 - m.color) == 4 * 6);
+                    right_projector.x += 10;
+                    right_projector.y += 10;
+                    right_projectors.Add(right_projector);
+                }catch(InvalidOperationException ioe)
+                {
+                    right_projector = bogus;
+                }
+                try
+                {
+                    left_projector = work.First(m => (254 - m.color) == 4 * 7);
+                    left_projector.x += 10;
+                    left_projector.y += 10;
+                    left_projectors.Add(left_projector);
+                }catch(InvalidOperationException ioe)
+                {
+                    left_projector = bogus;
+                }
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsPartialW(work).ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -8432,12 +8468,10 @@ namespace AssetsPV
                         for (int dir = 0; dir < 4; dir++)
                         {
                             Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
-                            b.Save(folder + "/palette" + palette + "_" + moniker + "_" + firing_name + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                            b.Save(folder + "/palette" + palette + "_" + moniker + "_" + firing_name + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
                     }
-
-
                     System.IO.Directory.CreateDirectory("gifs");
                     System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                     ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8446,6 +8480,107 @@ namespace AssetsPV
 
                     s = folder + "/palette" + palette + "_" + moniker + "_" + firing_name + "_Large_face* ";
                     startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_" + firing_name + "_Large_animated.gif";
+                    Process.Start(startInfo).WaitForExit();
+
+                    // Animation generation starts here
+
+                    switch (combo)
+                    {
+                        case 0: if (right_projectile == null)
+                            continue;
+                            break;
+                        case 1: if (left_projectile == null)
+                            continue;
+                            break;
+                        case 2: if (left_projectile == null || right_projectile == null)
+                            continue;
+                            break;
+                    }
+                    for (int f = 0; f < 12; f++)
+                    {
+                        for (int dir = 0; dir < 4; dir++)
+                        {
+                            List<MagicaVoxelData> right_projectors_adj = VoxelLogic.RotateYaw(right_projectors, dir, 60, 60), left_projectors_adj = VoxelLogic.RotateYaw(left_projectors, dir, 60, 60);
+                            Bitmap b = new Bitmap(folder + "/palette" + palette + "_" + moniker + "_" + firing_name + "_Large_face" + dir + "_" + (f % framelimit) + ".png"),
+                                b_base = new Bitmap(248, 308, PixelFormat.Format32bppArgb);// new Bitmap("palette50/palette50_Terrain_Huge_face0_0.png"),
+                            Bitmap b_left = new Bitmap(88, 108, PixelFormat.Format32bppArgb), b_right = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
+                            if(left_projectile != null) b_left = new Bitmap("frames/palette0_" + left_projectile + "_Attack_face" + dir + "_" + f + ".png");
+                            if(right_projectile != null) b_right = new Bitmap("frames/palette0_" + right_projectile + "_Attack_face" + dir + "_" + f + ".png");
+                            MagicaVoxelData left_emission = bogus, right_emission = bogus;
+                            if (left_projectile != null)
+                            {
+                                BinaryReader leftbin = new BinaryReader(File.Open("animations/" + left_projectile + "/" + left_projectile + "_Attack_" + f + ".vox", FileMode.Open));
+                                left_emission = VoxelLogic.RotateYaw(VoxelLogic.FromMagicaRaw(leftbin), dir, 40, 40).First(m => 254 - m.color == 4 * 6);
+                            }
+                            
+                            if (right_projectile != null)
+                            {
+                                BinaryReader rightbin = new BinaryReader(File.Open("animations/" + right_projectile + "/" + right_projectile + "_Attack_" + f + ".vox", FileMode.Open));
+                                right_emission = VoxelLogic.RotateYaw(VoxelLogic.FromMagicaRaw(rightbin), dir, 40, 40).First(m => 254 - m.color == 4 * 6);
+                            }
+                                /*left_emission.x += 40;
+                            left_emission.y += 40;
+                            right_emission.x += 40;
+                            right_emission.y += 40;*/
+                            //Bitmap b_base = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+                            Graphics g = Graphics.FromImage(b_base);
+                            if (dir < 2)
+                            {
+                                g.DrawImage(b, 80, 120);
+                                if (right_projectors_adj.Count > 0)
+                                {
+                                    int proj_location = voxelToPixelHugeW(0, 0, right_projectors_adj.First().x, right_projectors_adj.First().y, right_projectors_adj.First().z, 0, stride, 0, true) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, right_emission.x, right_emission.y, right_emission.z, 0, stride, 0, true) / 4;
+
+                                    g.DrawImage(b_right, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
+                                         120 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                                }
+                                if (left_projectors_adj.Count > 0)
+                                {
+                                    int proj_location = voxelToPixelHugeW(0, 0, left_projectors_adj.First().x, left_projectors_adj.First().y, left_projectors_adj.First().z, 0, stride, 0, true) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, left_emission.x, left_emission.y, left_emission.z, 0, stride, 0, true) / 4;
+
+                                    g.DrawImage(b_left, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
+                                         120 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                                }
+                            }
+                            else
+                            {
+                                if (right_projectors_adj.Count > 0)
+                                {
+                                    int proj_location = voxelToPixelHugeW(0, 0, right_projectors_adj.First().x, right_projectors_adj.First().y, right_projectors_adj.First().z, 0, stride, 0, true) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, right_emission.x, right_emission.y, right_emission.z, 0, stride, 0, true) / 4;
+
+                                    g.DrawImage(b_right, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
+                                         120 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                                }
+                                if (left_projectors_adj.Count > 0)
+                                {
+                                    int proj_location = voxelToPixelHugeW(0, 0, left_projectors_adj.First().x, left_projectors_adj.First().y, left_projectors_adj.First().z, 0, stride, 0, true) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, left_emission.x, left_emission.y, left_emission.z, 0, stride, 0, true) / 4;
+
+                                    g.DrawImage(b_left, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
+                                         120 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                                }
+                                g.DrawImage(b, 80, 120);
+                            }
+                            b_base.Save("frames/palette" + palette + "_" + moniker + "_" + firing_name + "_" +
+                                ((firing_name == "Firing_Left") ? left_projectile : (firing_name == "Firing_Right") ? right_projectile : left_projectile + "_" + right_projectile)
+                                + "_Huge_face" + dir + "_" + f + ".png");
+                            
+                        }
+                    }
+
+                    s = "";
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            s += "frames/palette" + palette + "_" + moniker + "_" + firing_name + "*Huge_face" + dir + "_" + f + ".png ";
+                        }
+                    }
+                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_" + firing_name + "_" +
+                                ((firing_name == "Firing_Left") ? left_projectile : (firing_name == "Firing_Right") ? right_projectile : left_projectile + "_" + right_projectile) + "_Huge_animated.gif";
                     Process.Start(startInfo).WaitForExit();
 
                     //bin.Close();
@@ -8601,7 +8736,7 @@ namespace AssetsPV
 
             //            processFiringDouble(u);
 
-            //processFieryExplosionQuadW(u, palette, shadowless);
+            processFieryExplosionQuadW(u, palette, shadowless);
 
         }
         public static void processUnitOutlinedWalkDouble(string u, int palette)
@@ -9082,6 +9217,76 @@ namespace AssetsPV
             }
 
         }
+
+        public static void processPureAttackW(string u, int palette)
+        {
+            Console.WriteLine("Processing: " + u);
+            BinaryReader[] bins = new BinaryReader[12];
+            MagicaVoxelData[][] attacking = new MagicaVoxelData[12][];
+            for (int i = 0; i < 12; i++)
+            {
+                bins[i] = new BinaryReader(File.Open("animations/" + u + "/" + u + "_Attack_" + i + ".vox", FileMode.Open));
+                attacking[i] = VoxelLogic.FromMagicaRaw(bins[i]).ToArray();
+                for(int j = 0; j < attacking[i].Length; j++)
+                {
+                    attacking[i][j].x += 10;
+                    attacking[i][j].y += 10;
+                    /*if((254 - attacking[i][j].color) % 4 == 0)
+                    {
+                        Console.WriteLine("Base Found: X" + attacking[i][j].x + ", Y " + attacking[i][j].y + ", Z " + attacking[i][j].z);
+                    }*/
+                }
+                bins[i].Close();
+            }
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            //MagicaVoxelData[][] attacking = VoxelLogic.FieryExplosionDoubleW(parsed, false); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("frames");
+
+            for (int d = 0; d < 4; d++)
+            {
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    Bitmap b = renderWSmart(attacking[frame], d, palette, frame, 12, true);
+                    /*                    string folder2 = "palette" + palette + "_big";
+                                        System.IO.Directory.CreateDirectory(folder2);
+                                        b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
+                    */
+                    Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
+                    Graphics g2 = Graphics.FromImage(b2);
+                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
+                    g2.Dispose();
+                    b2.Save(folder + "/palette" + palette + "_" + u + "_Attack_face" + d + "_" + frame + ".png", ImageFormat.Png);
+
+                }
+            }
+
+
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            for (int d = 0; d < 4; d++)
+            {
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    s += folder + "/palette" + palette + "_" + u + "_Attack_face" + d + "_" + frame + ".png ";
+                }
+            }
+
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_attack_animated.gif";
+            Console.WriteLine("Running convert.exe ...");
+            Process.Start(startInfo).WaitForExit();
+            //Console.ReadKey();
+            //bin.Close();
+        }
+
+
 
         public static void processUnitOutlinedPartial(string u)
         {
@@ -10418,12 +10623,13 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
                 */
             }
-            /*
+            
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
-            */
+            
             VoxelLogic.InitializeWPalette();
+            processPureAttackW("Autofire", 0);
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
             /*
             processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
@@ -10432,11 +10638,12 @@ namespace AssetsPV
             processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
 
             processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
-            processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka");
+            processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka");*/
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
-            processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
+            processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", right_projectile: null);
+            /*
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
@@ -10502,7 +10709,7 @@ namespace AssetsPV
             {
                 processUnitOutlinedWQuad("Terrain", i, true, true);
             }*/
-            generateBotLSpritesheet();
+            //generateBotLSpritesheet();
             /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
             
