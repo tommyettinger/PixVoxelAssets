@@ -6760,53 +6760,53 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             },
             new float[][] { //52 desert
             //terrain dark
-            new float[] {1F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.3F,1F},
             //terrain mid
-            new float[] {1F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.3F,1F},
             //terrain light
-            new float[] {1F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.3F,1F},
             //terrain highlight
-            new float[] {1F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.3F,1F},
             },
             new float[][] { //53 jungle
             //terrain dark
-            new float[] {0F,0.5F,0.35F,1F},
+            new float[] {0F,0.55F,0.35F,1F},
             //terrain mid
-            new float[] {0F,0.5F,0.35F,1F},
+            new float[] {0F,0.55F,0.35F,1F},
             //terrain light
-            new float[] {0F,0.5F,0.35F,1F},
+            new float[] {0F,0.55F,0.35F,1F},
             //terrain highlight
-            new float[] {0F,0.5F,0.35F,1F},
+            new float[] {0F,0.55F,0.35F,1F},
             },
             new float[][] { //54 hills
             //terrain dark
-            new float[] {0.9F,0.6F,0.15F,1F},
+            new float[] {0.95F,0.7F,0.4F,1F},
             //terrain mid
-            new float[] {0.9F,0.6F,0.15F,1F},
+            new float[] {0.95F,0.7F,0.4F,1F},
             //terrain light
-            new float[] {0.9F,0.6F,0.15F,1F},
+            new float[] {0.95F,0.7F,0.4F,1F},
             //terrain highlight
-            new float[] {0.9F,0.6F,0.15F,1F},
+            new float[] {0.95F,0.7F,0.4F,1F},
             },
             new float[][] { //55 mountains
             //terrain dark
-            new float[] {0.7F,0.75F,0.82F,1F},
+            new float[] {0.8F,0.83F,0.86F,1F},
             //terrain mid
-            new float[] {0.7F,0.75F,0.82F,1F},
+            new float[] {0.8F,0.83F,0.86F,1F},
             //terrain light
-            new float[] {0.7F,0.75F,0.82F,1F},
+            new float[] {0.8F,0.83F,0.86F,1F},
             //terrain highlight
-            new float[] {0.7F,0.75F,0.82F,1F},
+            new float[] {0.8F,0.83F,0.86F,1F},
             },
             new float[][] { //56 ruins
             //terrain dark
-            new float[] {0.6F,0.53F,0.61F,1F},
+            new float[] {0.8F,0.45F,0.75F,1F},
             //terrain mid
-            new float[] {0.6F,0.53F,0.61F,1F},
+            new float[] {0.8F,0.45F,0.75F,1F},
             //terrain light
-            new float[] {0.6F,0.53F,0.61F,1F},
+            new float[] {0.8F,0.45F,0.75F,1F},
             //terrain highlight
-            new float[] {0.6F,0.53F,0.61F,1F},
+            new float[] {0.8F,0.45F,0.75F,1F},
             },
             new float[][] { //57 tundra
             //terrain dark
@@ -6840,13 +6840,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             },
             new float[][] { //60 sea
             //terrain dark
-            new float[] {0F,0.3F,0.75F,1F},
+            new float[] {0F,0.3F,0.7F,1F},
             //terrain mid
-            new float[] {0F,0.3F,0.75F,1F},
+            new float[] {0F,0.3F,0.7F,1F},
             //terrain light
-            new float[] {0F,0.3F,0.75F,1F},
+            new float[] {0F,0.3F,0.7F,1F},
             //terrain highlight
-            new float[] {0F,0.3F,0.75F,1F},
+            new float[] {0F,0.3F,0.7F,1F},
             },
             
             new float[][] { //61 ceglia
@@ -7681,7 +7681,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
         public static byte clear = 255;
-        public static int[] drabPalettes = { 47, 48,     50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
+        public static int[] subtlePalettes = { 47, 48,     50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
+            drabPalettes = { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
         static VoxelLogic()
         {
@@ -7831,6 +7832,25 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             if (which_image.Equals(image))
                             {
                                 if (drabPalettes.Contains(p))
+                                {
+
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.4, v * 0.9);
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.7, v * 0.7);
+                                    }
+                                    else
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.55, v * 0.82);
+                                    }
+                                }
+                                else if (subtlePalettes.Contains(p))
                                 {
 
                                     if (j == 0)

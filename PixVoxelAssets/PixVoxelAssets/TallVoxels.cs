@@ -5084,7 +5084,7 @@ namespace AssetsPV
                 if (argbValues[i] == 7)
                     argbValues[i] = 0;
             }
-            bool lightOutline = !VoxelLogic.drabPalettes.Contains(palette);
+            bool lightOutline = !VoxelLogic.subtlePalettes.Contains(palette);
             for (int i = 3; i < numBytes; i += 4)
             {
                 if (argbValues[i] > 255 * VoxelLogic.waver_alpha && barePositions[i] == false)
@@ -5338,7 +5338,7 @@ namespace AssetsPV
                     }
                 }
             }
-            bool lightOutline = !VoxelLogic.drabPalettes.Contains(palette);
+            bool lightOutline = !VoxelLogic.subtlePalettes.Contains(palette);
             for (int i = 3; i < numBytes; i += 4)
             {
                 if (argbValues[i] > 255 * VoxelLogic.waver_alpha && barePositions[i] == false)
@@ -5598,7 +5598,7 @@ namespace AssetsPV
                     }
                 }
             }
-            bool lightOutline = !VoxelLogic.drabPalettes.Contains(palette);
+            bool lightOutline = !VoxelLogic.subtlePalettes.Contains(palette);
             for (int i = 3; i < numBytes; i += 4)
             {
                 if (argbValues[i] > 255 * VoxelLogic.waver_alpha && barePositions[i] == false)
@@ -8601,7 +8601,7 @@ namespace AssetsPV
 
             //            processFiringDouble(u);
 
-            processFieryExplosionQuadW(u, palette, shadowless);
+            //processFieryExplosionQuadW(u, palette, shadowless);
 
         }
         public static void processUnitOutlinedWalkDouble(string u, int palette)
@@ -10218,6 +10218,129 @@ namespace AssetsPV
             , "Thug"
             , "Bishop"
         };
+        static Tuple<string, int>[] undead =
+            {
+                Tuple.Create("Zombie", 2),
+                Tuple.Create("Skeleton", 6),
+                Tuple.Create("Spirit", 7),
+                Tuple.Create("Wraith", 8),
+                Tuple.Create("Cinder", 9),
+                Tuple.Create("Ghoul", 39),
+                Tuple.Create("Wight", 40),
+                Tuple.Create("Spectre", 42),
+                Tuple.Create("Mummy", 43),
+                Tuple.Create("Drowned", 45),
+                Tuple.Create("Banshee", 46),
+                Tuple.Create("Damned", 63),
+                Tuple.Create("Husk", 64),
+                Tuple.Create("Necromancer", 65),
+            },
+            living = 
+            {
+                Tuple.Create("Generic_Male", 0),
+                Tuple.Create("Generic_Male", 1),
+                Tuple.Create("Generic_Male", 15),
+                Tuple.Create("Generic_Male", 16),
+                Tuple.Create("Generic_Male", 17),
+                Tuple.Create("Generic_Female", 0),
+                Tuple.Create("Generic_Female", 1),
+                Tuple.Create("Generic_Female", 15),
+                Tuple.Create("Generic_Female", 16),
+                Tuple.Create("Generic_Female", 17),
+                Tuple.Create("Bulky_Male", 0),
+                Tuple.Create("Bulky_Male", 1),
+                Tuple.Create("Bulky_Male", 15),
+                Tuple.Create("Bulky_Male", 16),
+                Tuple.Create("Bulky_Male", 17),
+                Tuple.Create("Bulky_Female", 0),
+                Tuple.Create("Bulky_Female", 1),
+                Tuple.Create("Bulky_Female", 15),
+                Tuple.Create("Bulky_Female", 16),
+                Tuple.Create("Bulky_Female", 17),
+                Tuple.Create("Armored_Male", 0),
+                Tuple.Create("Armored_Male", 1),
+                Tuple.Create("Armored_Male", 15),
+                Tuple.Create("Armored_Male", 16),
+                Tuple.Create("Armored_Male", 17),
+            },
+            hats =
+            {
+                Tuple.Create("Berserker", 0),
+                Tuple.Create("Witch", 0),
+                Tuple.Create("Scout", 0),
+                Tuple.Create("Captain", 0),
+                Tuple.Create("Mystic", 0),
+                Tuple.Create("Wizard", 0),
+                Tuple.Create("Provocateur", 0),
+                Tuple.Create("Noble", 0),
+                Tuple.Create("Woodsman", 44),
+                Tuple.Create("Sheriff", 0),
+                Tuple.Create("Thief", 0),
+                Tuple.Create("Merchant", 0),
+                Tuple.Create( "Farmer", 49),
+                Tuple.Create("Officer", 0),
+                Tuple.Create("Dervish", 0),
+                Tuple.Create("Thug", 0),
+                Tuple.Create("Bishop", 0),
+            },
+            ghost_hats =
+            {
+                Tuple.Create("Berserker", 7),
+                Tuple.Create("Witch", 7),
+                Tuple.Create("Scout", 7),
+                Tuple.Create("Captain", 7),
+                Tuple.Create("Mystic", 7),
+                Tuple.Create("Wizard", 7),
+                Tuple.Create("Provocateur", 7),
+                Tuple.Create("Noble", 7),
+                Tuple.Create("Woodsman", 44),
+                Tuple.Create("Sheriff", 7),
+                Tuple.Create("Thief", 7),
+                Tuple.Create("Merchant", 7),
+                Tuple.Create("Farmer", 49),
+                Tuple.Create("Officer", 7),
+                Tuple.Create("Dervish", 7),
+                Tuple.Create("Thug", 7),
+                Tuple.Create("Bishop", 7),
+            },
+            terrain =
+            {
+                Tuple.Create("Terrain", 50),
+                Tuple.Create("Terrain", 51),
+                Tuple.Create("Terrain", 52),
+                Tuple.Create("Terrain", 53),
+                Tuple.Create("Terrain", 54),
+                Tuple.Create("Terrain", 55),
+                Tuple.Create("Terrain", 56),
+                Tuple.Create("Terrain", 57),
+                Tuple.Create("Terrain", 58),
+                Tuple.Create("Terrain", 59),
+                Tuple.Create("Terrain", 60),
+            },
+            landscape =
+            {
+                Tuple.Create("Grass", 47),
+                Tuple.Create("Tree", 47),
+                Tuple.Create("Boulder", 48),
+                Tuple.Create("Rubble", 48),
+                Tuple.Create("Headstone", 48),
+                Tuple.Create("Roof_Corner", 49),
+                Tuple.Create("Roof_Flat", 49),
+                Tuple.Create("Roof_Straight", 49),
+                Tuple.Create("Roof_Solid_Corner", 49),
+                Tuple.Create("Roof_Solid_Corner_Off", 49),
+                Tuple.Create("Roof_Solid_Flat", 49),
+                Tuple.Create("Roof_Solid_Straight", 49),
+                Tuple.Create("Roof_Solid_Straight_Off", 49),
+                Tuple.Create("Wall_Corner", 49),
+                Tuple.Create("Wall_Cross", 49),
+                Tuple.Create("Wall_Straight", 49),
+                Tuple.Create("Wall_Tee", 49),
+                Tuple.Create("Wall_Corner_Upper", 49),
+                Tuple.Create("Wall_Cross_Upper", 49),
+                Tuple.Create("Wall_Straight_Upper", 49),
+                Tuple.Create("Wall_Tee_Upper", 49),
+            };
         public static string altFolder = "";
         /// <summary>
         /// This will take a long time to run.  It should produce a ton of assets.
@@ -10295,16 +10418,16 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
                 */
             }
-            
+            /*
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
-            
+            */
             VoxelLogic.InitializeWPalette();
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
+            /*
             processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
             processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
-            /*
             processUnitOutlinedWMecha(moniker: "Vox_Nihilus", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
 
@@ -10377,8 +10500,9 @@ namespace AssetsPV
             /*
             for(int i = 50; i <= 60; i++)
             {
-                processUnitOutlinedWQuad("Terrain", i, true);
+                processUnitOutlinedWQuad("Terrain", i, true, true);
             }*/
+            generateBotLSpritesheet();
             /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
             
@@ -10597,12 +10721,11 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
             */
+            
             /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
-
-            //processHats("Skeleton_Spear", 6, true, classes);
 
             processHats("Spirit", 7, false, classes);
 
@@ -10683,7 +10806,8 @@ namespace AssetsPV
 
             //File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
-            
+
+            //processHats("Skeleton_Spear", 6, true, classes);
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 
 
@@ -11014,5 +11138,86 @@ namespace AssetsPV
             return bmp;
         }
 
+        private static Bitmap generateBotLSpritesheet()
+        {
+            Bitmap bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
+            Graphics g = Graphics.FromImage(bmp);
+            Image temp = null;
+            for (int x = 0; x < undead.Length; x++)
+            {
+                string palette = "palette" + undead[x].Item2;
+                for (int y = 0; y < 16; y++)
+                {
+                    temp = Image.FromFile(palette + "/" + palette + "_" + undead[x].Item1 + "_Large_face" + (y / 4) + "_" + (y % 4) + ".png");
+                    g.DrawImage(temp, x * 90, y * 110);
+                    temp.Dispose();
+                }
+            }
+            bmp.Save("undead.png");
+
+            bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
+            g = Graphics.FromImage(bmp);
+            temp = null;
+
+            for (int x = 0; x < living.Length; x++)
+            {
+                string palette = "palette" + living[x].Item2;
+                for (int y = 0; y < 4; y++)
+                {
+                    temp = Image.FromFile(palette + "/" + palette + "_" + living[x].Item1 + "_Large_face" + y + "_0.png");
+                    g.DrawImage(temp, (x / 4) * 90, ((x % 4) * 4 + y) * 110);
+                    temp.Dispose();
+                }
+            }
+
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 0; y < hats.Length; y++)
+                {
+                    temp = Image.FromFile("palette" + hats[y].Item2 + "/" + hats[y].Item1 + "_Hat_face" + x + "_0.png");
+                    g.DrawImage(temp, (living.Length / 4 + 1 + x) * 90, y * 110);
+                    temp.Dispose();
+                }
+            }
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 0; y < ghost_hats.Length; y++)
+                {
+                    temp = Image.FromFile("palette" + ghost_hats[y].Item2 + "/" + ghost_hats[y].Item1 + "_Hat_face" + x + "_0.png");
+                    g.DrawImage(temp, (living.Length / 4 + 5 + x) * 90, y * 110);
+                    temp.Dispose();
+                }
+            }
+            bmp.Save("living.png");
+
+            bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
+            g = Graphics.FromImage(bmp);
+            temp = null;
+
+            for (int x = 0; x < terrain.Length; x++)
+            {
+                string palette = "palette" + terrain[x].Item2;
+                for (int y = 0; y < 1; y++)
+                {
+                    temp = Image.FromFile(palette + "/" + palette + "_" + terrain[x].Item1 + "_Huge_face" + y + "_3.png");
+                    g.DrawImage(temp, (x / 9) * 170, ((x % 9) + y) * 210);
+                    temp.Dispose();
+                }
+            }
+
+            for (int x = 0; x < landscape.Length; x++)
+            {
+                string palette = "palette" + landscape[x].Item2;
+                for (int y = 0; y < 4; y++)
+                {
+                    temp = Image.FromFile(palette + "/" + palette + "_" + landscape[x].Item1 + "_Huge_face" + y + "_3.png");
+                    g.DrawImage(temp, ((int)Math.Floor((x-1) / 2.0) + 2) * 170, (((x+1) % 2) * 4 + y) * 210);
+                    temp.Dispose();
+                }
+            }
+
+            bmp.Save("landscape.png");
+            return bmp;
+        }
     }
 }
