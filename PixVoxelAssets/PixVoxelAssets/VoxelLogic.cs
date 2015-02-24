@@ -13940,6 +13940,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         /// <returns>The voxel chunk data for the MagicaVoxel .vox file.</returns>
         public static void WriteVOX(string filename, List<MagicaVoxelData> voxelData, char paletteKind, int palette, int xSize, int ySize, int zSize)
         {
+            xSize += 20;
+            ySize += 20;
+            zSize += 20;
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
             Stream stream = File.OpenWrite(filename);
             BinaryWriter bin = new BinaryWriter(stream);
@@ -13952,11 +13955,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 foreach (MagicaVoxelData mvd in voxelData)
                 {
-                    if (mvd.x < xSize && mvd.y < ySize && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 249 - 96 && mvd.color > 249 - 168)
+                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 249 - 96 && mvd.color > 249 - 168)
                     {
-                        voxelsRaw.Add(mvd.x);
-                        voxelsRaw.Add(mvd.y);
-                        voxelsRaw.Add(mvd.z);
+                        voxelsRaw.Add((byte)(mvd.x + 10));
+                        voxelsRaw.Add((byte)(mvd.y + 10));
+                        voxelsRaw.Add((byte)(mvd.z + 0));
                         voxelsRaw.Add(mvd.color);
                         taken[mvd.x, mvd.y, mvd.z] = true;
                     }
@@ -13983,11 +13986,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 foreach (MagicaVoxelData mvd in voxelData)
                 {
-                    if (mvd.x < xSize && mvd.y < ySize && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 253 - 100 && mvd.color > 253 - wcolorcount * 4)
+                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 253 - 100 && mvd.color > 253 - wcolorcount * 4)
                     {
-                        voxelsRaw.Add(mvd.x);
-                        voxelsRaw.Add(mvd.y);
-                        voxelsRaw.Add(mvd.z);
+                        voxelsRaw.Add((byte)(mvd.x + 10));
+                        voxelsRaw.Add((byte)(mvd.y + 10));
+                        voxelsRaw.Add((byte)(mvd.z + 0));
                         voxelsRaw.Add((byte)(((253 - mvd.color) % 4 == 0) ? mvd.color : mvd.color - ((253 - mvd.color) % 4)));
                         taken[mvd.x, mvd.y, mvd.z] = true;
                     }

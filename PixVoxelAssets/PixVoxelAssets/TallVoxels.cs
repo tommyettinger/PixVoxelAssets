@@ -8333,10 +8333,10 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4, 6, VoxelLogic.clear), work, 2);
             work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
             work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
+            work = VoxelLogic.PlaceShadowsPartialW(work);
+            VoxelLogic.WriteVOX("vox/" + moniker + "_0.vox", work, 'W', 0, 40, 40, 40);
 
-            VoxelLogic.WriteVOX(altFolder + "vox/" + moniker + "_0.vox", work, 'W', 0, 40, 40, 40);
-
-            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsPartialW(work).ToArray();
+            MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -8435,8 +8435,7 @@ namespace AssetsPV
                         break;
                 }
                 work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
-                VoxelLogic.WriteVOX(altFolder + "vox/" + moniker + "_" + firing_name + "_0.vox", work, 'W', 0, 40, 40, 40);
-
+                
                 try
                 {
                     right_projector = work.First(m => (254 - m.color) == 4 * 6);
@@ -8457,7 +8456,9 @@ namespace AssetsPV
                 {
                     left_projector = bogus;
                 }
-                MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsPartialW(work).ToArray();
+                work = VoxelLogic.PlaceShadowsPartialW(work);
+                VoxelLogic.WriteVOX("vox/" + moniker + "_" + firing_name + "_0.vox", work, 'W', 0, 40, 40, 40);
+                MagicaVoxelData[] parsed = work.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
                     parsed[i].x += 10;
@@ -8631,7 +8632,6 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
 
             work = VoxelLogic.RotateYaw(work, 1, 40, 40);
-            VoxelLogic.WriteVOX(altFolder + "vox/" + moniker + "_Firing_Both_0.vox", work, 'W', 0, 40, 40, 40);
             try
             {
                 right_projector = work.First(m => (254 - m.color) == 4 * 6);
@@ -8643,7 +8643,9 @@ namespace AssetsPV
             {
                 right_projector = bogus;
             }
-            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsPartialW(work).ToArray();
+            work = VoxelLogic.PlaceShadowsPartialW(work);
+            VoxelLogic.WriteVOX("vox/" + moniker + "_Firing_Both_0.vox", work, 'W', 0, 40, 40, 40);
+            MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -8653,7 +8655,7 @@ namespace AssetsPV
 
             for (int palette = 0; palette < VoxelLogic.wpalettecount; palette++)
             {
-                Console.WriteLine("Processing: " + moniker + ", palette " + palette);
+                Console.WriteLine("Processing: " + moniker + ", palette " + palette + ", " + "Firing_Both");
                 string folder = (altFolder + "palette" + palette);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
@@ -10730,12 +10732,12 @@ namespace AssetsPV
                 
             }
             */
-            /*
+            
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
             System.IO.Directory.CreateDirectory(altFolder + "vox");
-            */
+            
             VoxelLogic.InitializeWPalette();
             /*
             VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
@@ -10755,7 +10757,7 @@ namespace AssetsPV
             //processPureAttackW("Cannon", 0);
             
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
-            /*
+            
             VoxelLogic.wcurrent = VoxelLogic.wrendered[0];
             processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
             processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Beam", left_projectile: "Autofire");
@@ -10776,7 +10778,7 @@ namespace AssetsPV
             
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-            */
+            
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
@@ -10917,7 +10919,7 @@ namespace AssetsPV
             */
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            
+            /*
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             //processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Vashk", 19, true);
@@ -10982,16 +10984,16 @@ namespace AssetsPV
 
             processUnitOutlinedWDouble("Ceglia", 61, true);
             processUnitOutlinedWQuad("Oah", 62, true);
-
+            */
 
             
-            
+            /*
             processUnitOutlinedWQuad("Grass", 47, true);
             processUnitOutlinedWQuad("Tree", 47, true);
             processUnitOutlinedWQuad("Boulder", 48, true);
             processUnitOutlinedWQuad("Rubble", 48, true);
             processUnitOutlinedWQuad("Headstone", 48, true);
-            
+            */
             /*
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
@@ -11057,7 +11059,7 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Bishop");
             */
             
-            
+            /*
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -11083,6 +11085,7 @@ namespace AssetsPV
             processHats("Damned", 63, true, classes);
 
             processHats("Husk", 64, true, classes);
+            */
             /*
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
             
