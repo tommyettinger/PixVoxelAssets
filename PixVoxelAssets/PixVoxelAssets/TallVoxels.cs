@@ -10732,12 +10732,12 @@ namespace AssetsPV
                 
             }
             */
-            
+            /*
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
             System.IO.Directory.CreateDirectory(altFolder + "vox");
-            
+            */
             VoxelLogic.InitializeWPalette();
             /*
             VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
@@ -10757,7 +10757,7 @@ namespace AssetsPV
             //processPureAttackW("Cannon", 0);
             
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
-            
+            /*
             VoxelLogic.wcurrent = VoxelLogic.wrendered[0];
             processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
             processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Beam", left_projectile: "Autofire");
@@ -10778,7 +10778,7 @@ namespace AssetsPV
             
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-            
+            */
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
@@ -10840,6 +10840,7 @@ namespace AssetsPV
                 processUnitOutlinedWQuad("Terrain", i, true, true);
             }*/
 //            generateBotLSpritesheet();
+            generateBotLImages();
             /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
             
@@ -11561,6 +11562,92 @@ namespace AssetsPV
 
             bmp.Save("landscape.png");
             return bmp;
+        }
+        private static string[] TerrainsW = new string[]
+        {"Plains","Forest","Desert","Jungle","Hills"
+        ,"Mountains","Ruins","Tundra","Road","River","Sea"};
+        private static void generateBotLImages()
+        {
+            //Bitmap bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
+//            Graphics g = Graphics.FromImage(bmp);
+//            Image temp = null;
+
+            System.IO.Directory.CreateDirectory("BotL");
+            for (int x = 0; x < undead.Length; x++)
+            {
+                string palette = "palette" + undead[x].Item2;
+                for (int y = 0; y < 16; y++)
+                {
+                    File.Copy(palette + "/" + palette + "_" + undead[x].Item1 + "_Large_face" + (y / 4) + "_" + (y % 4) + ".png", "BotL/" + undead[x].Item1 + "_face" + (y/4) + "_" + (y % 4) + ".png", true);
+                }
+            }
+            /*
+            bmp.Save("undead.png");
+
+            bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
+            g = Graphics.FromImage(bmp);
+            temp = null;
+            */
+            for (int x = 0; x < living.Length; x++)
+            {
+                string palette = "palette" + living[x].Item2;
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int f = 0; f < 4; f++)
+                    {
+                        File.Copy(palette + "/" + palette + "_" + living[x].Item1 + "_Large_face" + y + "_0.png", "BotL/" + living[x].Item1 + "_alt" + living[x].Item2 + "_face" + y + "_" + f + ".png", true);
+                    }
+                }
+            }
+
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 0; y < hats.Length; y++)
+                {
+                    for (int f = 0; f < 4; f++)
+                    {
+                        File.Copy("palette" + hats[y].Item2 + "/" + hats[y].Item1 + "_Hat_face" + x + "_0.png", "BotL/" + hats[y].Item1 + "_alt0" + "_face" + x + "_" + f + ".png", true);
+                    }
+                }
+            }
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 0; y < ghost_hats.Length; y++)
+                {
+                    for (int f = 0; f < 4; f++)
+                    {
+                        File.Copy("palette" + ghost_hats[y].Item2 + "/" + ghost_hats[y].Item1 + "_Hat_face" + x + "_0.png", "BotL/" + ghost_hats[y].Item1 + "_alt1" + "_face" + x + "_" + f + ".png", true);
+                    }
+                }
+            }
+
+            for (int x = 0; x < terrain.Length; x++)
+            {
+                string palette = "palette" + terrain[x].Item2;
+                for (int y = 0; y < 1; y++)
+                {
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        for (int f = 0; f < 4; f++)
+                        {
+                            File.Copy(palette + "/" + palette + "_" + terrain[x].Item1 + "_Huge_face" + y + "_3.png", "BotL/" + TerrainsW[x] + "_face_" + dir + "_" + f + ".png", true);
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < landscape.Length; x++)
+            {
+                string palette = "palette" + landscape[x].Item2;
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int f = 0; f < 4; f++)
+                    {
+                        File.Copy(palette + "/" + palette + "_" + landscape[x].Item1 + "_Huge_face" + y + "_" + f + ".png", "BotL/" + landscape[x].Item1 + "_face" + y + "_" + f + ".png", true);
+                    }
+                }
+            }
+
         }
     }
 }
