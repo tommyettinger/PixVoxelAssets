@@ -4051,7 +4051,7 @@ namespace AssetsPV
                         , shiny = new float[] { 1.3f, 1.3f, 0.8f, borderless_alpha }
                         , windy0 = new float[] { 0.95f, 0.85f, 0.65f, flash_alpha_0 }
                         , windy1 = new float[] { 0.95f, 0.85f, 0.65f, flash_alpha_1 }
-                        , flurry = new float[] { 0.99f, 0.9f, 0.7f, borderless_alpha};
+                        , flurry = new float[] { 0.99f, 0.9f, 0.7f, borderless_alpha };
                     schemes[s][p] = schemes[s][p].Concat(new float[][] {
                         drip, //0 moving water
                         transp, //1
@@ -4077,6 +4077,48 @@ namespace AssetsPV
                         flurry, //21 randomly appearing lighter mist inside something
 
                     }).ToArray();
+                }
+
+                if (s == 0)
+                {
+                    for (int p = 0; p < mecha_palettes.Length; p++)
+                    {
+                        float[] drip = mecha_palettes[p][27].ToArray(), transp = mecha_palettes[p][VoxelLogic.wcolorcount - 1];
+                        drip[3] = 1F;
+                        float[] zap = new float[] { 0.93F, 0.83F, 1.4F, borderless_alpha };
+                        float[] dark = new float[] { 0.0f + s * 0.20f, -0.03f + s * 0.17f, -0.09f + s * 0.22f, 1f }
+                            , violet = new float[] { 0.55f, 0.05f, 0.65f, 1f }
+                            , deepviolet = new float[] { 0.3f, 0.05f, 0.4f, 1f }
+                            , shiny = new float[] { 1.3f, 1.3f, 0.8f, borderless_alpha }
+                            , windy0 = new float[] { 0.95f, 0.85f, 0.65f, flash_alpha_0 }
+                            , windy1 = new float[] { 0.95f, 0.85f, 0.65f, flash_alpha_1 }
+                            , flurry = new float[] { 0.99f, 0.9f, 0.7f, borderless_alpha };
+                        mecha_palettes[p] = mecha_palettes[p].Concat(new float[][] {
+                        drip, //0 moving water
+                        transp, //1
+                        transp, //2
+                        transp, //3
+                        drip, //4 lots of water
+                        zap, //5 flickering zap
+                        deepviolet, //6 moving darkblob
+                        transp, //7
+                        transp, //8
+                        transp, //9
+                        deepviolet, //10 darkblob on the ground, still
+                        violet, //11 violet, will move with unit
+                        dark, //12 darkness on the unit, will move with unit
+                        deepviolet, //13 deep violet, will move with unit
+                        shiny, //14 bright light bit
+                        transp, //15
+                        transp, //16
+                        transp, //17
+                        windy0, //18 spinning wind frame 0
+                        windy1, //19 spinning wind frame 1
+                        flurry, //20 randomly appearing lighter dust on ground
+                        flurry, //21 randomly appearing lighter mist inside something
+
+                    }).ToArray();
+                    }
                 }
             }
         }
