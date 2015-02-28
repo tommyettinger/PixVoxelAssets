@@ -211,6 +211,9 @@
     <None Include="Armored_Head_Part_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Armored_Jet_Legs_Part_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Armored_Left_Arm_Part_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -282,6 +285,9 @@
     </None>
     <None Include="Blocky_Head_Part_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Blocky_Jet_Legs_Part_W.vox">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Blocky_Left_Arm_Part_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

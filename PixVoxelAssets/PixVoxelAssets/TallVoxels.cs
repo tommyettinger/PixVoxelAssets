@@ -6735,8 +6735,7 @@ namespace AssetsPV
                     b3.Dispose();
                 }
             }
-            ///REMOVE COMMENT
-            /*
+
             System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -6753,7 +6752,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
         }
         public static void processFieryExplosionDoubleWHat(string u, int palette, string hat, MagicaVoxelData[] headpoints)
@@ -8297,8 +8296,7 @@ namespace AssetsPV
                 }
             }
 
-            ///REMOVE COMMENT
-            /*
+
             System.IO.Directory.CreateDirectory("gifs");
             System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8314,7 +8312,7 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionDoubleW(u, palette);
-            */
+            
         }
         public static void processUnitOutlinedWMecha(string moniker = "Maku", bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null)
@@ -8537,16 +8535,16 @@ namespace AssetsPV
                                 g.DrawImage(b, 80, 160);
                                 if (right_projectors_adj.Count > 0)
                                 {
-                                    int proj_location = voxelToPixelHugeW(0, 0, right_projectors_adj.First().x, right_projectors_adj.First().y, right_projectors_adj.First().z, 0, stride, 0, true) / 4,
-                                        emit_location = voxelToPixelHugeW(0, 0, right_emission.x, right_emission.y, right_emission.z, 0, stride, 0, true) / 4;
+                                    int proj_location = voxelToPixelHugeW(0, 0, right_projectors_adj.First().x, right_projectors_adj.First().y, right_projectors_adj.First().z, 0, stride, 0, still) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, right_emission.x, right_emission.y, right_emission.z, 0, stride, 0, still) / 4;
 
                                     g.DrawImage(b_right, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
                                          160 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
                                 }
                                 if (left_projectors_adj.Count > 0)
                                 {
-                                    int proj_location = voxelToPixelHugeW(0, 0, left_projectors_adj.First().x, left_projectors_adj.First().y, left_projectors_adj.First().z, 0, stride, 0, true) / 4,
-                                        emit_location = voxelToPixelHugeW(0, 0, left_emission.x, left_emission.y, left_emission.z, 0, stride, 0, true) / 4;
+                                    int proj_location = voxelToPixelHugeW(0, 0, left_projectors_adj.First().x, left_projectors_adj.First().y, left_projectors_adj.First().z, 0, stride, 0, still) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, left_emission.x, left_emission.y, left_emission.z, 0, stride, 0, still) / 4;
 
                                     g.DrawImage(b_left, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
                                          160 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
@@ -8556,16 +8554,16 @@ namespace AssetsPV
                             {
                                 if (right_projectors_adj.Count > 0)
                                 {
-                                    int proj_location = voxelToPixelHugeW(0, 0, right_projectors_adj.First().x, right_projectors_adj.First().y, right_projectors_adj.First().z, 0, stride, 0, true) / 4,
-                                        emit_location = voxelToPixelHugeW(0, 0, right_emission.x, right_emission.y, right_emission.z, 0, stride, 0, true) / 4;
+                                    int proj_location = voxelToPixelHugeW(0, 0, right_projectors_adj.First().x, right_projectors_adj.First().y, right_projectors_adj.First().z, 0, stride, 0, still) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, right_emission.x, right_emission.y, right_emission.z, 0, stride, 0, still) / 4;
 
                                     g.DrawImage(b_right, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
                                          160 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
                                 }
                                 if (left_projectors_adj.Count > 0)
                                 {
-                                    int proj_location = voxelToPixelHugeW(0, 0, left_projectors_adj.First().x, left_projectors_adj.First().y, left_projectors_adj.First().z, 0, stride, 0, true) / 4,
-                                        emit_location = voxelToPixelHugeW(0, 0, left_emission.x, left_emission.y, left_emission.z, 0, stride, 0, true) / 4;
+                                    int proj_location = voxelToPixelHugeW(0, 0, left_projectors_adj.First().x, left_projectors_adj.First().y, left_projectors_adj.First().z, 0, stride, 0, still) / 4,
+                                        emit_location = voxelToPixelHugeW(0, 0, left_emission.x, left_emission.y, left_emission.z, 0, stride, 0, still) / 4;
 
                                     g.DrawImage(b_left, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
                                          160 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
@@ -8578,8 +8576,7 @@ namespace AssetsPV
                             
                         }
                     }
-                    ///REMOVE COMMENT
-/*
+
                     s = "";
                     for(int dir = 0; dir < 4; dir++)
                     {
@@ -8593,7 +8590,7 @@ namespace AssetsPV
                     startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_" + firing_name + "_" +
                                 ((firing_name == "Firing_Left") ? left_projectile : (firing_name == "Firing_Right") ? right_projectile : left_projectile + "_" + right_projectile) + "_Huge_animated.gif";
                     Process.Start(startInfo).WaitForExit();
-                    */
+                    
                     //bin.Close();
 
                     //            processFiringDouble(u);
@@ -8710,8 +8707,8 @@ namespace AssetsPV
                             g.DrawImage(b, 80, 160);
                             if (projectors_adj.Count > 0)
                             {
-                                int proj_location = voxelToPixelHugeW(0, 0, projectors_adj.First().x, projectors_adj.First().y, projectors_adj.First().z, 0, stride, 0, true) / 4,
-                                    emit_location = voxelToPixelHugeW(0, 0, emission.x, emission.y, emission.z, 0, stride, 0, true) / 4;
+                                int proj_location = voxelToPixelHugeW(0, 0, projectors_adj.First().x, projectors_adj.First().y, projectors_adj.First().z, 0, stride, 0, still) / 4,
+                                    emit_location = voxelToPixelHugeW(0, 0, emission.x, emission.y, emission.z, 0, stride, 0, still) / 4;
 
                                 g.DrawImage(b_right, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
                                      160 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
@@ -8721,8 +8718,8 @@ namespace AssetsPV
                         {
                             if (projectors_adj.Count > 0)
                             {
-                                int proj_location = voxelToPixelHugeW(0, 0, projectors_adj.First().x, projectors_adj.First().y, projectors_adj.First().z, 0, stride, 0, true) / 4,
-                                    emit_location = voxelToPixelHugeW(0, 0, emission.x, emission.y, emission.z, 0, stride, 0, true) / 4;
+                                int proj_location = voxelToPixelHugeW(0, 0, projectors_adj.First().x, projectors_adj.First().y, projectors_adj.First().z, 0, stride, 0, still) / 4,
+                                    emit_location = voxelToPixelHugeW(0, 0, emission.x, emission.y, emission.z, 0, stride, 0, still) / 4;
 
                                 g.DrawImage(b_right, 60 + (((proj_location % (stride / 4) - 32) / 2) - ((emit_location % (stride / 4) - 32) / 2)),
                                      160 + (((proj_location / (stride / 4) - (108 - 30)) / 2) - ((emit_location / (stride / 4) - (108 - 30)) / 2)), 88, 108);
@@ -8734,8 +8731,7 @@ namespace AssetsPV
 
                     }
                 }
-                ///REMOVE COMMENT
-                /*
+
                 s = "";
                 for (int dir = 0; dir < 4; dir++)
                 {
@@ -8747,7 +8743,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Firing_Both_" +
                             right_projectile + "_Huge_animated.gif";
                 Process.Start(startInfo).WaitForExit();
-                */
+                
 
                 //bin.Close();
 
@@ -8786,8 +8782,7 @@ namespace AssetsPV
                     b.Dispose();
                 }
             }
-            ///REMOVE COMMENT
-            /*
+
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8802,7 +8797,7 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionQuadW(u, palette);
-            */
+            
         }
         public static void processUnitOutlinedWQuad(string u, int palette, bool still, bool shadowless)
         {
@@ -10732,12 +10727,12 @@ namespace AssetsPV
                 
             }
             */
-            /*
+            
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
             System.IO.Directory.CreateDirectory(altFolder + "vox");
-            */
+            
             VoxelLogic.InitializeWPalette();
             /*
             VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
@@ -10779,6 +10774,10 @@ namespace AssetsPV
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             */
+            processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
+            processUnitOutlinedWMecha(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", legs: "Armored_Jet", still: false);
+            processUnitOutlinedWMechaFiring(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
+            processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", legs: "Armored_Jet", still: false);
             /*
             renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
 
@@ -10840,7 +10839,7 @@ namespace AssetsPV
                 processUnitOutlinedWQuad("Terrain", i, true, true);
             }*/
 //            generateBotLSpritesheet();
-            generateBotLImages();
+//            generateBotLImages();
             /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
             
@@ -11355,8 +11354,7 @@ namespace AssetsPV
             
             processUnitOutlinedWDouble(u, palette, hover);
             //processUnitOutlinedWDoubleDead(u, palette, hover);
-            ///REMOVE COMMENT
-            /*
+            
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
@@ -11367,7 +11365,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("html");
             File.WriteAllText("html/" + u + ".html", html);
-            */
+            
         }
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
@@ -11392,8 +11390,7 @@ namespace AssetsPV
         {
 
             processUnitOutlinedWDouble(u, palette, hover);
-            ///REMOVE COMMENT
-            /*
+            
             processUnitOutlinedWDoubleAugmented(u, palette, hover);
 
             string doc = File.ReadAllText("AugmentTemplate.html");
@@ -11402,7 +11399,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("beast");
             System.IO.Directory.CreateDirectory("beast/html");
             File.WriteAllText("beast/html/" + u + ".html", html);
-             * */
+            
         }
 
         private static void processAugments(string u, int palette, bool hover, string alternateName)
@@ -11568,10 +11565,7 @@ namespace AssetsPV
         ,"Mountains","Ruins","Tundra","Road","River","Sea"};
         private static void generateBotLImages()
         {
-            //Bitmap bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
-//            Graphics g = Graphics.FromImage(bmp);
-//            Image temp = null;
-
+            
             System.IO.Directory.CreateDirectory("BotL");
             for (int x = 0; x < undead.Length; x++)
             {
