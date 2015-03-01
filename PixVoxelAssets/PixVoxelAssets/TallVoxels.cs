@@ -8737,7 +8737,7 @@ namespace AssetsPV
                 {
                     for (int f = 0; f < 12; f++)
                     {
-                        s += "frames/palette" + palette + "_" + moniker + "_Firing_Both" + "*Huge_face" + dir + "_" + f + ".png ";
+                        s += "frames/palette" + palette + "_" + moniker + "_Firing_Both_" + right_projectile + "_Huge_face" + dir + "_" + f + ".png ";
                     }
                 }
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Firing_Both_" +
@@ -10758,22 +10758,22 @@ namespace AssetsPV
             //processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
             //processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Beam", left_projectile: "Autofire");
             processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Lightning", left_projectile: "Cannon");
-
-            //processUnitOutlinedWMecha(moniker: "Vox_Nihilus", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
-            //processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle", right_projectile: "Cannon");
+            */
+            processUnitOutlinedWMecha(moniker: "Vox_Nihilus", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
+            processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle", right_projectile: "Cannon");
             processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
             
             //processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
             //processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka", left_projectile: "Beam");
-            processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka", left_projectile: "Lightning");
-
-            //processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
-            //processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Beam");
+            //processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka", left_projectile: "Lightning");
+            
+            processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
+            processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Beam");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
-            */
+            
             //processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
-            processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
-            processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Lightning");
+            //processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
+            //processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Lightning");
             
             //processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             //processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
