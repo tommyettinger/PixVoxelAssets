@@ -8190,6 +8190,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug.Value);
+                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, 'W', palette, 60, 60, 60);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
                 
                 int framelimit = 4;
@@ -8207,7 +8208,7 @@ namespace AssetsPV
                     }
                 }
 
-
+                /* REMOVE COMMENT
                 System.IO.Directory.CreateDirectory("gifs");
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8223,6 +8224,7 @@ namespace AssetsPV
                 //            processFiringDouble(u);
 
                 processFieryExplosionDoubleW(u, newModel, palette);
+                 */
             }
             {
                 VoxelLogic.Augmenter aug = VoxelLogic.AirAugmenter;
@@ -8230,6 +8232,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug);
+                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, 'W', palette, 60, 60, 60);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
 
                 int framelimit = 4;
@@ -8247,7 +8250,7 @@ namespace AssetsPV
                     }
                 }
 
-
+                /* REMOVE COMMENT
                 System.IO.Directory.CreateDirectory("gifs");
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8263,7 +8266,7 @@ namespace AssetsPV
                 //            processFiringDouble(u);
 
                 processFieryExplosionDoubleW(u, newModel, palette);
-
+                */
             }
         }
         public static void processUnitOutlinedWDouble(string u, int palette, bool still)
@@ -8272,7 +8275,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", voxes, 'W', palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + u + ((currentScheme < 0) ? "_" : "_s" + currentScheme + "_") + palette + ".vox", voxes, 'W', palette, 40, 40, 40);
             MagicaVoxelData[] parsed = voxes.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -8296,7 +8299,7 @@ namespace AssetsPV
                 }
             }
 
-
+            /* REMOVE COMMENT
             System.IO.Directory.CreateDirectory("gifs");
             System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8312,7 +8315,7 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionDoubleW(u, palette);
-            
+            */
         }
         public static void processUnitOutlinedWMecha(string moniker = "Maku", bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null)
@@ -8357,7 +8360,7 @@ namespace AssetsPV
                     }
                 }
 
-
+                /* REMOVE COMMENT
                 System.IO.Directory.CreateDirectory("gifs");
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8373,6 +8376,7 @@ namespace AssetsPV
                 //            processFiringDouble(u);
 
                 processFieryExplosionDoubleW(moniker, work.ToList(), palette);
+                */
             }
         }
         public static void processUnitOutlinedWMechaFiring(string moniker = "Maku", bool still = true,
@@ -8478,6 +8482,7 @@ namespace AssetsPV
                             b.Dispose();
                         }
                     }
+                    /* REMOVE COMMENT
                     System.IO.Directory.CreateDirectory("gifs");
                     System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                     ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8524,10 +8529,10 @@ namespace AssetsPV
                                 BinaryReader rightbin = new BinaryReader(File.Open("animations/" + right_projectile + "/" + right_projectile + "_Attack_" + f + ".vox", FileMode.Open));
                                 right_emission = VoxelLogic.RotateYaw(VoxelLogic.FromMagicaRaw(rightbin), dir, 40, 40).First(m => 254 - m.color == 4 * 6);
                             }
-                                /*left_emission.x += 40;
-                            left_emission.y += 40;
-                            right_emission.x += 40;
-                            right_emission.y += 40;*/
+                            //left_emission.x += 40;
+                            //left_emission.y += 40;
+                            //right_emission.x += 40;
+                            //right_emission.y += 40;
                             //Bitmap b_base = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
                             Graphics g = Graphics.FromImage(b_base);
                             if (dir < 2)
@@ -8596,6 +8601,7 @@ namespace AssetsPV
                     //            processFiringDouble(u);
 
                     //processFieryExplosionDoubleW(moniker, work.ToList(), palette);
+                    */
                 }
             }
         }
@@ -8665,7 +8671,7 @@ namespace AssetsPV
                     }
                 }
 
-
+                /* REMOVE COMMENT
                 System.IO.Directory.CreateDirectory("gifs");
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -8696,10 +8702,10 @@ namespace AssetsPV
                             BinaryReader bin = new BinaryReader(File.Open("animations/" + right_projectile + "/" + right_projectile + "_Attack_" + f + ".vox", FileMode.Open));
                             emission = VoxelLogic.RotateYaw(VoxelLogic.FromMagicaRaw(bin), dir, 40, 40).First(m => 254 - m.color == 4 * 6);
                         }
-                        /*left_emission.x += 40;
-                    left_emission.y += 40;
-                    right_emission.x += 40;
-                    right_emission.y += 40;*/
+                    //left_emission.x += 40;
+                    //left_emission.y += 40;
+                    //right_emission.x += 40;
+                    //right_emission.y += 40;
                         //Bitmap b_base = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
                         Graphics g = Graphics.FromImage(b_base);
                         if (dir < 2)
@@ -8750,6 +8756,7 @@ namespace AssetsPV
                 //            processFiringDouble(u);
 
                 //processFieryExplosionDoubleW(moniker, work.ToList(), palette);
+                */
             }
         }
         
@@ -8782,7 +8789,7 @@ namespace AssetsPV
                     b.Dispose();
                 }
             }
-
+            /* REMOVE COMMENT
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8797,14 +8804,16 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionQuadW(u, palette);
-            
+            */
         }
         public static void processUnitOutlinedWQuad(string u, int palette, bool still, bool shadowless)
         {
 
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = (shadowless) ? VoxelLogic.FromMagicaRaw(bin).ToArray() : VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)).ToArray();
+            List<MagicaVoxelData> vlist = (shadowless) ? VoxelLogic.FromMagicaRaw(bin) : VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
+            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", vlist, 'W', palette, 80, 80, 80);
+            MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 20;
@@ -8825,7 +8834,7 @@ namespace AssetsPV
                 }
             }
 
-
+            /* REMOVE COMMENT
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -8840,7 +8849,7 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             processFieryExplosionQuadW(u, palette, shadowless);
-
+            */
         }
         public static void processUnitOutlinedWalkDouble(string u, int palette)
         {
@@ -9032,7 +9041,9 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u + " Dead");
             BinaryReader bin = new BinaryReader(File.Open(u + "_Dead_Large_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(VoxelLogic.PlaceBloodPoolW(VoxelLogic.FromMagicaRaw(bin))).ToArray();
+            List<MagicaVoxelData> vlist = VoxelLogic.PlaceShadowsW(VoxelLogic.PlaceBloodPoolW(VoxelLogic.FromMagicaRaw(bin)));
+            VoxelLogic.WriteVOX("vox/" + u + "_Dead_" + palette + ".vox", vlist, 'W', palette, 40, 40, 40);
+            MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -9236,7 +9247,9 @@ namespace AssetsPV
             */
 
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
+            List<MagicaVoxelData> vlist = VoxelLogic.FromMagicaRaw(bin);
+            VoxelLogic.WriteVOX("vox/" + hat + "_" + palette + ".vox", vlist, 'W', palette, 40, 40, 40);
+            MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -9397,7 +9410,10 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Part_X.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
-
+            for (int c = 0; c < 8; c++ )
+            {
+                VoxelLogic.WriteVOX("vox/" + u + "_" + c + ".vox", parsed.ToList(), 'X', c, 40, 40, 40);
+            }
             for (int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -9430,7 +9446,7 @@ namespace AssetsPV
                 }
 
             }
-
+            /* REMOVE COMMENT
             System.IO.Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -9445,7 +9461,7 @@ namespace AssetsPV
                 processFiringPartial(u);
 
             processExplosionPartial(u);
-
+            */
         }
 
         public static void processTerrainChannel()
@@ -10650,6 +10666,7 @@ namespace AssetsPV
                 Tuple.Create("Wall_Tee_Upper", 49),
             };
         public static string altFolder = "";
+        public static int currentScheme = -1;
         /// <summary>
         /// This will take a long time to run.  It should produce a ton of assets.
         /// </summary>
@@ -10666,17 +10683,18 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
-            /*
+            
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 
+                currentScheme = p;
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
 
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
                 
-                
+                /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
                 processUnitOutlinedWDouble("Generic_Male", 2, true);
@@ -10687,7 +10705,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Generic_Female", 2, true);
                 processUnitOutlinedWDouble("Generic_Female", 3, true);
                 processUnitOutlinedWDouble("Generic_Female", 4, true);
-
+                
                 processUnitOutlinedWDouble("Bulky_Male", 0, true);
                 processUnitOutlinedWDouble("Bulky_Male", 1, true);
                 processUnitOutlinedWDouble("Bulky_Male", 2, true);
@@ -10698,8 +10716,8 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 2, true);
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
-                
-                
+                */
+               
                 processAugments("Wolf", 5, true);
                 //processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processAugments("Drakeling", 6, false);
@@ -10726,13 +10744,13 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
                 
             }
-            */
             
+            /*
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
             System.IO.Directory.CreateDirectory(altFolder + "vox");
-            
+            */
             VoxelLogic.InitializeWPalette();
             /*
             VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
@@ -10750,35 +10768,36 @@ namespace AssetsPV
             //processPureAttackW("Autofire", 0);
             //processPureAttackW("Beam", 0);
             //processPureAttackW("Cannon", 0);
+            /*
             VoxelLogic.wcurrent = VoxelLogic.wrendered[0];
             //processPureAttackW("Lightning", 0);
 
             //processUnitOutlinedWDouble("Full_Mecha", 0, true);
-            /*
-            //processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
-            //processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Beam", left_projectile: "Autofire");
-            processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Lightning", left_projectile: "Cannon");
-            */
+            
+            processUnitOutlinedWMecha(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol");
+            processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Beam", left_projectile: "Autofire");
+            //processUnitOutlinedWMechaFiring(moniker: "Vox_Populi", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky", right_arm: "Blocky", right_weapon: "Bazooka", left_weapon: "Pistol", right_projectile: "Lightning", left_projectile: "Cannon");
+            
             processUnitOutlinedWMecha(moniker: "Vox_Nihilus", head: "Blocky", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle", right_projectile: "Cannon");
-            processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
+            //processUnitOutlinedWMechaAiming(moniker: "Vox_Nihilus", head: "Blocky_Aiming", torso: "Blocky", legs: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
             
-            //processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
-            //processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka", left_projectile: "Beam");
+            processUnitOutlinedWMecha(moniker: "Maku", left_weapon: "Bazooka");
+            processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka", left_projectile: "Beam");
             //processUnitOutlinedWMechaFiring(moniker: "Maku", left_weapon: "Bazooka", left_projectile: "Lightning");
             
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Beam");
-            processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
+            //processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
             
-            //processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
-            //processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
+            processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
+            processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
             //processUnitOutlinedWMechaFiring(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Lightning");
             
-            //processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-            //processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
+            processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
+            processUnitOutlinedWMechaFiring(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             
-            /*
+            
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMecha(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol",
                 legs: "Armored_Jet", still: false);
@@ -11001,8 +11020,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Boulder", 48, true);
             processUnitOutlinedWQuad("Rubble", 48, true);
             processUnitOutlinedWQuad("Headstone", 48, true);
-            */
-            /*
+            
             processUnitOutlinedWQuad("Roof_Flat", 49, true, true);
             processUnitOutlinedWQuad("Roof_Straight", 49, true, true);
             processUnitOutlinedWQuad("Roof_Corner", 49, true, true);
@@ -11046,8 +11064,8 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Dervish");
             processWDoubleHat("Generic_Male", 0, "Thug");
             processWDoubleHat("Generic_Male", 0, "Bishop");
-
-
+            */
+            /*
             processWDoubleHat("Spirit", 7, "Berserker");
             processWDoubleHat("Spirit", 7, "Witch");
             processWDoubleHat("Spirit", 7, "Scout");
@@ -11093,8 +11111,8 @@ namespace AssetsPV
             processHats("Damned", 63, true, classes);
 
             processHats("Husk", 64, true, classes);
-            */
-            /*
+            
+            
             processHats("Generic_Male", 0, true, classes, "Living_Men_A");
             
             processHats("Generic_Male", 1, true, classes, "Living_Men_B");
@@ -11147,9 +11165,9 @@ namespace AssetsPV
             processHats("Armored_Male", 16, true, classes, "Armored_Men_D");
 
             processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
+            
+            processUnitOutlinedWDouble("Necromancer", 65, true);
             */
-            //processUnitOutlinedWDouble("Necromancer", 65, true);
-
             //File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
             //File.WriteAllText("hats.txt", hat_headpoints.ToString());
 
@@ -11192,31 +11210,48 @@ namespace AssetsPV
             OrthoVoxels.processUnitOutlinedWDouble("Cinder", 9);
             OrthoVoxels.processUnitOutlinedWDouble("Spectral_Knight", 7);
             */
-            //processUnitOutlinedPartial("Copter");
-            //processUnitOutlinedPartial("Copter_P");
-            //processUnitOutlinedPartial("Copter_S");
-            //processUnitOutlinedPartial("Copter_T");
-            //processUnitOutlinedPartial("Infantry");
-            //processUnitOutlinedPartial("Infantry_P");
-            //processUnitOutlinedPartial("Infantry_S");
-            //processUnitOutlinedPartial("Infantry_T");
-            //processUnitOutlinedPartial("Tank");
-            //processUnitOutlinedPartial("Tank_P");
-            //processUnitOutlinedPartial("Tank_S");
-            //processUnitOutlinedPartial("Tank_T");
-            //processUnitOutlinedPartial("Artillery");
-            //processUnitOutlinedPartial("Artillery_P");
-            //processUnitOutlinedPartial("Artillery_S");
-            //processUnitOutlinedPartial("Artillery_T");
-            //processUnitOutlinedPartial("Supply");
-            //processUnitOutlinedPartial("Supply_P");
-            //processUnitOutlinedPartial("Supply_S");
-            //processUnitOutlinedPartial("Supply_T");
-            //processUnitOutlinedPartial("Plane");
-            //processUnitOutlinedPartial("Plane_P");
-            //processUnitOutlinedPartial("Plane_S");
-            //processUnitOutlinedPartial("Plane_T");
+            /*
+            processUnitOutlinedPartial("Infantry_Firing");
+            processUnitOutlinedPartial("Infantry_P_Firing");
+            processUnitOutlinedPartial("Infantry_T_Firing");
+            processUnitOutlinedPartial("Tank_S_Firing");
+            
+            processUnitOutlinedPartial("Copter");
+            processUnitOutlinedPartial("Copter_P");
+            processUnitOutlinedPartial("Copter_S");
+            processUnitOutlinedPartial("Copter_T");
+            processUnitOutlinedPartial("Infantry");
+            processUnitOutlinedPartial("Infantry_P");
+            processUnitOutlinedPartial("Infantry_S");
+            processUnitOutlinedPartial("Infantry_T");
+            processUnitOutlinedPartial("Tank");
+            processUnitOutlinedPartial("Tank_P");
+            processUnitOutlinedPartial("Tank_S");
+            processUnitOutlinedPartial("Tank_T");
+            processUnitOutlinedPartial("Artillery");
+            processUnitOutlinedPartial("Artillery_P");
+            processUnitOutlinedPartial("Artillery_S");
+            processUnitOutlinedPartial("Artillery_T");
+            processUnitOutlinedPartial("Supply");
+            processUnitOutlinedPartial("Supply_P");
+            processUnitOutlinedPartial("Supply_S");
+            processUnitOutlinedPartial("Supply_T");
+            processUnitOutlinedPartial("Plane");
+            processUnitOutlinedPartial("Plane_P");
+            processUnitOutlinedPartial("Plane_S");
+            processUnitOutlinedPartial("Plane_T");
+            processUnitOutlinedPartial("Boat");
+            processUnitOutlinedPartial("Boat_P");
+            processUnitOutlinedPartial("Boat_S");
+            processUnitOutlinedPartial("Boat_T");
 
+            processUnitOutlinedPartial("City");
+            processUnitOutlinedPartial("Factory");
+            processUnitOutlinedPartial("Airport");
+            processUnitOutlinedPartial("Laboratory");
+            processUnitOutlinedPartial("Castle");
+            processUnitOutlinedPartial("Estate");
+            */
             //CreateChannelBitmap(new Bitmap(88, 108, PixelFormat.Format32bppArgb), "indexed/clear.png");
             //CreateChannelBitmap(new Bitmap(128, 158, PixelFormat.Format32bppArgb), "indexed/clear_large.png");
 
@@ -11362,7 +11397,7 @@ namespace AssetsPV
             
             processUnitOutlinedWDouble(u, palette, hover);
             //processUnitOutlinedWDoubleDead(u, palette, hover);
-            
+            /* REMOVE COMMENT
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
@@ -11373,15 +11408,15 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("html");
             File.WriteAllText("html/" + u + ".html", html);
-            
+            */
         }
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
         {
             
-            //processUnitOutlinedWDouble(u, palette, hover);
-            //processUnitOutlinedWDoubleDead(u, palette, hover);
-            
+            processUnitOutlinedWDouble(u, palette, hover);
+            processUnitOutlinedWDoubleDead(u, palette, hover);
+            /* REMOVE COMMENT
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
@@ -11392,6 +11427,7 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("html");
             File.WriteAllText("html/" + alternateName + ".html", html);
+             * */
         }
 
         private static void processAugments(string u, int palette, bool hover)

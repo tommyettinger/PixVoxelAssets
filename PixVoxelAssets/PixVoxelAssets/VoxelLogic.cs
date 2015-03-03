@@ -13955,8 +13955,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 foreach (MagicaVoxelData mvd in voxelData)
                 {
-                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 249 - 96 && mvd.color > 249 - 168)
+                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 249 - 96 && mvd.color > 249 - 168
+                        && xcolors[249 - mvd.color][3] != spin_alpha_1)
                     {
+                        if (249 - mvd.color == 136 && r.Next(7) < 2)
+                            continue;
                         voxelsRaw.Add((byte)(mvd.x + 10));
                         voxelsRaw.Add((byte)(mvd.y + 10));
                         voxelsRaw.Add((byte)(mvd.z + 0));
@@ -13968,10 +13971,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     if ((249 - i) % 8 == 0 && 249 - i < 168)
                     {
-                        colors[(i - 1) * 4] = xrendered[249 - i + palette][2];
-                        colors[(i - 1) * 4 + 1] = xrendered[249 - i + palette][1];
-                        colors[(i - 1) * 4 + 2] = xrendered[249 - i + palette][0];
-                        colors[(i - 1) * 4 + 3] = xrendered[249 - i + palette][3];
+                        colors[(i - 1) * 4] = xrendered[249 - i + palette][2 + 16];
+                        colors[(i - 1) * 4 + 1] = xrendered[249 - i + palette][1 + 16];
+                        colors[(i - 1) * 4 + 2] = xrendered[249 - i + palette][0 + 16];
+                        colors[(i - 1) * 4 + 3] = xrendered[249 - i + palette][3 + 16];
                     }
                     else
                     {
@@ -13986,12 +13989,66 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 foreach (MagicaVoxelData mvd in voxelData)
                 {
-                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 253 - 100 && mvd.color > 253 - wcolorcount * 4)
+                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 253 - 100 && mvd.color > 253 - wcolorcount * 4
+                        && wpalettes[palette][(253 - mvd.color)/4][3] != spin_alpha_1)
                     {
+                        int current_color = ((255 - mvd.color) % 4 == 0) ? (255 - mvd.color) / 4 + wcolorcount : ((254 - mvd.color) % 4 == 0) ? (254 - mvd.color) / 4 : (253 - mvd.color) / 4;
+                        if ((255 - mvd.color) % 4 != 0 && current_color >= wcolorcount)
+                            continue;
+
+                        if (wcolors[current_color][3] == 0F)
+                            continue;
+
+                        if (current_color == 17 && r.Next(7) < 2) //smoke
+                            continue;
+                        if ((current_color == 27 || current_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                            continue;
+                        if ((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
+                            continue;
+
                         voxelsRaw.Add((byte)(mvd.x + 10));
                         voxelsRaw.Add((byte)(mvd.y + 10));
                         voxelsRaw.Add((byte)(mvd.z + 0));
-                        voxelsRaw.Add((byte)(((253 - mvd.color) % 4 == 0) ? mvd.color : mvd.color - ((253 - mvd.color) % 4)));
+                        if (current_color == 18) //yellow fire
+                        {
+                            if (r.Next(3) > 0)
+                            {
+                                current_color += r.Next(3);
+                                voxelsRaw.Add((byte)(mvd.color - 4*r.Next(3)));
+                            }
+                            else
+                            {
+                                voxelsRaw.Add(mvd.color);
+                            }
+                        }
+                        else if (current_color == 19) // orange fire
+                        {
+                            if (r.Next(5) < 4)
+                            {
+                                current_color -= r.Next(3);
+                                voxelsRaw.Add((byte)(mvd.color + 4 * r.Next(3)));
+                            }
+                            else
+                            {
+                                voxelsRaw.Add(mvd.color);
+                            }
+                        }
+                        else if (current_color == 20) // sparks
+                        {
+                            if (r.Next(5) > 0)
+                            {
+                                current_color -= r.Next(3);
+                                voxelsRaw.Add((byte)(mvd.color + 4 * r.Next(3)));
+                            }
+                            else
+                            {
+                                voxelsRaw.Add(mvd.color);
+                            }
+                        }
+                        else
+                        {
+                            voxelsRaw.Add((byte)(((254 - mvd.color) % 4 == 0) ? mvd.color - 1 : mvd.color));
+                        }
                         taken[mvd.x, mvd.y, mvd.z] = true;
                     }
                 }
@@ -13999,14 +14056,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     if ((253 - i) % 4 == 0 && (253 - i) / 4 < wcolorcount)
                     {
-                        colors[(i-1) * 4    ] = wrendered[palette][(253 - i) / 4][2];
-                        colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1];
-                        colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0];
-                        colors[(i - 1) * 4 + 3] = wrendered[palette][(253 - i) / 4][3];
+                        colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2 + 16];
+                        colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + 16];
+                        colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + 16];
+                        colors[(i - 1) * 4 + 3] = wrendered[palette][(253 - i) / 4][3 + 16];
+                    }
+                    else if ((255 - i) % 4 == 0 && wcolorcount + (255 - i) / 4 < wrendered[palette].Length)
+                    {
+                        colors[(i - 1) * 4] = wrendered[palette][(255 - i) / 4 + wcolorcount][2 + 16];
+                        colors[(i - 1) * 4 + 1] = wrendered[palette][(255 - i) / 4 + wcolorcount][1 + 16];
+                        colors[(i - 1) * 4 + 2] = wrendered[palette][(255 - i) / 4 + wcolorcount][0 + 16];
+                        colors[(i - 1) * 4 + 3] = wrendered[palette][(255 - i) / 4 + wcolorcount][3 + 16];
                     }
                     else
                     {
-                        colors[(i - 1) * 4] = (byte)(mv_default_palette[i] & 0xff);
+                        colors[(i - 1) * 4] =     (byte)(mv_default_palette[i] & 0xff);
                         colors[(i - 1) * 4 + 1] = (byte)((mv_default_palette[i] >> 8) & 0xff);
                         colors[(i - 1) * 4 + 2] = (byte)((mv_default_palette[i] >> 16) & 0xff);
                         colors[(i - 1) * 4 + 3] = (byte)((mv_default_palette[i] >> 24) & 0xff);
