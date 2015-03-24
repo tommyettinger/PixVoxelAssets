@@ -6810,9 +6810,9 @@ namespace AssetsPV
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     body_graphics.DrawImage(hat_image, 80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
                          40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2)), 88, 108);
-                    model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        (80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))) +
-                        ", y " + (40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2))));
+//                    model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+//                        (80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))) +
+//                        ", y " + (40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2))));
                     body_image.Save(folder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_fiery_explode_" + f + ".png", ImageFormat.Png);
 
                 }
@@ -9084,8 +9084,8 @@ namespace AssetsPV
             //processFieryExplosionDoubleW(u, palette);
 
         }
-        
-
+        private static FileStream offbin = new FileStream("offsets.bin",FileMode.OpenOrCreate);
+        private static BinaryWriter offsets = new BinaryWriter(offbin);
         private static StringBuilder model_headpoints = new StringBuilder(), hat_headpoints = new StringBuilder();
         public static void processUnitOutlinedWDoubleHat(string u, int palette, bool still, string hat)
         {
@@ -9125,7 +9125,7 @@ namespace AssetsPV
                     int hat_coord = voxelToPixelLargeW(0, 0, headpoints[1 + dir * 2].x, headpoints[1 + dir * 2].y, headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
                     //hat_headpoints.AppendLine("HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
                     //    ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
-
+                    /*
                     Graphics hat_graphics;
                     Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/"
                         // + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
@@ -9139,14 +9139,19 @@ namespace AssetsPV
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
                          (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)), 88, 108);
-                    model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
-                        (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))
-                        + ", y " + (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)));
+                     */
+                    offsets.Write(((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2));
+                    offsets.Write(((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2));
+//                    model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
+//                        (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))
+//                        + ", y " + (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)));
+                    /*
                     body_graphics.Dispose();
                     body_image.Save("palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png");
                     hat_graphics.Dispose();
                     hat_image.Dispose();
                     body_image.Dispose();
+                    */
                 }
             }
             /*
@@ -9179,7 +9184,7 @@ namespace AssetsPV
 
             //            processFiringDouble(u);
 
-            processFieryExplosionDoubleWHat(u, palette, hat, headpoints);
+            //processFieryExplosionDoubleWHat(u, palette, hat, headpoints);
 
             /*
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
@@ -10686,14 +10691,14 @@ namespace AssetsPV
             
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
-                
+                /*
                 currentScheme = p;
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
 
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
-                
+                */
                 /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
                 processUnitOutlinedWDouble("Generic_Male", 1, true);
@@ -10717,7 +10722,7 @@ namespace AssetsPV
                 processUnitOutlinedWDouble("Bulky_Female", 3, true);
                 processUnitOutlinedWDouble("Bulky_Female", 4, true);
                 */
-               
+               /*
                 processAugments("Wolf", 5, true);
                 //processUnitOutlinedWDoubleAugmented("Wolf", 5, true);
                 processAugments("Drakeling", 6, false);
@@ -10742,7 +10747,7 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Centipede", 14, true);
                 processAugments("Sand_Worm", 15, true);
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
-                
+                */
             }
             
             /*
@@ -11046,7 +11051,7 @@ namespace AssetsPV
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            /*
+            
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -11064,8 +11069,8 @@ namespace AssetsPV
             processWDoubleHat("Generic_Male", 0, "Dervish");
             processWDoubleHat("Generic_Male", 0, "Thug");
             processWDoubleHat("Generic_Male", 0, "Bishop");
-            */
-            /*
+            
+            
             processWDoubleHat("Spirit", 7, "Berserker");
             processWDoubleHat("Spirit", 7, "Witch");
             processWDoubleHat("Spirit", 7, "Scout");
@@ -11083,9 +11088,9 @@ namespace AssetsPV
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            */
             
-            /*
+            
+            
             processHats("Zombie", 2, true, classes);
 
             processHats("Skeleton", 6, true, classes);
@@ -11166,10 +11171,12 @@ namespace AssetsPV
 
             processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
             
-            processUnitOutlinedWDouble("Necromancer", 65, true);
-            */
-            //File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
-            //File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            //processUnitOutlinedWDouble("Necromancer", 65, true);
+
+            offsets.Close();
+            offbin.Close();
+//            File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
+//            File.WriteAllText("hats.txt", hat_headpoints.ToString());
 
             //processHats("Skeleton_Spear", 6, true, classes);
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
@@ -11397,12 +11404,11 @@ namespace AssetsPV
             
             processUnitOutlinedWDouble(u, palette, hover);
             //processUnitOutlinedWDoubleDead(u, palette, hover);
-            /* REMOVE COMMENT
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            
+            /* REMOVE COMMENT
             string doc = File.ReadAllText("Template.html");
             string html = String.Format(doc, palette, u);
 
@@ -11416,12 +11422,11 @@ namespace AssetsPV
             
             processUnitOutlinedWDouble(u, palette, hover);
             processUnitOutlinedWDoubleDead(u, palette, hover);
-            /* REMOVE COMMENT
             foreach (string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
-            
+            /* REMOVE COMMENT
             string doc = File.ReadAllText("LivingTemplate.html");
             string html = String.Format(doc, palette, u);
 
