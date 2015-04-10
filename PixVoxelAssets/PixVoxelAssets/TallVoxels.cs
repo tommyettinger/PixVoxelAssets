@@ -9125,7 +9125,7 @@ namespace AssetsPV
                     int hat_coord = voxelToPixelLargeW(0, 0, headpoints[1 + dir * 2].x, headpoints[1 + dir * 2].y, headpoints[1 + dir * 2].z, (byte)(253 - headpoints[1 + dir * 2].color) / 4, stride, 0, true) / 4;
                     //hat_headpoints.AppendLine("HAT: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
                     //    ((hat_coord % (stride / 4) - 32) / 2) + ", y " + (108 - ((hat_coord / (stride / 4) - 78) / 2)));
-                    /*
+                    
                     Graphics hat_graphics;
                     Bitmap hat_image = new Bitmap(Image.FromFile("palette" + ((hat == "Woodsman") ? 44 : (hat == "Farmer") ? 49 : (palette == 7 || palette == 8 || palette == 42) ? 7 : 0) + "/"
                         // + ((palette == 7 || palette == 8 || palette == 42) ? "Spirit_" : "Generic_Male_")
@@ -9139,19 +9139,19 @@ namespace AssetsPV
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
                          (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)), 88, 108);
-                     */
+                    
                     offsets.Write(((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2));
                     offsets.Write(((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2));
 //                    model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
 //                        (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))
 //                        + ", y " + (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)));
-                    /*
+                    
                     body_graphics.Dispose();
                     body_image.Save("palette" + palette + "/palette" + palette + "_" + u + "_" + hat + "_Large_face" + dir + "_" + f + ".png");
                     hat_graphics.Dispose();
                     hat_image.Dispose();
                     body_image.Dispose();
-                    */
+                    
                 }
             }
             /*
@@ -11098,7 +11098,7 @@ namespace AssetsPV
             processHats("Spirit", 7, false, classes);
 
             processHats("Wraith", 8, false, classes);
-
+            /*
             processHats("Cinder", 9, true, classes);
 
             processHats("Ghoul", 39, true, classes);
@@ -11170,7 +11170,7 @@ namespace AssetsPV
             processHats("Armored_Male", 16, true, classes, "Armored_Men_D");
 
             processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
-            
+            */
             //processUnitOutlinedWDouble("Necromancer", 65, true);
 
             offsets.Close();

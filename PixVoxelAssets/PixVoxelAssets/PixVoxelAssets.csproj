@@ -52,6 +52,7 @@
     <Compile Include="AlternatePalettes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IOrderedDictionary.cs" />
+    <Compile Include="KolonizePalettes.cs" />
     <Compile Include="LocalMap.cs" />
     <Compile Include="OrderedDictionary.cs" />
     <Compile Include="OrthoPaletteDraw.cs" />
