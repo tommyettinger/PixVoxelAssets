@@ -173,13 +173,13 @@ namespace AssetsPV
             //13 smoke
             new float[] {0.14F,0.14F,0.02F,waver_alpha},
             //14 yellow fire
-            new float[] {1.25F,1.1F,0.45F,1F},
+            new float[] {1.25F,1.1F,0.45F,borderless_alpha},
             //15 orange fire
-            new float[] {1.25F,0.7F,0.3F,1F},
+            new float[] {1.25F,0.7F,0.3F,borderless_alpha},
             //16 sparks
-            new float[] {1.3F,1.2F,0.85F,1F},
+            new float[] {1.3F,1.2F,0.85F,borderless_alpha},
             //17 flickering sparks
-            new float[] {1.3F,0.9F,0.55F,borderless_alpha},
+            new float[] {0.15F,0.8F,0.4F,borderless_alpha},
             //18 flickering sparks alternate
             new float[] {0.85F,0.1F,0.7F,borderless_alpha},
             //19 glow frame 0
@@ -257,7 +257,7 @@ namespace AssetsPV
             //55 always bright white
             new float[] {1.25F,1.25F,0.95F,1F},
             //56 always gold
-            new float[] {0.92F,0.85F,0.4F,1F},
+            new float[] {1.2F,1.16F,-0.1F,1F},
             //57 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //58 total transparent
