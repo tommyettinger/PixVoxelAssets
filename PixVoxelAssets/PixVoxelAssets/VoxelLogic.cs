@@ -7764,7 +7764,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    ColorAdjustType.Bitmap);
                 for (int p = 0; p < kpalettes.Length; p++)
                 {
-                    for (int current_color = 0; current_color < kpalettes[0].Length; current_color++)
+                    for (int current_color = 0; current_color < kpalettes[p].Length; current_color++)
                     {
                         Bitmap b =
                         new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -14238,6 +14238,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             ySize += 20;
             zSize += 20;
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+
             Stream stream = File.OpenWrite(filename);
             BinaryWriter bin = new BinaryWriter(stream);
             bool[, ,] taken = new bool[xSize, ySize, zSize].Fill(false);

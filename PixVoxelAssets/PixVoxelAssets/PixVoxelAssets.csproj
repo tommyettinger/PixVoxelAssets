@@ -671,8 +671,14 @@
     <None Include="Kurguiv_Walk_3_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="K\Female_Base_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="K\Male_Base_K.vox">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Sorcerer_Male_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Laboratory_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
