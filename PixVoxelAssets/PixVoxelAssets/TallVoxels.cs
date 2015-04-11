@@ -8190,7 +8190,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug.Value);
-                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, 'W', palette, 60, 60, 60);
+                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, "W", palette, 60, 60, 60);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
                 
                 int framelimit = 4;
@@ -8232,7 +8232,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug);
-                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, 'W', palette, 60, 60, 60);
+                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, "W", palette, 60, 60, 60);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
 
                 int framelimit = 4;
@@ -8275,7 +8275,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + ((currentScheme < 0) ? "_" : "_s" + currentScheme + "_") + palette + ".vox", voxes, 'W', palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + u + ((currentScheme < 0) ? "_" : "_s" + currentScheme + "_") + palette + ".vox", voxes, "W", palette, 40, 40, 40);
             MagicaVoxelData[] parsed = voxes.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -8335,7 +8335,7 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
             work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
             work = VoxelLogic.PlaceShadowsPartialW(work);
-            VoxelLogic.WriteVOX("vox/" + moniker + "_0.vox", work, 'W', 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + moniker + "_0.vox", work, "W", 0, 40, 40, 40);
 
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -8459,7 +8459,7 @@ namespace AssetsPV
                     left_projector = bogus;
                 }
                 work = VoxelLogic.PlaceShadowsPartialW(work);
-                VoxelLogic.WriteVOX("vox/" + moniker + "_" + firing_name + "_0.vox", work, 'W', 0, 40, 40, 40);
+                VoxelLogic.WriteVOX("vox/" + moniker + "_" + firing_name + "_0.vox", work, "W", 0, 40, 40, 40);
                 MagicaVoxelData[] parsed = work.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -8647,7 +8647,7 @@ namespace AssetsPV
                 right_projector = bogus;
             }
             work = VoxelLogic.PlaceShadowsPartialW(work);
-            VoxelLogic.WriteVOX("vox/" + moniker + "_Firing_Both_0.vox", work, 'W', 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + moniker + "_Firing_Both_0.vox", work, "W", 0, 40, 40, 40);
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -8767,7 +8767,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", voxes, 'W', palette, 80, 80, 80);
+            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", voxes, "W", palette, 80, 80, 80);
 
             MagicaVoxelData[] parsed = voxes.ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -8812,7 +8812,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> vlist = (shadowless) ? VoxelLogic.FromMagicaRaw(bin) : VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", vlist, 'W', palette, 80, 80, 80);
+            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", vlist, "W", palette, 80, 80, 80);
             MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9042,7 +9042,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + " Dead");
             BinaryReader bin = new BinaryReader(File.Open(u + "_Dead_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> vlist = VoxelLogic.PlaceShadowsW(VoxelLogic.PlaceBloodPoolW(VoxelLogic.FromMagicaRaw(bin)));
-            VoxelLogic.WriteVOX("vox/" + u + "_Dead_" + palette + ".vox", vlist, 'W', palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + u + "_Dead_" + palette + ".vox", vlist, "W", palette, 40, 40, 40);
             MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9253,7 +9253,7 @@ namespace AssetsPV
 
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
             List<MagicaVoxelData> vlist = VoxelLogic.FromMagicaRaw(bin);
-            VoxelLogic.WriteVOX("vox/" + hat + "_" + palette + ".vox", vlist, 'W', palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + hat + "_" + palette + ".vox", vlist, "W", palette, 40, 40, 40);
             MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9417,7 +9417,7 @@ namespace AssetsPV
             MagicaVoxelData[] parsed = VoxelLogic.AssembleHeadToBody(bin, false);
             for (int c = 0; c < 8; c++ )
             {
-                VoxelLogic.WriteVOX("vox/" + u + "_" + c + ".vox", parsed.ToList(), 'X', c, 40, 40, 40);
+                VoxelLogic.WriteVOX("vox/" + u + "_" + c + ".vox", parsed.ToList(), "X", c, 40, 40, 40);
             }
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -10688,7 +10688,19 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
+
+
+
+            System.IO.Directory.CreateDirectory("vox/Kolonize_Allies");
+            System.IO.Directory.CreateDirectory("vox/Kolonize_Other");
+
+            VoxelLogic.InitializeKPalette();
+            BinaryReader bin = new BinaryReader(File.OpenRead("K/Male_Base_K.vox"));
+            List<MagicaVoxelData> vl = VoxelLogic.FromMagicaRaw(bin);
+            VoxelLogic.WriteVOX("vox/Kolonize_Allies/Male_Base.vox", vl, "K_ALLY", 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/Kolonize_Other/Male_Base.vox", vl, "K_OTHER", 0, 40, 40, 40);
             
+
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 /*
@@ -10764,7 +10776,7 @@ namespace AssetsPV
             
             BinaryReader bin = new BinaryReader(File.OpenRead("Eye_Tyrant_Large_W.vox"));
             var eye = VoxelLogic.FromMagicaRaw(bin);
-            VoxelLogic.WriteVOX("vox/EyeTest.vox", eye, 'W', 13, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/EyeTest.vox", eye, "W", 13, 40, 40, 40);
             bin = new BinaryReader(File.OpenRead("vox/EyeTest.vox"));
             eye = VoxelLogic.FromMagicaRaw(bin);
             VoxelLogic.wcurrent = VoxelLogic.wrendered[13];
@@ -11051,7 +11063,7 @@ namespace AssetsPV
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
 
-            
+            /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
             processWDoubleHat("Generic_Male", 0, "Scout");
@@ -11098,7 +11110,7 @@ namespace AssetsPV
             processHats("Spirit", 7, false, classes);
 
             processHats("Wraith", 8, false, classes);
-            /*
+            
             processHats("Cinder", 9, true, classes);
 
             processHats("Ghoul", 39, true, classes);

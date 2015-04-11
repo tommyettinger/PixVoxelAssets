@@ -460,11 +460,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 /*            new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},
             new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F}, new float[] {0F,0F,0F,0F},*/
         };
-        
+
         public static float[][] kcolors;
 
         public static float[][][] kpalettes;
-        
+
         public static float[][] wcolors =
             new float[][] { //default to brown hair
                         //0 shoes, boots, brown leather contrast
@@ -7682,12 +7682,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 return Color.FromArgb(255, v, p, q);
         }
 
+        public static byte[][][][] krendered;
+        public static byte[][] kcurrent;
 
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
         public static byte clear = 255;
-        public static int[] subtlePalettes = { 47, 48,     50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
-            drabPalettes = {};// { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
+        public static int[] subtlePalettes = { 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
+            drabPalettes = { };// { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
         static VoxelLogic()
         {
@@ -7735,11 +7737,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         {
             KolonizePalettes.Initialize();
             kpalettecount = KolonizePalettes.kolonizes[0].Length;
-            byte[, , ,] cubes = new byte[KolonizePalettes.kolonizes.Length, kpalettecount, KolonizePalettes.kolonizes[0][0].Length * 2, 80];
+            byte[, , ,] cubes = new byte[KolonizePalettes.kolonizes.Length, kpalettecount * 2, KolonizePalettes.kolonizes[0][0].Length * 2, 80];
 
-            for(int k = 0; k < KolonizePalettes.kolonizes.Length; k++)
+            for (int k = 0; k < KolonizePalettes.kolonizes.Length; k++)
             {
                 float[][][] kpalettes = KolonizePalettes.kolonizes[k];
+                float[][][] contrast = kpalettes.Replicate();
                 Image image = new Bitmap("cube_soft.png");
                 Image flat = new Bitmap("flat_soft.png");
                 Image shine = new Bitmap("spin_soft.png");
@@ -7818,32 +7821,65 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             for (int j = 0; j < height; j++)
                             {
                                 Color c = b.GetPixel(i, j);
-                                Color c2 = Color.FromArgb(c.ToArgb());
                                 double h = 0.0, s = 1.0, v = 1.0;
                                 double h2 = 0.0, s2 = 1.0, v2 = 1.0;
                                 if (which_image.Equals(image))
                                 {
-                                    if (j == 0)
+
+                                    if (current_color <= 2 || current_color >= 8)
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV((h + k*15) % 360, Math.Min(1.0, s * 1.1), v);
-                                    }
-                                    else if (i >= width / 2 || j == height - 1)
-                                    {
-                                        ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV((h + k*15) % 360, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
+                                        if (j == 0)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV((h + k * 20) % 360,
+                                                             Math.Min(1.0, s * (1.1 - k * 0.2)),
+                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 1.0 - k * 0.15)));
+                                        }
+                                        else if (i >= width / 2 || j == height - 1)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV((h + k * 20) % 360,
+                                                             Math.Min(1.0, s * (1.35 - k * 0.2)),
+                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85 - k * 0.2)));
+                                        }
+                                        else
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV((h + k * 20) % 360,
+                                                              Math.Min(1.0, s * (1.2 - k * 0.2)),
+                                                              Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95 - k * 0.2)));
+                                        }
                                     }
                                     else
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV((h + k*15) % 360, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
+
+                                        if (j == 0)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV((h) % 360,
+                                                             Math.Min(1.0, s * (1.1)),
+                                                             v);
+                                        }
+                                        else if (i >= width / 2 || j == height - 1)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV((h) % 360,
+                                                             Math.Min(1.0, s * (1.35)),
+                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
+                                        }
+                                        else
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV((h) % 360,
+                                                              Math.Min(1.0, s * (1.2)),
+                                                              Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
+                                        }
                                     }
                                 }
+                                Color c2 = Color.FromArgb(c.ToArgb());
                                 ColorToHSV(c2, out h2, out s2, out v2);
-                                if(current_color <= 2 || current_color >= 8)
-                                {
-                                    c2 = ColorFromHSV((h2 + k*15) % 360, Math.Min(1.0, s2 * 1.2), Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.8)));
-                                }
+                                c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.15), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.75)));
+                                
                                 if (c.A != 0)
                                 {
                                     cubes[k, p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
@@ -7851,7 +7887,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     cubes[k, p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
                                     cubes[k, p, current_color, i * 4 + j * width * 4 + 3] = c.A;
 
-                                    
+
                                     cubes[k, p, current_color + kcolorcount, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c2.B);
                                     cubes[k, p, current_color + kcolorcount, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c2.G);
                                     cubes[k, p, current_color + kcolorcount, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c2.R);
@@ -7864,7 +7900,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     cubes[k, p, current_color, i * 4 + j * 4 * width + 2] = 0;
                                     cubes[k, p, current_color, i * 4 + j * 4 * width + 3] = 0;
 
-                                    
+
                                     cubes[k, p, current_color + kcolorcount, i * 4 + j * 4 * width + 0] = 0;
                                     cubes[k, p, current_color + kcolorcount, i * 4 + j * 4 * width + 1] = 0;
                                     cubes[k, p, current_color + kcolorcount, i * 4 + j * 4 * width + 2] = 0;
@@ -7917,26 +7953,33 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                             }
                                         }
                                     }*/
+                    KolonizePalettes.kolonizes[k][p] = kpalettes[p].Concat(contrast[p]).ToArray();
                 }
             }
             byte[][][][] cubes2 = new byte[KolonizePalettes.kolonizes.Length][][][];
-            for(int k = 0; k < KolonizePalettes.kolonizes.Length; k++)
+            for (int k = 0; k < KolonizePalettes.kolonizes.Length; k++)
             {
-                cubes2[k] = new byte[kpalettes.Length][][];
-                for (int i = 0; i < kpalettes.Length; i++)
-            {
-                cubes2[k][i] = new byte[kpalettes[0].Length][];
-                for (int c = 0; c < kpalettes[0].Length; c++)
+                cubes2[k] = new byte[KolonizePalettes.kolonizes[k].Length][][];
+                for (int i = 0; i < KolonizePalettes.kolonizes[k].Length; i++)
                 {
-                    cubes2[k][i][c] = new byte[80];
-                    for (int j = 0; j < 80; j++)
+                    cubes2[k][i] = new byte[KolonizePalettes.kolonizes[k][i].Length][];
+                    for (int c = 0; c < KolonizePalettes.kolonizes[k][i].Length; c++)
                     {
-                        cubes2[k][i][c][j] = cubes[k, i, c, j];
+                        cubes2[k][i][c] = new byte[80];
+                        for (int j = 0; j < 80; j++)
+                        {
+                            cubes2[k][i][c][j] = cubes[k, i, c, j];
+                        }
                     }
                 }
             }
-            }
             return cubes2;
+        }
+
+        public static void InitializeKPalette()
+        {
+            krendered = storeColorCubesK();
+            kcurrent = krendered[0][0];
         }
 
         private static byte[][][] storeColorCubesW()
@@ -8495,6 +8538,45 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelsAltered;
         }
+        public static byte WithoutShadingK(byte originalColor)
+        {
+             return (byte) ((255 - originalColor % 4 == 0) ? (255 - originalColor) / 4 : (253 - originalColor) / 4);
+        }
+        public static List<MagicaVoxelData> PlaceShadowsK(List<MagicaVoxelData> voxelData)
+        {
+            int[,] taken = new int[sizex + 20, sizey + 20];
+            taken.Fill(-1);
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 9 / 8);
+            for (int i = 0; i < voxelData.Count; i++)
+            {
+                if (voxelData[i].x >= sizex + 20 || voxelData[i].y >= sizey + 20)
+                {
+                    continue;
+                }
+                //if (voxelData[i].color > 257 - kcolorcount * 4 && (254 - voxelData[i].color) % 4 == 0)
+                //{
+                //    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
+                //}
+                voxelsAltered.Add(voxelData[i]);
+                int unshaded = (255 - voxelData[i].color % 4 == 0) ? (255 - voxelData[i].color) / 4 : (253 - voxelData[i].color) / 4;
+                if (-1 == taken[voxelData[i].x, voxelData[i].y]
+                     && (unshaded < 14 || unshaded > 23)
+                     && unshaded != 12
+                     && voxelData[i].color > 257 - kcolorcount * 4)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = (byte)(0);
+                    vox.color = 253 - 23 * 4;
+                    taken[vox.x, vox.y] = voxelsAltered.Count();
+                    voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered;
+        }
+        
         public static List<MagicaVoxelData> PlaceShadowsPartialW(List<MagicaVoxelData> voxelData)
         {
             int[,] taken = new int[sizex + 20, sizey + 20];
@@ -8509,7 +8591,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if ((254 - voxelData[i].color) % 4 == 0) //voxelData[i].color > 257 - wcolorcount * 4 && 
                 {
                     continue;
-//                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
+                    //                    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
                 }
                 voxelsAltered.Add(voxelData[i]);
                 if (-1 == taken[voxelData[i].x, voxelData[i].y]
@@ -8550,9 +8632,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                      && voxelData[i].color == 253 - 34 * 4)
                 {
                     //                    Console.Write(voxelData[i].color  + ", ");
-                    for(int floor_x = -4; floor_x <= 4; floor_x++)
+                    for (int floor_x = -4; floor_x <= 4; floor_x++)
                     {
-                        for(int floor_y = -4; floor_y <= 4; floor_y++)
+                        for (int floor_y = -4; floor_y <= 4; floor_y++)
                         {
                             if (Math.Abs(floor_x) + Math.Abs(floor_y) <= 5 &&
                                 voxelData[i].x + floor_x >= 0 && voxelData[i].x + floor_x < sizex + 20 &&
@@ -8841,7 +8923,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else Console.Write(", ");
                 }
             }*/
-            
+
             if (socketList.Count == 0)
                 return plugList;
             else if (plugList.Count == 0)
@@ -8879,9 +8961,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             socketList.AddRange(working);
             for (int i = 0; i < socketList.Count; i++)
             {
-                if(254 - socketList[i].color == removeColor * 4)
+                if (254 - socketList[i].color == removeColor * 4)
                 {
-                    socketList[i] = new MagicaVoxelData { x = socketList[i].x, y = socketList[i].y, z = socketList[i].z, color = (byte)replaceColor};
+                    socketList[i] = new MagicaVoxelData { x = socketList[i].x, y = socketList[i].y, z = socketList[i].z, color = (byte)replaceColor };
                 }
             }
             return socketList;
@@ -13973,7 +14055,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 for (int i = -6 - r.Next(4); i <= initial.z; i += 2)
                 {
                     if (i == 0) continue;
-                    l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((6 + mod(i/2, 4)) * 4)));
+                    l.Add(AlterVoxel(initial, 0, 0, -i, 255 - ((6 + mod(i / 2, 4)) * 4)));
                 }
                 l.AddRange(new MagicaVoxelData[] {
                     AlterVoxel(initial, -1, 0, -initial.z, 255 - 10 * 4),
@@ -14070,11 +14152,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     l.Add(AlterVoxel(initial, -1, 0, 3 - r.Next(4), 255 - (18 * 4)));
                     l.Add(AlterVoxel(initial, 0, -1, 3 - r.Next(4), 255 - (19 * 4)));
                 }
-                if(r.Next(8) < 3)
+                if (r.Next(8) < 3)
                 {
                     l.Add(AlterVoxel(initial, r.Next(3) - 1, r.Next(3) - 1, -initial.z + r.Next(2), 255 - (20 * 4)));
-                    l.Add(AlterVoxel(initial, 2*(r.Next(3) - 1), 2*(r.Next(3) - 1), -initial.z + r.Next(2) + 1, 255 - (20 * 4)));
-//                    l.Add(AlterVoxel(initial, 2*(r.Next(3) - 1), 2*(r.Next(3) - 1), -initial.z + r.Next(2) + 1, 255 - (20 * 4)));
+                    l.Add(AlterVoxel(initial, 2 * (r.Next(3) - 1), 2 * (r.Next(3) - 1), -initial.z + r.Next(2) + 1, 255 - (20 * 4)));
+                    //                    l.Add(AlterVoxel(initial, 2*(r.Next(3) - 1), 2*(r.Next(3) - 1), -initial.z + r.Next(2) + 1, 255 - (20 * 4)));
                 }
                 //for (int i = 1; i <= initial.z && i <= 7; i++)
                 //{ //((b) % 4)
@@ -14147,10 +14229,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         /// </summary>
         /// <param name="filename">Name of the file to write.</param>
         /// <param name="voxelData">The voxels in indexed-color mode.</param>
-        /// <param name="paletteKind">Currently 'X' or 'W', referring to the different styles of indexed color to use.</param>
+        /// <param name="paletteKind">Currently 'X', 'W', "K_ALLY", or "K_OTHER", referring to the different styles of indexed color to use.</param>
         /// <param name="palette">Which palette to use.</param>
         /// <returns>The voxel chunk data for the MagicaVoxel .vox file.</returns>
-        public static void WriteVOX(string filename, List<MagicaVoxelData> voxelData, char paletteKind, int palette, int xSize, int ySize, int zSize)
+        public static void WriteVOX(string filename, List<MagicaVoxelData> voxelData, string paletteKind, int palette, int xSize, int ySize, int zSize)
         {
             xSize += 20;
             ySize += 20;
@@ -14158,12 +14240,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
             Stream stream = File.OpenWrite(filename);
             BinaryWriter bin = new BinaryWriter(stream);
-            bool[,,] taken = new bool[xSize,ySize,zSize].Fill(false);
+            bool[, ,] taken = new bool[xSize, ySize, zSize].Fill(false);
 
             List<byte> voxelsRaw = new List<byte>(voxelData.Count * 4);
-            
+
             byte[] colors = new byte[1024];
-            if (paletteKind == 'X')
+            if (paletteKind == "X")
             {
                 foreach (MagicaVoxelData mvd in voxelData)
                 {
@@ -14197,12 +14279,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                 }
             }
-            else
+            else if (paletteKind == "W")
             {
                 foreach (MagicaVoxelData mvd in voxelData)
                 {
                     if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && mvd.color != 253 - 100 && mvd.color > 253 - wcolorcount * 4
-                        && wpalettes[palette][(253 - mvd.color)/4][3] != spin_alpha_1)
+                        && wpalettes[palette][(253 - mvd.color) / 4][3] != spin_alpha_1)
                     {
                         int current_color = ((255 - mvd.color) % 4 == 0) ? (255 - mvd.color) / 4 + wcolorcount : ((254 - mvd.color) % 4 == 0) ? (254 - mvd.color) / 4 : (253 - mvd.color) / 4;
                         if ((255 - mvd.color) % 4 != 0 && current_color >= wcolorcount)
@@ -14226,7 +14308,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             if (r.Next(3) > 0)
                             {
                                 current_color += r.Next(3);
-                                voxelsRaw.Add((byte)(mvd.color - 4*r.Next(3)));
+                                voxelsRaw.Add((byte)(mvd.color - 4 * r.Next(3)));
                             }
                             else
                             {
@@ -14282,7 +14364,123 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     else
                     {
-                        colors[(i - 1) * 4] =     (byte)(mv_default_palette[i] & 0xff);
+                        colors[(i - 1) * 4] = (byte)(mv_default_palette[i] & 0xff);
+                        colors[(i - 1) * 4 + 1] = (byte)((mv_default_palette[i] >> 8) & 0xff);
+                        colors[(i - 1) * 4 + 2] = (byte)((mv_default_palette[i] >> 16) & 0xff);
+                        colors[(i - 1) * 4 + 3] = (byte)((mv_default_palette[i] >> 24) & 0xff);
+                    }
+                }
+            } else if (paletteKind == "K_ALLY" || paletteKind == "K_OTHER")
+            {
+                float[][][] kpalettes = KolonizePalettes.kolonizes[(paletteKind == "K_ALLY") ? 0 : 1];
+                float[][] kcolors = kpalettes[palette];
+                kcurrent = krendered[(paletteKind == "K_ALLY") ? 0 : 1][palette];
+                foreach (MagicaVoxelData mvd in voxelData)
+                {
+                    int unshaded = WithoutShadingK(mvd.color);
+                    if (mvd.x < xSize - 10 && mvd.y < ySize - 10 && mvd.z < zSize && !taken[mvd.x, mvd.y, mvd.z] && unshaded != 23 && mvd.color > 253 - kcolorcount * 4
+                        && kpalettes[palette][unshaded][3] != spin_alpha_1)
+                    {
+                        int current_color = ((255 - mvd.color) % 4 == 0) ? unshaded + kcolorcount : unshaded;
+                        if ((255 - mvd.color) % 4 != 0 && current_color >= kcolorcount)
+                            continue;
+
+                        if (kcolors[current_color][3] == 0F)
+                            continue;
+
+                        if (unshaded == 13 && r.Next(7) < 2) //smoke
+                            continue;
+                        if ((unshaded == 25) && r.Next(7) < 2) //water
+                            continue;
+                        if ((unshaded >= 16 && unshaded <= 18) && r.Next(11) < 8) //rare sparks
+                            continue;
+
+                        voxelsRaw.Add((byte)(mvd.x + 10));
+                        voxelsRaw.Add((byte)(mvd.y + 10));
+                        voxelsRaw.Add((byte)(mvd.z + 0));
+                        if (unshaded == 14) //yellow fire
+                        {
+                            if (r.Next(3) > 0)
+                            {
+                                current_color += r.Next(3);
+                                if(current_color >= kcolorcount)
+                                {
+                                    voxelsRaw.Add((byte)(255 - current_color * 4));
+                                }
+                                else
+                                {
+                                    voxelsRaw.Add((byte)(253 - current_color * 4));
+                                }
+                            }
+                            else
+                            {
+                                voxelsRaw.Add(mvd.color);
+                            }
+                        }
+                        else if (current_color == 15) // orange fire
+                        {
+                            if (r.Next(5) < 4)
+                            {
+                                current_color -= r.Next(3);
+                                if (current_color >= kcolorcount)
+                                {
+                                    voxelsRaw.Add((byte)(255 - current_color * 4));
+                                }
+                                else
+                                {
+                                    voxelsRaw.Add((byte)(253 - current_color * 4));
+                                }
+                            }
+                            else
+                            {
+                                voxelsRaw.Add(mvd.color);
+                            }
+                        }
+                        else if (current_color == 16) // sparks
+                        {
+                            if (r.Next(5) > 0)
+                            {
+                                current_color -= r.Next(3);
+                                if (current_color >= kcolorcount)
+                                {
+                                    voxelsRaw.Add((byte)(255 - current_color * 4));
+                                }
+                                else
+                                {
+                                    voxelsRaw.Add((byte)(253 - current_color * 4));
+                                }
+                            }
+                            else
+                            {
+                                voxelsRaw.Add(mvd.color);
+                            }
+                        }
+                        else
+                        {
+                            voxelsRaw.Add((byte)(mvd.color));
+                        }
+                        taken[mvd.x, mvd.y, mvd.z] = true;
+                    }
+                }
+                for (int i = 1; i < 256; i++)
+                {
+                    if ((253 - i) % 4 == 0 && (253 - i) / 4 < kcolorcount)
+                    {
+                        colors[(i - 1) * 4] = kcurrent[(253 - i) / 4][2 + 16];
+                        colors[(i - 1) * 4 + 1] = kcurrent[(253 - i) / 4][1 + 16];
+                        colors[(i - 1) * 4 + 2] = kcurrent[(253 - i) / 4][0 + 16];
+                        colors[(i - 1) * 4 + 3] = kcurrent[(253 - i) / 4][3 + 16];
+                    }
+                    else if ((255 - i) % 4 == 0 && kcolorcount + (255 - i) / 4 < kcurrent.Length)
+                    {
+                        colors[(i - 1) * 4] = kcurrent[(255 - i) / 4 + kcolorcount][2 + 16];
+                        colors[(i - 1) * 4 + 1] = kcurrent[(255 - i) / 4 + kcolorcount][1 + 16];
+                        colors[(i - 1) * 4 + 2] = kcurrent[(255 - i) / 4 + kcolorcount][0 + 16];
+                        colors[(i - 1) * 4 + 3] = kcurrent[(255 - i) / 4 + kcolorcount][3 + 16];
+                    }
+                    else
+                    {
+                        colors[(i - 1) * 4] = (byte)(mv_default_palette[i] & 0xff);
                         colors[(i - 1) * 4 + 1] = (byte)((mv_default_palette[i] >> 8) & 0xff);
                         colors[(i - 1) * 4 + 2] = (byte)((mv_default_palette[i] >> 16) & 0xff);
                         colors[(i - 1) * 4 + 3] = (byte)((mv_default_palette[i] >> 24) & 0xff);
@@ -14297,7 +14495,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
             bin.Write("MAIN".ToCharArray());
             bin.Write((int)0);
-            bin.Write((int) 12 + 12 + 12 + 4 + voxelsRaw.Count + 12 + 1024);
+            bin.Write((int)12 + 12 + 12 + 4 + voxelsRaw.Count + 12 + 1024);
 
             bin.Write("SIZE".ToCharArray());
             bin.Write((int)12);

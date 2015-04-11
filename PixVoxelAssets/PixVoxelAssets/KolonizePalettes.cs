@@ -32,7 +32,7 @@ namespace AssetsPV
             //3 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //4 lips/ears
-            new float[] {0.8F,0.5F,0.12F,1F},
+            new float[] {0.83F,0.49F,0.18F,1F},
             //5 skin
             new float[] {0.93F,0.74F,0.39F,1F},
             //6 eyes shine
