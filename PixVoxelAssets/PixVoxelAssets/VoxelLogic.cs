@@ -7839,8 +7839,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         {
                                             ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV((h + k * 20) % 360,
-                                                             Math.Min(1.0, s * (1.35 - k * 0.2)),
-                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85 - k * 0.2)));
+                                                             Math.Min(1.0, s * (1.3 - k * 0.2)),
+                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9 - k * 0.2)));
                                         }
                                         else
                                         {
@@ -7864,8 +7864,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         {
                                             ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV((h) % 360,
-                                                             Math.Min(1.0, s * (1.35)),
-                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
+                                                             Math.Min(1.0, s * (1.3)),
+                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9)));
                                         }
                                         else
                                         {
@@ -7878,7 +7878,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 }
                                 Color c2 = Color.FromArgb(c.ToArgb());
                                 ColorToHSV(c2, out h2, out s2, out v2);
-                                c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.15), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.75)));
+                                c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.2), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.75)));
                                 
                                 if (c.A != 0)
                                 {

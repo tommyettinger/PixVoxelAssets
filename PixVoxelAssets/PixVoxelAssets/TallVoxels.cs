@@ -11092,7 +11092,14 @@ namespace AssetsPV
             VoxelLogic.WriteVOX("vox/Kolonize_Allies/Male_Base.vox", vl, "K_ALLY", 0, 40, 40, 40);
             VoxelLogic.WriteVOX("vox/Kolonize_Other/Male_Base.vox", vl, "K_OTHER", 0, 40, 40, 40);
 
-            processUnitK("Sorcerer_Male", 1, true);
+            //processUnitK("Male_Base", 0, true);
+            //processUnitK("Female_Base", 0, true);
+            processUnitK("Male_Base", 2, true);
+            processUnitK("Female_Base", 2, true);
+            //processUnitK("Sorcerer_Male", 1, true);
+            //processUnitK("Sorcerer_Female", 1, true);
+            processUnitK("Sorcerer_Male", 2, true);
+            processUnitK("Sorcerer_Female", 2, true);
 
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
