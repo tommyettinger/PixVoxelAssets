@@ -10145,13 +10145,20 @@ namespace AssetsPV
 
 
 
-        private static Bitmap processKFrame(MagicaVoxelData[] parsed, int faction, int palette, int dir, int frame, int maxFrames, bool still)
+        private static Bitmap processKFrame(MagicaVoxelData[] parsed, int faction, int palette, int body, int dir, int frame, int maxFrames, bool still)
         {
             Bitmap b;
             Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
 
             VoxelLogic.kcolors = KolonizePalettes.kolonizes[faction][palette];
             VoxelLogic.kcurrent = VoxelLogic.krendered[faction][palette];
+            for (int ft = 0; ft < 5; ft++)
+            {
+                VoxelLogic.kcolors[3 + ft] = KolonizePalettes.fleshTones[body][ft];
+                VoxelLogic.kcurrent[3 + ft] = VoxelLogic.kFleshRendered[body][ft];
+                VoxelLogic.kcolors[VoxelLogic.kcolorcount + 3 + ft] = KolonizePalettes.fleshTones[body][ft + 5];
+                VoxelLogic.kcurrent[VoxelLogic.kcolorcount + 3 + ft] = VoxelLogic.kFleshRendered[body][ft + 5];
+            }
             b = renderKSmart(parsed, dir, faction, palette, frame, maxFrames, still);
 
             Graphics g2 = Graphics.FromImage(b2);
@@ -10188,24 +10195,27 @@ namespace AssetsPV
 
                 string folder = (altFolder + "faction" + faction + "/palette" + palette);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
-                for (int f = 0; f < framelimit; f++)
-                { //
-                    for (int dir = 0; dir < 4; dir++)
-                    {
-                        Bitmap b = processKFrame(parsed, faction, palette, dir, f, framelimit, still);
-                        b.Save(folder + "/palette" + palette + "_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
-                        b.Dispose();
+                for (int bodyPalette = 0; bodyPalette < KolonizePalettes.fleshTones.Length; bodyPalette++)
+                {
+                    for (int f = 0; f < framelimit; f++)
+                    { //
+                        for (int dir = 0; dir < 4; dir++)
+                        {
+                            Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                            b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                            b.Dispose();
+                        }
                     }
+
+                    System.IO.Directory.CreateDirectory("gifs/" + altFolder + "/faction" + faction);
+                    ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                    startInfo.UseShellExecute = false;
+                    string s = "";
+
+                    s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
+                    startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                    Process.Start(startInfo).WaitForExit();
                 }
-
-                System.IO.Directory.CreateDirectory("gifs/" + altFolder + "/faction" + faction);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
-                string s = "";
-
-                s = folder + "/palette" + palette + "_" + unit + "_face* ";
-                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "/faction" + faction + "/palette" + palette + "_" + unit + "_animated.gif";
-                Process.Start(startInfo).WaitForExit();
             }
             //bin.Close();
 
@@ -10214,6 +10224,52 @@ namespace AssetsPV
 //            processFieryExplosionDoubleW(u, palette);
         }
 
+        public static void processUnitK(string unit, int palette, int bodyPalette, bool still)
+        {
+            for (int faction = 0; faction < 2; faction++)
+            {
+                Console.WriteLine("Processing: " + unit + ", faction " + faction + ", palette " + palette);
+                BinaryReader bin = new BinaryReader(File.Open("K/" + unit + "_K.vox", FileMode.Open));
+                List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
+                System.IO.Directory.CreateDirectory("vox/K");
+                VoxelLogic.WriteVOX("vox/K/" + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 40);
+                MagicaVoxelData[] parsed = voxes.ToArray();
+                for (int i = 0; i < parsed.Length; i++)
+                {
+                    parsed[i].x += 10;
+                    parsed[i].y += 10;
+                    if ((254 - parsed[i].color) % 4 == 0)
+                        parsed[i].color--;
+                }
+                int framelimit = 4;
+
+
+                string folder = (altFolder + "faction" + faction + "/palette" + palette);//"color" + i;
+                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                for (int f = 0; f < framelimit; f++)
+                { //
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                        b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                        b.Dispose();
+                    }
+                }
+                System.IO.Directory.CreateDirectory("gifs/" + altFolder + "/faction" + faction);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+
+                s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                Process.Start(startInfo).WaitForExit();
+            }
+            //bin.Close();
+
+            //            processFiringDouble(u);
+
+            //            processFieryExplosionDoubleW(u, palette);
+        }
 
 
 
@@ -11091,15 +11147,13 @@ namespace AssetsPV
             List<MagicaVoxelData> vl = VoxelLogic.FromMagicaRaw(bin);
             VoxelLogic.WriteVOX("vox/Kolonize_Allies/Male_Base.vox", vl, "K_ALLY", 0, 40, 40, 40);
             VoxelLogic.WriteVOX("vox/Kolonize_Other/Male_Base.vox", vl, "K_OTHER", 0, 40, 40, 40);
-
-            //processUnitK("Male_Base", 0, true);
-            //processUnitK("Female_Base", 0, true);
-            processUnitK("Male_Base", 2, true);
-            processUnitK("Female_Base", 2, true);
-            //processUnitK("Sorcerer_Male", 1, true);
-            //processUnitK("Sorcerer_Female", 1, true);
-            processUnitK("Sorcerer_Male", 2, true);
-            processUnitK("Sorcerer_Female", 2, true);
+            
+            processUnitK("Male_Base", 0, true);
+            processUnitK("Female_Base", 0, true);
+            processUnitK("Male_Base", 1, true);
+            processUnitK("Female_Base", 1, true);
+            processUnitK("Sorcerer_Male", 1, true);
+            processUnitK("Sorcerer_Female", 1, true);
 
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
