@@ -7827,61 +7827,65 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 double h2 = 0.0, s2 = 1.0, v2 = 1.0;
                                 if (which_image.Equals(image))
                                 {
-
-                                    if (current_color <= 2 || current_color >= 8)
+                                    int alt_k = 0;
+                                    if (current_color != 25 && (current_color < 38 && current_color > 41) && (current_color < 12 || current_color > 18))
                                     {
-                                        if (j == 0)
-                                        {
-                                            ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV((h + k * 20) % 360,
-                                                             Math.Min(1.0, s * (1.1 - k * 0.2)),
-                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 1.0 - k * 0.15)));
-                                        }
-                                        else if (i >= width / 2 || j == height - 1)
-                                        {
-                                            ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV((h + k * 20) % 360,
-                                                             Math.Min(1.0, s * (1.3 - k * 0.2)),
-                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9 - k * 0.2)));
-                                        }
-                                        else
-                                        {
-                                            ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV((h + k * 20) % 360,
-                                                              Math.Min(1.0, s * (1.2 - k * 0.2)),
-                                                              Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95 - k * 0.2)));
-                                        }
+                                        alt_k = k;
+                                    }
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV((h + alt_k * 20) % 360,
+                                                            Math.Min(1.0, s * (1.1 - alt_k * 0.2)),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 1.0 - alt_k * 0.15)));
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV((h + alt_k * 20) % 360,
+                                                            Math.Min(1.0, s * (1.3 - alt_k * 0.2)),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9 - alt_k * 0.2)));
                                     }
                                     else
                                     {
-
-                                        if (j == 0)
-                                        {
-                                            ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV((h) % 360,
-                                                             Math.Min(1.0, s * (1.1)),
-                                                             v);
-                                        }
-                                        else if (i >= width / 2 || j == height - 1)
-                                        {
-                                            ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV((h) % 360,
-                                                             Math.Min(1.0, s * (1.3)),
-                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9)));
-                                        }
-                                        else
-                                        {
-                                            ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV((h) % 360,
-                                                              Math.Min(1.0, s * (1.2)),
-                                                              Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
-                                        }
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV((h + alt_k * 20) % 360,
+                                                            Math.Min(1.0, s * (1.2 - alt_k * 0.2)),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95 - alt_k * 0.2)));
                                     }
                                 }
-                                Color c2 = Color.FromArgb(c.ToArgb());
-                                ColorToHSV(c2, out h2, out s2, out v2);
-                                c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.2), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.75)));
+                                else
+                                {
 
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV((h) % 360,
+                                                            Math.Min(1.0, s * (1.1)),
+                                                            v);
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV((h) % 360,
+                                                            Math.Min(1.0, s * (1.3)),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9)));
+                                    }
+                                    else
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV((h) % 360,
+                                                            Math.Min(1.0, s * (1.2)),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
+                                    }
+                                }
+                                
+                                Color c2 = Color.FromArgb(c.ToArgb());
+                                if (current_color != 25)
+                                {
+                                    ColorToHSV(c2, out h2, out s2, out v2);
+                                    c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.2), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.75)));
+                                }
                                 if (c.A != 0)
                                 {
                                     cubes[k, p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);

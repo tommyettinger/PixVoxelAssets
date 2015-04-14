@@ -4281,14 +4281,14 @@ namespace AssetsPV
         {
             return 4 * ((x + y) * 2 + 4 + ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (300 - 60 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha || current_color == 25)
+                stride * (300 - 60 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
                 ? -2 : (still) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelKQuad(int innerX, int innerY, int x, int y, int z, int faction, int palette, int current_color, int stride, int jitter, bool still)
         {
             return 4 * ((x + y) * 2 + 12 + ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (600 - 120 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha || current_color == 25)
+                stride * (600 - 120 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
                 ? -2 : (still) ? 0 : jitter) + innerY);
         }
 
@@ -6466,7 +6466,7 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (unshaded == 25 && r.Next(7) < 2) //water
+                    if (mod_color == 25 && r.Next(7) < 2)  //water top, intentionally ignoring "shaded"
                         continue;
                     if ((unshaded >= 16 && unshaded <= 18) && r.Next(11) < 8) //rare sparks
                         continue;
@@ -6757,7 +6757,7 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (unshaded == 25 && r.Next(7) < 2) //water
+                    if (mod_color == 25 && r.Next(7) < 2) //water top, intentionally ignoring "shaded"
                         continue;
                     if ((unshaded >= 16 && unshaded <= 18) && r.Next(11) < 8) //rare sparks
                         continue;
@@ -10601,14 +10601,24 @@ namespace AssetsPV
         }
 
 
-        public static void processTerrainK(string subfolder, string unit, int palette, bool still)
+        public static void processTerrainK(string subfolder, string unit, int palette, bool addFloor)
         {
             int bodyPalette = 0, faction = 0;
-
+            bool still = true;
             
                 Console.WriteLine("Processing: " + unit + ", faction " + faction + ", palette " + palette);
+                List<MagicaVoxelData> voxes;
+            if(addFloor)
+            {
                 BinaryReader bin = new BinaryReader(File.Open("K/" + subfolder + "/" + unit + "_K.vox", FileMode.Open));
-                List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
+                BinaryReader binFloor = new BinaryReader(File.Open("K/" + subfolder + "/Floor_K.vox", FileMode.Open));
+                voxes = VoxelLogic.FromMagicaRaw(bin).Concat(VoxelLogic.FromMagicaRaw(binFloor)).ToList();
+            }
+            else
+            {
+                BinaryReader bin = new BinaryReader(File.Open("K/" + subfolder + "/" + unit + "_K.vox", FileMode.Open));
+                voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
+            }
                 System.IO.Directory.CreateDirectory("vox/K/" + subfolder);
                 VoxelLogic.WriteVOX("vox/K/" + subfolder + "/" + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 80, 80, 80);
                 MagicaVoxelData[] parsed = voxes.ToArray();
@@ -11533,6 +11543,14 @@ namespace AssetsPV
             processUnitK("Occultist_Male", 2, true);
             */
             processTerrainK("Dungeon", "Wall_Straight", 0, true);
+            processTerrainK("Dungeon", "Wall_Corner", 0, true);
+            processTerrainK("Dungeon", "Wall_Tee", 0, true);
+            processTerrainK("Dungeon", "Wall_Cross", 0, true);
+            processTerrainK("Dungeon", "Door_Closed", 0, true);
+            processTerrainK("Dungeon", "Door_Open", 0, true);
+            
+            processTerrainK("Dungeon", "Floor", 0, false);
+            processTerrainK("Dungeon", "Water", 0, false);
             
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
