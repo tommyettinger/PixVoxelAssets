@@ -7807,7 +7807,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         Image which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F) ? shine :
                            (kpalettes[p][current_color][3] == 1F || kpalettes[p][current_color][3] == waver_alpha
                             || kpalettes[p][current_color][3] == fuzz_alpha || kpalettes[p][current_color][3] == bordered_alpha || kpalettes[p][current_color][3] == gloss_alpha
-                             || kpalettes[p][current_color][3] == spin_alpha_0 || kpalettes[p][current_color][3] == spin_alpha_1) ? image :
+                             || kpalettes[p][current_color][3] == spin_alpha_0 || kpalettes[p][current_color][3] == spin_alpha_1 || kpalettes[p][current_color][3] == borderless_alpha) ? image :
                            (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine;
                         g.DrawImage(which_image,
                            new Rectangle(0, 0,
@@ -7828,30 +7828,35 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 if (which_image.Equals(image))
                                 {
                                     int alt_k = 0;
+                                    double softness = 0.0;
                                     if (current_color != 25 && (current_color < 38 && current_color > 41) && (current_color < 12 || current_color > 18))
                                     {
                                         alt_k = k;
+                                    }
+                                    if(current_color == 25)
+                                    {
+                                        softness = 0.6;
                                     }
                                     if (j == 0)
                                     {
                                         ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV((h + alt_k * 20) % 360,
-                                                            Math.Min(1.0, s * (1.1 - alt_k * 0.2)),
+                                                            Math.Min(1.0, s * (1.1 - alt_k * 0.2) - 0.1 * softness),
                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 1.0 - alt_k * 0.15)));
                                     }
                                     else if (i >= width / 2 || j == height - 1)
                                     {
                                         ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV((h + alt_k * 20) % 360,
-                                                            Math.Min(1.0, s * (1.3 - alt_k * 0.2)),
-                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9 - alt_k * 0.2)));
+                                                            Math.Min(1.0, s * (1.3 - alt_k * 0.2) - 0.3 * softness),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9 - alt_k * 0.2 + 0.1 * softness)));
                                     }
                                     else
                                     {
                                         ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV((h + alt_k * 20) % 360,
-                                                            Math.Min(1.0, s * (1.2 - alt_k * 0.2)),
-                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95 - alt_k * 0.2)));
+                                                            Math.Min(1.0, s * (1.2 - alt_k * 0.2) - 0.2 * softness),
+                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95 - alt_k * 0.2 + 0.05 * softness)));
                                     }
                                 }
                                 
