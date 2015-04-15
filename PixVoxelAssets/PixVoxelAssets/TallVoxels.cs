@@ -11533,7 +11533,7 @@ namespace AssetsPV
             List<MagicaVoxelData> vl = VoxelLogic.FromMagicaRaw(bin);
             VoxelLogic.WriteVOX("vox/Kolonize_Allies/Male_Base.vox", vl, "K_ALLY", 0, 40, 40, 40);
             VoxelLogic.WriteVOX("vox/Kolonize_Other/Male_Base.vox", vl, "K_OTHER", 0, 40, 40, 40);
-            /*
+            
             processUnitK("Male_Base", 0, true);
             processUnitK("Female_Base", 0, true);
             processUnitK("Male_Base", 1, true);
@@ -11551,7 +11551,7 @@ namespace AssetsPV
             processTerrainK("Dungeon", "Door_Closed", 0, true);
             processTerrainK("Dungeon", "Door_Open", 0, true);
             
-            processTerrainK("Dungeon", "Floor", 0, false);*/
+            processTerrainK("Dungeon", "Floor", 0, false);
             processTerrainK("Dungeon", "Water", 0, false);
             
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
