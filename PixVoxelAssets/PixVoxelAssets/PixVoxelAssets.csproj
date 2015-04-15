@@ -698,6 +698,9 @@
     <None Include="K\Male_Base_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="K\Occultist_Female_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="K\Occultist_Male_K.vox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -7854,31 +7854,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                                             Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95 - alt_k * 0.2)));
                                     }
                                 }
-                                else
-                                {
-
-                                    if (j == 0)
-                                    {
-                                        ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV((h) % 360,
-                                                            Math.Min(1.0, s * (1.1)),
-                                                            v);
-                                    }
-                                    else if (i >= width / 2 || j == height - 1)
-                                    {
-                                        ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV((h) % 360,
-                                                            Math.Min(1.0, s * (1.3)),
-                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9)));
-                                    }
-                                    else
-                                    {
-                                        ColorToHSV(c, out h, out s, out v);
-                                        c = ColorFromHSV((h) % 360,
-                                                            Math.Min(1.0, s * (1.2)),
-                                                            Math.Max(0.01, v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
-                                    }
-                                }
                                 
                                 Color c2 = Color.FromArgb(c.ToArgb());
                                 if (current_color != 25)

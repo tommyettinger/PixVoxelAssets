@@ -6375,13 +6375,13 @@ namespace AssetsPV
                     current_color = 38 + VoxelLogic.kcolorcount + ((current_color + frame) % 4);
 
 
-                if ((frame % 2 != 0) && (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.spin_alpha_0 || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flash_alpha_0))
+                if ((frame % 2 != 0) && (VoxelLogic.kcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.kcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
-                else if ((frame % 2 != 1) && (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.spin_alpha_1 || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flash_alpha_1))
+                else if ((frame % 2 != 1) && (VoxelLogic.kcolors[current_color][3] == VoxelLogic.spin_alpha_1 || VoxelLogic.kcolors[current_color][3] == VoxelLogic.flash_alpha_1))
                     continue;
-                else if (KolonizePalettes.kolonizes[faction][palette][current_color][3] == 0F)
+                else if (VoxelLogic.kcolors[current_color][3] == 0F)
                     continue;
-                //else if (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.eraser_alpha)
+                //else if (VoxelLogic.kcolors[current_color][3] == VoxelLogic.eraser_alpha)
                 //{
 
                 //    for (int j = 0; j < 4; j++)
@@ -6396,7 +6396,7 @@ namespace AssetsPV
                 //        }
                 //    }
                 //}
-                else if (current_color >= 13 && unshaded <= 16)
+                else if (unshaded >= 13 && unshaded <= 16)
                 {
                     int mod_color = current_color;
                     if (unshaded == 13 && r.Next(7) < 2) //smoke
@@ -6436,11 +6436,11 @@ namespace AssetsPV
                             p = voxelToPixelK(i, j, vx.x, vx.y, vx.z, faction, palette, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // check for erased pixels
                             {
-                                if (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_alpha || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_flat_alpha)
+                                if (VoxelLogic.kcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.kcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                     zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.kcurrent[mod_color][i + j * 16];
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
-                                barePositions[p] = !(KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_alpha || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_flat_alpha);
+                                barePositions[p] = !(VoxelLogic.kcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.kcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.kcurrent[mod_color][i + 64];//(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2 < 255) ? (byte)(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2) : (byte)255;
 
@@ -6480,7 +6480,7 @@ namespace AssetsPV
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // eraser stuff
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                if (KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
+                                if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] + 160, 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] + 160, 255);
@@ -6492,9 +6492,9 @@ namespace AssetsPV
                                     argbValues[p] = VoxelLogic.kcurrent[((unshaded == 26 || unshaded == 27) ? mod_color +
                                         Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
                                 }
-                                barePositions[p] = (KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.flash_alpha_0 ||
-                                    KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.flash_alpha_1 ||
-                                    KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.borderless_alpha);
+                                barePositions[p] = (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.flash_alpha_0 ||
+                                    VoxelLogic.kcolors[mod_color][3] == VoxelLogic.flash_alpha_1 ||
+                                    VoxelLogic.kcolors[mod_color][3] == VoxelLogic.borderless_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.kcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
@@ -6687,7 +6687,7 @@ namespace AssetsPV
                 //        }
                 //    }
                 //}
-                else if (current_color >= 13 && unshaded <= 16)
+                else if (unshaded >= 13 && unshaded <= 16)
                 {
                     int mod_color = current_color;
                     if (unshaded == 13 && r.Next(7) < 2) //smoke
@@ -11533,15 +11533,17 @@ namespace AssetsPV
             List<MagicaVoxelData> vl = VoxelLogic.FromMagicaRaw(bin);
             VoxelLogic.WriteVOX("vox/Kolonize_Allies/Male_Base.vox", vl, "K_ALLY", 0, 40, 40, 40);
             VoxelLogic.WriteVOX("vox/Kolonize_Other/Male_Base.vox", vl, "K_OTHER", 0, 40, 40, 40);
-            /*
+            
             processUnitK("Male_Base", 0, true);
             processUnitK("Female_Base", 0, true);
             processUnitK("Male_Base", 1, true);
             processUnitK("Female_Base", 1, true);
             processUnitK("Sorcerer_Male", 1, true);
             processUnitK("Sorcerer_Female", 1, true);
+            
             processUnitK("Occultist_Male", 2, true);
-            */
+            processUnitK("Occultist_Female", 2, true);
+            
             processTerrainK("Dungeon", "Wall_Straight", 0, true);
             processTerrainK("Dungeon", "Wall_Corner", 0, true);
             processTerrainK("Dungeon", "Wall_Tee", 0, true);
