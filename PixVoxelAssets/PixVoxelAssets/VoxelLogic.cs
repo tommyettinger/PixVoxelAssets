@@ -8172,8 +8172,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return cubes2;
         }
 
-        public static void InitializeKPalette()
+        public static void InitializeKPalette(bool mecha_mode)
         {
+            if(mecha_mode)
+            {
+                KolonizePalettes.kolonizes = KolonizePalettes.kmecha;
+            }
             krendered = storeColorCubesK();
             kFleshRendered = storeColorCubesFleshToneK();
             kcurrent = krendered[0][0];
@@ -8675,6 +8679,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             bin.Close();
             return raw;
         }
+
+        public static List<MagicaVoxelData> readPartK(string file)
+        {
+            if (file == null)
+                return new List<MagicaVoxelData>();
+            BinaryReader bin = new BinaryReader(File.Open("K/" + file + "_K.vox", FileMode.Open));
+            List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
+            bin.Close();
+            return raw;
+        }
+
         public static List<MagicaVoxelData> PlaceShadows(List<MagicaVoxelData> voxelData)
         {
             int[,] taken = new int[sizex, sizey];
@@ -8748,6 +8763,44 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             for (int i = 0; i < voxelData.Count; i++)
             {
                 if (voxelData[i].x >= sizex + 20 || voxelData[i].y >= sizey + 20)
+                {
+                    continue;
+                }
+                //if (voxelData[i].color > 257 - kcolorcount * 4 && (254 - voxelData[i].color) % 4 == 0)
+                //{
+                //    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
+                //}
+                voxelsAltered.Add(voxelData[i]);
+                int unshaded = (255 - voxelData[i].color % 4 == 0) ? (255 - voxelData[i].color) / 4 : (253 - voxelData[i].color) / 4;
+                if (-1 == taken[voxelData[i].x, voxelData[i].y]
+                     && (unshaded < 14 || unshaded > 23)
+                     && unshaded != 12
+                     && voxelData[i].color > 257 - kcolorcount * 4)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = (byte)(0);
+                    vox.color = 253 - 23 * 4;
+                    taken[vox.x, vox.y] = voxelsAltered.Count();
+                    voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered;
+        }
+        public static List<MagicaVoxelData> PlaceShadowsKPartial(List<MagicaVoxelData> voxelData)
+        {
+            int[,] taken = new int[sizex + 20, sizey + 20];
+            taken.Fill(-1);
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 9 / 8);
+            for (int i = 0; i < voxelData.Count; i++)
+            {
+                if (voxelData[i].x >= sizex + 20 || voxelData[i].y >= sizey + 20)
+                {
+                    continue;
+                }
+                if ((254 - voxelData[i].color) % 4 == 0) //voxelData[i].color > 257 - wcolorcount * 4 && 
                 {
                     continue;
                 }
@@ -9141,6 +9194,121 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             foreach (MagicaVoxelData mvd in socket)
             {
                 if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    socketMatcher = mvd;
+                    socketMatcher.color--;
+                    break;
+                }
+            }
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(plugList.Count + socketList.Count);
+            for (int i = 0; i < plugList.Count; i++)
+            {
+                MagicaVoxelData mvd = plugList[i];
+                mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
+                mvd.y = (byte)(mvd.y - plugMatcher.y + socketMatcher.y);
+                mvd.z = (byte)(mvd.z - plugMatcher.z + socketMatcher.z);
+                working.Add(mvd);
+            }
+            socketList.AddRange(working);
+            for (int i = 0; i < socketList.Count; i++)
+            {
+                if (254 - socketList[i].color == removeColor * 4)
+                {
+                    socketList[i] = new MagicaVoxelData { x = socketList[i].x, y = socketList[i].y, z = socketList[i].z, color = (byte)replaceColor };
+                }
+            }
+            return socketList;
+
+        }
+
+        public static List<MagicaVoxelData> MergeVoxelsK(IEnumerable<MagicaVoxelData> plug, IEnumerable<MagicaVoxelData> socket, int matchColor)
+        {
+            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
+            List<MagicaVoxelData> plugList = plug.ToList(), socketList = socket.ToList();
+            /*
+            List<byte> knownColors = new List<byte>(50);
+            if (!knownColors.Contains(mvd.color))
+            {
+                knownColors.Add(mvd.color);
+                Console.Write(253 - mvd.color);
+                if ((253 - mvd.color) % 4 != 0) Console.Write("!!!  ");
+                else Console.Write(", ");
+            }
+            */
+            if (socketList.Count == 0)
+                return plugList;
+            else if (plugList.Count == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in plug)
+            {
+
+                if (mvd.color > 257 - kcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    plugMatcher = mvd;
+                    plugMatcher.color--;
+                    break;
+                }
+            }
+            if (plugMatcher.color == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in socket)
+            {
+                if (mvd.color > 257 - kcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    socketMatcher = mvd;
+                    socketMatcher.color--;
+                    break;
+                }
+            }
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(plugList.Count + socketList.Count);
+            for (int i = 0; i < plugList.Count; i++)
+            {
+                MagicaVoxelData mvd = plugList[i];
+                mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
+                mvd.y = (byte)(mvd.y - plugMatcher.y + socketMatcher.y);
+                mvd.z = (byte)(mvd.z - plugMatcher.z + socketMatcher.z);
+                working.Add(mvd);
+            }
+            socketList.AddRange(working);
+            return socketList;
+
+        }
+        public static List<MagicaVoxelData> MergeVoxelsK(IEnumerable<MagicaVoxelData> plug, IEnumerable<MagicaVoxelData> socket, int matchColor, int removeColor, int replaceColor)
+        {
+            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
+            List<MagicaVoxelData> plugList = plug.ToList(), socketList = socket.ToList();
+            /*
+            List<byte> knownColors = new List<byte>(50);
+            foreach (MagicaVoxelData mvd in plug.Concat(socket))
+            {
+                if (!knownColors.Contains(mvd.color))
+                {
+                    knownColors.Add(mvd.color);
+                    Console.Write(253 - mvd.color);
+                    if ((253 - mvd.color) % 4 != 0) Console.Write("!!!  ");
+                    else Console.Write(", ");
+                }
+            }*/
+
+            if (socketList.Count == 0)
+                return plugList;
+            else if (plugList.Count == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in plug)
+            {
+
+                if (mvd.color > 257 - kcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                {
+                    plugMatcher = mvd;
+                    plugMatcher.color--;
+                    break;
+                }
+            }
+            if (plugMatcher.color == 0)
+                return socketList;
+            foreach (MagicaVoxelData mvd in socket)
+            {
+                if (mvd.color > 257 - kcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
                 {
                     socketMatcher = mvd;
                     socketMatcher.color--;

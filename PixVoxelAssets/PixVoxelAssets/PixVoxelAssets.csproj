@@ -671,6 +671,125 @@
     <None Include="Kurguiv_Walk_3_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_0.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_1.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_10.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_11.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_2.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_3.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_4.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_5.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_6.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_7.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_8.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_9.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_0.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_1.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_10.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_11.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_2.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_3.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_4.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_5.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_6.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_7.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_8.vox" />
+    <None Include="K\animations\Beam\Beam_Attack_9.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_1.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_2.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_3.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_4.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_5.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_6.vox" />
+    <None Include="K\animations\Beam\Beam_Extend_7.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_0.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_1.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_10.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_11.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_2.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_3.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_4.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_5.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_6.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_7.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_8.vox" />
+    <None Include="K\animations\Cannon\Cannon_Attack_9.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_0.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_1.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_10.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_11.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_2.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_3.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_4.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_5.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_6.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_7.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_8.vox" />
+    <None Include="K\animations\Lightning\Lightning_Attack_9.vox" />
+    <None Include="K\animations\Lightning\Lightning_Extend_1.vox" />
+    <None Include="K\animations\Lightning\Lightning_Extend_3.vox" />
+    <None Include="K\animations\Lightning\Lightning_Extend_5.vox" />
+    <None Include="K\animations\Lightning\Lightning_Extend_7.vox" />
+    <None Include="K\Armored_Aiming_Head_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Aiming_Left_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Aiming_Right_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Head_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Jet_Legs_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Left_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Legs_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Right_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Armored_Torso_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Bazooka_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Beam_Sword_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Aiming_Head_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Aiming_Left_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Aiming_Right_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Head_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Jet_Legs_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Left_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Legs_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Right_Arm_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Blocky_Torso_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="K\Dungeon\Door_Closed_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -695,6 +814,9 @@
     <None Include="K\Female_Base_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="K\Katana_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="K\Male_Base_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -702,7 +824,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="K\Occultist_Male_K.vox">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Pistol_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Rifle_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="K\Sorcerer_Female_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -713,6 +841,26 @@
     <None Include="K\Dungeon\Wall_Straight_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="K\vox_mecha\Banzai_0.vox" />
+    <None Include="K\vox_mecha\Banzai_Firing_Both_0.vox" />
+    <None Include="K\vox_mecha\Banzai_Firing_Left_0.vox" />
+    <None Include="K\vox_mecha\Banzai_Firing_Right_0.vox" />
+    <None Include="K\vox_mecha\Chivalry_0.vox" />
+    <None Include="K\vox_mecha\Chivalry_Firing_Right_0.vox" />
+    <None Include="K\vox_mecha\Deadman_0.vox" />
+    <None Include="K\vox_mecha\Deadman_Firing_Both_0.vox" />
+    <None Include="K\vox_mecha\Deadman_Firing_Left_0.vox" />
+    <None Include="K\vox_mecha\Deadman_Firing_Right_0.vox" />
+    <None Include="K\vox_mecha\Maku_0.vox" />
+    <None Include="K\vox_mecha\Maku_Firing_Left_0.vox" />
+    <None Include="K\vox_mecha\Mark_Zero_0.vox" />
+    <None Include="K\vox_mecha\Mark_Zero_Firing_Both_0.vox" />
+    <None Include="K\vox_mecha\Vox_Nihilus_0.vox" />
+    <None Include="K\vox_mecha\Vox_Nihilus_Firing_Both_0.vox" />
+    <None Include="K\vox_mecha\Vox_Populi_0.vox" />
+    <None Include="K\vox_mecha\Vox_Populi_Firing_Both_0.vox" />
+    <None Include="K\vox_mecha\Vox_Populi_Firing_Left_0.vox" />
+    <None Include="K\vox_mecha\Vox_Populi_Firing_Right_0.vox" />
     <None Include="Laboratory_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
