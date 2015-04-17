@@ -4282,14 +4282,14 @@ namespace AssetsPV
             return 4 * ((x + y) * 2 + 4 + ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
                 stride * (300 - 60 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
-                ? -2 : (still) ? 0 : jitter) + innerY);
+                ? -2 : (still ^ (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelKQuad(int innerX, int innerY, int x, int y, int z, int faction, int palette, int current_color, int stride, int jitter, bool still)
         {
             return 4 * ((x + y) * 2 + 12 + ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
                 stride * (600 - 120 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
-                ? -2 : (still) ? 0 : jitter) + innerY);
+                ? -2 : (still ^ (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
         }
 
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
@@ -11996,7 +11996,8 @@ namespace AssetsPV
             processTerrainK("Dungeon", "Floor", 0, false);
             processTerrainK("Dungeon", "Water", 0, false);
             */
-            processUnitKMecha(left_weapon: "Pistol", right_weapon: "Pistol");
+//            processUnitKMecha(left_weapon: "Pistol", right_weapon: "Pistol");
+            processUnitKMecha(moniker: "SYN-RD", right_weapon: "Idol");
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 /*

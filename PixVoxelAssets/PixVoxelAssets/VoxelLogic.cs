@@ -170,6 +170,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public const float bordered_flat_alpha = 0.78F;
         public const float bordered_alpha = 0.79F;
         public const float waver_alpha = 0.83F;
+        public const float yver_alpha = 0.84F;
         public const float spin_alpha_0 = 0.85F;
         public const float spin_alpha_1 = 0.87F;
         public const float flash_alpha_0 = 0.86F;
@@ -7805,9 +7806,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
                         Image which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F) ? shine :
-                           (kpalettes[p][current_color][3] == 1F || kpalettes[p][current_color][3] == waver_alpha
+                              (kpalettes[p][current_color][3] == 1F || kpalettes[p][current_color][3] == waver_alpha || kpalettes[p][current_color][3] == yver_alpha
                             || kpalettes[p][current_color][3] == fuzz_alpha || kpalettes[p][current_color][3] == bordered_alpha || kpalettes[p][current_color][3] == gloss_alpha
-                             || kpalettes[p][current_color][3] == spin_alpha_0 || kpalettes[p][current_color][3] == spin_alpha_1 || kpalettes[p][current_color][3] == borderless_alpha) ? image :
+                            || kpalettes[p][current_color][3] == spin_alpha_0 || kpalettes[p][current_color][3] == spin_alpha_1 || kpalettes[p][current_color][3] == borderless_alpha) ? image :
                            (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine;
                         g.DrawImage(which_image,
                            new Rectangle(0, 0,
@@ -8786,6 +8787,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     taken[vox.x, vox.y] = voxelsAltered.Count();
                     voxelsAltered.Add(vox);
                 }
+                if (unshaded == 11 && KolonizePalettes.kolonizes[0][0][unshaded][3] == yver_alpha)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = voxelData[i].z;
+                    vox.color = (byte)(voxelData[i].color + 4);
+                    voxelsAltered.Add(vox);
+                }
             }
             return voxelsAltered;
         }
@@ -8822,6 +8833,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     vox.z = (byte)(0);
                     vox.color = 253 - 23 * 4;
                     taken[vox.x, vox.y] = voxelsAltered.Count();
+                    voxelsAltered.Add(vox);
+                }
+                if (unshaded == 11 && KolonizePalettes.kolonizes[0][0][unshaded][3] == yver_alpha)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = voxelData[i].z;
+                    vox.color = (byte)(voxelData[i].color + 4);
                     voxelsAltered.Add(vox);
                 }
             }

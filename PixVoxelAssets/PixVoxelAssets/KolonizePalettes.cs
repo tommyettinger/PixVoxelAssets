@@ -11,6 +11,7 @@ namespace AssetsPV
         public const float flat_alpha = VoxelLogic.flat_alpha;
         public const float fuzz_alpha = VoxelLogic.fuzz_alpha;
         public const float waver_alpha = VoxelLogic.waver_alpha;
+        public const float yver_alpha = VoxelLogic.yver_alpha;
         public const float bordered_alpha = VoxelLogic.bordered_alpha;
         public const float borderless_alpha = VoxelLogic.borderless_alpha;
         public const float eraser_alpha = VoxelLogic.eraser_alpha;
@@ -394,9 +395,9 @@ namespace AssetsPV
             //0 guns
             new float[] {0.5F,0.47F,0.48F,1F},
             //1 highlight paint
-            new float[] {0.4F,0.65F,0.8F,1F},
+            new float[] {0.65F,0.7F,0.8F,1F},
             //2 base paint
-            new float[] {0.35F,0.45F,0.58F,1F},
+            new float[] {0.55F,0.65F,0.7F,1F},
             //3 FILTHY HUMAN hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //4 FILTHY HUMAN lips/ears
@@ -411,10 +412,10 @@ namespace AssetsPV
             new float[] {0.7F,0.85F,1.1F,1F},
             //9 chrome
             new float[] {0.6F,0.75F,0.95F,1F},
-            //10 flowing cloth
-            new float[] {0.2F,0.3F,0.3F,1F},
-            //11 flowing cloth pattern
-            new float[] {0.0F,0.0F,0.2F,1F},
+            //10 non-euclidean ectoplasm (x)
+            new float[] {0.45F,0.75F,0.6F,waver_alpha},
+            //11 non-euclidean ectoplasm (y)
+            new float[] {0.45F,0.75F,0.6F,yver_alpha},
             //12 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //13 smoke
