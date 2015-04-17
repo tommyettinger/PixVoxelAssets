@@ -409,9 +409,9 @@ namespace AssetsPV
             //7 FILTHY HUMAN eyes
             new float[] {0.15F,0.1F,0.0F,1F},
             //8 chrome shine
-            new float[] {0.7F,0.85F,1.1F,1F},
+            new float[] {0.95F,0.95F,1.1F,1F},
             //9 chrome
-            new float[] {0.6F,0.75F,0.95F,1F},
+            new float[] {0.8F,0.8F,0.85F,1F},
             //10 non-euclidean ectoplasm (x)
             new float[] {0.45F,0.75F,0.6F,waver_alpha},
             //11 non-euclidean ectoplasm (y)

@@ -671,65 +671,183 @@
     <None Include="Kurguiv_Walk_3_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="K\animations\Autofire\Autofire_Attack_0.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_1.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_10.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_11.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_2.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_3.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_4.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_5.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_6.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_7.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_8.vox" />
-    <None Include="K\animations\Autofire\Autofire_Attack_9.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_0.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_1.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_10.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_11.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_2.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_3.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_4.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_5.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_6.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_7.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_8.vox" />
-    <None Include="K\animations\Beam\Beam_Attack_9.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_1.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_2.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_3.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_4.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_5.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_6.vox" />
-    <None Include="K\animations\Beam\Beam_Extend_7.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_0.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_1.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_10.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_11.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_2.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_3.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_4.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_5.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_6.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_7.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_8.vox" />
-    <None Include="K\animations\Cannon\Cannon_Attack_9.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_0.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_1.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_10.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_11.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_2.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_3.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_4.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_5.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_6.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_7.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_8.vox" />
-    <None Include="K\animations\Lightning\Lightning_Attack_9.vox" />
-    <None Include="K\animations\Lightning\Lightning_Extend_1.vox" />
-    <None Include="K\animations\Lightning\Lightning_Extend_3.vox" />
-    <None Include="K\animations\Lightning\Lightning_Extend_5.vox" />
-    <None Include="K\animations\Lightning\Lightning_Extend_7.vox" />
+    <None Include="K\animations\Autofire\Autofire_Attack_0.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_1.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_10.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_11.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_2.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_3.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_4.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_5.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_6.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_7.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_8.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Autofire\Autofire_Attack_9.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_0.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_1.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_10.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_11.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_2.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_3.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_4.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_5.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_6.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_7.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_8.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Attack_9.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_1.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_2.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_3.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_4.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_5.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_6.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Beam\Beam_Extend_7.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_0.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_1.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_10.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_11.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_2.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_3.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_4.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_5.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_6.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_7.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_8.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Cannon\Cannon_Attack_9.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_0.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_1.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_10.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_11.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_2.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_3.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_4.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_5.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_6.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_7.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_8.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Attack_9.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Extend_1.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Extend_3.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Extend_5.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\animations\Lightning\Lightning_Extend_7.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="K\Armored_Aiming_Head_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -812,6 +930,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="K\Female_Base_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="K\Gatling_K.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="K\Idol_K.vox">
