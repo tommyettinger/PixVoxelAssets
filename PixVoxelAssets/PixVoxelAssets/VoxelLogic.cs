@@ -464,7 +464,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static float[][] kcolors;
 
-        public static float[][][] kpalettes;
+//        public static float[][][] kpalettes;
 
         public static float[][] wcolors =
             new float[][] { //default to brown hair
@@ -8173,11 +8173,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return cubes2;
         }
 
-        public static void InitializeKPalette(bool mecha_mode)
+        public static void InitializeKPalette(string mode = "KOLONIZE")
         {
-            if(mecha_mode)
+            switch(mode)
             {
-                KolonizePalettes.kolonizes = KolonizePalettes.kmecha;
+                case "KOLONIZE":
+                    break;
+                case "MECHA":
+                    KolonizePalettes.kolonizes = KolonizePalettes.kmecha.Replicate();
+                    break;
+                case "MYTHOS":
+                    KolonizePalettes.kolonizes = KolonizePalettes.kmythos.Replicate();
+                    break;
             }
             krendered = storeColorCubesK();
             kFleshRendered = storeColorCubesFleshToneK();
@@ -8752,6 +8759,58 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelsAltered;
         }
+
+        public static void setupCurrentColorsK(int faction, int palette, int body)
+        {
+            kcolors = KolonizePalettes.kolonizes[faction][palette];
+            kcurrent = krendered[faction][palette];
+            for (int ft = 0; ft < 5; ft++)
+            {
+                kcolors[3 + ft] = KolonizePalettes.fleshTones[body][ft];
+                kcurrent[3 + ft] = kFleshRendered[body][ft];
+                kcolors[kcolorcount + 3 + ft] = KolonizePalettes.fleshTones[body][ft + 5];
+                kcurrent[kcolorcount + 3 + ft] = kFleshRendered[body][ft + 5];
+            }
+        }
+
+        public static List<MagicaVoxelData> Lovecraftiate(List<MagicaVoxelData> voxelData, float[][] current_colors)
+        {
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData);
+            foreach (MagicaVoxelData v in voxelData)
+            {
+                byte unshaded = WithoutShadingK(v.color);
+                if (current_colors[unshaded][3] == yver_alpha)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = v.x;
+                    vox.y = v.y;
+                    vox.z = v.z;
+                    vox.color = (byte)(v.color + 4);
+                    voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered;
+        }
+        public static MagicaVoxelData[] Lovecraftiate(MagicaVoxelData[] voxelData, float[][] current_colors)
+        {
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData);
+            foreach (MagicaVoxelData v in voxelData)
+            {
+                byte unshaded = WithoutShadingK(v.color);
+                if (current_colors[unshaded][3] == yver_alpha)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = v.x;
+                    vox.y = v.y;
+                    vox.z = v.z;
+                    vox.color = (byte)(v.color + 4);
+                    voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered.ToArray();
+        }
         public static byte WithoutShadingK(byte originalColor)
         {
              return (byte) (((255 - originalColor) % 4 == 0) ? (255 - originalColor) / 4 : (253 - originalColor) / 4);
@@ -8785,16 +8844,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     vox.z = (byte)(0);
                     vox.color = 253 - 23 * 4;
                     taken[vox.x, vox.y] = voxelsAltered.Count();
-                    voxelsAltered.Add(vox);
-                }
-                if (unshaded == 11 && KolonizePalettes.kolonizes[0][0][unshaded][3] == yver_alpha)
-                {
-                    //                    Console.Write(voxelData[i].color  + ", ");
-                    MagicaVoxelData vox = new MagicaVoxelData();
-                    vox.x = voxelData[i].x;
-                    vox.y = voxelData[i].y;
-                    vox.z = voxelData[i].z;
-                    vox.color = (byte)(voxelData[i].color + 4);
                     voxelsAltered.Add(vox);
                 }
             }
@@ -8833,16 +8882,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     vox.z = (byte)(0);
                     vox.color = 253 - 23 * 4;
                     taken[vox.x, vox.y] = voxelsAltered.Count();
-                    voxelsAltered.Add(vox);
-                }
-                if (unshaded == 11 && KolonizePalettes.kolonizes[0][0][unshaded][3] == yver_alpha)
-                {
-                    //                    Console.Write(voxelData[i].color  + ", ");
-                    MagicaVoxelData vox = new MagicaVoxelData();
-                    vox.x = voxelData[i].x;
-                    vox.y = voxelData[i].y;
-                    vox.z = voxelData[i].z;
-                    vox.color = (byte)(voxelData[i].color + 4);
                     voxelsAltered.Add(vox);
                 }
             }

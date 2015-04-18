@@ -6372,9 +6372,9 @@ namespace AssetsPV
                     current_color = 19 + VoxelLogic.kcolorcount + ((current_color + frame) % 4);
 
                 if (current_color >= 38 && current_color <= 41)
-                    current_color = 38 + ((current_color + frame) % 4);
+                    current_color = 38 + ((current_color - 38 + frame) % 4);
                 if (current_color >= 38 + VoxelLogic.kcolorcount && current_color <= 41 + VoxelLogic.kcolorcount)
-                    current_color = 38 + VoxelLogic.kcolorcount + ((current_color + frame) % 4);
+                    current_color = 38 + VoxelLogic.kcolorcount + ((current_color - 38 - VoxelLogic.kcolorcount + frame) % 4);
 
 
                 if ((frame % 2 != 0) && (VoxelLogic.kcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.kcolors[current_color][3] == VoxelLogic.flash_alpha_0))
@@ -6665,9 +6665,10 @@ namespace AssetsPV
                     current_color = 19 + VoxelLogic.kcolorcount + ((current_color + frame) % 4);
 
                 if (current_color >= 38 && current_color <= 41)
-                    current_color = 38 + ((current_color + frame) % 4);
+                    current_color = 38 + ((current_color - 38 + frame) % 4);
                 if (current_color >= 38 + VoxelLogic.kcolorcount && current_color <= 41 + VoxelLogic.kcolorcount)
-                    current_color = 38 + VoxelLogic.kcolorcount + ((current_color + frame) % 4);
+                    current_color = 38 + VoxelLogic.kcolorcount + ((current_color - 38 - VoxelLogic.kcolorcount + frame) % 4);
+
 
 
                 if ((frame % 2 != 0) && (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.spin_alpha_0 || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flash_alpha_0))
@@ -9058,7 +9059,7 @@ namespace AssetsPV
                     right_projector.x += 10;
                     right_projector.y += 10;
                     right_projectors.Add(right_projector);
-                }catch(InvalidOperationException ioe)
+                }catch(InvalidOperationException)
                 {
                     right_projector = bogus;
                 }
@@ -9068,7 +9069,7 @@ namespace AssetsPV
                     left_projector.x += 10;
                     left_projector.y += 10;
                     left_projectors.Add(left_projector);
-                }catch(InvalidOperationException ioe)
+                }catch(InvalidOperationException)
                 {
                     left_projector = bogus;
                 }
@@ -9256,7 +9257,7 @@ namespace AssetsPV
                 right_projector.y += 10;
                 projectors.Add(right_projector);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 right_projector = bogus;
             }
@@ -10533,15 +10534,6 @@ namespace AssetsPV
             Bitmap b;
             Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
 
-            VoxelLogic.kcolors = KolonizePalettes.kolonizes[faction][palette];
-            VoxelLogic.kcurrent = VoxelLogic.krendered[faction][palette];
-            for (int ft = 0; ft < 5; ft++)
-            {
-                VoxelLogic.kcolors[3 + ft] = KolonizePalettes.fleshTones[body][ft];
-                VoxelLogic.kcurrent[3 + ft] = VoxelLogic.kFleshRendered[body][ft];
-                VoxelLogic.kcolors[VoxelLogic.kcolorcount + 3 + ft] = KolonizePalettes.fleshTones[body][ft + 5];
-                VoxelLogic.kcurrent[VoxelLogic.kcolorcount + 3 + ft] = VoxelLogic.kFleshRendered[body][ft + 5];
-            }
             b = renderKSmart(parsed, dir, faction, palette, frame, maxFrames, still);
 
             Graphics g2 = Graphics.FromImage(b2);
@@ -10560,15 +10552,6 @@ namespace AssetsPV
             Bitmap b;
             Bitmap b2 = new Bitmap(168, 208, PixelFormat.Format32bppArgb);
 
-            VoxelLogic.kcolors = KolonizePalettes.kolonizes[faction][palette];
-            VoxelLogic.kcurrent = VoxelLogic.krendered[faction][palette];
-            for (int ft = 0; ft < 5; ft++)
-            {
-                VoxelLogic.kcolors[3 + ft] = KolonizePalettes.fleshTones[body][ft];
-                VoxelLogic.kcurrent[3 + ft] = VoxelLogic.kFleshRendered[body][ft];
-                VoxelLogic.kcolors[VoxelLogic.kcolorcount + 3 + ft] = KolonizePalettes.fleshTones[body][ft + 5];
-                VoxelLogic.kcurrent[VoxelLogic.kcolorcount + 3 + ft] = VoxelLogic.kFleshRendered[body][ft + 5];
-            }
             b = renderKSmartQuad(parsed, dir, faction, palette, frame, maxFrames, still, darkOutline);
 
             Graphics g2 = Graphics.FromImage(b2);
@@ -10607,11 +10590,14 @@ namespace AssetsPV
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
                 for (int bodyPalette = 0; bodyPalette < KolonizePalettes.fleshTones.Length; bodyPalette++)
                 {
+
+                    VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
+                    MagicaVoxelData[] p2 = VoxelLogic.Lovecraftiate(parsed, VoxelLogic.kcolors);
                     for (int f = 0; f < framelimit; f++)
                     { //
                         for (int dir = 0; dir < 4; dir++)
                         {
-                            Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                            Bitmap b = processKFrame(p2, faction, palette, bodyPalette, dir, f, framelimit, still);
                             b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
@@ -10623,7 +10609,7 @@ namespace AssetsPV
                     string s = "";
 
                     s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
-                    startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                    startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/K/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
                     Process.Start(startInfo).WaitForExit();
                 }
             }
@@ -10653,6 +10639,9 @@ namespace AssetsPV
                 }
                 int framelimit = 4;
 
+                VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
+                
+                MagicaVoxelData[] p2 = VoxelLogic.Lovecraftiate(parsed, VoxelLogic.kcolors);
 
                 string folder = (altFolder + "faction" + faction + "/palette" + palette);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
@@ -10660,18 +10649,18 @@ namespace AssetsPV
                 { //
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                        Bitmap b = processKFrame(p2, faction, palette, bodyPalette, dir, f, framelimit, still);
                         b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                         b.Dispose();
                     }
                 }
-                System.IO.Directory.CreateDirectory("gifs/" + altFolder + "/faction" + faction);
+                System.IO.Directory.CreateDirectory("gifs/K/" + altFolder + "/faction" + faction);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
 
                 s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
-                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/K/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
                 Process.Start(startInfo).WaitForExit();
             }
             //bin.Close();
@@ -10685,6 +10674,8 @@ namespace AssetsPV
         public static void processTerrainK(string subfolder, string unit, int palette, bool addFloor)
         {
             int bodyPalette = 0, faction = 0;
+            VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
+
             bool still = true;
             
                 Console.WriteLine("Processing: " + unit + ", faction " + faction + ", palette " + palette);
@@ -10730,7 +10721,7 @@ namespace AssetsPV
                 string s = "";
 
                 s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
-                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + subfolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/K/" + altFolder + subfolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
                 Process.Start(startInfo).WaitForExit();
             
             //bin.Close();
@@ -10744,6 +10735,8 @@ namespace AssetsPV
             string legs = "Blocky", string torso = "Blocky", string left_arm = "Blocky", string right_arm = "Blocky", string head = "Blocky", string left_weapon = null, string right_weapon = null)
         {
             int bodyPalette = 0, faction = 0;
+            VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
+
             Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
             { {"Legs", VoxelLogic.readPartK(legs + "_Legs")},
                 {"Torso", VoxelLogic.readPartK(torso + "_Torso")},
@@ -10759,7 +10752,7 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxelsK(work, components["Legs"], 1);
             work = VoxelLogic.PlaceShadowsKPartial(work);
             VoxelLogic.WriteVOX("vox/K/" + moniker + "_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
-
+            work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -10803,7 +10796,9 @@ namespace AssetsPV
             string legs = "Blocky", string torso = "Blocky", string left_arm = "Blocky", string right_arm = "Blocky", string head = "Blocky", string left_weapon = null, string right_weapon = null,
             string left_projectile = null, string right_projectile = null)
         {
-            int faction = 0;
+            int faction = 0, bodyPalette = 0;
+            VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
+
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
             PixelFormat pxf = PixelFormat.Format32bppArgb;
@@ -10864,7 +10859,7 @@ namespace AssetsPV
                     right_projectors.AddRange(work.FindAll(m => (254 - m.color) == 4 * 6).Select(m => VoxelLogic.AlterVoxel(m, 10, 10, 0, m.color)));
                     right_projector = right_projectors.RandomElement();
                 }
-                catch (InvalidOperationException ioe)
+                catch (InvalidOperationException)
                 {
                     right_projector = bogus;
                 }
@@ -10873,12 +10868,13 @@ namespace AssetsPV
                     left_projectors.AddRange(work.FindAll(m => (254 - m.color) == 4 * 7).Select(m => VoxelLogic.AlterVoxel(m, 10, 10, 0, m.color)));
                     left_projector = left_projectors.RandomElement();
                 }
-                catch (InvalidOperationException ioe)
+                catch (InvalidOperationException)
                 {
                     left_projector = bogus;
                 }
                 work = VoxelLogic.PlaceShadowsKPartial(work);
                 VoxelLogic.WriteVOX("vox/K/" + moniker + "_" + firing_name + "_f0_" + palette + ".vox", work, "K_ALLY", palette, 40, 40, 40);
+                work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
                 MagicaVoxelData[] parsed = work.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -10895,7 +10891,7 @@ namespace AssetsPV
                     {
                         for (int dir = 0; dir < 4; dir++)
                         {
-                            Bitmap b = processKFrame(parsed, 0, palette, 0, dir, f, framelimit, still);
+                            Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
                             b.Save(folder + "/palette" + palette + "(0)_" + moniker + "_" + firing_name + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
@@ -11029,9 +11025,11 @@ namespace AssetsPV
             }
         }
 
-        public static void processUnitKMechaAiming(string moniker = "SYN_TR", int palette = 0, bool still = true,
+        public static void processUnitKMechaAiming(string moniker = "SYN-TR", int palette = 0, bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored_Aiming", string right_arm = "Armored_Aiming", string head = "Armored_Aiming", string right_weapon = "Gatling", string right_projectile = "Autofire")
         {
+            int faction = 0, bodyPalette = 0;
+            VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
             PixelFormat pxf = PixelFormat.Format32bppArgb;
@@ -11064,12 +11062,13 @@ namespace AssetsPV
                 projectors.AddRange(work.FindAll(m => (254 - m.color) == 4 * 6).Select(m => VoxelLogic.AlterVoxel(m, 10, 10, 0, m.color)));
                 right_projector = projectors.RandomElement();
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 right_projector = bogus;
             }
             work = VoxelLogic.PlaceShadowsKPartial(work);
             VoxelLogic.WriteVOX("vox/K/" + moniker + "_Firing_Both_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
+            work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -11086,7 +11085,7 @@ namespace AssetsPV
                 { //
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processKFrame(parsed, 0, palette, 0, dir, f, framelimit, still);
+                        Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
                         b.Save(folder + "/palette" + palette + "(0)_" + moniker + "_Firing_Both_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -12048,8 +12047,17 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("vox/Kolonize_Allies");
             System.IO.Directory.CreateDirectory("vox/Kolonize_Other");
+            
+            VoxelLogic.InitializeKPalette("MYTHOS");
+            
+            altFolder = "mythos/";
+            
+            processUnitK("Shoggoth_Spore", 0, 0, true);
+            processUnitK("Shoggoth_Spore", 1, 0, true);
+            processUnitK("Shoggoth_Spore", 2, 0, true);
 
-            VoxelLogic.InitializeKPalette(true);
+            VoxelLogic.InitializeKPalette("MECHA");
+            altFolder = "";
             /*BinaryReader bin = new BinaryReader(File.OpenRead("K/Male_Base_K.vox"));
             List<MagicaVoxelData> vl = VoxelLogic.FromMagicaRaw(bin);
             VoxelLogic.WriteVOX("vox/Kolonize_Allies/Male_Base.vox", vl, "K_ALLY", 0, 40, 40, 40);
@@ -12076,26 +12084,26 @@ namespace AssetsPV
             processTerrainK("Dungeon", "Water", 0, false);
             */
 //            processUnitKMecha(left_weapon: "Pistol", right_weapon: "Pistol");
-
+            /*
             processPureAttackK("Autofire", 0);
             processPureAttackK("Beam", 0);
             processPureAttackK("Cannon", 0);
             processPureAttackK("Lightning", 0);
 
-/*            processUnitKMecha(left_weapon: "Pistol", right_weapon: "Pistol");
+            processUnitKMecha(left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitKMechaFiring(left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire");
             processUnitKMecha(moniker: "SYN-SK", left_weapon: "Pistol", right_weapon: "Knife");
-            processUnitKMechaFiring(moniker: "SYN-SK", left_weapon: "Pistol", right_weapon: "Knife", left_projectile: "Lightning");*/
+            processUnitKMechaFiring(moniker: "SYN-SK", left_weapon: "Pistol", right_weapon: "Knife", left_projectile: "Lightning");
             processUnitKMecha(moniker: "SYN-CC", legs: "Armored", torso: "Armored", left_arm: "Armored", right_arm: "Armored", head: "Armored", left_weapon: "Pistol");
             processUnitKMechaFiring(moniker: "SYN-CC", legs: "Armored", torso: "Armored", left_arm: "Armored", right_arm: "Armored", head: "Armored", left_weapon: "Pistol", left_projectile: "Beam");
-/*            processUnitKMecha(moniker: "SYN-HV", right_weapon: "Bazooka");
+            processUnitKMecha(moniker: "SYN-HV", right_weapon: "Bazooka");
             processUnitKMechaFiring(moniker: "SYN-HV", right_weapon: "Bazooka", right_projectile: "Cannon");
-            processUnitKMecha(moniker: "SYN-RD", right_weapon: "Idol");*/
-            processUnitKMecha(moniker: "SYN_TR", legs: "Armored", torso: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", head: "Armored", right_weapon: "Gatling");
+            processUnitKMecha(moniker: "SYN-RD", right_weapon: "Idol");
+            processUnitKMecha(moniker: "SYN-TR", legs: "Armored", torso: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", head: "Armored", right_weapon: "Gatling");
             processUnitKMechaAiming();
-            processUnitKMecha(moniker: "SYN_MM", legs: "Blocky", torso: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", head: "Blocky", right_weapon: "Rifle");
-            processUnitKMechaAiming(moniker: "SYN_MM", legs: "Blocky", torso: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", head: "Blocky", right_weapon: "Rifle", right_projectile: "Beam");
-
+            processUnitKMecha(moniker: "SYN-MM", legs: "Blocky", torso: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", head: "Blocky", right_weapon: "Rifle");
+            processUnitKMechaAiming(moniker: "SYN-MM", legs: "Blocky", torso: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", head: "Blocky", right_weapon: "Rifle", right_projectile: "Beam");
+            */
             for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 /*
