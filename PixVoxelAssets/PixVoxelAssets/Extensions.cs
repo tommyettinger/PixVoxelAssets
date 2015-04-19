@@ -73,6 +73,23 @@ namespace AssetsPV
             }
             return mat;
         }
+        public static byte[,,] Fill(this byte[,,] mat, byte item)
+        {
+            if (mat.Length == 0)
+                return mat;
+
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+                for (int j = 0; j < mat.GetLength(1); j++)
+                {
+                    for (int k = 0; k < mat.GetLength(2); k++)
+                    {
+                        mat[i, j, k] = item;
+                    }
+                }
+            }
+            return mat;
+        }
         public static short[,] Fill(this short[,] mat, short item)
         {
             if (mat.Length == 0)
