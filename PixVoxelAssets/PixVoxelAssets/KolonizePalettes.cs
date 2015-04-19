@@ -681,13 +681,13 @@ namespace AssetsPV
             //18 flickering sparks plasma
             new float[] {1.3F,1.3F,0.9F,borderless_alpha},
             //19 glow frame 0
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {0.65F,1.05F,0.65F,waver_alpha},
             //20 glow frame 1
-            new float[] {1.25F,1.15F,0.8F,borderless_alpha},
+            new float[] {0.8F,1.2F,0.8F,waver_alpha},
             //21 glow frame 2
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {0.65F,1.05F,0.65F,waver_alpha},
             //22 glow frame 3
-            new float[] {0.95F,0.85F,0.5F,borderless_alpha},
+            new float[] {0.5F,0.9F,0.5F,waver_alpha},
             //23 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //24 mouth
@@ -802,13 +802,13 @@ namespace AssetsPV
             //18 flickering sparks plasma
             new float[] {1.3F,1.3F,0.9F,borderless_alpha},
             //19 glow frame 0
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {1.05F,1.05F,0.25F,waver_alpha},
             //20 glow frame 1
-            new float[] {1.25F,1.15F,0.8F,borderless_alpha},
+            new float[] {1.15F,1.15F,0.4F,waver_alpha},
             //21 glow frame 2
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {1.05F,1.05F,0.25F,waver_alpha},
             //22 glow frame 3
-            new float[] {0.95F,0.85F,0.5F,borderless_alpha},
+            new float[] {0.95F,0.95F,0.1F,waver_alpha},
             //23 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //24 mouth
@@ -923,13 +923,13 @@ namespace AssetsPV
             //18 flickering sparks plasma
             new float[] {1.3F,1.3F,0.9F,borderless_alpha},
             //19 glow frame 0
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {0.95F,0.55F,0.95F,waver_alpha},
             //20 glow frame 1
-            new float[] {1.25F,1.15F,0.8F,borderless_alpha},
+            new float[] {1.05F,0.7F,1.05F,waver_alpha},
             //21 glow frame 2
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {0.95F,0.55F,0.95F,waver_alpha},
             //22 glow frame 3
-            new float[] {0.95F,0.85F,0.5F,borderless_alpha},
+            new float[] {0.85F,0.4F,0.85F,waver_alpha},
             //23 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //24 mouth

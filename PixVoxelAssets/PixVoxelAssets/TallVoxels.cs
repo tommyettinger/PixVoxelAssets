@@ -12055,7 +12055,7 @@ namespace AssetsPV
             processUnitK("Shoggoth_Spore", 0, 0, true);
             processUnitK("Shoggoth_Spore", 1, 0, true);
             processUnitK("Shoggoth_Spore", 2, 0, true);
-
+            
             VoxelLogic.InitializeKPalette("MECHA");
             altFolder = "";
             /*BinaryReader bin = new BinaryReader(File.OpenRead("K/Male_Base_K.vox"));
@@ -12083,7 +12083,6 @@ namespace AssetsPV
             processTerrainK("Dungeon", "Floor", 0, false);
             processTerrainK("Dungeon", "Water", 0, false);
             */
-//            processUnitKMecha(left_weapon: "Pistol", right_weapon: "Pistol");
             /*
             processPureAttackK("Autofire", 0);
             processPureAttackK("Beam", 0);
