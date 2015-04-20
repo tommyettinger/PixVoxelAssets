@@ -7606,7 +7606,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u);
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionK(parsed); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
-            string folder = ("frames/K/" + faction);
+            string folder = ("frames/K/faction" + faction);
 
             System.IO.Directory.CreateDirectory(folder);
 

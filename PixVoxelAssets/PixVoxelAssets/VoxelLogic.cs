@@ -11669,13 +11669,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     int m = (shaded) ? 2 : 0;
                     int rm = r.Next(2) * 2;
 
-                    if (kcolors[c][3] == waver_alpha)
+                    if (c == 13)
+                        mvd.color = (byte)(253 + rm - 13 * 4); // smoke stays smoke
+                    else if (kcolors[c][3] == waver_alpha)
                         mvd.color = clear;
                     else if (c == 4 || c == 5) //flesh
                         mvd.color = (byte)((r.Next(2 + f) == 0) ? 253 - 32 * 4 : (r.Next(8) == 0) ? 253 + rm - 15 * 4 : v.color); //random transform to guts
                     else if (c == 32) //guts
                         mvd.color = (byte)((r.Next(18) == 0) ? 253 + rm - 15 * 4 : v.color); //random transform to orange fire
-                    else if (c == kcolorcount - 1) //clear
+                    else if (c == 58) //clear
                         mvd.color = clear; //clear stays clear
                     else if (c == 12)
                         mvd.color = clear; //clear inner shadow
@@ -11707,8 +11709,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.color = (byte)((r.Next(3) == 0) ? clear : v.color); //random transform to clear
                     else if (c == 18) //plasma sparks
                         mvd.color = (byte)((r.Next(6) == 0) ? clear : v.color); //random transform to clear
-                    else if (c == 13)
-                        mvd.color = (byte)(253 + rm - 13 * 4); // smoke stays smoke
                     else if (kcolors[c][3] == yver_alpha)
                         mvd.color = v.color; //(byte)((r.Next(110) <= 2) ? 253 + rm - ((r.Next(4) == 0) ? 14 * 4 : 15 * 4) : v.color); //rare random transform to orange or yellow fire
                     else
@@ -11747,7 +11747,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         else if (minZ > 0)
                             zMove = ((v.z) * (1 - f) / 6F);
                         else
-                            zMove = (v.z / ((maxZ + 1 + midZ) * (0.15F))) * (2 - f / 2) * 1.1F;
+                            zMove = (v.z / ((maxZ + 1.0F + midZ) * (0.15F))) * (2 - f / 2.0F) * 1.1F;
                     }
 
                     if (xMove > 20) xMove = 20;
@@ -11847,7 +11847,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                     if (zMove != 0)
                     {
-                        float nv = (v.z + (zMove * 1.6f / (f + 1)));
+                        float nv = (v.z + (zMove * 1.7f / (f + 1)));
 
                         if (nv <= 0 && f < 8) nv = r.Next(2); //bounce
                         else if (nv < 0) nv = 0;
@@ -11925,19 +11925,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                     if (kcolors[c][3] == yver_alpha)
                     {
-                        mvd.color = (byte)((r.Next(18) + 4 <= f) ? clear : v.color); //random transform to clear
+                        mvd.color = (byte)((r.Next(40) + 3 <= f) ? clear : v.color); //random transform to clear
                         c = WithoutShadingK(mvd.color);
                         shaded = (255 - v.color) % 4 == 0;
                         m = (shaded) ? 2 : 0;
                         rm = r.Next(2) * 2;
                     }
-                    if (kcolors[c][3] == waver_alpha)
+                    if (c == 13) //smoke
+                        mvd.color = (byte)((r.Next(9) + 3 <= f) ? clear : 253 + rm - 13 * 4); //random transform to clear
+                    else if (kcolors[c][3] == waver_alpha)
                         mvd.color = clear;
                     else if (c == 4 || c == 5) //flesh
                         mvd.color = (byte)((r.Next(f) == 0) ? 253 - 32 * 4 : (r.Next(6) == 0 && f < 10) ? 253 + rm - 15 * 4 : v.color); //random transform to guts
                     else if (c == 32) //guts
                         mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 + rm - 15 * 4 : v.color); //random transform to orange fire
-                    else if (c == kcolorcount - 1) //clear and markers
+                    else if (c == 58) //clear
                         mvd.color = clear; //clear stays clear
                     else if (c == 12)
                         mvd.color = clear; //clear inner shadow
@@ -11960,21 +11962,19 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else if (c == 36 || c == 37)
                         mvd.color = clear; //clear non-active rotors
                     else if (c == 15) //orange fire
-                        mvd.color = (byte)((r.Next(9) + 2 <= f) ? 253 + rm - 13 * 4 : ((r.Next(3) <= 1) ? 253 + rm - 14 * 4 : ((r.Next(3) == 0) ? 253 + rm - 13 * 4 : v.color))); //random transform to yellow fire or smoke
+                        mvd.color = (byte)((r.Next(10) + 2 <= f) ? 253 + rm - 13 * 4 : ((r.Next(3) <= 1) ? 253 + rm - 14 * 4 : ((r.Next(3) == 0) ? 253 + rm - 13 * 4 : v.color))); //random transform to yellow fire or smoke
                     else if (c == 14) //yellow fire
-                        mvd.color = (byte)((r.Next(9) + 1 <= f) ? 253 + rm - 13 * 4 : ((r.Next(3) <= 1) ? 253 + rm - 15 * 4 : ((r.Next(4) == 0) ? 253 + rm - 13 * 4 : ((r.Next(4) == 0) ? 253 + rm - 16 * 4 : v.color)))); //random transform to orange fire, smoke, or sparks
+                        mvd.color = (byte)((r.Next(10) + 1 <= f) ? 253 + rm - 13 * 4 : ((r.Next(3) <= 1) ? 253 + rm - 15 * 4 : ((r.Next(4) == 0) ? 253 + rm - 13 * 4 : ((r.Next(4) == 0) ? 253 + rm - 16 * 4 : v.color)))); //random transform to orange fire, smoke, or sparks
                     else if (c == 16) //bright sparks
-                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : clear); //random transform to clear
+                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(11) > f) ? v.color : clear); //random transform to clear
                     else if (c == 17) //electric sparks
-                        mvd.color = (byte)((r.Next(3) > 0 && r.Next(12) > f) ? v.color : clear); //random transform to clear
+                        mvd.color = (byte)((r.Next(3) > 0 && r.Next(11) > f) ? v.color : clear); //random transform to clear
                     else if (c == 18) //plasma sparks
-                        mvd.color = (byte)((r.Next(6) > 0 && r.Next(12) > f) ? v.color : clear); //random transform to clear
-                    else if (c == 13) //smoke
-                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? clear : 253 + rm - 13 * 4); //random transform to clear
+                        mvd.color = (byte)((r.Next(6) > 0 && r.Next(11) > f) ? v.color : clear); //random transform to clear
                     else if (kcolors[c][3] == yver_alpha)
-                        mvd.color = (byte)((r.Next(110) <= (f - 4) * (f - 3)) ? 253 + rm - ((r.Next(4) == 0) ? 14 * 4 : 15 * 4) : v.color); //rare random transform to orange or yellow fire
-                    else 
-                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 + rm - ((r.Next(4) == 0) ? 14 * 4 : 15 * 4) : v.color); //random transform to orange or yellow fire
+                        mvd.color = (byte)((r.Next(110) <= (f - 3) * (f / 3.0) && (r.Next(12) > f || r.Next(12) > f || r.Next(12) > f)) ? 253 + rm - ((r.Next(4) == 0) ? 14 * 4 : 15 * 4) : v.color); //rare random transform to orange or yellow fire
+                    else
+                        mvd.color = (byte)((r.Next(f * 4) <= 6 && (r.Next(12) > f || r.Next(12) > f || r.Next(12) > f)) ? 253 + rm - ((r.Next(4) == 0) ? 14 * 4 : 15 * 4) : v.color); //random transform to orange or yellow fire
 
 
                     /*
@@ -12029,15 +12029,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     float xMove = 0, yMove = 0, zMove = 0;
                     if (mvd.color <= 255 - 12 * 4 && mvd.color >= 253 - 18 * 4)
                     {
-                        zMove = f * 0.5f;
+                        zMove = f * 0.7f;
                         xMove = (float)(r.NextDouble() * 2.0 - 1.0);
                         yMove = (float)(r.NextDouble() * 2.0 - 1.0);
                     }
                     else if (mvd.color != clear && (kcolors[c][3] == yver_alpha))
                     {
-                        zMove = (float)(r.NextDouble() - 0.9);
-                        xMove = (float)(r.NextDouble() - 0.5) * 0.7f;
-                        yMove = (float)(r.NextDouble() - 0.5) * 0.7f;
+                        zMove = (float)(r.NextDouble() - 0.65) * 2f;
+                        xMove = (float)(r.NextDouble() - 0.5) * 7f;
+                        yMove = (float)(r.NextDouble() - 0.5) * 7f;
                     }
                     else
                     {
