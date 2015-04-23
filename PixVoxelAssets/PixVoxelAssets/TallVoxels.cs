@@ -7527,8 +7527,8 @@ namespace AssetsPV
                 }
             }
 
-            
-            System.IO.Directory.CreateDirectory("gifs");
+
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder); 
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -7581,7 +7581,7 @@ namespace AssetsPV
             }
 
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder); 
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -8840,7 +8840,7 @@ namespace AssetsPV
             }
 
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder); 
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -8882,7 +8882,6 @@ namespace AssetsPV
                     }
                 }
 
-                System.IO.Directory.CreateDirectory("gifs");
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -8922,7 +8921,7 @@ namespace AssetsPV
                     }
                 }
 
-                System.IO.Directory.CreateDirectory("gifs");
+
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -8957,19 +8956,19 @@ namespace AssetsPV
             int framelimit = 4;
 
 
-            string folder = (altFolder + "palette" + palette);//"color" + i;
+            string folder = (altFolder);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, still);
-                    b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
 
-            System.IO.Directory.CreateDirectory("gifs");
+
             System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -9029,7 +9028,7 @@ namespace AssetsPV
                     }
                 }
 
-                System.IO.Directory.CreateDirectory("gifs");
+
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -9150,7 +9149,7 @@ namespace AssetsPV
                             b.Dispose();
                         }
                     }
-                    System.IO.Directory.CreateDirectory("gifs");
+
                     System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                     ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                     startInfo.UseShellExecute = false;
@@ -9338,7 +9337,7 @@ namespace AssetsPV
                     }
                 }
 
-                System.IO.Directory.CreateDirectory("gifs");
+
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -9443,7 +9442,7 @@ namespace AssetsPV
             int framelimit = 4;
 
 
-            string folder = (altFolder + "palette" + palette);//"color" + i;
+            string folder = (altFolder);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //
@@ -9454,7 +9453,7 @@ namespace AssetsPV
                     b.Dispose();
                 }
             }
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder); 
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9485,7 +9484,7 @@ namespace AssetsPV
             int framelimit = 4;
 
 
-            string folder = ("palette" + palette);//"color" + i;
+            string folder = (altFolder);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //
@@ -9497,7 +9496,7 @@ namespace AssetsPV
                 }
             }
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder); 
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9545,20 +9544,20 @@ namespace AssetsPV
             int framelimit = 8;
 
 
-            string folder = ("palette" + palette);//"color" + i;
+            string folder = (altFolder);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWDouble(parsed[f % 4], palette, dir, f, framelimit, true);
-                    b.Save(altFolder + folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
 
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder); 
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9566,7 +9565,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < framelimit; i++)
                 {
-                    s += altFolder + "palette" + palette + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
+                    s += folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + i + ".png ";
                 }
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Large_animated.gif";
@@ -9611,20 +9610,20 @@ namespace AssetsPV
             int framelimit = 8;
 
 
-            string folder = ("palette" + palette);//"color" + i;
+            string folder = (altFolder);//"color" + i;
             System.IO.Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //
                 for (int dir = 0; dir < 4; dir++)
                 {
                     Bitmap b = processSingleOutlinedWQuad(parsed[f % 4], palette, dir, f, framelimit, true);
-                    b.Save(altFolder + folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Save(folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
             }
 
 
-            System.IO.Directory.CreateDirectory("gifs");
+            System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9632,7 +9631,7 @@ namespace AssetsPV
             {
                 for (int i = 0; i < framelimit; i++)
                 {
-                    s += altFolder + "palette" + palette + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
+                    s += folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + i + ".png ";
                 }
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Huge_animated.gif";
@@ -9728,7 +9727,6 @@ namespace AssetsPV
             }
 
 
-            System.IO.Directory.CreateDirectory("gifs");
             System.IO.Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -12094,6 +12092,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory("indexed");
 
             System.IO.Directory.CreateDirectory("beast");
+            System.IO.Directory.CreateDirectory("sau");
 
 
             /*
@@ -12414,7 +12413,8 @@ namespace AssetsPV
             */
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            /*
+            altFolder = "sau/";
+            
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Vashk", 19, true);
@@ -12432,17 +12432,19 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Male", 17);
             processUnitOutlinedWDouble("Kurguiv", 13, false);
             processUnitOutlinedWalkDouble("Kurguiv", 13);
-            */
+            
+            processUnitOutlinedWDouble("Ceglia", 61, true);
+            processUnitOutlinedWalkDouble("Ceglia", 61);
+            
             processUnitOutlinedWDouble("Tassar", 11, false);
             processUnitOutlinedWalkDouble("Tassar", 11);
-            /*
             processUnitOutlinedWDouble("Axarik", 18, true);
             processUnitOutlinedWalkDouble("Axarik", 18);
             processUnitOutlinedWDouble("Sfyst", 24, true);
             processUnitOutlinedWalkDouble("Sfyst", 24);
-            */
             
-            /*
+            
+            
             processUnitOutlinedWDouble("Ilapa", 12, true);
             processUnitOutlinedWalkDouble("Ilapa", 12);
             processUnitOutlinedWDouble("Erezdo", 14, true);
@@ -12464,9 +12466,8 @@ namespace AssetsPV
             processUnitOutlinedWDouble("Glarosp", 21, true);
             processUnitOutlinedWalkDouble("Glarosp", 21);
 
-            processUnitOutlinedWDouble("Ceglia", 61, true);
             processUnitOutlinedWQuad("Oah", 62, true);
-            */
+            
             /*
 processUnitOutlinedWDouble("Pelmir", 22, true);
 processUnitOutlinedWDouble("Uljir", 23, true);
