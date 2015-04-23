@@ -1945,7 +1945,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             //10 eyes shine
             new float[] {1.05F,0.8F,1.2F,1F},
             //11 eyes
-            new float[] {0.05F,-0.05F,0.35F,1F},
+            new float[] {0.0F,-0.08F,0.1F,gloss_alpha},
             //12 metal contrast
             new float[] {0.5F,0.85F,0.95F,1F},
             //13 metal
