@@ -12414,12 +12414,15 @@ namespace AssetsPV
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             altFolder = "sau/";
-            
+            /*
             processUnitOutlinedWQuad("Nodebpe", 10, true);
             processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Vashk", 19, true);
-            processUnitOutlinedWalkQuad("Vashk", 19);
-            
+            processUnitOutlinedWalkQuad("Vashk", 19);*/
+            processUnitOutlinedWQuad("Oah", 62, true);
+            processUnitOutlinedWalkQuad("Oah", 62);
+
+  /*          
             processUnitOutlinedWDouble("Human_Male", 0, true);
             processUnitOutlinedWalkDouble("Human_Male", 0);
             processUnitOutlinedWDouble("Human_Male", 1, true);
@@ -12465,7 +12468,7 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Lomuk", 20);
             processUnitOutlinedWDouble("Glarosp", 21, true);
             processUnitOutlinedWalkDouble("Glarosp", 21);
-
+*/
             processUnitOutlinedWQuad("Oah", 62, true);
             
             /*
