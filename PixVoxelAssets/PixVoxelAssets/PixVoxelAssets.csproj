@@ -59,6 +59,7 @@
     <Compile Include="OrthoVoxelsAdjusted.cs" />
     <Compile Include="OrthoVoxels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaPalettes.cs" />
     <Compile Include="TallPaletteDraw.cs" />
     <Compile Include="TallVoxels.cs" />
     <Compile Include="VoxelLogic.cs" />

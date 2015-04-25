@@ -59,6 +59,17 @@ namespace AssetsPV
             }
             return mat;
         }
+
+        public static T[] Repeat<T>(this T item, int count)
+        {
+            T[] items = new T[count];
+            for(int i = 0; i < count; i++)
+            {
+                items[i] = item;
+            }
+            return items;
+        }
+
         public static byte[,] Fill(this byte[,] mat, byte item)
         {
             if (mat.Length == 0)

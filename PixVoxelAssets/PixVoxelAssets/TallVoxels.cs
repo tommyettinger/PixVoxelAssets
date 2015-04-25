@@ -8864,7 +8864,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug.Value);
-                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, "W", palette, 60, 60, 60);
+                VoxelLogic.WriteVOX("vox/" + altFolder + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, "W", palette, 60, 60, 60);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
                 
                 int framelimit = 4;
@@ -8903,7 +8903,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + u + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open(unit + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> newModel = VoxelLogic.ElementalAugment(VoxelLogic.FromMagicaRaw(bin), aug);
-                VoxelLogic.WriteVOX("vox/" + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, "W", palette, 60, 60, 60);
+                VoxelLogic.WriteVOX("vox/" + altFolder + u + "_s" + currentScheme + "_" + palette + ".vox", newModel, "W", palette, 60, 60, 60);
                 MagicaVoxelData[] parsed = VoxelLogic.PlaceShadowsW(newModel).ToArray();
 
                 int framelimit = 4;
@@ -8944,7 +8944,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + ((currentScheme < 0) ? "_" : "_s" + currentScheme + "_") + palette + ".vox", voxes, "W", palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + altFolder + u + ((currentScheme < 0) ? "_" : "_s" + currentScheme + "_") + palette + ".vox", voxes, "W", palette, 40, 40, 40);
             MagicaVoxelData[] parsed = voxes.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9003,7 +9003,7 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
             work = VoxelLogic.MergeVoxels(work, components["Legs"], 1);
             work = VoxelLogic.PlaceShadowsPartialW(work);
-            VoxelLogic.WriteVOX("vox/" + moniker + "_0.vox", work, "W", 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_0.vox", work, "W", 0, 40, 40, 40);
 
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -9126,7 +9126,7 @@ namespace AssetsPV
                     left_projector = bogus;
                 }
                 work = VoxelLogic.PlaceShadowsPartialW(work);
-                VoxelLogic.WriteVOX("vox/" + moniker + "_" + firing_name + "_0.vox", work, "W", 0, 40, 40, 40);
+                VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + firing_name + "_0.vox", work, "W", 0, 40, 40, 40);
                 MagicaVoxelData[] parsed = work.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -9313,7 +9313,7 @@ namespace AssetsPV
                 right_projector = bogus;
             }
             work = VoxelLogic.PlaceShadowsPartialW(work);
-            VoxelLogic.WriteVOX("vox/" + moniker + "_Firing_Both_0.vox", work, "W", 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_Firing_Both_0.vox", work, "W", 0, 40, 40, 40);
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9431,7 +9431,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", voxes, "W", palette, 80, 80, 80);
+            VoxelLogic.WriteVOX("vox/" + altFolder + u + "_" + palette + ".vox", voxes, "W", palette, 80, 80, 80);
 
             MagicaVoxelData[] parsed = voxes.ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -9474,7 +9474,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> vlist = (shadowless) ? VoxelLogic.FromMagicaRaw(bin) : VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
-            VoxelLogic.WriteVOX("vox/" + u + "_" + palette + ".vox", vlist, "W", palette, 80, 80, 80);
+            VoxelLogic.WriteVOX("vox/" + altFolder + u + "_" + palette + ".vox", vlist, "W", palette, 80, 80, 80);
             MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9702,7 +9702,7 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u + " Dead");
             BinaryReader bin = new BinaryReader(File.Open(u + "_Dead_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> vlist = VoxelLogic.PlaceShadowsW(VoxelLogic.PlaceBloodPoolW(VoxelLogic.FromMagicaRaw(bin)));
-            VoxelLogic.WriteVOX("vox/" + u + "_Dead_" + palette + ".vox", vlist, "W", palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + altFolder + u + "_Dead_" + palette + ".vox", vlist, "W", palette, 40, 40, 40);
             MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -9912,7 +9912,7 @@ namespace AssetsPV
 
             bin = new BinaryReader(File.Open(hat + "_Hat_W.vox", FileMode.Open));
             List<MagicaVoxelData> vlist = VoxelLogic.FromMagicaRaw(bin);
-            VoxelLogic.WriteVOX("vox/" + hat + "_" + palette + ".vox", vlist, "W", palette, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/" + altFolder + hat + "_" + palette + ".vox", vlist, "W", palette, 40, 40, 40);
             MagicaVoxelData[] parsed = vlist.ToArray();
             for (int i = 0; i < parsed.Length; i++)
             {
@@ -10617,7 +10617,7 @@ namespace AssetsPV
                 BinaryReader bin = new BinaryReader(File.Open("K/" + unit + "_K.vox", FileMode.Open));
                 List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
                 System.IO.Directory.CreateDirectory("vox/K");
-                VoxelLogic.WriteVOX("vox/K/" + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 60);
+                VoxelLogic.WriteVOX("vox/K/" + altFolder + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 60);
                 MagicaVoxelData[] parsed = voxes.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -10674,7 +10674,7 @@ namespace AssetsPV
                 BinaryReader bin = new BinaryReader(File.Open("K/" + unit + "_K.vox", FileMode.Open));
                 List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
                 System.IO.Directory.CreateDirectory("vox/K");
-                VoxelLogic.WriteVOX("vox/K/" + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 60);
+                VoxelLogic.WriteVOX("vox/K/" + altFolder + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 60);
                 MagicaVoxelData[] parsed = voxes.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -10799,7 +10799,7 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxelsK(VoxelLogic.MergeVoxelsK(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
             work = VoxelLogic.MergeVoxelsK(work, components["Legs"], 1);
             work = VoxelLogic.PlaceShadowsKPartial(work);
-            VoxelLogic.WriteVOX("vox/K/" + moniker + "_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/K/" + altFolder + moniker + "_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
             work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -10923,7 +10923,7 @@ namespace AssetsPV
                     left_projector = bogus;
                 }
                 work = VoxelLogic.PlaceShadowsKPartial(work);
-                VoxelLogic.WriteVOX("vox/K/" + moniker + "_" + firing_name + "_f0_" + palette + ".vox", work, "K_ALLY", palette, 40, 40, 40);
+                VoxelLogic.WriteVOX("vox/K/" + altFolder + moniker + "_" + firing_name + "_f0_" + palette + ".vox", work, "K_ALLY", palette, 40, 40, 40);
                 work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
                 MagicaVoxelData[] parsed = work.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
@@ -11117,7 +11117,7 @@ namespace AssetsPV
                 right_projector = bogus;
             }
             work = VoxelLogic.PlaceShadowsKPartial(work);
-            VoxelLogic.WriteVOX("vox/K/" + moniker + "_Firing_Both_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
+            VoxelLogic.WriteVOX("vox/K/" + altFolder + moniker + "_Firing_Both_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
             work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
             MagicaVoxelData[] parsed = work.ToArray();
             for (int i = 0; i < parsed.Length; i++)
@@ -12093,7 +12093,8 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("beast");
             System.IO.Directory.CreateDirectory("sau");
-
+            System.IO.Directory.CreateDirectory("vox/sau");
+            System.IO.Directory.CreateDirectory("vox/K/mythos");
 
             /*
             System.IO.Directory.CreateDirectory("vox/Kolonize_Allies");
@@ -12158,8 +12159,9 @@ namespace AssetsPV
                 VoxelLogic.wpalettes = AlternatePalettes.schemes[p];
                 altFolder = "beast/scheme" + p + "/";
                 VoxelLogic.InitializeWPalette();
-
+                
                 System.IO.Directory.CreateDirectory("beast/scheme" + p);
+                System.IO.Directory.CreateDirectory("vox/beast/scheme" + p);
                 */
                 /*
                 processUnitOutlinedWDouble("Generic_Male", 0, true);
@@ -12216,8 +12218,9 @@ namespace AssetsPV
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
-            System.IO.Directory.CreateDirectory(altFolder + "vox");
+            System.IO.Directory.CreateDirectory("vox/mecha");
             */
+            SaPalettes.Initialize();
             VoxelLogic.InitializeWPalette();
             /*
             VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
@@ -12414,15 +12417,75 @@ namespace AssetsPV
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             altFolder = "sau/";
-            /*
-            processUnitOutlinedWQuad("Nodebpe", 10, true);
-            processUnitOutlinedWalkQuad("Nodebpe", 10);
-            processUnitOutlinedWQuad("Vashk", 19, true);
-            processUnitOutlinedWalkQuad("Vashk", 19);*/
-            processUnitOutlinedWQuad("Oah", 62, true);
-            processUnitOutlinedWalkQuad("Oah", 62);
 
-  /*          
+
+            processUnitOutlinedWDouble("Axarik", 0, true);
+            processUnitOutlinedWalkDouble("Axarik", 0);
+            processUnitOutlinedWDouble("Ceglia", 1, true);
+            processUnitOutlinedWalkDouble("Ceglia", 1);
+            processUnitOutlinedWDouble("Erezdo", 2, true);
+            processUnitOutlinedWalkDouble("Erezdo", 2);
+            processUnitOutlinedWDouble("Glarosp", 3, true);
+            processUnitOutlinedWalkDouble("Glarosp", 3);
+
+            processUnitOutlinedWDouble("Human_Male", 4, true);
+            processUnitOutlinedWalkDouble("Human_Male", 4);
+            processUnitOutlinedWDouble("Human_Male", 5, true);
+            processUnitOutlinedWalkDouble("Human_Male", 5);
+            processUnitOutlinedWDouble("Human_Male", 6, true);
+            processUnitOutlinedWalkDouble("Human_Male", 6);
+            processUnitOutlinedWDouble("Human_Male", 7, true);
+            processUnitOutlinedWalkDouble("Human_Male", 7);
+            processUnitOutlinedWDouble("Human_Male", 8, true);
+            processUnitOutlinedWalkDouble("Human_Male", 8);
+            processUnitOutlinedWDouble("Human_Male", 9, true);
+            processUnitOutlinedWalkDouble("Human_Male", 9);
+            processUnitOutlinedWDouble("Human_Male", 10, true);
+            processUnitOutlinedWalkDouble("Human_Male", 10);
+
+            processUnitOutlinedWDouble("Human_Female", 4, true);
+            processUnitOutlinedWalkDouble("Human_Female", 4);
+            processUnitOutlinedWDouble("Human_Female", 5, true);
+            processUnitOutlinedWalkDouble("Human_Female", 5);
+            processUnitOutlinedWDouble("Human_Female", 6, true);
+            processUnitOutlinedWalkDouble("Human_Female", 6);
+            processUnitOutlinedWDouble("Human_Female", 7, true);
+            processUnitOutlinedWalkDouble("Human_Female", 7);
+            processUnitOutlinedWDouble("Human_Female", 8, true);
+            processUnitOutlinedWalkDouble("Human_Female", 8);
+            processUnitOutlinedWDouble("Human_Female", 9, true);
+            processUnitOutlinedWalkDouble("Human_Female", 9);
+            processUnitOutlinedWDouble("Human_Female", 10, true);
+            processUnitOutlinedWalkDouble("Human_Female", 10);
+
+            processUnitOutlinedWDouble("Ilapa", 11, true);
+            processUnitOutlinedWalkDouble("Ilapa", 11);
+            processUnitOutlinedWDouble("Kurguiv", 12, false);
+            processUnitOutlinedWalkDouble("Kurguiv", 12);
+            processUnitOutlinedWDouble("Lomuk", 13, false);
+            processUnitOutlinedWalkDouble("Lomuk", 13);
+            processUnitOutlinedWQuad("Nodebpe", 14, true);
+            processUnitOutlinedWalkQuad("Nodebpe", 14);
+            processUnitOutlinedWQuad("Oah", 15, true);
+            processUnitOutlinedWalkQuad("Oah", 15);
+            processUnitOutlinedWDouble("Sfyst", 16, true);
+            processUnitOutlinedWalkDouble("Sfyst", 16);
+            processUnitOutlinedWDouble("Tassar", 17, false);
+            processUnitOutlinedWalkDouble("Tassar", 17);
+            processUnitOutlinedWQuad("Vashk", 18, true);
+            processUnitOutlinedWalkQuad("Vashk", 18);
+
+
+            /*
+            processUnitOutlinedWDouble("Axarik", 18, true);
+            processUnitOutlinedWalkDouble("Axarik", 18);
+            processUnitOutlinedWDouble("Ceglia", 61, true);
+            processUnitOutlinedWalkDouble("Ceglia", 61);
+            processUnitOutlinedWDouble("Erezdo", 14, true);
+            processUnitOutlinedWalkDouble("Erezdo", 14);
+            processUnitOutlinedWDouble("Glarosp", 21, true);
+            processUnitOutlinedWalkDouble("Glarosp", 21);
+
             processUnitOutlinedWDouble("Human_Male", 0, true);
             processUnitOutlinedWalkDouble("Human_Male", 0);
             processUnitOutlinedWDouble("Human_Male", 1, true);
@@ -12433,27 +12496,7 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Male", 16);
             processUnitOutlinedWDouble("Human_Male", 17, true);
             processUnitOutlinedWalkDouble("Human_Male", 17);
-            processUnitOutlinedWDouble("Kurguiv", 13, false);
-            processUnitOutlinedWalkDouble("Kurguiv", 13);
-            
-            processUnitOutlinedWDouble("Ceglia", 61, true);
-            processUnitOutlinedWalkDouble("Ceglia", 61);
-            
-            processUnitOutlinedWDouble("Tassar", 11, false);
-            processUnitOutlinedWalkDouble("Tassar", 11);
-            processUnitOutlinedWDouble("Axarik", 18, true);
-            processUnitOutlinedWalkDouble("Axarik", 18);
-            processUnitOutlinedWDouble("Sfyst", 24, true);
-            processUnitOutlinedWalkDouble("Sfyst", 24);
-            
-            
-            
-            processUnitOutlinedWDouble("Ilapa", 12, true);
-            processUnitOutlinedWalkDouble("Ilapa", 12);
-            processUnitOutlinedWDouble("Erezdo", 14, true);
-            processUnitOutlinedWalkDouble("Erezdo", 14);
-            
-            
+
             processUnitOutlinedWDouble("Human_Female", 0, true);
             processUnitOutlinedWalkDouble("Human_Female", 0);
             processUnitOutlinedWDouble("Human_Female", 1, true);
@@ -12464,13 +12507,26 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Female", 16);
             processUnitOutlinedWDouble("Human_Female", 17, true);
             processUnitOutlinedWalkDouble("Human_Female", 17);
+
+            processUnitOutlinedWDouble("Ilapa", 12, true);
+            processUnitOutlinedWalkDouble("Ilapa", 12);
+            processUnitOutlinedWDouble("Kurguiv", 13, false);
+            processUnitOutlinedWalkDouble("Kurguiv", 13);
             processUnitOutlinedWDouble("Lomuk", 20, false);
             processUnitOutlinedWalkDouble("Lomuk", 20);
-            processUnitOutlinedWDouble("Glarosp", 21, true);
-            processUnitOutlinedWalkDouble("Glarosp", 21);
-*/
+            processUnitOutlinedWQuad("Nodebpe", 10, true);
+            processUnitOutlinedWalkQuad("Nodebpe", 10);
             processUnitOutlinedWQuad("Oah", 62, true);
-            
+            processUnitOutlinedWalkQuad("Oah", 62);
+            processUnitOutlinedWDouble("Sfyst", 24, true);
+            processUnitOutlinedWalkDouble("Sfyst", 24);
+            processUnitOutlinedWDouble("Tassar", 11, false);
+            processUnitOutlinedWalkDouble("Tassar", 11);
+            processUnitOutlinedWQuad("Vashk", 19, true);
+            processUnitOutlinedWalkQuad("Vashk", 19);
+
+             */
+
             /*
 processUnitOutlinedWDouble("Pelmir", 22, true);
 processUnitOutlinedWDouble("Uljir", 23, true);
