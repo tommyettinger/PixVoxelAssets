@@ -12476,10 +12476,22 @@ namespace AssetsPV
             processUnitOutlinedWalkQuad("Vashk", 18);
             */
             processUnitOutlinedWQuad("Barrel", 38, true);
-            processUnitOutlinedWQuad("Grass", 35, true);
-            processUnitOutlinedWQuad("Tree", 35, true);
-            processUnitOutlinedWQuad("Boulder", 36, true);
-            processUnitOutlinedWQuad("Rubble", 36, true);
+
+
+            processUnitOutlinedWQuad("Table", 39, true);
+            processUnitOutlinedWQuad("Desk", 39, true);
+            processUnitOutlinedWQuad("Computer_Desk", 39, true);
+            processUnitOutlinedWQuad("Computer_Desk", 40, true);
+
+            processUnitOutlinedWQuad("Table", 41, true);
+            processUnitOutlinedWQuad("Desk", 41, true);
+            processUnitOutlinedWQuad("Computer_Desk", 41, true);
+            processUnitOutlinedWQuad("Computer_Desk", 42, true);
+
+            /*            processUnitOutlinedWQuad("Grass", 35, true);
+                                                            processUnitOutlinedWQuad("Tree", 35, true);
+                                                            processUnitOutlinedWQuad("Boulder", 36, true);
+                                                            processUnitOutlinedWQuad("Rubble", 36, true);*/
 
             //OLD PALETTE NUMBERS 
             /*
