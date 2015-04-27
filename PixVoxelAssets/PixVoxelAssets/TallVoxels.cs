@@ -5084,6 +5084,27 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
                                 else
                                 {
                                     argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
@@ -5345,6 +5366,27 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
                                 else
                                 {
                                     argbValues[p] = VoxelLogic.wcurrent[((current_color == 28 || current_color == 29) ? mod_color +
@@ -5602,6 +5644,27 @@ namespace AssetsPV
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] + 160, 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] + 160, 255);
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 0, vx.y + 0, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 0, vx.y + 0, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
@@ -6489,6 +6552,27 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
                                 else
                                 {
                                     argbValues[p] = VoxelLogic.kcurrent[((unshaded == 26 || unshaded == 27) ? mod_color +
@@ -6776,11 +6860,32 @@ namespace AssetsPV
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // eraser stuff
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                if (KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
+                                if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] + 160, 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] + 160, 255);
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] + 160, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
@@ -12488,10 +12593,10 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Computer_Desk", 41, true);
             processUnitOutlinedWQuad("Computer_Desk", 42, true);
 
-            /*            processUnitOutlinedWQuad("Grass", 35, true);
-                                                            processUnitOutlinedWQuad("Tree", 35, true);
-                                                            processUnitOutlinedWQuad("Boulder", 36, true);
-                                                            processUnitOutlinedWQuad("Rubble", 36, true);*/
+            processUnitOutlinedWQuad("Grass", 35, true);
+            processUnitOutlinedWQuad("Tree", 35, true);
+            processUnitOutlinedWQuad("Boulder", 36, true);
+            processUnitOutlinedWQuad("Rubble", 36, true);
 
             //OLD PALETTE NUMBERS 
             /*

@@ -178,7 +178,12 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public const float fuzz_alpha = 0.91F;
         public const float gloss_alpha = 0.92F;
         public const float borderless_alpha = 0.93F;
+        public const float grain_hard_alpha = 0.95F;
+        public const float grain_some_alpha = 0.96F;
+        public const float grain_mild_alpha = 0.97F;
+
         public const float eraser_alpha = -0.1F;
+        
         public static float[][] xcolors = new float[][]
         {
             //0 tires, tread
@@ -7805,11 +7810,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                            colorMatrix,
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
-                        Image which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F) ? shine :
-                              (kpalettes[p][current_color][3] == 1F || kpalettes[p][current_color][3] == waver_alpha || kpalettes[p][current_color][3] == yver_alpha
-                            || kpalettes[p][current_color][3] == fuzz_alpha || kpalettes[p][current_color][3] == bordered_alpha || kpalettes[p][current_color][3] == gloss_alpha
-                            || kpalettes[p][current_color][3] == spin_alpha_0 || kpalettes[p][current_color][3] == spin_alpha_1 || kpalettes[p][current_color][3] == borderless_alpha) ? image :
-                           (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine;
+                        Image which_image = ((current_color >= 14 && current_color <= 22) || wpalettes[p][current_color][3] == 0F || wpalettes[p][current_color][3] == borderless_alpha
+                            || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                            (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
                         g.DrawImage(which_image,
                            new Rectangle(0, 0,
                                width, height),  // destination rectangle 
@@ -8030,11 +8033,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         colorMatrix,
                         ColorMatrixFlag.Default,
                         ColorAdjustType.Bitmap);
-                    Image which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F) ? shine :
-                        (kpalettes[p][current_color][3] == 1F || kpalettes[p][current_color][3] == waver_alpha
-                        || kpalettes[p][current_color][3] == fuzz_alpha || kpalettes[p][current_color][3] == bordered_alpha || kpalettes[p][current_color][3] == gloss_alpha
-                            || kpalettes[p][current_color][3] == spin_alpha_0 || kpalettes[p][current_color][3] == spin_alpha_1) ? image :
-                        (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine;
+                    Image which_image = ((current_color >= 14 && current_color <= 22) || wpalettes[p][current_color][3] == 0F || wpalettes[p][current_color][3] == borderless_alpha
+                        || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                        (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
                     g.DrawImage(which_image,
                         new Rectangle(0, 0,
                             width, height),  // destination rectangle 
@@ -8275,11 +8276,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        colorMatrix,
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
-                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F) ? shine :
-                       (wpalettes[p][current_color][3] == 1F || wpalettes[p][current_color][3] == waver_alpha
-                        || wpalettes[p][current_color][3] == fuzz_alpha || wpalettes[p][current_color][3] == bordered_alpha || wpalettes[p][current_color][3] == gloss_alpha
-                         || wpalettes[p][current_color][3] == spin_alpha_0 || wpalettes[p][current_color][3] == spin_alpha_1) ? image :
-                       (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : shine;
+                    
+                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F || wpalettes[p][current_color][3] == borderless_alpha
+                        || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                       (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
                     g.DrawImage(which_image,
                        new Rectangle(0, 0,
                            width, height),  // destination rectangle 

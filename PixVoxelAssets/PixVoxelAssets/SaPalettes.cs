@@ -20,6 +20,9 @@ namespace AssetsPV
         public const float flash_alpha_0 = VoxelLogic.flash_alpha_0;
         public const float flash_alpha_1 = VoxelLogic.flash_alpha_1;
         public const float gloss_alpha = VoxelLogic.gloss_alpha;
+        public const float grain_hard_alpha = VoxelLogic.grain_hard_alpha;
+        public const float grain_some_alpha = VoxelLogic.grain_some_alpha;
+        public const float grain_mild_alpha = VoxelLogic.grain_mild_alpha;
 
         public static float[][][] wpalettes = new float[][][]
             {
@@ -4279,9 +4282,9 @@ namespace AssetsPV
             
             new float[][] { //35 (47) grass and plants
             //0 dry bark contrast
-            new float[] {0.25F,0.13F,0.03F,1F},
+            new float[] {0.25F,0.13F,0.03F,grain_some_alpha},
             //1 dry bark
-            new float[] {0.45F,0.33F,0.15F,1F},
+            new float[] {0.45F,0.33F,0.15F,grain_some_alpha},
             //2 green leaves contrast
             new float[] {0.05F,0.35F,0.0F,1F},
             //3 green leaves
@@ -4400,9 +4403,9 @@ namespace AssetsPV
 
             new float[][] { //36 (48) stones
             //0 stone contrast
-            new float[] {0.45F,0.4F,0.35F,1F},
+            new float[] {0.45F,0.4F,0.35F,grain_mild_alpha},
             //1 stone
-            new float[] {0.65F,0.6F,0.55F,1F},
+            new float[] {0.65F,0.6F,0.55F,grain_mild_alpha},
             //2 mud/dirt contrast
             new float[] {0.55F,0.43F,0.32F,1F},
             //3 mud/dirt
@@ -4521,13 +4524,13 @@ namespace AssetsPV
             
             new float[][] { //37 (49) primitive houses
             //0 wooden wall contrast
-            new float[] {0.25F,0.15F,0.05F,1F},
+            new float[] {0.25F,0.15F,0.05F,grain_some_alpha},
             //1 wooden wall
-            new float[] {0.45F,0.35F,0.15F,1F},
+            new float[] {0.45F,0.35F,0.15F,grain_some_alpha},
             //2 new lumber contrast
-            new float[] {0.85F,0.65F,0.3F,1F},
+            new float[] {0.85F,0.65F,0.3F,grain_some_alpha},
             //3 new lumber
-            new float[] {0.95F,0.8F,0.5F,1F},
+            new float[] {0.95F,0.8F,0.5F,grain_some_alpha},
             //4 grassy ground contrast
             new float[] {0.22F,0.6F,0.05F,1F},
             //5 grassy ground
@@ -4764,13 +4767,13 @@ namespace AssetsPV
             
             new float[][] { //39 wooden desk (screens on)
             //0 wood contrast
-            new float[] {0.25F,0.15F,0.05F,1F},
+            new float[] {0.25F,0.15F,0.05F,grain_mild_alpha},
             //1 wood
-            new float[] {0.45F,0.35F,0.15F,1F},
+            new float[] {0.45F,0.35F,0.15F,grain_mild_alpha},
             //2 stained wood contrast
-            new float[] {0.2F,0.08F,-0.02F,1F},
+            new float[] {0.2F,0.08F,-0.02F,grain_some_alpha},
             //3 stained wood
-            new float[] {0.35F,0.23F,0.08F,1F},
+            new float[] {0.35F,0.23F,0.08F,grain_some_alpha},
             //4 plastic equipment contrast
             new float[] {0.05F,0.05F,0.05F,1F},
             //5 plastic equipment
@@ -4885,13 +4888,13 @@ namespace AssetsPV
             
             new float[][] { //40 wooden desk (screens off)
             //0 wood contrast
-            new float[] {0.25F,0.15F,0.05F,1F},
+            new float[] {0.25F,0.15F,0.05F,grain_mild_alpha},
             //1 wood
-            new float[] {0.45F,0.35F,0.15F,1F},
+            new float[] {0.45F,0.35F,0.15F,grain_mild_alpha},
             //2 stained wood contrast
-            new float[] {0.2F,0.08F,-0.02F,1F},
+            new float[] {0.2F,0.08F,-0.02F,grain_some_alpha},
             //3 stained wood
-            new float[] {0.35F,0.23F,0.08F,1F},
+            new float[] {0.35F,0.23F,0.08F,grain_some_alpha},
             //4 plastic equipment contrast
             new float[] {0.05F,0.05F,0.05F,1F},
             //5 plastic equipment

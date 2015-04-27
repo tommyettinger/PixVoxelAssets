@@ -20,6 +20,9 @@ namespace AssetsPV
         public const float flash_alpha_0 = VoxelLogic.flash_alpha_0;
         public const float flash_alpha_1 = VoxelLogic.flash_alpha_1;
         public const float gloss_alpha = VoxelLogic.gloss_alpha;
+        public const float grain_hard_alpha = VoxelLogic.grain_hard_alpha;
+        public const float grain_some_alpha = VoxelLogic.grain_some_alpha;
+        public const float grain_mild_alpha = VoxelLogic.grain_mild_alpha;
 
         public static float[][][] kolonize1 = new float[][][]
         {
