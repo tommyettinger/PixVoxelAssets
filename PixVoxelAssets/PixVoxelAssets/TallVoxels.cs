@@ -12522,6 +12522,7 @@ namespace AssetsPV
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             altFolder = "sau/";
+            processUnitOutlinedWDouble("Vih", 43, false);
 
             /*
             processUnitOutlinedWDouble("Axarik", 0, true);
@@ -12580,6 +12581,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Vashk", 18, true);
             processUnitOutlinedWalkQuad("Vashk", 18);
             */
+            /*
             processUnitOutlinedWQuad("Barrel", 38, true);
 
 
@@ -12597,7 +12599,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Tree", 35, true);
             processUnitOutlinedWQuad("Boulder", 36, true);
             processUnitOutlinedWQuad("Rubble", 36, true);
-
+            */
             //OLD PALETTE NUMBERS 
             /*
             processUnitOutlinedWDouble("Axarik", 18, true);

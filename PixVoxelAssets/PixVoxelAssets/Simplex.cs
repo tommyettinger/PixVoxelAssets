@@ -470,14 +470,15 @@ namespace AssetsPV
         static Simplex()
         {
 
-            Singleton = new OpenSimplexNoise(1234567890L);
+            OpenSimplexNoise major = new OpenSimplexNoise(1234567890L);
+            OpenSimplexNoise minor = new OpenSimplexNoise(2143658709L);
             for (int x = 0; x < 160; x++)
             {
                 for (int y = 0; y < 160; y++)
                 {
                     for (int z = 0; z < 160; z++)
                     {
-                        NoiseGridBold[0, x, y, z] = Singleton.Evaluate(x, y, z);
+                        NoiseGridBold[0, x, y, z] = (major.Evaluate(x / 4.0, y / 4.0, z / 4.0) + minor.Evaluate(x / 2.0, y / 2.0, z / 2.0)) / 2.0;
                         NoiseGrid[0, x, y, z] = NoiseGridBold[0, x, y, z] * 0.5;
                         NoiseGridLight[0, x, y, z] = NoiseGrid[0, x, y, z] * 0.5;
 
@@ -491,17 +492,17 @@ namespace AssetsPV
                         NoiseGridLight[0, x, y, z] += 1.0;
 
 
-                        NoiseGridBold[1, 159 - y, x, z] = NoiseGridBold[0, x, y, z];
+                        NoiseGridBold[3, 159 - y, x, z] = NoiseGridBold[0, x, y, z];
                         NoiseGridBold[2, 159 - x, 159 - y, z] = NoiseGridBold[0, x, y, z];
-                        NoiseGridBold[3, y, 159 - x, z] = NoiseGridBold[0, x, y, z];
+                        NoiseGridBold[1, y, 159 - x, z] = NoiseGridBold[0, x, y, z];
 
-                        NoiseGrid[1, 159 - y, x, z] = NoiseGrid[0, x, y, z];
+                        NoiseGrid[3, 159 - y, x, z] = NoiseGrid[0, x, y, z];
                         NoiseGrid[2, 159 - x, 159 - y, z] = NoiseGrid[0, x, y, z];
-                        NoiseGrid[3, y, 159 - x, z] = NoiseGrid[0, x, y, z];
+                        NoiseGrid[1, y, 159 - x, z] = NoiseGrid[0, x, y, z];
 
-                        NoiseGridLight[1, 159 - y, x, z] = NoiseGridLight[0, x, y, z];
+                        NoiseGridLight[3, 159 - y, x, z] = NoiseGridLight[0, x, y, z];
                         NoiseGridLight[2, 159 - x, 159 - y, z] = NoiseGridLight[0, x, y, z];
-                        NoiseGridLight[3, y, 159 - x, z] = NoiseGridLight[0, x, y, z];
+                        NoiseGridLight[1, y, 159 - x, z] = NoiseGridLight[0, x, y, z];
 
 
                     }
@@ -509,7 +510,6 @@ namespace AssetsPV
             }
         }
 
-        public static OpenSimplexNoise Singleton { get; private set; }
 
     }
 }
