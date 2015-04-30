@@ -5255,19 +5255,19 @@ namespace AssetsPV
             //1 claws, teeth, hands, legs, chitin
             new float[] {1.0F,0.9F,0.6F,1F},
             //2 veins contrast
-            new float[] {0.75F,0.55F,0.7F,1F},
+            new float[] {0.8F,0.57F,0.73F,1F},
             //3 veins
-            new float[] {0.9F,0.7F,0.85F,1F},
+            new float[] {0.95F,0.72F,0.88F,1F},
             //4 skin contrast
-            new float[] {1.3F,0.75F,0.45F,1F},
+            new float[] {1.3F,0.75F,0.55F,1F},
             //5 skin
-            new float[] {1.3F,0.85F,0.6F,1F},
+            new float[] {1.3F,0.85F,0.7F,1F},
             //6 hand
             new float[] {0.8F,0.45F,0.2F,1F},
             //7 eyestalk
             new float[] {0.15F,0.15F,0.05F,1F},
             //8 flesh contrast
-            new float[] {1.3F,0.75F,0.45F,1F},
+            new float[] {1.15F,0.77F,0.45F,1F},
             //9 flesh
             new float[] {1.3F,0.85F,0.6F,1F},
             //10 eyes shine
@@ -5279,7 +5279,7 @@ namespace AssetsPV
             //13 metal
             new float[] {0.6F,0.65F,0.75F,1F},
             //14 tentacles contrast
-            new float[] {1.3F,0.75F,0.45F,waver_alpha},
+            new float[] {1.22F,0.77F,0.52F,waver_alpha},
             //15 tentacles
             new float[] {1.3F,0.85F,0.6F,waver_alpha},
             //16 inner shadow
@@ -5319,7 +5319,7 @@ namespace AssetsPV
             //33 fuzz lightest
             new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
             //34 gore
-            new float[] {1.0F,0.55F,0.3F,1F},
+            new float[] {1.0F,0.7F,0.55F,1F},
             //35 glass
             new float[] {0.5F,0.8F,1.1F,1F},
             //36 placeholder

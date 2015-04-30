@@ -12523,6 +12523,7 @@ namespace AssetsPV
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             altFolder = "sau/";
             processUnitOutlinedWDouble("Vih", 43, false);
+            processUnitOutlinedWalkDouble("Vih", 43);
 
             /*
             processUnitOutlinedWDouble("Axarik", 0, true);
