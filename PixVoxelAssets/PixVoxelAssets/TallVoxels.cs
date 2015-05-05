@@ -4279,17 +4279,17 @@ namespace AssetsPV
 
         private static int voxelToPixelK(int innerX, int innerY, int x, int y, int z, int faction, int palette, int current_color, int stride, int jitter, bool still)
         {
-            return 4 * ((x + y) * 2 + 4 + ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
+            return 4 * ((x + y) * 2 + 4 + ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (300 - 60 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
-                ? -2 : (still ^ (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
+                stride * (300 - 60 - y + x - z * 3 - ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
+                ? -2 : (still ^ (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelKQuad(int innerX, int innerY, int x, int y, int z, int faction, int palette, int current_color, int stride, int jitter, bool still)
         {
-            return 4 * ((x + y) * 2 + 12 + ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
+            return 4 * ((x + y) * 2 + 12 + ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (600 - 120 - y + x - z * 3 - ((KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
-                ? -2 : (still ^ (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
+                stride * (600 - 120 - y + x - z * 3 - ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.flat_alpha) // || current_color == 25 + VoxelLogic.kcolorcount
+                ? -2 : (still ^ (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
         }
 
         private static Bitmap renderLargeSmart(MagicaVoxelData[] voxels, int facing, int faction, int frame, bool still)
@@ -5084,7 +5084,7 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
-                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                else if ((VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha) && i % 4 == 3)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
@@ -5366,7 +5366,7 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
-                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                else if ((VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha) && i % 4 == 3)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
@@ -5646,7 +5646,7 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
-                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
+                                else if ((VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha) && i % 4 == 3)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 0, vx.y + 0, vx.z], 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 0, vx.y + 0, vx.z], 255);
@@ -6545,6 +6545,10 @@ namespace AssetsPV
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // eraser stuff
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
+                                mod_color = (current_color == 26 || current_color == 27 || current_color == 26 + VoxelLogic.kcolorcount || current_color == 27 + VoxelLogic.kcolorcount) ? current_color + 2 : current_color;
+//                                mod_color = (current_color == 26 || current_color == 27 || current_color == 26 + VoxelLogic.kcolorcount || current_color == 27 + VoxelLogic.kcolorcount) ? current_color +
+//                                    (Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y)) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : current_color;
+
                                 if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] + 160, 255);
@@ -6573,10 +6577,16 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
                                 else
                                 {
-                                    argbValues[p] = VoxelLogic.kcurrent[((unshaded == 26 || unshaded == 27) ? mod_color +
-                                        Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                    argbValues[p] = VoxelLogic.kcurrent[mod_color][i + j * 16];
                                 }
                                 barePositions[p] = (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.flash_alpha_0 ||
                                     VoxelLogic.kcolors[mod_color][3] == VoxelLogic.flash_alpha_1 ||
@@ -6755,11 +6765,11 @@ namespace AssetsPV
 
 
 
-                if ((frame % 2 != 0) && (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.spin_alpha_0 || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flash_alpha_0))
+                if ((frame % 2 != 0) && (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.spin_alpha_0 || DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.flash_alpha_0))
                     continue;
-                else if ((frame % 2 != 1) && (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.spin_alpha_1 || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.flash_alpha_1))
+                else if ((frame % 2 != 1) && (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.spin_alpha_1 || DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.flash_alpha_1))
                     continue;
-                else if (KolonizePalettes.kolonizes[faction][palette][current_color][3] == 0F)
+                else if (DungeonPalettes.kdungeon[faction][palette][current_color][3] == 0F)
                     continue;
                 //else if (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.eraser_alpha)
                 //{
@@ -6816,11 +6826,11 @@ namespace AssetsPV
                             p = voxelToPixelKQuad(i, j, vx.x, vx.y, vx.z, faction, palette, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // check for erased pixels
                             {
-                                if (KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_alpha || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_flat_alpha)
+                                if (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.bordered_alpha || DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.bordered_flat_alpha)
                                     zbuffer[p] = vx.z + vx.x - vx.y;
                                 argbValues[p] = VoxelLogic.kcurrent[mod_color][i + j * 16];
                                 //bareValues[p] = VoxelLogic.wcurrent[mod_color][i + j * 16];
-                                barePositions[p] = !(KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_alpha || KolonizePalettes.kolonizes[faction][palette][current_color][3] == VoxelLogic.bordered_flat_alpha);
+                                barePositions[p] = !(DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.bordered_alpha || DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.bordered_flat_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.kcurrent[mod_color][i + 64];//(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2 < 255) ? (byte)(VoxelLogic.wcurrent[mod_color][i + j * 16] * 1.2 + 2) : (byte)255;
 
@@ -6860,6 +6870,9 @@ namespace AssetsPV
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // eraser stuff
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
+                                mod_color = (current_color == 26 || current_color == 27 || current_color == 26 + VoxelLogic.kcolorcount || current_color == 27 + VoxelLogic.kcolorcount) ? current_color + 2 : current_color;
+//                                mod_color = ((current_color == 26 || current_color == 27 || current_color == 26 + VoxelLogic.kcolorcount || current_color == 27 + VoxelLogic.kcolorcount) ? current_color +
+//                                    (Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y)) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : current_color);
                                 if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] + 160, 255);
@@ -6869,33 +6882,39 @@ namespace AssetsPV
                                 }
                                 else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
                                 {
-                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
-                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
-                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridBold[facing, vx.x + 20, vx.y + 20, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
                                 {
-                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
-                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
-                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGrid[facing, vx.x + 20, vx.y + 20, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
                                 {
-                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
-                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
-                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridLight[facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
+                                {
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 20, vx.y + 20, vx.z], 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 20, vx.y + 20, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
                                 {
-                                    argbValues[p] = VoxelLogic.kcurrent[((unshaded == 26 || unshaded == 27) ? mod_color +
-                                        Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : mod_color)][i + j * 16];
+                                    argbValues[p] = VoxelLogic.kcurrent[mod_color][i + j * 16];
                                 }
-                                barePositions[p] = (KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.flash_alpha_0 ||
-                                    KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.flash_alpha_1 ||
-                                    KolonizePalettes.kolonizes[faction][palette][mod_color][3] == VoxelLogic.borderless_alpha);
+                                barePositions[p] = (DungeonPalettes.kdungeon[faction][palette][mod_color][3] == VoxelLogic.flash_alpha_0 ||
+                                    DungeonPalettes.kdungeon[faction][palette][mod_color][3] == VoxelLogic.flash_alpha_1 ||
+                                    DungeonPalettes.kdungeon[faction][palette][mod_color][3] == VoxelLogic.borderless_alpha);
                                 if (!barePositions[p] && outlineValues[p] == 0)
                                     outlineValues[p] = VoxelLogic.kcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
@@ -10193,13 +10212,13 @@ namespace AssetsPV
                 bins[i].Close();
             }
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
-            VoxelLogic.kcolors = KolonizePalettes.kolonizes[faction][palette];
+            VoxelLogic.kcolors = DungeonPalettes.kdungeon[faction][palette];
             VoxelLogic.kcurrent = VoxelLogic.krendered[faction][palette];
             for (int ft = 0; ft < 5; ft++)
             {
-                VoxelLogic.kcolors[3 + ft] = KolonizePalettes.fleshTones[body][ft];
+                VoxelLogic.kcolors[3 + ft] = DungeonPalettes.fleshTones[body][ft];
                 VoxelLogic.kcurrent[3 + ft] = VoxelLogic.kFleshRendered[body][ft];
-                VoxelLogic.kcolors[VoxelLogic.kcolorcount + 3 + ft] = KolonizePalettes.fleshTones[body][ft + 5];
+                VoxelLogic.kcolors[VoxelLogic.kcolorcount + 3 + ft] = DungeonPalettes.fleshTones[body][ft + 5];
                 VoxelLogic.kcurrent[VoxelLogic.kcolorcount + 3 + ft] = VoxelLogic.kFleshRendered[body][ft + 5];
             }
 
@@ -10676,8 +10695,8 @@ namespace AssetsPV
 
 
 
-
-        private static Bitmap processKFrame(MagicaVoxelData[] parsed, int faction, int palette, int body, int dir, int frame, int maxFrames, bool still)
+        
+        private static Bitmap processKFrame(MagicaVoxelData[] parsed, int faction, int palette, int dir, int frame, int maxFrames, bool still)
         {
             Bitmap b;
             Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
@@ -10695,7 +10714,7 @@ namespace AssetsPV
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
             */
         }
-        private static Bitmap processKFrameQuad(MagicaVoxelData[] parsed, int faction, int palette, int body, int dir, int frame, int maxFrames, bool still, bool darkOutline)
+        private static Bitmap processKFrameQuad(MagicaVoxelData[] parsed, int faction, int palette, int dir, int frame, int maxFrames, bool still, bool darkOutline)
         {
             Bitmap b;
             Bitmap b2 = new Bitmap(168, 208, PixelFormat.Format32bppArgb);
@@ -10721,7 +10740,7 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + unit + ", faction " + faction + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open("K/" + unit + "_K.vox", FileMode.Open));
                 List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
-                System.IO.Directory.CreateDirectory("vox/K");
+                System.IO.Directory.CreateDirectory("vox/K/" + altFolder);
                 VoxelLogic.WriteVOX("vox/K/" + altFolder + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 60);
                 MagicaVoxelData[] parsed = voxes.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
@@ -10736,7 +10755,7 @@ namespace AssetsPV
 
                 string folder = (altFolder + "faction" + faction + "/palette" + palette);//"color" + i;
                 System.IO.Directory.CreateDirectory(folder); //("color" + i);
-                for (int bodyPalette = 0; bodyPalette < KolonizePalettes.fleshTones.Length; bodyPalette++)
+                for (int bodyPalette = 0; bodyPalette < DungeonPalettes.fleshTones.Length; bodyPalette++)
                 {
 
                     VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
@@ -10745,7 +10764,7 @@ namespace AssetsPV
                     { //
                         for (int dir = 0; dir < 4; dir++)
                         {
-                            Bitmap b = processKFrame(p2, faction, palette, bodyPalette, dir, f, framelimit, still);
+                            Bitmap b = processKFrame(p2, faction, palette, dir, f, framelimit, still);
                             b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
@@ -10771,14 +10790,19 @@ namespace AssetsPV
 //            processFieryExplosionDoubleW(u, palette);
         }
 
-        public static void processUnitK(string unit, int palette, int bodyPalette, bool still)
+        public static void processUnitK(string unit, int palette, bool preserveBodyPalette, bool still)
         {
+            if(!preserveBodyPalette)
+            {
+                processUnitK(unit, palette, still);
+                return;
+            }
             for (int faction = 0; faction < 2; faction++)
             {
                 Console.WriteLine("Processing: " + unit + ", faction " + faction + ", palette " + palette);
                 BinaryReader bin = new BinaryReader(File.Open("K/" + unit + "_K.vox", FileMode.Open));
                 List<MagicaVoxelData> voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
-                System.IO.Directory.CreateDirectory("vox/K");
+                System.IO.Directory.CreateDirectory("vox/K/" + altFolder);
                 VoxelLogic.WriteVOX("vox/K/" + altFolder + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 40, 40, 60);
                 MagicaVoxelData[] parsed = voxes.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
@@ -10790,7 +10814,7 @@ namespace AssetsPV
                 }
                 int framelimit = 4;
 
-                VoxelLogic.setupCurrentColorsK(faction, palette, bodyPalette);
+                VoxelLogic.setupCurrentColorsK(faction, palette);
                 
                 MagicaVoxelData[] p2 = VoxelLogic.Lovecraftiate(parsed, VoxelLogic.kcolors);
 
@@ -10800,8 +10824,8 @@ namespace AssetsPV
                 { //
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processKFrame(p2, faction, palette, bodyPalette, dir, f, framelimit, still);
-                        b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                        Bitmap b = processKFrame(p2, faction, palette, dir, f, framelimit, still);
+                        b.Save(folder + "/palette" + palette + "(0)_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                         b.Dispose();
                     }
                 }
@@ -10810,11 +10834,11 @@ namespace AssetsPV
                 startInfo.UseShellExecute = false;
                 string s = "";
 
-                s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
-                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/K/" + altFolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                s = folder + "/palette" + palette + "(0)_" + unit + "_face* ";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/K/" + altFolder + "/faction" + faction + "/palette" + palette + "(0)_" + unit + "_animated.gif";
                 Process.Start(startInfo).WaitForExit();
 
-                processExplosionK(unit, p2, faction, palette, bodyPalette);
+                processExplosionK(unit, p2, faction, palette, 0);
             }
             //bin.Close();
 
@@ -10844,8 +10868,8 @@ namespace AssetsPV
                 BinaryReader bin = new BinaryReader(File.Open("K/" + subfolder + "/" + unit + "_K.vox", FileMode.Open));
                 voxes = VoxelLogic.PlaceShadowsK(VoxelLogic.FromMagicaRaw(bin));
             }
-                System.IO.Directory.CreateDirectory("vox/K/" + subfolder);
-                VoxelLogic.WriteVOX("vox/K/" + subfolder + "/" + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 80, 80, 80);
+                System.IO.Directory.CreateDirectory("vox/K/" + altFolder + subfolder);
+                VoxelLogic.WriteVOX("vox/K/" + altFolder + subfolder + "/" + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 80, 80, 80);
                 MagicaVoxelData[] parsed = voxes.ToArray();
                 for (int i = 0; i < parsed.Length; i++)
                 {
@@ -10863,12 +10887,12 @@ namespace AssetsPV
                 { //
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processKFrameQuad(parsed, faction, palette, bodyPalette, dir, f, framelimit, still, false);
+                        Bitmap b = processKFrameQuad(parsed, faction, palette, dir, f, framelimit, still, false);
                         b.Save(folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                         b.Dispose();
                     }
                 }
-                System.IO.Directory.CreateDirectory("gifs/" + altFolder + subfolder + "/faction" + faction);
+                System.IO.Directory.CreateDirectory("gifs/K/" + altFolder + subfolder + "/faction" + faction);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -10904,6 +10928,7 @@ namespace AssetsPV
             work = VoxelLogic.MergeVoxelsK(VoxelLogic.MergeVoxelsK(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
             work = VoxelLogic.MergeVoxelsK(work, components["Legs"], 1);
             work = VoxelLogic.PlaceShadowsKPartial(work);
+            System.IO.Directory.CreateDirectory("vox/K/" + altFolder);
             VoxelLogic.WriteVOX("vox/K/" + altFolder + moniker + "_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
             work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
             MagicaVoxelData[] parsed = work.ToArray();
@@ -10921,7 +10946,7 @@ namespace AssetsPV
                 { //
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                        Bitmap b = processKFrame(parsed, faction, palette, dir, f, framelimit, still);
                         b.Save(folder + "/palette" + palette + "(0)_" + moniker + "_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -11028,6 +11053,7 @@ namespace AssetsPV
                     left_projector = bogus;
                 }
                 work = VoxelLogic.PlaceShadowsKPartial(work);
+                System.IO.Directory.CreateDirectory("vox/K/" + altFolder);
                 VoxelLogic.WriteVOX("vox/K/" + altFolder + moniker + "_" + firing_name + "_f0_" + palette + ".vox", work, "K_ALLY", palette, 40, 40, 40);
                 work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
                 MagicaVoxelData[] parsed = work.ToArray();
@@ -11046,7 +11072,7 @@ namespace AssetsPV
                     {
                         for (int dir = 0; dir < 4; dir++)
                         {
-                            Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                            Bitmap b = processKFrame(parsed, faction, palette, dir, f, framelimit, still);
                             b.Save(folder + "/palette" + palette + "(0)_" + moniker + "_" + firing_name + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
@@ -11222,6 +11248,7 @@ namespace AssetsPV
                 right_projector = bogus;
             }
             work = VoxelLogic.PlaceShadowsKPartial(work);
+            System.IO.Directory.CreateDirectory("vox/K/" + altFolder);
             VoxelLogic.WriteVOX("vox/K/" + altFolder + moniker + "_Firing_Both_f0_" + palette + ".vox", work, "K_ALLY", 0, 40, 40, 40);
             work = VoxelLogic.Lovecraftiate(work, VoxelLogic.kcolors);
             MagicaVoxelData[] parsed = work.ToArray();
@@ -11240,7 +11267,7 @@ namespace AssetsPV
                 { //
                     for (int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processKFrame(parsed, faction, palette, bodyPalette, dir, f, framelimit, still);
+                        Bitmap b = processKFrame(parsed, faction, palette, dir, f, framelimit, still);
                         b.Save(folder + "/palette" + palette + "(0)_" + moniker + "_Firing_Both_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -12198,9 +12225,31 @@ namespace AssetsPV
 
             System.IO.Directory.CreateDirectory("beast");
             System.IO.Directory.CreateDirectory("sau");
+            System.IO.Directory.CreateDirectory("dungeon");
+            System.IO.Directory.CreateDirectory("vox/dungeon");
             System.IO.Directory.CreateDirectory("vox/sau");
             System.IO.Directory.CreateDirectory("vox/K/mythos");
 
+            VoxelLogic.InitializeKPalette();
+            altFolder = "dungeon/";
+            processUnitK("Wolf", 3, true, true);
+            /*
+            processUnitK("Male_Base", 0, true);
+            processUnitK("Female_Base", 0, true);
+            processUnitK("Male_Base", 1, true);
+            processUnitK("Female_Base", 1, true);
+            
+            processTerrainK("Dungeon", "Wall_Straight", 4, true);
+            processTerrainK("Dungeon", "Wall_Corner", 4, true);
+            processTerrainK("Dungeon", "Wall_Tee", 4, true);
+            processTerrainK("Dungeon", "Wall_Cross", 4, true);
+            */
+            processTerrainK("Dungeon", "Door_Closed", 4, true);
+            processTerrainK("Dungeon", "Door_Open", 4, true);
+            /*
+            processTerrainK("Dungeon", "Floor", 4, false);
+            processTerrainK("Dungeon", "Water", 4, false);
+            */
             /*
             System.IO.Directory.CreateDirectory("vox/Kolonize_Allies");
             System.IO.Directory.CreateDirectory("vox/Kolonize_Other");

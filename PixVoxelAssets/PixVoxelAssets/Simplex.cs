@@ -455,6 +455,10 @@ namespace AssetsPV
     public class Simplex
     {
         /// <summary>
+        /// 0.25 to 1.75
+        /// </summary>
+        public static readonly double[, , , ,] NoiseGridTight = new double[4, 4, 160, 160, 160];
+        /// <summary>
         /// 0.5 to 1.5
         /// </summary>
         public static readonly double[, , ,] NoiseGridBold = new double[4, 160, 160, 160];
@@ -491,7 +495,6 @@ namespace AssetsPV
                         NoiseGridLight[0, x, y, z] *= 0.5;
                         NoiseGridLight[0, x, y, z] += 1.0;
 
-
                         NoiseGridBold[3, 159 - y, x, z] = NoiseGridBold[0, x, y, z];
                         NoiseGridBold[2, 159 - x, 159 - y, z] = NoiseGridBold[0, x, y, z];
                         NoiseGridBold[1, y, 159 - x, z] = NoiseGridBold[0, x, y, z];
@@ -503,8 +506,28 @@ namespace AssetsPV
                         NoiseGridLight[3, 159 - y, x, z] = NoiseGridLight[0, x, y, z];
                         NoiseGridLight[2, 159 - x, 159 - y, z] = NoiseGridLight[0, x, y, z];
                         NoiseGridLight[1, y, 159 - x, z] = NoiseGridLight[0, x, y, z];
+                    }
+                }
+            }
+            double[] offsets = new double[]{0, 0.35, 0.8, 0.45};
+            for (int o = 0; o < 4; o++ )
+            {
+                double off = offsets[o];
+                for (int x = 0; x < 160; x++)
+                {
+                    for (int y = 0; y < 160; y++)
+                    {
+                        for (int z = 0; z < 160; z++)
+                        {
+                            NoiseGridTight[o, 0, x, y, z] = (major.Evaluate((x + off) / 2.0, (y + off / 3.0) / 2.0, (z + off / 2.0) / 2.0) + minor.Evaluate((x + off) / 1.5, (y + off / 3.0) / 1.5, (z + off / 2.0) / 1.5)) / 2.0;
 
+                            NoiseGridTight[o, 0, x, y, z] *= 0.75;
+                            NoiseGridTight[o, 0, x, y, z] += 1.0;
 
+                            NoiseGridTight[o, 3, 159 - y, x, z] = NoiseGridTight[o, 0, x, y, z];
+                            NoiseGridTight[o, 2, 159 - x, 159 - y, z] = NoiseGridTight[o, 0, x, y, z];
+                            NoiseGridTight[o, 1, y, 159 - x, z] = NoiseGridTight[o, 0, x, y, z];
+                        }
                     }
                 }
             }

@@ -52,7 +52,7 @@
     <Compile Include="AlternatePalettes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IOrderedDictionary.cs" />
-    <Compile Include="KolonizePalettes.cs" />
+    <Compile Include="DungeonPalettes.cs" />
     <Compile Include="LocalMap.cs" />
     <Compile Include="OrderedDictionary.cs" />
     <Compile Include="OrthoPaletteDraw.cs" />
@@ -1014,6 +1014,9 @@
     <None Include="K\vox_mecha\Vox_Populi_Firing_Both_0.vox" />
     <None Include="K\vox_mecha\Vox_Populi_Firing_Left_0.vox" />
     <None Include="K\vox_mecha\Vox_Populi_Firing_Right_0.vox" />
+    <None Include="K\Wolf_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Laboratory_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

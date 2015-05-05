@@ -7743,13 +7743,13 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         private static byte[][][][] storeColorCubesK()
         {
-            KolonizePalettes.Initialize();
-            kpalettecount = KolonizePalettes.kolonizes[0].Length;
-            byte[, , ,] cubes = new byte[KolonizePalettes.kolonizes.Length, kpalettecount, KolonizePalettes.kolonizes[0][0].Length * 2, 80];
+            DungeonPalettes.Initialize();
+            kpalettecount = DungeonPalettes.kdungeon[0].Length;
+            byte[, , ,] cubes = new byte[DungeonPalettes.kdungeon.Length, kpalettecount, DungeonPalettes.kdungeon[0][0].Length * 2, 80];
 
-            for (int k = 0; k < KolonizePalettes.kolonizes.Length; k++)
+            for (int k = 0; k < DungeonPalettes.kdungeon.Length; k++)
             {
-                float[][][] kpalettes = KolonizePalettes.kolonizes[k];
+                float[][][] kpalettes = DungeonPalettes.kdungeon[k];
                 float[][][] contrast = kpalettes.Replicate();
                 Image image = new Bitmap("cube_soft.png");
                 Image flat = new Bitmap("flat_soft.png");
@@ -7810,9 +7810,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                            colorMatrix,
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
-                        Image which_image = ((current_color >= 14 && current_color <= 22) || wpalettes[p][current_color][3] == 0F || wpalettes[p][current_color][3] == borderless_alpha
-                            || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
-                            (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
+                        Image which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F || kpalettes[p][current_color][3] == borderless_alpha
+                            || kpalettes[p][current_color][3] == flash_alpha_0 || kpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                            (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
                         g.DrawImage(which_image,
                            new Rectangle(0, 0,
                                width, height),  // destination rectangle 
@@ -7833,7 +7833,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 {
                                     int alt_k = 0;
                                     double softness = 0.0;
-                                    if (current_color != 25 && (current_color < 38 || current_color > 41) && (current_color < 12 || current_color > 18))
+                                    if (current_color != 25 && (current_color < 3 || current_color > 7) && (current_color < 38 || current_color > 41) && (current_color < 12 || current_color > 18))
                                     {
                                         alt_k = k;
                                     }
@@ -7943,17 +7943,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                             }
                                         }
                                     }*/
-                    KolonizePalettes.kolonizes[k][p] = kpalettes[p].Concat(contrast[p]).ToArray();
+                    DungeonPalettes.kdungeon[k][p] = kpalettes[p].Concat(contrast[p]).ToArray();
                 }
             }
-            byte[][][][] cubes2 = new byte[KolonizePalettes.kolonizes.Length][][][];
-            for (int k = 0; k < KolonizePalettes.kolonizes.Length; k++)
+            byte[][][][] cubes2 = new byte[DungeonPalettes.kdungeon.Length][][][];
+            for (int k = 0; k < DungeonPalettes.kdungeon.Length; k++)
             {
-                cubes2[k] = new byte[KolonizePalettes.kolonizes[k].Length][][];
-                for (int i = 0; i < KolonizePalettes.kolonizes[k].Length; i++)
+                cubes2[k] = new byte[DungeonPalettes.kdungeon[k].Length][][];
+                for (int i = 0; i < DungeonPalettes.kdungeon[k].Length; i++)
                 {
-                    cubes2[k][i] = new byte[KolonizePalettes.kolonizes[k][i].Length][];
-                    for (int c = 0; c < KolonizePalettes.kolonizes[k][i].Length; c++)
+                    cubes2[k][i] = new byte[DungeonPalettes.kdungeon[k][i].Length][];
+                    for (int c = 0; c < DungeonPalettes.kdungeon[k][i].Length; c++)
                     {
                         cubes2[k][i][c] = new byte[80];
                         for (int j = 0; j < 80; j++)
@@ -7968,10 +7968,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         private static byte[][][] storeColorCubesFleshToneK()
         {
-            int fleshPaletteCount = KolonizePalettes.fleshTones.Length;
-            byte[, ,] cubes = new byte[fleshPaletteCount, KolonizePalettes.fleshTones[0].Length * 2, 80];
+            int fleshPaletteCount = DungeonPalettes.fleshTones.Length;
+            byte[, ,] cubes = new byte[fleshPaletteCount, DungeonPalettes.fleshTones[0].Length * 2, 80];
 
-            float[][][] kpalettes = KolonizePalettes.fleshTones;
+            float[][][] kpalettes = DungeonPalettes.fleshTones;
             int kcolorcount = kpalettes[0].Length;
             float[][][] contrast = kpalettes.Replicate();
             Image image = new Bitmap("cube_soft.png");
@@ -8033,9 +8033,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         colorMatrix,
                         ColorMatrixFlag.Default,
                         ColorAdjustType.Bitmap);
-                    Image which_image = ((current_color >= 14 && current_color <= 22) || wpalettes[p][current_color][3] == 0F || wpalettes[p][current_color][3] == borderless_alpha
-                        || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
-                        (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
+                    Image which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F || kpalettes[p][current_color][3] == borderless_alpha
+                        || kpalettes[p][current_color][3] == flash_alpha_0 || kpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                        (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
                     g.DrawImage(which_image,
                         new Rectangle(0, 0,
                             width, height),  // destination rectangle 
@@ -8155,14 +8155,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         }
                                     }
                                 }*/
-                KolonizePalettes.fleshTones[p] = kpalettes[p].Concat(contrast[p]).ToArray();
+                DungeonPalettes.fleshTones[p] = kpalettes[p].Concat(contrast[p]).ToArray();
             }
             
-            byte[][][] cubes2 = new byte[KolonizePalettes.fleshTones.Length][][];
-            for (int k = 0; k < KolonizePalettes.fleshTones.Length; k++)
+            byte[][][] cubes2 = new byte[DungeonPalettes.fleshTones.Length][][];
+            for (int k = 0; k < DungeonPalettes.fleshTones.Length; k++)
             {
-                cubes2[k] = new byte[KolonizePalettes.fleshTones[k].Length][];
-                for (int c = 0; c < KolonizePalettes.fleshTones[k].Length; c++)
+                cubes2[k] = new byte[DungeonPalettes.fleshTones[k].Length][];
+                for (int c = 0; c < DungeonPalettes.fleshTones[k].Length; c++)
                 {
                     cubes2[k][c] = new byte[80];
                     for (int j = 0; j < 80; j++)
@@ -8174,17 +8174,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return cubes2;
         }
 
-        public static void InitializeKPalette(string mode = "KOLONIZE")
+        public static void InitializeKPalette(string mode = "DUNGEON")
         {
             switch(mode)
             {
-                case "KOLONIZE":
+                case "DUNGEON":
                     break;
                 case "MECHA":
-                    KolonizePalettes.kolonizes = KolonizePalettes.kmecha.Replicate();
+                    DungeonPalettes.kdungeon = DungeonPalettes.kmecha.Replicate();
                     break;
                 case "MYTHOS":
-                    KolonizePalettes.kolonizes = KolonizePalettes.kmythos.Replicate();
+                    DungeonPalettes.kdungeon = DungeonPalettes.kmythos.Replicate();
                     break;
             }
             krendered = storeColorCubesK();
@@ -8760,15 +8760,20 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return voxelsAltered;
         }
 
+        public static void setupCurrentColorsK(int faction, int palette)
+        {
+            kcolors = DungeonPalettes.kdungeon[faction][palette];
+            kcurrent = krendered[faction][palette];
+        }
         public static void setupCurrentColorsK(int faction, int palette, int body)
         {
-            kcolors = KolonizePalettes.kolonizes[faction][palette];
+            kcolors = DungeonPalettes.kdungeon[faction][palette];
             kcurrent = krendered[faction][palette];
             for (int ft = 0; ft < 5; ft++)
             {
-                kcolors[3 + ft] = KolonizePalettes.fleshTones[body][ft];
+                kcolors[3 + ft] = DungeonPalettes.fleshTones[body][ft];
                 kcurrent[3 + ft] = kFleshRendered[body][ft];
-                kcolors[kcolorcount + 3 + ft] = KolonizePalettes.fleshTones[body][ft + 5];
+                kcolors[kcolorcount + 3 + ft] = DungeonPalettes.fleshTones[body][ft + 5];
                 kcurrent[kcolorcount + 3 + ft] = kFleshRendered[body][ft + 5];
             }
         }
@@ -15457,7 +15462,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
             } else if (paletteKind == "K_ALLY" || paletteKind == "K_OTHER")
             {
-                float[][][] kpalettes = KolonizePalettes.kolonizes[(paletteKind == "K_ALLY") ? 0 : 1];
+                float[][][] kpalettes = DungeonPalettes.kdungeon[(paletteKind == "K_ALLY") ? 0 : 1];
                 float[][] kcolors = kpalettes[palette];
                 kcurrent = krendered[(paletteKind == "K_ALLY") ? 0 : 1][palette];
                 foreach (MagicaVoxelData mvd in voxelData)
