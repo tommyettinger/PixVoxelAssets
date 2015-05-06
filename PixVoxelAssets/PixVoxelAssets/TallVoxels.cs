@@ -6531,8 +6531,10 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (mod_color == 25 && r.Next(7) < 2)  //water top, intentionally ignoring "shaded"
+                    if (mod_color == 25 && Simplex.NoiseGridWater[frame % 4, facing, vx.x + 50, vx.y + 50, vx.z] < 0.5 - (Math.Pow(Math.Max(Math.Abs(30 - vx.x), Math.Abs(30 - vx.y)), 3.0) / 14000.0)) //water top, intentionally ignoring "shaded"
                         continue;
+//                    if (mod_color == 25 && r.Next(7) < 2)  //water top, intentionally ignoring "shaded"
+//                        continue;
                     if ((unshaded >= 16 && unshaded <= 18) && r.Next(11) < 8) //rare sparks
                         continue;
 
@@ -6582,6 +6584,55 @@ namespace AssetsPV
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 50, vx.y + 50, vx.z], 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 50, vx.y + 50, vx.z], 255);
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 50, vx.y + 50, vx.z], 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (unshaded == 25 && i % 4 == 3)
+                                {
+                                    double wave = Simplex.NoiseGridWater[frame % 4, facing, vx.x + 50, vx.y + 50, vx.z];
+
+                                    if (mod_color == 25)
+                                    {
+                                        if (wave > 0.73)
+                                        {
+                                            wave = 100 * wave;
+                                        }
+                                        else if (wave > 0.65)
+                                        {
+                                            wave = 70 * wave;
+                                        }
+                                        else if (wave > 0.6)
+                                        {
+                                            wave = 55 * wave;
+                                        }
+                                        else
+                                        {
+                                            wave = 20;
+                                        }
+                                    }
+                                    else //solid body of water using shaded color
+                                    {
+                                        wave += 0.1;
+                                        if (wave < 0.4)
+                                        {
+                                            wave = -12 / wave;
+                                        }
+                                        else if (wave < 0.45)
+                                        {
+                                            wave = -9 / wave;
+                                        }
+                                        else if (wave < 0.5)
+                                        {
+                                            wave = -6 / wave;
+                                        }
+                                        else
+                                        {
+                                            wave = 0;
+                                        }
+                                    }
+                                    
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] + wave, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] + wave, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] + wave, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
@@ -6856,8 +6907,10 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (mod_color == 25 && r.Next(7) < 2) //water top, intentionally ignoring "shaded"
+                    if (mod_color == 25 && Simplex.NoiseGridWater[frame % 4, facing, vx.x + 20, vx.y + 20, vx.z] < 0.5 - (Math.Pow(Math.Max(Math.Abs(60 - vx.x), Math.Abs(60 - vx.y)), 3.0) / 16000.0)) //water top, intentionally ignoring "shaded"
                         continue;
+//                    if (mod_color == 25 && r.Next(7) < 2) //water top, intentionally ignoring "shaded"
+//                        continue;
                     if ((unshaded >= 16 && unshaded <= 18) && r.Next(11) < 8) //rare sparks
                         continue;
 
@@ -6908,6 +6961,56 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] * Simplex.NoiseGridTight[(frame % 4), facing, vx.x + 20, vx.y + 20, vx.z], 255);
                                     argbValues[p - 0] = 255;
                                 }
+                                else if (unshaded == 25 && i % 4 == 3)
+                                {
+                                    double wave = Simplex.NoiseGridWater[frame % 4, facing, vx.x + 20, vx.y + 20, vx.z];
+
+                                    if (mod_color == 25)
+                                    {
+                                        if (wave > 0.73)
+                                        {
+                                            wave = 100 * wave;
+                                        }
+                                        else if (wave > 0.65)
+                                        {
+                                            wave = 70 * wave;
+                                        }
+                                        else if (wave > 0.6)
+                                        {
+                                            wave = 55 * wave;
+                                        }
+                                        else
+                                        {
+                                            wave = 20;
+                                        }
+                                    }
+                                    else //solid body of water using shaded color
+                                    {
+                                        wave += 0.1;
+                                        if (wave < 0.4)
+                                        {
+                                            wave = -12 / wave;
+                                        }
+                                        else if (wave < 0.45)
+                                        {
+                                            wave = -9 / wave;
+                                        }
+                                        else if (wave < 0.5)
+                                        {
+                                            wave = -6 / wave;
+                                        }
+                                        else
+                                        {
+                                            wave = 0;
+                                        }
+                                    }
+
+                                    argbValues[p - 3] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 3 + j * 16] + wave, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 2 + j * 16] + wave, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(VoxelLogic.kcurrent[mod_color][i - 1 + j * 16] + wave, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+
                                 else
                                 {
                                     argbValues[p] = VoxelLogic.kcurrent[mod_color][i + j * 16];
@@ -10898,7 +11001,7 @@ namespace AssetsPV
                 string s = "";
 
                 s = folder + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_face* ";
-                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/K/" + altFolder + subfolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
+                startInfo.Arguments = "-dispose background -delay 75 -loop 0 " + s + " gifs/K/" + altFolder + subfolder + "/faction" + faction + "/palette" + palette + "(" + bodyPalette + ")_" + unit + "_animated.gif";
                 Process.Start(startInfo).WaitForExit();
             
             //bin.Close();
@@ -12232,24 +12335,25 @@ namespace AssetsPV
 
             VoxelLogic.InitializeKPalette();
             altFolder = "dungeon/";
-            processUnitK("Wolf", 3, true, true);
+//            processUnitK("Wolf", 3, true, true);
             /*
             processUnitK("Male_Base", 0, true);
             processUnitK("Female_Base", 0, true);
             processUnitK("Male_Base", 1, true);
             processUnitK("Female_Base", 1, true);
-            
+            */
+            /*
             processTerrainK("Dungeon", "Wall_Straight", 4, true);
             processTerrainK("Dungeon", "Wall_Corner", 4, true);
             processTerrainK("Dungeon", "Wall_Tee", 4, true);
             processTerrainK("Dungeon", "Wall_Cross", 4, true);
-            */
+            
             processTerrainK("Dungeon", "Door_Closed", 4, true);
             processTerrainK("Dungeon", "Door_Open", 4, true);
-            /*
             processTerrainK("Dungeon", "Floor", 4, false);
-            processTerrainK("Dungeon", "Water", 4, false);
             */
+            processTerrainK("Dungeon", "Water", 4, false);
+            
             /*
             System.IO.Directory.CreateDirectory("vox/Kolonize_Allies");
             System.IO.Directory.CreateDirectory("vox/Kolonize_Other");
@@ -12572,7 +12676,7 @@ namespace AssetsPV
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             altFolder = "sau/";
             
-            processUnitOutlinedWDouble("Rakgar", 18, true);
+           // processUnitOutlinedWDouble("Rakgar", 18, true);
             /*
             processUnitOutlinedWDouble("Axarik", 0, true);
             processUnitOutlinedWalkDouble("Axarik", 0);

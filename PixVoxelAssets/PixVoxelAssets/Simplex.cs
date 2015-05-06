@@ -455,6 +455,10 @@ namespace AssetsPV
     public class Simplex
     {
         /// <summary>
+        /// 0.0 to 1.0
+        /// </summary>
+        public static readonly double[, , , ,] NoiseGridWater = new double[4, 4, 160, 160, 160];
+        /// <summary>
         /// 0.25 to 1.75
         /// </summary>
         public static readonly double[, , , ,] NoiseGridTight = new double[4, 4, 160, 160, 160];
@@ -509,10 +513,11 @@ namespace AssetsPV
                     }
                 }
             }
-            double[] offsets = new double[]{0, 0.35, 0.8, 0.45};
+            double[] offsets = new double[] { 0, 0.35, 0.8, 0.45 }, water_offsets = new double[] { 0, 0.7, 1.5, 0.8 };
             for (int o = 0; o < 4; o++ )
             {
                 double off = offsets[o];
+                double wat = water_offsets[o];
                 for (int x = 0; x < 160; x++)
                 {
                     for (int y = 0; y < 160; y++)
@@ -527,6 +532,16 @@ namespace AssetsPV
                             NoiseGridTight[o, 3, 159 - y, x, z] = NoiseGridTight[o, 0, x, y, z];
                             NoiseGridTight[o, 2, 159 - x, 159 - y, z] = NoiseGridTight[o, 0, x, y, z];
                             NoiseGridTight[o, 1, y, 159 - x, z] = NoiseGridTight[o, 0, x, y, z];
+
+
+                            NoiseGridWater[o, 0, x, y, z] = (major.Evaluate((x + off / 1.0) / 5.0, (y + off / 1.0) / 5.0, (z + off) / 2.5) * 3.0 + minor.Evaluate((x + off / 0.5) / 2.0, (y + off / 0.5) / 2.0, (z + off) / 1.5)) / 4.0;
+
+                            NoiseGridWater[o, 0, x, y, z] *= 0.5;
+                            NoiseGridWater[o, 0, x, y, z] += 0.5;
+
+                            NoiseGridWater[o, 3, 159 - y, x, z] = NoiseGridWater[o, 0, x, y, z];
+                            NoiseGridWater[o, 2, 159 - x, 159 - y, z] = NoiseGridWater[o, 0, x, y, z];
+                            NoiseGridWater[o, 1, y, 159 - x, z] = NoiseGridWater[o, 0, x, y, z];
                         }
                     }
                 }
