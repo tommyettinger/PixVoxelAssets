@@ -21,6 +21,7 @@ namespace AssetsPV
         private const double NORM_2D = 1.0 / 47.0;
         private const double NORM_3D = 1.0 / 103.0;
         private const double NORM_4D = 1.0 / 30.0;
+        private const float  NORM_3DF = 1.0F / 103.0F;
 
         private byte[] perm;
         private byte[] perm2D;
@@ -333,6 +334,64 @@ namespace AssetsPV
             return value * NORM_3D;
         }
 
+        public float EvaluateFloat(double x, double y, double z)
+        {
+            var stretchOffset = (x + y + z) * STRETCH_3D;
+            var xs = x + stretchOffset;
+            var ys = y + stretchOffset;
+            var zs = z + stretchOffset;
+
+            var xsb = FastFloor(xs);
+            var ysb = FastFloor(ys);
+            var zsb = FastFloor(zs);
+
+            var squishOffset = (xsb + ysb + zsb) * SQUISH_3D;
+            var dx0 = x - (xsb + squishOffset);
+            var dy0 = y - (ysb + squishOffset);
+            var dz0 = z - (zsb + squishOffset);
+
+            var xins = xs - xsb;
+            var yins = ys - ysb;
+            var zins = zs - zsb;
+
+            var inSum = xins + yins + zins;
+
+            var hash =
+               (int)(yins - zins + 1) |
+               (int)(xins - yins + 1) << 1 |
+               (int)(xins - zins + 1) << 2 |
+               (int)inSum << 3 |
+               (int)(inSum + zins) << 5 |
+               (int)(inSum + yins) << 7 |
+               (int)(inSum + xins) << 9;
+
+            var c = lookup3D[hash];
+
+            var value = 0.0;
+            while (c != null)
+            {
+                var dx = dx0 + c.dx;
+                var dy = dy0 + c.dy;
+                var dz = dz0 + c.dz;
+                var attn = 2 - dx * dx - dy * dy - dz * dz;
+                if (attn > 0)
+                {
+                    var px = xsb + c.xsb;
+                    var py = ysb + c.ysb;
+                    var pz = zsb + c.zsb;
+
+                    var i = perm3D[(perm[(perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF];
+                    var valuePart = gradients3D[i] * dx + gradients3D[i + 1] * dy + gradients3D[i + 2] * dz;
+
+                    attn *= attn;
+                    value += attn * attn * valuePart;
+                }
+
+                c = c.Next;
+            }
+            return (float)value * NORM_3DF;
+        }
+
         public double Evaluate(double x, double y, double z, double w)
         {
             var stretchOffset = (x + y + z + w) * STRETCH_4D;
@@ -457,23 +516,97 @@ namespace AssetsPV
         /// <summary>
         /// 0.0 to 1.0
         /// </summary>
-        public static readonly double[, , , ,] NoiseGridWater = new double[4, 4, 160, 160, 160];
-        /// <summary>
-        /// 0.25 to 1.75
-        /// </summary>
-        public static readonly double[, , , ,] NoiseGridTight = new double[4, 4, 160, 160, 160];
+        public static readonly float[, , ,] NoiseGridWater = new float[4, 160, 160, 160];
         /// <summary>
         /// 0.5 to 1.5
         /// </summary>
-        public static readonly double[, , ,] NoiseGridBold = new double[4, 160, 160, 160];
+        public static readonly float[, , ,] NoiseGridTight = new float[4, 160, 160, 160];
+        /// <summary>
+        /// 0.5 to 1.5
+        /// </summary>
+        public static readonly float[, ,] NoiseGridBold = new float[160, 160, 160];
         /// <summary>
         /// 0.75 to 1.25
         /// </summary>
-        public static readonly double[, , ,] NoiseGrid = new double[4, 160, 160, 160];
+        public static readonly float[, ,] NoiseGrid = new float[160, 160, 160];
         /// <summary>
         /// 0.875 to 1.125
         /// </summary>
-        public static readonly double[, , ,] NoiseGridLight = new double[4, 160, 160, 160];
+        public static readonly float[, ,] NoiseGridLight = new float[160, 160, 160];
+
+        public static float FindNoise(int facing, int x, int y, int z)
+        {
+            switch (facing)
+            {
+                case 1:
+                    return NoiseGrid[y, 159 - x, z];
+                case 2:
+                    return NoiseGrid[159 - x, 159 - y, z];
+                case 3:
+                    return NoiseGrid[159 - y, x, z];
+                default:
+                    return NoiseGrid[x, y, z];
+            }
+        }
+        public static float FindNoiseBold(int facing, int x, int y, int z)
+        {
+            switch (facing)
+            {
+                case 1:
+                    return NoiseGridBold[y, 159 - x, z];
+                case 2:
+                    return NoiseGridBold[159 - x, 159 - y, z];
+                case 3:
+                    return NoiseGridBold[159 - y, x, z];
+                default:
+                    return NoiseGridBold[x, y, z];
+            }
+        }
+        public static float FindNoiseLight(int facing, int x, int y, int z)
+        {
+            switch (facing)
+            {
+                case 1:
+                    return NoiseGridLight[y, 159 - x, z];
+                case 2:
+                    return NoiseGridLight[159 - x, 159 - y, z];
+                case 3:
+                    return NoiseGridLight[159 - y, x, z];
+                default:
+                    return NoiseGridLight[x, y, z];
+            }
+        }
+
+        public static float FindNoiseTight(int frame, int facing, int x, int y, int z)
+        {
+            switch (facing)
+            {
+                case 1:
+                    return NoiseGridTight[frame, y, 159 - x, z];
+                case 2:
+                    return NoiseGridTight[frame, 159 - x, 159 - y, z];
+                case 3:
+                    return NoiseGridTight[frame, 159 - y, x, z];
+                default:
+                    return NoiseGridTight[frame, x, y, z];
+            }
+        }
+
+        public static float FindNoiseWater(int frame, int facing, int x, int y, int z)
+        {
+            switch (facing)
+            {
+                case 1:
+                    return NoiseGridWater[frame, y, 159 - x, z];
+                case 2:
+                    return NoiseGridWater[frame, 159 - x, 159 - y, z];
+                case 3:
+                    return NoiseGridWater[frame, 159 - y, x, z];
+                default:
+                    return NoiseGridWater[frame, x, y, z];
+            }
+        }
+
 
         static Simplex()
         {
@@ -486,19 +619,20 @@ namespace AssetsPV
                 {
                     for (int z = 0; z < 160; z++)
                     {
-                        NoiseGridBold[0, x, y, z] = (major.Evaluate(x / 4.0, y / 4.0, z / 4.0) + minor.Evaluate(x / 2.0, y / 2.0, z / 2.0)) / 2.0;
-                        NoiseGrid[0, x, y, z] = NoiseGridBold[0, x, y, z] * 0.5;
-                        NoiseGridLight[0, x, y, z] = NoiseGrid[0, x, y, z] * 0.5;
+                        NoiseGridBold[x, y, z] = (major.EvaluateFloat(x / 4.0, y / 4.0, z / 4.0) + minor.EvaluateFloat(x / 2.0, y / 2.0, z / 2.0)) / 2.0F;
 
-                        NoiseGridBold[0, x, y, z] *= 0.5;
-                        NoiseGridBold[0, x, y, z] += 1.0;
+                        NoiseGrid[x, y, z] = NoiseGridBold[x, y, z] * 0.5F;
+                        NoiseGridLight[x, y, z] = NoiseGrid[x, y, z] * 0.5F;
 
-                        NoiseGrid[0, x, y, z] *= 0.5;
-                        NoiseGrid[0, x, y, z] += 1.0;
+                        NoiseGridBold[x, y, z] *= 0.5F;
+                        NoiseGridBold[x, y, z] += 1.0F;
 
-                        NoiseGridLight[0, x, y, z] *= 0.5;
-                        NoiseGridLight[0, x, y, z] += 1.0;
+                        NoiseGrid[x, y, z] *= 0.5F;
+                        NoiseGrid[x, y, z] += 1.0F;
 
+                        NoiseGridLight[x, y, z] *= 0.5F;
+                        NoiseGridLight[x, y, z] += 1.0F;
+                        /*
                         NoiseGridBold[3, 159 - y, x, z] = NoiseGridBold[0, x, y, z];
                         NoiseGridBold[2, 159 - x, 159 - y, z] = NoiseGridBold[0, x, y, z];
                         NoiseGridBold[1, y, 159 - x, z] = NoiseGridBold[0, x, y, z];
@@ -510,6 +644,7 @@ namespace AssetsPV
                         NoiseGridLight[3, 159 - y, x, z] = NoiseGridLight[0, x, y, z];
                         NoiseGridLight[2, 159 - x, 159 - y, z] = NoiseGridLight[0, x, y, z];
                         NoiseGridLight[1, y, 159 - x, z] = NoiseGridLight[0, x, y, z];
+                    */
                     }
                 }
             }
@@ -524,24 +659,15 @@ namespace AssetsPV
                     {
                         for (int z = 0; z < 160; z++)
                         {
-                            NoiseGridTight[o, 0, x, y, z] = (major.Evaluate((x + off) / 2.0, (y + off / 3.0) / 2.0, (z + off / 2.0) / 2.0) + minor.Evaluate((x + off) / 1.5, (y + off / 3.0) / 1.5, (z + off / 2.0) / 1.5)) / 2.0;
+                            NoiseGridTight[o, x, y, z] = (major.EvaluateFloat((x + off) / 2.0, (y + off / 3.0) / 2.0, (z + off / 2.0) / 2.0) + minor.EvaluateFloat((x + off) / 1.5, (y + off / 3.0) / 1.5, (z + off / 2.0) / 1.5)) / 2.0F;
 
-                            NoiseGridTight[o, 0, x, y, z] *= 0.75;
-                            NoiseGridTight[o, 0, x, y, z] += 1.0;
+                            NoiseGridTight[o, x, y, z] *= 0.5F;
+                            NoiseGridTight[o, x, y, z] += 1.0F;
+                            
+                            NoiseGridWater[o, x, y, z] = (major.EvaluateFloat((x + off / 1.0) / 5.0, (y + off / 1.0) / 5.0, (z + off) / 2.5) * 3.0F + minor.EvaluateFloat((x + off / 0.5) / 2.0, (y + off / 0.5) / 2.0, (z + off) / 1.5)) / 4.0F;
 
-                            NoiseGridTight[o, 3, 159 - y, x, z] = NoiseGridTight[o, 0, x, y, z];
-                            NoiseGridTight[o, 2, 159 - x, 159 - y, z] = NoiseGridTight[o, 0, x, y, z];
-                            NoiseGridTight[o, 1, y, 159 - x, z] = NoiseGridTight[o, 0, x, y, z];
-
-
-                            NoiseGridWater[o, 0, x, y, z] = (major.Evaluate((x + off / 1.0) / 5.0, (y + off / 1.0) / 5.0, (z + off) / 2.5) * 3.0 + minor.Evaluate((x + off / 0.5) / 2.0, (y + off / 0.5) / 2.0, (z + off) / 1.5)) / 4.0;
-
-                            NoiseGridWater[o, 0, x, y, z] *= 0.5;
-                            NoiseGridWater[o, 0, x, y, z] += 0.5;
-
-                            NoiseGridWater[o, 3, 159 - y, x, z] = NoiseGridWater[o, 0, x, y, z];
-                            NoiseGridWater[o, 2, 159 - x, 159 - y, z] = NoiseGridWater[o, 0, x, y, z];
-                            NoiseGridWater[o, 1, y, 159 - x, z] = NoiseGridWater[o, 0, x, y, z];
+                            NoiseGridWater[o, x, y, z] *= 0.5F;
+                            NoiseGridWater[o, x, y, z] += 0.5F;
                         }
                     }
                 }

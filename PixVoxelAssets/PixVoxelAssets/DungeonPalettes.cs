@@ -23,6 +23,7 @@ namespace AssetsPV
         public const float grain_hard_alpha = VoxelLogic.grain_hard_alpha;
         public const float grain_some_alpha = VoxelLogic.grain_some_alpha;
         public const float grain_mild_alpha = VoxelLogic.grain_mild_alpha;
+        public const float fade_alpha = VoxelLogic.fade_alpha;
 
         public static float[][][] dungeon_palettes = new float[][][]
         {
@@ -79,18 +80,18 @@ namespace AssetsPV
             new float[] {0.2F,0.4F,0.3F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //27 fuzz
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //29 faded dark
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //30 faded light            
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.78F,0.78F,0.78F,fade_alpha},
             //32 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //33 glass
@@ -200,18 +201,18 @@ namespace AssetsPV
             new float[] {0.2F,0.4F,0.3F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //27 fuzz
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //33 glass
@@ -321,18 +322,18 @@ namespace AssetsPV
             new float[] {0.2F,0.4F,0.3F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //27 fuzz
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //33 glass
@@ -442,18 +443,18 @@ namespace AssetsPV
             new float[] {0.2F,0.4F,0.3F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
-            new float[] {0.25F,0.25F,0.25F,fuzz_alpha},
-            //27 fuzz deep
-            new float[] {0.3F,0.3F,0.3F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.36F,0.36F,0.36F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.43F,0.43F,0.43F,fuzz_alpha},
-            //30 fuzz light            
-            new float[] {0.51F,0.51F,0.51F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.63F,0.63F,0.63F,fuzz_alpha},
+            //26 fuzz contrast
+            new float[] {0.5F,0.5F,0.5F,fuzz_alpha},
+            //27 fuzz
+            new float[] {0.6F,0.6F,0.6F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //33 glass
@@ -563,18 +564,18 @@ namespace AssetsPV
             new float[] {0.2F,0.4F,0.3F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //27 fuzz
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //33 glass
@@ -689,18 +690,18 @@ namespace AssetsPV
             new float[] {0.2F,0.4F,0.3F,1F},
             //25 water
             new float[] {0.6F,0.65F,0.9F,borderless_alpha},
-            //26 fuzz deepest
-            new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //26 fuzz contrast
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
+            //27 fuzz
             new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 oil
             new float[] {0.2F,0.17F,-0.1F,1F},
             //33 glass
@@ -939,18 +940,18 @@ namespace AssetsPV
             new float[] {0.5F,0.1F,0.05F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
             //27 fuzz deep
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 green blood
             new float[] {0.25F,1.05F,0.2F,1F},
             //33 glass
@@ -1060,18 +1061,18 @@ namespace AssetsPV
             new float[] {0.5F,0.1F,0.05F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //27 fuzz
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 yellow blood
             new float[] {0.58F,0.55F,0.1F,1F},
             //33 glass
@@ -1181,18 +1182,18 @@ namespace AssetsPV
             new float[] {0.4F,-0.05F,0.2F,1F},
             //25 water
             new float[] {0.4F,0.6F,0.9F,borderless_alpha},
-            //26 fuzz deepest
+            //26 fuzz contrast
             new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
-            //27 fuzz deep
+            //27 fuzz
             new float[] {0.55F,0.05F,-0.05F,fuzz_alpha},
-            //28 fuzz mid-deep
-            new float[] {0.6F,0.1F,0.0F,fuzz_alpha},
-            //29 fuzz mid-light
-            new float[] {0.65F,0.15F,0.05F,fuzz_alpha},
-            //30 fuzz light
-            new float[] {0.7F,0.2F,0.1F,fuzz_alpha},
-            //31 fuzz lightest
-            new float[] {0.8F,0.25F,0.15F,fuzz_alpha},
+            //28 faded deep
+            new float[] {0.54F,0.54F,0.54F,fade_alpha},
+            //29 faded dark
+            new float[] {0.6F,0.6F,0.6F,fade_alpha},
+            //30 faded light            
+            new float[] {0.66F,0.66F,0.66F,fade_alpha},
+            //31 faded lightest
+            new float[] {0.72F,0.72F,0.72F,fade_alpha},
             //32 purple blood
             new float[] {0.35F,0.1F,0.4F,1F},
             //33 glass
@@ -1250,12 +1251,12 @@ namespace AssetsPV
             },
 
         };
-        
+
         public static float[][][] fleshTones = new float[][][]
         {
             new float[][] { //0 brown hair
             //3 hair
-            new float[] {0.4F,0.15F,0.05F,1F},
+            new float[] {0.4F,0.15F,0.05F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.83F,0.49F,0.18F,1F},
             //5 skin
@@ -1268,7 +1269,7 @@ namespace AssetsPV
             
             new float[][] { //1 blonde hair
             //3 hair
-            new float[] {0.97F,0.89F,0.39F,1F},
+            new float[] {0.97F,0.85F,0.36F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.82F,0.50F,0.16F,1F},
             //5 skin
@@ -1281,7 +1282,7 @@ namespace AssetsPV
 
             new float[][] { //2 red hair
             //3 hair
-            new float[] {0.9F,0.4F,-0.05F,1F},
+            new float[] {0.9F,0.37F,-0.03F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.88F,0.41F,0.18F,1F},
             //5 skin
@@ -1294,7 +1295,7 @@ namespace AssetsPV
             
             new float[][] { //3 gold skin
             //3 hair
-            new float[] {0.05F,0.0F,-0.05F,1F},
+            new float[] {0.05F,0.0F,-0.05F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.72F,0.53F,0.05F,1F},
             //5 skin
@@ -1307,7 +1308,7 @@ namespace AssetsPV
             
             new float[][] { //4 very dark skin
             //3 hair
-            new float[] {0.05F,0.03F,0.03F,1F},
+            new float[] {0.05F,0.03F,0.03F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.2F,0.1F,0.1F,1F},
             //5 skin
@@ -1320,7 +1321,7 @@ namespace AssetsPV
 
             new float[][] { //4 olive-dark skin
             //3 hair
-            new float[] {-0.05F,-0.05F,-0.05F,1F},
+            new float[] {-0.05F,-0.05F,-0.05F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.51F,0.3F,0.1F,1F},
             //5 skin
@@ -1333,7 +1334,7 @@ namespace AssetsPV
             
             new float[][] { //5 red-brown skin
             //3 hair
-            new float[] {0.03F,0.0F,-0.05F,1F},
+            new float[] {0.03F,0.0F,-0.05F,fuzz_alpha},
             //4 lips/ears
             new float[] {0.4F,0.15F,0.0F,1F},
             //5 skin
