@@ -12353,8 +12353,10 @@ namespace AssetsPV
 
             VoxelLogic.InitializeKPalette();
             altFolder = "dungeon/";
-            processUnitK("Wolf", 3, true, true);
-            
+            //processUnitK("Wolf", 3, true, true);
+            //processUnitK("Ant", 5, true, true);
+            processUnitK("Soldier_Ant", 5, true, true);
+            /*
             processUnitK("Male_Base", 0, true);
             processUnitK("Female_Base", 0, true);
             processUnitK("Male_Base", 1, true);
@@ -12370,8 +12372,8 @@ namespace AssetsPV
             
             processTerrainK("Dungeon", "Door_Closed", 4, true);
             processTerrainK("Dungeon", "Door_Open", 4, true);
-            processTerrainK("Dungeon", "Water", 4, false);
-            
+            processTerrainK("Dungeon", "Water", 4, false);*/
+
             /*
             System.IO.Directory.CreateDirectory("vox/Kolonize_Allies");
             System.IO.Directory.CreateDirectory("vox/Kolonize_Other");
