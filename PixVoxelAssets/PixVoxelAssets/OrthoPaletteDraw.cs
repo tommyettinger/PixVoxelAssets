@@ -417,7 +417,7 @@ Ruins	purple-gray
                     imageAttributes);
                 }
             }
-            System.IO.Directory.CreateDirectory("TerrainOrtho");
+            Directory.CreateDirectory("TerrainOrtho");
             b.Save("TerrainOrtho/" + terrainnames[color] + ".png");
             bold.Save("TerrainOrtho/" + terrainnames[color] + "_bold.png");
 
@@ -620,11 +620,11 @@ Ruins	purple-gray
                     imageAttributes);
                 }
             }
-            System.IO.Directory.CreateDirectory("TerrainOrtho");
+            Directory.CreateDirectory("TerrainOrtho");
             //b.Save("TerrainOrtho/" + terrainnames[color] + ".png");
             //bold.Save("TerrainOrtho/" + terrainnames[color] + "_bold.png");
 
-            System.IO.Directory.CreateDirectory("Terrain");
+            Directory.CreateDirectory("Terrain");
             Bitmap b2 = new Bitmap(90, 90, PixelFormat.Format32bppArgb);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;

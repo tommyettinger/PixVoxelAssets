@@ -7697,7 +7697,7 @@ namespace AssetsPV
 
             for (int i = 0; i < 8; i++)
             {
-                System.IO.Directory.CreateDirectory(u);
+                Directory.CreateDirectory(u);
                 for (int face = 0; face < 4; face++)
                 {
                     Bitmap b = render(parsed, face, i, 0, 4)[0];
@@ -7823,7 +7823,7 @@ namespace AssetsPV
             {
                 for (int d = 0; d < 4; d++)
                 {
-                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    Directory.CreateDirectory(folder); //("color" + i);
 
                     for (int frame = 0; frame < 12; frame++)
                     {
@@ -7845,8 +7845,8 @@ namespace AssetsPV
                     }
                 }
             }
-            
-            System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+
+            Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -7878,7 +7878,7 @@ namespace AssetsPV
             int color = 0;
             for (int d = 0; d < 4; d++)
             {
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
 
                 for (int frame = 0; frame < 8; frame++)
                 {
@@ -7915,7 +7915,7 @@ namespace AssetsPV
             {
                 for (int d = 0; d < 4; d++)
                 {
-                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    Directory.CreateDirectory(folder); //("color" + i);
 
                     for (int frame = 0; frame < 8; frame++)
                     {
@@ -7935,7 +7935,7 @@ namespace AssetsPV
                 }
             }
 
-            System.IO.Directory.CreateDirectory("ortho/gifs");
+            Directory.CreateDirectory("ortho/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -8013,7 +8013,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8044,7 +8044,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8068,7 +8068,7 @@ namespace AssetsPV
                 }
                 else continue;
 
-                System.IO.Directory.CreateDirectory("ortho/gifs");
+                Directory.CreateDirectory("ortho/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -8145,7 +8145,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8179,7 +8179,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8205,8 +8205,8 @@ namespace AssetsPV
                     //bin.Close();
                 }
                 else continue;
-                
-                System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+
+                Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -8286,7 +8286,7 @@ namespace AssetsPV
 
                     for (int d = 0; d < 4; d++)
                     {
-                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                        Directory.CreateDirectory(folder); //("color" + i);
 
                         for (int frame = 0; frame < 16; frame++)
                         {
@@ -8333,7 +8333,7 @@ namespace AssetsPV
                     int color = 0;
                     for (int d = 0; d < 4; d++)
                     {
-                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                        Directory.CreateDirectory(folder); //("color" + i);
 
                         for (int frame = 0; frame < 16; frame++)
                         {
@@ -8388,7 +8388,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8409,7 +8409,7 @@ namespace AssetsPV
                     }
                 }
 
-                System.IO.Directory.CreateDirectory("ortho/gifs");
+                Directory.CreateDirectory("ortho/gifs");
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 for (int color = 0; color < ((i == 6) ? 8 : 2); color++)
@@ -8447,7 +8447,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8583,7 +8583,7 @@ namespace AssetsPV
                     {
                         for (int d = 0; d < 4; d++)
                         {
-                            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
                             for (int frame = 0; frame < 16; frame++)
                             {
@@ -8604,7 +8604,7 @@ namespace AssetsPV
 
                     for (int d = 0; d < 4; d++)
                     {
-                        System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                        Directory.CreateDirectory(folder); //("color" + i);
 
                         for (int frame = 0; frame < 16; frame++)
                         {
@@ -8704,7 +8704,7 @@ namespace AssetsPV
 
             for (int d = 0; d < 4; d++)
             {
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
 
                 for (int frame = 0; frame < 8; frame++)
                 {
@@ -8723,7 +8723,7 @@ namespace AssetsPV
 
                 for (int d = 0; d < 4; d++)
                 {
-                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    Directory.CreateDirectory(folder); //("color" + i);
 
                     for (int frame = 0; frame < 8; frame++)
                     {
@@ -8767,7 +8767,7 @@ namespace AssetsPV
             for (int i = 0; i < 8; i++)
             {
                 string folder = ("ortho/color" + i);//"color" + i;
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
 
@@ -8780,7 +8780,7 @@ namespace AssetsPV
 
             }
 
-            System.IO.Directory.CreateDirectory("ortho/gifs");
+            Directory.CreateDirectory("ortho/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -8814,7 +8814,7 @@ namespace AssetsPV
                 for (int i = 0; i < 8; i++)
                 {
                     string folder = ("ortho_adj/color" + i);//"color" + i;
-                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    Directory.CreateDirectory(folder); //("color" + i);
                     for (int f = 0; f < framelimit; f++)
                     {
                         Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit, u);
@@ -8824,7 +8824,7 @@ namespace AssetsPV
                 }
                 bin.Close();
 
-                System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+                Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
                 starter.UseShellExecute = false;
                 string arrgs = "";
@@ -8843,7 +8843,7 @@ namespace AssetsPV
             for (int i = 0; i < 8; i++)
             {
                 string folder = ("ortho_adj/color" + i);//"color" + i;
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
 
@@ -8863,7 +8863,7 @@ namespace AssetsPV
 
             }
 
-            System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+            Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -8897,7 +8897,7 @@ namespace AssetsPV
                 for (int i = 0; i < 8; i++)
                 {
                     string folder = ("ortho_adj/color" + i);//"color" + i;
-                    System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                    Directory.CreateDirectory(folder); //("color" + i);
                     for (int f = 0; f < framelimit; f++)
                     {
                         Bitmap b = processSingleOutlinedDouble(parsed, i, "S", f, framelimit, u);
@@ -8915,8 +8915,8 @@ namespace AssetsPV
                     }
                 }
                 //bin.Close();
-                
-                System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+
+                Directory.CreateDirectory("ortho_adj/gifs");
                 ProcessStartInfo starter = new ProcessStartInfo(@"convert.exe");
                 starter.UseShellExecute = false;
                 string arrgs = "";
@@ -8938,7 +8938,7 @@ namespace AssetsPV
             for (int i = 0; i < 8; i++)
             {
                 string folder = ("ortho_adj/color" + i);//"color" + i;
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < 4; f++)
                 { //"color" + i + "/"
 
@@ -8957,8 +8957,8 @@ namespace AssetsPV
                 }
 
             }
-            
-            System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+
+            Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -8994,7 +8994,7 @@ namespace AssetsPV
             }
 
             string folder = ("ortho_adj/indexed");//"color" + i;
-            System.IO.Directory.CreateDirectory(folder); //("color" + i);
+            Directory.CreateDirectory(folder); //("color" + i);
             for (int f = 0; f < 4; f++)
             { //"color" + i + "/"
                 CreateChannelBitmap(processSingleOutlinedDouble(parsed, 0, "S", f, framelimit, u), "ortho_adj/indexed/" + u + "_face0" + "_" + f + ".png"); //se
@@ -9022,7 +9022,7 @@ namespace AssetsPV
             for (int i = 0; i < 3; i++)
             {
                 string folder = ("ortho/palette" + i);//"color" + i;
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
                     for (int dir = 0; dir < 4; dir++)
@@ -9031,8 +9031,8 @@ namespace AssetsPV
                     }
                 }
             }
-            
-            System.IO.Directory.CreateDirectory("gifs");
+
+            Directory.CreateDirectory("gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9051,8 +9051,8 @@ namespace AssetsPV
         {
             Console.WriteLine("Processing: " + u);
 
-            System.IO.Directory.CreateDirectory("8way");
-            System.IO.Directory.CreateDirectory("8way/gifs");
+            Directory.CreateDirectory("8way");
+            Directory.CreateDirectory("8way/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9112,8 +9112,8 @@ namespace AssetsPV
         public static void processEightWayAnimationW(string u)
         {
 
-            System.IO.Directory.CreateDirectory("8way");
-            System.IO.Directory.CreateDirectory("8way/gifs");
+            Directory.CreateDirectory("8way");
+            Directory.CreateDirectory("8way/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9148,7 +9148,7 @@ namespace AssetsPV
             for (int i = 0; i < VoxelLogic.wpalettecount; i++)
             {
                 string folder = ("ortho_adj/palette" + i);//"color" + i;
-                System.IO.Directory.CreateDirectory(folder); //("color" + i);
+                Directory.CreateDirectory(folder); //("color" + i);
                 for (int f = 0; f < framelimit; f++)
                 { //"color" + i + "/"
                     for (int dir = 0; dir < 4; dir++)
@@ -9158,7 +9158,7 @@ namespace AssetsPV
                 }
             }
 
-            System.IO.Directory.CreateDirectory("ortho_adj/gifs");
+            Directory.CreateDirectory("ortho_adj/gifs");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -9200,7 +9200,7 @@ namespace AssetsPV
             MagicaVoxelData[] parsed = VoxelLogic.FromMagica(bin);
             int framelimit = 4;
 
-            System.IO.Directory.CreateDirectory("ortho_adj/indexed"); //("color" + i);
+            Directory.CreateDirectory("ortho_adj/indexed"); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "ortho_adj/indexed/" + u + "_face0" + "_" + f + ".png");
@@ -9223,7 +9223,7 @@ namespace AssetsPV
                 framelimit = 2;
             }
 
-            System.IO.Directory.CreateDirectory("ortho_adj/indexed"); //("color" + i);
+            Directory.CreateDirectory("ortho_adj/indexed"); //("color" + i);
             for (int f = 0; f < framelimit; f++)
             { //"color" + i + "/"
                 CreateChannelBitmap(processSingleOutlined(parsed, 0, "SE", f, framelimit), "ortho_adj/indexed/" + u + "_face0" + "_" + f + ".png");
@@ -9792,11 +9792,11 @@ namespace AssetsPV
         {
             VoxelLogic.Initialize();
 
-            System.IO.Directory.CreateDirectory("Palettes");
-            System.IO.Directory.CreateDirectory("junk");
-            System.IO.Directory.CreateDirectory("ortho_adj");
-            System.IO.Directory.CreateDirectory("ortho_adj/indexed");
-            System.IO.Directory.CreateDirectory("indexed");
+            Directory.CreateDirectory("Palettes");
+            Directory.CreateDirectory("junk");
+            Directory.CreateDirectory("ortho_adj");
+            Directory.CreateDirectory("ortho_adj/indexed");
+            Directory.CreateDirectory("indexed");
             /*
             TallVoxels.renderOnlyTerrainColors().Save("PaletteTerrain.png", ImageFormat.Png);
             InitializeXPalette();
@@ -10342,8 +10342,8 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u);
 
-            System.IO.Directory.CreateDirectory("strips_iso");
-            System.IO.Directory.CreateDirectory("strips_ortho");
+            Directory.CreateDirectory("strips_iso");
+            Directory.CreateDirectory("strips_ortho");
             ProcessStartInfo startInfo = new ProcessStartInfo(@"montage.exe");
             startInfo.UseShellExecute = false;
             string s = "";

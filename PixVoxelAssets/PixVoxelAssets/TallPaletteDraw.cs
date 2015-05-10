@@ -788,7 +788,7 @@ Ruins	purple-gray
                     imageAttributes);
                 }
             }
-            System.IO.Directory.CreateDirectory("Terrain");
+            Directory.CreateDirectory("Terrain");
             Bitmap b2 = new Bitmap(128, 90, PixelFormat.Format32bppArgb);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -1031,7 +1031,7 @@ Ruins	purple-gray
                     imageAttributes);
                 }
             }
-            System.IO.Directory.CreateDirectory("Terrain_Small");
+            Directory.CreateDirectory("Terrain_Small");
             Bitmap b2 = new Bitmap(horiz / 2, vert / 2, PixelFormat.Format32bppArgb);
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -1272,7 +1272,7 @@ Ruins	purple-gray
                     imageAttributes);
                 }
             }
-            System.IO.Directory.CreateDirectory("Terrain");
+            Directory.CreateDirectory("Terrain");
             b.Save("Terrain/" + terrainnames[color] + ".png");
             bold.Save("Terrain/" + terrainnames[color] + "_bold.png");
 
@@ -1379,7 +1379,7 @@ Ruins	purple-gray
                 parsed[i].x += 10;
                 parsed[i].y += 10;
             }
-            System.IO.Directory.CreateDirectory("custom");
+            Directory.CreateDirectory("custom");
             for(int d = 0; d < 4; d++)
             {
                 Graphics g;

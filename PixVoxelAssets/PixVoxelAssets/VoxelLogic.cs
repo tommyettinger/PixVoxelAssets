@@ -8840,6 +8840,68 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelsAltered.ToArray();
         }
+
+
+        public static List<MagicaVoxelData> AutoShadeK(List<MagicaVoxelData> voxelData, int x_size, int y_size, int z_size)
+        {
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count);
+            MagicaVoxelData?[,,] singular = new MagicaVoxelData?[x_size, y_size, z_size];
+            singular.Fill(null);
+            foreach (MagicaVoxelData v in voxelData)
+            {
+                if(v.x < x_size && v.y < y_size && v.z < z_size)
+                    singular[v.x, v.y, v.z] = v;
+            }
+            foreach(MagicaVoxelData? v in singular)
+            {
+                if(v.HasValue)
+                {
+                    if((253 - v.Value.color) % 4 == 0)
+                    {
+                        if(v.Value.z == z_size - 1 || singular[v.Value.x, v.Value.y, v.Value.z + 1].HasValue == false)
+                        {
+                            voxelsAltered.Add(v.Value);
+                        }
+                        else if(v.Value.z == 0 || singular[v.Value.x, v.Value.y, v.Value.z - 1].HasValue == false)
+                        {
+                            int neighbors = 0;
+                            if (v.Value.x + 1 < x_size && singular[v.Value.x + 1, v.Value.y, v.Value.z].HasValue)
+                                neighbors++;
+                            if (v.Value.x > 0 && singular[v.Value.x - 1, v.Value.y, v.Value.z].HasValue)
+                                neighbors++;
+                            if (v.Value.y + 1 < y_size && singular[v.Value.x, v.Value.y + 1, v.Value.z].HasValue)
+                                neighbors++;
+                            if (v.Value.y > 0 && singular[v.Value.x, v.Value.y - 1, v.Value.z].HasValue)
+                                neighbors++;
+
+                            if (neighbors > 1)
+                            {
+                                voxelsAltered.Add(AlterVoxel(v.Value, v.Value.color + 2));
+                            }
+                            else
+                            {
+                                voxelsAltered.Add(v.Value);
+                            }
+                        }
+                        else
+                        {
+                            voxelsAltered.Add(v.Value);
+                        }
+                    }
+                    else
+                    {
+                        voxelsAltered.Add(v.Value);
+                    }
+                }
+            }
+            return voxelsAltered;
+        }
+        public static MagicaVoxelData[] AutoShadeK(MagicaVoxelData[] voxelData, int x_size, int y_size, int z_size)
+        {
+            return AutoShadeK(voxelData.ToList(), x_size, y_size, z_size).ToArray();
+        }
+
+
         public static byte WithoutShadingK(byte originalColor)
         {
              return (byte) (((255 - originalColor) % 4 == 0) ? (255 - originalColor) / 4 : (253 - originalColor) / 4);
@@ -14600,8 +14662,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static void VoxToBVX(List<MagicaVoxelData> data, string filename, int size)
         {
-            System.IO.Directory.CreateDirectory("vx_models");
-            System.IO.Directory.CreateDirectory("vx_models/" + filename);
+            Directory.CreateDirectory("vx_models");
+            Directory.CreateDirectory("vx_models/" + filename);
             int total = data.Count;
             byte[, ,] voxels = new byte[size, size, size];
             voxels.Fill((byte)255);

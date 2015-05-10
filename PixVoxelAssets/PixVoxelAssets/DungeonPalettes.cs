@@ -391,7 +391,7 @@ namespace AssetsPV
             },
 
             new float[][] { //3 wolf
-                            //0 claws
+                //0 claws
                 new float[] {0.8F,0.7F,0.45F,1F},
                 //1 dark parts of skin
                 new float[] {0.05F,0.0F,-0.05F,1F},
@@ -752,130 +752,129 @@ namespace AssetsPV
                 //58 total transparent
                 new float[] {0F,0F,0F,0F},
             },
-            /*
-            
-            new float[][] { //11 ant
-            //0 claws contrast
-            new float[] {0.02F,-0.02F,-0.08F,1F},
-            //1 claws, teeth
-            new float[] {0.1F,0.06F,0.0F,1F},
-            //2 body contrast
-            new float[] {0.2F,0.17F,0.13F,1F},
-            //3 body
-            new float[] {0.32F,0.29F,0.25F,1F},
-            //4 stinger contrast
-            new float[] {0.5F,0.65F,0.3F,1F},
-            //5 stinger
-            new float[] {0.65F,0.8F,0.45F,1F},
-            //6 jaws contrast
-            new float[] {0.15F,0.11F,0.05F,1F},
-            //7 jaws
-            new float[] {0.25F,0.21F,0.15F,1F},
-            //8 mouth contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
-            //9 pink skin
-            new float[] {0.85F,0.5F,0.6F,1F},
-            //10 eyes shine
-            new float[] {1.15F,1.0F,0.85F,1F},
-            //11 eyes
-            new float[] {0.15F,0.1F,0.02F,gloss_alpha},
-            //12 metal contrast
-            new float[] {0.7F,0.85F,1.1F,1F},
-            //13 metal
-            new float[] {0.6F,0.65F,0.75F,1F},
-            //14 flowing clothes contrast
-            new float[] {0.2F,0.6F,0.3F,waver_alpha},
-            //15 flowing clothes
-            new float[] {0.35F,0.75F,0.45F,waver_alpha},
-            //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
-            //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
-            //18 yellow fire
-            new float[] {1.25F,1.1F,0.45F,1F},
-            //19 orange fire
-            new float[] {1.25F,0.7F,0.3F,1F},
-            //20 sparks
-            new float[] {1.3F,1.2F,0.85F,1F},
-            //21 glow frame 0
-            new float[] {1.4F,0.6F,0.75F,1F},
-            //22 glow frame 1
-            new float[] {1.25F,0.3F,1.25F,1F},
-            //23 glow frame 2
-            new float[] {0.3F,1.25F,1.25F,1F},
-            //24 glow frame 3
-            new float[] {1.25F,1.25F,0.3F,1F},
-            //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
-            //26 mud
-            new float[] {0.2F,0.4F,0.3F,1F},
-            //27 water
-            new float[] {0.4F,0.6F,0.9F,flat_alpha},
-            //28 fuzz deepest
-            new float[] {0.4F,0.0F,-0.09F,fuzz_alpha},
-            //29 fuzz deep
-            new float[] {0.5F,0.1F,-0.05F,fuzz_alpha},
-            //30 fuzz mid-deep
-            new float[] {0.6F,0.2F,0.0F,fuzz_alpha},
-            //31 fuzz mid-light
-            new float[] {0.7F,0.3F,0.05F,fuzz_alpha},
-            //32 fuzz light            
-            new float[] {0.8F,0.4F,0.1F,fuzz_alpha},
-            //33 fuzz lightest
-            new float[] {0.9F,0.5F,0.15F,fuzz_alpha},
-            //34 gore
-            new float[] {0.08F,0.04F,-0.1F,1F},
-            //35 glass
-            new float[] {0.5F,0.8F,1.1F,1F},
-            //36 placeholder
-            new float[] {0F,0F,0F,0F},
-            //37 placeholder
-            new float[] {0F,0F,0F,0F},
-            //38 placeholder
-            new float[] {0F,0F,0F,0F},
-            //39 placeholder
-            new float[] {0F,0F,0F,0F},
-            //40 flickering sparks
-            new float[] {0.93F,0.83F,1.4F,flash_alpha_0},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
-            //43 always brown contrast
-            new float[] {0.4F,0.25F,0.1F,1F},
-            //44 always brown
-            new float[] {0.55F,0.4F,0.25F,1F},
-            //45 always tan contrast
-            new float[] {0.7F,0.55F,0.3F,1F},
-            //46 always tan
-            new float[] {0.85F,0.7F,0.45F,1F},
-            //47 always black contrast
-            new float[] {0.0F,-0.03F,-0.09F,1F},
-            //48 always black
-            new float[] {0.15F,0.12F,0.06F,1F},
-            //49 always white contrast
-            new float[] {1.25F,1.25F,0.75F,1F},
-            //50 always white
-            new float[] {0.9F,0.9F,0.9F,1F},
-            //51 always red contrast
-            new float[] {0.85F,0.0F,-0.05F,1F},
-            //52 always red
-            new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
-            //55 always gold
-            new float[] {0.92F,0.85F,0.4F,1F},
-            //56 always silver
-            new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
-            new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
-            new float[] {0F,0F,0F,0F},
+
+
+            new float[][] { //6 linnorm
+                //0 claws
+                new float[] {0.85F,0.68F,0.5F,1F},
+                //1 body
+                new float[] {0.1F,0.4F,-0.05F,1F},
+                //2 shirt
+                new float[] {0.42F,0.07F,0.02F,1F},
+                //3 nose
+                new float[] {0.25F,0.1F,0.03F,1F},
+                //4 mouth
+                new float[] {0.4F,0.15F,0.0F,1F},
+                //5 skin
+                new float[] {0.85F,0.5F,0.6F,1F},
+                //6 eyes shine
+                new float[] {1.4F,1.4F,1.4F,1F},
+                //7 eyes
+                new float[] {0.0F,0.1F,0.15F,1F},
+                //8 metal shine
+                new float[] {0.7F,0.85F,1.1F,1F},
+                //9 metal
+                new float[] {0.6F,0.65F,0.75F,1F},
+                //10 flowing clothes
+                new float[] {0.3F,0.05F,0.0F,1F},
+                //11 flowing clothes pattern
+                new float[] {0.5F,0.1F,0.05F,1F},
+                //12 inner shadow
+                new float[] {0.1F,0.1F,0.09F,1F},
+                //13 smoke
+                new float[] {0.14F,0.14F,0.02F,waver_alpha},
+                //14 yellow fire
+                new float[] {1.25F,1.1F,0.45F,borderless_alpha},
+                //15 orange fire
+                new float[] {1.25F,0.7F,0.3F,borderless_alpha},
+                //16 sparks
+                new float[] {1.3F,1.2F,0.85F,borderless_alpha},
+                //17 flickering sparks
+                new float[] {0.15F,0.8F,0.4F,borderless_alpha},
+                //18 flickering sparks alternate
+                new float[] {0.85F,0.1F,0.7F,borderless_alpha},
+                //19 glow frame 0
+                new float[] {1.4F,0.6F,0.75F,1F},
+                //20 glow frame 1
+                new float[] {1.25F,0.3F,1.25F,1F},
+                //21 glow frame 2
+                new float[] {0.3F,1.25F,1.25F,1F},
+                //22 glow frame 3
+                new float[] {1.25F,1.25F,0.3F,1F},
+                //23 shadow
+                new float[] {0.1F,0.1F,0.1F,flat_alpha},
+                //24 mud
+                new float[] {0.2F,0.4F,0.3F,1F},
+                //25 water
+                new float[] {0.4F,0.6F,0.9F,borderless_alpha},
+                //26 fuzz contrast
+                new float[] {0.5F,0.5F,0.5F,fuzz_alpha},
+                //27 fuzz
+                new float[] {0.6F,0.6F,0.6F,fuzz_alpha},
+                //28 faded deep
+                new float[] {0.54F,0.54F,0.54F,fade_alpha},
+                //29 faded dark
+                new float[] {0.6F,0.6F,0.6F,fade_alpha},
+                //30 faded light            
+                new float[] {0.66F,0.66F,0.66F,fade_alpha},
+                //31 faded lightest
+                new float[] {0.72F,0.72F,0.72F,fade_alpha},
+                //32 gore
+                new float[] {0.67F,0.05F,-0.1F,1F},
+                //33 glass
+                new float[] {0.5F,0.8F,1.1F,1F},
+                //34 spinning objects pattern, even frames 
+                new float[] {0.5F,0.5F,0.5F,spin_alpha_0},
+                //35 spinning objects, even frames
+                new float[] {0.65F,0.65F,0.65F,spin_alpha_0},
+                //36 spinning objects pattern, odd frames
+                new float[] {0.5F,0.5F,0.5F,spin_alpha_1},
+                //37 spinning objects, odd frames
+                new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
+                //38 dripping fluid frame 0
+                new float[] {0.4F,0.6F,0.9F,1F},
+                //39 dripping fluid frame 1
+                new float[] {0.4F,0.6F,0.9F,0F},
+                //40 dripping fluid frame 2
+                new float[] {0.4F,0.6F,0.9F,0F},
+                //41 dripping fluid frame 3
+                new float[] {0.4F,0.6F,0.9F,0F},
+                //42 always red
+                new float[] {0.9F,0.05F,0.0F,1F},
+                //43 always orange
+                new float[] {0.95F,0.4F,-0.05F,1F},
+                //44 always yellow
+                new float[] {1.05F,1.05F,0.25F,1F},
+                //45 always green
+                new float[] {0.25F,0.55F,0.1F,1F},
+                //46 always blue
+                new float[] {0.05F,0.05F,0.85F,1F},
+                //47 always violet
+                new float[] {0.35F,0.1F,0.55F,1F},
+                //48 always brown
+                new float[] {0.55F,0.4F,0.25F,1F},
+                //49 always tan
+                new float[] {0.85F,0.7F,0.45F,1F},
+                //50 always pink
+                new float[] {0.95F,0.3F,0.7F,1F},
+                //51 always black
+                new float[] {0.0F,-0.03F,-0.09F,1F},
+                //52 always dark gray
+                new float[] {0.25F,0.22F,0.16F,1F},
+                //53 always light gray
+                new float[] {0.65F,0.65F,0.65F,1F},
+                //54 always off-white
+                new float[] {0.9F,0.9F,0.85F,1F},
+                //55 always bright white
+                new float[] {1.25F,1.25F,0.95F,1F},
+                //56 always gold
+                new float[] {1.2F,1.16F,-0.1F,1F},
+                //57 always silver
+                new float[] {0.7F,0.77F,0.83F,1F},
+                //58 total transparent
+                new float[] {0F,0F,0F,0F},
             },
-            
-            */
+
         };
 
         public static float[][][] mecha_palettes = new float[][][]
