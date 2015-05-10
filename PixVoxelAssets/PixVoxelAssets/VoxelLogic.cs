@@ -7892,7 +7892,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 if (current_color != 25)
                                 {
                                     ColorToHSV(c2, out h2, out s2, out v2);
-                                    c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.2), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.875)));
+                                    c2 = ColorFromHSV(h2, Math.Min(1.0, s2 * 1.15), Math.Max(0.01, v2 * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 0.925 : ((kpalettes[p][current_color][3] == fade_alpha) ? 0.9 : 0.675))));
                                 }
                                 if (c.A != 0)
                                 {
