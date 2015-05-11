@@ -51,7 +51,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallVoxels</StartupObject>
+    <StartupObject>AssetsPV.MiniVoxels</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -69,6 +69,7 @@
     <Compile Include="IOrderedDictionary.cs" />
     <Compile Include="DungeonPalettes.cs" />
     <Compile Include="LocalMap.cs" />
+    <Compile Include="MiniVoxels.cs" />
     <Compile Include="OrderedDictionary.cs" />
     <Compile Include="OrthoPaletteDraw.cs" />
     <Compile Include="OrthoVoxelsAdjusted.cs" />
@@ -1070,6 +1071,18 @@
     <None Include="Merchant_Hat_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Mini\Human_Female_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mini\Human_Male_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mini\Warrior_Female_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mini\Warrior_Male_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Mummy_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1281,6 +1294,9 @@
     <None Include="Tassar_Walk_3_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Template.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
