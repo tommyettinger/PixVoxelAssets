@@ -841,7 +841,7 @@ namespace AssetsPV
                 else
                 {
                     int mod_color = current_color;
-                    if (mod_color == 25 && Simplex.FindNoiseWater(frame % 4, facing, vx.x + 20, vx.y + 20, vx.z) < 0.5 - (Math.Pow(Math.Max(Math.Abs(60 - vx.x), Math.Abs(60 - vx.y)), 3.0) / 16000.0)) //water top, intentionally ignoring "shaded"
+                    if (mod_color == 25 && Simplex.FindNoiseWater(frame % 4, facing, vx.x + 72, vx.y + 72, vx.z) < 0.5 - (Math.Pow(Math.Max(Math.Abs(8 - vx.x), Math.Abs(8 - vx.y)), 3.0) / 48.0)) //water top, intentionally ignoring "shaded"
                         continue;
                     //                    if (mod_color == 25 && r.Next(7) < 2) //water top, intentionally ignoring "shaded"
                     //                        continue;
@@ -905,19 +905,19 @@ namespace AssetsPV
                                     {
                                         if (wave > 0.73)
                                         {
-                                            wave = 100 * wave;
+                                            wave = 75 * wave;
                                         }
                                         else if (wave > 0.65)
                                         {
-                                            wave = 70 * wave;
+                                            wave = 55 * wave;
                                         }
                                         else if (wave > 0.6)
                                         {
-                                            wave = 55 * wave;
+                                            wave = 40 * wave;
                                         }
                                         else
                                         {
-                                            wave = 20;
+                                            wave = 8;
                                         }
                                     }
                                     else //solid body of water using shaded color
@@ -1109,13 +1109,12 @@ namespace AssetsPV
                 Directory.CreateDirectory("vox/Mini/" + altFolder);
                 VoxelLogic.WriteVOX("vox/Mini/" + altFolder + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 16, 16, 20);
                 MagicaVoxelData[] parsed = voxes.ToArray();
+                /*
                 for (int i = 0; i < parsed.Length; i++)
                 {
-                    parsed[i].x += 10;
-                    parsed[i].y += 10;
                     if ((254 - parsed[i].color) % 4 == 0)
                         parsed[i].color--;
-                }
+                }*/
                 int framelimit = 4;
 
                 setupCurrentColorsK(faction, palette);
@@ -1144,6 +1143,57 @@ namespace AssetsPV
             }
         }
 
+        public static void processTerrainK(string unit, string subfolder, int palette, bool still, bool autoshade, bool addFloor)
+        {
+            int faction = 0;
+            Console.WriteLine("Processing: " + unit + ", palette " + palette);
+            List<MagicaVoxelData> voxes;
+            if (addFloor)
+            {
+                BinaryReader bin = new BinaryReader(File.Open("Mini/" + subfolder + "/" + unit + "_K.vox", FileMode.Open));
+                BinaryReader binFloor = new BinaryReader(File.Open("Mini/" + subfolder + "/Floor_K.vox", FileMode.Open));
+                IEnumerable<MagicaVoxelData> structure = ((autoshade) ? VoxelLogic.AutoShadeK(VoxelLogic.FromMagicaRaw(bin), 16, 16, 16) : VoxelLogic.FromMagicaRaw(bin))
+                    .Select(v => VoxelLogic.AlterVoxel(v, 0, 0, 1, v.color));
+                voxes = structure.Concat((autoshade) ? VoxelLogic.AutoShadeK(VoxelLogic.FromMagicaRaw(binFloor), 16, 16, 16) : VoxelLogic.FromMagicaRaw(binFloor)).ToList();
+            }
+            else
+            {
+                BinaryReader bin = new BinaryReader(File.Open("Mini/" + subfolder + "/" + unit + "_K.vox", FileMode.Open));
+                voxes = VoxelLogic.PlaceShadowsK((autoshade) ? VoxelLogic.AutoShadeK(VoxelLogic.FromMagicaRaw(bin), 16, 16, 16) : VoxelLogic.FromMagicaRaw(bin));
+            }
+
+            Directory.CreateDirectory("vox/Mini/" + altFolder + subfolder + "/");
+            VoxelLogic.WriteVOX("vox/Mini/" + altFolder + subfolder + "/" + unit + "_f0" + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 16, 16, 20);
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            
+            int framelimit = 4;
+
+            setupCurrentColorsK(faction, palette);
+
+            MagicaVoxelData[] p2 = VoxelLogic.Lovecraftiate(parsed, kcolors);
+
+            string folder = (altFolder + subfolder + "/" + "faction" + faction + "/palette" + palette);
+            Directory.CreateDirectory(folder);
+            for (int f = 0; f < framelimit; f++)
+            { //
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = processKFrame(p2, faction, palette, dir, f, framelimit, still, false);
+                    b.Save(folder + "/palette" + palette + "(0)_" + unit + "_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    b.Dispose();
+                }
+            }
+            Directory.CreateDirectory("gifs/Mini/" + altFolder + subfolder + "/faction" + faction);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = folder + "/palette" + palette + "(0)_" + unit + "_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/Mini/" + altFolder + subfolder + "/faction" + faction + "/palette" + palette + "(0)_" + unit + "_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+        }
+
 
         static void Main(string[] args)
         {
@@ -1153,11 +1203,20 @@ namespace AssetsPV
             VoxelLogic.krendered = krendered;
             kFleshRendered = storeColorCubesFleshToneK();
             VoxelLogic.kFleshRendered = kFleshRendered;
-            /*            processUnitK("Human_Male", 0, true, false);
-                        processUnitK("Human_Female", 1, true, false);
-            */
+            /*
+            processUnitK("Human_Male", 0, true, false);
+            processUnitK("Human_Female", 1, true, false);
+
             processUnitK("Warrior_Male", 7, true, false);
-            processUnitK("Warrior_Female",7, true, false);
+            processUnitK("Warrior_Female", 7, true, false);*/
+            processTerrainK("Floor", "Caves", 4, true, false, false);
+            processTerrainK("Water", "Caves", 4, true, false, false);
+            processTerrainK("Wall_Straight", "Caves", 4, true, false, true);
+            processTerrainK("Wall_Corner", "Caves", 4, true, false, true);
+            processTerrainK("Wall_Tee", "Caves", 4, true, false, true);
+            processTerrainK("Wall_Cross", "Caves", 4, true, false, true);
+            processTerrainK("Door_Closed", "Caves", 4, true, false, true);
+            processTerrainK("Door_Open", "Caves", 4, true, false, true);
         }
     }
 }
