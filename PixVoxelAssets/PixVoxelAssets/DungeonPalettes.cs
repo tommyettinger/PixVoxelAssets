@@ -563,7 +563,7 @@ namespace AssetsPV
                 //24 mud
                 new float[] {0.2F,0.4F,0.3F,1F},
                 //25 water
-                new float[] {0.4F,0.6F,0.9F,borderless_alpha},
+                new float[] {0.6F,0.75F,0.95F,borderless_alpha},
                 //26 fuzz contrast
                 new float[] {0.5F,0.0F,-0.05F,fuzz_alpha},
                 //27 fuzz

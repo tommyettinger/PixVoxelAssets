@@ -169,7 +169,7 @@ namespace AssetsPV
                            ColorMatrixFlag.Default,
                            ColorAdjustType.Bitmap);
                         string which_image = ((current_color >= 14 && current_color <= 22) || kpalettes[p][current_color][3] == 0F
-                            || kpalettes[p][current_color][3] == flash_alpha_0 || kpalettes[p][current_color][3] == flash_alpha_1) ? "shine" :
+                            || kpalettes[p][current_color][3] == flash_alpha_0 || kpalettes[p][current_color][3] == flash_alpha_1 || kpalettes[p][current_color][3] == borderless_alpha) ? "shine" :
                             (kpalettes[p][current_color][3] == flat_alpha || kpalettes[p][current_color][3] == bordered_flat_alpha) ? "flat" : "cube";
                         g.DrawImage(image,
                            new Rectangle(0, 0,
@@ -292,7 +292,7 @@ namespace AssetsPV
                                             //outline
                                             if (j == height - 1)
                                             {
-
+                                                ColorToHSV(c, out h, out s, out v);
                                                 if (kpalettes[p][current_color][3] == fade_alpha)
                                                 {
                                                     c = ColorFromHSV((h + alt_k * 100) % 360,
@@ -302,8 +302,8 @@ namespace AssetsPV
                                                 else
                                                 {
                                                     c = ColorFromHSV((h + alt_k * 100) % 360,
-                                                        MercifulClamp(s * (1.0 - alt_k * 0.2) - 0.3 * softness),
-                                                        MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 0.9 : 0.75 - alt_k * 0.2 + 0.1 * softness)));
+                                                        MercifulClamp(s * (1.1 - alt_k * 0.2) + 0.3 * softness),
+                                                        MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 0.75 : 0.65 - alt_k * 0.2 + 0.1 * softness)));
 
                                                 }
                                             }
@@ -555,7 +555,7 @@ namespace AssetsPV
                                         }
                                     }
                                     break;
-                                    //includes shine and anything else, all pretty much a solid block
+                                //includes shine and anything else, all pretty much a solid block
                                 default:
                                     {
                                         //outline
@@ -804,7 +804,7 @@ namespace AssetsPV
                             mod_color -= r.Next(3);
                         }
                     }
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         for (int i = 0; i < 16; i++)
@@ -857,7 +857,7 @@ namespace AssetsPV
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // eraser stuff
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                mod_color = (current_color == 26 || current_color == 27 || current_color == 26 + kcolorcount || current_color == 27 + kcolorcount) ? current_color + 2 : current_color;
+                                mod_color = current_color;
                                 if (kcolors[mod_color][3] == gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] + 160, 255);
@@ -1036,6 +1036,162 @@ namespace AssetsPV
             return bmp;
         }
 
+        private static Bitmap generateWaterMask(int facing, int variant)
+        {
+            Bitmap bmp = new Bitmap(4 * 16 + 8, 5 * 16 + 8, PixelFormat.Format32bppArgb);
+
+            //            Bitmap bmp = new Bitmap(4 * 128 + 8, 2 * 128 + 8, PixelFormat.Format32bppArgb);
+
+            // Specify a pixel format.
+            PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+            // Lock the bitmap's bits.
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = bmpData.Stride * bmp.Height;
+            byte[] argbValues = new byte[numBytes];
+            argbValues.Fill<byte>(0);
+            byte[] outlineColors = new byte[numBytes];
+            outlineColors.Fill<byte>(0);
+            byte[] outlineValues = new byte[numBytes];
+            outlineValues.Fill<byte>(0);
+            bool[] barePositions = new bool[numBytes];
+            barePositions.Fill(false);
+
+            int[] zbuffer = new int[numBytes];
+            zbuffer.Fill<int>(-9999);
+
+            int jitter = 0;// (((variant % 4) % 3) + ((variant % 4) / 3)) * 2;
+
+            for (int mvdx = 15; mvdx >= 0; mvdx--)
+            {
+                for (int mvdy = 0; mvdy <= 15; mvdy++)
+                {
+                    MagicaVoxelData vx = new MagicaVoxelData { x = (byte)mvdx, y = (byte)mvdy, z = 0, color = 153 };
+                    int current_color = 25;
+                    //int unshaded = VoxelLogic.WithoutShadingK(vx.color);
+                    //int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + kcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - clear) / 4 : (253 - vx.color) / 4;
+                    int p = 0;
+                    int mod_color = current_color;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            //p = 4 * ((vx.x + vx.y) * 2 + 2) + i + bmpData.Stride * (128 + 2 - vx.y + vx.x + j);
+                            p = voxelToPixelK16(i, j, vx.x, vx.y, 0, 0, 4, 25, bmpData.Stride, 0, true);
+                            if (argbValues[p] == 0)
+                            {
+                                zbuffer[p] = vx.z + vx.x - vx.y;
+                                mod_color = current_color;
+                                if (i % 4 == 3)
+                                {
+                                    double wave = Simplex.FindNoiseFlatWater(facing, vx.x, vx.y, variant);
+
+                                    if (wave > 0.73)
+                                    {
+                                        wave = 85 * wave;
+                                    }
+                                    else if (wave > 0.64)
+                                    {
+                                        wave = 65 * wave;
+                                    }
+                                    else if (wave > 0.55)
+                                    {
+                                        wave = 50 * wave;
+                                    }
+                                    else if (wave < 0.45)
+                                    {
+
+                                        wave += 0.2;
+                                        if (wave < 0.5)
+                                        {
+                                            wave = -15 / wave;
+                                        }
+                                        else if (wave < 0.55)
+                                        {
+                                            wave = -11 / wave;
+                                        }
+                                        else if (wave < 0.6)
+                                        {
+                                            wave = -7 / wave;
+                                        }
+                                        else
+                                        {
+                                            wave = 6.0 * (wave - 0.25);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        wave = 32.0 * wave;
+                                    }
+
+
+                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] + wave, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] + wave, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] + wave, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+
+                                else
+                                {
+                                    argbValues[p] = kcurrent[mod_color][i + j * 16];
+                                }
+                                if (outlineColors[p] == 0)
+                                    outlineColors[p] = kcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                            }
+                        }
+
+                    }
+                }
+            }
+            bool darkOutline = false;
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 255 * waver_alpha && barePositions[i] == false)
+                {
+                    if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && darkOutline && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && (zbuffer[i] - 2 > zbuffer[i + 4]) && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; outlineValues[i + 4 - 1] = outlineColors[i - 1]; outlineValues[i + 4 - 2] = outlineColors[i - 2]; outlineValues[i + 4 - 3] = outlineColors[i - 3]; }
+                    if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && darkOutline && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && (zbuffer[i] - 2 > zbuffer[i - 4]) && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; outlineValues[i - 4 - 1] = outlineColors[i - 1]; outlineValues[i - 4 - 2] = outlineColors[i - 2]; outlineValues[i - 4 - 3] = outlineColors[i - 3]; }
+                    if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && darkOutline && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride]) && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; outlineValues[i + bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && argbValues[i - bmpData.Stride] == 0 && darkOutline && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; } else if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && barePositions[i - bmpData.Stride] == false && (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride]) && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; outlineValues[i - bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 3] = outlineColors[i - 3]; }
+                    if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && argbValues[i + bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; } else if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && barePositions[i + bmpData.Stride + 4] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4]) && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; outlineValues[i + bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && argbValues[i - bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; } else if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && barePositions[i - bmpData.Stride - 4] == false && (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 4]) && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; outlineValues[i - bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
+                    if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; outlineValues[i + bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; outlineValues[i - bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
+                    
+                }
+            }
+            
+
+            
+            for (int i = 3; i < numBytes; i += 4)
+            {
+                if (argbValues[i] > 0)
+                    argbValues[i] = 255;
+                if (outlineValues[i] == 255)
+                {
+                    argbValues[i] = 255;
+                    argbValues[i - 1] = outlineValues[i - 1];
+                    argbValues[i - 2] = outlineValues[i - 2];
+                    argbValues[i - 3] = outlineValues[i - 3];
+                }
+            }
+            
+            Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            return bmp;
+
+        }
+
         private static Bitmap processKFrame(MagicaVoxelData[] parsed, int faction, int palette, int dir, int frame, int maxFrames, bool still, bool darkOutline)
         {
             Bitmap b;
@@ -1061,9 +1217,9 @@ namespace AssetsPV
                 Directory.CreateDirectory("vox/Mini/" + altFolder);
                 VoxelLogic.WriteVOX("vox/Mini/" + altFolder + unit + "_f" + faction + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 16, 16, 20);
                 MagicaVoxelData[] parsed = voxes.ToArray();
-                
+
                 int framelimit = 4;
-                
+
                 string folder = (altFolder + "faction" + faction + "/palette" + palette);//"color" + i;
                 Directory.CreateDirectory(folder); //("color" + i);
                 for (int bodyPalette = 0; bodyPalette < DungeonPalettes.fleshTones.Length; bodyPalette++)
@@ -1165,7 +1321,7 @@ namespace AssetsPV
             Directory.CreateDirectory("vox/Mini/" + altFolder + subfolder + "/");
             VoxelLogic.WriteVOX("vox/Mini/" + altFolder + subfolder + "/" + unit + "_f0" + "_" + palette + ".vox", voxes, (faction == 0 ? "K_ALLY" : "K_OTHER"), palette, 16, 16, 20);
             MagicaVoxelData[] parsed = voxes.ToArray();
-            
+
             int framelimit = 4;
 
             setupCurrentColorsK(faction, palette);
@@ -1194,6 +1350,36 @@ namespace AssetsPV
 
         }
 
+        public static void processWaterK(string subfolder, int palette)
+        {
+            int faction = 0;
+            Console.WriteLine("Processing: Water Tiles, palette " + palette);
+            // int framelimit = 4;
+
+            setupCurrentColorsK(faction, palette);
+
+            string folder = (altFolder + subfolder + "/" + "faction" + faction + "/palette" + palette);
+            Directory.CreateDirectory(folder);
+            for (int v = 0; v < 16; v++)
+            { //
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    Bitmap b = generateWaterMask(dir, v);
+                    b.Save(folder + "/palette" + palette + "(0)_Water_face" + dir + "_" + string.Format("{0:x}", v) + ".png", ImageFormat.Png);
+                    b.Dispose();
+                }
+            }
+            /*
+            Directory.CreateDirectory("gifs/Mini/" + altFolder + subfolder + "/faction" + faction);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = folder + "/palette" + palette + "(0)_Water_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/Mini/" + altFolder + subfolder + "/faction" + faction + "/palette" + palette + "(0)_Water_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+            */
+        }
 
         static void Main(string[] args)
         {
@@ -1209,14 +1395,19 @@ namespace AssetsPV
 
             processUnitK("Warrior_Male", 7, true, false);
             processUnitK("Warrior_Female", 7, true, false);*/
+
+            //            processTerrainK("Water", "Caves", 4, true, false, false);
+            processWaterK("Caves", 4);
+
+            /*
             processTerrainK("Floor", "Caves", 4, true, false, false);
-            processTerrainK("Water", "Caves", 4, true, false, false);
             processTerrainK("Wall_Straight", "Caves", 4, true, false, true);
             processTerrainK("Wall_Corner", "Caves", 4, true, false, true);
             processTerrainK("Wall_Tee", "Caves", 4, true, false, true);
             processTerrainK("Wall_Cross", "Caves", 4, true, false, true);
             processTerrainK("Door_Closed", "Caves", 4, true, false, true);
             processTerrainK("Door_Open", "Caves", 4, true, false, true);
+            */
         }
     }
 }

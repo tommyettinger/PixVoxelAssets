@@ -21,7 +21,8 @@ namespace AssetsPV
         private const double NORM_2D = 1.0 / 47.0;
         private const double NORM_3D = 1.0 / 103.0;
         private const double NORM_4D = 1.0 / 30.0;
-        private const float  NORM_3DF = 1.0F / 103.0F;
+        private const float NORM_3DF = 1.0F / 103.0F;
+        private const double NORM_4DF = 1.0F / 30.0F;
 
         private byte[] perm;
         private byte[] perm2D;
@@ -30,43 +31,43 @@ namespace AssetsPV
 
         private static double[] gradients2D = new double[]
         {
-		     5,  2,    2,  5,
-		    -5,  2,   -2,  5,
-		     5, -2,    2, -5,
-		    -5, -2,   -2, -5,
-	    };
+             5,  2,    2,  5,
+            -5,  2,   -2,  5,
+             5, -2,    2, -5,
+            -5, -2,   -2, -5,
+        };
 
         private static double[] gradients3D =
         {
-		    -11,  4,  4,     -4,  11,  4,    -4,  4,  11,
-		     11,  4,  4,      4,  11,  4,     4,  4,  11,
-		    -11, -4,  4,     -4, -11,  4,    -4, -4,  11,
-		     11, -4,  4,      4, -11,  4,     4, -4,  11,
-		    -11,  4, -4,     -4,  11, -4,    -4,  4, -11,
-		     11,  4, -4,      4,  11, -4,     4,  4, -11,
-		    -11, -4, -4,     -4, -11, -4,    -4, -4, -11,
-		     11, -4, -4,      4, -11, -4,     4, -4, -11,
-	    };
+            -11,  4,  4,     -4,  11,  4,    -4,  4,  11,
+             11,  4,  4,      4,  11,  4,     4,  4,  11,
+            -11, -4,  4,     -4, -11,  4,    -4, -4,  11,
+             11, -4,  4,      4, -11,  4,     4, -4,  11,
+            -11,  4, -4,     -4,  11, -4,    -4,  4, -11,
+             11,  4, -4,      4,  11, -4,     4,  4, -11,
+            -11, -4, -4,     -4, -11, -4,    -4, -4, -11,
+             11, -4, -4,      4, -11, -4,     4, -4, -11,
+        };
 
         private static double[] gradients4D =
         {
-	         3,  1,  1,  1,      1,  3,  1,  1,      1,  1,  3,  1,      1,  1,  1,  3,
-	        -3,  1,  1,  1,     -1,  3,  1,  1,     -1,  1,  3,  1,     -1,  1,  1,  3,
-	         3, -1,  1,  1,      1, -3,  1,  1,      1, -1,  3,  1,      1, -1,  1,  3,
-	        -3, -1,  1,  1,     -1, -3,  1,  1,     -1, -1,  3,  1,     -1, -1,  1,  3,
-	         3,  1, -1,  1,      1,  3, -1,  1,      1,  1, -3,  1,      1,  1, -1,  3,
-	        -3,  1, -1,  1,     -1,  3, -1,  1,     -1,  1, -3,  1,     -1,  1, -1,  3,
-	         3, -1, -1,  1,      1, -3, -1,  1,      1, -1, -3,  1,      1, -1, -1,  3,
-	        -3, -1, -1,  1,     -1, -3, -1,  1,     -1, -1, -3,  1,     -1, -1, -1,  3,
-	         3,  1,  1, -1,      1,  3,  1, -1,      1,  1,  3, -1,      1,  1,  1, -3,
-	        -3,  1,  1, -1,     -1,  3,  1, -1,     -1,  1,  3, -1,     -1,  1,  1, -3,
-	         3, -1,  1, -1,      1, -3,  1, -1,      1, -1,  3, -1,      1, -1,  1, -3,
-	        -3, -1,  1, -1,     -1, -3,  1, -1,     -1, -1,  3, -1,     -1, -1,  1, -3,
-	         3,  1, -1, -1,      1,  3, -1, -1,      1,  1, -3, -1,      1,  1, -1, -3,
-	        -3,  1, -1, -1,     -1,  3, -1, -1,     -1,  1, -3, -1,     -1,  1, -1, -3,
-	         3, -1, -1, -1,      1, -3, -1, -1,      1, -1, -3, -1,      1, -1, -1, -3,
-	        -3, -1, -1, -1,     -1, -3, -1, -1,     -1, -1, -3, -1,     -1, -1, -1, -3,
-	    };
+             3,  1,  1,  1,      1,  3,  1,  1,      1,  1,  3,  1,      1,  1,  1,  3,
+            -3,  1,  1,  1,     -1,  3,  1,  1,     -1,  1,  3,  1,     -1,  1,  1,  3,
+             3, -1,  1,  1,      1, -3,  1,  1,      1, -1,  3,  1,      1, -1,  1,  3,
+            -3, -1,  1,  1,     -1, -3,  1,  1,     -1, -1,  3,  1,     -1, -1,  1,  3,
+             3,  1, -1,  1,      1,  3, -1,  1,      1,  1, -3,  1,      1,  1, -1,  3,
+            -3,  1, -1,  1,     -1,  3, -1,  1,     -1,  1, -3,  1,     -1,  1, -1,  3,
+             3, -1, -1,  1,      1, -3, -1,  1,      1, -1, -3,  1,      1, -1, -1,  3,
+            -3, -1, -1,  1,     -1, -3, -1,  1,     -1, -1, -3,  1,     -1, -1, -1,  3,
+             3,  1,  1, -1,      1,  3,  1, -1,      1,  1,  3, -1,      1,  1,  1, -3,
+            -3,  1,  1, -1,     -1,  3,  1, -1,     -1,  1,  3, -1,     -1,  1,  1, -3,
+             3, -1,  1, -1,      1, -3,  1, -1,      1, -1,  3, -1,      1, -1,  1, -3,
+            -3, -1,  1, -1,     -1, -3,  1, -1,     -1, -1,  3, -1,     -1, -1,  1, -3,
+             3,  1, -1, -1,      1,  3, -1, -1,      1,  1, -3, -1,      1,  1, -1, -3,
+            -3,  1, -1, -1,     -1,  3, -1, -1,     -1,  1, -3, -1,     -1,  1, -1, -3,
+             3, -1, -1, -1,      1, -3, -1, -1,      1, -1, -3, -1,      1, -1, -1, -3,
+            -3, -1, -1, -1,     -1, -3, -1, -1,     -1, -1, -3, -1,     -1, -1, -1, -3,
+        };
 
         private static Contribution2[] lookup2D;
         private static Contribution3[] lookup3D;
@@ -460,6 +461,74 @@ namespace AssetsPV
             return value * NORM_4D;
         }
 
+        public double EvaluateFloat(double x, double y, double z, double w)
+        {
+            var stretchOffset = (x + y + z + w) * STRETCH_4D;
+            var xs = x + stretchOffset;
+            var ys = y + stretchOffset;
+            var zs = z + stretchOffset;
+            var ws = w + stretchOffset;
+
+            var xsb = FastFloor(xs);
+            var ysb = FastFloor(ys);
+            var zsb = FastFloor(zs);
+            var wsb = FastFloor(ws);
+
+            var squishOffset = (xsb + ysb + zsb + wsb) * SQUISH_4D;
+            var dx0 = x - (xsb + squishOffset);
+            var dy0 = y - (ysb + squishOffset);
+            var dz0 = z - (zsb + squishOffset);
+            var dw0 = w - (wsb + squishOffset);
+
+            var xins = xs - xsb;
+            var yins = ys - ysb;
+            var zins = zs - zsb;
+            var wins = ws - wsb;
+
+            var inSum = xins + yins + zins + wins;
+
+            var hash =
+                (int)(zins - wins + 1) |
+                (int)(yins - zins + 1) << 1 |
+                (int)(yins - wins + 1) << 2 |
+                (int)(xins - yins + 1) << 3 |
+                (int)(xins - zins + 1) << 4 |
+                (int)(xins - wins + 1) << 5 |
+                (int)inSum << 6 |
+                (int)(inSum + wins) << 8 |
+                (int)(inSum + zins) << 11 |
+                (int)(inSum + yins) << 14 |
+                (int)(inSum + xins) << 17;
+
+            var c = lookup4D[hash];
+
+            var value = 0.0;
+            while (c != null)
+            {
+                var dx = dx0 + c.dx;
+                var dy = dy0 + c.dy;
+                var dz = dz0 + c.dz;
+                var dw = dw0 + c.dw;
+                var attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw;
+                if (attn > 0)
+                {
+                    var px = xsb + c.xsb;
+                    var py = ysb + c.ysb;
+                    var pz = zsb + c.zsb;
+                    var pw = wsb + c.wsb;
+
+                    var i = perm4D[(perm[(perm[(perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF] + pw) & 0xFF];
+                    var valuePart = gradients4D[i] * dx + gradients4D[i + 1] * dy + gradients4D[i + 2] * dz + gradients4D[i + 3] * dw;
+
+                    attn *= attn;
+                    value += attn * attn * valuePart;
+                }
+
+                c = c.Next;
+            }
+            return value * NORM_4D;
+        }
+
         private class Contribution2
         {
             public double dx, dy;
@@ -516,23 +585,27 @@ namespace AssetsPV
         /// <summary>
         /// 0.0 to 1.0
         /// </summary>
-        public static readonly float[, , ,] NoiseGridWater = new float[4, 160, 160, 160];
+        public static readonly float[,,,] NoiseGridWater = new float[4, 160, 160, 160];
+        /// <summary>
+        /// 0.0 to 1.0
+        /// </summary>
+        public static readonly float[,,] NoiseGridFlatWater = new float[16, 0x10, 0x10];
         /// <summary>
         /// 0.5 to 1.5
         /// </summary>
-        public static readonly float[, , ,] NoiseGridTight = new float[4, 160, 160, 160];
+        public static readonly float[,,,] NoiseGridTight = new float[4, 160, 160, 160];
         /// <summary>
         /// 0.5 to 1.5
         /// </summary>
-        public static readonly float[, ,] NoiseGridBold = new float[160, 160, 160];
+        public static readonly float[,,] NoiseGridBold = new float[160, 160, 160];
         /// <summary>
         /// 0.75 to 1.25
         /// </summary>
-        public static readonly float[, ,] NoiseGrid = new float[160, 160, 160];
+        public static readonly float[,,] NoiseGrid = new float[160, 160, 160];
         /// <summary>
         /// 0.875 to 1.125
         /// </summary>
-        public static readonly float[, ,] NoiseGridLight = new float[160, 160, 160];
+        public static readonly float[,,] NoiseGridLight = new float[160, 160, 160];
 
         public static float FindNoise(int facing, int x, int y, int z)
         {
@@ -606,6 +679,20 @@ namespace AssetsPV
                     return NoiseGridWater[frame, x, y, z];
             }
         }
+        public static float FindNoiseFlatWater(int facing, int x, int y, int variant)
+        {
+            switch (facing)
+            {
+                case 1:
+                    return NoiseGridFlatWater[variant, y, 0x10 - 1 - x];
+                case 2:
+                    return NoiseGridFlatWater[variant, 0x10 - 1 - x, 0x10 - 1 - y];
+                case 3:
+                    return NoiseGridFlatWater[variant, 0x10 - 1 - y, x];
+                default:
+                    return NoiseGridFlatWater[variant, x, y];
+            }
+        }
 
 
         static Simplex()
@@ -649,7 +736,7 @@ namespace AssetsPV
                 }
             }
             double[] offsets = new double[] { 0, 0.35, 0.8, 0.45 }, water_offsets = new double[] { 0, 0.7, 1.5, 0.8 };
-            for (int o = 0; o < 4; o++ )
+            for (int o = 0; o < 4; o++)
             {
                 double off = offsets[o];
                 double wat = water_offsets[o];
@@ -663,17 +750,159 @@ namespace AssetsPV
 
                             NoiseGridTight[o, x, y, z] *= 0.5F;
                             NoiseGridTight[o, x, y, z] += 1.0F;
-                            
+                            /*
                             NoiseGridWater[o, x, y, z] = (major.EvaluateFloat((x + off / 1.0) / 5.0, (y + off / 1.0) / 5.0, (z + off) / 2.5) * 3.0F + minor.EvaluateFloat((x + off / 0.5) / 2.0, (y + off / 0.5) / 2.0, (z + off) / 1.5)) / 4.0F;
 
                             NoiseGridWater[o, x, y, z] *= 0.5F;
-                            NoiseGridWater[o, x, y, z] += 0.5F;
+                            NoiseGridWater[o, x, y, z] += 0.5F;*/
                         }
                     }
                 }
             }
-        }
 
+            float[,] blue = new float[16, 16], orange = new float[16, 16];
+            {
+                //blue block
+                double x1 = 0.0;
+                double y1 = 0.0;
+
+                double dx = 6.0;
+                double dy = 6.0;
+
+                for (int x = 0; x < 16; x++)
+                {
+                    for (int y = 0; y < 16; y++)
+                    {
+                        double s = x / 16.0;
+                        double t = y / 16.0;
+
+                        double nx = x1 + Math.Cos(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
+                        double nz = x1 + Math.Sin(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double nw = y1 + Math.Sin(t * 2 * Math.PI) * dy / (2 * Math.PI);
+
+                        float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(7.5F - x), Math.Abs(7.5F - y)) / 6.5F))), 0.5F) * 6F;
+
+                        blue[x, y] = (float)(major.Evaluate(nx, ny, nz, nw) * (3.0F - contrib));
+
+                    }
+                }
+            }
+            {
+                //orange block
+                double x1 = 0.0;
+                double y1 = 0.0;
+
+                double dx = 7.0;
+                double dy = 7.0;
+
+                for (int x = 0; x < 16; x++)
+                {
+                    for (int y = 0; y < 16; y++)
+                    {
+                        double s = x / 16.0;
+                        double t = y / 16.0;
+
+                        double nx = x1 + Math.Cos(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
+                        double nz = x1 + Math.Sin(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double nw = y1 + Math.Sin(t * 2 * Math.PI) * dy / (2 * Math.PI);
+
+                        float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(7.5F - x), Math.Abs(7.5F - y)) / 6.5F))), 0.5F) * 4F;
+
+                        orange[x, y] = (float)(minor.Evaluate(nx, ny, nz, nw) * (2F - contrib));
+
+                    }
+                }
+            }
+            for (int v = 0; v < 16; v++)
+            {
+                //true means use blue.
+                bool north = 0 < (v & 1);
+                bool east = 0 < (v & 2);
+                bool south = 0 < (v & 4);
+                bool west = 0 < (v & 8);
+                
+                for (int x = 0; x < 16; x++)
+                {
+                    for (int y = 0; y < 16; y++)
+                    {
+                        /* From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
+                        for x=0,bufferwidth-1,1 do
+        for y=0,bufferheight-1,1 do
+            local s=x/bufferwidth
+            local t=y/bufferheight
+            local dx=x2-x1
+            local dy=y2-y1
+
+            local nx=x1+cos(s*2*pi)*dx/(2*pi)
+            local ny=y1+cos(t*2*pi)*dy/(2*pi)
+            local nz=x1+sin(s*2*pi)*dx/(2*pi)
+            local nw=y1+sin(t*2*pi)*dy/(2*pi)
+
+            buffer:set(x,y,Noise4D(nx,ny,nz,nw))
+        end
+    end
+    */
+                        //always between 0.0F and 3.0F, tends strongly toward 3.0 anywhere close to center, 0.0 always at edges
+                        float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(7.5F - x), Math.Abs(7.5F - y)) / 6.5F))), 0.5F) * 6F;
+                        NoiseGridFlatWater[v, x, y] = (float)((major.EvaluateFloat(x / 4.0, y / 4.0, v * 2.5) * 3.0F + minor.EvaluateFloat(x / 0.9, y / 0.9, v * 3.5)) / 4.0F) * contrib;
+                        /*if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
+                        {
+                            NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
+                        }*/
+                        if (7.5 - Math.Abs(7.5 - x) >= y)
+                        {
+                            if (north)
+                            {
+                                NoiseGridFlatWater[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWater[v, x, y] += orange[x, y];
+                            }
+                        }
+                        if (7.5 - Math.Abs(7.5 - x) >= 15 - y)
+                        {
+                            if (south)
+                            {
+                                NoiseGridFlatWater[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWater[v, x, y] += orange[x, y];
+                            }
+                        }
+
+                        if (7.5 - Math.Abs(7.5 - y) > x)
+                        {
+                            if (west)
+                            {
+                                NoiseGridFlatWater[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWater[v, x, y] += orange[x, y];
+                            }
+                        }
+                        if (7.5 - Math.Abs(7.5 - y) > 15 - x)
+                        {
+                            if (east)
+                            {
+                                NoiseGridFlatWater[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWater[v, x, y] += orange[x, y];
+                            }
+                        }
+
+                        NoiseGridFlatWater[v, x, y] /= 4.0F * 2.0F;
+                        NoiseGridFlatWater[v, x, y] += 0.5F;
+                    }
+                }
+            }
+        }
 
     }
 }

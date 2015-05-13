@@ -6936,7 +6936,7 @@ namespace AssetsPV
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // eraser stuff
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
-                                mod_color = (current_color == 26 || current_color == 27 || current_color == 26 + VoxelLogic.kcolorcount || current_color == 27 + VoxelLogic.kcolorcount) ? current_color + 2 : current_color;
+                                mod_color = current_color;
 //                                mod_color = ((current_color == 26 || current_color == 27 || current_color == 26 + VoxelLogic.kcolorcount || current_color == 27 + VoxelLogic.kcolorcount) ? current_color +
 //                                    (Math.Abs((((frame % 4) / 2) + zbuffer[p] + vx.x - vx.y)) % (((zbuffer[p] + vx.x + vx.y + vx.z) % 4 == 0) ? 5 : 4)) : current_color);
                                 if (VoxelLogic.kcolors[mod_color][3] == VoxelLogic.gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
