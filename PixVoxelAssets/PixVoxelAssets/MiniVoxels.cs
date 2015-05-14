@@ -302,8 +302,8 @@ namespace AssetsPV
                                                 else
                                                 {
                                                     c = ColorFromHSV((h + alt_k * 100) % 360,
-                                                        MercifulClamp(s * (1.1 - alt_k * 0.2) + 0.3 * softness),
-                                                        MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 0.75 : 0.65 - alt_k * 0.2 + 0.1 * softness)));
+                                                        MercifulClamp(s * (1.05 - alt_k * 0.2) + 0.1 * softness),
+                                                        MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 0.85 : 0.7 - alt_k * 0.2 + 0.1 * softness)));
 
                                                 }
                                             }
@@ -868,33 +868,33 @@ namespace AssetsPV
                                 else if (kcolors[mod_color][3] == grain_hard_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseBold(facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] * n, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] * n, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == grain_some_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoise(facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] * n, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] * n, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == grain_mild_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseLight(facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] * n, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] * n, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == fuzz_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] * n, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] * n, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (unshaded == 25 && i % 4 == 3)
@@ -941,9 +941,9 @@ namespace AssetsPV
                                         }
                                     }
 
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] + wave, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] + wave, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] + wave, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] + wave, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] + wave, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] + wave, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
 
@@ -1132,10 +1132,10 @@ namespace AssetsPV
                                         wave = 32.0 * wave;
                                     }
 
-
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] + wave, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 16] + wave, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 16] + wave, 255);
+                                    
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] + wave, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] + wave, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] + wave, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
 
@@ -1389,17 +1389,20 @@ namespace AssetsPV
             VoxelLogic.krendered = krendered;
             kFleshRendered = storeColorCubesFleshToneK();
             VoxelLogic.kFleshRendered = kFleshRendered;
-            /*
+            
             processUnitK("Human_Male", 0, true, false);
             processUnitK("Human_Female", 1, true, false);
 
             processUnitK("Warrior_Male", 7, true, false);
-            processUnitK("Warrior_Female", 7, true, false);*/
+            processUnitK("Warrior_Female", 7, true, false);
+            processUnitK("Mage_Male", 8, true, false);
+            processUnitK("Mage_Female", 8, true, false);
 
             //            processTerrainK("Water", "Caves", 4, true, false, false);
+            
             processWaterK("Caves", 4);
 
-            /*
+            
             processTerrainK("Floor", "Caves", 4, true, false, false);
             processTerrainK("Wall_Straight", "Caves", 4, true, false, true);
             processTerrainK("Wall_Corner", "Caves", 4, true, false, true);
@@ -1407,7 +1410,7 @@ namespace AssetsPV
             processTerrainK("Wall_Cross", "Caves", 4, true, false, true);
             processTerrainK("Door_Closed", "Caves", 4, true, false, true);
             processTerrainK("Door_Open", "Caves", 4, true, false, true);
-            */
+            
         }
     }
 }

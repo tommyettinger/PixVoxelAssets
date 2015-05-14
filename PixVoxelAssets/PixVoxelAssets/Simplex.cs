@@ -706,7 +706,7 @@ namespace AssetsPV
                 {
                     for (int z = 0; z < 160; z++)
                     {
-                        NoiseGridBold[x, y, z] = (major.EvaluateFloat(x / 4.0, y / 4.0, z / 4.0) + minor.EvaluateFloat(x / 2.0, y / 2.0, z / 2.0)) / 2.0F;
+                        NoiseGridBold[x, y, z] = (float)Math.Truncate((major.EvaluateFloat(x / 4.0, y / 4.0, z / 4.0) + minor.EvaluateFloat(x / 2.0, y / 2.0, z / 2.0)) * 8F) / 16.0F;
 
                         NoiseGrid[x, y, z] = NoiseGridBold[x, y, z] * 0.5F;
                         NoiseGridLight[x, y, z] = NoiseGrid[x, y, z] * 0.5F;
@@ -747,6 +747,7 @@ namespace AssetsPV
                         for (int z = 0; z < 160; z++)
                         {
                             NoiseGridTight[o, x, y, z] = (major.EvaluateFloat((x + off) / 2.0, (y + off / 3.0) / 2.0, (z + off / 2.0) / 2.0) + minor.EvaluateFloat((x + off) / 1.5, (y + off / 3.0) / 1.5, (z + off / 2.0) / 1.5)) / 2.0F;
+                            NoiseGridTight[o, x, y, z] = (float)Math.Truncate(NoiseGridTight[o, x, y, z] * 16) / 16.0F;
 
                             NoiseGridTight[o, x, y, z] *= 0.5F;
                             NoiseGridTight[o, x, y, z] += 1.0F;
@@ -807,7 +808,7 @@ namespace AssetsPV
                         double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
                         double nz = x1 + Math.Sin(s * 2 * Math.PI) * dx / (2 * Math.PI);
                         double nw = y1 + Math.Sin(t * 2 * Math.PI) * dy / (2 * Math.PI);
-
+                        //less significant than the contrib used for the center; 0.0F to 2.0F
                         float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(7.5F - x), Math.Abs(7.5F - y)) / 6.5F))), 0.5F) * 4F;
 
                         orange[x, y] = (float)(minor.Evaluate(nx, ny, nz, nw) * (2F - contrib));
@@ -899,6 +900,8 @@ namespace AssetsPV
 
                         NoiseGridFlatWater[v, x, y] /= 4.0F * 2.0F;
                         NoiseGridFlatWater[v, x, y] += 0.5F;
+                        NoiseGridFlatWater[v, x, y] = (float)Math.Truncate(NoiseGridFlatWater[v, x, y] * 16) / 16.0F;
+
                     }
                 }
             }
