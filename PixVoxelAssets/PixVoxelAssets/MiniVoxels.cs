@@ -1391,15 +1391,17 @@ namespace AssetsPV
             VoxelLogic.kFleshRendered = kFleshRendered;
             
             processUnitK("Human_Male", 0, true, false);
-            processUnitK("Human_Female", 1, true, false);
+            processUnitK("Human_Female", 10, true, false);
 
             processUnitK("Warrior_Male", 7, true, false);
             processUnitK("Warrior_Female", 7, true, false);
             processUnitK("Mage_Male", 8, true, false);
             processUnitK("Mage_Female", 8, true, false);
+            processUnitK("Rogue_Male", 1, true, false);
+            processUnitK("Rogue_Female", 9, true, false);
 
             //            processTerrainK("Water", "Caves", 4, true, false, false);
-            
+            /*
             processWaterK("Caves", 4);
 
             
@@ -1410,7 +1412,8 @@ namespace AssetsPV
             processTerrainK("Wall_Cross", "Caves", 4, true, false, true);
             processTerrainK("Door_Closed", "Caves", 4, true, false, true);
             processTerrainK("Door_Open", "Caves", 4, true, false, true);
-            
+            */
+
         }
     }
 }
