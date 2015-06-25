@@ -1399,6 +1399,7 @@ namespace AssetsPV
             processUnitK("Mage_Female", 8, true, false);
             processUnitK("Rogue_Male", 1, true, false);
             processUnitK("Rogue_Female", 9, true, false);
+            processUnitK("Priest_Male", 11, true, false);
 
             //            processTerrainK("Water", "Caves", 4, true, false, false);
             /*
