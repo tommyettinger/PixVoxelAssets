@@ -858,6 +858,17 @@ namespace AssetsPV
                             {
                                 zbuffer[p] = vx.z + vx.x - vx.y;
                                 mod_color = current_color;
+                                if(current_color == 7)
+                                {
+                                    if(j <= 1 && (i < 4 || (i >= 8 && i < 12)))
+                                    {
+                                        mod_color = 6;
+                                    }
+                                    else
+                                    {
+                                        mod_color = 7;
+                                    }
+                                }
                                 if (kcolors[mod_color][3] == gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
                                     argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 16] + 160, 255);
@@ -1400,6 +1411,7 @@ namespace AssetsPV
             processUnitK("Rogue_Male", 1, true, false);
             processUnitK("Rogue_Female", 9, true, false);
             processUnitK("Priest_Male", 11, true, false);
+            processUnitK("Priest_Female", 11, true, false);
 
             //            processTerrainK("Water", "Caves", 4, true, false, false);
             /*
