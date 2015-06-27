@@ -15399,6 +15399,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
     0xff000022, 0xff000011, 0xff00ee00, 0xff00dd00, 0xff00bb00, 0xff00aa00, 0xff008800, 0xff007700, 0xff005500, 0xff004400, 0xff002200, 0xff001100, 0xffee0000, 0xffdd0000, 0xffbb0000, 0xffaa0000,
     0xff880000, 0xff770000, 0xff550000, 0xff440000, 0xff220000, 0xff110000, 0xffeeeeee, 0xffdddddd, 0xffbbbbbb, 0xffaaaaaa, 0xff888888, 0xff777777, 0xff555555, 0xff444444, 0xff222222, 0xff111111
 };
+        private static int rowWidthBytes = 4;
         /// <summary>
         /// Write a MagicaVoxel .vox format file from a List of MagicaVoxelData and a palette from this program to use.
         /// </summary>
@@ -15441,10 +15442,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     if ((249 - i) % 8 == 0 && 249 - i < 168)
                     {
-                        colors[(i - 1) * 4] = xrendered[249 - i + palette][2 + 16];
-                        colors[(i - 1) * 4 + 1] = xrendered[249 - i + palette][1 + 16];
-                        colors[(i - 1) * 4 + 2] = xrendered[249 - i + palette][0 + 16];
-                        colors[(i - 1) * 4 + 3] = xrendered[249 - i + palette][3 + 16];
+                        colors[(i - 1) * 4] = xrendered[249 - i + palette][2 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 1] = xrendered[249 - i + palette][1 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 2] = xrendered[249 - i + palette][0 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 3] = xrendered[249 - i + palette][3 + rowWidthBytes];
                     }
                     else
                     {
@@ -15526,17 +15527,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     if ((253 - i) % 4 == 0 && (253 - i) / 4 < wcolorcount)
                     {
-                        colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2 + 16];
-                        colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + 16];
-                        colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + 16];
-                        colors[(i - 1) * 4 + 3] = wrendered[palette][(253 - i) / 4][3 + 16];
+                        colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 3] = wrendered[palette][(253 - i) / 4][3 + rowWidthBytes];
                     }
                     else if ((255 - i) % 4 == 0 && wcolorcount + (255 - i) / 4 < wrendered[palette].Length)
                     {
-                        colors[(i - 1) * 4] = wrendered[palette][(255 - i) / 4 + wcolorcount][2 + 16];
-                        colors[(i - 1) * 4 + 1] = wrendered[palette][(255 - i) / 4 + wcolorcount][1 + 16];
-                        colors[(i - 1) * 4 + 2] = wrendered[palette][(255 - i) / 4 + wcolorcount][0 + 16];
-                        colors[(i - 1) * 4 + 3] = wrendered[palette][(255 - i) / 4 + wcolorcount][3 + 16];
+                        colors[(i - 1) * 4] = wrendered[palette][(255 - i) / 4 + wcolorcount][2 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 1] = wrendered[palette][(255 - i) / 4 + wcolorcount][1 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 2] = wrendered[palette][(255 - i) / 4 + wcolorcount][0 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 3] = wrendered[palette][(255 - i) / 4 + wcolorcount][3 + rowWidthBytes];
                     }
                     else
                     {
@@ -15642,17 +15643,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     if ((253 - i) % 4 == 0 && (253 - i) / 4 < kcolorcount)
                     {
-                        colors[(i - 1) * 4] = kcurrent[(253 - i) / 4][2 + 16];
-                        colors[(i - 1) * 4 + 1] = kcurrent[(253 - i) / 4][1 + 16];
-                        colors[(i - 1) * 4 + 2] = kcurrent[(253 - i) / 4][0 + 16];
-                        colors[(i - 1) * 4 + 3] = kcurrent[(253 - i) / 4][3 + 16];
+                        colors[(i - 1) * 4] = kcurrent[(253 - i) / 4][2 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 1] = kcurrent[(253 - i) / 4][1 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 2] = kcurrent[(253 - i) / 4][0 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 3] = kcurrent[(253 - i) / 4][3 + rowWidthBytes];
                     }
                     else if ((255 - i) % 4 == 0 && kcolorcount + (255 - i) / 4 < kcurrent.Length)
                     {
-                        colors[(i - 1) * 4] = kcurrent[(255 - i) / 4 + kcolorcount][2 + 16];
-                        colors[(i - 1) * 4 + 1] = kcurrent[(255 - i) / 4 + kcolorcount][1 + 16];
-                        colors[(i - 1) * 4 + 2] = kcurrent[(255 - i) / 4 + kcolorcount][0 + 16];
-                        colors[(i - 1) * 4 + 3] = kcurrent[(255 - i) / 4 + kcolorcount][3 + 16];
+                        colors[(i - 1) * 4] = kcurrent[(255 - i) / 4 + kcolorcount][2 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 1] = kcurrent[(255 - i) / 4 + kcolorcount][1 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 2] = kcurrent[(255 - i) / 4 + kcolorcount][0 + rowWidthBytes];
+                        colors[(i - 1) * 4 + 3] = kcurrent[(255 - i) / 4 + kcolorcount][3 + rowWidthBytes];
                     }
                     else
                     {

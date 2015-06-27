@@ -13,6 +13,7 @@ namespace AssetsPV
 {
     class MiniOrthoVoxels
     {
+        private static int vwidth = 2, vheight = 4;
         private static Random r = new Random(0x1337beef);
 
         public const int factions = 1;
@@ -105,7 +106,7 @@ namespace AssetsPV
 
             kpalettecount = DungeonPalettes.kdungeon[0].Length;
 
-            byte[,,,] cubes = new byte[DungeonPalettes.kdungeon.Length, kpalettecount, DungeonPalettes.kdungeon[0][0].Length * 2, 32];
+            byte[,,,] cubes = new byte[DungeonPalettes.kdungeon.Length, kpalettecount, DungeonPalettes.kdungeon[0][0].Length * 2, 4 * vwidth * (vheight + 1)];
 
             for (int k = 0; k < DungeonPalettes.kdungeon.Length; k++)
             {
@@ -113,8 +114,8 @@ namespace AssetsPV
                 float[][][] contrast = kpalettes.Replicate();
                 Image image = new Bitmap("white.png");
                 ImageAttributes imageAttributes = new ImageAttributes();
-                int width = 2;
-                int height = 4;
+                int width = vwidth;
+                int height = vheight + 1;
                 float[][] colorMatrixElements = {
        new float[] {1F, 0,  0,  0,  0},
        new float[] {0, 1F,  0,  0,  0},
@@ -205,7 +206,7 @@ namespace AssetsPV
                                         {
 
                                             //top
-                                            if (j == 0)
+                                            if (j <= 1)
                                             {
                                                 ColorToHSV(c, out h, out s, out v);
                                                 c = ColorFromHSV((h + alt_k * 100) % 360,
@@ -243,7 +244,7 @@ namespace AssetsPV
                                     case "flat":
                                         {
                                             //above the region that should have color
-                                            if (j < 2)
+                                            if (j < vheight / 2)
                                             {
                                                 c = Color.Transparent;
                                             }
@@ -347,6 +348,7 @@ namespace AssetsPV
                     DungeonPalettes.kdungeon[k][p] = kpalettes[p].Concat(contrast[p]).ToArray();
                 }
             }
+            int blen = 4 * vwidth * (vheight + 1);
             byte[][][][] cubes2 = new byte[DungeonPalettes.kdungeon.Length][][][];
             for (int k = 0; k < DungeonPalettes.kdungeon.Length; k++)
             {
@@ -356,8 +358,8 @@ namespace AssetsPV
                     cubes2[k][i] = new byte[DungeonPalettes.kdungeon[k][i].Length][];
                     for (int c = 0; c < DungeonPalettes.kdungeon[k][i].Length; c++)
                     {
-                        cubes2[k][i][c] = new byte[32];
-                        for (int j = 0; j < 32; j++)
+                        cubes2[k][i][c] = new byte[blen];
+                        for (int j = 0; j < blen; j++)
                         {
                             cubes2[k][i][c][j] = cubes[k, i, c, j];
                         }
@@ -370,15 +372,15 @@ namespace AssetsPV
         private static byte[][][] storeColorCubesFleshToneK()
         {
             int fleshPaletteCount = DungeonPalettes.fleshTones.Length;
-            byte[,,] cubes = new byte[fleshPaletteCount, DungeonPalettes.fleshTones[0].Length * 2, 32];
+            byte[,,] cubes = new byte[fleshPaletteCount, DungeonPalettes.fleshTones[0].Length * 2, 4 * vwidth * (vheight + 1)];
 
             float[][][] kpalettes = DungeonPalettes.fleshTones;
             int kcolorcount = kpalettes[0].Length;
             float[][][] contrast = kpalettes.Replicate();
             Image image = new Bitmap("white.png");
             ImageAttributes imageAttributes = new ImageAttributes();
-            int width = 2;
-            int height = 4;
+            int width = vwidth;
+            int height = vheight + 1;
             float[][] colorMatrixElements = {
     new float[] {1F, 0,  0,  0,  0},
     new float[] {0, 1F,  0,  0,  0},
@@ -461,7 +463,7 @@ namespace AssetsPV
                                     {
 
                                         //top
-                                        if (j == 0)
+                                        if (j <= 1)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV((h + alt_k * 100) % 360,
@@ -498,7 +500,7 @@ namespace AssetsPV
                                 case "flat":
                                     {
                                         //above the region that should have color
-                                        if (j < 2)
+                                        if (j < vheight / 2)
                                         {
                                             c = Color.Transparent;
                                         }
@@ -598,15 +600,15 @@ namespace AssetsPV
                 }
                 DungeonPalettes.fleshTones[p] = kpalettes[p].Concat(contrast[p]).ToArray();
             }
-
+            int blen = 4 * vwidth * (vheight + 1);
             byte[][][] cubes2 = new byte[DungeonPalettes.fleshTones.Length][][];
             for (int k = 0; k < DungeonPalettes.fleshTones.Length; k++)
             {
                 cubes2[k] = new byte[DungeonPalettes.fleshTones[k].Length][];
                 for (int c = 0; c < DungeonPalettes.fleshTones[k].Length; c++)
                 {
-                    cubes2[k][c] = new byte[32];
-                    for (int j = 0; j < 32; j++)
+                    cubes2[k][c] = new byte[blen];
+                    for (int j = 0; j < blen; j++)
                     {
                         cubes2[k][c][j] = cubes[k, c, j];
                     }
@@ -636,23 +638,23 @@ namespace AssetsPV
 
         private static int voxelToPixelK16(int innerX, int innerY, int x, int y, int z, int faction, int palette, int current_color, int stride, int jitter, bool still)
         {
-            return 4 * ((y) * 2 + 4 + ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == waver_alpha) ? jitter - 2 : 0))
+            return 4 * ((y) * vwidth + 4 + ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (16 * 2 + 4 + x - z * 2 - ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == flat_alpha)
+                stride * (16 * (vheight - 2) + 4 + x * 2 - z * (vheight - 2) - ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == flat_alpha)
                 ? -2 : (still ^ (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
         }
         private static int voxelToPixelK32(int innerX, int innerY, int x, int y, int z, int faction, int palette, int current_color, int stride, int jitter, bool still)
         {
-            return 4 * ((y) * 2 + 4 + ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
+            return 4 * ((y) * vwidth + 4 + ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                stride * (32 * 2 + 4 + x - z * 2 - ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.flat_alpha)
+                stride * (32 * (vheight - 2) + 4 + x * 2 - z * (vheight - 2) - ((DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.flat_alpha)
                 ? -2 : (still ^ (DungeonPalettes.kdungeon[faction][palette][current_color][3] == VoxelLogic.yver_alpha)) ? 0 : jitter) + innerY);
         }
 
 
         private static Bitmap renderK(MagicaVoxelData[] voxels, int facing, int faction, int palette, int frame, int maxFrames, bool still, bool darkOutline)
         {
-            Bitmap bmp = new Bitmap(2 * 16 + 8, 3 * 16 + 8, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(vwidth * 16 + 8, vheight * 16 + 8, PixelFormat.Format32bppArgb);
 
             // Specify a pixel format.
             PixelFormat pxf = PixelFormat.Format32bppArgb;
@@ -783,9 +785,9 @@ namespace AssetsPV
                         }
                     }
 
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < vheight; j++)
                     {
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 4 * vwidth; i++)
                         {
                             p = voxelToPixelK16(i, j, vx.x, vx.y, vx.z, faction, palette, mod_color, bmpData.Stride, jitter, still);
                             if (argbValues[p] == 0) //  && argbValues[(p / 4) + 3] != 7 // check for erased pixels
@@ -795,10 +797,10 @@ namespace AssetsPV
                                     zbuffer[p] = vx.z;
                                     xbuffer[p] = vx.x;
                                 }
-                                argbValues[p] = kcurrent[mod_color][i + j * 8];
+                                argbValues[p] = kcurrent[mod_color][i + j * (vwidth * 4)];
                                 barePositions[p] = !(DungeonPalettes.kdungeon[faction][palette][current_color][3] == bordered_alpha || DungeonPalettes.kdungeon[faction][palette][current_color][3] == bordered_flat_alpha);
                                 if (!barePositions[p] && outlineColors[p] == 0)
-                                    outlineColors[p] = kcurrent[mod_color][i + 24];
+                                    outlineColors[p] = kcurrent[mod_color][i + (vheight * vwidth * 4)];
 
                             }
                         }
@@ -806,15 +808,15 @@ namespace AssetsPV
                 }
                 else if (unshaded == 23)
                 {
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < vheight; j++)
                     {
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 4 * vwidth; i++)
                         {
                             p = voxelToPixelK16(i, j, vx.x, vx.y, vx.z, faction, palette, current_color, bmpData.Stride, jitter, still);
 
                             if (shadowValues[p] == 0)
                             {
-                                shadowValues[p] = kcurrent[current_color][i + j * 8];
+                                shadowValues[p] = kcurrent[current_color][i + j * (vwidth * 4)];
                             }
                         }
                     }
@@ -829,9 +831,9 @@ namespace AssetsPV
                     if ((unshaded >= 16 && unshaded <= 18) && r.Next(11) < 8) //rare sparks
                         continue;
 
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < vheight; j++)
                     {
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 4 * vwidth; i++)
                         {
                             p = voxelToPixelK16(i, j, vx.x, vx.y, vx.z, faction, palette, mod_color, bmpData.Stride, jitter, still);
 
@@ -840,9 +842,9 @@ namespace AssetsPV
                                 zbuffer[p] = vx.z;
                                 xbuffer[p] = vx.x;
                                 mod_color = current_color;
-                                if (current_color == 7)
+                                if (current_color == 7 && vheight > 2)
                                 {
-                                    if (j <= 1 && i < 4)
+                                    if (j <= 2 && i < 4)
                                     {
                                         mod_color = 6;
                                     }
@@ -853,41 +855,41 @@ namespace AssetsPV
                                 }
                                 if (kcolors[mod_color][3] == gloss_alpha && i % 4 == 3 && r.Next(12) == 0)
                                 {
-                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * 8] + 160, 255);
-                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * 8] + 160, 255);
-                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * 8] + 160, 255);
+                                    argbValues[p - 3] = (byte)Math.Min(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] + 160, 255);
+                                    argbValues[p - 2] = (byte)Math.Min(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] + 160, 255);
+                                    argbValues[p - 1] = (byte)Math.Min(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == grain_hard_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseBold(facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 8] * n, 1, 255);
-                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 8] * n, 1, 255);
-                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 8] * n, 1, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == grain_some_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoise(facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 8] * n, 1, 255);
-                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 8] * n, 1, 255);
-                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 8] * n, 1, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == grain_mild_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseLight(facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 8] * n, 1, 255);
-                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 8] * n, 1, 255);
-                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 8] * n, 1, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (kcolors[mod_color][3] == fuzz_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 72, vx.y + 72, vx.z);
-                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 8] * n, 1, 255);
-                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 8] * n, 1, 255);
-                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 8] * n, 1, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] * n, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else if (unshaded == 25 && i % 4 == 3)
@@ -934,21 +936,21 @@ namespace AssetsPV
                                         }
                                     }
 
-                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 8] + wave, 1, 255);
-                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 8] + wave, 1, 255);
-                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 8] + wave, 1, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] + wave, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] + wave, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] + wave, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
 
                                 else
                                 {
-                                    argbValues[p] = kcurrent[mod_color][i + j * 8];
+                                    argbValues[p] = kcurrent[mod_color][i + j * (vwidth * 4)];
                                 }
                                 barePositions[p] = (DungeonPalettes.kdungeon[faction][palette][mod_color][3] == flash_alpha_0 ||
                                     DungeonPalettes.kdungeon[faction][palette][mod_color][3] == flash_alpha_1 ||
                                     DungeonPalettes.kdungeon[faction][palette][mod_color][3] == borderless_alpha);
                                 if (!barePositions[p] && outlineColors[p] == 0)
-                                    outlineColors[p] = kcurrent[mod_color][i + 24]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineColors[p] = kcurrent[mod_color][i + (4 * vwidth * vheight)]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
 
                             }
                         }
@@ -959,16 +961,16 @@ namespace AssetsPV
             {
                 if (argbValues[i] > 255 * waver_alpha && barePositions[i] == false)
                 {
-
                     if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && darkOutline && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && (zbuffer[i] - 1 > zbuffer[i + 4] || xbuffer[i] - 1 > xbuffer[i + 4]) && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; outlineValues[i + 4 - 1] = outlineColors[i - 1]; outlineValues[i + 4 - 2] = outlineColors[i - 2]; outlineValues[i + 4 - 3] = outlineColors[i - 3]; }
                     if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && darkOutline && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && (zbuffer[i] - 1 > zbuffer[i - 4] || xbuffer[i] - 1 > xbuffer[i - 4]) && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; outlineValues[i - 4 - 1] = outlineColors[i - 1]; outlineValues[i - 4 - 2] = outlineColors[i - 2]; outlineValues[i - 4 - 3] = outlineColors[i - 3]; }
                     if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && darkOutline && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && (zbuffer[i] - 1 > zbuffer[i + bmpData.Stride] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride]) && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; outlineValues[i + bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 3] = outlineColors[i - 3]; }
                     if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && argbValues[i - bmpData.Stride] == 0 && darkOutline && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; } else if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && barePositions[i - bmpData.Stride] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride] || xbuffer[i] - 1 > xbuffer[i - bmpData.Stride]) && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; outlineValues[i - bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 3] = outlineColors[i - 3]; }
-                    if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && argbValues[i + bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; } else if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && barePositions[i + bmpData.Stride + 4] == false && (zbuffer[i] - 1 > zbuffer[i + bmpData.Stride + 4] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride + 4]) && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; outlineValues[i + bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
-                    if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && argbValues[i - bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; } else if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && barePositions[i - bmpData.Stride - 4] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride - 4] || xbuffer[i] - 1 > xbuffer[i - bmpData.Stride - 4]) && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; outlineValues[i - bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
-                    if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && (zbuffer[i] - 1 > zbuffer[i + bmpData.Stride - 4] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride - 4]) && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; outlineValues[i + bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
-                    if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride + 4] || xbuffer[i] - 1 > xbuffer[i - bmpData.Stride + 4]) && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; outlineValues[i - bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
-
+                    /*
+                    if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && argbValues[i + bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; } else if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && barePositions[i + bmpData.Stride + 4] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride + 4]) && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; outlineValues[i + bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && argbValues[i - bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; } else if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && barePositions[i - bmpData.Stride - 4] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride - 4] || xbuffer[i] - 2 > xbuffer[i - bmpData.Stride - 4]) && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; outlineValues[i - bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
+                    if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride - 4]) && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; outlineValues[i + bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride + 4] || xbuffer[i] - 2 > xbuffer[i - bmpData.Stride + 4]) && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; outlineValues[i - bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
+                    */
                     /*
                                         if (argbValues[i] > 0 && i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && darkOutline) { outlineValues[i + 4] = 255; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && (zbuffer[i] - 2 > zbuffer[i + 4] || zbuffer[i] + 2 < zbuffer[i + 4])) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = outlineValues[i - 1]; argbValues[i + 4 - 2] = outlineValues[i - 2]; argbValues[i + 4 - 3] = outlineValues[i - 3]; }
                                         if (argbValues[i] > 0 && i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && darkOutline) { outlineValues[i - 4] = 255; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && (zbuffer[i] - 2 > zbuffer[i - 4] || zbuffer[i] + 2 < zbuffer[i - 4])) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = outlineValues[i - 1]; argbValues[i - 4 - 2] = outlineValues[i - 2]; argbValues[i - 4 - 3] = outlineValues[i - 3]; }
@@ -1004,6 +1006,7 @@ namespace AssetsPV
             {
                 if (argbValues[i] > 0)
                     argbValues[i] = 255;
+                
                 if (outlineValues[i] == 255)
                 {
                     argbValues[i] = 255;
@@ -1013,16 +1016,38 @@ namespace AssetsPV
                 }
             }
 
-            for (int i = 3; i < numBytes; i += 4)
+            for (int s = 3; s < numBytes; s += 4)
             {
-                if (argbValues[i] == 0 && shadowValues[i] > 0)
+                if (shadowValues[s] > 0)
                 {
-                    argbValues[i - 3] = shadowValues[i - 3];
-                    argbValues[i - 2] = shadowValues[i - 2];
-                    argbValues[i - 1] = shadowValues[i - 1];
-                    argbValues[i - 0] = shadowValues[i - 0];
+                    if (argbValues[s] == 0)
+                    {
+                        argbValues[s - 3] = shadowValues[s - 3];
+                        argbValues[s - 2] = shadowValues[s - 2];
+                        argbValues[s - 1] = shadowValues[s - 1];
+                        argbValues[s - 0] = shadowValues[s - 0];
+                    }
                 }
             }
+            /*
+            for (int s = 3; s < numBytes; s += 4)
+            {
+                if (shadowValues[s] > 0)
+                {
+                    foreach (int i in new int[]{ s + 4, s - 4, s + bmpData.Stride, s - bmpData.Stride
+                        //, s + bmpData.Stride + 4, s - bmpData.Stride + 4, s + bmpData.Stride - 4, s - bmpData.Stride - 4
+                    })
+                    {
+                        if (i >= 3 && i < argbValues.Length && argbValues[i] == 0)
+                        {
+                            argbValues[i - 3] = (byte)(shadowValues[s - 3] + 50);
+                            argbValues[i - 2] = (byte)(shadowValues[s - 2] + 50);
+                            argbValues[i - 1] = (byte)(shadowValues[s - 1] + 50);
+                            argbValues[i - 0] = shadowValues[s - 0];
+                        }
+                    }
+                }
+            }*/
             Marshal.Copy(argbValues, 0, ptr, numBytes);
 
             // Unlock the bits.
@@ -1033,7 +1058,7 @@ namespace AssetsPV
 
         private static Bitmap generateWaterMask(int facing, int variant)
         {
-            Bitmap bmp = new Bitmap(2 * 16 + 8, 3 * 16 + 8, PixelFormat.Format32bppArgb);
+            Bitmap bmp = new Bitmap(vwidth * 16 + 8, vheight * 16 + 8, PixelFormat.Format32bppArgb);
 
             //            Bitmap bmp = new Bitmap(4 * 128 + 8, 2 * 128 + 8, PixelFormat.Format32bppArgb);
 
@@ -1059,10 +1084,10 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill(false);
 
+            int[] xbuffer = new int[numBytes];
+            xbuffer.Fill<int>(-999);
             int[] zbuffer = new int[numBytes];
-            zbuffer.Fill<int>(-9999);
-
-            int jitter = 0;// (((variant % 4) % 3) + ((variant % 4) / 3)) * 2;
+            zbuffer.Fill<int>(-999);
 
             for (int mvdx = 15; mvdx >= 0; mvdx--)
             {
@@ -1075,15 +1100,16 @@ namespace AssetsPV
                     int p = 0;
                     int mod_color = current_color;
 
-                    for (int j = 0; j < 4; j++)
+                    for (int j = 0; j < vheight; j++)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 4 * vwidth; i++)
                         {
                             //p = 4 * ((vx.x + vx.y) * 2 + 2) + i + bmpData.Stride * (128 + 2 - vx.y + vx.x + j);
                             p = voxelToPixelK16(i, j, vx.x, vx.y, 0, 0, 4, 25, bmpData.Stride, 0, true);
                             if (argbValues[p] == 0)
                             {
-                                zbuffer[p] = vx.z + vx.x - vx.y;
+                                zbuffer[p] = vx.z;
+                                xbuffer[p] = vx.x;
                                 mod_color = current_color;
                                 if (i % 4 == 3)
                                 {
@@ -1128,18 +1154,18 @@ namespace AssetsPV
                                     }
 
 
-                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * 16] + wave, 1, 255);
-                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * 16] + wave, 1, 255);
-                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * 16] + wave, 1, 255);
+                                    argbValues[p - 3] = (byte)Clamp(kcurrent[mod_color][i - 3 + j * (vwidth * 4)] + wave, 1, 255);
+                                    argbValues[p - 2] = (byte)Clamp(kcurrent[mod_color][i - 2 + j * (vwidth * 4)] + wave, 1, 255);
+                                    argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] + wave, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
 
                                 else
                                 {
-                                    argbValues[p] = kcurrent[mod_color][i + j * 16];
+                                    argbValues[p] = kcurrent[mod_color][i + j * (vwidth * 4)];
                                 }
                                 if (outlineColors[p] == 0)
-                                    outlineColors[p] = kcurrent[mod_color][i + 64]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                    outlineColors[p] = kcurrent[mod_color][i + (4 * vwidth * vheight)]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
                         }
 
@@ -1151,16 +1177,19 @@ namespace AssetsPV
             {
                 if (argbValues[i] > 255 * waver_alpha && barePositions[i] == false)
                 {
-                    if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && darkOutline && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && (zbuffer[i] - 2 > zbuffer[i + 4]) && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; outlineValues[i + 4 - 1] = outlineColors[i - 1]; outlineValues[i + 4 - 2] = outlineColors[i - 2]; outlineValues[i + 4 - 3] = outlineColors[i - 3]; }
-                    if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && darkOutline && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && (zbuffer[i] - 2 > zbuffer[i - 4]) && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; outlineValues[i - 4 - 1] = outlineColors[i - 1]; outlineValues[i - 4 - 2] = outlineColors[i - 2]; outlineValues[i - 4 - 3] = outlineColors[i - 3]; }
-                    if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && darkOutline && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride]) && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; outlineValues[i + bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 3] = outlineColors[i - 3]; }
-                    if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && argbValues[i - bmpData.Stride] == 0 && darkOutline && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; } else if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && barePositions[i - bmpData.Stride] == false && (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride]) && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; outlineValues[i - bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 3] = outlineColors[i - 3]; }
-                    if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && argbValues[i + bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; } else if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && barePositions[i + bmpData.Stride + 4] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4]) && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; outlineValues[i + bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
-                    if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && argbValues[i - bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; } else if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && barePositions[i - bmpData.Stride - 4] == false && (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 4]) && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; outlineValues[i - bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
-                    if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && (zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; outlineValues[i + bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
-                    if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && (zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; outlineValues[i - bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
 
+                    if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && darkOutline && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && (zbuffer[i] - 1 > zbuffer[i + 4] || xbuffer[i] - 1 > xbuffer[i + 4]) && outlineValues[i + 4] == 0) { outlineValues[i + 4] = 255; outlineValues[i + 4 - 1] = outlineColors[i - 1]; outlineValues[i + 4 - 2] = outlineColors[i - 2]; outlineValues[i + 4 - 3] = outlineColors[i - 3]; }
+                    if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && darkOutline && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && (zbuffer[i] - 1 > zbuffer[i - 4] || xbuffer[i] - 1 > xbuffer[i - 4]) && outlineValues[i - 4] == 0) { outlineValues[i - 4] = 255; outlineValues[i - 4 - 1] = outlineColors[i - 1]; outlineValues[i - 4 - 2] = outlineColors[i - 2]; outlineValues[i - 4 - 3] = outlineColors[i - 3]; }
+                    if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && darkOutline && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && (zbuffer[i] - 1 > zbuffer[i + bmpData.Stride] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride]) && outlineValues[i + bmpData.Stride] == 0) { outlineValues[i + bmpData.Stride] = 255; outlineValues[i + bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && argbValues[i - bmpData.Stride] == 0 && darkOutline && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; } else if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && barePositions[i - bmpData.Stride] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride] || xbuffer[i] - 1 > xbuffer[i - bmpData.Stride]) && outlineValues[i - bmpData.Stride] == 0) { outlineValues[i - bmpData.Stride] = 255; outlineValues[i - bmpData.Stride - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 3] = outlineColors[i - 3]; }
+                    /*
+                    if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && argbValues[i + bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; } else if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && barePositions[i + bmpData.Stride + 4] == false && (zbuffer[i] - 1 > zbuffer[i + bmpData.Stride + 4] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride + 4]) && outlineValues[i + bmpData.Stride + 4] == 0) { outlineValues[i + bmpData.Stride + 4] = 255; outlineValues[i + bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && argbValues[i - bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; } else if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && barePositions[i - bmpData.Stride - 4] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride - 4] || xbuffer[i] - 1 > xbuffer[i - bmpData.Stride - 4]) && outlineValues[i - bmpData.Stride - 4] == 0) { outlineValues[i - bmpData.Stride - 4] = 255; outlineValues[i - bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
+                    if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && darkOutline && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && (zbuffer[i] - 1 > zbuffer[i + bmpData.Stride - 4] || xbuffer[i] - 1 > xbuffer[i + bmpData.Stride - 4]) && outlineValues[i + bmpData.Stride - 4] == 0) { outlineValues[i + bmpData.Stride - 4] = 255; outlineValues[i + bmpData.Stride - 4 - 1] = outlineColors[i - 1]; outlineValues[i + bmpData.Stride - 4 - 2] = outlineColors[i - 2]; outlineValues[i + bmpData.Stride - 4 - 3] = outlineColors[i - 3]; }
+                    if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && darkOutline && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && (zbuffer[i] - 1 > zbuffer[i - bmpData.Stride + 4] || xbuffer[i] - 1 > xbuffer[i - bmpData.Stride + 4]) && outlineValues[i - bmpData.Stride + 4] == 0) { outlineValues[i - bmpData.Stride + 4] = 255; outlineValues[i - bmpData.Stride + 4 - 1] = outlineColors[i - 1]; outlineValues[i - bmpData.Stride + 4 - 2] = outlineColors[i - 2]; outlineValues[i - bmpData.Stride + 4 - 3] = outlineColors[i - 3]; }
+                    */
                 }
+
             }
 
 
@@ -1190,7 +1219,7 @@ namespace AssetsPV
         private static Bitmap processKFrame(MagicaVoxelData[] parsed, int faction, int palette, int dir, int frame, int maxFrames, bool still, bool darkOutline)
         {
             Bitmap b;
-            Bitmap b2 = new Bitmap(2 * 16 + 8, 3 * 16 + 8, PixelFormat.Format32bppArgb);
+            Bitmap b2 = new Bitmap(vwidth * 16 + 8, vheight * 16 + 8, PixelFormat.Format32bppArgb);
 
             b = renderK(parsed, dir, faction, palette, frame, maxFrames, still, darkOutline);
             /*
@@ -1379,12 +1408,12 @@ namespace AssetsPV
         static void Main(string[] args)
         {
             VoxelLogic.Initialize();
-            altFolder = "MiniOrtho/";
+            altFolder = "MicroOrtho/";
             krendered = storeColorCubesK();
             VoxelLogic.krendered = krendered;
             kFleshRendered = storeColorCubesFleshToneK();
             VoxelLogic.kFleshRendered = kFleshRendered;
-
+            
             processUnitK("Human_Male", 0, true, false);
             processUnitK("Human_Female", 10, true, false);
 
@@ -1396,9 +1425,9 @@ namespace AssetsPV
             processUnitK("Rogue_Female", 9, true, false);
             processUnitK("Priest_Male", 11, true, false);
             processUnitK("Priest_Female", 11, true, false);
-
-            //            processTerrainK("Water", "Caves", 4, true, false, false);
-            /*
+            
+            processTerrainK("Water", "Caves", 4, true, false, false);
+            
             processWaterK("Caves", 4);
 
             
@@ -1409,7 +1438,7 @@ namespace AssetsPV
             processTerrainK("Wall_Cross", "Caves", 4, true, false, true);
             processTerrainK("Door_Closed", "Caves", 4, true, false, true);
             processTerrainK("Door_Open", "Caves", 4, true, false, true);
-            */
+            
 
         }
     }
