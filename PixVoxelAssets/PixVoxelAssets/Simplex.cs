@@ -589,7 +589,7 @@ namespace AssetsPV
         /// <summary>
         /// 0.0 to 1.0
         /// </summary>
-        public static readonly float[,,] NoiseGridFlatWater = new float[16, 0x10, 0x10];
+        public static readonly float[,,] NoiseGridFlatWater = new float[16, 0x20, 0x20];
         /// <summary>
         /// 0.5 to 1.5
         /// </summary>
@@ -684,11 +684,11 @@ namespace AssetsPV
             switch (facing)
             {
                 case 1:
-                    return NoiseGridFlatWater[variant, y, 0x10 - 1 - x];
+                    return NoiseGridFlatWater[variant, y, 0x20 - 1 - x];
                 case 2:
-                    return NoiseGridFlatWater[variant, 0x10 - 1 - x, 0x10 - 1 - y];
+                    return NoiseGridFlatWater[variant, 0x20 - 1 - x, 0x20 - 1 - y];
                 case 3:
-                    return NoiseGridFlatWater[variant, 0x10 - 1 - y, x];
+                    return NoiseGridFlatWater[variant, 0x20 - 1 - y, x];
                 default:
                     return NoiseGridFlatWater[variant, x, y];
             }
@@ -761,7 +761,7 @@ namespace AssetsPV
                 }
             }
 
-            float[,] blue = new float[16, 16], orange = new float[16, 16];
+            float[,] blue = new float[0x20, 0x20], orange = new float[0x20, 0x20];
             {
                 //blue block
                 double x1 = 0.0;
@@ -770,12 +770,12 @@ namespace AssetsPV
                 double dx = 6.0;
                 double dy = 6.0;
 
-                for (int x = 0; x < 16; x++)
+                for (int x = 0; x < 0x20; x++)
                 {
-                    for (int y = 0; y < 16; y++)
+                    for (int y = 0; y < 0x20; y++)
                     {
-                        double s = x / 16.0;
-                        double t = y / 16.0;
+                        double s = x / 32.0;
+                        double t = y / 32.0;
 
                         double nx = x1 + Math.Cos(s * 2 * Math.PI) * dx / (2 * Math.PI);
                         double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
@@ -797,12 +797,12 @@ namespace AssetsPV
                 double dx = 7.0;
                 double dy = 7.0;
 
-                for (int x = 0; x < 16; x++)
+                for (int x = 0; x < 0x20; x++)
                 {
-                    for (int y = 0; y < 16; y++)
+                    for (int y = 0; y < 0x20; y++)
                     {
-                        double s = x / 16.0;
-                        double t = y / 16.0;
+                        double s = x / 32.0;
+                        double t = y / 32.0;
 
                         double nx = x1 + Math.Cos(s * 2 * Math.PI) * dx / (2 * Math.PI);
                         double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
@@ -824,9 +824,9 @@ namespace AssetsPV
                 bool south = 0 < (v & 4);
                 bool west = 0 < (v & 8);
                 
-                for (int x = 0; x < 16; x++)
+                for (int x = 0; x < 0x20; x++)
                 {
-                    for (int y = 0; y < 16; y++)
+                    for (int y = 0; y < 0x20; y++)
                     {
                         /* From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
                         for x=0,bufferwidth-1,1 do

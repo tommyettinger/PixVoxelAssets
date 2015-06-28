@@ -51,7 +51,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.MiniOrthoVoxels</StartupObject>
+    <StartupObject>AssetsPV.MiniSubVoxels</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -70,6 +70,7 @@
     <Compile Include="DungeonPalettes.cs" />
     <Compile Include="LocalMap.cs" />
     <Compile Include="MiniOrthoVoxels.cs" />
+    <Compile Include="MiniSubVoxels.cs" />
     <Compile Include="MiniVoxels.cs" />
     <Compile Include="OrderedDictionary.cs" />
     <Compile Include="OrthoPaletteDraw.cs" />
