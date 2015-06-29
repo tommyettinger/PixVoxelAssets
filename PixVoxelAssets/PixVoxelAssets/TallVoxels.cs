@@ -12459,16 +12459,16 @@ namespace AssetsPV
             Directory.CreateDirectory("indexed");
 
             Directory.CreateDirectory("beast");
-            Directory.CreateDirectory("sau");
+            Directory.CreateDirectory("sau2");
             Directory.CreateDirectory("dungeon");
             Directory.CreateDirectory("vox/dungeon");
-            Directory.CreateDirectory("vox/sau");
+            Directory.CreateDirectory("vox/sau2");
             Directory.CreateDirectory("vox/K/mythos");
 
             VoxelLogic.InitializeKPalette();
-            altFolder = "dungeon/";
-            processUnitQuadK("Dragon", 6, true, true, true);
-            processUnitQuadK("Linnorm", 6, true, true, true);
+//            altFolder = "dungeon/";
+            //processUnitQuadK("Dragon", 6, true, true, true);
+            //processUnitQuadK("Linnorm", 6, true, true, true);
             //processUnitK("Wolf", 3, true, true);
             //processUnitK("Ant", 5, true, true);
             //processUnitK("Soldier_Ant", 5, true, true);
@@ -12607,15 +12607,14 @@ namespace AssetsPV
                 //processUnitOutlinedWDoubleAugmented("Sand_Worm", 15, true);
                 */
             }
-            
+
             /*
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "mecha/";
             System.IO.Directory.CreateDirectory("mecha");
             System.IO.Directory.CreateDirectory("vox/mecha");
             */
-            SaPalettes.Initialize();
-            VoxelLogic.InitializeWPalette();
+
             /*
             VoxelLogic.wpalettes = AlternatePalettes.schemes[0];
             altFolder = "";
@@ -12729,8 +12728,8 @@ namespace AssetsPV
             {
                 processUnitOutlinedWQuad("Terrain", i, true, true);
             }*/
-//            generateBotLSpritesheet();
-//            generateBotLImages();
+            //            generateBotLSpritesheet();
+            //            generateBotLImages();
             /*
             File.WriteAllText("ZombieBVX.json", VoxelLogic.VoxToJSON(VoxelLogic.readBVX("Zombie.bvx"), 2));
             
@@ -12810,10 +12809,12 @@ namespace AssetsPV
             */
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            altFolder = "sau/";
+            SaPalettes.Initialize();
+            VoxelLogic.InitializeWPalette();
+            altFolder = "sau2/";
             
-           // processUnitOutlinedWDouble("Rakgar", 18, true);
-            /*
+            processUnitOutlinedWDouble("Rakgar", 18, true);
+            
             processUnitOutlinedWDouble("Axarik", 0, true);
             processUnitOutlinedWalkDouble("Axarik", 0);
             processUnitOutlinedWDouble("Ceglia", 1, true);
@@ -12871,8 +12872,8 @@ namespace AssetsPV
             processUnitOutlinedWalkQuad("Vashk", 18);
             processUnitOutlinedWDouble("Vih", 43, false);
             processUnitOutlinedWalkDouble("Vih", 43);
-            */
-            /*
+            
+            
             processUnitOutlinedWQuad("Barrel", 38, true);
 
 
@@ -12890,7 +12891,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Tree", 35, true);
             processUnitOutlinedWQuad("Boulder", 36, true);
             processUnitOutlinedWQuad("Rubble", 36, true);
-            */
+            
             //OLD PALETTE NUMBERS 
             /*
             processUnitOutlinedWDouble("Axarik", 18, true);

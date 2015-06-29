@@ -8457,6 +8457,258 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return cubes2;
         }
 
+        private static byte[][][] storeColorCubesWGrim()
+        {
+            wpalettecount = wpalettes.Length;
+            //            wcolorcount = wpalettes[0].Length;
+            byte[,,] cubes = new byte[wpalettecount, wpalettes[0].Length, 80];
+
+            Image image = new Bitmap("cube_soft.png");
+            Image flat = new Bitmap("flat_soft.png");
+            Image shine = new Bitmap("spin_soft.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 5;
+            float[][] colorMatrixElements = {
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+            for (int p = 0; p < wpalettes.Length; p++)
+            {
+                for (int current_color = 0; current_color < wpalettes[0].Length; current_color++)
+                {
+                    Bitmap b =
+                    new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+                    Graphics g = Graphics.FromImage((Image)b);
+
+                    if (current_color == 25)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.22F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if (wpalettes[p][current_color][3] == eraser_alpha)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                    }
+                    else if (wpalettes[p][current_color][3] == 0F)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                    }
+                    else
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.12F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.151F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.21F+wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+
+                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F
+                        || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                       (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
+                    g.DrawImage(which_image,
+                       new Rectangle(0, 0,
+                           width, height),  // destination rectangle 
+                                            //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            Color c = b.GetPixel(i, j);
+                            double h = 0.0, s = 1.0, v = 1.0;
+                            if (which_image.Equals(image))
+                            {
+                                if (drabPalettes.Contains(p))
+                                {
+
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.4, v * 0.9);
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.7, v * 0.7);
+                                    }
+                                    else
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.55, v * 0.82);
+                                    }
+                                }
+                                else if (subtlePalettes.Contains(p))
+                                {
+
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.6, v * 0.96);
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.8, v * 0.85);
+                                    }
+                                    else
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.7, v * 0.92);
+                                    }
+                                }
+                                else
+                                {
+                                    if (current_color == 8 || current_color == 9 || current_color == 11)
+                                    {
+                                        if (j == 0)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Min(1.0, s * 1.1), v);
+                                        }
+                                        else if (i >= width / 2 || j == height - 1)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
+                                        }
+                                        else
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (j == 0)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Max(0.01, s * 0.7), v * 0.9);
+                                        }
+                                        else if (i >= width / 2 || j == height - 1)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Max(0.01, s * 0.9), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 0.9 : 0.7)));
+                                        }
+                                        else
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Max(0.01, s * 0.8), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 0.95 : 0.8)));
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (c.A != 0)
+                            {
+                                cubes[p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 3] = c.A;
+                            }
+                            else
+                            {
+                                cubes[p, current_color, i * 4 + j * 4 * width + 0] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 1] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 2] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 3] = 0;
+                            }
+                        }
+                    }
+                }
+                /*                for (int current_color = 80; current_color < 88; current_color++)
+                                {
+                                    for (int frame = 0; frame < 4; frame++)
+                                    {
+                                        Bitmap b =
+                                        new Bitmap(2, 3, PixelFormat.Format32bppArgb);
+
+                                        Graphics g = Graphics.FromImage((Image)b);
+                                        float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
+                                        colorMatrix = new ColorMatrix(new float[][]{ 
+                   new float[] {0.22F+VoxelLogic.xcolors[current_color][0] + lightCalc,  0,  0,  0, 0},
+                   new float[] {0,  0.251F+VoxelLogic.xcolors[current_color][1] + lightCalc,  0,  0, 0},
+                   new float[] {0,  0,  0.31F+VoxelLogic.xcolors[current_color][2] + lightCalc,  0, 0},
+                   new float[] {0,  0,  0,  1F, 0},
+                   new float[] {0, 0, 0, 0, 1F}});
+
+                                        imageAttributes.SetColorMatrix(
+                                           colorMatrix,
+                                           ColorMatrixFlag.Default,
+                                           ColorAdjustType.Bitmap);
+                                        g.DrawImage(spin,
+                                           new Rectangle(0, 0,
+                                               width, height),  // destination rectangle 
+                                            //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                                           0, 0,        // upper-left corner of source rectangle 
+                                           width,       // width of source rectangle
+                                           height,      // height of source rectangle
+                                           GraphicsUnit.Pixel,
+                                           imageAttributes);
+
+                                        cubes[88 + current_color + (8 * frame)] = new byte[24];
+                                        for (int i = 0; i < 2; i++)
+                                        {
+                                            for (int j = 0; j < 3; j++)
+                                            {
+                                                Color c = b.GetPixel(i, j);
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 0] = c.B;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 1] = c.G;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 2] = c.R;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 3] = c.A;
+                                            }
+                                        }
+                                    }
+                                }*/
+            }
+            byte[][][] cubes2 = new byte[wpalettes.Length][][];
+            for (int i = 0; i < wpalettes.Length; i++)
+            {
+                cubes2[i] = new byte[wpalettes[0].Length][];
+                for (int c = 0; c < wpalettes[0].Length; c++)
+                {
+                    cubes2[i][c] = new byte[80];
+                    for (int j = 0; j < 80; j++)
+                    {
+                        cubes2[i][c][j] = cubes[i, c, j];
+                    }
+                }
+            }
+            return cubes2;
+        }
+
 
         public static void InitializeXPalette()
         {
@@ -8465,7 +8717,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static void InitializeWPalette()
         {
-            wrendered = storeColorCubesW();
+            wrendered = storeColorCubesWGrim();
             VoxelLogic.wcurrent = VoxelLogic.wrendered[0];
         }
 
@@ -15755,26 +16007,178 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                        az + z >= 0 && az + z < zSize &&
                                        voxelData[ax + x, ay + y, az + z] > 0)
                                     {
+                                        /*
                                         if (voxelData[x, y, z] == 253 - 7 * 4)
                                         {
                                             if (az == 1 && ay == 0)
                                                 data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 253 - 6 * 4;
-                                            else if (ay >= 0)
+                                            else
                                                 data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 253 - 7 * 4;
-                                        }
-                                        else if (voxelData[x, y, z] == 253 - 4 * 4)
+                                        }*/
+                                        /*
+                                        else if (voxelData[x, y, z] == 253 - 4 * 4 || voxelData[x, y, z] == 253 - 50 * 4)
                                         {
-//                                            if (az == 0)
-                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 253 - 4 * 4;
-                                            //else if (ay >= 0)
-                                            //    data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 253 - 7 * 4;
+                                            if (az < 1 && ax > -1)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[x, y, z];
+                                            else
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[ax + x, ay + y, az + z];
+
+                                                //else if (ay >= 0)
+                                                //    data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 253 - 7 * 4;
                                         }
-                                        else if (voxelData[ax + x, ay + y, az + z] == voxelData[x, y, z] &&
+                                        */
+                                        if (voxelData[ax + x, ay + y, az + z] == voxelData[x, y, z] &&
                                             data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] == 0)
                                         {
-                                            data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[ax + x, ay + y, az + z];
+                                            data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[ax + x, ay + y, az + z]; //(byte)((Math.Abs(ax) + Math.Abs(ay) + Math.Abs(az) > 1) ? 255 - 58 * 4 : 
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < xSize - 1; x++)
+            {
+                for (int y = 0; y < ySize - 1; y++)
+                {
+                    for (int z = 0; z < zSize - 1; z++)
+                    {
+                        for (int ax = -1; ax < 2; ax++)
+                        {
+                            for (int ay = -1; ay < 2; ay++)
+                            {
+                                for (int az = -1; az < 2; az++)
+                                {
+                                    if (Math.Abs(ax) + Math.Abs(ay) + Math.Abs(az) == 3)
+                                        continue;
+                                    if (data[2 + x * 2 + ax, 2 + y * 2 + ay, 2 + z * 2 + az] > 0)
+                                        continue;
+                                    byte[,,] vs = new byte[2, 2, 2]
+                                    {
+                                        {
+                                            {
+                                                data[1 + x * 2 + 0, 1 + y * 2 + 0, 1 + z * 2 + 0],
+                                                data[1 + x * 2 + 0, 1 + y * 2 + 0, 1 + z * 2 + 2]
+                                            },
+                                            {
+                                                data[1 + x * 2 + 0, 1 + y * 2 + 2, 1 + z * 2 + 0],
+                                                data[1 + x * 2 + 0, 1 + y * 2 + 2, 1 + z * 2 + 2]
+                                            }
+                                        },
+                                        {
+                                            {
+                                                data[1 + x * 2 + 2, 1 + y * 2 + 0, 1 + z * 2 + 0],
+                                                data[1 + x * 2 + 2, 1 + y * 2 + 0, 1 + z * 2 + 2]
+                                            },
+                                            {
+                                                data[1 + x * 2 + 2, 1 + y * 2 + 2, 1 + z * 2 + 0],
+                                                data[1 + x * 2 + 2, 1 + y * 2 + 2, 1 + z * 2 + 2]
+                                            }
+                                        }
+                                    };
+                                    if (ax == -1)
+                                    {
+                                        vs[1, 0, 0] = 0;
+                                        vs[1, 0, 1] = 0;
+                                        vs[1, 1, 0] = 0;
+                                        vs[1, 1, 1] = 0;
+                                    }
+                                    else if (ax == 1)
+                                    {
+                                        vs[0, 0, 0] = 0;
+                                        vs[0, 0, 1] = 0;
+                                        vs[0, 1, 0] = 0;
+                                        vs[0, 1, 1] = 0;
+                                    }
+
+                                    if (ay == -1)
+                                    {
+                                        vs[0, 1, 0] = 0;
+                                        vs[0, 1, 1] = 0;
+                                        vs[1, 1, 0] = 0;
+                                        vs[1, 1, 1] = 0;
+                                    }
+                                    else if (ay == 1)
+                                    {
+                                        vs[0, 0, 0] = 0;
+                                        vs[0, 0, 1] = 0;
+                                        vs[1, 0, 0] = 0;
+                                        vs[1, 0, 1] = 0;
+                                    }
+
+                                    if (az == -1)
+                                    {
+                                        vs[0, 0, 1] = 0;
+                                        vs[0, 1, 1] = 0;
+                                        vs[1, 0, 1] = 0;
+                                        vs[1, 1, 1] = 0;
+                                    }
+                                    else if (az == 1)
+                                    {
+                                        vs[0, 0, 0] = 0;
+                                        vs[0, 1, 0] = 0;
+                                        vs[1, 0, 0] = 0;
+                                        vs[1, 1, 0] = 0;
+                                    }
+                                    byte v = 0;
+                                    int dist = xSize * ySize * zSize * 10;
+                                    for (int tx = 0, vx = 1 + x * 2; tx < 2; tx++, vx += 2)
+                                    {
+                                        for (int ty = 0, vy = 1 + y * 2; ty < 2; ty++, vy += 2)
+                                        {
+                                            for (int tz = 0, vz = 1 + z * 2; tz < 2; tz++, vz += 2)
+                                            {
+                                                if (vs[tx, ty, tz] > 0 &&
+                                                    data[vx, vy, vz] > 0 &&
+                                                    Math.Abs(xSize - vx) + Math.Abs(ySize - vy) + Math.Abs(zSize - vz) < dist)
+                                                {
+                                                    v = data[vx,vy,vz];
+                                                    dist = Math.Abs(xSize - vx) + Math.Abs(ySize - vy) + Math.Abs(zSize - vz);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    data[2 + x * 2 + ax, 2 + y * 2 + ay, 2 + z * 2 + az] = v;
+                                    /*
+                                    if (voxelData[x, y, z] > 0 &&
+                                       ax + x >= 0 && ax + x < xSize &&
+                                       ay + y >= 0 && ay + y < ySize &&
+                                       az + z >= 0 && az + z < zSize &&
+                                       voxelData[ax + x, ay + y, az + z] > 0)
+                                    {
+
+                                        if (voxelData[x, y, z] == 253 - 7 * 4)
+                                        {
+                                            if (az == 1 && ay == 0)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 252 - 6 * 4;
+                                            else
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 252 - 7 * 4;
+                                        }
+                                        else if(voxelData[ax + x, ay + y, az + z] == 253 - 7 * 4)
+                                        {
+                                            data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = 252 - 5 * 4;
+                                        }
+                                        else if (voxelData[ax + x, ay + y, az + z] != voxelData[x, y, z] && ( //data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] % 2 != 0 ||
+                                            data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] == 0))
+                                        {
+                                            if (az == 1)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[x, y, z];
+                                            else if (ay > 0 && y <= ySize / 2)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[x, y, z];
+                                            else if (ay > 0 && y > ySize / 2)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[ax + x, ay + y, az + z];
+                                            else if (ax > 0 && x <= xSize / 2)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[x, y, z];
+                                            else if (ax > 0 && x > xSize / 2)
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[ax + x, ay + y, az + z]; 
+                                            else
+                                                data[1 + x * 2 + ax, 1 + y * 2 + ay, 1 + z * 2 + az] = voxelData[x, y, z];
+                                        }
+                                    }
+                                    */
                                 }
                             }
                         }
@@ -15798,6 +16202,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
             }
 
+            for (int x = 0; x < 1 + xSize * 2; x++)
+            {
+                for (int y = 0; y < 1 + ySize * 2; y++)
+                {
+                    for (int z = 0; z < 1 + zSize * 2; z++)
+                    {
+                        if (data[x, y, z] > 0 && data[x, y, z] % 2 == 0) data[x, y, z] += 1;
+                    }
+                }
+            }
             return data;
         }
     }
