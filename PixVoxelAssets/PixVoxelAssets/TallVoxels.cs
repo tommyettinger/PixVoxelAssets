@@ -12459,10 +12459,10 @@ namespace AssetsPV
             Directory.CreateDirectory("indexed");
 
             Directory.CreateDirectory("beast");
-            Directory.CreateDirectory("sau2");
+            Directory.CreateDirectory("sau3");
             Directory.CreateDirectory("dungeon");
             Directory.CreateDirectory("vox/dungeon");
-            Directory.CreateDirectory("vox/sau2");
+            Directory.CreateDirectory("vox/sau3");
             Directory.CreateDirectory("vox/K/mythos");
 
             VoxelLogic.InitializeKPalette();
@@ -12811,7 +12811,7 @@ namespace AssetsPV
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
             SaPalettes.Initialize();
             VoxelLogic.InitializeWPalette();
-            altFolder = "sau2/";
+            altFolder = "sau3/";
             
             processUnitOutlinedWDouble("Rakgar", 18, true);
             

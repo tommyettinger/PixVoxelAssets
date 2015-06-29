@@ -7655,6 +7655,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return cubes;
         }
 
+        public static double Clamp(double x)
+        {
+            return Clamp(x, 0.0, 1.0);
+        }
+
+        public static double MercifulClamp(double x)
+        {
+            return Clamp(x, 0.01, 1.0);
+        }
+
+        public static double Clamp(double x, double min, double max)
+        {
+            return Math.Min(Math.Max(min, x), max);
+        }
+
         public static void ColorToHSV(Color color, out double hue, out double saturation, out double value)
         {
             int max = Math.Max(color.R, Math.Max(color.G, color.B));
@@ -8615,17 +8630,279 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         if (j == 0)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Math.Max(0.01, s * 0.7), v * 0.9);
+                                            c = ColorFromHSV(h, MercifulClamp((s + s - s * s * 0.45) * 0.45), MercifulClamp((v + v + v - v * v) / (1.6 + v * v * 0.55)));
                                         }
-                                        else if (i >= width / 2 || j == height - 1)
+                                        else if (j == height - 1)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Math.Max(0.01, s * 0.9), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 0.9 : 0.7)));
+                                            c = ColorFromHSV(h, MercifulClamp((s + s - s * s * 0.45) * 0.51), MercifulClamp((v + v + v - v * v) / (2.9 + v * v * 0.55)));
+                                        }
+                                        else if (i >= width / 2)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, MercifulClamp((s + s - s * s * 0.45) * 0.63), MercifulClamp((v + v + v - v * v) / (2.45 + v * v * 0.55)));
                                         }
                                         else
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Math.Max(0.01, s * 0.8), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 0.95 : 0.8)));
+                                            c = ColorFromHSV(h, MercifulClamp((s + s - s * s * 0.45) * 0.55), MercifulClamp((v + v + v - v * v) / (1.95 + v * v * 0.55)));
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (c.A != 0)
+                            {
+                                cubes[p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 3] = c.A;
+                            }
+                            else
+                            {
+                                cubes[p, current_color, i * 4 + j * 4 * width + 0] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 1] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 2] = 0;
+                                cubes[p, current_color, i * 4 + j * 4 * width + 3] = 0;
+                            }
+                        }
+                    }
+                }
+                /*                for (int current_color = 80; current_color < 88; current_color++)
+                                {
+                                    for (int frame = 0; frame < 4; frame++)
+                                    {
+                                        Bitmap b =
+                                        new Bitmap(2, 3, PixelFormat.Format32bppArgb);
+
+                                        Graphics g = Graphics.FromImage((Image)b);
+                                        float lightCalc = (0.5F - (((frame % 4) % 3) + ((frame % 4) / 3))) * 0.12F;
+                                        colorMatrix = new ColorMatrix(new float[][]{ 
+                   new float[] {0.22F+VoxelLogic.xcolors[current_color][0] + lightCalc,  0,  0,  0, 0},
+                   new float[] {0,  0.251F+VoxelLogic.xcolors[current_color][1] + lightCalc,  0,  0, 0},
+                   new float[] {0,  0,  0.31F+VoxelLogic.xcolors[current_color][2] + lightCalc,  0, 0},
+                   new float[] {0,  0,  0,  1F, 0},
+                   new float[] {0, 0, 0, 0, 1F}});
+
+                                        imageAttributes.SetColorMatrix(
+                                           colorMatrix,
+                                           ColorMatrixFlag.Default,
+                                           ColorAdjustType.Bitmap);
+                                        g.DrawImage(spin,
+                                           new Rectangle(0, 0,
+                                               width, height),  // destination rectangle 
+                                            //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                                           0, 0,        // upper-left corner of source rectangle 
+                                           width,       // width of source rectangle
+                                           height,      // height of source rectangle
+                                           GraphicsUnit.Pixel,
+                                           imageAttributes);
+
+                                        cubes[88 + current_color + (8 * frame)] = new byte[24];
+                                        for (int i = 0; i < 2; i++)
+                                        {
+                                            for (int j = 0; j < 3; j++)
+                                            {
+                                                Color c = b.GetPixel(i, j);
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 0] = c.B;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 1] = c.G;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 2] = c.R;
+                                                cubes[88 + current_color + (8 * frame)][i * 4 + j * 8 + 3] = c.A;
+                                            }
+                                        }
+                                    }
+                                }*/
+            }
+            byte[][][] cubes2 = new byte[wpalettes.Length][][];
+            for (int i = 0; i < wpalettes.Length; i++)
+            {
+                cubes2[i] = new byte[wpalettes[0].Length][];
+                for (int c = 0; c < wpalettes[0].Length; c++)
+                {
+                    cubes2[i][c] = new byte[80];
+                    for (int j = 0; j < 80; j++)
+                    {
+                        cubes2[i][c][j] = cubes[i, c, j];
+                    }
+                }
+            }
+            return cubes2;
+        }
+
+        private static byte[][][] storeColorCubesWBold()
+        {
+            wpalettecount = wpalettes.Length;
+            //            wcolorcount = wpalettes[0].Length;
+            byte[,,] cubes = new byte[wpalettecount, wpalettes[0].Length, 80];
+
+            Image image = new Bitmap("cube_soft.png");
+            Image flat = new Bitmap("flat_soft.png");
+            Image shine = new Bitmap("spin_soft.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 5;
+            float[][] colorMatrixElements = {
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+            for (int p = 0; p < wpalettes.Length; p++)
+            {
+                for (int current_color = 0; current_color < wpalettes[0].Length; current_color++)
+                {
+                    Bitmap b =
+                    new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+                    Graphics g = Graphics.FromImage((Image)b);
+
+                    if (current_color == 25)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.22F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if (wpalettes[p][current_color][3] == eraser_alpha)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                    }
+                    else if (wpalettes[p][current_color][3] == 0F)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                    }
+                    else
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.12F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.151F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.21F+wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+
+                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F
+                        || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
+                       (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
+                    g.DrawImage(which_image,
+                       new Rectangle(0, 0,
+                           width, height),  // destination rectangle 
+                                            //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            Color c = b.GetPixel(i, j);
+                            double h = 0.0, s = 1.0, v = 1.0;
+                            if (which_image.Equals(image))
+                            {
+                                if (drabPalettes.Contains(p))
+                                {
+
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.4, v * 0.9);
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.7, v * 0.7);
+                                    }
+                                    else
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.55, v * 0.82);
+                                    }
+                                }
+                                else if (subtlePalettes.Contains(p))
+                                {
+
+                                    if (j == 0)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.6, v * 0.96);
+                                    }
+                                    else if (i >= width / 2 || j == height - 1)
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.8, v * 0.85);
+                                    }
+                                    else
+                                    {
+                                        ColorToHSV(c, out h, out s, out v);
+                                        c = ColorFromHSV(h, s * 0.7, v * 0.92);
+                                    }
+                                }
+                                else
+                                {
+                                    if (current_color == 8 || current_color == 9 || current_color == 11)
+                                    {
+                                        if (j == 0)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Min(1.0, s * 1.1), v);
+                                        }
+                                        else if (i >= width / 2 || j == height - 1)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
+                                        }
+                                        else
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (j == 0)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.20, 0.04, 0.9), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 1.0, 0.1, 1.0));
+                                        }
+                                        else if (j == height - 1)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.4, 0.2, 1.0), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 0.75, 0.01, 0.7));
+                                        }
+                                        else if (i >= width / 2)
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.32, 0.12, 1.0), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 0.84, 0.02, 0.83));
+                                        }
+                                        else
+                                        {
+                                            ColorToHSV(c, out h, out s, out v);
+                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.25, 0.08, 0.97), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 0.91, 0.05, 0.9));
                                         }
                                     }
                                 }
@@ -8717,7 +8994,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static void InitializeWPalette()
         {
-            wrendered = storeColorCubesWGrim();
+            wrendered = storeColorCubesWBold();
             VoxelLogic.wcurrent = VoxelLogic.wrendered[0];
         }
 
