@@ -270,7 +270,7 @@ namespace AssetsPV
 
             new float[][] { //2 (14) erezdo
             //0 armor contrast
-            new float[] {0.8F,-0.05F,0.05F,1F},
+            new float[] {0.5F,0.14F,0.17F,1F},
             //1 armor
             new float[] {0.15F,0.15F,0.15F,1F},
             //2 stone/crystal contrast
@@ -280,7 +280,7 @@ namespace AssetsPV
             //4 clothes contrast
             new float[] {0.5F,-0.05F,0.0F,1F},
             //5 clothes
-            new float[] {0.8F,-0.05F,0.05F,1F},
+            new float[] {0.65F,0.05F,0.15F,1F},
             //6 fur contrast
             new float[] {0.7F,0.4F,0.05F,1F},
             //7 fur
@@ -300,7 +300,7 @@ namespace AssetsPV
             //14 cape contrast
             new float[] {0.9F,0.72F,0.15F,waver_alpha},
             //15 cape
-            new float[] {0.7F,0.0F,0.1F,waver_alpha},
+            new float[] {0.65F,0.05F,0.15F,waver_alpha},
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
@@ -2101,7 +2101,7 @@ namespace AssetsPV
             //2 hat contrast
             new float[] {0.2F,0.05F,0.4F,1F},
             //3 hat
-            new float[] {0.25F,0.05F,0.45F,1F},
+            new float[] {0.1F,0.04F,0.14F,1F},
             //4 robes contrast
             new float[] {0.4F,0.1F,0.3F,1F},
             //5 robes

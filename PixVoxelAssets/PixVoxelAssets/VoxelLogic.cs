@@ -8887,22 +8887,22 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         if (j == 0)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.1), Clamp(v * 1.02, 0.09, 1.0));
+                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.1, 0.0112, 1.0) * 0.9, Clamp(v * 1.02, 0.09, 1.0));
                                         }
                                         else if (j == height - 1)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.45), Clamp(v * 0.70, 0.01, 1.0));
+                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.5, 0.0112, 1.0), Clamp(v * 0.55, 0.01, 1.0));
                                         }
                                         else if (i >= width / 2)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.35), Clamp(v * 0.81, 0.03, 1.0));
+                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0) * 0.98, Clamp(v * 0.81, 0.03, 1.0));
                                         }
                                         else
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.2), Clamp(v * 0.9, 0.06, 1.0));
+                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0) * 0.95, Clamp(v * 0.9, 0.06, 1.0));
                                         }
                                     }
                                 }
