@@ -1667,15 +1667,15 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.0F,0.0F,0.35F,fuzz_alpha},
+            new float[] {0.04F,0.04F,0.35F,fuzz_alpha},
             //29 fuzz lowlight
-            new float[] {0.0F,0.0F,0.45F,fuzz_alpha},
+            new float[] {0.08F,0.08F,0.45F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.04F,0.04F,0.55F,fuzz_alpha},
+            new float[] {0.12F,0.12F,0.55F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.08F,0.08F,0.65F,fuzz_alpha},
+            new float[] {0.15F,0.15F,0.65F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.15F,0.15F,0.75F,fuzz_alpha},
+            new float[] {0.2F,0.2F,0.75F,fuzz_alpha},
             //33 fuzz lightest
             new float[] {0.25F,0.25F,0.95F,fuzz_alpha},
             //34 gore
@@ -1788,15 +1788,15 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.64F,0.14F,-0.05F,fuzz_alpha},
+            new float[] {0.5F,0.15F,0.05F,fuzz_alpha},
             //29 fuzz lowlight
-            new float[] {0.4F,0.0F,-0.09F,fuzz_alpha},
+            new float[] {0.43F,0.09F,-0.03F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.69F,0.2F,0.0F,fuzz_alpha},
+            new float[] {0.73F,0.2F,0.0F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.73F,0.23F,0.05F,fuzz_alpha},
+            new float[] {0.77F,0.23F,0.05F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.8F,0.3F,0.1F,fuzz_alpha},
+            new float[] {0.82F,0.3F,0.1F,fuzz_alpha},
             //33 fuzz lightest
             new float[] {0.95F,0.75F,0.25F,fuzz_alpha},
             //34 gore

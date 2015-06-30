@@ -5084,7 +5084,7 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
-                                else if ((VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha) && i % 4 == 3)
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n, 255);
@@ -5106,6 +5106,14 @@ namespace AssetsPV
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n, 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * n, 255);
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
+                                {
+                                    float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) + 0.3f;
+                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n + 16 * n, 1, 255);
+                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * n + 16 * n, 1, 255);
+                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * n + 16 * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
@@ -5369,7 +5377,7 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
-                                else if ((VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha) && i % 4 == 3)
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseBold(facing, vx.x + 20, vx.y + 20, vx.z);
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n, 255);
@@ -5391,6 +5399,14 @@ namespace AssetsPV
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n, 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * n, 255);
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
+                                {
+                                    float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 20, vx.y + 20, vx.z) + 0.3f;
+                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n + 16 * n, 1, 255);
+                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * n + 16 * n, 1, 255);
+                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * n + 16 * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
@@ -5652,7 +5668,7 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] + 160, 255);
                                     argbValues[p - 0] = 255;
                                 }
-                                else if ((VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha) && i % 4 == 3)
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
                                 {
                                     float n = Simplex.FindNoiseBold(facing, vx.x + 0, vx.y + 0, vx.z);
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n, 255);
@@ -5674,6 +5690,14 @@ namespace AssetsPV
                                     argbValues[p - 3] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n, 255);
                                     argbValues[p - 2] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * n, 255);
                                     argbValues[p - 1] = (byte)Math.Min(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * n, 255);
+                                    argbValues[p - 0] = 255;
+                                }
+                                else if (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
+                                {
+                                    float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 0, vx.y + 0, vx.z) + 0.3f;
+                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 3 + j * 16] * n + 16 * n, 1, 255);
+                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 2 + j * 16] * n + 16 * n, 1, 255);
+                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(VoxelLogic.wcurrent[mod_color][i - 1 + j * 16] * n + 16 * n, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
                                 else
@@ -12814,6 +12838,11 @@ namespace AssetsPV
             altFolder = "sau3/";
             
             processUnitOutlinedWDouble("Rakgar", 18, true);
+
+            processUnitOutlinedWQuad("Nodebpe", 14, true);
+            processUnitOutlinedWalkQuad("Nodebpe", 14);
+            processUnitOutlinedWDouble("Lomuk", 13, false);
+            processUnitOutlinedWalkDouble("Lomuk", 13);
             
             processUnitOutlinedWDouble("Axarik", 0, true);
             processUnitOutlinedWalkDouble("Axarik", 0);
@@ -12823,6 +12852,22 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Erezdo", 2);
             processUnitOutlinedWDouble("Glarosp", 3, true);
             processUnitOutlinedWalkDouble("Glarosp", 3);
+
+            processUnitOutlinedWDouble("Ilapa", 11, true);
+            processUnitOutlinedWalkDouble("Ilapa", 11);
+            processUnitOutlinedWDouble("Kurguiv", 12, false);
+            processUnitOutlinedWalkDouble("Kurguiv", 12);
+            processUnitOutlinedWQuad("Oah", 15, true);
+            processUnitOutlinedWalkQuad("Oah", 15);
+            processUnitOutlinedWDouble("Sfyst", 16, true);
+            processUnitOutlinedWalkDouble("Sfyst", 16);
+            processUnitOutlinedWDouble("Tassar", 17, false);
+            processUnitOutlinedWalkDouble("Tassar", 17);
+            processUnitOutlinedWQuad("Vashk", 18, true);
+            processUnitOutlinedWalkQuad("Vashk", 18);
+            processUnitOutlinedWDouble("Vih", 43, false);
+            processUnitOutlinedWalkDouble("Vih", 43);
+
 
             processUnitOutlinedWDouble("Human_Male", 4, true);
             processUnitOutlinedWalkDouble("Human_Male", 4);
@@ -12853,27 +12898,7 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Human_Female", 9);
             processUnitOutlinedWDouble("Human_Female", 10, true);
             processUnitOutlinedWalkDouble("Human_Female", 10);
-            
-            processUnitOutlinedWDouble("Ilapa", 11, true);
-            processUnitOutlinedWalkDouble("Ilapa", 11);
-            processUnitOutlinedWDouble("Kurguiv", 12, false);
-            processUnitOutlinedWalkDouble("Kurguiv", 12);
-            processUnitOutlinedWDouble("Lomuk", 13, false);
-            processUnitOutlinedWalkDouble("Lomuk", 13);
-            processUnitOutlinedWQuad("Nodebpe", 14, true);
-            processUnitOutlinedWalkQuad("Nodebpe", 14);
-            processUnitOutlinedWQuad("Oah", 15, true);
-            processUnitOutlinedWalkQuad("Oah", 15);
-            processUnitOutlinedWDouble("Sfyst", 16, true);
-            processUnitOutlinedWalkDouble("Sfyst", 16);
-            processUnitOutlinedWDouble("Tassar", 17, false);
-            processUnitOutlinedWalkDouble("Tassar", 17);
-            processUnitOutlinedWQuad("Vashk", 18, true);
-            processUnitOutlinedWalkQuad("Vashk", 18);
-            processUnitOutlinedWDouble("Vih", 43, false);
-            processUnitOutlinedWalkDouble("Vih", 43);
-            
-            
+
             processUnitOutlinedWQuad("Barrel", 38, true);
 
 

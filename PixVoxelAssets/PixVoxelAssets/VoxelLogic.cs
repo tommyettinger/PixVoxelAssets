@@ -8793,9 +8793,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     else
                     {
                         colorMatrix = new ColorMatrix(new float[][]{
-   new float[] {0.12F+wpalettes[p][current_color][0],  0,  0,  0, 0},
-   new float[] {0,  0.151F+wpalettes[p][current_color][1],  0,  0, 0},
-   new float[] {0,  0,  0.21F+wpalettes[p][current_color][2],  0, 0},
+   new float[] {0.235F+wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.26F+wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.30F+wpalettes[p][current_color][2],  0, 0},
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                     }
@@ -8864,7 +8864,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 }
                                 else
                                 {
-                                    if (current_color == 8 || current_color == 9 || current_color == 11)
+                                    if (current_color == -1 && (current_color == 8 || current_color == 9 || current_color == 11))
                                     {
                                         if (j == 0)
                                         {
@@ -8887,22 +8887,22 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         if (j == 0)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.20, 0.04, 0.9), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 1.0, 0.1, 1.0));
+                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.1), Clamp(v * 1.02, 0.09, 1.0));
                                         }
                                         else if (j == height - 1)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.4, 0.2, 1.0), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 0.75, 0.01, 0.7));
+                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.45), Clamp(v * 0.70, 0.01, 1.0));
                                         }
                                         else if (i >= width / 2)
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.32, 0.12, 1.0), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 0.84, 0.02, 0.83));
+                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.35), Clamp(v * 0.81, 0.03, 1.0));
                                         }
                                         else
                                         {
                                             ColorToHSV(c, out h, out s, out v);
-                                            c = ColorFromHSV(h, Clamp((s * 2 + 2 * MercifulClamp(Math.Round(s * s * 3.0))) * 0.25, 0.08, 0.97), Clamp((v * 4.5 + Math.Round(v) * 1.5) * 0.25 * 0.91, 0.05, 0.9));
+                                            c = ColorFromHSV(h, MercifulClamp((s + s * s * s * Math.Sqrt(s)) * 1.2), Clamp(v * 0.9, 0.06, 1.0));
                                         }
                                     }
                                 }
@@ -8910,9 +8910,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                             if (c.A != 0)
                             {
-                                cubes[p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
-                                cubes[p, current_color, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
-                                cubes[p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c.R);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)10, c.B);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 1] = Math.Max((byte)10, c.G);
+                                cubes[p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)10, c.R);
                                 cubes[p, current_color, i * 4 + j * width * 4 + 3] = c.A;
                             }
                             else
