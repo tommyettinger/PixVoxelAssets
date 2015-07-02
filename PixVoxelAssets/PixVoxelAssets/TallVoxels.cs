@@ -13923,7 +13923,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
 */
             //            processUnitOutlinedWDouble("Mutant", 41, true);
 
-            
+            /*
             processUnitOutlinedWQuad("Grass", 47, true);
             processUnitOutlinedWQuad("Tree", 47, true);
             processUnitOutlinedWQuad("Boulder", 48, true);
@@ -13949,7 +13949,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             processUnitOutlinedWQuad("Wall_Cross_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Tee_Upper", 49, true, true);
             processUnitOutlinedWQuad("Wall_Corner_Upper", 49, true, true);
-            
+            */
             //            File.WriteAllText("tree.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Tree" + "_Huge_W.vox", FileMode.Open))), 47));
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
@@ -14083,7 +14083,9 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
             */
-            generateBotLSpritesheet();
+            processHats("Birthday_Necromancer", 65, true, classes);
+
+            //            generateBotLSpritesheet();
             //processHats("Skeleton_Spear", 6, true, classes);
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
 
