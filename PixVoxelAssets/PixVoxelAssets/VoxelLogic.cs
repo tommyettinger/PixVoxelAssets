@@ -7469,6 +7469,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         };
         public static int wcolorcount = 0, wpalettecount = 0;
         public static int kcolorcount = 0, kpalettecount = 0;
+        public static int hcolorcount = 0, hpalettecount = 0;
 
         public static float[][] xcolours = new float[256][];
         public static byte[][] xrendered;
@@ -7712,6 +7713,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[][][] wrendered;
         public static byte[][] wcurrent;
         public static byte clear = 255;
+
+        public static byte[][] hrendered;
+        public static byte[][] hcurrent;
+
         public static int[] subtlePalettes = { 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
             drabPalettes = { };// { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
@@ -8824,22 +8829,20 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             double h = 0.0, s = 1.0, v = 1.0;
                             if (which_image.Equals(image))
                             {
+                                ColorToHSV(c, out h, out s, out v);
                                 if (drabPalettes.Contains(p))
                                 {
 
                                     if (j == 0)
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV(h, s * 0.4, v * 0.9);
                                     }
                                     else if (i >= width / 2 || j == height - 1)
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV(h, s * 0.7, v * 0.7);
                                     }
                                     else
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV(h, s * 0.55, v * 0.82);
                                     }
                                 }
@@ -8848,17 +8851,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
                                     if (j == 0)
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV(h, s * 0.6, v * 0.96);
                                     }
                                     else if (i >= width / 2 || j == height - 1)
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV(h, s * 0.8, v * 0.85);
                                     }
                                     else
                                     {
-                                        ColorToHSV(c, out h, out s, out v);
                                         c = ColorFromHSV(h, s * 0.7, v * 0.92);
                                     }
                                 }
@@ -8868,17 +8868,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     {
                                         if (j == 0)
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Math.Min(1.0, s * 1.1), v);
                                         }
                                         else if (i >= width / 2 || j == height - 1)
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.85)));
                                         }
                                         else
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((wpalettes[p][current_color][0] + wpalettes[p][current_color][1] + wpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.95)));
                                         }
                                     }
@@ -8886,22 +8883,18 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     {
                                         if (j == 0)
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.1, 0.0112, 1.0) * 0.9, Clamp(v * 1.02, 0.09, 1.0));
                                         }
                                         else if (j == height - 1)
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.5, 0.0112, 1.0), Clamp(v * 0.55, 0.01, 1.0));
                                         }
                                         else if (i >= width / 2)
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0) * 0.98, Clamp(v * 0.81, 0.03, 1.0));
                                         }
                                         else
                                         {
-                                            ColorToHSV(c, out h, out s, out v);
                                             c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0) * 0.95, Clamp(v * 0.9, 0.06, 1.0));
                                         }
                                     }
@@ -9430,6 +9423,65 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return AutoShadeK(voxelData.ToList(), x_size, y_size, z_size).ToArray();
         }
 
+        public static List<MagicaVoxelData> AutoShadeH(List<MagicaVoxelData> voxelData, int x_size, int y_size, int z_size)
+        {
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count);
+            MagicaVoxelData?[,,] singular = new MagicaVoxelData?[x_size, y_size, z_size];
+            singular.Fill(null);
+            foreach (MagicaVoxelData v in voxelData)
+            {
+                if (v.x < x_size && v.y < y_size && v.z < z_size)
+                    singular[v.x, v.y, v.z] = v;
+            }
+            foreach (MagicaVoxelData? v in singular)
+            {
+                if (v.HasValue)
+                {
+                    if ((253 - v.Value.color) % 4 == 0)
+                    {
+                        if (v.Value.z == z_size - 1 || singular[v.Value.x, v.Value.y, v.Value.z + 1].HasValue == false)
+                        {
+                            voxelsAltered.Add(v.Value);
+                        }
+                        else if (v.Value.z == 0 || singular[v.Value.x, v.Value.y, v.Value.z - 1].HasValue == false)
+                        {
+                            int neighbors = 0;
+                            if (v.Value.x + 1 < x_size && singular[v.Value.x + 1, v.Value.y, v.Value.z].HasValue)
+                                neighbors++;
+                            if (v.Value.x > 0 && singular[v.Value.x - 1, v.Value.y, v.Value.z].HasValue)
+                                neighbors++;
+                            if (v.Value.y + 1 < y_size && singular[v.Value.x, v.Value.y + 1, v.Value.z].HasValue)
+                                neighbors++;
+                            if (v.Value.y > 0 && singular[v.Value.x, v.Value.y - 1, v.Value.z].HasValue)
+                                neighbors++;
+
+                            if (neighbors > 1)
+                            {
+                                voxelsAltered.Add(AlterVoxel(v.Value, Math.Max(255, v.Value.color + (int)16)));
+                            }
+                            else
+                            {
+                                voxelsAltered.Add(v.Value);
+                            }
+                        }
+                        else
+                        {
+                            voxelsAltered.Add(v.Value);
+                        }
+                    }
+                    else
+                    {
+                        voxelsAltered.Add(v.Value);
+                    }
+                }
+            }
+            return voxelsAltered;
+        }
+        public static MagicaVoxelData[] AutoShadeH(MagicaVoxelData[] voxelData, int x_size, int y_size, int z_size)
+        {
+            return AutoShadeH(voxelData.ToList(), x_size, y_size, z_size).ToArray();
+        }
+
 
         public static byte WithoutShadingK(byte originalColor)
         {
@@ -9469,6 +9521,39 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return voxelsAltered;
         }
+        public static List<MagicaVoxelData> PlaceShadowsH(List<MagicaVoxelData> voxelData)
+        {
+            int[,] taken = new int[sizex, sizey];
+            taken.Fill(-1);
+            List<MagicaVoxelData> voxelsAltered = new List<MagicaVoxelData>(voxelData.Count * 9 / 8);
+            for (int i = 0; i < voxelData.Count; i++)
+            {
+                if (voxelData[i].x >= sizex || voxelData[i].y >= sizey)
+                {
+                    continue;
+                }
+                //if (voxelData[i].color > 257 - kcolorcount * 4 && (254 - voxelData[i].color) % 4 == 0)
+                //{
+                //    voxelData[i] = new MagicaVoxelData { x = voxelData[i].x, y = voxelData[i].y, z = voxelData[i].z, color = (byte)(voxelData[i].color - 1) };
+                //}
+                voxelsAltered.Add(voxelData[i]);
+                int unshaded = (255 - voxelData[i].color % 4 == 0) ? (255 - voxelData[i].color) / 4 : (253 - voxelData[i].color) / 4;
+                if (-1 == taken[voxelData[i].x, voxelData[i].y]
+                     && voxelData[i].color > 257 - hcolorcount * 4)
+                {
+                    //                    Console.Write(voxelData[i].color  + ", ");
+                    MagicaVoxelData vox = new MagicaVoxelData();
+                    vox.x = voxelData[i].x;
+                    vox.y = voxelData[i].y;
+                    vox.z = 0;
+                    vox.color = (byte)(253 - (hcolorcount - 2) * 4);
+                    taken[vox.x, vox.y] = voxelsAltered.Count();
+                    voxelsAltered.Add(vox);
+                }
+            }
+            return voxelsAltered;
+        }
+
         public static List<MagicaVoxelData> PlaceShadowsKPartial(List<MagicaVoxelData> voxelData)
         {
             int[,] taken = new int[sizex + 20, sizey + 20];

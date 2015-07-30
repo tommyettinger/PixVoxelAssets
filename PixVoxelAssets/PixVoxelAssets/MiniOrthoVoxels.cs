@@ -199,6 +199,7 @@ namespace AssetsPV
                                 Color c = b.GetPixel(i, j);
                                 double h = 0.0, s = 1.0, v = 1.0;
                                 double h2 = 0.0, s2 = 1.0, v2 = 1.0;
+                                ColorToHSV(c, out h, out s, out v);
 
                                 switch (which_image)
                                 {
@@ -208,7 +209,7 @@ namespace AssetsPV
                                             //top
                                             if (j <= 1)
                                             {
-                                                ColorToHSV(c, out h, out s, out v);
+                                                //ColorToHSV(c, out h, out s, out v);
                                                 c = ColorFromHSV((h + alt_k * 100) % 360,
                                                                     MercifulClamp(s * (1.2 - alt_k * 0.2) - 0.1 * softness),
                                                                     MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.15 : 1.1 - alt_k * 0.15)));
@@ -216,7 +217,7 @@ namespace AssetsPV
                                             // outline
                                             else if (j == height - 1)
                                             {
-                                                ColorToHSV(c, out h, out s, out v);
+                                                //ColorToHSV(c, out h, out s, out v);
                                                 //outline
                                                 if (kpalettes[p][current_color][3] == fade_alpha)
                                                 {
@@ -234,7 +235,7 @@ namespace AssetsPV
                                             //lightly shaded side
                                             else
                                             {
-                                                ColorToHSV(c, out h, out s, out v);
+                                                //ColorToHSV(c, out h, out s, out v);
                                                 c = ColorFromHSV((h + alt_k * 100) % 360,
                                                         MercifulClamp(s * (1.3 - alt_k * 0.2) - 0.2 * softness),
                                                         MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.0 : 0.9 - alt_k * 0.2 + 0.05 * softness)));
@@ -269,7 +270,7 @@ namespace AssetsPV
                                             //middle part
                                             else
                                             {
-                                                ColorToHSV(c, out h, out s, out v);
+                                                //ColorToHSV(c, out h, out s, out v);
                                                 c = ColorFromHSV((h + alt_k * 100) % 360,
                                                                     MercifulClamp(s * (1.2 - alt_k * 0.2) - 0.1 * softness),
                                                                     MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.15 : 1.1 - alt_k * 0.15)));
@@ -281,7 +282,7 @@ namespace AssetsPV
                                             //outline
                                             if (j == height - 1)
                                             {
-                                                ColorToHSV(c, out h, out s, out v);
+                                                //ColorToHSV(c, out h, out s, out v);
                                                 if (kpalettes[p][current_color][3] == fade_alpha)
                                                 {
                                                     c = ColorFromHSV((h + alt_k * 100) % 360,
@@ -299,7 +300,7 @@ namespace AssetsPV
                                             //all same color
                                             else
                                             {
-                                                ColorToHSV(c, out h, out s, out v);
+                                                //ColorToHSV(c, out h, out s, out v);
                                                 c = ColorFromHSV((h + alt_k * 100) % 360,
                                                                     MercifulClamp(s * (1.3 - alt_k * 0.2) - 0.1 * softness),
                                                                     MercifulClamp(v * ((kpalettes[p][current_color][0] + kpalettes[p][current_color][1] + kpalettes[p][current_color][2] > 2.5) ? 1.1 : 1.0 - alt_k * 0.15)));
@@ -1159,11 +1160,11 @@ namespace AssetsPV
                                     argbValues[p - 1] = (byte)Clamp(kcurrent[mod_color][i - 1 + j * (vwidth * 4)] + wave, 1, 255);
                                     argbValues[p - 0] = 255;
                                 }
-
+                                /*
                                 else
                                 {
                                     argbValues[p] = kcurrent[mod_color][i + j * (vwidth * 4)];
-                                }
+                                }*/
                                 if (outlineColors[p] == 0)
                                     outlineColors[p] = kcurrent[mod_color][i + (4 * vwidth * vheight)]; //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                             }
