@@ -8887,11 +8887,11 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         }
                                         else if (j == height - 1)
                                         {
-                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.5, 0.0112, 1.0), Clamp(v * 0.55, 0.01, 1.0));
+                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.45, 0.0112, 1.0), Clamp(v * 0.7, 0.01, 1.0));
                                         }
                                         else if (i >= width / 2)
                                         {
-                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0) * 0.98, Clamp(v * 0.81, 0.03, 1.0));
+                                            c = ColorFromHSV(h, Clamp((s + s * s * s * Math.Sqrt(s)) * 1.39, 0.0112, 1.0) * 0.98, Clamp(v * 0.77, 0.03, 1.0));
                                         }
                                         else
                                         {
@@ -16014,7 +16014,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
     0xff000022, 0xff000011, 0xff00ee00, 0xff00dd00, 0xff00bb00, 0xff00aa00, 0xff008800, 0xff007700, 0xff005500, 0xff004400, 0xff002200, 0xff001100, 0xffee0000, 0xffdd0000, 0xffbb0000, 0xffaa0000,
     0xff880000, 0xff770000, 0xff550000, 0xff440000, 0xff220000, 0xff110000, 0xffeeeeee, 0xffdddddd, 0xffbbbbbb, 0xffaaaaaa, 0xff888888, 0xff777777, 0xff555555, 0xff444444, 0xff222222, 0xff111111
 };
-        private static int rowWidthBytes = 4;
+        private static int rowWidthBytes = 16;
         /// <summary>
         /// Write a MagicaVoxel .vox format file from a List of MagicaVoxelData and a palette from this program to use.
         /// </summary>
@@ -16057,7 +16057,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 {
                     if ((249 - i) % 8 == 0 && 249 - i < 168)
                     {
-                        colors[(i - 1) * 4] = xrendered[249 - i + palette][2 + rowWidthBytes];
+                        colors[(i - 1) * 4]     = xrendered[249 - i + palette][2 + rowWidthBytes];
                         colors[(i - 1) * 4 + 1] = xrendered[249 - i + palette][1 + rowWidthBytes];
                         colors[(i - 1) * 4 + 2] = xrendered[249 - i + palette][0 + rowWidthBytes];
                         colors[(i - 1) * 4 + 3] = xrendered[249 - i + palette][3 + rowWidthBytes];

@@ -8535,7 +8535,7 @@ namespace AssetsPV
                     b.Dispose();
                     g2.DrawImage(b3, 0, 0, 248, 308);
 
-                    b2.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    smoothScale(b2, 3).Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                     b2.Dispose();
                     g2.Dispose();
                     b3.Dispose();
@@ -8594,7 +8594,7 @@ namespace AssetsPV
                     b.Dispose();
                     g2.DrawImage(b3, 0, 0, 248, 308);
 
-                    b2.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    smoothScale(b2, 3).Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                     b2.Dispose();
                     g2.Dispose();
                     b3.Dispose();
@@ -8673,8 +8673,8 @@ namespace AssetsPV
                     hat_graphics = Graphics.FromImage(hat_image);
                     body_graphics = Graphics.FromImage(body_image);
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    body_graphics.DrawImage(hat_image, 80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
-                         40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2)), 88, 108);
+                    body_graphics.DrawImage(hat_image, 80 * 3 + (((body_coord % (stride / 4) - 32) / 2) * 3 - ((hat_coord % (stride / 4) - 32) / 2) * 3),
+                         40 * 3 + (((body_coord / (stride / 4) - (108 - 30)) / 2) * 3 - ((hat_coord / (stride / 4) - (108 - 30)) / 2) * 3), 88 * 3, 108 * 3);
 //                    model_headpoints.AppendLine("EXPLODE: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
 //                        (80 + (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))) +
 //                        ", y " + (40 + (((body_coord / (stride / 4) - (108 - 30)) / 2) - ((hat_coord / (stride / 4) - (108 - 30)) / 2))));
@@ -8771,7 +8771,7 @@ namespace AssetsPV
                     b.Dispose();
                     g2.DrawImage(b3, 0, 0, 328, 408);
 
-                    b2.Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    smoothScale(b2, 3).Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                     b2.Dispose();
                     g2.Dispose();
                 }
@@ -8824,7 +8824,7 @@ namespace AssetsPV
                     b.Dispose();
                     g2.DrawImage(b3, 0, 0, 328, 408);
 
-                    b2.Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    smoothScale(b2, 3).Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
                     b2.Dispose();
                     g2.Dispose();
                 }
@@ -11053,11 +11053,11 @@ namespace AssetsPV
                     hat_graphics = Graphics.FromImage(hat_image);
                     Graphics body_graphics = Graphics.FromImage(body_image);
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2)),
-                         (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)), 88, 108);
+                    body_graphics.DrawImage(hat_image, (((body_coord % (stride / 4) - 32) / 2) * 3 - ((hat_coord % (stride / 4) - 32) / 2) * 3),
+                         (((body_coord / (stride / 4) - 78) / 2) * 3 - ((hat_coord / (stride / 4) - 78) / 2) * 3), 88 * 3, 108 * 3);
                     
-                    offsets.Write(((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2));
-                    offsets.Write(((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2));
+                    offsets.Write(((body_coord % (stride / 4) - 32) / 2) * 3 - ((hat_coord % (stride / 4) - 32) / 2) * 3);
+                    offsets.Write(((body_coord / (stride / 4) - 78) / 2) * 3 - ((hat_coord / (stride / 4) - 78) / 2) * 3);
 //                    model_headpoints.AppendLine("BODY: " + u + "_" + hat + " facing " + dir + " frame " + f + ": x " +
 //                        (((body_coord % (stride / 4) - 32) / 2) - ((hat_coord % (stride / 4) - 32) / 2))
 //                        + ", y " + (((body_coord / (stride / 4) - 78) / 2) - ((hat_coord / (stride / 4) - 78) / 2)));
@@ -12690,7 +12690,7 @@ namespace AssetsPV
 
             List<Tuple<int, int>> path = new List<Tuple<int, int>>();
             int x;
-            int initial_y = (r.Next(3, height - 4) / 2) * 2 + 1;
+            int initial_y = (r.Next(2, height - 1) / 2) * 2 + 1;
             int y = initial_y;
             int midpoint = width / 2;
             int dir = (r.Next(2) == 0) ? -1 : 1;
@@ -12761,7 +12761,7 @@ namespace AssetsPV
         }
         public static Bitmap makeFlatTiling()
         {
-            Bitmap b = new Bitmap(128 * 16, 32 * 32);
+            Bitmap b = new Bitmap(128 * 8, 32 * 16);
             Graphics g = Graphics.FromImage(b);
 
             Bitmap[] tilings = new Bitmap[12];
@@ -12769,7 +12769,7 @@ namespace AssetsPV
             {
                 tilings[i] = TallPaletteDraw.drawPixelsFlatDouble(i);
             }
-            int[,] grid = new int[17, 33];
+            int[,] grid = new int[9, 17];
             Random r = new Random();
 
             //tilings[0].Save("flatgrass.png", ImageFormat.Png);
@@ -12786,24 +12786,24 @@ namespace AssetsPV
                 grid[8, i] = 0;
             }*/
 
-            int[,] takenLocations = new int[17, 33];
-            for (int i = 0; i < 17; i++)
+            int[,] takenLocations = new int[9, 17];
+            for (int i = 0; i < 9; i++)
             {
-                for (int j = 0; j < 33; j++)
+                for (int j = 0; j < 17; j++)
                 {
                     takenLocations[i, j] = 0;
                     grid[i, j] = 0;
                 }
             }
-            List<Tuple<int, int>> p = getSoftPath(10, 33);
+            List<Tuple<int, int>> p = getSoftPath(5, 17);
             foreach (Tuple<int, int> t in p)
             {
-                grid[t.Item1 + 6, t.Item2] = 9;
-                takenLocations[t.Item1 + 6, t.Item2] = 1;
+                grid[t.Item1 + 3, t.Item2] = 9;
+                takenLocations[t.Item1 + 3, t.Item2] = 1;
             }
             int numMountains = r.Next(17, 30);
             int iter = 0;
-            int rx = r.Next(15) + 1, ry = r.Next(30) + 2;
+            int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
             do
             {
                 if (takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
@@ -12820,13 +12820,13 @@ namespace AssetsPV
                 }
                 else
                 {
-                    rx = r.Next(15) + 1;
-                    ry = r.Next(30) + 2;
+                    rx = r.Next(8) + 1;
+                    ry = r.Next(15) + 2;
                 }
                 iter++;
             } while (iter < numMountains);
 
-            List<Tuple<int, int>> h = getHardPath(17, 13);
+            List<Tuple<int, int>> h = getHardPath(9, 6);
             foreach (Tuple<int, int> t in h)
             {
                 grid[t.Item1, t.Item2 + 6] = 8;
@@ -12847,9 +12847,9 @@ namespace AssetsPV
                 case 4: extreme = 1;
                     break;
             }
-            for (int i = 1; i < 16; i++)
+            for (int i = 1; i < 8; i++)
             {
-                for (int j = 2; j < 31; j++)
+                for (int j = 2; j < 15; j++)
                 {
                     for (int v = 0; v < 3; v++)
                     {
@@ -12895,9 +12895,9 @@ namespace AssetsPV
             }
 
 
-            for (int j = 0; j < 33; j++)
+            for (int j = 0; j < 17; j++)
             {
-                for (int i = 0; i < 17; i++)
+                for (int i = 0; i < 9; i++)
                 {
                     g.DrawImageUnscaled(tilings[grid[i, j]], (128 * i) - ((j % 2 == 0) ? 0 : 64), (32 * j) - 32 + 8 - 32);
                 }
@@ -13463,7 +13463,7 @@ namespace AssetsPV
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            altFolder = "botl3/";
+            altFolder = "botl4/";
 
             VoxelLogic.Initialize();
 
@@ -13702,7 +13702,7 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-            //            makeFlatTiling().Save("tiling_128x64.png", ImageFormat.Png);
+//                        smoothScale(makeFlatTiling(), 3).Save("tiling_smooth.png", ImageFormat.Png);
             //            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
@@ -13827,7 +13827,7 @@ namespace AssetsPV
             */
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            
+            /*
             SaPalettes.Initialize();
             VoxelLogic.InitializeWPalette();
             
@@ -13844,8 +13844,6 @@ namespace AssetsPV
             processUnitOutlinedWalkDouble("Tassar", 17);
             processUnitOutlinedWDouble("Erezdo", 2, true);
             processUnitOutlinedWalkDouble("Erezdo", 2);
-            processUnitOutlinedWDouble("Axarik", 0, true);
-            processUnitOutlinedWalkDouble("Axarik", 0);
             processUnitOutlinedWDouble("Ceglia", 1, true);
             processUnitOutlinedWalkDouble("Ceglia", 1);
 
@@ -13869,7 +13867,7 @@ namespace AssetsPV
             processUnitOutlinedWalkQuad("Vashk", 18);
             processUnitOutlinedWDouble("Vih", 43, false);
             processUnitOutlinedWalkDouble("Vih", 43);
-
+            
 
             processUnitOutlinedWDouble("Human_Male", 4, true);
             processUnitOutlinedWalkDouble("Human_Male", 4);
@@ -13918,7 +13916,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Tree", 35, true);
             processUnitOutlinedWQuad("Boulder", 36, true);
             processUnitOutlinedWQuad("Rubble", 36, true);
-            
+            */
             //OLD PALETTE NUMBERS 
             /*
             processUnitOutlinedWDouble("Axarik", 18, true);
@@ -14021,7 +14019,6 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             // File.WriteAllText("boulder.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Boulder" + "_Huge_W.vox", FileMode.Open))), 48));
 
             //processUnitOutlinedWDoubleHat("Zombie", 2, true, "Thief");
-
             /*
             processWDoubleHat("Generic_Male", 0, "Berserker");
             processWDoubleHat("Generic_Male", 0, "Witch");
@@ -14059,7 +14056,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             processWDoubleHat("Spirit", 7, "Dervish");
             processWDoubleHat("Spirit", 7, "Thug");
             processWDoubleHat("Spirit", 7, "Bishop");
-            
+            */
             
             
             processHats("Zombie", 2, true, classes);
@@ -14151,7 +14148,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
             
             processHats("Birthday_Necromancer", 65, true, classes);
-            */
+            
             //            generateBotLSpritesheet();
             //processHats("Skeleton_Spear", 6, true, classes);
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
