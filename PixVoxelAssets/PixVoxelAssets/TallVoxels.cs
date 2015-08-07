@@ -12906,7 +12906,7 @@ namespace AssetsPV
         }
         public static Bitmap makeFlatTilingDrab()
         {
-            Bitmap b = new Bitmap(96 * 16, 24 * 32);
+            Bitmap b = new Bitmap(96 * 8, 24 * 16);
             Graphics g = Graphics.FromImage(b);
 
             Bitmap[] tilings = new Bitmap[10];
@@ -12914,27 +12914,27 @@ namespace AssetsPV
             {
                 tilings[i] = TallPaletteDraw.drawPixelsFlatDrab(i);
             }
-            int[,] grid = new int[17, 33];
+            int[,] grid = new int[9, 17];
             Random r = new Random();
 
-            int[,] takenLocations = new int[17, 33];
-            for (int i = 0; i < 17; i++)
+            int[,] takenLocations = new int[9, 17];
+            for (int i = 0; i < 9; i++)
             {
-                for (int j = 0; j < 33; j++)
+                for (int j = 0; j < 17; j++)
                 {
                     takenLocations[i, j] = 0;
                     grid[i, j] = 0;
                 }
             }
-            List<Tuple<int, int>> p = getSoftPath(10, 33);
+            List<Tuple<int, int>> p = getSoftPath(5, 17);
             foreach (Tuple<int, int> t in p)
             {
-                grid[t.Item1 + 6, t.Item2] = 9;
-                takenLocations[t.Item1 + 6, t.Item2] = 1;
+                grid[t.Item1 + 3, t.Item2] = 9;
+                takenLocations[t.Item1 + 3, t.Item2] = 1;
             }
-            int numMountains = r.Next(17, 30);
+            int numMountains = r.Next(9, 15);
             int iter = 0;
-            int rx = r.Next(15) + 1, ry = r.Next(30) + 2;
+            int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
             do
             {
                 if (takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
@@ -12944,20 +12944,20 @@ namespace AssetsPV
                     int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
                     int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
                     if (xdir <= 1) xdir++;
-                    if (xdir >= 15) xdir--;
+                    if (xdir >= 8) xdir--;
                     rx = xdir;
                     ry = ry + ydir;
 
                 }
                 else
                 {
-                    rx = r.Next(15) + 1;
-                    ry = r.Next(30) + 2;
+                    rx = r.Next(8) + 1;
+                    ry = r.Next(15) + 2;
                 }
                 iter++;
             } while (iter < numMountains);
 
-            List<Tuple<int, int>> h = getHardPath(17, 13);
+            List<Tuple<int, int>> h = getHardPath(9, 6);
             foreach (Tuple<int, int> t in h)
             {
                 grid[t.Item1, t.Item2 + 6] = 8;
@@ -12978,9 +12978,9 @@ namespace AssetsPV
                 case 4: extreme = 1;
                     break;
             }
-            for (int i = 1; i < 16; i++)
+            for (int i = 1; i < 8; i++)
             {
-                for (int j = 2; j < 31; j++)
+                for (int j = 2; j < 15; j++)
                 {
                     for (int v = 0; v < 3; v++)
                     {
@@ -13026,9 +13026,9 @@ namespace AssetsPV
             }
 
 
-            for (int j = 0; j < 33; j++)
+            for (int j = 0; j < 17; j++)
             {
-                for (int i = 0; i < 17; i++)
+                for (int i = 0; i < 9; i++)
                 {
                     g.DrawImageUnscaled(tilings[grid[i, j]], (96 * i) - ((j % 2 == 0) ? 0 : 48), (24 * j) - 24 - 7 - 24);
                 }
@@ -13702,8 +13702,8 @@ namespace AssetsPV
             //processTerrainChannel();
             //processReceiving();
 
-//                        smoothScale(makeFlatTiling(), 3).Save("tiling_smooth.png", ImageFormat.Png);
-            //            makeFlatTilingSmall().Save("tiling_96x48.png", ImageFormat.Png);
+            //                  smoothScale(makeFlatTiling(), 3).Save("tiling_smooth.png", ImageFormat.Png);
+            smoothScale(makeFlatTilingDrab(), 3).Save("tiling_96x48.png", ImageFormat.Png);
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
@@ -14139,16 +14139,16 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
 
             processHats("Armored_Male", 17, true, classes, "Armored_Men_E");
             
-            processUnitOutlinedWDouble("Necromancer", 65, true);
+//            processUnitOutlinedWDouble("Necromancer", 65, true);
+
+//            File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
+//            File.WriteAllText("hats.txt", hat_headpoints.ToString());
+            
+//            processHats("Birthday_Necromancer", 65, true, classes);
 
             offsets.Close();
             offbin.Close();
 
-            File.WriteAllText("relative-hat-positions.txt", model_headpoints.ToString());
-            File.WriteAllText("hats.txt", hat_headpoints.ToString());
-            
-            processHats("Birthday_Necromancer", 65, true, classes);
-            
             //            generateBotLSpritesheet();
             //processHats("Skeleton_Spear", 6, true, classes);
             //processUnitOutlinedWDouble("Spectral_Knight", 7, false);
@@ -14376,17 +14376,23 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             
             processUnitOutlinedWDouble(u, palette, hover);
             //processUnitOutlinedWDoubleDead(u, palette, hover);
-            foreach (string s in classes)
+            foreach(string s in classes)
             {
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
+            
             // /* REMOVE COMMENT
-            string doc = File.ReadAllText("Template.html");
+            string doc = File.ReadAllText("TemplateSmooth.html");
             string html = String.Format(doc, palette, u);
 
-            System.IO.Directory.CreateDirectory("html");
-            File.WriteAllText("html/" + u + ".html", html);
+
+            string doc2 = File.ReadAllText("TemplateGifSmooth.html");
+            string html2 = String.Format(doc2, palette, u);
+            System.IO.Directory.CreateDirectory(altFolder + "html");
+            File.WriteAllText(altFolder + "html/" + u + "_still.html", html);
+            File.WriteAllText(altFolder + "html/" + u + ".html", html2);
             // */
+
         }
 
         private static void processHats(string u, int palette, bool hover, string[] classes, string alternateName)
@@ -14399,11 +14405,14 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
                 processUnitOutlinedWDoubleHat(u, palette, hover, s);
             }
             // /* REMOVE COMMENT
-            string doc = File.ReadAllText("LivingTemplate.html");
+            string doc = File.ReadAllText("LivingTemplateSmooth.html");
             string html = String.Format(doc, palette, u);
 
-            System.IO.Directory.CreateDirectory("html");
-            File.WriteAllText("html/" + alternateName + ".html", html);
+            string doc2 = File.ReadAllText("LivingTemplateGifSmooth.html");
+            string html2 = String.Format(doc2, palette, u);
+            System.IO.Directory.CreateDirectory(altFolder + "html");
+            File.WriteAllText(altFolder + "html/" + alternateName + "_still.html", html);
+            File.WriteAllText(altFolder + "html/" + alternateName + ".html", html2);
             // */
         }
 

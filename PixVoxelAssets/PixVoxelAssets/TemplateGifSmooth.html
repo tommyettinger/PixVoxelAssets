@@ -1,0 +1,195 @@
+
+<html>
+<head>
+<title>PixVoxel Demo</title>
+<style type="text/css">
+img {{border:none; padding: 0px; margin-top: 60px;padding-right: 132px; outline: none;}}
+.big img {{border:none; padding: 0px; margin-top: 108px;margin-right: 288px;margin-left: -72px; outline: none;}}
+.huge img {{border:none; padding: 0px; padding-bottom: -60px; margin-top: -60px;margin-right: 288px;margin-left: -132px; outline: none;}}
+.massive img {{border:none; padding: 0px; margin-top: -60px;margin-right: 288px;margin-left: -192px; outline: none;}}
+
+body {{
+	background-image: url(tiling_small.png);
+	background-position: 0px 0px;
+	margin: 0;
+}}
+p {{color: #fff; background: #333; font-family: 'Serif';}}
+a {{color: #f40; background: #333; font-family: 'Serif';}}
+p, a {{color: #fff; font-family: "Serif"; font-weight: bold; background-color: #444; text-align: center; }}
+.gap
+{{
+	margin-bottom: 0px;
+	font-size: 54px;
+	margin-left: -810px;
+	min-height: 0px;
+	max-height: 0px;
+	width: 600px;
+	position: relative;
+	overflow:visible;
+	display: inline-block;
+}}
+.over
+{{
+	color: #fff;
+	background: #333;
+	margin-bottom: 0px;
+	font-size: 48px;
+	font-weight: bolder;
+	width: 500px;
+	height: 60px;
+	text-align: center;
+	position: absolute;
+	top: 50px;
+	right: 100px;
+	overflow:hidden;
+	display: block;
+}}
+.grid
+{{
+	padding-top: 40px;
+	padding-bottom: 0;
+	padding-left: 8px;
+	padding-right: 0;
+}}
+.row
+{{
+	min-height: 216px;
+	max-height: 216px;
+	width: 100%;
+	position: relative;
+	font-size: 0px;
+	overflow:visible;
+}}
+.big
+{{
+	margin-left: 42px;
+}}
+
+.terrain
+{{
+	margin-left: -120px;
+	margin-top: -240px;
+	padding-top: 72px;
+	margin-bottom: 384px;
+}}
+.isotile
+{{
+	vertical-align: top;
+	position: relative;
+	display: inline-block;
+	width: 288px;
+	height: 288px;
+	margin-top: -132px;
+}}
+.bigtile
+{{
+	position: relative;
+	display: inline-block;
+	width: 288px;
+	height: 288px;
+	margin-top: -120px;
+	top: -120px;
+}}
+.tritile
+{{
+	position: relative;
+	display: inline-block;
+	width: 288px;
+	height: 288px;
+	margin-left: 156px;
+	margin-top: -420px;
+}}
+.massive
+{{
+	position: relative;
+	display: inline-block;
+	width: 528px;
+	height: 264px;
+	margin-left: 264px;
+	margin-top: -366px;
+	top: -48px;
+}}
+.row:nth-of-type(2n-1)
+{{
+	margin-left: 132px;
+}}
+</style>
+</head>
+<body>
+    <div class="grid">
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Berserker_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Berserker_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Witch_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Witch_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Scout_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Scout_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Captain_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Captain_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Mystic_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Mystic_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Wizard_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Wizard_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Provocateur_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Provocateur_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Noble_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Noble_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Woodsman_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Woodsman_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Sheriff_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Sheriff_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Thief_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Thief_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Merchant_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Merchant_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Farmer_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Farmer_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Officer_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Officer_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Dervish_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Dervish_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Thug_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Thug_explosion_animated.gif" /></div>
+        </div>
+        <div class="row">
+            <div class="isotile"><img src="allies/palette{0}/palette{0}_{1}_Bishop_Large_animated.gif" /></div>
+            <div class="tritile"><img src="allies/palette{0}/palette{0}_{1}_Bishop_explosion_animated.gif" /></div>
+        </div>
+    </div>
+</body>
+</html>
+
