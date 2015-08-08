@@ -13,7 +13,7 @@ namespace AssetsPV
 {
     public class TallVoxels
     {
-        private static Random r = new Random(TallPaletteDraw.r.Next());
+        private static Random r = new Random(0x1337BEEF);
         public static StringBuilder log = new StringBuilder();
         public static string[] Directions = { "SE", "SW", "NW", "NE" };
         public static string[] Terrains = new string[]
@@ -13463,7 +13463,7 @@ namespace AssetsPV
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            altFolder = "botl4/";
+            //   altFolder = "botl4/";
 
             VoxelLogic.Initialize();
 
@@ -13827,7 +13827,7 @@ namespace AssetsPV
             */
             //            File.WriteAllText("ilapa.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Ilapa" + "_Large_W.vox", FileMode.Open))), 12));
             //            File.WriteAllText("vashk.json", VoxelLogic.VoxToJSON(VoxelLogic.FromMagicaRaw(new BinaryReader(File.Open("Vashk" + "_Huge_W.vox", FileMode.Open))), 19));
-            /*
+            
             SaPalettes.Initialize();
             VoxelLogic.InitializeWPalette();
             
@@ -13916,7 +13916,7 @@ namespace AssetsPV
             processUnitOutlinedWQuad("Tree", 35, true);
             processUnitOutlinedWQuad("Boulder", 36, true);
             processUnitOutlinedWQuad("Rubble", 36, true);
-            */
+            
             //OLD PALETTE NUMBERS 
             /*
             processUnitOutlinedWDouble("Axarik", 18, true);
