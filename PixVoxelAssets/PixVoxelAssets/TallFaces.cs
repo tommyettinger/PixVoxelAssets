@@ -883,7 +883,7 @@ namespace AssetsPV
 
             Console.WriteLine("Processing: " + u + ", palette " + palette);
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
-            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin); //VoxelLogic.PlaceShadowsW(
+            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin);
             Directory.CreateDirectory("vox/" + altFolder);
             VoxelLogic.WriteVOX("vox/" + altFolder + u + "_" + palette + ".vox", voxes, "W", palette, 80, 80, 80);
             MagicaVoxelData[] parsed = voxes.ToArray();
@@ -926,6 +926,140 @@ namespace AssetsPV
             // processFieryExplosionHugeW(u, palette);
 
         }
+        public static Bitmap makeFlatTiling()
+        {
+            Bitmap b = new Bitmap(48 * 4 * 8, 12 * 4 * 16);
+            Graphics g = Graphics.FromImage(b);
+
+            Bitmap[] tilings = new Bitmap[11];
+
+            BinaryReader bin = new BinaryReader(File.Open("Terrain_Huge_W.vox", FileMode.Open));
+            MagicaVoxelData[] voxes = VoxelLogic.FromMagicaRaw(bin).ToArray();
+            for(int i = 0; i < 11; i++)
+            {
+                wcurrent = wrendered[VoxelLogic.wpalettecount - 11 + i];
+                tilings[i] = renderWSmartHuge(voxes, 0, VoxelLogic.wpalettecount - 11 + i, 0, 1, true);
+            }
+            int[,] grid = new int[9, 17];
+            
+            int[,] takenLocations = new int[9, 17];
+            for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j < 17; j++)
+                {
+                    takenLocations[i, j] = 0;
+                    grid[i, j] = 0;
+                    if(i > 0 && i < 8 && j > 0 && j < 16 && r.Next(3) > 0)
+                    {
+                        grid[i, j] = r.Next(11);
+                    }
+                }
+            }
+            /*
+            int numMountains = r.Next(17, 30);
+            int iter = 0;
+            int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
+            do
+            {
+                if(takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
+                {
+                    takenLocations[rx, ry] = 2;
+                    grid[rx, ry] = r.Next(9) + 1;
+                    int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
+                    int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
+                    if(xdir <= 1) xdir++;
+                    if(xdir >= 9) xdir--;
+                    rx = xdir;
+                    ry = ry + ydir;
+
+                }
+                else
+                {
+                    rx = r.Next(8) + 1;
+                    ry = r.Next(15) + 2;
+                }
+                iter++;
+            } while(iter < numMountains);
+
+            int extreme = 0;
+            switch(r.Next(5))
+            {
+                case 0:
+                    extreme = 7;
+                    break;
+                case 1:
+                    extreme = 2;
+                    break;
+                case 2:
+                    extreme = 2;
+                    break;
+                case 3:
+                    extreme = 1;
+                    break;
+                case 4:
+                    extreme = 1;
+                    break;
+            }
+            */
+            /*
+            for(int i = 1; i < 8; i++)
+            {
+                for(int j = 2; j < 15; j++)
+                {
+                    for(int v = 0; v < 3; v++)
+                    {
+
+                        int[] adj = { 0, 0, 0, 0,
+                                        0,0,0,0,
+                                    0, 0, 0, 0, };
+                        adj[0] = grid[i, j + 1];
+                        adj[1] = grid[i, j - 1];
+                        if(j % 2 == 0)
+                        {
+                            adj[2] = grid[i + 1, j + 1];
+                            adj[3] = grid[i + 1, j - 1];
+                        }
+                        else
+                        {
+                            adj[2] = grid[i - 1, j + 1];
+                            adj[3] = grid[i - 1, j - 1];
+                        }
+                        adj[4] = grid[i, j + 2];
+                        adj[5] = grid[i, j - 2];
+                        adj[6] = grid[i + 1, j];
+                        adj[7] = grid[i - 1, j];
+                        int likeliest = 0;
+                        if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+                            likeliest = extreme;
+                        if((adj.Contains(2) && r.Next(4) == 0))
+                            likeliest = extreme;
+                        if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+                            likeliest = extreme;
+                        if((adj.Contains(1) && r.Next(5) > 1) || r.Next(4) == 0)
+                            likeliest = r.Next(2) * 2 + 1;
+                        if(adj.Contains(5) && r.Next(3) == 0)
+                            likeliest = r.Next(4, 6);
+                        if(r.Next(45) == 0)
+                            likeliest = 6;
+                        if(takenLocations[i, j] == 0)
+                        {
+                            grid[i, j] = likeliest;
+                        }
+                    }
+                }
+            }
+            */
+
+            for(int j = 0; j < 17; j++)
+            {
+                for(int i = 0; i < 9; i++)
+                {
+                    g.DrawImageUnscaled(tilings[grid[i, j]], (48 * 4 * i) - ((j % 2 == 0) ? 0 : 24 * 4) - 24 * 4 + 20, (12 * 4 * j) - 12 * 2 * 17 - 40);
+                }
+            }
+            return b;
+        }
+
         public static void processUnitWalkHugeW(string u, int palette)
         {
 
@@ -1768,7 +1902,8 @@ namespace AssetsPV
             SaPalettes.Initialize();
             InitializeWPalette();
             altFolder = "sau8/";
-
+            makeFlatTiling().Save("tiling_flat_gray.png");
+            /*
             processUnitLargeW("Rakgar", 18, true);
 
             processUnitLargeW("Lomuk", 13, false);
@@ -1834,7 +1969,7 @@ namespace AssetsPV
             processUnitLargeWalkW("Human_Female", 9);
             processUnitLargeW("Human_Female", 10, true);
             processUnitLargeWalkW("Human_Female", 10);
-
+            */
             /*
             processUnitHugeW("Barrel", 38, true);
 
