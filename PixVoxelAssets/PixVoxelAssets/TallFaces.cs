@@ -476,7 +476,13 @@ namespace AssetsPV
                             Color c = b.GetPixel(i, j);
                             double h = 0.0, s = 1.0, v = 1.0;
                             VoxelLogic.ColorToHSV(c, out h, out s, out v);
-
+                            //                            if(VoxelLogic.subtlePalettes.Contains(p) && i == 0 && j == 0)
+                            //                                Console.WriteLine("palette: " + p + ", current_color: " + current_color + ", s before: " + s + ", s after: " + (VoxelLogic.Clamp(s - 0.3, 0.0, 0.6)));
+                            if(VoxelLogic.subtlePalettes.Contains(p))
+                            {
+                                s = VoxelLogic.Clamp((s * 0.5), 0.0, 0.5);
+                                v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
+                            }
                             for(int slp = 0; slp < 17; slp++)
                             {
                                 Color c2 = Color.Transparent;
@@ -665,7 +671,9 @@ namespace AssetsPV
                                 {
                                     if(j >= 2 && j < height - 1)
                                     {
-                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.85, 0.01, 1.0));
+                                        double h2 = h, s2 = 1.0, v2 = v;
+                                        VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
+                                        c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
                                     }
                                 }
                                 if(c2.A != 0)
@@ -860,19 +868,19 @@ namespace AssetsPV
         private static Bitmap processFrameLargeW(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
             Bitmap b;
-//            Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
+            Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still);
-            return b;
-            /*
+//            return b;
+            
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
             g2.Dispose();
-            return smoothScale(b2, 3);
-            */
+            return b2;
+            
             /*string folder = "palette" + palette + "_big";
             System.IO.Directory.CreateDirectory(folder);
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
@@ -1130,19 +1138,19 @@ namespace AssetsPV
         private static Bitmap processFrameHugeW(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still)
         {
             Bitmap b;
-//            Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
+            Bitmap b2 = new Bitmap(168, 208, PixelFormat.Format32bppArgb);
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
             b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still);
-            return b;
-            /*
+//            return b;
+            
             Graphics g2 = Graphics.FromImage(b2);
             g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
+            g2.DrawImage(b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat), -40, -80, 248, 308);
             g2.Dispose();
-            return smoothScale(b2, 3);
-            */
+            return b2;
+            
             /*string folder = "palette" + palette + "_big";
             System.IO.Directory.CreateDirectory(folder);
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
@@ -1398,39 +1406,39 @@ namespace AssetsPV
                                                     argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] + 160, 255);
                                                     argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] + 160, 255);
                                                     argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] + 160, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
-                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n, 255);
-                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n, 255);
-                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoise(facing, vx.x + 50, vx.y + 50, vx.z);
-                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n, 255);
-                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n, 255);
-                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoiseLight(facing, vx.x + 50, vx.y + 50, vx.z);
-                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n, 255);
-                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n, 255);
-                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) + 0.3f;
-                                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * n, 1, 255);
-                                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * n, 1, 255);
-                                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * n, 1, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 24 * (n - 0.8), 1, 255);
+                                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 24 * (n - 0.8), 1, 255);
+                                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 24 * (n - 0.8), 1, 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else
                                                 {
@@ -1757,39 +1765,39 @@ namespace AssetsPV
                                                     argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] + 160, 255);
                                                     argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] + 160, 255);
                                                     argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] + 160, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
-                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n, 255);
-                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n, 255);
-                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n-0.8), 255);
+                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_some_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoise(facing, vx.x + 50, vx.y + 50, vx.z);
-                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n, 255);
-                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n, 255);
-                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_mild_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoiseLight(facing, vx.x + 50, vx.y + 50, vx.z);
-                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n, 255);
-                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n, 255);
-                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha && i % 4 == 3)
                                                 {
                                                     float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) + 0.3f;
-                                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * n, 1, 255);
-                                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * n, 1, 255);
-                                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * n, 1, 255);
-                                                    argbValues[p - 0] = 255;
+                                                    argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 24 * (n - 0.8), 1, 255);
+                                                    argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 24 * (n - 0.8), 1, 255);
+                                                    argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 24 * (n - 0.8), 1, 255);
+                                                    argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
                                                 }
                                                 else
                                                 {
@@ -1817,7 +1825,7 @@ namespace AssetsPV
                 if(argbValues[i] == 7)
                     argbValues[i] = 0;
             }
-            bool lightOutline = !VoxelLogic.subtlePalettes.Contains(palette);
+            bool lightOutline = true; //!VoxelLogic.subtlePalettes.Contains(palette);
             for(int i = 3; i < numBytes; i += 4)
             {
                 if(argbValues[i] > 255 * VoxelLogic.waver_alpha && barePositions[i] == false)
@@ -1901,9 +1909,14 @@ namespace AssetsPV
 
             SaPalettes.Initialize();
             InitializeWPalette();
-            altFolder = "sau8/";
-            makeFlatTiling().Save("tiling_flat_gray.png");
-            /*
+            altFolder = "sau9/";
+            //            makeFlatTiling().Save("tiling_flat_gray.png");
+
+            processUnitHugeW("Grass", 35, true);
+            processUnitHugeW("Tree", 35, true);
+            processUnitHugeW("Boulder", 36, true);
+            processUnitHugeW("Rubble", 36, true);
+            
             processUnitLargeW("Rakgar", 18, true);
 
             processUnitLargeW("Lomuk", 13, false);
@@ -1936,8 +1949,8 @@ namespace AssetsPV
             processUnitLargeWalkW("Tassar", 17);
             processUnitHugeW("Vashk", 18, true);
             processUnitWalkHugeW("Vashk", 18);
-            processUnitLargeW("Vih", 43, false);
-            processUnitLargeWalkW("Vih", 43);
+            processUnitLargeW("Meisan", 43, false);
+            processUnitLargeWalkW("Meisan", 43);
 
 
             processUnitLargeW("Human_Male", 4, true);
@@ -1969,11 +1982,10 @@ namespace AssetsPV
             processUnitLargeWalkW("Human_Female", 9);
             processUnitLargeW("Human_Female", 10, true);
             processUnitLargeWalkW("Human_Female", 10);
-            */
-            /*
+            
+
             processUnitHugeW("Barrel", 38, true);
-
-
+            
             processUnitHugeW("Table", 39, true);
             processUnitHugeW("Desk", 39, true);
             processUnitHugeW("Computer_Desk", 39, true);
@@ -1984,11 +1996,7 @@ namespace AssetsPV
             processUnitHugeW("Computer_Desk", 41, true);
             processUnitHugeW("Computer_Desk", 42, true);
 
-            processUnitHugeW("Grass", 35, true);
-            processUnitHugeW("Tree", 35, true);
-            processUnitHugeW("Boulder", 36, true);
-            processUnitHugeW("Rubble", 36, true);
-            */
+            
 
         }
     }

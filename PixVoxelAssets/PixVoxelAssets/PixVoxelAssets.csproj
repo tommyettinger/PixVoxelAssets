@@ -1143,6 +1143,21 @@
     </None>
     <None Include="Lord_Large_W_archive.vox" />
     <None Include="Male_Base_K.vox" />
+    <None Include="Meisan_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Meisan_Walk_0_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Meisan_Walk_1_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Meisan_Walk_2_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Meisan_Walk_3_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Merchant_Hat_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
