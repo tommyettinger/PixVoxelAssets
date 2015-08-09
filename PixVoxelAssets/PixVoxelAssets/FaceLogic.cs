@@ -31,7 +31,7 @@ namespace AssetsPV
     {
         public MagicaVoxelData vox;
         public Slope slope;
-        
+
         public FaceVoxel(MagicaVoxelData v, Slope slp)
         {
             vox = v;
@@ -71,7 +71,7 @@ namespace AssetsPV
             }
             return vlist;
         }
-        
+
         public static FaceVoxel[,,] TransformFaces(byte[,,] voxelData)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
@@ -100,11 +100,11 @@ namespace AssetsPV
 
                         if(voxelData[x, y, z] > 0)
                         {
-                            for(int i = Math.Max(0, x - 1), n0 = i - x; i <= Math.Min(xSize-1, x + 1); i++, n0++)
+                            for(int i = Math.Max(0, x - 1), n0 = i - x; i <= Math.Min(xSize - 1, x + 1); i++, n0++)
                             {
-                                for(int j = Math.Max(0, y - 1), n1 = j - y; j <= Math.Min(ySize-1, y + 1); j++, n1++)
+                                for(int j = Math.Max(0, y - 1), n1 = j - y; j <= Math.Min(ySize - 1, y + 1); j++, n1++)
                                 {
-                                    for(int k = Math.Max(0, z - 1), n2 = k - z; k <= Math.Min(zSize-1, z + 1); k++, n2++)
+                                    for(int k = Math.Max(0, z - 1), n2 = k - z; k <= Math.Min(zSize - 1, z + 1); k++, n2++)
                                     {
                                         neighbors[n0 + 1, n1 + 1, n2 + 1] = voxelData[i, j, k] > 0;
                                     }
@@ -121,13 +121,13 @@ namespace AssetsPV
                                 {
                                     data[x, y, z].slope = Slope.BrightTop;
                                     if(x > 0 && voxelData[x - 1, y, z] == 0)
-                                        data[x - 1, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x-1), y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
+                                        data[x - 1, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x - 1), y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
                                 }
                                 else if(!neighbors[2, 1, 1] && neighbors[2, 1, 0] && neighbors[0, 1, 2])
                                 {
                                     data[x, y, z].slope = Slope.DimTop;
                                     if(y < ySize - 2 && voxelData[x, y + 1, z] == 0)
-                                        data[x, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)(y+1), z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
+                                        data[x, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)(y + 1), z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
                                 }
                                 else if(!neighbors[0, 0, 1] && neighbors[1, 2, 2] && neighbors[2, 1, 2] && neighbors[1, 1, 0])
                                 {
@@ -153,7 +153,7 @@ namespace AssetsPV
                                     {
                                         data[x, y, z].slope |= Slope.Bright;
                                     }
-                                    
+
                                     if(!neighbors[2, 0, 1] && neighbors[0, 2, 1] && (neighbors[0, 0, 1] || neighbors[2, 2, 1]))
                                     {
                                         data[x, y, z].slope = Slope.BrightDim;
@@ -163,8 +163,8 @@ namespace AssetsPV
                                     else if(!neighbors[0, 0, 1] && (neighbors[0, 2, 1] || neighbors[2, 0, 1])) // && neighbors[2, 2, 1]
                                     {
                                         data[x, y, z].slope = Slope.BrightBack;
-                                        if(x < xSize - 2 && y < ySize - 2 && voxelData[x+1, y + 1, z] == 0)
-                                            data[x+1, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x+1), y = (byte)(y + 1), z = (byte)z, color = voxelData[x, y, z] }, Slope.DimBack);
+                                        if(x < xSize - 2 && y < ySize - 2 && voxelData[x + 1, y + 1, z] == 0)
+                                            data[x + 1, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x + 1), y = (byte)(y + 1), z = (byte)z, color = voxelData[x, y, z] }, Slope.DimBack);
                                     }
                                     else if(!neighbors[2, 2, 1] && (neighbors[0, 2, 1] || neighbors[2, 0, 1])) // && neighbors[0, 0, 1]
                                     {
@@ -272,9 +272,10 @@ namespace AssetsPV
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x, y, z]))) &&
                             //                        (faces[x-1, y, z] == null || (faces[x-1, y, z] != null && (faces[x-1, y, z].slope & Slope.Top) == Slope.Top)) &&
                             //                     (faces[x+1, y, z] == null || (faces[x+1, y, z] != null && (faces[x+1, y, z].slope & Slope.Top) == Slope.Top)) &&
-                            ((faces[x, y+1, z + 1] != null && (faces[x, y+1, z + 1].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x, y+1, z+1])))
-         //                   (faces[x - 1, y + 1, z + 1] == null || (faces[x - 1, y + 1, z + 1] != null && (faces[x - 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top)) &&
-         //                 (faces[x + 1, y + 1, z + 1] == null || (faces[x + 1, y + 1, z + 1] != null && (faces[x + 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top))
+                            ((faces[x, y + 1, z + 1] != null && (faces[x, y + 1, z + 1].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x, y + 1, z + 1])))
+                            && ((faces[x - 1, y, z + 1] == null || (faces[x - 1, y, z + 1].slope & Slope.Top) != Slope.Top) || (faces[x + 1, y, z + 1] == null || (faces[x + 1, y, z + 1].slope & Slope.Top) != Slope.Top))
+                            //                   (faces[x - 1, y + 1, z + 1] == null || (faces[x - 1, y + 1, z + 1] != null && (faces[x - 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top)) &&
+                            //                 (faces[x + 1, y + 1, z + 1] == null || (faces[x + 1, y + 1, z + 1] != null && (faces[x + 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top))
                             )
                         {
                             faces[x, y, z + 1] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z + 1), color = faces[x, y, z].vox.color }, Slope.BrightTop);
@@ -303,13 +304,14 @@ namespace AssetsPV
                     {
                         if(faces[x, y, z + 1] == null &&
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x, y, z]))) &&
-                            ((faces[x - 1, y, z + 1] != null && (faces[x - 1, y, z + 1].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x-1, y, z+1])))
+                            ((faces[x - 1, y, z + 1] != null && (faces[x - 1, y, z + 1].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x - 1, y, z + 1])))
+                            && ((faces[x, y - 1, z + 1] == null || (faces[x, y - 1, z + 1].slope & Slope.Top) != Slope.Top) || (faces[x, y + 1, z + 1] == null || (faces[x, y + 1, z + 1].slope & Slope.Top) != Slope.Top))
                             )
-                            //                          (faces[x, y-1, z] == null || (faces[x, y-1, z] != null && (faces[x, y-1, z].slope & Slope.Top) == Slope.Top)) &&
-                            //                        (faces[x, y+1, z] == null || (faces[x, y+1, z] != null && (faces[x, y+1, z].slope & Slope.Top) == Slope.Top)) &&
-                            //                        (faces[x-1, y-1, z+1] == null || (faces[x - 1, y-1, z + 1] != null && (faces[x - 1, y-1, z + 1].slope & Slope.Top) == Slope.Top)) &&
-                            //                      (faces[x-1, y+1, z+1] == null || (faces[x - 1, y+1, z + 1] != null && (faces[x - 1, y+1, z + 1].slope & Slope.Top) == Slope.Top))
-                            
+                        //                          (faces[x, y-1, z] == null || (faces[x, y-1, z] != null && (faces[x, y-1, z].slope & Slope.Top) == Slope.Top)) &&
+                        //                        (faces[x, y+1, z] == null || (faces[x, y+1, z] != null && (faces[x, y+1, z].slope & Slope.Top) == Slope.Top)) &&
+                        //                        (faces[x-1, y-1, z+1] == null || (faces[x - 1, y-1, z + 1] != null && (faces[x - 1, y-1, z + 1].slope & Slope.Top) == Slope.Top)) &&
+                        //                      (faces[x-1, y+1, z+1] == null || (faces[x - 1, y+1, z + 1] != null && (faces[x - 1, y+1, z + 1].slope & Slope.Top) == Slope.Top))
+
                         {
                             faces[x, y, z + 1] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z + 1), color = faces[x, y, z].vox.color }, Slope.DimTop);
                         }/*
@@ -340,9 +342,11 @@ namespace AssetsPV
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x, y, z]))) &&
                            //                            (faces[x, y, z-1] == null || (faces[x, y, z-1] != null && (faces[x, y, z-1].slope & Slope.Top) == Slope.Top)) &&
                            //                           (faces[x, y, z+1] == null || (faces[x, y, z+1] != null && (faces[x, y, z+1].slope & Slope.Top) == Slope.Top)) &&
-                           ((faces[x + 1, y+1, z] != null && (faces[x + 1, y+1, z].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x+1, y+1, z])))
-   //                         (faces[x + 1, y + 1, z - 1] == null || (faces[x + 1, y + 1, z - 1] != null && (faces[x + 1, y + 1, z - 1].slope & Slope.Top) == Slope.Top)) &&
-   //                       (faces[x + 1, y + 1, z + 1] == null || (faces[x + 1, y + 1, z + 1] != null && (faces[x + 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top))
+                           ((faces[x + 1, y + 1, z] != null && (faces[x + 1, y + 1, z].slope & Slope.Top) == Slope.Top && !ImportantVisual(faces[x + 1, y + 1, z])))
+                               //                         (faces[x + 1, y + 1, z - 1] == null || (faces[x + 1, y + 1, z - 1] != null && (faces[x + 1, y + 1, z - 1].slope & Slope.Top) == Slope.Top)) &&
+                               //                       (faces[x + 1, y + 1, z + 1] == null || (faces[x + 1, y + 1, z + 1] != null && (faces[x + 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top))
+                               && ((faces[x+1, y, z + 1] == null || (faces[x+1, y, z + 1].slope & Slope.Top) != Slope.Top) || (faces[x+1, y, z - 1] == null || (faces[x+1, y, z - 1].slope & Slope.Top) != Slope.Top))
+
      )
                         {
                             faces[x + 1, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x + 1), y = (byte)y, z = (byte)(z), color = faces[x, y, z].vox.color }, Slope.BrightDim);
@@ -380,9 +384,9 @@ namespace AssetsPV
 
                         if(faces[x, y, z - 1] == null &&
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top)) &&
-                            ((faces[x, y+1, z - 1] != null && (faces[x, y+1, z - 1].slope & Slope.Top) == Slope.Top))
+                            ((faces[x, y + 1, z - 1] != null && (faces[x, y + 1, z - 1].slope & Slope.Top) == Slope.Top))
                             )
-//                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x, y + 1, z - 1] != null && (faces[x, y + 1, z - 1].slope & Slope.Top) == Slope.Top && faces[x, y, z - 1] == null)
+                        //                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x, y + 1, z - 1] != null && (faces[x, y + 1, z - 1].slope & Slope.Top) == Slope.Top && faces[x, y, z - 1] == null)
                         {
                             faces[x, y, z - 1] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z - 1), color = faces[x, y, z].vox.color }, Slope.BrightBottom);
                         }
@@ -407,7 +411,7 @@ namespace AssetsPV
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top)) &&
                             ((faces[x - 1, y, z - 1] != null && (faces[x - 1, y, z - 1].slope & Slope.Top) == Slope.Top))
                             )
-//                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x - 1, y, z - 1] != null && (faces[x - 1, y, z - 1].slope & Slope.Top) == Slope.Top && faces[x, y, z - 1] == null)
+                        //                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x - 1, y, z - 1] != null && (faces[x - 1, y, z - 1].slope & Slope.Top) == Slope.Top && faces[x, y, z - 1] == null)
                         {
 
                             faces[x, y, z - 1] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z - 1), color = faces[x, y, z].vox.color }, Slope.DimBottom);
@@ -429,11 +433,11 @@ namespace AssetsPV
                     for(int z = 0; z < zSize; z++)
                     {
 
-                        if(faces[x-1, y, z] == null &&
+                        if(faces[x - 1, y, z] == null &&
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top)) &&
-                            ((faces[x - 1, y+1, z] != null && (faces[x - 1, y+1, z].slope & Slope.Top) == Slope.Top))
+                            ((faces[x - 1, y + 1, z] != null && (faces[x - 1, y + 1, z].slope & Slope.Top) == Slope.Top))
                             )
-//                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x - 1, y + 1, z] != null && (faces[x - 1, y + 1, z].slope & Slope.Top) == Slope.Top && faces[x - 1, y, z] == null)
+                        //                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x - 1, y + 1, z] != null && (faces[x - 1, y + 1, z].slope & Slope.Top) == Slope.Top && faces[x - 1, y, z] == null)
                         {
                             faces[x - 1, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x - 1), y = (byte)y, z = (byte)(z), color = faces[x, y, z].vox.color }, Slope.BrightBack);
                         }
@@ -453,13 +457,13 @@ namespace AssetsPV
                     for(int z = 0; z < zSize; z++)
                     {
 
-                        if(faces[x, y+1, z] == null &&
+                        if(faces[x, y + 1, z] == null &&
                             ((faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top)) &&
                             ((faces[x - 1, y + 1, z] != null && (faces[x - 1, y + 1, z].slope & Slope.Top) == Slope.Top))
                             )
-//                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x - 1, y + 1, z] != null && (faces[x - 1, y + 1, z].slope & Slope.Top) == Slope.Top && faces[x, y + 1, z] == null)
+                        //                            if(faces[x, y, z] != null && (faces[x, y, z].slope & Slope.Top) == Slope.Top  && faces[x - 1, y + 1, z] != null && (faces[x - 1, y + 1, z].slope & Slope.Top) == Slope.Top && faces[x, y + 1, z] == null)
                         {
-                            faces[x, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)(y+1), z = (byte)(z), color = faces[x, y, z].vox.color }, Slope.DimBack);
+                            faces[x, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)(y + 1), z = (byte)(z), color = faces[x, y, z].vox.color }, Slope.DimBack);
                         }
                     }
                 }
@@ -505,7 +509,7 @@ namespace AssetsPV
                         // && (faces[x, y, z].slope & Slope.BrightDim) == Slope.BrightDim)) &&
                         // && (faces[x, y + 1, z + 1].slope & Slope.DimTop) == Slope.DimTop)) &&
                         // && (faces[x - 1, y, z + 1].slope & Slope.BrightTop) == Slope.BrightTop))
-                        if(faces[x, y, z + 1] == null &&
+                        if((faces[x, y, z + 1] == null) &&// || (faces[x, y, z + 1].slope & Slope.BrightTop) == Slope.BrightTop || (faces[x, y, z + 1].slope & Slope.DimTop) == Slope.DimTop) &&
                             ((faces[x, y, z] != null && !ImportantVisual(faces[x, y, z]))) &&
                             ((faces[x, y + 1, z + 1] != null && !ImportantVisual(faces[x, y + 1, z + 1]))) &&
                             ((faces[x - 1, y, z + 1] != null && !ImportantVisual(faces[x - 1, y, z + 1]))) &&
@@ -532,7 +536,7 @@ namespace AssetsPV
 
                         // && (faces[x + 1, y, z + 1].slope & Slope.BrightTop) == Slope.BrightTop))
                         // && (faces[x, y, z].slope & Slope.BrightBack) == Slope.BrightBack)) &&
-                        else if(faces[x, y, z + 1] == null &&
+                        else if((faces[x, y, z + 1] == null) &&// || (faces[x, y, z + 1].slope & Slope.BrightTop) == Slope.BrightTop) && // || (faces[x, y, z + 1].slope & Slope.BrightBack) == Slope.BrightBack
                             ((faces[x, y, z] != null && !ImportantVisual(faces[x, y, z]))) &&
                             ((faces[x + 1, y, z + 1] != null && !ImportantVisual(faces[x + 1, y, z + 1]))) &&
                             ((faces[x, y + 1, z + 1] != null && !ImportantVisual(faces[x, y + 1, z + 1]))) &&
@@ -556,7 +560,7 @@ namespace AssetsPV
                         }
                         // && (faces[x, y, z].slope & Slope.DimBack) == Slope.DimBack)) &&
                         // && (faces[x, y-1, z + 1].slope & Slope.DimTop) == Slope.DimTop))
-                        else if(faces[x, y, z + 1] == null &&
+                        else if((faces[x, y, z + 1] == null) &&// || (faces[x, y, z + 1].slope & Slope.DimTop) == Slope.DimTop) && //  || (faces[x, y, z + 1].slope & Slope.DimBack) == Slope.DimBack
                             ((faces[x, y, z] != null && !ImportantVisual(faces[x, y, z]))) &&
                             ((faces[x, y - 1, z + 1] != null && !ImportantVisual(faces[x, y - 1, z + 1]))) &&
                             ((faces[x - 1, y, z + 1] != null && !ImportantVisual(faces[x - 1, y, z + 1]))) &&
