@@ -8562,64 +8562,6 @@ namespace AssetsPV
 
             //bin.Close();
         }
-        public static void processFieryExplosionDoubleW(string u, List<MagicaVoxelData> newModel, int palette)
-        {
-            Console.WriteLine("Processing: " + u + ", palette " + palette);
-            //BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = newModel.ToArray();
-            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
-            string folder = ("frames");
-
-            for (int d = 0; d < 4; d++)
-            {
-                Directory.CreateDirectory(folder); //("color" + i);
-
-                for (int frame = 0; frame < 12; frame++)
-                {
-                    Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
-                    /*                    string folder2 = "palette" + palette + "_big";
-                                        System.IO.Directory.CreateDirectory(folder2);
-                                        b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
-                    */
-                    Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
-
-
-                    //                        b.Save("temp.png", ImageFormat.Png);
-                    Graphics g2 = Graphics.FromImage(b2);
-                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
-                    b.Dispose();
-                    g2.DrawImage(b3, 0, 0, 248, 308);
-
-                    smoothScale(b2, 3).Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
-                    b2.Dispose();
-                    g2.Dispose();
-                    b3.Dispose();
-                }
-            }
-
-            Directory.CreateDirectory("gifs/" + altFolder);
-            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-            startInfo.UseShellExecute = false;
-            string s = "";
-
-            for (int d = 0; d < 4; d++)
-            {
-                for (int frame = 0; frame < 12; frame++)
-                {
-                    s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
-                }
-            }
-
-            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
-            Console.WriteLine("Running convert.exe ...");
-            Process.Start(startInfo).WaitForExit();
-            
-            //bin.Close();
-        }
         public static void processFieryExplosionDoubleWHat(string u, int palette, string hat, MagicaVoxelData[] headpoints)
         {
             Console.WriteLine("Processing: " + u + " " + hat + ", palette " + palette);
@@ -8841,6 +8783,64 @@ namespace AssetsPV
                 for (int frame = 0; frame < 12; frame++)
                 {
                     s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png ";
+                }
+            }
+
+            startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
+            Console.WriteLine("Running convert.exe ...");
+            Process.Start(startInfo).WaitForExit();
+
+            //bin.Close();
+        }
+        public static void processFieryExplosionDoubleW(string u, List<MagicaVoxelData> newModel, int palette)
+        {
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
+            //BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            MagicaVoxelData[] parsed = newModel.ToArray();
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("frames");
+
+            for(int d = 0; d < 4; d++)
+            {
+                Directory.CreateDirectory(folder); //("color" + i);
+
+                for(int frame = 0; frame < 12; frame++)
+                {
+                    Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true);
+                    /*                    string folder2 = "palette" + palette + "_big";
+                                        System.IO.Directory.CreateDirectory(folder2);
+                                        b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
+                    */
+                    Bitmap b2 = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
+
+
+                    //                        b.Save("temp.png", ImageFormat.Png);
+                    Graphics g2 = Graphics.FromImage(b2);
+                    g2.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    Bitmap b3 = b.Clone(new Rectangle(0, 0, 248 * 2, 308 * 2), b.PixelFormat);
+                    b.Dispose();
+                    g2.DrawImage(b3, 0, 0, 248, 308);
+
+                    smoothScale(b2, 3).Save(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", ImageFormat.Png);
+                    b2.Dispose();
+                    g2.Dispose();
+                    b3.Dispose();
+                }
+            }
+
+            Directory.CreateDirectory("gifs/" + altFolder);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            for(int d = 0; d < 4; d++)
+            {
+                for(int frame = 0; frame < 12; frame++)
+                {
+                    s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
                 }
             }
 
@@ -13313,7 +13313,7 @@ namespace AssetsPV
             return b;
         }
 
-        static string[] classes = new string[] { 
+        public static string[] classes = new string[] { 
               "Berserker"
             , "Witch"
             , "Scout"
@@ -13332,7 +13332,7 @@ namespace AssetsPV
             , "Thug"
             , "Bishop"
         };
-        static Tuple<string, int>[] undead =
+        public static Tuple<string, int>[] undead =
             {
                 Tuple.Create("Zombie", 2),
                 Tuple.Create("Skeleton", 6),
@@ -13703,7 +13703,8 @@ namespace AssetsPV
             //processReceiving();
 
             //                  smoothScale(makeFlatTiling(), 3).Save("tiling_smooth.png", ImageFormat.Png);
-            smoothScale(makeFlatTilingDrab(), 3).Save("tiling_96x48.png", ImageFormat.Png);
+            // makeFlatTilingDrab().Save("tiling_96x48.png", ImageFormat.Png);
+
             /*
             processUnitOutlinedWDouble("Zombie", 2, true);
             processUnitOutlinedWDoubleHat("Zombie", 2, true, "Berserker");
@@ -14509,7 +14510,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
             return bmp;
         }
 
-        private static Bitmap generateBotLSpritesheet()
+        public static Bitmap generateBotLSpritesheet()
         {
             Bitmap bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(bmp);
@@ -14524,7 +14525,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
                     temp.Dispose();
                 }
             }
-            bmp.Save("undead2.png");
+            bmp.Save("undead5.png");
 
             bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
             g = Graphics.FromImage(bmp);
@@ -14559,7 +14560,7 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
                     temp.Dispose();
                 }
             }
-            bmp.Save("living2.png");
+            bmp.Save("living5.png");
 
             bmp = new Bitmap(2048, 2048, PixelFormat.Format32bppArgb);
             g = Graphics.FromImage(bmp);
@@ -14587,13 +14588,13 @@ processUnitOutlinedWDouble("Robot_Construction", 38, true);
                 }
             }
 
-            bmp.Save("landscape2.png");
+            bmp.Save("landscape5.png");
             return bmp;
         }
         private static string[] TerrainsW = new string[]
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River","Sea"};
-        private static void generateBotLImages()
+        public static void generateBotLImages()
         {
 
             Directory.CreateDirectory("BotL");
