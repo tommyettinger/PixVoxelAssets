@@ -422,7 +422,7 @@ namespace AssetsPV
         {
 
             Console.WriteLine("Processing: " + u + ", palette " + palette);
-            /*
+            
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin); //VoxelLogic.PlaceShadowsW(
             Directory.CreateDirectory("vox/" + altFolder);
@@ -459,7 +459,7 @@ namespace AssetsPV
             s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
 
             //            processFiringLarge(u);
@@ -740,7 +740,7 @@ namespace AssetsPV
             
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] headpoints = VoxelLogic.GetHeadVoxels(bin, hat).ToArray();
-            /*
+            
             int framelimit = 4;
 
             string folder = (altFolder);//"color" + i;
@@ -776,8 +776,8 @@ namespace AssetsPV
                         + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f) + ".png"));
                     Bitmap body_image = new Bitmap(Image.FromFile(altFolder + "palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png"));
 
-                    VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-                    VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            wcurrent = wrendered[palette];
                     hat_graphics = Graphics.FromImage(hat_image);
                     Graphics body_graphics = Graphics.FromImage(body_image);
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -806,7 +806,7 @@ namespace AssetsPV
             s = altFolder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            */
+            
             //bin.Close();
 
             //            processFiringDouble(u);
@@ -940,7 +940,7 @@ namespace AssetsPV
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            wcurrent = wrendered[palette];
             MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
 
@@ -1040,8 +1040,9 @@ namespace AssetsPV
                     Image b2 = Image.FromFile(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
                     body_image = new Bitmap(b2);
                     b2.Dispose();
+
                     VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-                    VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+                    wcurrent = wrendered[palette];
                     hat_graphics = Graphics.FromImage(hat_image);
                     body_graphics = Graphics.FromImage(body_image);
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -1088,8 +1089,10 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            wcurrent = wrendered[palette];
+
             MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
 
@@ -1141,8 +1144,9 @@ namespace AssetsPV
             BinaryReader bin = new BinaryReader(File.Open(u + "_Huge_W.vox", FileMode.Open));
             MagicaVoxelData[] parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            VoxelLogic.wcurrent = VoxelLogic.wrendered[palette];
+            wcurrent = wrendered[palette];
             MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
 
