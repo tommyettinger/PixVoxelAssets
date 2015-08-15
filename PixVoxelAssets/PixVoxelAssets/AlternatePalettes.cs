@@ -16,6 +16,7 @@ namespace AssetsPV
         public const float eraser_alpha = VoxelLogic.eraser_alpha;
         public const float spin_alpha_0 = VoxelLogic.spin_alpha_0;
         public const float spin_alpha_1 = VoxelLogic.spin_alpha_1;
+        public const float flash_alpha = VoxelLogic.flash_alpha;
         public const float flash_alpha_0 = VoxelLogic.flash_alpha_0;
         public const float flash_alpha_1 = VoxelLogic.flash_alpha_1;
         public const float gloss_alpha = VoxelLogic.gloss_alpha;
@@ -3956,13 +3957,13 @@ namespace AssetsPV
             //20 sparks
             new float[] {1.3F,1.2F,0.85F,1F},
             //21 glow frame 0
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {1.1F,1.0F,0.65F,flash_alpha},
             //22 glow frame 1
-            new float[] {1.25F,1.15F,0.8F,borderless_alpha},
+            new float[] {1.25F,1.15F,0.8F,flash_alpha},
             //23 glow frame 2
-            new float[] {1.1F,1.0F,0.65F,borderless_alpha},
+            new float[] {1.1F,1.0F,0.65F,flash_alpha},
             //24 glow frame 3
-            new float[] {0.95F,0.85F,0.5F,borderless_alpha},
+            new float[] {0.95F,0.85F,0.5F,flash_alpha},
             //25 shadow
             new float[] {0.1F,0.1F,0.1F,flat_alpha},
             //26 oil
@@ -4119,8 +4120,7 @@ namespace AssetsPV
                         windy1, //19 spinning wind frame 1
                         flurry, //20 randomly appearing lighter dust on ground
                         flurry, //21 randomly appearing lighter mist inside something
-
-                    }).ToArray();
+                        }).ToArray();
                     }
                 }
             }

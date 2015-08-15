@@ -173,6 +173,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public const float yver_alpha = 0.84F;
         public const float spin_alpha_0 = 0.85F;
         public const float spin_alpha_1 = 0.87F;
+        public const float flash_alpha = 0.89F;
         public const float flash_alpha_0 = 0.86F;
         public const float flash_alpha_1 = 0.88F;
         public const float fuzz_alpha = 0.91F;
@@ -8321,7 +8322,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
 
-                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F
+                    Image which_image = ((current_color >= 18 && current_color <= 24) || wpalettes[p][current_color][3] == 0F || wpalettes[p][current_color][3] == flash_alpha
                         || wpalettes[p][current_color][3] == flash_alpha_0 || wpalettes[p][current_color][3] == flash_alpha_1) ? shine :
                        (wpalettes[p][current_color][3] == flat_alpha || wpalettes[p][current_color][3] == bordered_flat_alpha) ? flat : image;
                     g.DrawImage(which_image,
@@ -9911,13 +9912,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
             }
             List<MagicaVoxelData> working = new List<MagicaVoxelData>(plugList.Count + socketList.Count);
-            for (int i = 0; i < plugList.Count; i++)
+            for(int i = 0; i < plugList.Count; i++)
             {
                 MagicaVoxelData mvd = plugList[i];
-                mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
-                mvd.y = (byte)(mvd.y - plugMatcher.y + socketMatcher.y);
-                mvd.z = (byte)(mvd.z - plugMatcher.z + socketMatcher.z);
-                working.Add(mvd);
+                if((mvd.z - plugMatcher.z + socketMatcher.z) >= 0)
+                {
+                    mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
+                    mvd.y = (byte)(mvd.y - plugMatcher.y + socketMatcher.y);
+                    mvd.z = (byte)(mvd.z - plugMatcher.z + socketMatcher.z);
+                    working.Add(mvd);
+                }
             }
             socketList.AddRange(working);
             return socketList;
