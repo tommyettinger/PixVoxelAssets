@@ -10152,16 +10152,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static List<MagicaVoxelData> RotatePitch(List<MagicaVoxelData> voxels, int amount, int xSize, int zSize)
         {
             MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Count];
-            switch (amount)
+            switch(amount)
             {
                 case 0:
                     vls = voxels.ToArray();
                     break;
                 case 1:
-                    for (int i = 0; i < vls.Length; i++)
+                    for(int i = 0; i < vls.Length; i++)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempZ = (byte)(voxels[i].z - (zSize / 2));
+                        int tempX = (voxels[i].x - (xSize / 2));
+                        int tempZ = (voxels[i].z - (zSize / 2));
                         vls[i].x = (byte)((tempZ) + (zSize / 2));
                         vls[i].z = (byte)((tempX * -1) + (xSize / 2) - 1);
                         vls[i].y = voxels[i].y;
@@ -10169,10 +10169,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     break;
                 case 2:
-                    for (int i = 0; i < vls.Length; i++)
+                    for(int i = 0; i < vls.Length; i++)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempZ = (byte)(voxels[i].z - (zSize / 2));
+                        int tempX = (voxels[i].x - (xSize / 2));
+                        int tempZ = (voxels[i].z - (zSize / 2));
                         vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
                         vls[i].z = (byte)((tempZ * -1) + (zSize / 2) - 1);
                         vls[i].y = voxels[i].y;
@@ -10180,10 +10180,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     break;
                 case 3:
-                    for (int i = 0; i < vls.Length; i++)
+                    for(int i = 0; i < vls.Length; i++)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempZ = (byte)(voxels[i].z - (zSize / 2));
+                        int tempX = (voxels[i].x - (xSize / 2));
+                        int tempZ = (voxels[i].z - (zSize / 2));
                         vls[i].x = (byte)((tempZ * -1) + (zSize / 2) - 1);
                         vls[i].z = (byte)(tempX + (xSize / 2));
                         vls[i].y = voxels[i].y;
@@ -10192,6 +10192,106 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     break;
             }
             return vls.ToList();
+        }
+        public static List<MagicaVoxelData> RotatePitchPartial(List<MagicaVoxelData> voxels, int degrees, int xSize, int ySize, int zSize)
+        {
+            byte[,,] vls = new byte[xSize * 4, ySize * 4, zSize * 4];
+            switch(degrees / 45)
+            {
+                case 0:
+                case 2:
+                case 4:
+                case 6:
+                    return RotatePitch(voxels, degrees / 90, xSize, zSize);
+                case 7:
+                    {
+                        byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+
+                        for(byte x = 0; x < xSize * 4; x++)
+                        {
+                            for(byte y = 0; y < ySize * 4; y++)
+                            {
+                                for(byte z = 0; z < zSize * 4; z++)
+                                {
+                                    int tempX = (x - (xSize * 2));
+                                    int tempZ = (z - (zSize * 2));
+                                    int x2 = 3 * (tempX - tempZ) / 4 + (xSize * 2);
+                                    int z2 = 3 * (tempX + tempZ) / 4 + (zSize * 2);
+                                    if(x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4)
+                                        vls[x2, y, z2] = colors[x, y, z];
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 5:
+                    {
+                        byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+
+                        for(byte x = 0; x < xSize * 4; x++)
+                        {
+                            for(byte y = 0; y < ySize * 4; y++)
+                            {
+                                for(byte z = 0; z < zSize * 4; z++)
+                                {
+                                    int tempX = (x - (xSize * 2));
+                                    int tempZ = (z - (zSize * 2));
+                                    int x2 = 3 * (-tempX - tempZ) / 4 + (xSize * 2);
+                                    int z2 = 3 * (tempX - tempZ) / 4 + (zSize * 2);
+                                    if(x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4)
+                                        vls[x2, y, z2] = colors[x, y, z];
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    {
+                        byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+
+                        for(byte x = 0; x < xSize * 4; x++)
+                        {
+                            for(byte y = 0; y < ySize * 4; y++)
+                            {
+                                for(byte z = 0; z < zSize * 4; z++)
+                                {
+                                    int tempX = (x - (xSize * 2));
+                                    int tempZ = (z - (zSize * 2));
+                                    int x2 = 3 * (-tempX + tempZ) / 4 + (xSize * 2);
+                                    int z2 = 3 * (-tempX - tempZ) / 4 + (zSize * 2);
+                                    if(x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4)
+                                        vls[x2, y, z2] = colors[x, y, z];
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    {
+                        byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+
+                        for(byte x = 0; x < xSize * 4; x++)
+                        {
+                            for(byte y = 0; y < ySize * 4; y++)
+                            {
+                                for(byte z = 0; z < zSize * 4; z++)
+                                {
+                                    int tempX = (x - (xSize * 2));
+                                    int tempZ = (z - (zSize * 2));
+                                    int x2 = 3 * (tempX + tempZ) / 4 + (xSize * 2);
+                                    int z2 = 3 * (-tempX + tempZ) / 4 + (zSize * 2);
+                                    if(x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4)
+                                        vls[x2, y, z2] = colors[x, y, z];
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+            return VoxLargerArrayToList(vls, 4);
         }
         public static void Madden()
         {
@@ -16323,7 +16423,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static byte[,,] VoxListToArray(List<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
         {
             byte[,,] data = new byte[xSize, ySize, zSize];
-            foreach (MagicaVoxelData mvd in voxelData)
+            foreach(MagicaVoxelData mvd in voxelData)
             {
                 data[mvd.x, mvd.y, mvd.z] = mvd.color;
             }
@@ -16347,6 +16447,82 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return vlist;
         }
+
+        public static byte[,,] VoxListToLargerArray(List<MagicaVoxelData> voxelData, int multiplier, int xSize, int ySize, int zSize)
+        {
+            byte[,,] data = new byte[xSize * multiplier, ySize * multiplier, zSize * multiplier];
+            foreach(MagicaVoxelData mvd in voxelData)
+            {
+                for(int x = 0; x < multiplier; x++)
+                {
+                    for(int y = 0; y < multiplier; y++)
+                    {
+                        for(int z = 0; z < multiplier; z++)
+                        {
+                            data[mvd.x * multiplier + x, mvd.y * multiplier + y, mvd.z * multiplier + z] = mvd.color;
+
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int multiplier)
+        {
+            List<MagicaVoxelData> vlist = new List<MagicaVoxelData>(voxelData.Length);
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            Dictionary<byte, int> colorCount;
+            for(byte x = 0; x < xSize / multiplier; x++)
+            {
+                for(byte y = 0; y < ySize / multiplier; y++)
+                {
+                    for(byte z = 0; z < zSize / multiplier; z++)
+                    {
+                        colorCount = new Dictionary<byte, int>();
+                        for(int xx = 0; xx < multiplier; xx++)
+                        {
+                            for(int yy = 0; yy < multiplier; yy++)
+                            {
+                                for(int zz = 0; zz < multiplier; zz++)
+                                {
+                                    byte smallColor = voxelData[x * multiplier + xx, y * multiplier + yy, z * multiplier + zz];
+                                    if(smallColor > 0)
+                                    {
+
+                                        if(colorCount.ContainsKey(smallColor))
+                                        {
+                                            colorCount[smallColor] = colorCount[smallColor] + 16;
+                                        }
+                                        else
+                                        {
+                                            colorCount[smallColor] = 16;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(colorCount.ContainsKey(smallColor))
+                                        {
+                                            colorCount[smallColor] = colorCount[smallColor] + 5;
+                                        }
+                                        else
+                                        {
+                                            colorCount[smallColor] = 5;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        byte best = colorCount.OrderByDescending(kv => kv.Value).First().Key;
+                        if(best > 0)
+                            vlist.Add(new MagicaVoxelData { x = x, y = y, z = z, color = best });
+                        
+                    }
+                }
+            }
+            return vlist;
+        }
+
         public static byte[,,] MakeSubCell(byte[,,] voxelData)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);

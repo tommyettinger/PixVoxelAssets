@@ -4089,7 +4089,7 @@ namespace AssetsPV
                     {
                         float[] drip = mecha_palettes[p][27].ToArray(), transp = mecha_palettes[p][VoxelLogic.wcolorcount - 1];
                         drip[3] = 1F;
-                        float[] zap = new float[] { 0.93F, 0.83F, 1.4F, borderless_alpha };
+                        float[] zap = new float[] { 0.93F, 0.83F, 1.4F, flash_alpha };
                         float[] dark = new float[] { 0.0f + s * 0.20f, -0.03f + s * 0.17f, -0.09f + s * 0.22f, 1f }
                             , violet = new float[] { 0.55f, 0.05f, 0.65f, 1f }
                             , deepviolet = new float[] { 0.3f, 0.05f, 0.4f, 1f }
