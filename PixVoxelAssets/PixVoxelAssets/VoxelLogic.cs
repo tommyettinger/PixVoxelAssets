@@ -10196,14 +10196,37 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static List<MagicaVoxelData> RotatePitchPartial(List<MagicaVoxelData> voxels, int degrees, int xSize, int ySize, int zSize)
         {
             byte[,,] vls = new byte[xSize * 4, ySize * 4, zSize * 4];
-            switch(degrees / 45)
+            switch(degrees % 360)
             {
                 case 0:
-                case 2:
-                case 4:
-                case 6:
+                case 90:
+                case 180:
+                case 270:
                     return RotatePitch(voxels, degrees / 90, xSize, zSize);
-                case 7:
+                default:
+                    {
+                        double angle = (Math.PI / 180) * (degrees % 360);
+                        double sn = Math.Sin(angle), cs = Math.Cos(angle);
+                        byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+
+                        for(byte x = 0; x < xSize * 4; x++)
+                        {
+                            for(byte y = 0; y < ySize * 4; y++)
+                            {
+                                for(byte z = 0; z < zSize * 4; z++)
+                                {
+                                    int tempX = (x - (xSize * 2));
+                                    int tempZ = (z - (zSize * 2));
+                                    int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize * 2));
+                                    int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize * 2));
+                                    if(x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4 && colors[x, y, z] > 0)
+                                        vls[x2, y, z2] = colors[x, y, z];
+                                }
+                            }
+                        }
+                    }
+                    break;
+/*                case 315:
                     {
                         byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
 
@@ -10224,7 +10247,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }
                     }
                     break;
-                case 5:
+                case 225:
                     {
                         byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
 
@@ -10246,7 +10269,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }
                     }
                     break;
-                case 3:
+                case 135:
                     {
                         byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
 
@@ -10268,7 +10291,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }
                     }
                     break;
-                case 1:
+                case 45:
                     {
                         byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
 
@@ -10290,6 +10313,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }
                     }
                     break;
+                    */
             }
             return VoxLargerArrayToList(vls, 4);
         }
