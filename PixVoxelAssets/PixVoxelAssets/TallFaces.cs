@@ -3507,103 +3507,103 @@ namespace AssetsPV
         static void Main(string[] args)
         {
 //            altFolder = "botl6/";
-            VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
-            altFolder = "mecha2/";
-            System.IO.Directory.CreateDirectory("mecha2");
-            System.IO.Directory.CreateDirectory("vox/mecha2");
+            //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
+            //altFolder = "mecha2/";
+            //System.IO.Directory.CreateDirectory("mecha2");
+            //System.IO.Directory.CreateDirectory("vox/mecha2");
 
             VoxelLogic.Initialize();
             
-            //SaPalettes.Initialize();
+            SaPalettes.Initialize();
             InitializeWPalette();
-            /*
-            altFolder = "sau9/";
+            
+            altFolder = "sau10/";
             //            makeFlatTiling().Save("tiling_flat_gray.png");
 
-            processUnitHugeW("Grass", 35, true);
-            processUnitHugeW("Tree", 35, true);
-            processUnitHugeW("Boulder", 36, true);
-            processUnitHugeW("Rubble", 36, true);
+            processUnitHugeW("Grass", 35, true, false);
+            processUnitHugeW("Tree", 35, true, false);
+            processUnitHugeW("Boulder", 36, true, false);
+            processUnitHugeW("Rubble", 36, true, false);
             
-            processUnitLargeW("Rakgar", 18, true);
+            processUnitLargeW("Rakgar", 18, true, false);
 
-            processUnitLargeW("Lomuk", 13, false);
+            processUnitLargeW("Lomuk", 13, false, false);
             processUnitLargeWalkW("Lomuk", 13);
 
-            processUnitLargeW("Axarik", 0, true);
+            processUnitLargeW("Axarik", 0, true, false);
             processUnitLargeWalkW("Axarik", 0);
-            processUnitLargeW("Tassar", 17, false);
+            processUnitLargeW("Tassar", 17, false, false);
             processUnitLargeWalkW("Tassar", 17);
-            processUnitLargeW("Erezdo", 2, true);
+            processUnitLargeW("Erezdo", 2, true, false);
             processUnitLargeWalkW("Erezdo", 2);
-            processUnitLargeW("Ceglia", 1, true);
+            processUnitLargeW("Ceglia", 1, true, false);
             processUnitLargeWalkW("Ceglia", 1);
 
-            processUnitHugeW("Nodebpe", 14, true);
-            processUnitWalkHugeW("Nodebpe", 14);
+            processUnitHugeW("Nodebpe", 14, true, false);
+            processUnitHugeWalkW("Nodebpe", 14);
 
-            processUnitLargeW("Glarosp", 3, true);
+            processUnitLargeW("Glarosp", 3, true, false);
             processUnitLargeWalkW("Glarosp", 3);
 
-            processUnitLargeW("Ilapa", 11, true);
+            processUnitLargeW("Ilapa", 11, true, false);
             processUnitLargeWalkW("Ilapa", 11);
-            processUnitLargeW("Kurguiv", 12, false);
+            processUnitLargeW("Kurguiv", 12, false, false);
             processUnitLargeWalkW("Kurguiv", 12);
-            processUnitHugeW("Oah", 15, true);
-            processUnitWalkHugeW("Oah", 15);
-            processUnitLargeW("Sfyst", 16, true);
+            processUnitHugeW("Oah", 15, true, false);
+            processUnitHugeWalkW("Oah", 15);
+            processUnitLargeW("Sfyst", 16, true, false);
             processUnitLargeWalkW("Sfyst", 16);
-            processUnitLargeW("Tassar", 17, false);
+            processUnitLargeW("Tassar", 17, false, false);
             processUnitLargeWalkW("Tassar", 17);
-            processUnitHugeW("Vashk", 18, true);
-            processUnitWalkHugeW("Vashk", 18);
-            processUnitLargeW("Meisan", 43, false);
+            processUnitHugeW("Vashk", 18, true, false);
+            processUnitHugeWalkW("Vashk", 18);
+            processUnitLargeW("Meisan", 43, false, false);
             processUnitLargeWalkW("Meisan", 43);
 
 
-            processUnitLargeW("Human_Male", 4, true);
+            processUnitLargeW("Human_Male", 4, true, false);
             processUnitLargeWalkW("Human_Male", 4);
-            processUnitLargeW("Human_Male", 5, true);
+            processUnitLargeW("Human_Male", 5, true, false);
             processUnitLargeWalkW("Human_Male", 5);
-            processUnitLargeW("Human_Male", 6, true);
+            processUnitLargeW("Human_Male", 6, true, false);
             processUnitLargeWalkW("Human_Male", 6);
-            processUnitLargeW("Human_Male", 7, true);
+            processUnitLargeW("Human_Male", 7, true, false);
             processUnitLargeWalkW("Human_Male", 7);
-            processUnitLargeW("Human_Male", 8, true);
+            processUnitLargeW("Human_Male", 8, true, false);
             processUnitLargeWalkW("Human_Male", 8);
-            processUnitLargeW("Human_Male", 9, true);
+            processUnitLargeW("Human_Male", 9, true, false);
             processUnitLargeWalkW("Human_Male", 9);
-            processUnitLargeW("Human_Male", 10, true);
+            processUnitLargeW("Human_Male", 10, true, false);
             processUnitLargeWalkW("Human_Male", 10);
 
-            processUnitLargeW("Human_Female", 4, true);
+            processUnitLargeW("Human_Female", 4, true, false);
             processUnitLargeWalkW("Human_Female", 4);
-            processUnitLargeW("Human_Female", 5, true);
+            processUnitLargeW("Human_Female", 5, true, false);
             processUnitLargeWalkW("Human_Female", 5);
-            processUnitLargeW("Human_Female", 6, true);
+            processUnitLargeW("Human_Female", 6, true, false);
             processUnitLargeWalkW("Human_Female", 6);
-            processUnitLargeW("Human_Female", 7, true);
+            processUnitLargeW("Human_Female", 7, true, false);
             processUnitLargeWalkW("Human_Female", 7);
-            processUnitLargeW("Human_Female", 8, true);
+            processUnitLargeW("Human_Female", 8, true, false);
             processUnitLargeWalkW("Human_Female", 8);
-            processUnitLargeW("Human_Female", 9, true);
+            processUnitLargeW("Human_Female", 9, true, false);
             processUnitLargeWalkW("Human_Female", 9);
-            processUnitLargeW("Human_Female", 10, true);
+            processUnitLargeW("Human_Female", 10, true, false);
             processUnitLargeWalkW("Human_Female", 10);
             
 
-            processUnitHugeW("Barrel", 38, true);
+            processUnitHugeW("Barrel", 38, true, false);
             
-            processUnitHugeW("Table", 39, true);
-            processUnitHugeW("Desk", 39, true);
-            processUnitHugeW("Computer_Desk", 39, true);
-            processUnitHugeW("Computer_Desk", 40, true);
+            processUnitHugeW("Table", 39, true, false);
+            processUnitHugeW("Desk", 39, true, false);
+            processUnitHugeW("Computer_Desk", 39, true, false);
+            processUnitHugeW("Computer_Desk", 40, true, false);
 
-            processUnitHugeW("Table", 41, true);
-            processUnitHugeW("Desk", 41, true);
-            processUnitHugeW("Computer_Desk", 41, true);
-            processUnitHugeW("Computer_Desk", 42, true);
-            */
+            processUnitHugeW("Table", 41, true, false);
+            processUnitHugeW("Desk", 41, true, false);
+            processUnitHugeW("Computer_Desk", 41, true, false);
+            processUnitHugeW("Computer_Desk", 42, true, false);
+            
             /*
             processHatLargeW("Generic_Male", 0, "Berserker");
             processHatLargeW("Generic_Male", 0, "Witch");
@@ -3792,15 +3792,13 @@ namespace AssetsPV
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Beam");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
-            */
             processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMechaSwinging(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
             processUnitOutlinedWMechaSwinging(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Lightning");
 
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaSwinging(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-            /*
-
+            
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMecha(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol",
                 legs: "Armored_Jet", still: false);
