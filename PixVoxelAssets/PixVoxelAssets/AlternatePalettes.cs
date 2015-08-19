@@ -3939,7 +3939,7 @@ namespace AssetsPV
             //11 tinted lenses
             new float[] {0.18F,0.18F,0.2F,1F},
             //12 chrome contrast
-            new float[] {0.7F,0.85F,1.1F,1F},
+            new float[] {0.8F,0.95F,1.3F,1F},
             //13 chrome
             new float[] {0.6F,0.75F,0.95F,1F},
             //14 flowing cloth contrast

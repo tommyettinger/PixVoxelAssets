@@ -1864,7 +1864,7 @@ namespace AssetsPV
                     parsed[i].y += 10;
                 }
                 int framelimit = 4;
-
+                byte[] spreadColors = new byte[] {253 - 12 * 4, 253 - 40 * 4 };
                 for(int palette = 0; palette < VoxelLogic.wpalettecount; palette++)
                 {
                     Console.WriteLine("Processing: " + moniker + ", palette " + palette + ", " + firing_name);
@@ -1919,7 +1919,8 @@ namespace AssetsPV
                     {"Right_Weapon", VoxelLogic.readPart(right_weapon)}
                 };
 
-                        int[] swingTable = new int[] { 0, 330, 300, 270, 240, 225, 285, 345, 0, 0, 0, 0, };
+                        int[] swingTable = new int[] { 0, 330, 300, 270, 240, 225, 285, 345, 0, 0, 0, 0, },
+                             effectTable = new int[] {-1,  -1,  -1,  -1,  -1, 215, 225, 255,-1,-1,-1,-1, };
                         //int[] swingTable = new int[] { 0, 330, 300, 270, 240, 210, 180, 150, 120, 90, 60, 30};
                         List<MagicaVoxelData> work2 = VoxelLogic.MergeVoxels(components["Head"], components["Torso"], 0);
                         switch(combo)
@@ -1928,8 +1929,16 @@ namespace AssetsPV
                                 if(right_weapon != null && right_projectile == "Swing")
                                 {
                                     firing_name = "Firing_Right";
-                                    work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4),
-                                        swingTable[f], 40, 40, 40), work2, 2);
+                                    if(effectTable[f] >= 0)
+                                    {
+                                        work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartialSpread(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4),
+                                            swingTable[f],effectTable[f], 40, 40, 40, spreadColors), work2, 2);
+                                    }
+                                    else
+                                    {
+                                        work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4),
+                                            swingTable[f], 40, 40, 40), work2, 2);
+                                    }
                                     work2 = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work2, 3);
                                     right_projectors.Clear();
 
@@ -1937,8 +1946,8 @@ namespace AssetsPV
                                 else if(right_weapon != null)
                                 {
                                     firing_name = "Firing_Right";
-                                    work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), 3, 40, 40), work, 2);
-                                    work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work, 3);
+                                    work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), 3, 40, 40), work2, 2);
+                                    work2 = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, VoxelLogic.clear), work2, 3);
 
                                 }
                                 else continue;
@@ -1946,15 +1955,23 @@ namespace AssetsPV
                             case 1:
                                 if(left_weapon != null && left_projectile == "Swing")
                                 {
-                                    work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4),
-                                        swingTable[f], 40, 40, 40), work2, 3);
+                                    if(effectTable[f] >= 0)
+                                    {
+                                        work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartialSpread(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4),
+                                            swingTable[f], effectTable[f], 40, 40, 40, spreadColors), work2, 3);
+                                    }
+                                    else
+                                    {
+                                        work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4),
+                                            swingTable[f], 40, 40, 40), work2, 3);
+                                    }
                                     work2 = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4, 6, VoxelLogic.clear), work2, 2);
                                     left_projectors.Clear();
                                 }
                                 else if(left_weapon != null)
                                 {
-                                    work = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4), 3, 40, 40), work, 3);
-                                    work = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4, 6, VoxelLogic.clear), work, 2);
+                                    work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4), 3, 40, 40), work2, 3);
+                                    work2 = VoxelLogic.MergeVoxels(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4, 6, VoxelLogic.clear), work2, 2);
                                 }
                                 else continue;
                                 break;
@@ -1966,15 +1983,31 @@ namespace AssetsPV
                                     firing_name = "Firing_Both";
                                     if(right_projectile == "Swing")
                                     {
-                                        work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4),
-                                           swingTable[f], 40, 40, 40), work2, 2);
+                                        if(effectTable[f] >= 0)
+                                        {
+                                            work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartialSpread(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4),
+                                                swingTable[f], effectTable[f], 40, 40, 40, spreadColors), work2, 2);
+                                        }
+                                        else
+                                        {
+                                            work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4),
+                                                swingTable[f], 40, 40, 40), work2, 2);
+                                        }
                                     }
                                     else
                                         work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Right_Arm"], components["Right_Weapon"], 4), 3, 40, 40), work2, 2);
                                     if(left_projectile == "Swing")
                                     {
-                                        work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4),
-                                           swingTable[f], 40, 40, 40), work2, 3);
+                                        if(effectTable[f] >= 0)
+                                        {
+                                            work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartialSpread(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4),
+                                                swingTable[f], effectTable[f], 40, 40, 40, spreadColors), work2, 3);
+                                        }
+                                        else
+                                        {
+                                            work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitchPartial(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4),
+                                                swingTable[f], 40, 40, 40), work2, 3);
+                                        }
                                     }
                                     else
                                         work2 = VoxelLogic.MergeVoxels(VoxelLogic.RotatePitch(VoxelLogic.MergeVoxels(components["Left_Arm"], components["Left_Weapon"], 4, 6, 254 - 7 * 4), 3, 40, 40), work2, 3);
@@ -3507,19 +3540,20 @@ namespace AssetsPV
         static void Main(string[] args)
         {
 //            altFolder = "botl6/";
-            //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
-            //altFolder = "mecha2/";
+            VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
+            altFolder = "mecha2/";
             //System.IO.Directory.CreateDirectory("mecha2");
             //System.IO.Directory.CreateDirectory("vox/mecha2");
 
             VoxelLogic.Initialize();
             
-            SaPalettes.Initialize();
+//            SaPalettes.Initialize();
             InitializeWPalette();
             
-            altFolder = "sau10/";
+//            altFolder = "sau10/";
             //            makeFlatTiling().Save("tiling_flat_gray.png");
 
+            /*
             processUnitHugeW("Grass", 35, true, false);
             processUnitHugeW("Tree", 35, true, false);
             processUnitHugeW("Boulder", 36, true, false);
@@ -3603,7 +3637,7 @@ namespace AssetsPV
             processUnitHugeW("Desk", 41, true, false);
             processUnitHugeW("Computer_Desk", 41, true, false);
             processUnitHugeW("Computer_Desk", 42, true, false);
-            
+            */
             /*
             processHatLargeW("Generic_Male", 0, "Berserker");
             processHatLargeW("Generic_Male", 0, "Witch");
@@ -3792,13 +3826,14 @@ namespace AssetsPV
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Beam");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
+            */
             processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMechaSwinging(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
             processUnitOutlinedWMechaSwinging(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Lightning");
-
+            
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaSwinging(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-            
+            /*
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMecha(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol",
                 legs: "Armored_Jet", still: false);

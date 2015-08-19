@@ -10161,7 +10161,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     return RotateYaw(voxels, degrees / 90, xSize, ySize);
                 default:
                     {
-                        double angle = (Math.PI / 180) * (degrees % 360);
+                        double angle = (Math.PI / 180) * ((degrees + 720) % 360);
                         double sn = Math.Sin(angle), cs = Math.Cos(angle);
                         byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
 
@@ -10318,7 +10318,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     break;
         */
-        
+
         public static List<MagicaVoxelData> RotatePitchPartial(List<MagicaVoxelData> voxels, int degrees, int xSize, int ySize, int zSize)
         {
             byte[,,] vls = new byte[xSize * 4, ySize * 4, zSize * 4];
@@ -10353,6 +10353,67 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }
                     }
                     break;
+            }
+            return VoxLargerArrayToList(vls, 4);
+        }
+        public static List<MagicaVoxelData> RotatePitchPartialSpread(List<MagicaVoxelData> voxels, int degrees, int effectStartDegrees, int xSize, int ySize, int zSize, byte[] spreadColor)
+        {
+            byte[,,] vls = new byte[xSize * 4, ySize * 4, zSize * 4];
+            double finalAngle = (Math.PI / 180) * ((degrees) % 360), effectStartAngle = (Math.PI / 180) * ((effectStartDegrees) % 360);
+            double increm = Math.PI / 36;
+            byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+
+            if((degrees - effectStartDegrees + 1440) % 360 < 180)
+            {
+                increm *= -1.0;
+            }
+
+            double sn = 0.0, cs = 0.0;
+            
+            sn = Math.Sin(finalAngle);
+            cs = Math.Cos(finalAngle);
+            for(byte x = 0; x < xSize * 4; x++)
+            {
+                for(byte z = 0; z < zSize * 4; z++)
+                {
+                    int tempX = (x - (xSize * 2));
+                    int tempZ = (z - (zSize * 2));
+                    int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize * 2));
+                    int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize * 2));
+
+                    for(byte y = 0; y < ySize * 4; y++)
+                    {
+                        if(x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4 && colors[x, y, z] > 0)
+                            vls[x2, y, z2] = colors[x, y, z];
+                    }
+                }
+            }
+            int sclen = 1;
+            if(spreadColor != null) sclen = spreadColor.Length;
+
+            for(double angle = finalAngle; Math.Abs(effectStartAngle - angle) >= Math.Abs(increm); angle += increm)
+            {
+                sn = Math.Sin(angle);
+                cs = Math.Cos(angle);
+                for(byte x = 0; x < xSize * 4; x++)
+                {
+                    for(byte z = 0; z < zSize * 4; z++)
+                    {
+                        int tempX = (x - (xSize * 2));
+                        int tempZ = (z - (zSize * 2));
+                        int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize * 2));
+                        int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize * 2));
+
+                        for(byte y = 0; y < ySize * 4; y++)
+                        {
+                            for(int it = 0; it < sclen; it++)
+                            {
+                                if((spreadColor == null || colors[x, y, z] == spreadColor[it]) && colors[x, y, z] > 0 && x2 >= 0 && z2 >= 0 && x2 < xSize * 4 && z2 < zSize * 4 && vls[x2, y, z2] == 0)
+                                    vls[x2, y, z2] = colors[x, y, z];
+                            }
+                        }
+                    }
+                }
             }
             return VoxLargerArrayToList(vls, 4);
         }
@@ -10413,7 +10474,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     return RotateRoll(voxels, degrees / 90, ySize, zSize);
                 default:
                     {
-                        double angle = (Math.PI / 180) * (degrees % 360);
+                        double angle = (Math.PI / 180) * ((degrees + 720) % 360);
                         double sn = Math.Sin(angle), cs = Math.Cos(angle);
                         byte[,,] colors = VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
 
@@ -16682,7 +16743,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                         if((254 - smallColor) % 4 == 0)
                                         {
                                             specialCount++;
-                                            if(specialColors.ContainsKey(smallColor) && specialColors[smallColor].color < specialCount)
+                                            if(specialColors.ContainsKey(smallColor))
+                                            {
+                                                if(specialColors[smallColor].color < specialCount)
+                                                {
+                                                    specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
+                                                }
+                                            }
+                                            else
                                             {
                                                 specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
                                             }
