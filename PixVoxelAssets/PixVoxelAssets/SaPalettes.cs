@@ -5606,7 +5606,7 @@ namespace AssetsPV
         {
             VoxelLogic.wpalettecount = wpalettes.Length;
             int wpc = VoxelLogic.wpalettecount;
-            VoxelLogic.subtlePalettes = new int[] { 35, 36 };//, wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5, wpc + 6, wpc + 7, wpc + 8, wpc + 9, wpc + 10 };
+            VoxelLogic.subtlePalettes = new int[] { 35, 36, wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5, wpc + 6, wpc + 7, wpc + 8, wpc + 9, wpc + 10 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
             wpalettes = wpalettes.Concat(wpalettes[0].Repeat(wterrainsgray.Length)).ToArray();
