@@ -1315,7 +1315,7 @@ namespace AssetsPV
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
             for (int p = 0; p < VoxelLogic.wpalettecount; p++)
             {
-                float[] drip = wpalettes[p][27].ToArray(), transp = VoxelLogic.wpalettes[p][VoxelLogic.wcolorcount - 1];
+                float[] drip = wpalettes[p][27].ToArray(), transp = wpalettes[p][VoxelLogic.wcolorcount - 1];
                 drip[3] = 1F;
                 float[] zap = wpalettes[p][40].ToArray();
                 zap[3] = spin_alpha_1;

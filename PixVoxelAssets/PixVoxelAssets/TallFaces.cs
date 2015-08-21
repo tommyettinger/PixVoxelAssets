@@ -605,6 +605,56 @@ namespace AssetsPV
 
         }
 
+        public static void processUnitLargeMilitaryW(string u, bool still, bool shadowless)
+        {
+                BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
+                List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
+                Directory.CreateDirectory("vox/" + altFolder);
+                VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
+                MagicaVoxelData[] parsed = voxes.ToArray();
+                for(int i = 0; i < parsed.Length; i++)
+                {
+                    parsed[i].x += 10;
+                    parsed[i].y += 10;
+                    if((254 - parsed[i].color) % 4 == 0)
+                        parsed[i].color--;
+                }
+                int framelimit = 4;
+
+
+                string folder = (altFolder);//"color" + i;
+                Directory.CreateDirectory(folder); //("color" + i);
+
+            for(int palette = 0; palette < 8; palette++)
+            {
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
+                for(int f = 0; f < framelimit; f++)
+                { //
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, shadowless);
+                        b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                        b.Dispose();
+                    }
+                }
+
+
+                Directory.CreateDirectory("gifs/" + altFolder);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+
+                s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
+                startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
+                Process.Start(startInfo).WaitForExit();
+
+                //bin.Close();
+
+                //            processFiringLarge(u);
+
+                processExplosionLargeW(u, palette, parsed.Replicate(), shadowless);
+            }
+        }
 
 
         public static void processHatLargeW(string u, int palette, string hat)
@@ -738,10 +788,10 @@ namespace AssetsPV
                             return;
                         }*/
             Console.WriteLine("Processing: " + u + " " + hat);
-            
+
             BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             MagicaVoxelData[] headpoints = VoxelLogic.GetHeadVoxels(bin, hat).ToArray();
-            
+
             int framelimit = 4;
 
             string folder = (altFolder);//"color" + i;
@@ -777,8 +827,8 @@ namespace AssetsPV
                         + hat + "_Hat_face" + dir + "_" + ((hat == "Farmer") ? 0 : f) + ".png"));
                     Bitmap body_image = new Bitmap(Image.FromFile(altFolder + "palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png"));
 
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            wcurrent = wrendered[palette];
+                    VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+                    wcurrent = wrendered[palette];
                     hat_graphics = Graphics.FromImage(hat_image);
                     Graphics body_graphics = Graphics.FromImage(body_image);
                     body_graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -807,7 +857,7 @@ namespace AssetsPV
             s = altFolder + "/palette" + palette + "_" + u + "_" + hat + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_" + hat + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+
             //bin.Close();
 
             //            processFiringDouble(u);
@@ -3541,16 +3591,17 @@ namespace AssetsPV
         {
 //            altFolder = "botl6/";
             VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
-            altFolder = "mecha2/";
+            altFolder = "CU2/";
             //System.IO.Directory.CreateDirectory("mecha2");
             //System.IO.Directory.CreateDirectory("vox/mecha2");
 
             VoxelLogic.Initialize();
-            
-//            SaPalettes.Initialize();
+
+            CUPalettes.Initialize();
+            //            SaPalettes.Initialize();
             InitializeWPalette();
-            
-//            altFolder = "sau10/";
+
+            //            altFolder = "sau10/";
             //            makeFlatTiling().Save("tiling_flat_gray.png");
 
             /*
@@ -3826,14 +3877,14 @@ namespace AssetsPV
             processUnitOutlinedWMecha(moniker: "Mark_Zero", head: "Armored", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Beam");
             processUnitOutlinedWMechaAiming(moniker: "Mark_Zero", head: "Armored_Aiming", left_arm: "Armored_Aiming", right_arm: "Armored_Aiming", right_weapon: "Rifle", right_projectile: "Lightning");
-            */
+            
             processUnitOutlinedWMecha(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana");
             processUnitOutlinedWMechaSwinging(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Autofire");
             processUnitOutlinedWMechaSwinging(moniker: "Deadman", head: "Armored", left_weapon: "Pistol", right_weapon: "Katana", left_projectile: "Lightning");
             
             processUnitOutlinedWMecha(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
             processUnitOutlinedWMechaSwinging(moniker: "Chivalry", head: "Armored", right_weapon: "Beam_Sword");
-            /*
+            
             processUnitOutlinedWMecha(moniker: "Banzai", left_weapon: "Pistol", right_weapon: "Pistol");
             processUnitOutlinedWMecha(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol",
                 legs: "Armored_Jet", still: false);
@@ -3841,7 +3892,7 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-
+            processUnitLargeMilitaryW("Tank", true, false);
         }
     }
 }

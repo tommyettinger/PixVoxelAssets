@@ -9830,21 +9830,21 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 else Console.Write(", ");
             }
             */
-            foreach (MagicaVoxelData mvd in bod)
+            foreach(MagicaVoxelData mvd in bod)
             {
 
-                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
                 {
                     bodyPlug = mvd;
                     bodyPlug.color--;
                     break;
                 }
             }
-            if (bodyPlug.color == 0)
+            if(bodyPlug.color == 0)
                 return bod;
-            foreach (MagicaVoxelData mvd in hat)
+            foreach(MagicaVoxelData mvd in hat)
             {
-                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
                 {
                     hatPlug = mvd;
                     hatPlug.color--;
@@ -9852,7 +9852,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
             }
             List<MagicaVoxelData> working = new List<MagicaVoxelData>(hat.Count + bod.Count);
-            for (int i = 0; i < hat.Count; i++)
+            for(int i = 0; i < hat.Count; i++)
             {
                 MagicaVoxelData mvd = hat[i];
                 mvd.x += (byte)(bodyPlug.x - hatPlug.x);
@@ -9860,9 +9860,69 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 mvd.z += (byte)(bodyPlug.z - hatPlug.z);
                 working.Add(mvd);
             }
-            for (int i = 0; i < working.Count; i++)
+            for(int i = 0; i < working.Count; i++)
             {
-                if ((254 - working[i].color) % 4 == 0)
+                if((254 - working[i].color) % 4 == 0)
+                    working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
+            }
+            bod.AddRange(working);
+
+            return bod;
+
+        }
+
+        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body)
+        {
+            BinaryReader hbin = new BinaryReader(File.Open("CU2/Head_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
+            List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
+            hbin.Close();
+            MagicaVoxelData bodyPlug = new MagicaVoxelData { color = 0 };
+            MagicaVoxelData headPlug = new MagicaVoxelData { color = 0 };
+
+            /*
+            List<byte> knownColors = new List<byte>(50);
+            if (!knownColors.Contains(mvd.color))
+            {
+                knownColors.Add(mvd.color);
+                Console.Write(253 - mvd.color);
+                if ((253 - mvd.color) % 4 != 0) Console.Write("!!!  ");
+                else Console.Write(", ");
+            }
+            */
+            foreach(MagicaVoxelData mvd in bod)
+            {
+
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                {
+                    bodyPlug = mvd;
+                    bodyPlug.color--;
+                    break;
+                }
+            }
+            if(bodyPlug.color == 0)
+                return bod;
+            foreach(MagicaVoxelData mvd in head)
+            {
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                {
+                    headPlug = mvd;
+                    headPlug.color--;
+                    break;
+                }
+            }
+            List<MagicaVoxelData> working = new List<MagicaVoxelData>(head.Count + bod.Count);
+            for(int i = 0; i < head.Count; i++)
+            {
+                MagicaVoxelData mvd = head[i];
+                mvd.x += (byte)(bodyPlug.x - headPlug.x);
+                mvd.y += (byte)(bodyPlug.y - headPlug.y);
+                mvd.z += (byte)(bodyPlug.z - headPlug.z);
+                working.Add(mvd);
+            }
+            for(int i = 0; i < working.Count; i++)
+            {
+                if((254 - working[i].color) % 4 == 0)
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
             bod.AddRange(working);
