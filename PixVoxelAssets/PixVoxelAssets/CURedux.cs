@@ -46,7 +46,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {0.3F,0.3F,0.3F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
@@ -300,7 +300,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {0.86F,0.19F,0.1F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
@@ -427,7 +427,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {1.1F,0.45F,0F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
@@ -554,7 +554,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {0.85F,0.75F,0.15F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
@@ -681,7 +681,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {0.2F,0.7F,0.1F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
@@ -808,7 +808,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {0.15F,0.25F,0.8F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast
@@ -935,7 +935,7 @@ namespace AssetsPV
             //5 main paint (mid)
             new float[] {0.4F,0.1F,0.45F,1F},
             //6 hair contrast
-            new float[] {0.3F,0.05F,0.0F,1F},
+            new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
             new float[] {0.4F,0.15F,0.05F,1F},
             //8 skin contrast

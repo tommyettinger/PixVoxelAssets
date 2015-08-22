@@ -625,6 +625,8 @@ namespace AssetsPV
             if((253 - fv.vox.color) % 4 != 0) return false;
             switch((253 - fv.vox.color) / 4)
             {
+                case 6:
+                case 7:
                 case 8:
                 case 9:
                 case 10:
