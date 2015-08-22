@@ -71,7 +71,7 @@
     <Compile Include="DungeonPalettes.cs" />
     <Compile Include="LocalMap.cs" />
     <Compile Include="ForaysVoxels.cs" />
-    <Compile Include="CUPalettes.cs" />
+    <Compile Include="CURedux.cs" />
     <Compile Include="TallFaces.cs" />
     <Compile Include="TinyOrthoVoxels.cs" />
     <Compile Include="MiniOrthoVoxels.cs" />
@@ -526,6 +526,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Tank_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Tank_P_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Damned_Large_W.vox">

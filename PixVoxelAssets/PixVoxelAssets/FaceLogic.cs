@@ -48,7 +48,9 @@ namespace AssetsPV
             byte[,,] data = new byte[xSize, ySize, zSize];
             foreach(MagicaVoxelData mvd in voxelData)
             {
-                if(mvd.color != VoxelLogic.clear && (data[mvd.x, mvd.y, mvd.z] == 0 || data[mvd.x, mvd.y, mvd.z] == shadowColor))
+                if(!(mvd.color == VoxelLogic.clear || data[mvd.x, mvd.y, mvd.z] == CURedux.emitter0 || data[mvd.x, mvd.y, mvd.z] == CURedux.trail0
+                     || data[mvd.x, mvd.y, mvd.z] == CURedux.emitter1 || data[mvd.x, mvd.y, mvd.z] == CURedux.trail1)
+                     && (data[mvd.x, mvd.y, mvd.z] == 0 || data[mvd.x, mvd.y, mvd.z] == shadowColor))
                     data[mvd.x, mvd.y, mvd.z] = mvd.color;
             }
             return data;

@@ -149,9 +149,12 @@ namespace AssetsPV
                                 Color c2 = Color.Transparent;
                                 if(which_image.Equals("image"))
                                 {
+                                    double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
+                                        v_alter = Math.Pow(v * v, 1.0 - v);
+                                    v_alter *= Math.Pow(v_alter, 0.35);
                                     if(j == height - 1)
                                     {
-                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.45, 0.01, 1.0));
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
                                     }
                                     else
                                     {
@@ -162,7 +165,7 @@ namespace AssetsPV
                                                 {
                                                     if(j == 0)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -170,7 +173,7 @@ namespace AssetsPV
                                                 {
                                                     if(i < width / 2 && j > 0)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.06, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
                                                     }
 
                                                 }
@@ -179,7 +182,7 @@ namespace AssetsPV
                                                 {
                                                     if(i >= width / 2 && j > 0)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.8, 0.03, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -192,12 +195,12 @@ namespace AssetsPV
                                                     }*/
                                                     if(i + (j + 1) / 2 > 3 && j > 0)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.8, 0.03, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
                                                     }
                                                     else if(i + j / 2 >= 1)
                                                     //if(j >= 2 &&  i >=  2 - (j / 3) * 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.0, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.15, 0.10, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.0, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.10, 1.0));
 
                                                         //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.8, 0.03, 1.0));
                                                     }
@@ -213,13 +216,13 @@ namespace AssetsPV
 
                                                     if(i < (j + 1) / 2 && j > 0)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.06, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
 
                                                     }
                                                     else if(i <= j / 2 + 2)
                                                     //                                                    if(j >= 2 && i < (j / 3) * 2 + 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.25, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.9, 0.05, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.25, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.9, 0.05, 1.0));
 
                                                         //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.06, 1.0));
                                                     }
@@ -240,7 +243,7 @@ namespace AssetsPV
                                                     {
                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.275, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.875, 0.045, 1.0));
                                                     }*/
-                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.275, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.875, 0.05, 1.0));
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.275, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.875, 0.05, 1.0));
 
                                                 }
                                                 break;
@@ -248,7 +251,7 @@ namespace AssetsPV
                                                 {
                                                     //     if((i + j) / 2 >= 1 && i <= j / 2 && j > 0)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.05, 0.08, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.05, 0.08, 1.0));
                                                     }
                                                     //   else // else if (j > 0)
                                                     //   {
@@ -261,11 +264,11 @@ namespace AssetsPV
                                                 {
                                                     if(i > (j + 1) / 2 + 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.8, 0.03, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
                                                     }
                                                     else if(i > (j + 1) / 2 + 1)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.4, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.7, 0.02, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.4, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.7, 0.02, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -273,18 +276,18 @@ namespace AssetsPV
                                                 {
                                                     if(i + (j + 1) / 2 < 1)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.06, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
                                                     }
                                                     else if(i + (j + 1) / 2 < 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.6, 0.01, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
                                                     }
                                                 }
                                                 break;
                                             case BrightDimBottom:
                                                 {
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.45, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.65, 0.015, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.45, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.015, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -293,7 +296,7 @@ namespace AssetsPV
 
                                                     if(i >= 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -302,7 +305,7 @@ namespace AssetsPV
 
                                                     if(i < 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -310,7 +313,7 @@ namespace AssetsPV
                                                 {
                                                     if(i + (j + 1) / 2 > 3) // && i >= 2
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.15, 0.09, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -318,7 +321,7 @@ namespace AssetsPV
                                                 {
                                                     if(i * 2 < j) // && i < 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.09, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -334,7 +337,7 @@ namespace AssetsPV
                                 }
                                 else if(which_image == "shine")
                                 {
-                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.85, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
+                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
                                 }
                                 else if(which_image == "flat")
                                 {
@@ -605,25 +608,25 @@ namespace AssetsPV
 
         }
 
-        public static void processUnitLargeMilitaryW(string u, bool still, bool shadowless)
+        public static void processUnitLargeWMilitary(string u)
         {
-                BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
-                List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
-                Directory.CreateDirectory("vox/" + altFolder);
-                VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
-                MagicaVoxelData[] parsed = voxes.ToArray();
-                for(int i = 0; i < parsed.Length; i++)
-                {
-                    parsed[i].x += 10;
-                    parsed[i].y += 10;
-                    if((254 - parsed[i].color) % 4 == 0)
-                        parsed[i].color--;
-                }
-                int framelimit = 4;
+            BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
+            Directory.CreateDirectory("vox/" + altFolder);
+            VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+            int framelimit = 4;
 
 
-                string folder = (altFolder);//"color" + i;
-                Directory.CreateDirectory(folder); //("color" + i);
+            string folder = (altFolder);//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
 
             for(int palette = 0; palette < 8; palette++)
             {
@@ -632,7 +635,7 @@ namespace AssetsPV
                 { //
                     for(int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, shadowless);
+                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, true, false);
                         b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                         b.Dispose();
                     }
@@ -650,10 +653,122 @@ namespace AssetsPV
 
                 //bin.Close();
 
-                //            processFiringLarge(u);
-
-                processExplosionLargeW(u, palette, parsed.Replicate(), shadowless);
+                processExplosionLargeW(u, palette, parsed.Replicate(), false);
             }
+
+            processUnitLargeWFiring(u);
+        }
+        public static void processUnitLargeWFiring(string u)
+        {
+            Console.WriteLine("Processing: " + u);
+            string filename = "CU2/" + u + "_Large_W.vox";
+            BinaryReader bin;
+            MagicaVoxelData[] parsed;
+            string folder = ("frames");
+
+            for(int w = 0; w < 2; w++)
+            {
+                if((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
+                {
+                    filename = u + "_Firing_Large_W.vox";
+                }
+                if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
+                    MagicaVoxelData[][] flying = CURedux.Flyover(parsed);
+                    MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+                    //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+                    for(int i = 0; i < 16; i++)
+                    {
+                        voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
+                        flying[i].CopyTo(voxelFrames[i], 0);
+                    }
+                    /*                    for (int i = 0; i < flying[4].Length; i++)
+                                        {
+                                            voxelFrames[0][i].x += 20;
+                                            voxelFrames[0][i].y += 20;
+                                        }*/
+
+                    voxelFrames = CURedux.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
+
+                    for(int f = 0; f < 16; f++)
+                    {
+                        List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                        int[,] taken = new int[120, 120];
+                        taken.Fill(-1);
+                        for(int i = 0; i < voxelFrames[f].Length; i++)
+                        {
+                            // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
+                            if(voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                            {
+                                //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                continue;
+                            }
+                            altered.Add(voxelFrames[f][i]);
+                        }
+                        flying[f] = altered.ToArray();
+                    }
+                    for(int color = 0; color < 8; color++)
+                    {
+                        for(int d = 0; d < 4; d++)
+                        {
+                            Directory.CreateDirectory(folder); //("color" + i);
+
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                Bitmap b = processFrameHugeW(flying[frame], color, d, frame, 16, true, false);
+                                b.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b.Dispose();
+                            }
+                        }
+                    }
+
+                    //bin.Close();
+                }
+                else if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
+                {
+                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                    parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
+                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    for(int color = 0; color < 8; color++)
+                    {
+                        for(int d = 0; d < 4; d++)
+                        {
+                            Directory.CreateDirectory(folder); //("color" + i);
+
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                Bitmap b = processFrameHugeW(firing[frame], color, d, frame, 16, true, false);
+                                b.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
+                                b.Dispose();
+                            }
+                        }
+                    }
+                    //bin.Close();
+                }
+                else continue;
+
+                Directory.CreateDirectory("gifs/" + altFolder);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+                for(int i = 0; i < 8; i++)
+                {
+                    for(int d = 0; d < 4; d++)
+                    {
+                        for(int frame = 0; frame < 16; frame++)
+                        {
+                            s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png ";
+                        }
+                    }
+                }
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_attack_" + w + "_animated.gif";
+                Console.WriteLine("Running convert.exe ...");
+                Process.Start(startInfo).WaitForExit();
+
+            }
+
         }
 
 
@@ -1370,7 +1485,7 @@ namespace AssetsPV
             //bin.Close();
         }
 
-        public static void processUnitOutlinedWMecha(string moniker = "Maku", bool still = true,
+        public static void processUnitLargeWMecha(string moniker = "Maku", bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null)
         {
 
@@ -1432,7 +1547,7 @@ namespace AssetsPV
 
             }
         }
-        public static void processUnitOutlinedWMechaFiring(string moniker = "Maku", bool still = true,
+        public static void processUnitLargeWMechaFiring(string moniker = "Maku", bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = null,
             string left_projectile = null, string right_projectile = null)
         {
@@ -1666,7 +1781,7 @@ namespace AssetsPV
                 }
             }
         }
-        public static void processUnitOutlinedWMechaAiming(string moniker = "Mark_Zero", bool still = true,
+        public static void processUnitLargeWMechaAiming(string moniker = "Mark_Zero", bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored_Aiming", string right_arm = "Armored_Aiming", string head = "Armored_Aiming", string right_weapon = "Rifle", string right_projectile = "Autofire")
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
@@ -1819,7 +1934,7 @@ namespace AssetsPV
                 //processFieryExplosionDoubleW(moniker, work.ToList(), palette);
             }
         }
-        public static void processUnitOutlinedWMechaSwinging(string moniker = "Maku", bool still = true,
+        public static void processUnitLargeWMechaSwinging(string moniker = "Maku", bool still = true,
             string legs = "Armored", string torso = "Armored", string left_arm = "Armored", string right_arm = "Armored", string head = "Blocky", string left_weapon = null, string right_weapon = "Katana",
             string left_projectile = null, string right_projectile = "Swing")
         {
@@ -2350,7 +2465,7 @@ namespace AssetsPV
                         else if(current_color >= 17 && current_color <= 20)
                         {
                             int mod_color = current_color;
-                            if(mod_color == 17 && r.Next(7) < 2) //smoke
+                            if(mod_color == 17 && r.Next(7) < 3) //smoke
                                 continue;
                             if(current_color == 18) //yellow fire
                             {
@@ -2363,7 +2478,7 @@ namespace AssetsPV
                             {
                                 if(r.Next(5) < 4)
                                 {
-                                    mod_color -= r.Next(3);
+                                    mod_color -= Math.Min(r.Next(3), r.Next(3));
                                 }
                             }
                             else if(current_color == 20) // sparks
@@ -2760,7 +2875,7 @@ namespace AssetsPV
                         else if(current_color >= 17 && current_color <= 20)
                         {
                             int mod_color = current_color;
-                            if(mod_color == 17 && r.Next(7) < 2) //smoke
+                            if(mod_color == 17 && r.Next(7) < 3) //smoke
                                 continue;
                             if(current_color == 18) //yellow fire
                             {
@@ -2773,7 +2888,7 @@ namespace AssetsPV
                             {
                                 if(r.Next(5) < 4)
                                 {
-                                    mod_color -= r.Next(3);
+                                    mod_color -= Math.Min(r.Next(3), r.Next(3));
                                 }
                             }
                             else if(current_color == 20) // sparks
@@ -3170,7 +3285,7 @@ namespace AssetsPV
                         else if(current_color >= 17 && current_color <= 20)
                         {
                             int mod_color = current_color;
-                            if(mod_color == 17 && r.Next(7) < 2) //smoke
+                            if(mod_color == 17 && r.Next(7) < 3) //smoke
                                 continue;
                             if(current_color == 18) //yellow fire
                             {
@@ -3183,7 +3298,7 @@ namespace AssetsPV
                             {
                                 if(r.Next(5) < 4)
                                 {
-                                    mod_color -= r.Next(3);
+                                    mod_color -= Math.Min(r.Next(3), r.Next(3));
                                 }
                             }
                             else if(current_color == 20) // sparks
@@ -3597,7 +3712,7 @@ namespace AssetsPV
 
             VoxelLogic.Initialize();
 
-            CUPalettes.Initialize();
+            CURedux.Initialize();
             //            SaPalettes.Initialize();
             InitializeWPalette();
 
@@ -3892,7 +4007,8 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            processUnitLargeMilitaryW("Tank", true, false);
+            processUnitLargeWMilitary("Tank");
+            processUnitLargeWMilitary("Tank_P");
         }
     }
 }

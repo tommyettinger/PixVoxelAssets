@@ -1596,7 +1596,7 @@ namespace AssetsPV
                         mvd.z = v.z;
                     }
                     working.Add(mvd);
-                    if (r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 1) working.AddRange(VoxelLogic.adjacent(mvd, new int[] { 249 - 152, 249 - 160, 249 - 152, 249 - 160, 249 - 136 }));
+                    if (r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 1) working.AddRange(VoxelLogic.Adjacent(mvd, new int[] { 249 - 152, 249 - 160, 249 - 152, 249 - 160, 249 - 136 }));
                 }
                 working = working.Where(_ => r.Next(7) < 8 - trimLevel).ToList();
                 voxelFrames[f] = new MagicaVoxelData[working.Count];

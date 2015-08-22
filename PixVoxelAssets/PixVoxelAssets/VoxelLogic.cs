@@ -9133,7 +9133,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 return GetEnumerator();
             }
         }
-        private static int sizex = 0, sizey = 0, sizez = 0;
+        public static int sizex = 0, sizey = 0, sizez = 0;
         /// <summary>
         /// Load a MagicaVoxel .vox format file into a MagicaVoxelData[] that we use for voxel chunks.
         /// </summary>
@@ -10666,7 +10666,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
 
 
-        public static List<MagicaVoxelData> adjacent(MagicaVoxelData pos)
+        public static List<MagicaVoxelData> Adjacent(MagicaVoxelData pos)
         {
             List<MagicaVoxelData> near = new List<MagicaVoxelData>(6);
             near.Add(new MagicaVoxelData { x = (byte)(pos.x + 1), y = (byte)(pos.y), z = (byte)(pos.z), color = (byte)(pos.color), });
@@ -10679,7 +10679,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return near;
 
         }
-        public static List<MagicaVoxelData> adjacent(MagicaVoxelData pos, int[] colors)
+        public static List<MagicaVoxelData> Adjacent(MagicaVoxelData pos, int[] colors)
         {
             List<MagicaVoxelData> near = new List<MagicaVoxelData>(6);
             near.Add(new MagicaVoxelData { x = (byte)(pos.x + 1), y = (byte)(pos.y), z = (byte)(pos.z), color = (byte)(colors.RandomElement()), });
@@ -12987,7 +12987,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         working.Add(AlterVoxel(mvd, mvd.color + 4));
                         if (r.Next(12) < f + 2 && r.Next(10) < f + 2)
                         {
-                            working.AddRange(Lovecraftiate(adjacent(mvd, new int[] { 255 - c * 4, 253 - c * 4 }).Where(av => r.Next(3) == 0).ToList(), kcolors));
+                            working.AddRange(Lovecraftiate(Adjacent(mvd, new int[] { 255 - c * 4, 253 - c * 4 }).Where(av => r.Next(3) == 0).ToList(), kcolors));
                         }
                     }
                 }
@@ -13386,7 +13386,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
 
 
-        private static List<MagicaVoxelData> generateFatVoxel(MagicaVoxelData start, int color)
+        public static List<MagicaVoxelData> generateFatVoxel(MagicaVoxelData start, int color)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(8);
             for (int x = 0; x < 2; x++)
@@ -13401,7 +13401,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateCube(MagicaVoxelData start, int size, int color)
+        public static List<MagicaVoxelData> generateCube(MagicaVoxelData start, int size, int color)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(8);
             for (int x = 0; x < size; x++)
@@ -13416,7 +13416,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateBox(MagicaVoxelData start, int xsize, int ysize, int zsize, int color)
+        public static List<MagicaVoxelData> generateBox(MagicaVoxelData start, int xsize, int ysize, int zsize, int color)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(8);
             for (int x = 0; x < xsize; x++)
@@ -13431,7 +13431,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateStraightLine(MagicaVoxelData start, MagicaVoxelData end, int color)
+        public static List<MagicaVoxelData> generateStraightLine(MagicaVoxelData start, MagicaVoxelData end, int color)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(16);
             MagicaVoxelData newStart = new MagicaVoxelData { x = (start.x < end.x) ? start.x : end.x, y = (start.y < end.y) ? start.y : end.y, z = (start.z < end.z) ? start.z : end.z, color = (byte)color };
@@ -13453,7 +13453,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         }*/
             return vox;
         }
-        private static List<MagicaVoxelData> generateFatStraightLine(MagicaVoxelData start, MagicaVoxelData end, int color)
+        public static List<MagicaVoxelData> generateFatStraightLine(MagicaVoxelData start, MagicaVoxelData end, int color)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for (int x = 0; x < 2; x++)
@@ -13614,7 +13614,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return frames;
         }
 
-        private static List<MagicaVoxelData> generateMissileDouble(MagicaVoxelData start, int length)
+        public static List<MagicaVoxelData> generateMissileDouble(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for (int x = 0; x < 3; x++)
@@ -13666,7 +13666,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateMissileFieryTrailDouble(MagicaVoxelData start, int length)
+        public static List<MagicaVoxelData> generateMissileFieryTrailDouble(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for (int x = 0; x < 3; x++)
@@ -13753,7 +13753,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return vox;
         }
 
-        private static List<MagicaVoxelData> generateConeDouble(MagicaVoxelData start, int segments, int color)
+        public static List<MagicaVoxelData> generateConeDouble(MagicaVoxelData start, int segments, int color)
         {
             List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
             for (int x = 0; x < segments; x++)
@@ -13777,7 +13777,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return cone;
 
         }
-        private static List<MagicaVoxelData> generateDownwardMissileDouble(MagicaVoxelData start, int length)
+        public static List<MagicaVoxelData> generateDownwardMissileDouble(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for (int x = 0; x < 3; x++)
@@ -13829,7 +13829,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateDownwardMissileFieryTrailDouble(MagicaVoxelData start, int length)
+        public static List<MagicaVoxelData> generateDownwardMissileFieryTrailDouble(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for (int x = 0; x < 3; x++)
@@ -13898,7 +13898,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return vox;
         }
 
-        private static List<MagicaVoxelData> generateDownwardConeDouble(MagicaVoxelData start, int segments, int color)
+        public static List<MagicaVoxelData> generateDownwardConeDouble(MagicaVoxelData start, int segments, int color)
         {
             List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
             for (int x = 0; x < segments; x++)
@@ -13921,7 +13921,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             return cone;
         }
-        private static List<MagicaVoxelData> randomFill(int xStart, int yStart, int zStart, int xSize, int ySize, int zSize, int[] colors)
+        public static List<MagicaVoxelData> randomFill(int xStart, int yStart, int zStart, int xSize, int ySize, int zSize, int[] colors)
         {
             List<MagicaVoxelData> box = new List<MagicaVoxelData>(xSize * ySize * zSize);
             for (int x = 0; x < xSize; x++)
@@ -14090,7 +14090,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         mvd.z = v.z;
                     }
                     working.Add(mvd);
-                    if (r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 2) working.AddRange(adjacent(mvd, new int[] { 249 - 152, 249 - 160, 249 - 152, 249 - 160, 249 - 136 }));
+                    if (r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 2) working.AddRange(Adjacent(mvd, new int[] { 249 - 152, 249 - 160, 249 - 152, 249 - 160, 249 - 136 }));
                 }
                 working = working.Where(_ => r.Next(7) < 8 - trimLevel).ToList();
                 voxelFrames[f] = new MagicaVoxelData[working.Count];
