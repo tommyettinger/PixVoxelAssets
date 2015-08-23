@@ -150,7 +150,7 @@ namespace AssetsPV
                                 if(which_image.Equals("image"))
                                 {
                                     double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
-                                        v_alter = Math.Pow(v * v, 1.0 - v);
+                                        v_alter = Math.Pow(v, 2.0 - 2.0 * v);
                                     v_alter *= Math.Pow(v_alter, 0.35);
                                     if(j == height - 1)
                                     {
@@ -376,10 +376,10 @@ namespace AssetsPV
                 for(int c = 0; c < VoxelLogic.wpalettes[0].Length; c++)
                 {
                     cubes2[i][c] = new byte[17][];
+                    VoxelLogic.wrendered[i][c] = new byte[80];
                     for(int sp = 0; sp < 17; sp++)
                     {
                         cubes2[i][c][sp] = new byte[80];
-                        VoxelLogic.wrendered[i][c] = new byte[80];
                         for(int j = 0; j < 80; j++)
                         {
                             cubes2[i][c][sp][j] = cubes[i, c, sp, j];
@@ -670,7 +670,7 @@ namespace AssetsPV
             {
                 if((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
                 {
-                    filename = u + "_Firing_Large_W.vox";
+                    filename = "CU2/" + u + "_Firing_Large_W.vox";
                 }
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
@@ -4007,8 +4007,47 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            processUnitLargeWMilitary("Tank");
-            processUnitLargeWMilitary("Tank_P");
+            /*
+            processUnitLargeWMilitary("Tank_S");
+            processUnitLargeWMilitary("Infantry");
+            
+            processUnitLargeWMilitary("Infantry_P");
+            processUnitLargeWMilitary("Infantry_S");
+            processUnitLargeWMilitary("Infantry_T");
+            processUnitLargeWMilitary("Tank_T");
+            processUnitLargeWMilitary("Supply");
+            processUnitLargeWMilitary("Supply_P");
+            processUnitLargeWMilitary("Supply_S");
+            processUnitLargeWMilitary("Supply_T");
+            */
+            processUnitLargeWMilitary("Artillery");
+            processUnitLargeWMilitary("Artillery_P");
+            processUnitLargeWMilitary("Artillery_S");
+            processUnitLargeWMilitary("Artillery_T");
+            processUnitLargeWMilitary("Copter");
+            processUnitLargeWMilitary("Copter_P");
+            processUnitLargeWMilitary("Copter_S");
+            processUnitLargeWMilitary("Copter_T");
+            processUnitLargeWMilitary("Plane");
+            processUnitLargeWMilitary("Plane_P");
+            processUnitLargeWMilitary("Plane_S");
+            processUnitLargeWMilitary("Plane_T");
+            processUnitLargeWMilitary("Boat");
+            processUnitLargeWMilitary("Boat_P");
+            processUnitLargeWMilitary("Boat_S");
+            processUnitLargeWMilitary("Boat_T");
+
+            processUnitLargeWMilitary("Civilian");
+            processUnitLargeWMilitary("Airport");
+            processUnitLargeWMilitary("City");
+            processUnitLargeWMilitary("Factory");
+            processUnitLargeWMilitary("Laboratory");
+            processUnitLargeWMilitary("Castle");
+            processUnitLargeWMilitary("Estate");
+
+            //            processUnitLargeWMilitary("Tank");
+            //processUnitLargeWMilitary("Tank_P");
+
         }
     }
 }

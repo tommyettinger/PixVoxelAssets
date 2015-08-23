@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -3434,6 +3435,48 @@ namespace AssetsPV
             }
             return frames;
         }
+        public static byte ColorConversion(byte original)
+        {
+            if((249 - original) > 168)
+                return (byte)(emitter0 - 4 * ((249 - original) % 4));
+            else if((249 - original) % 8 != 0)
+                return original;
+            switch(249 - original)
+            {
+                case 0: return original;
+                case 8: return 253 - 26 * 4;
+                case 16: return 253 - 15 * 4;
+                case 24: return 253 - 14 * 4;
+                case 32: return 253 - 5 * 4;
+                case 40: return 253 - 3 * 4;
+                case 48: return 253 - 29 * 4;
+                case 56: return 253 - 31 * 4;
+                case 64:
+                case 144: return 253 - 9 * 4;
+                case 72: return 253 - 13 * 4;
+                case 80: return 253 - 21 * 4;
+                case 88: return 253 - 35 * 4;
+                case 96: return 253 - 25 * 4;
+                case 104: return 253 - 37 * 4;
+                case 112: return 253 - 39 * 4;
+                case 120: return 253 - 16 * 4;
+                case 128: return 253 - 27 * 4;
+                case 136: return 253 - 17 * 4;
+                case 152: return 253 - 19 * 4;
+                case 160: return 253 - 18 * 4;
+                default: return original;
+            }
+        }
+        public static void ConvertXW(string u)
+        {
+            BinaryReader bin = new BinaryReader(File.Open("CU1/" + u + "_Part_X.vox", FileMode.Open));
+            List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin), next = new List<MagicaVoxelData>(raw.Count);
 
+            foreach(MagicaVoxelData mvd in raw)
+            {
+                next.Add(new MagicaVoxelData {x = mvd.x, y = mvd.y, z = mvd.z, color = ColorConversion(mvd.color) });
+            }
+            VoxelLogic.WriteVOX("CU2/" + u + "_Large_W.vox", next, "W_EXACT", 5, 40, 40, 40);
+        }
     }
 }
