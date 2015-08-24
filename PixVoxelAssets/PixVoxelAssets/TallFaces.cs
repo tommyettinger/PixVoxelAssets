@@ -151,7 +151,7 @@ namespace AssetsPV
                                 {
                                     double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
                                         v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-                                    v_alter *= Math.Pow(v_alter, 0.35);
+                                    v_alter *= Math.Pow(v_alter, 0.5);
                                     if(j == height - 1)
                                     {
                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
@@ -614,7 +614,7 @@ namespace AssetsPV
             List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
             Directory.CreateDirectory("vox/" + altFolder);
             VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
-            MagicaVoxelData[] parsed = voxes.ToArray();
+            MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
             for(int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -653,7 +653,7 @@ namespace AssetsPV
 
                 //bin.Close();
 
-                processExplosionLargeW(u, palette, parsed.Replicate(), false);
+                processExplosionLargeW(u, palette, explode_parsed, false);
             }
 
             processUnitLargeWFiring(u);
@@ -4007,19 +4007,23 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            /*
+
+            processUnitLargeWMilitary("Boat_S");
+
+            processUnitLargeWMilitary("Tank");
+            processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
-            processUnitLargeWMilitary("Infantry");
-            
+            processUnitLargeWMilitary("Tank_T");
+
+            processUnitLargeWMilitary("Infantry");            
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
-            processUnitLargeWMilitary("Tank_T");
             processUnitLargeWMilitary("Supply");
             processUnitLargeWMilitary("Supply_P");
             processUnitLargeWMilitary("Supply_S");
             processUnitLargeWMilitary("Supply_T");
-            */
+            
             processUnitLargeWMilitary("Artillery");
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
@@ -4034,7 +4038,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Plane_T");
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
-            processUnitLargeWMilitary("Boat_S");
+//            processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
 
             processUnitLargeWMilitary("Civilian");
@@ -4044,10 +4048,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-
-            //            processUnitLargeWMilitary("Tank");
-            //processUnitLargeWMilitary("Tank_P");
-
+            
         }
     }
 }
