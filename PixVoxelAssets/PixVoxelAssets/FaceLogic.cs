@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace AssetsPV
 {
-    [Flags]
     public enum Slope
     {
         Top = 0x1,
@@ -89,7 +88,7 @@ namespace AssetsPV
                     {
                         if(voxelData[x, y, z] > 0)
                         {
-                            data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
+                            data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top); //  | Slope.Bright | Slope.Dim
                         }
                     }
                 }
@@ -125,13 +124,13 @@ namespace AssetsPV
                                 {
                                     data[x, y, z].slope = Slope.BrightTop;
                                     if(x > 0 && voxelData[x - 1, y, z] == 0)
-                                        data[x - 1, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x - 1), y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
+                                        data[x - 1, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)(x - 1), y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top); // | Slope.Bright | Slope.Dim
                                 }
                                 else if(!neighbors[2, 1, 1] && neighbors[2, 1, 0] && neighbors[0, 1, 2])
                                 {
                                     data[x, y, z].slope = Slope.DimTop;
                                     if(y < ySize - 2 && voxelData[x, y + 1, z] == 0)
-                                        data[x, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)(y + 1), z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
+                                        data[x, y + 1, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)(y + 1), z = (byte)z, color = voxelData[x, y, z] }, Slope.Top); // | Slope.Bright | Slope.Dim
                                 }
                                 else if(!neighbors[0, 0, 1] && neighbors[1, 2, 2] && neighbors[2, 1, 2] && neighbors[1, 1, 0])
                                 {
@@ -144,7 +143,7 @@ namespace AssetsPV
                                 else
                                 {
                                     data[x, y, z].slope = Slope.Top;
-
+                                    /*
                                     if(!neighbors[2, 1, 1] && !neighbors[1, 0, 1])
                                     {
                                         data[x, y, z].slope |= Slope.Dim | Slope.Bright;
@@ -156,7 +155,7 @@ namespace AssetsPV
                                     else if(!neighbors[1, 0, 1])
                                     {
                                         data[x, y, z].slope |= Slope.Bright;
-                                    }
+                                    }*/
 
                                     if(!neighbors[2, 0, 1] && neighbors[0, 2, 1] && (neighbors[0, 0, 1] || neighbors[2, 2, 1]))
                                     {
@@ -213,20 +212,23 @@ namespace AssetsPV
                                 }
                                 else
                                 {
-                                    if(!neighbors[2, 1, 1] && !neighbors[1, 0, 1])
+
+                                    if((!neighbors[2, 1, 1] && !neighbors[1, 0, 1]) || !neighbors[2, 1, 1] || !neighbors[1, 0, 1])
                                     {
-                                        data[x, y, z].slope = Slope.Dim | Slope.Bright;
+                                        data[x, y, z].slope = Slope.Top; // Slope.Dim | Slope.Bright | 
                                     }
+                                    /*
                                     else if(!neighbors[2, 1, 1])
                                     {
-                                        data[x, y, z].slope = Slope.Dim;
+                                        data[x, y, z].slope = Slope.Dim | Slope.Top;
                                     }
                                     else if(!neighbors[1, 0, 1])
                                     {
-                                        data[x, y, z].slope = Slope.Bright;
+                                        data[x, y, z].slope = Slope.Bright | Slope.Top;
                                     }
+                                    */
                                 }
-                                data[x, y, z].slope |= Slope.Top;
+                                //data[x, y, z].slope |= Slope.Top;
                             }
 
                         }
@@ -251,7 +253,7 @@ namespace AssetsPV
                     for(int y = 0; y < ySize; y++)
                     {
                         if(voxelData[x, y, z] > 0)
-                            data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top | Slope.Bright | Slope.Dim);
+                            data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = voxelData[x, y, z] }, Slope.Top); //  | Slope.Bright | Slope.Dim
                     }
                 }
             }
