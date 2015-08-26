@@ -59,6 +59,7 @@ namespace AssetsPV
 
         public static string[] CurrentUnits = {
 "Infantry", "Infantry_P", "Infantry_S", "Infantry_T",
+"Infantry_PS", "Infantry_PT", "Infantry_ST",
 "Artillery", "Artillery_P", "Artillery_S", "Artillery_T",
 "Tank", "Tank_P", "Tank_S", "Tank_T",
 "Plane", "Plane_P", "Plane_S", "Plane_T",
@@ -67,12 +68,13 @@ namespace AssetsPV
 "Boat", "Boat_P", "Boat_S", "Boat_T",
 "City", "Factory", "Airport", "Laboratory", "Castle", "Estate",
 "Civilian" };
-        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(35), TerrainLookup = new Dictionary<string, int>(10);
-        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(34), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
-        public static List<int>[] TerrainToUnits = new List<int>[35];
+        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(38), TerrainLookup = new Dictionary<string, int>(10);
+        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(38), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
+        public static List<int>[] TerrainToUnits = new List<int>[38];
         public static Dictionary<int, List<MovementType>> TerrainToMobilities = new Dictionary<int, List<MovementType>>();
         public static int[] CurrentSpeeds = {
 3, 3, 5, 3,
+4, 2, 5,
 4, 3, 6, 4,
 6, 4, 7, 6,
 7, 5, 9, 8,
@@ -83,6 +85,7 @@ namespace AssetsPV
 1};
         public static int[][] CurrentWeapons = {
 new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
+new int[] {6, -1}, new int[] {-1, 4}, new int[] {1, -1},
 new int[] {-1, 4}, new int[] {3, -1}, new int[] {-1, 6}, new int[] {-1, 6},
 new int[] {3, 1}, new int[] {3, 1}, new int[] {1, -1}, new int[] {1, 3},
 new int[] {1, -1}, new int[] {-1, 7}, new int[] {5, -1}, new int[] {5, -1},
@@ -94,6 +97,7 @@ new int[] {-1, -1}
 };
         public static int[][] CurrentWeaponReceptions = {
 new int[] {1, -1}, new int[] {1, 3}, new int[] {2, -1}, new int[] {1, 1},
+new int[] {-1, 2}, new int[] {-1, 2}, new int[] {2, -1},
 new int[] {-1, 3}, new int[] {4, -1}, new int[] {-1, 3}, new int[] {-1, 4},
 new int[] {2, 1}, new int[] {4, 2}, new int[] {2, -1}, new int[] {1, 2},
 new int[] {2, -1}, new int[] {-1, 4}, new int[] {1, -1}, new int[] {2, -1},
@@ -104,6 +108,7 @@ new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, 
 new int[] {-1, -1}};
         public static MovementType[] CurrentMobilities = {
 MovementType.Foot, MovementType.Foot, MovementType.WheelsTraverse, MovementType.Foot,
+MovementType.Foot, MovementType.Foot, MovementType.Flight,
 MovementType.Treads, MovementType.Treads, MovementType.Treads, MovementType.Wheels,
 MovementType.Treads, MovementType.Treads, MovementType.Treads, MovementType.TreadsAmphi,
 MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flight,

@@ -4008,8 +4008,8 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            processUnitLargeWMilitary("Boat_S");
-
+            processUnitLargeWMilitary("Infantry_PS");
+            /*
             processUnitLargeWMilitary("Tank");
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
@@ -4038,7 +4038,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Plane_T");
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
-//            processUnitLargeWMilitary("Boat_S");
+            processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
 
             processUnitLargeWMilitary("Civilian");
@@ -4048,7 +4048,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-            
+            */
         }
     }
 }
