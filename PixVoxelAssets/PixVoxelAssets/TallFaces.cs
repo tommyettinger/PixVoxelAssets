@@ -2508,7 +2508,6 @@ namespace AssetsPV
                                                 zbuffer[p] = vx.z + vx.x * 3 - vx.y * 3;
 
                                             argbValues[p] = wcurrent[mod_color][sp][i + j * 16];
-                                            break;
                                         }
 
                                         if(!barePositions[p] && outlineValues[p] == 0)
@@ -2917,7 +2916,6 @@ namespace AssetsPV
                                                 zbuffer[p] = vx.z + vx.x * 3 - vx.y * 3;
 
                                             argbValues[p] = wcurrent[mod_color][sp][i + j * 16];
-                                            break;
                                         }
 
                                         if(!barePositions[p] && outlineValues[p] == 0)
@@ -3326,7 +3324,6 @@ namespace AssetsPV
                                                 zbuffer[p] = vx.z + vx.x * 3 - vx.y * 3;
 
                                             argbValues[p] = wcurrent[mod_color][sp][i + j * 16];
-                                            break;
                                         }
 
                                         if(!barePositions[p] && outlineValues[p] == 0)
