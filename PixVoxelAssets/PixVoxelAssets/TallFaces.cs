@@ -633,7 +633,7 @@ namespace AssetsPV
                 { //
                     for(int dir = 0; dir < 4; dir++)
                     {
-                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, true, false);
+                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
                         b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                         b.Dispose();
                     }
@@ -3998,8 +3998,12 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            processUnitLargeWMilitary("Infantry_PT");
+            processUnitLargeWMilitary("Infantry_ST");
+
             /*
+            processUnitLargeWMilitary("Infantry_PT");
+            processUnitLargeWMilitary("Infantry_P");
+            
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Tank");
             processUnitLargeWMilitary("Tank_P");
@@ -4019,6 +4023,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
+            
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter_S");
