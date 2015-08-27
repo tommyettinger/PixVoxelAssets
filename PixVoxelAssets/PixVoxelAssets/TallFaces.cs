@@ -666,7 +666,7 @@ namespace AssetsPV
 
             for(int w = 0; w < 2; w++)
             {
-                if((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T")))
+                if((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T" || u == "Infantry_PT")))
                 {
                     filename = "CU2/" + u + "_Firing_Large_W.vox";
                 }
@@ -3998,8 +3998,9 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            processUnitLargeWMilitary("Infantry_PS");
+            processUnitLargeWMilitary("Infantry_PT");
             /*
+            processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Tank");
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
