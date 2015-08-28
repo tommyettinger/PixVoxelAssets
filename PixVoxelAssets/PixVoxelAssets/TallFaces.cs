@@ -14,29 +14,27 @@ namespace AssetsPV
     class TallFaces
     {
         public const int
-        Top = 0,
-        Bright = 1,
-        Dim = 2,
-        BrightTop = 3,
-        DimTop = 4,
-        BrightDim = 5,
-        BrightDimTop = 6,
-        BrightBottom = 7,
-        DimBottom = 8,
-        BrightDimBottom = 9,
-        BrightBack = 10,
-        DimBack = 11,
-        BrightTopBack = 12,
-        DimTopBack = 13,
-        BrightBottomBack = 14,
-        DimBottomBack = 15,
-        BackBack = 16;
+        Cube = 0,
+        BrightTop = 1,
+        DimTop = 2,
+        BrightDim = 3,
+        BrightDimTop = 4,
+        BrightBottom = 5,
+        DimBottom = 6,
+        BrightDimBottom = 7,
+        BrightBack = 8,
+        DimBack = 9,
+        BrightTopBack = 10,
+        DimTopBack = 11,
+        BrightBottomBack = 12,
+        DimBottomBack = 13,
+        BackBack = 14;
 
-        public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Top, Top }, { Slope.Bright, Bright }, { Slope.Dim, Dim },
+        public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             {  Slope.BrightTop, BrightTop }, {  Slope.DimTop, DimTop }, {  Slope.BrightDim, BrightDim }, {  Slope.BrightDimTop, BrightDimTop }, {  Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
             {  Slope.BrightDimBottom, BrightDimBottom }, {  Slope.BrightBack, BrightBack }, {  Slope.DimBack, DimBack },
             {  Slope.BrightTopBack, BrightTopBack }, {  Slope.DimTopBack, DimTopBack }, {  Slope.BrightBottomBack, BrightBottomBack }, {  Slope.DimBottomBack, DimBottomBack }, {  Slope.BackBack, BackBack } };
-        private static Random r = new Random(0x1337BEEF);
+        public static Random r = new Random(0x1337BEEF);
         public static string altFolder = "";
 
         private static FileStream offbin = new FileStream("offsets2.bin", FileMode.OpenOrCreate);
@@ -165,10 +163,8 @@ namespace AssetsPV
                                     {
                                         switch(slp)
                                         {
-                                            case Top:
+                                            case Cube:
                                             case BackBack:
-                                            case Bright:
-                                            case Dim:
                                                 {
                                                     if(j == 0)
                                                     {
@@ -402,9 +398,7 @@ namespace AssetsPV
             wcurrent = wrendered[0];
         }
         public static Slope[] Slopes = new Slope[] {
-        Slope.Top,
-        Slope.Bright,
-        Slope.Dim,
+        Slope.Cube,
         Slope.BrightTop,
         Slope.DimTop,
         Slope.BrightDim,
@@ -442,11 +436,12 @@ namespace AssetsPV
 
             string folder = (altFolder);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
-            for(int f = 0; f < framelimit; f++)
-            { //
-                for(int dir = 0; dir < 4; dir++)
+            for(int dir = 0; dir < 4; dir++)
+            {
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                for(int f = 0; f < framelimit; f++)
                 {
-                    Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, shadowless);
+                    Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, shadowless);
                     b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
@@ -499,16 +494,22 @@ namespace AssetsPV
 
                 }
             }
+            FaceVoxel[][,,] faces = new FaceVoxel[4][,,];
+            
             int framelimit = 8;
 
 
             string folder = (altFolder);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
-            for(int f = 0; f < framelimit; f++)
-            { //
-                for(int dir = 0; dir < 4; dir++)
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int i = 0; i < 4; i++)
                 {
-                    Bitmap b = processFrameLargeW(parsed[f % 4], palette, dir, f, framelimit, true, false);
+                    faces[i] = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed[i], dir), 60, 60, 60, 153));
+                }
+                for(int f = 0; f < framelimit; f++)
+            { //
+                    Bitmap b = processFrameLargeW(faces[f % 4], palette, dir, f, framelimit, true, false);
                     b.Save(folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
@@ -536,7 +537,7 @@ namespace AssetsPV
 
         }
 
-        private static Bitmap processFrameLargeW(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap processFrameLargeW(FaceVoxel[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap b;
             Bitmap b2 = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
@@ -578,11 +579,13 @@ namespace AssetsPV
 
             string folder = (altFolder);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
-            for(int f = 0; f < framelimit; f++)
-            { //
-                for(int dir = 0; dir < 4; dir++)
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed, dir), 60, 60, 60, 153));
+                for(int f = 0; f < framelimit; f++)
                 {
-                    Bitmap b = processFrameHugeW(parsed, palette, dir, f, framelimit, still, shadowless);
+                    Bitmap b = processFrameHugeW(faces, palette, dir, f, framelimit, still, shadowless);
                     b.Save(folder + "/palette" + palette + "_" + u + "_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
@@ -628,12 +631,14 @@ namespace AssetsPV
 
             for(int palette = 0; palette < 8; palette++)
             {
-                Console.WriteLine("Processing: " + u + ", palette " + palette);
-                for(int f = 0; f < framelimit; f++)
-                { //
-                    for(int dir = 0; dir < 4; dir++)
-                    {
-                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+
+                    Console.WriteLine("Processing: " + u + ", palette " + palette);
+                    for(int f = 0; f < framelimit; f++)
+                    { //
+                        Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
                         b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                         b.Dispose();
                     }
@@ -707,15 +712,16 @@ namespace AssetsPV
                         }
                         flying[f] = altered.ToArray();
                     }
-                    for(int color = 0; color < 8; color++)
+                    Directory.CreateDirectory(folder); //("color" + i);
+                    for(int d = 0; d < 4; d++)
                     {
-                        for(int d = 0; d < 4; d++)
+                        for(int frame = 0; frame < 16; frame++)
                         {
-                            Directory.CreateDirectory(folder); //("color" + i);
+                            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(flying[frame], d), 120, 120, 80, 153));
 
-                            for(int frame = 0; frame < 16; frame++)
+                            for(int color = 0; color < 8; color++)
                             {
-                                Bitmap b = processFrameHugeW(flying[frame], color, d, frame, 16, true, false);
+                                Bitmap b = processFrameHugeW(faces, color, d, frame, 16, true, false);
                                 b.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
                                 b.Dispose();
                             }
@@ -737,7 +743,9 @@ namespace AssetsPV
 
                             for(int frame = 0; frame < 16; frame++)
                             {
-                                Bitmap b = processFrameHugeW(firing[frame], color, d, frame, 16, true, false);
+                                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(firing[frame], d), 120, 120, 80, 153));
+
+                                Bitmap b = processFrameHugeW(faces, color, d, frame, 16, true, false);
                                 b.Save(folder + "/color" + color + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + (frame) + ".png", ImageFormat.Png);
                                 b.Dispose();
                             }
@@ -793,11 +801,13 @@ namespace AssetsPV
                     parsed[i].color = VoxelLogic.clear;
             }
 
-            for(int f = 0; f < framelimit; f++)
-            { //
-                for(int dir = 0; dir < 4; dir++)
-                {
-                    Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, true, true);
+            for(int dir = 0; dir < 4; dir++)
+            {
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed.ToList(), 60, 60, 60, 153));
+
+                for(int f = 0; f < framelimit; f++)
+                { //
+                    Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, true, true);
                     b.Save(folder + "/" + "palette" + palette + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
@@ -837,14 +847,20 @@ namespace AssetsPV
             }
             int framelimit = 8;
 
+            FaceVoxel[][,,] faces = new FaceVoxel[4][,,];
+
 
             string folder = (altFolder);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
-            for(int f = 0; f < framelimit; f++)
-            { //
-                for(int dir = 0; dir < 4; dir++)
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int i = 0; i < 4; i++)
                 {
-                    Bitmap b = processFrameHugeW(parsed[f % 4], palette, dir, f, framelimit, true, false);
+                    faces[i] = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed[i], dir), 60, 60, 60, 153));
+                }
+                for(int f = 0; f < framelimit; f++)
+                {
+                    Bitmap b = processFrameHugeW(faces[f % 4], palette, dir, f, framelimit, true, false);
                     b.Save(folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", ImageFormat.Png);
                     b.Dispose();
                 }
@@ -872,14 +888,14 @@ namespace AssetsPV
 
         }
 
-        private static Bitmap processFrameHugeW(MagicaVoxelData[] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap processFrameHugeW(FaceVoxel[,,] faces, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap b;
             Bitmap b2 = new Bitmap(168, 208, PixelFormat.Format32bppArgb);
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
-            b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still, shadowless);
+            b = renderWSmartHuge(faces, dir, palette, frame, maxFrames, still, shadowless);
             //            return b;
 
             Graphics g2 = Graphics.FromImage(b2);
@@ -1021,11 +1037,13 @@ namespace AssetsPV
 
             string folder = (altFolder + "palette" + palette);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
-            for(int f = 0; f < framelimit; f++)
-            { //
-                for(int dir = 0; dir < 4; dir++)
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                for(int f = 0; f < framelimit; f++)
                 {
-                    Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, false);
+                    Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
                     b.Save(folder + "/palette" + palette + "_" + u + "_Dead_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                     b.Dispose();
                 }
@@ -1105,12 +1123,15 @@ namespace AssetsPV
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            // MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
+            Directory.CreateDirectory(folder); //("color" + i);
 
             for(int d = 0; d < 4; d++)
             {
-                Directory.CreateDirectory(folder); //("color" + i);
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, d), 60, 60, 60, 153));
+
+                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
                 {
@@ -1160,17 +1181,19 @@ namespace AssetsPV
         {
             Console.WriteLine("Processing: " + u);
 //            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
-            MagicaVoxelData[] parsed = voxels;
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
+            Directory.CreateDirectory(folder); //("color" + i);
 
             for(int d = 0; d < 4; d++)
             {
-                Directory.CreateDirectory(folder); //("color" + i);
+                
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(voxels, d), 60, 60, 60, 153));
 
+                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartHuge(explode[frame], d, palette, frame, 8, true, shadowless);
@@ -1317,12 +1340,16 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
 
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            // MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
+
+            Directory.CreateDirectory(folder); //("color" + i);
 
             for(int d = 0; d < 4; d++)
             {
-                Directory.CreateDirectory(folder); //("color" + i);
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, d), 120, 120, 80, 153));
+
+                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
                 {
@@ -1371,13 +1398,16 @@ namespace AssetsPV
 
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wcurrent = wrendered[palette];
-            MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            // MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionQuadW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
+
+            Directory.CreateDirectory(folder); //("color" + i);
 
             for(int d = 0; d < 4; d++)
             {
-                Directory.CreateDirectory(folder); //("color" + i);
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, d), 120, 120, 80, 153));
 
+                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
                     Bitmap b = renderWSmartMassive(explode[frame], d, palette, frame, 8, true, shadowless);
@@ -1441,13 +1471,16 @@ namespace AssetsPV
             wcurrent = wrendered[palette];
             string folder = ("frames");
 
+            Directory.CreateDirectory(folder); //("color" + i);
+
             for(int d = 0; d < 4; d++)
             {
-                Directory.CreateDirectory(folder); //("color" + i);
-
                 for(int frame = 0; frame < 12; frame++)
                 {
-                    Bitmap b = renderWSmart(attacking[frame], d, palette, frame, 12, true, true);
+
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(attacking[frame], d), 60, 60, 60, 153));
+
+                    Bitmap b = renderWSmart(faces, d, palette, frame, 12, true, true);
                     /*                    string folder2 = "palette" + palette + "_big";
                                         System.IO.Directory.CreateDirectory(folder2);
                                         b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder2).Length) + "_Gigantic_face" + d + "_" + frame + ".png", ImageFormat.Png);
@@ -1517,11 +1550,13 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + moniker + ", palette " + palette);
                 string folder = (altFolder);//"color" + i;
                 Directory.CreateDirectory(folder); //("color" + i);
-                for(int f = 0; f < framelimit; f++)
-                { //
-                    for(int dir = 0; dir < 4; dir++)
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                    for(int f = 0; f < framelimit; f++)
                     {
-                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, false);
+                        Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
                         b.Save(folder + "/palette" + palette + "_" + moniker + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -1645,11 +1680,13 @@ namespace AssetsPV
                     Console.WriteLine("Processing: " + moniker + ", palette " + palette + ", " + firing_name);
                     string folder = (altFolder);//"color" + i;
                     Directory.CreateDirectory(folder); //("color" + i);
-                    for(int f = 0; f < framelimit; f++)
-                    { //
-                        for(int dir = 0; dir < 4; dir++)
+
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                        for(int f = 0; f < framelimit; f++)
                         {
-                            Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, false);
+                            Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
                             b.Save(folder + "/palette" + palette + "_" + moniker + "_" + firing_name + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
@@ -1836,11 +1873,13 @@ namespace AssetsPV
                 Console.WriteLine("Processing: " + moniker + ", palette " + palette + ", " + "Firing_Both");
                 string folder = (altFolder);//"color" + i;
                 Directory.CreateDirectory(folder); //("color" + i);
-                for(int f = 0; f < framelimit; f++)
-                { //
-                    for(int dir = 0; dir < 4; dir++)
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                    for(int f = 0; f < framelimit; f++)
                     {
-                        Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, false);
+                        Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
                         b.Save(folder + "/palette" + palette + "_" + moniker + "_Firing_Both_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
                         b.Dispose();
                     }
@@ -2033,11 +2072,13 @@ namespace AssetsPV
                     Console.WriteLine("Processing: " + moniker + ", palette " + palette + ", " + firing_name);
                     string folder = (altFolder);//"color" + i;
                     Directory.CreateDirectory(folder); //("color" + i);
-                    for(int f = 0; f < framelimit; f++)
+
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        for(int dir = 0; dir < 4; dir++)
+                        FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                        for(int f = 0; f < framelimit; f++)
                         {
-                            Bitmap b = processFrameLargeW(parsed, palette, dir, f, framelimit, still, false);
+                            Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
                             b.Save(folder + "/palette" + palette + "_" + moniker + "_" + firing_name + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
                             b.Dispose();
                         }
@@ -2213,8 +2254,9 @@ namespace AssetsPV
 
                         for(int dir = 0; dir < 4; dir++)
                         {
+                            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
                             List<MagicaVoxelData> right_projectors_adj = VoxelLogic.RotateYaw(right_projectors, dir, 60, 60), left_projectors_adj = VoxelLogic.RotateYaw(left_projectors, dir, 60, 60);
-                            Bitmap b = processFrameLargeW(parsed, palette, dir, f % 4, 4, still, false),
+                            Bitmap b = processFrameLargeW(faces, palette, dir, f % 4, 4, still, false),
                                 b_base = new Bitmap(248, 308, PixelFormat.Format32bppArgb);// new Bitmap("palette50/palette50_Terrain_Huge_face0_0.png"),
                             Bitmap b_left = new Bitmap(88, 108, PixelFormat.Format32bppArgb), b_right = new Bitmap(88, 108, PixelFormat.Format32bppArgb);
                             if(left_projectile != null && left_projectile != "Swing") b_left = new Bitmap("frames/palette0_" + left_projectile + "_Attack_face" + dir + "_" + f + ".png");
@@ -2334,7 +2376,7 @@ namespace AssetsPV
                                     ? -2 : (still) ? 0 : jitter) + innerY);
         }
 
-        private static Bitmap renderWSmart(MagicaVoxelData[] voxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
@@ -2366,52 +2408,75 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
             int xSize = 60, ySize = 60, zSize = 60;
-            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
-            switch(facing)
+            FaceVoxel[,,] faces = faceVoxels.Replicate();
+/*            switch(facing)
             {
                 case 0:
-                    vls = voxels;
                     break;
                 case 1:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY) + (ySize / 2));
-                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempY) + (ySize / 2));
+                                mvd.y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
                 case 2:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                                mvd.y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
                 case 3:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
-                        vls[i].y = (byte)(tempX + (xSize / 2));
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                                mvd.y = (byte)(tempX + (xSize / 2));
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
-            }
+            }*/
             int[] zbuffer = new int[numBytes];
             zbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
-            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153));
+            //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153), frame, shadowless);
             bool[,] taken = new bool[xSize, ySize];
             taken.Fill(false);
             //            foreach(MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128))
@@ -2538,11 +2603,13 @@ namespace AssetsPV
                             int mod_color = current_color;
                             if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                                 continue;
-                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
-                                continue;
-
+                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            {
+                                if(r.Next(11) < 8) continue;
+                            }
+                            else
+                                taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
-                            taken[vx.x, vx.y] = true;
 
 
                             for(int j = 0; j < 4; j++)
@@ -2615,6 +2682,7 @@ namespace AssetsPV
                     }
                 }
             }
+            
             int[] xmods = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 }, ymods = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
             bool[,] nextTaken = new bool[xSize, ySize];
             for(int iter = 0; iter < 4; iter++)
@@ -2659,6 +2727,7 @@ namespace AssetsPV
                     }
                 }
             }
+            
             for(int i = 3; i < numBytes; i += 4)
             {
                 if(argbValues[i] == 7)
@@ -2707,8 +2776,6 @@ namespace AssetsPV
 
             for(int i = 3; i < numBytes; i += 4)
             {
-                if(argbValues[i] == 7)
-                    argbValues[i] = 0;
                 if(argbValues[i] > 0) // && argbValues[i] <= 255 * VoxelLogic.flat_alpha
                     argbValues[i] = 255;
                 if(editValues[i] > 0)
@@ -2741,7 +2808,7 @@ namespace AssetsPV
             return bmp;
         }
 
-        private static Bitmap renderWSmartHuge(MagicaVoxelData[] voxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap renderWSmartHuge(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap bmp = new Bitmap(248 * 2, 308 * 2, PixelFormat.Format32bppArgb);
 
@@ -2773,52 +2840,75 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
             int xSize = 120, ySize = 120, zSize = 80;
-            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
-            switch(facing)
+            FaceVoxel[,,] faces = faceVoxels.Replicate();
+/*            switch(facing)
             {
                 case 0:
-                    vls = voxels;
                     break;
                 case 1:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY) + (ySize / 2));
-                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempY) + (ySize / 2));
+                                mvd.y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
                 case 2:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                                mvd.y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
                 case 3:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
-                        vls[i].y = (byte)(tempX + (xSize / 2));
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                                mvd.y = (byte)(tempX + (xSize / 2));
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
-            }
+            }*/
             int[] zbuffer = new int[numBytes];
             zbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
-            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153));
+//            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153), frame, shadowless);
             bool[,] taken = new bool[xSize, ySize];
             taken.Fill(false);
             //            foreach(MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128))
@@ -3023,6 +3113,7 @@ namespace AssetsPV
                     }
                 }
             }
+            
             int[] xmods = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 }, ymods = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
             bool[,] nextTaken = new bool[xSize, ySize];
             for(int iter = 0; iter < 4; iter++)
@@ -3067,6 +3158,7 @@ namespace AssetsPV
                     }
                 }
             }
+            
             for(int i = 3; i < numBytes; i += 4)
             {
                 if(argbValues[i] == 7)
@@ -3116,8 +3208,6 @@ namespace AssetsPV
 
             for(int i = 3; i < numBytes; i += 4)
             {
-                if(argbValues[i] == 7)
-                    argbValues[i] = 0;
                 if(argbValues[i] > 0) // && argbValues[i] <= 255 * VoxelLogic.flat_alpha
                     argbValues[i] = 255;
                 if(editValues[i] > 0)
@@ -3149,7 +3239,7 @@ namespace AssetsPV
             return bmp;
         }
 
-        private static Bitmap renderWSmartMassive(MagicaVoxelData[] voxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap renderWSmartMassive(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap bmp = new Bitmap(328 * 2, 408 * 2, PixelFormat.Format32bppArgb);
 
@@ -3181,52 +3271,76 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
             int xSize = 160, ySize = 160, zSize = 120;
-            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            FaceVoxel[,,] faces = faceVoxels.Replicate();
+            /*
             switch(facing)
             {
                 case 0:
-                    vls = voxels;
                     break;
                 case 1:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY) + (ySize / 2));
-                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempY) + (ySize / 2));
+                                mvd.y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
                 case 2:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                                mvd.y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
                 case 3:
-                    for(int i = 0; i < voxels.Length; i++)
+                    for(int fz = zSize - 1; fz >= 0; fz--)
                     {
-                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
-                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
-                        vls[i].y = (byte)(tempX + (xSize / 2));
-                        vls[i].z = voxels[i].z;
-                        vls[i].color = voxels[i].color;
+                        for(int fx = xSize - 1; fx >= 0; fx--)
+                        {
+                            for(int fy = 0; fy < ySize; fy++)
+                            {
+                                byte tempX = (byte)(fx - (xSize / 2));
+                                byte tempY = (byte)(fy - (ySize / 2));
+                                MagicaVoxelData mvd = new MagicaVoxelData();
+                                mvd.x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                                mvd.y = (byte)(tempX + (xSize / 2));
+                                mvd.z = (byte)fz;
+                                mvd.color = faceVoxels[fx, fy, fz].vox.color;
+                                faces[mvd.x, mvd.y, fz] = new FaceVoxel(mvd, faceVoxels[fx, fy, fz].slope);
+                            }
+                        }
                     }
                     break;
-            }
+            }*/
             int[] zbuffer = new int[numBytes];
             zbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
-            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153));
+//            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153), frame, shadowless);
             bool[,] taken = new bool[xSize, ySize];
             taken.Fill(false);
             //            foreach(MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128))
@@ -3430,7 +3544,7 @@ namespace AssetsPV
                     }
                 }
             }
-
+            
             int[] xmods = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 }, ymods = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
             bool[,] nextTaken = new bool[xSize, ySize];
             for(int iter = 0; iter < 4; iter++)
@@ -3475,6 +3589,7 @@ namespace AssetsPV
                     }
                 }
             }
+            
             for(int i = 3; i < numBytes; i += 4)
             {
                 if(argbValues[i] == 7)
@@ -3524,8 +3639,6 @@ namespace AssetsPV
 
             for(int i = 3; i < numBytes; i += 4)
             {
-                if(argbValues[i] == 7)
-                    argbValues[i] = 0;
                 if(argbValues[i] > 0) // && argbValues[i] <= 255 * VoxelLogic.flat_alpha
                     argbValues[i] = 255;
                 if(editValues[i] > 0)
@@ -3566,7 +3679,7 @@ namespace AssetsPV
             Bitmap[] tilings = new Bitmap[11];
 
             BinaryReader bin = new BinaryReader(File.Open("Terrain_Huge_W.vox", FileMode.Open));
-            MagicaVoxelData[] voxes = VoxelLogic.FromMagicaRaw(bin).ToArray();
+            FaceVoxel[,,] voxes = FaceLogic.FaceListToArray(VoxelLogic.FromMagicaRaw(bin).Select(m => new FaceVoxel(m, Slope.Cube)).ToList(), 80, 80, 60, 153);
             for(int i = 0; i < 11; i++)
             {
                 wcurrent = wrendered[VoxelLogic.wpalettecount - 11 + i];
@@ -3997,11 +4110,14 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-
-            processUnitLargeWMilitary("Infantry_ST");
-
+            processUnitLargeWMilitary("Copter_S");
             /*
+            processUnitLargeWMilitary("Copter");
+
             processUnitLargeWMilitary("Infantry_PT");
+            processUnitLargeWMilitary("Infantry_ST");
+            */
+            /*
             processUnitLargeWMilitary("Infantry_P");
             
             processUnitLargeWMilitary("Infantry_PS");
