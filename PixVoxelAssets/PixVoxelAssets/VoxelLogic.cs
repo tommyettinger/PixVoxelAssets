@@ -17154,6 +17154,51 @@ MovementType.Foot                                                         };
             return data;
         }
 
+        public static List<MagicaVoxelData> BasicRotateAlmostLarge(MagicaVoxelData[] voxels, int facing)
+        {
+            int xSize = 40, ySize = 40;
+            MagicaVoxelData[] vls = new MagicaVoxelData[voxels.Length];
+            switch(facing)
+            {
+                case 0:
+                    vls = voxels;
+                    break;
+                case 1:
+                    for(int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY) + (ySize / 2));
+                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 2:
+                    for(int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+                case 3:
+                    for(int i = 0; i < voxels.Length; i++)
+                    {
+                        byte tempX = (byte)(voxels[i].x - (xSize / 2));
+                        byte tempY = (byte)(voxels[i].y - (ySize / 2));
+                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].y = (byte)(tempX + (xSize / 2));
+                        vls[i].z = voxels[i].z;
+                        vls[i].color = voxels[i].color;
+                    }
+                    break;
+            }
+            return vls.ToList();
+        }
         public static List<MagicaVoxelData> BasicRotateLarge(MagicaVoxelData[] voxels, int facing)
         {
             int xSize = 60, ySize = 60;

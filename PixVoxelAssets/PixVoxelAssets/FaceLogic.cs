@@ -357,6 +357,8 @@ namespace AssetsPV
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x - 1, y, z].vox.color }, Slope.DimBack);
                                 }
                             }
+//                            if(faces2[x, y, z] != null)
+//                                Console.WriteLine("x,y,z:" + x + "," + y + "," + z + ": " + faces2[x,y,z].slope.ToString());
                         }
                     }
                 }
@@ -719,12 +721,56 @@ namespace AssetsPV
         public static FaceModifier[] Modifiers = new FaceModifier[] { AddBrightTop, AddDimTop, AddBrightDim, AddBrightBack, AddDimBack, AddBackBack,
             AddBrightBottom, AddDimBottom, AddCorners
         };
+
+        public static string VisualMode = "CU";
+
         public static bool ImportantVisual(FaceVoxel fv)
         {
-            return ImportantVisualW(fv);
+            switch(VisualMode)
+            {
+                case "CU":
+                    return ImportantVisualCU(fv);
+                case "Mecha":
+                    return ImportantVisualMecha(fv);
+                default:
+                    return ImportantVisualW(fv);
+            }
         }
 
+        public static bool ImportantVisualMecha(FaceVoxel fv)
+        {
+            if((253 - fv.vox.color) % 4 != 0) return false;
+            switch((253 - fv.vox.color) / 4)
+            {
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    {
+                        return true;
+                    }
+                default: return false;
+            }
+        }
         public static bool ImportantVisualW(FaceVoxel fv)
+        {
+            if((253 - fv.vox.color) % 4 != 0) return false;
+            switch((253 - fv.vox.color) / 4)
+            {
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    {
+                        return true;
+                    }
+                default: return false;
+            }
+        }
+
+        public static bool ImportantVisualCU(FaceVoxel fv)
         {
             if((253 - fv.vox.color) % 4 != 0) return false;
             switch((253 - fv.vox.color) / 4)

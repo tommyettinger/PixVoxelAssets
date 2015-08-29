@@ -3919,17 +3919,17 @@ namespace AssetsPV
             //1 raw metal
             new float[] {0.6F,0.63F,0.65F,1F},
             //2 highlight paint contrast
-            new float[] {0.5F,0.1F,-0.05F,1F},
+            new float[] {0.5F,0.05F,-0.05F,1F},
             //3 highlight paint
-            new float[] {0.7F,0.2F,0.05F,1F},
+            new float[] {0.58F,0.12F,0.02F,1F},
             //4 base paint contrast
-            new float[] {0.3F,-0.15F,-0.15F,1F},
+            new float[] {0.5F,0.1F,0.05F,1F},
             //5 base paint
-            new float[] {0.45F,0.0F,0.0F,1F},
+            new float[] {0.65F,0.2F,0.15F,1F},
             //6 guns contrast
-            new float[] {0.28F,0.23F,0.2F,1F},
+            new float[] {0.25F,0.21F,0.2F,1F},
             //7 guns
-            new float[] {0.43F,0.38F,0.35F,1F},
+            new float[] {0.4F,0.36F,0.35F,1F},
             //8 flesh contrast
             new float[] {0.4F,0.15F,0.0F,1F},
             //9 flesh
@@ -3937,7 +3937,7 @@ namespace AssetsPV
             //10 tinted lenses shine
             new float[] {1.15F,1.15F,1.2F,1F},
             //11 tinted lenses
-            new float[] {0.18F,0.18F,0.2F,1F},
+            new float[] {0.15F,0.15F,0.2F,1F},
             //12 chrome contrast
             new float[] {0.8F,0.95F,1.3F,1F},
             //13 chrome

@@ -51,9 +51,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallFaces</StartupObject>
+    <StartupObject>AssetsPV.TallFacesDithered</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Pngcs, Version=1.1.4.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Pngcs.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -72,6 +76,7 @@
     <Compile Include="LocalMap.cs" />
     <Compile Include="ForaysVoxels.cs" />
     <Compile Include="CURedux.cs" />
+    <Compile Include="TallFacesDithered.cs" />
     <Compile Include="TallFaces.cs" />
     <Compile Include="TinyOrthoVoxels.cs" />
     <Compile Include="MiniOrthoVoxels.cs" />
@@ -101,6 +106,7 @@
     <Content Include="LivingTemplateStill.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Pngcs.dll" />
     <Content Include="TemplateGif.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
