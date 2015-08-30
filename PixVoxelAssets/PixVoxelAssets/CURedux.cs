@@ -1286,7 +1286,7 @@ namespace AssetsPV
             VoxelLogic.subtlePalettes = new int[] { 35, 36, wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5, wpc + 6, wpc + 7, wpc + 8, wpc + 9, wpc + 10 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
-            wpalettes = wpalettes.Concat(wpalettes[0].Repeat(wterrains.Length)).ToArray();
+/*            wpalettes = wpalettes.Concat(wpalettes[0].Repeat(wterrains.Length)).ToArray();
             for (int p = 0; p < wterrains.Length; p++)
             {
                 float[][] temp = new float[wpalettes[0].Length][];
@@ -1316,10 +1316,11 @@ namespace AssetsPV
                 }
                 wpalettes[VoxelLogic.wpalettecount + p] = temp;
             }
-
+            */
             VoxelLogic.wpalettecount = wpalettes.Length;
 
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
+            
             for (int p = 0; p < VoxelLogic.wpalettecount; p++)
             {
                 float[] drip = wpalettes[p][27].ToArray(), transp = wpalettes[p][VoxelLogic.wcolorcount - 1];
@@ -1328,6 +1329,7 @@ namespace AssetsPV
                 zap[3] = spin_alpha_1;
                 wpalettes[p] = wpalettes[p].Concat(new float[][] { drip, transp, transp, transp, drip, zap }).ToArray();
             }
+            
             VoxelLogic.wpalettes = wpalettes;
         }
 
