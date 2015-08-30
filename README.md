@@ -5,7 +5,11 @@ Free art for games generated from 3D voxel models. CC0 Licensed, so do what you
 want with these. Any use, even without crediting me, is fine, though I would
 appreciate a link if you use these in a project. The voxel models that this
 uses to generate the 2D art are also CC0 licensed, as are the more usable
-models that this code can output into the `vox` output subdirectory.
+models that this code can output into the `vox` output subdirectory. Some tools
+are distributed with this repo but have their own licenses; the XBRZ library is GPL-licensed
+and only a runner binary that links with it is run from the CC0 code, while the source is unchanged.
+ImageMagick's convert.exe application is distributed without changes. PngCs, which is Apache licensed,
+needed some bugfixes to work more reliably and is hosted in [its own repo](https://github.com/tommyettinger/pngcs).
 
 Previews
 ========
