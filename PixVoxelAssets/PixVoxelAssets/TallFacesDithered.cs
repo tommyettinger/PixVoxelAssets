@@ -581,7 +581,7 @@ namespace AssetsPV
                                 {
                                     if(j >= 2 && j < height - 1)
                                     {
-                                        c2 = new byte[] { dimi, dimi, dimi, dimi };
+                                        c2 = new byte[] { brighti, brighti, brighti, brighti };
                                         /*
                                         double h2 = h, s2 = 1.0, v2 = v;
                                         VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
@@ -644,8 +644,8 @@ namespace AssetsPV
                 for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
                 {
                     simplepalettes[i][j] = new int[] { wrendered[i][c][0][2], wrendered[i][c][0][1], wrendered[i][c][0][0] };
-                    simplepalettes[i][j - 1] = new int[] { wrendered[i][c][0][2 + 16], wrendered[i][c][0][1 + 16], wrendered[i][c][0][0 + 16] };
-                    simplepalettes[i][j - 2] = new int[] { wrendered[i][c][0][2 + 24], wrendered[i][c][0][1 + 24], wrendered[i][c][0][0 + 24] };
+                    simplepalettes[i][j - 1] = new int[] { wrendered[i][c][0][2 + 16 + 16], wrendered[i][c][0][1 + 16 + 16], wrendered[i][c][0][0 + 16 + 16] };
+                    simplepalettes[i][j - 2] = new int[] { wrendered[i][c][0][2 + 24 + 16], wrendered[i][c][0][1 + 24 + 16], wrendered[i][c][0][0 + 24 + 16] };
                     simplepalettes[i][j - 3] = new int[] { wrendered[i][c][0][2 + 64], wrendered[i][c][0][1 + 64], wrendered[i][c][0][0 + 64] };
                 }
                 simplepalettes[i][0] = new int[] { 0, 0, 0 };
@@ -941,6 +941,14 @@ namespace AssetsPV
 
         public static void processUnitLargeWMilitary(string u)
         {
+            int framelimit = 4;
+
+
+            string folder = (altFolder);//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+            Console.WriteLine("Processing: " + u + ", palette " + 99);
+
+            
             BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
             Directory.CreateDirectory("vox/" + altFolder);
@@ -953,13 +961,7 @@ namespace AssetsPV
                 if((254 - parsed[i].color) % 4 == 0)
                     parsed[i].color--;
             }
-            int framelimit = 4;
-
-
-            string folder = (altFolder);//"color" + i;
-            Directory.CreateDirectory(folder); //("color" + i);
-
-            Console.WriteLine("Processing: " + u + ", palette " + 99);
+            
             for(int dir = 0; dir < 4; dir++)
             {
                 FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
@@ -974,7 +976,7 @@ namespace AssetsPV
                     WritePNG(png, b, basepalette);
                 }
             }
-
+            
             for(int dir = 0; dir < 4; dir++)
             {
                 for(int f = 0; f < framelimit; f++)
@@ -994,8 +996,9 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-            
+
             processExplosionLargeW(u, -1, explode_parsed, false);
+//            processExplosionLargeW(u, -1, new MagicaVoxelData[] { }, false);
 
 
             processUnitLargeWFiring(u);
@@ -1016,6 +1019,7 @@ namespace AssetsPV
                 }
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
+                    
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] flying = CURedux.Flyover(parsed);
@@ -1026,11 +1030,6 @@ namespace AssetsPV
                         voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
                         flying[i].CopyTo(voxelFrames[i], 0);
                     }
-                    /*                    for (int i = 0; i < flying[4].Length; i++)
-                                        {
-                                            voxelFrames[0][i].x += 20;
-                                            voxelFrames[0][i].y += 20;
-                                        }*/
 
                     voxelFrames = CURedux.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
 
@@ -1080,7 +1079,7 @@ namespace AssetsPV
                 else if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
                     Directory.CreateDirectory(folder);
-
+                    
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
                     MagicaVoxelData[][] firing = CURedux.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
@@ -1100,7 +1099,7 @@ namespace AssetsPV
                         }
                     }
 
-
+                    
                     for(int dir = 0; dir < 4; dir++)
                     {
                         for(int f = 0; f < 16; f++)
@@ -1581,7 +1580,7 @@ namespace AssetsPV
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
             Directory.CreateDirectory(folder); //("color" + i);
-
+            
             for(int d = 0; d < 4; d++)
             {
                 
@@ -1598,7 +1597,7 @@ namespace AssetsPV
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
-
+            
             if(palette >= 0)
             {
                 Directory.CreateDirectory("gifs/" + altFolder);
@@ -4252,17 +4251,10 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            
-            processUnitLargeWMilitary("Copter_S");
-            
-            processUnitLargeWMilitary("Copter");
 
+            processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
-            
-            processUnitLargeWMilitary("Infantry_P");
-            
-            processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Tank");
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");

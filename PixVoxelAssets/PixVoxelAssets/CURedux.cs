@@ -69,7 +69,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.13F,0.07F,-0.04F,waver_alpha},
+            new float[] {0.27F,0.17F,0.07F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -85,7 +85,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {0.9F,0.9F,0.4F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -196,7 +196,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.01F,0.12F,0.16F,waver_alpha},
+            new float[] {0.15F,0.27F,0.33F,waver_alpha},
             //18 yellow fire
             new float[] {0.55F,1.3F,0.6F,1F},
             //19 orange fire
@@ -212,7 +212,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {0.2F,0.95F,0.45F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -323,7 +323,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -339,7 +339,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {1.0F,0.8F,0.4F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -450,7 +450,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -466,7 +466,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {1.0F,0.8F,0.4F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -577,7 +577,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -593,7 +593,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {0.8F,0.65F,0.1F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -704,7 +704,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -720,7 +720,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {0.77F,1.0F,0.38F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -831,7 +831,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -847,7 +847,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {0.78F,0.7F,0.55F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
@@ -958,7 +958,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
-            new float[] {0.14F,0.14F,0.02F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -974,7 +974,7 @@ namespace AssetsPV
             //24 glow frame 3
             new float[] {0.85F,0.8F,0.35F,1F},
             //25 shadow
-            new float[] {0.1F,0.1F,0.1F,flat_alpha},
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
             //26 mud, wood
             new float[] {0.4F,0.25F,0.15F,1F},
             //27 water
