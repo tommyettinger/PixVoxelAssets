@@ -151,17 +151,18 @@ namespace AssetsPV
                             for(int slp = 0; slp < 17; slp++)
                             {
                                 Color c2 = Color.Transparent;
-                                if(which_image.Equals("image"))
-                                {
-                                    double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
+                                double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
                                         v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-                                    v_alter *= Math.Pow(v_alter, 0.5);
-                                    if(j == height - 1)
+                                v_alter *= Math.Pow(v_alter, 0.6);
+                                if(j == height - 1)
+                                {
+                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
+                                }
+                                else
+                                {
+                                    if(which_image.Equals("image"))
                                     {
-                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
-                                    }
-                                    else
-                                    {
+
                                         switch(slp)
                                         {
                                             case Cube:
@@ -177,7 +178,7 @@ namespace AssetsPV
                                                     }
                                                     else if(i >= width / 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -329,18 +330,47 @@ namespace AssetsPV
                                                 break;
                                         }
                                     }
-                                }
-                                else if(which_image == "shine")
-                                {
-                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
-                                }
-                                else if(which_image == "flat")
-                                {
-                                    if(j >= 2 && j < height - 1)
+
+                                    else if(which_image == "shine")
                                     {
-                                        double h2 = h, s2 = 1.0, v2 = v;
-                                        VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
-                                        c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
+                                    }
+                                    else if(which_image == "flat")
+                                    {
+
+                                        if(current_color == 27)
+                                        {
+                                            if(slp == 0)
+                                            {
+                                                if(j == 0)
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                }
+                                                else if(i < width / 2)
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
+                                                }
+                                                else if(i >= width / 2)
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
+                                                }
+                                            }
+                                            else if(j >= 2 && j < height - 1)
+                                            {
+                                                double h2 = h, s2 = 1.0, v2 = v;
+                                                VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
+                                                c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(j >= 2 && j < height - 1)
+                                            {
+                                                double h2 = h, s2 = 1.0, v2 = v;
+                                                VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
+                                                c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
+                                            }
+                                        }
                                     }
                                 }
                                 if(c2.A != 0)
@@ -360,6 +390,7 @@ namespace AssetsPV
                             }
                         }
                     }
+
                 }
             }
             byte[][][][] cubes2 = new byte[VoxelLogic.wpalettes.Length][][][];
@@ -419,14 +450,15 @@ namespace AssetsPV
                             for(int slp = 0; slp < 17; slp++)
                             {
                                 byte[] c2 = new byte[] {0,0,0,0};
-                                if(which_image.Equals("image"))
+
+                                if(j == height - 1)
                                 {
-                                    if(j == height - 1)
-                                    {
-                                        c2 = new byte[] { darki, darki, darki, darki};
-                                        // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
-                                    }
-                                    else
+                                    c2 = new byte[] { darki, darki, darki, darki };
+                                    // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
+                                }
+                                else
+                                {
+                                    if(which_image.Equals("image"))
                                     {
                                         switch(slp)
                                         {
@@ -499,9 +531,9 @@ namespace AssetsPV
                                                         c2 = new byte[] { dimi, dimi, dimi, dimi };
                                                         // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
                                                     }
-                                                    else if(i > (j + 1) / 2 + 1)
+                                                    else if(i > (j + 1) / 2 + 0)
                                                     {
-                                                        c2 = new byte[] { dimi, darki, dimi, darki };
+                                                        c2 = new byte[] { dimi, brighti, dimi, brighti};
                                                         // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.4, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.7, 0.02, 1.0));
                                                     }
                                                 }
@@ -513,7 +545,7 @@ namespace AssetsPV
                                                         c2 = new byte[] { brighti, brighti, brighti, brighti };
                                                         //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
                                                     }
-                                                    else if(i + (j + 1) / 2 < 2)
+                                                    else if(i + (j + 1) / 2 < 3)
                                                     {
                                                         c2 = new byte[] { darki, dimi, darki, dimi };
                                                         //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
@@ -571,22 +603,44 @@ namespace AssetsPV
                                                 break;
                                         }
                                     }
-                                }
-                                else if(which_image == "shine")
-                                {
-                                    c2 = new byte[] { topi, topi, topi, topi };
-                                    //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
-                                }
-                                else if(which_image == "flat")
-                                {
-                                    if(j >= 2 && j < height - 1)
+
+                                    else if(which_image == "shine")
                                     {
-                                        c2 = new byte[] { brighti, brighti, brighti, brighti };
-                                        /*
-                                        double h2 = h, s2 = 1.0, v2 = v;
-                                        VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
-                                        c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
-                                        */
+                                        c2 = new byte[] { topi, topi, topi, topi };
+                                        //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
+                                    }
+                                    else if(which_image == "flat")
+                                    {
+                                        if(current_color == 27)
+                                        {
+                                            if(slp == 0)
+                                            {
+                                                if(j == 0)
+                                                {
+                                                    c2 = new byte[] { topi, topi, topi, topi };
+                                                }
+                                                else if(i < width / 2)
+                                                {
+                                                    c2 = new byte[] { brighti, brighti, brighti, brighti };
+                                                }
+                                                else if(i >= width / 2)
+                                                {
+                                                    c2 = new byte[] { dimi, dimi, dimi, dimi };
+                                                }
+                                            }
+                                            else if(j >= 2 && j < height - 1)
+                                            {
+                                                c2 = new byte[] { brighti, dimi, topi, dimi };
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(j >= 2 && j < height - 1)
+                                            {
+                                                c2 = new byte[] { brighti, brighti, brighti, brighti };
+                                            }
+                                        }
+
                                     }
                                 }
                                 if(c2[0] != 0)
@@ -1135,6 +1189,89 @@ namespace AssetsPV
 
         }
 
+        public static void processReceivingMilitaryW()
+        {
+            string folder = ("frames");
+            //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
+            for(int i = 0; i < 8; i++)
+            {
+                for(int s = 0; s < 4; s++)
+                {
+                    MagicaVoxelData[][] receive = VoxelLogic.makeReceiveAnimationDouble(i, s + 1);
+                    for(int d = 0; d < 4; d++)
+                    {
+                        Directory.CreateDirectory(folder); //("color" + i);
+
+                        for(int frame = 0; frame < 16; frame++)
+                        {
+                            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(receive[frame], d), 120, 120, 80, 153));
+
+                            byte[][] b = processFrameHugeW(faces, 0, d, frame, 16, true, false);
+
+                            ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
+                            PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
+                            WritePNG(png, b, basepalette);
+                        }
+                    }
+                }
+
+                /*
+                System.IO.Directory.CreateDirectory("strips_iso");
+//                System.IO.Directory.CreateDirectory("strips_ortho");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"montage.exe");
+                startInfo.UseShellExecute = false;
+                string st = "";
+                for (int color = 0; color < ((i > 4) ? 8 : 2); color++)
+                {
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        for (int strength = 0; strength < 4; strength++)
+                        {
+                            st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
+                            startInfo.Arguments = st + " -background none -mode Concatenate -tile x1 strips_iso/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
+                            Process.Start(startInfo).WaitForExit();
+                            //st = folder + "/color" + color + "_" + WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_%d.png[0-15] ";
+                            //startInfo.Arguments = st + " -mode Concatenate -tile x1 strips_ortho/color" + color + "_" + WeaponTypes[i] + "_strength" + strength + "_receive_face" + dir + ".png";
+                            //Process.Start(startInfo).WaitForExit();
+                        }
+                    }
+                }
+                */
+                for(int strength = 0; strength < 4; strength++)
+                {
+                    for(int d = 0; d < 4; d++)
+                    {
+                        for(int frame = 0; frame < 16; frame++)
+                        {
+                            AlterPNGPalette(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
+                                folder + "/color{0}" + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
+                        }
+                    }
+                }
+                System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string st = "";
+
+                for(int color = 0; color < 8; color++)
+                {
+                    for (int strength = 0; strength < 4; strength++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            for (int frame = 0; frame < 16; frame++)
+                            {
+                                st += folder + "/color" + color + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png ";
+                            }
+                        }
+                    }
+                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + st + " gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated.gif";
+                    Console.WriteLine("Running convert.exe ...");
+                    Console.WriteLine("Args: " + st);
+                    Process.Start(startInfo).WaitForExit();
+                }
+            }
+        }
 
         public static void processHatLargeW(string u, int palette, string hat)
         {
@@ -2788,19 +2925,19 @@ namespace AssetsPV
         }
         private static byte Dither(byte[] sprite, int innerX, int innerY, int x, int y, int z)
         {
-            switch(((innerY + x + y + z) % 4) * 4 + (innerX + x + y + z) % 4)
+            switch((((7 + innerX) ^ (3 + innerY) + x + y + z) % 4) * 4 + ((11 + innerX) ^ (5 + innerY) + x + y + z) % 4)
             {
                 case 0:
-                case 3:
-                case 6:
-                case 9:
-                case 12:
+                case 2:
+                case 5:
+                case 7:
+                case 11:
                 case 15:
                     return sprite[innerY * 16 + innerX * 4];
                 case 1:
-                case 11:
+                case 13:
                     return sprite[innerY * 16 + innerX * 4 + 3];
-                case 2:
+                case 3:
                 case 8:
                 case 14:
                     return sprite[innerY * 16 + innerX * 4 + 2];
@@ -2808,9 +2945,37 @@ namespace AssetsPV
                     return sprite[innerY * 16 + innerX * 4 + 1];
             }
         }
+        private static byte RandomDither(byte[] sprite, int innerX, int innerY, Random rng)
+        {
+            switch((rng.Next(2) + 1) * rng.Next(9) + rng.Next(5))
+            {
+                case 0:
+                case 3:
+                case 5:
+                case 7:
+                case 11:
+                case 13:
+                case 17:
+                case 20:
+                    return sprite[innerY * 16 + innerX * 4];
+                case 1:
+                case 12:
+                case 18:
+                    return sprite[innerY * 16 + innerX * 4 + 3];
+                case 2:
+                case 9:
+                case 14:
+                case 16:
+                    return sprite[innerY * 16 + innerX * 4 + 2];
+                default:
+                    return sprite[innerY * 16 + innerX * 4 + 1];
+            }
 
+        }
+        public static Random rng = new Random(0x1337BEEF);
         private static byte[][] renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
+            rng = new Random(0xb335 + frame / 2);
             int rows = 308, cols = 248;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
@@ -2934,7 +3099,7 @@ namespace AssetsPV
 
                                     if(shadowValues[p] == 0)
                                     {
-                                        shadowValues[p] = wditheredcurrent[current_color][0][i * 4 + j * 16];
+                                        shadowValues[p] = wditheredcurrent[current_color][1][i * 4 + j * 16];
                                     }
                                 }
                             }
@@ -2942,8 +3107,8 @@ namespace AssetsPV
                         else
                         {
                             int mod_color = current_color;
-                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
-                                continue;
+//                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+  //                              continue;
                             if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
@@ -2951,7 +3116,8 @@ namespace AssetsPV
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
-                            
+                            if(mod_color == 27) //water
+                                sp = 1;
                             for(int j = 0; j < 4; j++)
                             {
                                 for(int i = 0; i < 4; i++)
@@ -3006,7 +3172,11 @@ namespace AssetsPV
                                             }
                                             else
                                             {*/
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            if(mod_color == 27) //water
+                                                argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+                                            else
+                                                argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+
                                             //}
 
                                             zbuffer[p] = vx.z + vx.x * 3 - vx.y * 3;
@@ -3063,7 +3233,7 @@ namespace AssetsPV
 
                                 if(shadowValues[p] == 0)
                                 {
-                                    shadowValues[p] = wditheredcurrent[25][0][i * 4 + j * 16];
+                                    shadowValues[p] = wditheredcurrent[25][1][i * 4 + j * 16];
                                 }
                             }
                         }
@@ -3140,6 +3310,8 @@ namespace AssetsPV
 
         private static byte[][] renderWSmartHuge(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
+            rng = new Random(0xb335 + frame / 2);
+
             int rows = 308 * 2, cols = 248 * 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
@@ -3264,7 +3436,7 @@ namespace AssetsPV
 
                                     if(shadowValues[p] == 0)
                                     {
-                                        shadowValues[p] = wditheredcurrent[current_color][0][i * 4 + j * 16];
+                                        shadowValues[p] = wditheredcurrent[current_color][1][i * 4 + j * 16];
                                     }
                                 }
                             }
@@ -3272,8 +3444,8 @@ namespace AssetsPV
                         else
                         {
                             int mod_color = current_color;
-                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
-                                continue;
+                            //if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                              //  continue;
                             if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
@@ -3281,6 +3453,8 @@ namespace AssetsPV
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
+                            if(mod_color == 27) //water
+                                sp = 1;
 
 
                             for(int j = 0; j < 4; j++)
@@ -3337,7 +3511,10 @@ namespace AssetsPV
                                             }
                                             else
                                             {*/
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            if(mod_color == 27) //water
+                                                argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+                                            else
+                                                argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
                                             //}
 
                                             zbuffer[p] = vx.z + vx.x * 3 - vx.y * 3;
@@ -3393,7 +3570,7 @@ namespace AssetsPV
 
                                 if(shadowValues[p] == 0)
                                 {
-                                    shadowValues[p] = wditheredcurrent[25][0][i * 4 + j * 16];
+                                    shadowValues[p] = wditheredcurrent[25][1][i * 4 + j * 16];
                                 }
                             }
                         }
@@ -3475,6 +3652,8 @@ namespace AssetsPV
 
         private static byte[][] renderWSmartMassive(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
+            rng = new Random(0xb335 + frame / 2);
+
             int rows = 328 * 2, cols = 408 * 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
@@ -3599,7 +3778,7 @@ namespace AssetsPV
 
                                     if(shadowValues[p] == 0)
                                     {
-                                        shadowValues[p] = wditheredcurrent[current_color][0][i * 4 + j * 16];
+                                        shadowValues[p] = wditheredcurrent[current_color][1][i * 4 + j * 16];
                                     }
                                 }
                             }
@@ -3607,8 +3786,8 @@ namespace AssetsPV
                         else
                         {
                             int mod_color = current_color;
-                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
-                                continue;
+                          //  if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                           //     continue;
                             if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
@@ -3616,6 +3795,8 @@ namespace AssetsPV
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
+                            if(mod_color == 27) //water
+                                sp = 1;
 
 
                             for(int j = 0; j < 4; j++)
@@ -3672,7 +3853,10 @@ namespace AssetsPV
                                             }
                                             else
                                             {*/
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            if(mod_color == 27) //water
+                                                argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+                                            else
+                                                argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
                                             //}
 
                                             zbuffer[p] = vx.z + vx.x * 3 - vx.y * 3;
@@ -3728,7 +3912,7 @@ namespace AssetsPV
 
                                 if(shadowValues[p] == 0)
                                 {
-                                    shadowValues[p] = wditheredcurrent[25][0][i * 4 + j * 16];
+                                    shadowValues[p] = wditheredcurrent[25][1][i * 4 + j * 16];
                                 }
                             }
                         }
@@ -4251,7 +4435,13 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
+            processUnitLargeWMilitary("Boat");
+            processUnitLargeWMilitary("Boat_P");
+            processUnitLargeWMilitary("Boat_S");
+            processUnitLargeWMilitary("Boat_T");
 
+            processUnitLargeWMilitary("Dock");
+            
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
@@ -4266,8 +4456,10 @@ namespace AssetsPV
             processUnitLargeWMilitary("Infantry_T");
             processUnitLargeWMilitary("Supply");
             processUnitLargeWMilitary("Supply_P");
+            
             processUnitLargeWMilitary("Supply_S");
             processUnitLargeWMilitary("Supply_T");
+
             
             processUnitLargeWMilitary("Artillery");
             processUnitLargeWMilitary("Artillery_P");
@@ -4282,10 +4474,6 @@ namespace AssetsPV
             processUnitLargeWMilitary("Plane_P");
             processUnitLargeWMilitary("Plane_S");
             processUnitLargeWMilitary("Plane_T");
-            processUnitLargeWMilitary("Boat");
-            processUnitLargeWMilitary("Boat_P");
-            processUnitLargeWMilitary("Boat_S");
-            processUnitLargeWMilitary("Boat_T");
 
             processUnitLargeWMilitary("Civilian");
             processUnitLargeWMilitary("Airport");
@@ -4295,6 +4483,8 @@ namespace AssetsPV
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
             
+            processReceivingMilitaryW();
+
         }
     }
 }
