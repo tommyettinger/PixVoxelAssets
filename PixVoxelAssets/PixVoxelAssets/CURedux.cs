@@ -1845,7 +1845,78 @@ namespace AssetsPV
 
                 foreach(MagicaVoxelData v in vls)
                 {
+                    MagicaVoxelData mvd = new MagicaVoxelData();
+                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + VoxelLogic.wcolorcount : (253 - v.color) / 4;
+                    if(c == 8 || c == 9) //flesh
+                        mvd.color = (byte)((r.Next(f) == 0) ? 253 - 34 * 4 : (r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to guts
+                    else if(c == 34) //guts
+                        mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to orange fire
+                    else if(c == VoxelLogic.wcolorcount - 1) //clear and markers
+                        mvd.color = (byte)VoxelLogic.clear; //clear stays clear
+                    else if(c == 16)
+                        mvd.color = VoxelLogic.clear; //clear inner shadow
+                    else if(c == 25)
+                        mvd.color = 253 - 25 * 4; //shadow stays shadow
+                    else if(c == 27)
+                        mvd.color = 253 - 27 * 4; //water stays water
+                    else if(c >= VoxelLogic.wcolorcount && c < VoxelLogic.wcolorcount + 5)
+                        mvd.color = (byte)(255 - (c - VoxelLogic.wcolorcount) * 4); // falling water stays falling water
+                    else if(c == 40)
+                        mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
+                    else if(c >= 21 && c <= 24) //lights
+                        mvd.color = 253 - 35 * 4; //glass color for broken lights
+                    else if(c == 35) //windows
+                        mvd.color = (byte)((r.Next(3) == 0) ? VoxelLogic.clear : v.color); //random transform to clear
+                    else if(c == 36) //rotor contrast
+                        mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
+                    else if(c == 37) //rotor
+                        mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
+                    else if(c == 38 || c == 39)
+                        mvd.color = VoxelLogic.clear; //clear non-active rotors
+                    else if(c == 19) //orange fire
+                        mvd.color = (byte)((r.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 18 * 4 : ((r.Next(3) == 0) ? 253 - 17 * 4 : v.color))); //random transform to yellow fire or smoke
+                    else if(c == 18) //yellow fire
+                        mvd.color = (byte)((r.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 19 * 4 : ((r.Next(4) == 0) ? 253 - 17 * 4 : ((r.Next(4) == 0) ? 253 - 20 * 4 : v.color)))); //random transform to orange fire, smoke, or sparks
+                    else if(c == 20) //sparks
+                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : VoxelLogic.clear); //random transform to clear
+                    else if(c == 17) //smoke
+                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? VoxelLogic.clear : 253 - 17 * 4); //random transform to clear
+                    else
+                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19 * 4) : v.color); //random transform to orange or yellow fire
 
+                    float xMove = 0, yMove = 0, zMove = 0;
+                    if(mvd.color == 253 - 19 * 4 || mvd.color == 253 - 18 * 4 || mvd.color == 253 - 17 * 4)
+                    {
+                        zMove = f * 0.5f;
+                        xMove = (float)(r.NextDouble() * 2.0 - 1.0);
+                        yMove = (float)(r.NextDouble() * 2.0 - 1.0);
+                    }
+                    else
+                    {
+                        if(v.x > midX[v.z])
+                            xMove = ((blowback * 0.3f - r.Next(3) + (v.x - midX[v.z])) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        else if(v.x < midX[v.z])
+                            xMove = ((blowback * 0.3f + r.Next(3) - midX[v.z] + v.x) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        if(v.y > midY[v.z])
+                            yMove = ((0 - r.Next(3) + (v.y - midY[v.z])) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        else if(v.y < midY[v.z])
+                            yMove = ((0 + r.Next(3) - midY[v.z] + v.y) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+
+                        if(mvd.color == 253 - 20 * 4)
+                        {
+                            zMove = 0.1f;
+                            xMove *= 2;
+                            yMove *= 2;
+                        }
+                        else if(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)
+                            zMove = f * 0.55F;
+                        else if(f < (maxFrames - 4) && minZ <= 1)
+                            zMove = (v.z / ((maxZ + 1) * (0.3F))) * ((maxFrames - 3) - f) * 0.8F;
+                        else
+                            zMove = (1 - f * 2.1F);
+                    }
+
+                    /*
                     MagicaVoxelData mvd = new MagicaVoxelData();
                     int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + VoxelLogic.wcolorcount : (253 - v.color) / 4;
                     if(c == 8 || c == 9) //flesh
@@ -1908,16 +1979,22 @@ namespace AssetsPV
                         else
                             zMove = (1 - f * 2.1F);
                     }
+                    */
+                    float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
+
                     if(xMove > 0)
                     {
-                        float nv = (v.x + (xMove / (0.2f * (f + 4)))) - Math.Abs((yMove / (0.5f * (f + 3))));
+                        //float nv = (v.x + (xMove / (0.2f * (f + 4)))) - Math.Abs((yMove / (0.5f * (f + 3))));
+                        float nv = v.x + (float)r.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
                         if(nv < 1) nv = 1;
                         if(nv > 118) nv = 118;
                         mvd.x = (byte)((blowback <= 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
                     }
                     else if(xMove < 0)
                     {
-                        float nv = (v.x + (xMove / (0.2f * (f + 4)))) + Math.Abs((yMove / (0.5f * (f + 3))));
+                        //float nv = (v.x + (xMove / (0.2f * (f + 4)))) + Math.Abs((yMove / (0.5f * (f + 3))));
+                        float nv = v.x - (float)r.NextDouble() * ((xMove / magnitude) * -35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+
                         if(nv < 1) nv = 1;
                         if(nv > 118) nv = 118;
                         mvd.x = (byte)((blowback > 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
@@ -1930,14 +2007,18 @@ namespace AssetsPV
                     }
                     if(yMove > 0)
                     {
-                        float nv = (v.y + (yMove / (0.2f * (f + 4)))) - Math.Abs((xMove / (0.5f * (f + 3))));
+                        //float nv = (v.y + (yMove / (0.2f * (f + 4)))) - Math.Abs((xMove / (0.5f * (f + 3))));
+                        float nv = v.y + (float)r.NextDouble() * ((yMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+
                         if(nv < 1) nv = 1;
                         if(nv > 118) nv = 118;
                         mvd.y = (byte)(Math.Floor(nv));
                     }
                     else if(yMove < 0)
                     {
-                        float nv = (v.y + (yMove / (0.2f * (f + 4)))) + Math.Abs((xMove / (0.5f * (f + 3))));
+                        //float nv = (v.y + (yMove / (0.2f * (f + 4)))) + Math.Abs((xMove / (0.5f * (f + 3))));
+                        float nv = v.y - (float)r.NextDouble() * ((yMove / magnitude) * -35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+
                         if(nv < 1) nv = 1;
                         if(nv > 118) nv = 118;
                         mvd.y = (byte)(Math.Ceiling(nv));
@@ -1953,9 +2034,9 @@ namespace AssetsPV
                         if(nv <= 0 && f < maxFrames && !(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)) nv = r.Next(2); //bounce
                         else if(nv < 0) nv = 0;
 
-                        if(nv > 55)
+                        if(nv > 59)
                         {
-                            nv = 55;
+                            nv = 59;
                             mvd.color = VoxelLogic.clear;
                         }
                         mvd.z = (byte)Math.Round(nv);
@@ -1967,7 +2048,7 @@ namespace AssetsPV
                     working.Add(mvd);
                     if(r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 2) working.AddRange(VoxelLogic.Adjacent(mvd, new int[] { orange_fire, yellow_fire, orange_fire, yellow_fire, smoke }));
                 }
-                working = working.Where(_ => r.Next(7) < 8 - trimLevel).ToList();
+                working = working.Where(_ => r.Next(7) < 7 - trimLevel).ToList();
                 voxelFrames[f] = new MagicaVoxelData[working.Count];
                 working.CopyTo(voxelFrames[f], 0);
             }
@@ -3288,7 +3369,7 @@ namespace AssetsPV
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
 
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
-            MagicaVoxelData[][] explosion = HugeExplosionDouble(randomFill(63, 48, 0, 6, 6, 6, new int[] { 253 - 27 * 4, 253 - 27 * 4, 253 - 27 * 4, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
+            MagicaVoxelData[][] explosion = HugeExplosionDouble(randomFill(62, 47, 0, 8, 8, 7, new int[] { 253 - 27 * 4, 253 - 27 * 4, 253 - 27 * 4, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
 
             for(int f = 0; f < voxelFrames.Length; f++)
             {

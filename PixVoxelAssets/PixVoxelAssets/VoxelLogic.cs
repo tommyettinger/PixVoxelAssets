@@ -12007,19 +12007,6 @@ MovementType.Foot                                                         };
                     }
                     else
                     {
-                        /*
-                         if (v.x > midX[v.z])
-                            xMove = ((0 - r.Next(3) - ((blowback) ? 9 : 0) + (v.x - midX[v.z])) * 2F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
-                        //for lower values: distance from current voxel x to center + (between 2 to 0), times variable based on height
-                        else if (v.x < midX[v.z])
-                            xMove = ((0 + r.Next(3) - ((blowback) ? 8 : 0) - midX[v.z] + v.x) * 2F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
-                        if (v.y > midY[v.z])
-                            yMove = ((0 - r.Next(3) + (v.y - midY[v.z])) * 2F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); //maxX[v.z] - minX[v.z]
-                        else if (v.y < midY[v.z])
-                            yMove = ((0 + r.Next(3) - midY[v.z] + v.y) * 2F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
-                         */
-
-
                         if(v.x > midX[v.z])
                             xMove = ((0 - r.Next(3) - ((blowback) ? 7 : 0) + (v.x - midX[v.z])) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
                         else if(v.x < midX[v.z])
@@ -12040,6 +12027,21 @@ MovementType.Foot                                                         };
                         else
                             zMove = (1 - f * 1.85F);
                     }
+
+
+                    /*
+                     if (v.x > midX[v.z])
+                        xMove = ((0 - r.Next(3) - ((blowback) ? 9 : 0) + (v.x - midX[v.z])) * 2F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                    //for lower values: distance from current voxel x to center + (between 2 to 0), times variable based on height
+                    else if (v.x < midX[v.z])
+                        xMove = ((0 + r.Next(3) - ((blowback) ? 8 : 0) - midX[v.z] + v.x) * 2F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (v.z + 5); //5 -
+                    if (v.y > midY[v.z])
+                        yMove = ((0 - r.Next(3) + (v.y - midY[v.z])) * 2F * ((v.z - minZ + 3) / (maxZ - minZ + 1F))); //maxX[v.z] - minX[v.z]
+                    else if (v.y < midY[v.z])
+                        yMove = ((0 + r.Next(3) - midY[v.z] + v.y) * 2F * ((v.z - minZ + 3) / (maxZ - minZ + 1F)));
+                     */
+
+
                     if(v.z <= 1 && f >= 10)
                     {
                         xMove = 0;

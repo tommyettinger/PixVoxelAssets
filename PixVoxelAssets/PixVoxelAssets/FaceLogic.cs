@@ -283,12 +283,16 @@ namespace AssetsPV
                         }
                         else
                         {
-                            bool xup = faces[x + 1, y, z] != null && !ImportantVisual(faces[x+1, y, z]),
-                                 xdown = faces[x - 1, y, z] != null && !ImportantVisual(faces[x-1, y, z]),
-                                 yup = faces[x, y + 1, z] != null && !ImportantVisual(faces[x, y+1, z]),
-                                 ydown = faces[x, y - 1, z] != null && !ImportantVisual(faces[x, y-1, z]),
-                                 zup = faces[x, y, z + 1] != null && !ImportantVisual(faces[x, y, z+1]),
-                                 zdown = faces[x, y, z - 1] != null && !ImportantVisual(faces[x, y, z-1]);
+                            if(ImportantVisual(faces[x + 1, y, z]) || ImportantVisual(faces[x - 1, y, z]) ||
+                               ImportantVisual(faces[x, y + 1, z]) || ImportantVisual(faces[x, y - 1, z]) ||
+                               ImportantVisual(faces[x, y, z + 1]) || ImportantVisual(faces[x, y, z - 1]))
+                                continue;
+                            bool xup = faces[x + 1, y, z] != null,
+                                 xdown = faces[x - 1, y, z] != null,
+                                 yup = faces[x, y + 1, z] != null,
+                                 ydown = faces[x, y - 1, z] != null,
+                                 zup = faces[x, y, z + 1] != null,
+                                 zdown = faces[x, y, z - 1] != null;
                             
                             if(zdown)
                             {
@@ -726,6 +730,8 @@ namespace AssetsPV
 
         public static bool ImportantVisual(FaceVoxel fv)
         {
+            if(fv == null)
+                return false;
             switch(VisualMode)
             {
                 case "CU":
