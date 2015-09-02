@@ -4439,7 +4439,7 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            //processUnitLargeWMilitary("Civilian");
+            processUnitLargeWMilitary("Civilian");
 
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
@@ -4454,18 +4454,18 @@ namespace AssetsPV
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
-            /*
+            
             processUnitLargeWMilitary("Supply");
             processUnitLargeWMilitary("Supply_P");
             processUnitLargeWMilitary("Supply_S");
             processUnitLargeWMilitary("Supply_T");
-            */
+            
             processUnitLargeWMilitary("Artillery");
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
 
-            //processUnitLargeWMilitary("Copter");
+            processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
@@ -4479,7 +4479,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
-            /*
+            
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
             processUnitLargeWMilitary("Airport");
@@ -4489,7 +4489,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Estate");
 
             processReceivingMilitaryW();
-            */
+            
         }
     }
 }

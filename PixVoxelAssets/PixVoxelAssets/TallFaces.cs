@@ -154,10 +154,10 @@ namespace AssetsPV
                                 {
                                     double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
                                         v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-                                    v_alter *= Math.Pow(v_alter, 0.5);
+                                    v_alter *= Math.Pow(v_alter, 0.6);
                                     if(j == height - 1)
                                     {
-                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
                                     }
                                     else
                                     {
@@ -262,7 +262,7 @@ namespace AssetsPV
                                                     }
                                                     else if(i > (j + 1) / 2 + 1)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.4, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.7, 0.02, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.4, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.75, 0.02, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -274,14 +274,14 @@ namespace AssetsPV
                                                     }
                                                     else if(i + (j + 1) / 2 < 2)
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
                                                     }
                                                 }
                                                 break;
                                             case BrightDimBottom:
                                                 {
                                                     {
-                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.45, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.015, 1.0));
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.45, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.7, 0.015, 1.0));
                                                     }
                                                 }
                                                 break;
@@ -2351,6 +2351,86 @@ namespace AssetsPV
         }
 
 
+
+        public static void processUnitLargeWBones(string moniker = "Dude", bool still = true,
+            string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
+            string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
+            string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, int palette = 0)
+        {
+
+            Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
+            { {"Left_Leg", VoxelLogic.readBone(left_leg + "_LLeg")},
+              {"Right_Leg", VoxelLogic.readBone(right_leg + "_RLeg")},
+              {"Torso", VoxelLogic.readBone(torso + "_Torso")},
+              {"Left_Upper_Arm", VoxelLogic.readBone(left_upper_arm + "_LUpperArm")},
+              {"Right_Upper_Arm", VoxelLogic.readBone(right_upper_arm + "_RUpperArm")},
+              {"Left_Lower_Arm", VoxelLogic.readBone(left_lower_arm + "_LLowerArm")},
+              {"Right_Lower_Arm", VoxelLogic.readBone(right_lower_arm + "_RLowerArm")},
+              {"Face",  VoxelLogic.readBone(face + "_Face")},
+              {"Head",  VoxelLogic.readBone(head + "_Head")},
+              {"Left_Weapon", VoxelLogic.readBone(left_weapon)},
+              {"Right_Weapon", VoxelLogic.readBone(right_weapon)}
+            };
+            List<MagicaVoxelData> work = VoxelLogic.MergeVoxels(components["Head"], components["Face"], 9);
+            work = VoxelLogic.MergeVoxels(work, components["Torso"], 8);
+            List<MagicaVoxelData> right_weapon_arm = VoxelLogic.MergeVoxels(components["Right_Lower_Arm"], components["Right_Weapon"], 6),
+                left_weapon_arm = VoxelLogic.MergeVoxels(components["Left_Lower_Arm"], components["Left_Weapon"], 6);
+            left_weapon_arm = VoxelLogic.RotateYawPartial(left_weapon_arm, 45, 60, 60, 60);
+            left_weapon_arm = VoxelLogic.RotatePitchPartial(left_weapon_arm, 315, 60, 60, 60);
+            right_weapon_arm = VoxelLogic.MergeVoxels(right_weapon_arm, components["Right_Upper_Arm"], 5);
+            left_weapon_arm = VoxelLogic.MergeVoxels(left_weapon_arm, components["Left_Upper_Arm"], 4);
+            left_weapon_arm = VoxelLogic.RotatePitchPartial(left_weapon_arm, 315, 60, 60, 60);
+            work = VoxelLogic.MergeVoxels(right_weapon_arm, work, 3);
+            work = VoxelLogic.MergeVoxels(left_weapon_arm, work, 2);
+            work = VoxelLogic.MergeVoxels(work, components["Left_Leg"], 0);
+            work = VoxelLogic.MergeVoxels(components["Right_Leg"], work, 1);
+            Directory.CreateDirectory("vox/" + altFolder);
+            VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + palette + ".vox", work, "W", palette, 40, 40, 40);
+
+            MagicaVoxelData[] parsed = work.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+            }
+            MagicaVoxelData[] explodeParsed = parsed.Replicate();
+            int framelimit = 4;
+
+
+            Console.WriteLine("Processing: " + moniker + ", palette " + palette);
+            string folder = (altFolder);//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                for(int f = 0; f < framelimit; f++)
+                {
+                    Bitmap b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
+                    b.Save(folder + "/palette" + palette + "_" + moniker + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png); //se
+                    b.Dispose();
+                }
+            }
+
+
+            Directory.CreateDirectory("gifs/" + altFolder);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = folder + "/palette" + palette + "_" + moniker + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
+            //bin.Close();
+
+            //            processFiringDouble(u);
+
+            processExplosionLargeW(moniker, palette, explodeParsed, false);
+
+        }
+
+
         public static int voxelToPixelLargeW(int innerX, int innerY, int x, int y, int z, int current_color, int stride, int jitter, bool still)
         {
             return 4 * ((x + y) * 2 + 4 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
@@ -3808,14 +3888,16 @@ namespace AssetsPV
         static void Main(string[] args)
         {
 //            altFolder = "botl6/";
-            VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
-            altFolder = "CU2/";
+//            VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
+            altFolder = "Forays2/";
+            System.IO.Directory.CreateDirectory("Forays2");
+            VoxelLogic.voxFolder = "ForaysBones/";
             //System.IO.Directory.CreateDirectory("mecha2");
             //System.IO.Directory.CreateDirectory("vox/mecha2");
 
             VoxelLogic.Initialize();
 
-            CURedux.Initialize();
+//            CURedux.Initialize();
             //            SaPalettes.Initialize();
             InitializeWPalette();
 
@@ -4110,26 +4192,24 @@ namespace AssetsPV
             processUnitOutlinedWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            processUnitLargeWMilitary("Copter_S");
             /*
-            processUnitLargeWMilitary("Copter");
 
+            processUnitLargeWMilitary("Civilian");
+
+            processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
-            */
-            /*
-            processUnitLargeWMilitary("Infantry_P");
-            
-            processUnitLargeWMilitary("Infantry_PS");
+
             processUnitLargeWMilitary("Tank");
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
             processUnitLargeWMilitary("Tank_T");
 
-            processUnitLargeWMilitary("Infantry");            
+            processUnitLargeWMilitary("Infantry");
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
+            
             processUnitLargeWMilitary("Supply");
             processUnitLargeWMilitary("Supply_P");
             processUnitLargeWMilitary("Supply_S");
@@ -4139,28 +4219,35 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
-            
+
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
+
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
             processUnitLargeWMilitary("Plane_S");
             processUnitLargeWMilitary("Plane_T");
+
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
-
-            processUnitLargeWMilitary("Civilian");
+            
+            processUnitLargeWMilitary("Laboratory");
+            processUnitLargeWMilitary("Dock");
             processUnitLargeWMilitary("Airport");
             processUnitLargeWMilitary("City");
             processUnitLargeWMilitary("Factory");
-            processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
+
+            processReceivingMilitaryW();
+            
             */
+
+            processUnitLargeWBones(left_weapon: "Longsword");
         }
     }
 }

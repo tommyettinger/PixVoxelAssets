@@ -9239,7 +9239,6 @@ MovementType.Foot                                                         };
                 return new List<MagicaVoxelData>();
             BinaryReader bin = new BinaryReader(File.Open(file + "_Part_W.vox", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
-            bin.Close();
             return raw;
         }
 
@@ -9249,7 +9248,17 @@ MovementType.Foot                                                         };
                 return new List<MagicaVoxelData>();
             BinaryReader bin = new BinaryReader(File.Open("K/" + file + "_K.vox", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
-            bin.Close();
+            return raw;
+        }
+
+        public static string voxFolder = "";
+
+        public static List<MagicaVoxelData> readBone(string file)
+        {
+            if(file == null)
+                return new List<MagicaVoxelData>();
+            BinaryReader bin = new BinaryReader(File.Open(voxFolder + file + "_W.vox", FileMode.Open));
+            List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
             return raw;
         }
 
@@ -16882,22 +16891,22 @@ MovementType.Foot                                                         };
                                         }
                                         else if(colorCount.ContainsKey(smallColor))
                                         {
-                                            colorCount[smallColor] = colorCount[smallColor] + 16;
+                                            colorCount[smallColor] = colorCount[smallColor] + 19;
                                         }
                                         else
                                         {
-                                            colorCount[smallColor] = 16;
+                                            colorCount[smallColor] = 19;
                                         }
                                     }
                                     else
                                     {
                                         if(colorCount.ContainsKey(smallColor))
                                         {
-                                            colorCount[smallColor] = colorCount[smallColor] + 5;
+                                            colorCount[smallColor] = colorCount[smallColor] + 8;
                                         }
                                         else
                                         {
-                                            colorCount[smallColor] = 5;
+                                            colorCount[smallColor] = 8;
                                         }
                                     }
                                 }
