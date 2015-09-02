@@ -47,8 +47,8 @@ namespace AssetsPV
             {
                 if(mvd.x >= xSize || mvd.y >= ySize || mvd.z >= zSize)
                     continue;
-                if(!(mvd.color == VoxelLogic.clear || data[mvd.x, mvd.y, mvd.z] == CURedux.emitter0 || data[mvd.x, mvd.y, mvd.z] == CURedux.trail0
-                     || data[mvd.x, mvd.y, mvd.z] == CURedux.emitter1 || data[mvd.x, mvd.y, mvd.z] == CURedux.trail1)
+                if(!(mvd.color == VoxelLogic.clear || mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
+                     || mvd.color == CURedux.emitter1 || mvd.color == CURedux.trail1)
                      && (data[mvd.x, mvd.y, mvd.z] == 0 || data[mvd.x, mvd.y, mvd.z] == shadowColor))
                     data[mvd.x, mvd.y, mvd.z] = mvd.color;
             }
