@@ -144,18 +144,55 @@ namespace AssetsPV
             return arr;
         }
 
-        public static T[, ,] Replicate<T>(this T[, ,] mat)
+        public static List<T> ToList<T>(this T[,,] mat)
         {
-            if (mat.Length == 0)
+            if(mat.Length == 0)
+                return new List<T>();
+            int xs = mat.GetLength(0), ys = mat.GetLength(1), zs = mat.GetLength(2);
+            List<T> l = new List<T>(xs * ys * zs);
+            for(int k = 0; k < zs; k++)
+            {
+                for(int j = 0; j < ys; j++)
+                {
+                    for(int i = 0; i < xs; i++)
+                    {
+                        l.Add(mat[i, j, k]);
+                    }
+                }
+            }
+            return l;
+        }
+        public static T[] ToArray<T>(this T[,,] mat)
+        {
+            if(mat.Length == 0)
+                return new T[0];
+            int xs = mat.GetLength(0), ys = mat.GetLength(1), zs = mat.GetLength(2);
+            T[] a = new T[xs * ys * zs];
+            int idx = 0;
+            for(int k = 0; k < zs; k++)
+            {
+                for(int j = 0; j < ys; j++)
+                {
+                    for(int i = 0; i < xs; i++)
+                    {
+                        a[idx++] = mat[i, j, k];
+                    }
+                }
+            }
+            return a;
+        }
+        public static T[,,] Replicate<T>(this T[,,] mat)
+        {
+            if(mat.Length == 0)
                 return new T[0, 0, 0];
             int xs = mat.GetLength(0), ys = mat.GetLength(1), zs = mat.GetLength(2);
-            T[, ,] dupe = new T[xs, ys, zs];
+            T[,,] dupe = new T[xs, ys, zs];
 
-            for (int i = 0; i < xs; i++)
+            for(int i = 0; i < xs; i++)
             {
-                for (int j = 0; j < ys; j++)
+                for(int j = 0; j < ys; j++)
                 {
-                    for (int k = 0; k < zs; k++)
+                    for(int k = 0; k < zs; k++)
                     {
                         dupe[i, j, k] = mat[i, j, k];
                     }

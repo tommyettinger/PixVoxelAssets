@@ -2373,15 +2373,16 @@ namespace AssetsPV
             };
             List<MagicaVoxelData> work = VoxelLogic.MergeVoxels(components["Head"], components["Face"], 9);
             work = VoxelLogic.MergeVoxels(work, components["Torso"], 8);
-            List<MagicaVoxelData> right_weapon_arm = VoxelLogic.MergeVoxels(components["Right_Lower_Arm"], components["Right_Weapon"], 6),
-                left_weapon_arm = VoxelLogic.MergeVoxels(components["Left_Lower_Arm"], components["Left_Weapon"], 6);
-            left_weapon_arm = VoxelLogic.RotateYawPartial(left_weapon_arm, 45, 60, 60, 60);
-            left_weapon_arm = VoxelLogic.RotatePitchPartial(left_weapon_arm, 315, 60, 60, 60);
-            right_weapon_arm = VoxelLogic.MergeVoxels(right_weapon_arm, components["Right_Upper_Arm"], 5);
-            left_weapon_arm = VoxelLogic.MergeVoxels(left_weapon_arm, components["Left_Upper_Arm"], 4);
-            left_weapon_arm = VoxelLogic.RotatePitchPartial(left_weapon_arm, 315, 60, 60, 60);
-            work = VoxelLogic.MergeVoxels(right_weapon_arm, work, 3);
-            work = VoxelLogic.MergeVoxels(left_weapon_arm, work, 2);
+            byte[,,] right_weapon_arm = VoxelLogic.MergeVoxels(VoxelLogic.TransformStartLarge(components["Right_Weapon"]), VoxelLogic.TransformStartLarge(components["Right_Lower_Arm"]), 6);
+            byte[,,] left_weapon_arm = VoxelLogic.RotatePitchPartial(VoxelLogic.TransformStartLarge(components["Left_Weapon"]), 15);
+            left_weapon_arm = VoxelLogic.MergeVoxels(VoxelLogic.TransformStartLarge(components["Left_Lower_Arm"]), left_weapon_arm, 6);
+            left_weapon_arm = VoxelLogic.RotateYawPartial(left_weapon_arm, 20);
+            left_weapon_arm = VoxelLogic.RotatePitchPartial(left_weapon_arm, 315);
+            right_weapon_arm = VoxelLogic.MergeVoxels(right_weapon_arm, VoxelLogic.TransformStartLarge(components["Right_Upper_Arm"]), 5);
+            left_weapon_arm = VoxelLogic.MergeVoxels(left_weapon_arm, VoxelLogic.TransformStartLarge(components["Left_Upper_Arm"]), 4);
+            left_weapon_arm = VoxelLogic.RotatePitchPartial(left_weapon_arm, 315);
+            work = VoxelLogic.MergeVoxels(VoxelLogic.TransformEnd(right_weapon_arm), work, 3);
+            work = VoxelLogic.MergeVoxels(VoxelLogic.TransformEnd(left_weapon_arm), work, 2);
             work = VoxelLogic.MergeVoxels(work, components["Left_Leg"], 0);
             work = VoxelLogic.MergeVoxels(components["Right_Leg"], work, 1);
             Directory.CreateDirectory("vox/" + altFolder);

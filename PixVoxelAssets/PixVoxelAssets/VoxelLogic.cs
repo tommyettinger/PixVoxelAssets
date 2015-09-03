@@ -7724,7 +7724,6 @@ MovementType.Foot                                                         };
         public static byte clear = 255;
 
         public static byte[][] hrendered;
-        public static byte[][] hcurrent;
 
         public static int[] subtlePalettes = { 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
             drabPalettes = { };// { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
@@ -9963,28 +9962,26 @@ MovementType.Foot                                                         };
                 else Console.Write(", ");
             }
             */
-            if (socketList.Count == 0)
+            if(socketList.Count == 0)
                 return plugList;
-            else if (plugList.Count == 0)
+            else if(plugList.Count == 0)
                 return socketList;
-            foreach (MagicaVoxelData mvd in plug)
+            foreach(MagicaVoxelData mvd in plug)
             {
 
-                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
                 {
                     plugMatcher = mvd;
-                    plugMatcher.color--;
                     break;
                 }
             }
-            if (plugMatcher.color == 0)
+            if(plugMatcher.color == 0)
                 return socketList;
-            foreach (MagicaVoxelData mvd in socket)
+            foreach(MagicaVoxelData mvd in socket)
             {
-                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
                 {
                     socketMatcher = mvd;
-                    socketMatcher.color--;
                     break;
                 }
             }
@@ -10021,33 +10018,31 @@ MovementType.Foot                                                         };
                 }
             }*/
 
-            if (socketList.Count == 0)
+            if(socketList.Count == 0)
                 return plugList;
-            else if (plugList.Count == 0)
+            else if(plugList.Count == 0)
                 return socketList;
-            foreach (MagicaVoxelData mvd in plug)
+            foreach(MagicaVoxelData mvd in plug)
             {
 
-                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
                 {
                     plugMatcher = mvd;
-                    plugMatcher.color--;
                     break;
                 }
             }
-            if (plugMatcher.color == 0)
+            if(plugMatcher.color == 0)
                 return socketList;
-            foreach (MagicaVoxelData mvd in socket)
+            foreach(MagicaVoxelData mvd in socket)
             {
-                if (mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) == matchColor * 4)
                 {
                     socketMatcher = mvd;
-                    socketMatcher.color--;
                     break;
                 }
             }
             List<MagicaVoxelData> working = new List<MagicaVoxelData>(plugList.Count + socketList.Count);
-            for (int i = 0; i < plugList.Count; i++)
+            for(int i = 0; i < plugList.Count; i++)
             {
                 MagicaVoxelData mvd = plugList[i];
                 mvd.x = (byte)(mvd.x - plugMatcher.x + socketMatcher.x);
@@ -10056,14 +10051,159 @@ MovementType.Foot                                                         };
                 working.Add(mvd);
             }
             socketList.AddRange(working);
-            for (int i = 0; i < socketList.Count; i++)
+            for(int i = 0; i < socketList.Count; i++)
             {
-                if (254 - socketList[i].color == removeColor * 4)
+                if(254 - socketList[i].color == removeColor * 4)
                 {
                     socketList[i] = new MagicaVoxelData { x = socketList[i].x, y = socketList[i].y, z = socketList[i].z, color = (byte)replaceColor };
                 }
             }
             return socketList;
+
+        }
+
+        public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
+        {
+            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
+            
+            if(socket == null)
+                return plug;
+            else if(plug == null)
+                return socket;
+            int xSize = socket.GetLength(0), ySize = socket.GetLength(1), zSize = socket.GetLength(2);
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(plug[x, y, z] > 257 - wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
+                        {
+                            plugMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = plug[x, y, z] };
+                            goto END_PLUG;
+                        }
+                    }
+                }
+            }
+            END_PLUG:
+            if(plugMatcher.color == 0)
+                return socket;
+            
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(socket[x, y, z] > 257 - wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
+                        {
+                            socketMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = socket[x, y, z] };
+                            goto END_SOCKET;
+                        }
+                    }
+                }
+            }
+            END_SOCKET:
+            byte[,,] working = socket.Replicate();
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(plug[x, y, z] > 0 &&
+                           x - plugMatcher.x + socketMatcher.x >= 0    && y - plugMatcher.y + socketMatcher.y >= 0    && z - plugMatcher.z + socketMatcher.z >= 0 &&
+                           x - plugMatcher.x + socketMatcher.x < xSize && y - plugMatcher.y + socketMatcher.y < ySize && z - plugMatcher.z + socketMatcher.z < zSize)
+                        {
+                            working[(x - plugMatcher.x + socketMatcher.x),
+                                    (y - plugMatcher.y + socketMatcher.y),
+                                    (z - plugMatcher.z + socketMatcher.z)] = plug[x, y, z];
+                        }
+                    }
+                }
+            }
+            return working;
+
+        }
+        public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor, int removeColor, int replaceColor)
+        {
+            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
+            
+            if(socket == null)
+                return plug;
+            else if(plug == null)
+                return socket;
+            int xSize = socket.GetLength(0), ySize = socket.GetLength(1), zSize = socket.GetLength(2);
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(plug[x, y, z] > 257 - wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
+                        {
+                            plugMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = plug[x, y, z] };
+                            goto END_PLUG;
+                        }
+                    }
+                }
+            }
+            END_PLUG:
+            if(plugMatcher.color == 0)
+                return socket;
+
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(socket[x, y, z] > 257 - wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
+                        {
+                            socketMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = socket[x, y, z] };
+                            goto END_SOCKET;
+                        }
+                    }
+                }
+            }
+            END_SOCKET:
+            byte[,,] working = socket.Replicate();
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(plug[x, y, z] > 0 &&
+                           x - plugMatcher.x + socketMatcher.x >= 0    && y - plugMatcher.y + socketMatcher.y >= 0    && z - plugMatcher.z + socketMatcher.z >= 0   &&
+                           x - plugMatcher.x + socketMatcher.x < xSize && y - plugMatcher.y + socketMatcher.y < ySize && z - plugMatcher.z + socketMatcher.z < zSize)
+                        {
+                            working[(x - plugMatcher.x + socketMatcher.x),
+                                    (y - plugMatcher.y + socketMatcher.y),
+                                    (z - plugMatcher.z + socketMatcher.z)] = plug[x, y, z];
+                        }
+                    }
+                }
+            }
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(254L - working[x, y, z] == removeColor * 4L)
+                        {
+                            working[x, y, z] = (byte)replaceColor;
+                        }
+                    }
+                }
+            }
+            return working;
 
         }
 
@@ -10613,6 +10753,203 @@ MovementType.Foot                                                         };
             }
             return VoxLargerArrayToList(vls, 4);
         }
+        public static byte[,,] TransformStartLarge(List<MagicaVoxelData> voxels)
+        {
+            return VoxListToLargerArray(voxels, 4, 60, 60, 60);
+        }
+        public static byte[,,] TransformStart(List<MagicaVoxelData> voxels, int xSize, int ySize, int zSize)
+        {
+            return VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
+        }
+        public static List<MagicaVoxelData> TransformEnd(byte[,,] colors)
+        {
+            return VoxLargerArrayToList(colors, 4);
+        }
+
+        public static byte[,,] RotateYawPartial(byte[,,] colors, int degrees)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            byte[,,] vls = new byte[xSize, ySize, zSize];
+
+            double angle = (Math.PI / 180) * ((degrees + 720) % 360);
+            double sn = Math.Sin(angle), cs = Math.Cos(angle);
+
+            for(byte x = 0; x < xSize; x++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    int tempX = (x - (xSize / 2));
+                    int tempY = (y - (ySize / 2));
+                    int x2 = (int)Math.Round((cs * tempX) + (sn * tempY) + (xSize / 2));
+                    int y2 = (int)Math.Round((-sn * tempX) + (cs * tempY) + (ySize / 2));
+
+                    for(byte z = 0; z < zSize; z++)
+                    {
+                        if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && colors[x, y, z] > 0)
+                            vls[x2, y2, z] = colors[x, y, z];
+                    }
+                }
+            }
+
+            return vls;
+        }
+        public static byte[,,] RotatePitchPartial(byte[,,] colors, int degrees)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            byte[,,] vls = new byte[xSize, ySize, zSize];
+
+            double angle = (Math.PI / 180) * ((degrees + 720) % 360);
+            double sn = Math.Sin(angle), cs = Math.Cos(angle);
+
+            for(byte x = 0; x < xSize; x++)
+            {
+                for(byte z = 0; z < zSize; z++)
+                {
+                    int tempX = (x - (xSize / 2));
+                    int tempZ = (z - (zSize / 2));
+                    int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize / 2));
+                    int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize / 2));
+
+                    for(byte y = 0; y < ySize; y++)
+                    {
+                        if(x2 >= 0 && z2 >= 0 && x2 < xSize && z2 < zSize && colors[x, y, z] > 0)
+                            vls[x2, y, z2] = colors[x, y, z];
+                    }
+                }
+            }
+
+            return vls;
+        }
+        public static byte[,,] RotatePitchPartialSpread(byte[,,] colors, int degrees, int effectStartDegrees, byte[] spreadColor)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            byte[,,] vls = new byte[xSize, ySize, zSize];
+            double finalAngle = (Math.PI / 180) * ((degrees) % 360), effectStartAngle = (Math.PI / 180) * ((effectStartDegrees) % 360);
+            double increm = Math.PI / 36;
+
+            if((degrees - effectStartDegrees + 1440) % 360 < 180)
+            {
+                increm *= -1.0;
+            }
+
+            double sn = 0.0, cs = 0.0;
+
+            sn = Math.Sin(finalAngle);
+            cs = Math.Cos(finalAngle);
+            for(byte x = 0; x < xSize; x++)
+            {
+                for(byte z = 0; z < zSize; z++)
+                {
+                    int tempX = (x - (xSize / 2));
+                    int tempZ = (z - (zSize / 2));
+                    int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize / 2));
+                    int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize / 2));
+
+                    for(byte y = 0; y < ySize; y++)
+                    {
+                        if(x2 >= 0 && z2 >= 0 && x2 < xSize && z2 < zSize && colors[x, y, z] > 0)
+                            vls[x2, y, z2] = colors[x, y, z];
+                    }
+                }
+            }
+            int sclen = 1;
+            if(spreadColor != null) sclen = spreadColor.Length;
+
+            for(double angle = finalAngle; Math.Abs(effectStartAngle - angle) >= Math.Abs(increm); angle += increm)
+            {
+                sn = Math.Sin(angle);
+                cs = Math.Cos(angle);
+                for(byte x = 0; x < xSize; x++)
+                {
+                    for(byte z = 0; z < zSize; z++)
+                    {
+                        int tempX = (x - (xSize / 2));
+                        int tempZ = (z - (zSize / 2));
+                        int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize / 2));
+                        int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize / 2));
+
+                        for(byte y = 0; y < ySize; y++)
+                        {
+                            for(int it = 0; it < sclen; it++)
+                            {
+                                if((spreadColor == null || colors[x, y, z] == spreadColor[it]) && colors[x, y, z] > 0 && x2 >= 0 && z2 >= 0 && x2 < xSize && z2 < zSize && vls[x2, y, z2] == 0)
+                                    vls[x2, y, z2] = colors[x, y, z];
+                            }
+                        }
+                    }
+                }
+            }
+            return vls;
+        }
+        public static byte[,,] RotateRollPartial(byte[,,] colors, int degrees)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            byte[,,] vls = new byte[xSize, ySize, zSize];
+            double angle = (Math.PI / 180) * ((degrees + 720) % 360);
+            double sn = Math.Sin(angle), cs = Math.Cos(angle);
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    int tempY = (y - (ySize / 2));
+                    int tempZ = (z - (zSize / 2));
+                    int y2 = (int)Math.Round((-sn * tempZ) + (cs * tempY) + (ySize / 2));
+                    int z2 = (int)Math.Round((cs * tempZ) + (sn * tempY) + (zSize / 2));
+
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        if(z2 >= 0 && y2 >= 0 && z2 < zSize && y2 < ySize && colors[x, y, z] > 0)
+                            vls[x, y2, z2] = colors[x, y, z];
+                    }
+                }
+            }
+
+            return vls;
+        }
+
+        public static byte[,,] ScalePartial(byte[,,] colors, double xScale, double yScale, double zScale)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            if(xScale <= 0 || yScale <= 0 || zScale <= 0)
+                return colors;
+            byte[,,] vls = new byte[xSize, ySize, zSize];
+
+            for(byte z = 0; z < zSize; z++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte x = 0; x < xSize; x++)
+                    {
+                        for(double xsc = 0.0; xsc < xScale; xsc += 1.0)
+                        {
+                            for(double ysc = 0.0; ysc < yScale; ysc += 1.0)
+                            {
+                                for(double zsc = 0.0; zsc < zScale; zsc += 1.0)
+                                {
+                                    int tempX = (x - (xSize / 2));
+                                    int tempY = (y - (ySize / 2));
+                                    int tempZ = (z - (zSize / 2));
+                                    int x2 = (int)Math.Round((xScale * tempX) + (xSize / 2) + ((tempX < 0) ? xsc : -xsc));
+                                    int y2 = (int)Math.Round((yScale * tempY) + (ySize / 2) + ((tempY < 0) ? ysc : -ysc));
+                                    int z2 = (int)Math.Round((zScale * tempZ) + (zSize / 2) + ((tempZ < 0) ? zsc : -zsc));
+
+                                    if(colors[x, y, z] > 0 && x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                        vls[x2, y2, z2] = colors[x, y, z];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return vls;
+        }
+
 
         public static void Madden()
         {
@@ -16863,6 +17200,8 @@ MovementType.Foot                                                         };
                     for(byte z = 0; z < zSize / zmultiplier; z++)
                     {
                         colorCount = new Dictionary<byte, int>();
+                        int fullCount = 0;
+                        int emptyCount = 0;
                         int specialCount = 0;
                         for(int xx = 0; xx < xmultiplier; xx++)
                         {
@@ -16871,48 +17210,43 @@ MovementType.Foot                                                         };
                                 for(int zz = 0; zz < zmultiplier; zz++)
                                 {
                                     byte smallColor = voxelData[x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
-                                    if(smallColor > 0)
+                                    if((254 - smallColor) % 4 == 0)
                                     {
-
-                                        if((254 - smallColor) % 4 == 0)
+                                        specialCount++;
+                                        if(specialColors.ContainsKey(smallColor))
                                         {
-                                            specialCount++;
-                                            if(specialColors.ContainsKey(smallColor))
-                                            {
-                                                if(specialColors[smallColor].color < specialCount)
-                                                {
-                                                    specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
-                                                }
-                                            }
-                                            else
+                                            if(specialColors[smallColor].color < specialCount)
                                             {
                                                 specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
                                             }
                                         }
-                                        else if(colorCount.ContainsKey(smallColor))
-                                        {
-                                            colorCount[smallColor] = colorCount[smallColor] + 19;
-                                        }
                                         else
                                         {
-                                            colorCount[smallColor] = 19;
+                                            specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
                                         }
                                     }
-                                    else
+                                    if(smallColor > 0)
                                     {
                                         if(colorCount.ContainsKey(smallColor))
                                         {
-                                            colorCount[smallColor] = colorCount[smallColor] + 8;
+                                            colorCount[smallColor] = colorCount[smallColor] + 16;
                                         }
                                         else
                                         {
-                                            colorCount[smallColor] = 8;
+                                            colorCount[smallColor] = 16;
                                         }
+                                        fullCount += 16;
+                                    }
+                                    else
+                                    {
+                                        emptyCount += 5;
                                     }
                                 }
                             }
                         }
-                        byte best = colorCount.OrderByDescending(kv => kv.Value).First().Key;
+                        byte best = 0;
+                        if(fullCount >= emptyCount)
+                            best = colorCount.OrderByDescending(kv => kv.Value).First().Key;
                         if(best > 0)
                         {
                             vfinal[x, y, z] = best;
