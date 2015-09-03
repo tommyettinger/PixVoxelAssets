@@ -91,6 +91,7 @@
     <Compile Include="Simplex.cs" />
     <Compile Include="TallPaletteDraw.cs" />
     <Compile Include="TallVoxels.cs" />
+    <Compile Include="TransformLogic.cs" />
     <Compile Include="VoxelLogic.cs" />
   </ItemGroup>
   <ItemGroup>
