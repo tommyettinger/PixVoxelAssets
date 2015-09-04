@@ -240,8 +240,7 @@ namespace AssetsPV
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             FaceVoxel[,,] data = new FaceVoxel[xSize, ySize, zSize];
-            bool[,] nextTaken = new bool[xSize, ySize], taken = new bool[xSize, ySize];
-            
+
             for(int z = 0; z < zSize; z++)
             {
                 for(int x = 0; x < xSize; x++)
@@ -261,6 +260,19 @@ namespace AssetsPV
                 data = fm(data);
             }*/
 
+            data = AddAll(data);
+
+            return data;
+        }
+
+        public static FaceVoxel[,,] GetFaces(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
+        {
+            FaceVoxel[,,] data = new FaceVoxel[xSize, ySize, zSize];
+
+            foreach(MagicaVoxelData mvd in voxelData)
+            {
+                data[mvd.x, mvd.y, mvd.z] = new FaceVoxel(mvd, Slope.Cube);
+            }
             data = AddAll(data);
 
             return data;

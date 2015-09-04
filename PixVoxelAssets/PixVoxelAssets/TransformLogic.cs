@@ -11,41 +11,44 @@ namespace AssetsPV
 
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
-            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
-
+            int plugX = -1, plugY = -1, plugZ = -1, socketX = -1, socketY = -1, socketZ = -1;
             if(socket == null)
                 return plug;
             else if(plug == null)
                 return socket;
             int xSize = socket.GetLength(0), ySize = socket.GetLength(1), zSize = socket.GetLength(2);
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
                         {
-                            plugMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = plug[x, y, z] };
+                            plugX = x;
+                            plugY = y;
+                            plugZ = z;
                             goto END_PLUG;
                         }
                     }
                 }
             }
             END_PLUG:
-            if(plugMatcher.color == 0)
+            if(plugX < 0)
                 return socket;
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(socket[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
                         {
-                            socketMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = socket[x, y, z] };
+                            socketX = x;
+                            socketY = y;
+                            socketZ = z;
                             goto END_SOCKET;
                         }
                     }
@@ -54,19 +57,19 @@ namespace AssetsPV
             END_SOCKET:
             byte[,,] working = socket.Replicate();
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(plug[x, y, z] > 0 &&
-                           x - plugMatcher.x + socketMatcher.x >= 0 && y - plugMatcher.y + socketMatcher.y >= 0 && z - plugMatcher.z + socketMatcher.z >= 0 &&
-                           x - plugMatcher.x + socketMatcher.x < xSize && y - plugMatcher.y + socketMatcher.y < ySize && z - plugMatcher.z + socketMatcher.z < zSize)
+                           x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
+                           x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
                         {
-                            working[(x - plugMatcher.x + socketMatcher.x),
-                                    (y - plugMatcher.y + socketMatcher.y),
-                                    (z - plugMatcher.z + socketMatcher.z)] = plug[x, y, z];
+                            working[(x - plugX + socketX),
+                                    (y - plugY + socketY),
+                                    (z - plugZ + socketZ)] = plug[x, y, z];
                         }
                     }
                 }
@@ -76,42 +79,44 @@ namespace AssetsPV
         }
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor, int removeColor, int replaceColor)
         {
-            MagicaVoxelData plugMatcher = new MagicaVoxelData { color = 0 }, socketMatcher = new MagicaVoxelData { color = 0 };
-
+            int plugX = -1, plugY = -1, plugZ = -1, socketX = -1, socketY = -1, socketZ = -1;
             if(socket == null)
                 return plug;
             else if(plug == null)
                 return socket;
             int xSize = socket.GetLength(0), ySize = socket.GetLength(1), zSize = socket.GetLength(2);
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
                         {
-                            plugMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = plug[x, y, z] };
+                            plugX = x;
+                            plugY = y;
+                            plugZ = z;
                             goto END_PLUG;
                         }
                     }
                 }
             }
             END_PLUG:
-            if(plugMatcher.color == 0)
+            if(plugX < 0)
                 return socket;
 
-
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(socket[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
                         {
-                            socketMatcher = new MagicaVoxelData { x = x, y = y, z = z, color = socket[x, y, z] };
+                            socketX = x;
+                            socketY = y;
+                            socketZ = z;
                             goto END_SOCKET;
                         }
                     }
@@ -120,28 +125,28 @@ namespace AssetsPV
             END_SOCKET:
             byte[,,] working = socket.Replicate();
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(plug[x, y, z] > 0 &&
-                           x - plugMatcher.x + socketMatcher.x >= 0 && y - plugMatcher.y + socketMatcher.y >= 0 && z - plugMatcher.z + socketMatcher.z >= 0 &&
-                           x - plugMatcher.x + socketMatcher.x < xSize && y - plugMatcher.y + socketMatcher.y < ySize && z - plugMatcher.z + socketMatcher.z < zSize)
+                           x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
+                           x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
                         {
-                            working[(x - plugMatcher.x + socketMatcher.x),
-                                    (y - plugMatcher.y + socketMatcher.y),
-                                    (z - plugMatcher.z + socketMatcher.z)] = plug[x, y, z];
+                            working[(x - plugX + socketX),
+                                    (y - plugY + socketY),
+                                    (z - plugZ + socketZ)] = plug[x, y, z];
                         }
                     }
                 }
             }
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(254L - working[x, y, z] == removeColor * 4L)
                         {
@@ -154,7 +159,7 @@ namespace AssetsPV
 
         }
 
-        public static byte[,,] VoxListToArray(List<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
+        public static byte[,,] VoxListToArray(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
         {
             byte[,,] data = new byte[xSize, ySize, zSize];
             foreach(MagicaVoxelData mvd in voxelData)
@@ -182,7 +187,7 @@ namespace AssetsPV
             return vlist;
         }
 
-        public static byte[,,] VoxListToLargerArray(List<MagicaVoxelData> voxelData, int multiplier, int xSize, int ySize, int zSize)
+        public static byte[,,] VoxListToLargerArray(IEnumerable<MagicaVoxelData> voxelData, int multiplier, int xSize, int ySize, int zSize)
         {
             byte[,,] data = new byte[xSize * multiplier, ySize * multiplier, zSize * multiplier];
             foreach(MagicaVoxelData mvd in voxelData)
@@ -210,16 +215,16 @@ namespace AssetsPV
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
-            byte[][,,] vs = new byte[4][,,];
+            byte[][,,] vs = new byte[3][,,];
             vs[0] = voxelData.Replicate();
-            for(int v = 1; v < 4; v++)
+            for(int v = 1; v < 3; v++)
             {
                 vs[v] = new byte[xSize, ySize, zSize];
-                for(byte x = 1; x < xSize - 1; x++)
+                for(int x = 1; x < xSize - 1; x++)
                 {
-                    for(byte y = 1; y < ySize - 1; y++)
+                    for(int y = 1; y < ySize - 1; y++)
                     {
-                        for(byte z = 1; z < zSize - 1; z++)
+                        for(int z = 1; z < zSize - 1; z++)
                         {
                             colorCount.Clear();
                             int emptyCount = 0;
@@ -264,11 +269,11 @@ namespace AssetsPV
             }
             byte[,,] vfinal = new byte[xSize / xmultiplier, ySize / ymultiplier, zSize / zmultiplier];
             Dictionary<byte, MagicaVoxelData> specialColors = new Dictionary<byte, MagicaVoxelData>();
-            for(byte x = 0; x < xSize / xmultiplier; x++)
+            for(int x = 0; x < xSize / xmultiplier; x++)
             {
-                for(byte y = 0; y < ySize / ymultiplier; y++)
+                for(int y = 0; y < ySize / ymultiplier; y++)
                 {
-                    for(byte z = 0; z < zSize / zmultiplier; z++)
+                    for(int z = 0; z < zSize / zmultiplier; z++)
                     {
                         colorCount = new Dictionary<byte, int>();
                         int fullCount = 0;
@@ -280,7 +285,7 @@ namespace AssetsPV
                             {
                                 for(int zz = 0; zz < zmultiplier; zz++)
                                 {
-                                    byte smallColor = vs[3][x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
+                                    byte smallColor = vs[2][x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
                                     if((254 - smallColor) % 4 == 0)
                                     {
                                         specialCount++;
@@ -288,12 +293,12 @@ namespace AssetsPV
                                         {
                                             if(specialColors[smallColor].color < specialCount)
                                             {
-                                                specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
+                                                specialColors[smallColor] = new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = (byte)specialCount };
                                             }
                                         }
                                         else
                                         {
-                                            specialColors[smallColor] = new MagicaVoxelData { x = x, y = y, z = z, color = (byte)specialCount };
+                                            specialColors[smallColor] = new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = (byte)specialCount };
                                         }
                                     }
                                     if(smallColor > 0)
@@ -332,11 +337,15 @@ namespace AssetsPV
             return VoxArrayToList(vfinal);
         }
 
-        public static byte[,,] TransformStartLarge(List<MagicaVoxelData> voxels)
+        public static byte[,,] TransformStartLarge(IEnumerable<MagicaVoxelData> voxels)
         {
             return VoxListToLargerArray(voxels, 4, 60, 60, 60);
         }
-        public static byte[,,] TransformStart(List<MagicaVoxelData> voxels, int xSize, int ySize, int zSize)
+        public static byte[,,] TransformStartHuge(IEnumerable<MagicaVoxelData> voxels)
+        {
+            return VoxListToLargerArray(voxels, 4, 120, 120, 80);
+        }
+        public static byte[,,] TransformStart(IEnumerable<MagicaVoxelData> voxels, int xSize, int ySize, int zSize)
         {
             return VoxListToLargerArray(voxels, 4, xSize, ySize, zSize);
         }
@@ -354,16 +363,16 @@ namespace AssetsPV
             double angle = (Math.PI / 180) * ((degrees + 720) % 360);
             double sn = Math.Sin(angle), cs = Math.Cos(angle);
 
-            for(byte x = 0; x < xSize; x++)
+            for(int x = 0; x < xSize; x++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
                     int tempX = (x - (xSize / 2));
                     int tempY = (y - (ySize / 2));
                     int x2 = (int)Math.Round((cs * tempX) + (sn * tempY) + (xSize / 2));
                     int y2 = (int)Math.Round((-sn * tempX) + (cs * tempY) + (ySize / 2));
 
-                    for(byte z = 0; z < zSize; z++)
+                    for(int z = 0; z < zSize; z++)
                     {
                         if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && colors[x, y, z] > 0)
                             vls[x2, y2, z] = colors[x, y, z];
@@ -382,16 +391,16 @@ namespace AssetsPV
             double angle = (Math.PI / 180) * ((degrees + 720) % 360);
             double sn = Math.Sin(angle), cs = Math.Cos(angle);
 
-            for(byte x = 0; x < xSize; x++)
+            for(int x = 0; x < xSize; x++)
             {
-                for(byte z = 0; z < zSize; z++)
+                for(int z = 0; z < zSize; z++)
                 {
                     int tempX = (x - (xSize / 2));
                     int tempZ = (z - (zSize / 2));
                     int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize / 2));
                     int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize / 2));
 
-                    for(byte y = 0; y < ySize; y++)
+                    for(int y = 0; y < ySize; y++)
                     {
                         if(x2 >= 0 && z2 >= 0 && x2 < xSize && z2 < zSize && colors[x, y, z] > 0)
                             vls[x2, y, z2] = colors[x, y, z];
@@ -418,16 +427,16 @@ namespace AssetsPV
 
             sn = Math.Sin(finalAngle);
             cs = Math.Cos(finalAngle);
-            for(byte x = 0; x < xSize; x++)
+            for(int x = 0; x < xSize; x++)
             {
-                for(byte z = 0; z < zSize; z++)
+                for(int z = 0; z < zSize; z++)
                 {
                     int tempX = (x - (xSize / 2));
                     int tempZ = (z - (zSize / 2));
                     int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize / 2));
                     int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize / 2));
 
-                    for(byte y = 0; y < ySize; y++)
+                    for(int y = 0; y < ySize; y++)
                     {
                         if(x2 >= 0 && z2 >= 0 && x2 < xSize && z2 < zSize && colors[x, y, z] > 0)
                             vls[x2, y, z2] = colors[x, y, z];
@@ -441,16 +450,16 @@ namespace AssetsPV
             {
                 sn = Math.Sin(angle);
                 cs = Math.Cos(angle);
-                for(byte x = 0; x < xSize; x++)
+                for(int x = 0; x < xSize; x++)
                 {
-                    for(byte z = 0; z < zSize; z++)
+                    for(int z = 0; z < zSize; z++)
                     {
                         int tempX = (x - (xSize / 2));
                         int tempZ = (z - (zSize / 2));
                         int x2 = (int)Math.Round((cs * tempX) + (sn * tempZ) + (xSize / 2));
                         int z2 = (int)Math.Round((-sn * tempX) + (cs * tempZ) + (zSize / 2));
 
-                        for(byte y = 0; y < ySize; y++)
+                        for(int y = 0; y < ySize; y++)
                         {
                             for(int it = 0; it < sclen; it++)
                             {
@@ -471,16 +480,16 @@ namespace AssetsPV
             double angle = (Math.PI / 180) * ((degrees + 720) % 360);
             double sn = Math.Sin(angle), cs = Math.Cos(angle);
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
                     int tempY = (y - (ySize / 2));
                     int tempZ = (z - (zSize / 2));
                     int y2 = (int)Math.Round((-sn * tempZ) + (cs * tempY) + (ySize / 2));
                     int z2 = (int)Math.Round((cs * tempZ) + (sn * tempY) + (zSize / 2));
 
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         if(z2 >= 0 && y2 >= 0 && z2 < zSize && y2 < ySize && colors[x, y, z] > 0)
                             vls[x, y2, z2] = colors[x, y, z];
@@ -497,13 +506,13 @@ namespace AssetsPV
 
             if(xScale <= 0 || yScale <= 0 || zScale <= 0)
                 return colors;
-            byte[,,] vls = new byte[xSize, ySize, zSize];
+            byte[,,] vls = new byte[(int)(xSize * xScale), (int)(ySize * yScale), (int)(zSize * zScale)];
 
-            for(byte z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize; z++)
             {
-                for(byte y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(byte x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize; x++)
                     {
                         for(double xsc = 0.0; xsc < xScale; xsc += 1.0)
                         {

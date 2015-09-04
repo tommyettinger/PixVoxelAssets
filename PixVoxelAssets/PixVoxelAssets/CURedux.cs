@@ -3440,8 +3440,94 @@ namespace AssetsPV
             VoxelLogic.sizex = 120;
             VoxelLogic.sizey = 120;
             VoxelLogic.sizez = 120;
-            
+
             return voxelFrames;
+        }
+        public static List<MagicaVoxelData>[] makeFiringAnimationSuper(MagicaVoxelData[] parsed, int unit, int weapon)
+        {
+            MagicaVoxelData[][] parsedFrames = new MagicaVoxelData[][] {
+                parsed, parsed, parsed, parsed,
+                parsed, parsed, parsed, parsed,
+                parsed, parsed, parsed, parsed,
+                parsed, parsed, parsed, parsed, };
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            List<MagicaVoxelData>[] vf2 = new List<MagicaVoxelData>[parsedFrames.Length];
+            //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            parsedFrames.CopyTo(voxelFrames, 0);
+            for(int i = 0; i < parsedFrames[0].Length; i++)
+            {
+                voxelFrames[0][i].x += 20;
+                voxelFrames[0][i].y += 20;
+            }
+
+            if(VoxelLogic.CurrentWeapons[unit][weapon] == -1)
+            {
+                return new List<MagicaVoxelData>[0];
+            }
+            else
+            {
+                voxelFrames = weaponAnimationsDouble[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
+            }
+            VoxelLogic.sizex = 80;
+            VoxelLogic.sizey = 80;
+            VoxelLogic.sizez = 60;
+            for(int i = 0; i < voxelFrames.Length; i++)
+            {
+                vf2[i] = new List<MagicaVoxelData>();
+                for(int j = 0; j < voxelFrames[i].Length; j++)
+                {
+                    if(!(voxelFrames[i][j].x >= 80 || voxelFrames[i][j].y >= 80 || voxelFrames[i][j].z >= 60))
+                        vf2[i].Add(voxelFrames[i][j]);
+                }
+
+            }
+
+
+
+            return vf2;
+        }
+
+        public static List<MagicaVoxelData>[] makeFiringAnimationSuper(MagicaVoxelData[][] parsed, int unit, int weapon)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsed.Length][];
+            List<MagicaVoxelData>[] vf2 = new List<MagicaVoxelData>[parsed.Length];
+            //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            for(int f = 0; f < parsed.Length; f++)
+            {
+                voxelFrames[f] = new MagicaVoxelData[parsed[f].Length];
+                parsed[f].CopyTo(voxelFrames[f], 0);
+
+                for(int i = 0; i < parsed[f].Length; i++)
+                {
+                    voxelFrames[f][i].x += 20;
+                    voxelFrames[f][i].y += 20;
+                }
+            }
+            if(VoxelLogic.CurrentWeapons[unit][weapon] == -1)
+            {
+                return new List<MagicaVoxelData>[0];
+            }
+            else
+            {
+                voxelFrames = weaponAnimationsDouble[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
+            }
+            VoxelLogic.sizex = 80;
+            VoxelLogic.sizey = 80;
+            VoxelLogic.sizez = 60;
+            for(int i = 0; i < voxelFrames.Length; i++)
+            {
+                vf2[i] = new List<MagicaVoxelData>();
+                for(int j = 0; j < voxelFrames[i].Length; j++)
+                {
+                    if(!(voxelFrames[i][j].x >= 80 || voxelFrames[i][j].y >= 80 || voxelFrames[i][j].z >= 60))
+                        vf2[i].Add(voxelFrames[i][j]);
+                }
+
+            }
+
+
+
+            return vf2;
         }
 
         public static MagicaVoxelData[][] makeReceiveAnimationDouble(int weaponType, int strength)
@@ -3453,8 +3539,36 @@ namespace AssetsPV
 
             VoxelLogic.sizex = 120;
             VoxelLogic.sizey = 120;
-            
+
             return voxelFrames;
+        }
+        public static List<MagicaVoxelData>[] makeReceiveAnimationSuper(int weaponType, int strength)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+            List<MagicaVoxelData>[] vf2 = new List<MagicaVoxelData>[16];
+            //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+
+            voxelFrames = receiveAnimations[weaponType](voxelFrames, strength);
+            for(int i = 0; i < 16; i++)
+            {
+                List<MagicaVoxelData> vlist = new List<MagicaVoxelData>(voxelFrames[i].Length);
+                for(int j = 0; j < voxelFrames[i].Length; j++)
+                {
+                    MagicaVoxelData m = new MagicaVoxelData { x = (byte)(voxelFrames[i][j].x * 0.66), y = (byte)(voxelFrames[i][j].y * 0.66), z = (byte)(voxelFrames[i][j].z * 0.66), color = voxelFrames[i][j].color };
+                    vlist.Add(m);
+                    vlist.Add(VoxelLogic.AlterVoxel(m, 0, 0, 1, m.color));
+                    vlist.Add(VoxelLogic.AlterVoxel(m, 0, 0, -1, m.color));
+                    vlist.Add(VoxelLogic.AlterVoxel(m, 0, 1, 0, m.color));
+                    vlist.Add(VoxelLogic.AlterVoxel(m, 0, -1, 0, m.color));
+                    vlist.Add(VoxelLogic.AlterVoxel(m, 1, 0, 0, m.color));
+                    vlist.Add(VoxelLogic.AlterVoxel(m, -1, 0, 0, m.color));
+                }
+                vf2[i] = vlist;
+            }
+            VoxelLogic.sizex = 80;
+            VoxelLogic.sizey = 80;
+
+            return vf2;
         }
 
         public static MagicaVoxelData[][] Flyover(MagicaVoxelData[] voxels)
@@ -3492,7 +3606,7 @@ namespace AssetsPV
             {
 
                 List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
-                
+
                 for(int i = 0; i < voxelFrames[f].Length; i++)
                 {
                     // do not store this voxel if it lies out of range of the voxel chunk (120x120x120)
@@ -3517,6 +3631,45 @@ namespace AssetsPV
                 voxelFrames[f].CopyTo(frames[16 - f], 0);
             }
             return frames;
+        }
+        public static MagicaVoxelData[][] FlyoverSuper(MagicaVoxelData[] voxels)
+        {
+
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+            voxelFrames[0] = new MagicaVoxelData[voxels.Length];
+            voxels.CopyTo(voxelFrames[0], 0);
+            
+            for(int f = 1; f <= 8; f++)
+            {
+                voxelFrames[f] = new MagicaVoxelData[voxelFrames[f - 1].Length]; //.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)
+                voxelFrames[f - 1].CopyTo(voxelFrames[f], 0);
+
+                for(int i = 0; i < voxelFrames[f].Length; i++)
+                {
+                    voxelFrames[f][i].z += 2;
+                }
+            }
+            for(int f = 1; f <= 8; f++)
+            {
+
+                List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+
+                for(int i = 0; i < voxelFrames[f].Length; i++)
+                {
+                    // do not store this voxel if it lies out of range of the voxel chunk (120x120x120)
+                    if(voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                    {
+                        continue;
+                    }
+
+                    altered.Add(voxelFrames[f][i]);
+                    //-1 == taken[voxelFrames[f][i].x, voxelFrames[f][i].y] && 
+                }
+                voxelFrames[f - 1] = altered.ToArray();
+                voxelFrames[16 - f] = voxelFrames[f - 1];
+            }
+            
+            return voxelFrames;
         }
         public static byte ColorConversion(byte original)
         {

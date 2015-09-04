@@ -582,7 +582,7 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed, dir), 60, 60, 60, 153));
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed, dir), 80, 80, 80, 153));
                 for(int f = 0; f < framelimit; f++)
                 {
                     Bitmap b = processFrameHugeW(faces, palette, dir, f, framelimit, still, shadowless);
@@ -856,7 +856,7 @@ namespace AssetsPV
             {
                 for(int i = 0; i < 4; i++)
                 {
-                    faces[i] = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed[i], dir), 60, 60, 60, 153));
+                    faces[i] = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed[i], dir), 80, 80, 80, 153));
                 }
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -1129,9 +1129,9 @@ namespace AssetsPV
 
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, d), 60, 60, 60, 153));
+                //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, d), 60, 60, 60, 153));
 
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
+                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, d), 60, 60, 60, 153)), false, false);
 
                 for(int frame = 0; frame < 12; frame++)
                 {
@@ -2457,7 +2457,7 @@ namespace AssetsPV
                                     ? -2 : (still) ? 0 : jitter) + innerY);
         }
 
-        private static Bitmap renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap renderWSmart(FaceVoxel[,,] faces, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap bmp = new Bitmap(248, 308, PixelFormat.Format32bppArgb);
 
@@ -2489,7 +2489,6 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
             int xSize = 60, ySize = 60, zSize = 60;
-            FaceVoxel[,,] faces = faceVoxels.Replicate();
 /*            switch(facing)
             {
                 case 0:
@@ -2889,7 +2888,7 @@ namespace AssetsPV
             return bmp;
         }
 
-        private static Bitmap renderWSmartHuge(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap renderWSmartHuge(FaceVoxel[,,] faces, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap bmp = new Bitmap(248 * 2, 308 * 2, PixelFormat.Format32bppArgb);
 
@@ -2921,7 +2920,6 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
             int xSize = 120, ySize = 120, zSize = 80;
-            FaceVoxel[,,] faces = faceVoxels.Replicate();
 /*            switch(facing)
             {
                 case 0:
@@ -3320,7 +3318,7 @@ namespace AssetsPV
             return bmp;
         }
 
-        private static Bitmap renderWSmartMassive(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static Bitmap renderWSmartMassive(FaceVoxel[,,] faces, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             Bitmap bmp = new Bitmap(328 * 2, 408 * 2, PixelFormat.Format32bppArgb);
 
@@ -3352,7 +3350,6 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             barePositions.Fill<bool>(false);
             int xSize = 160, ySize = 160, zSize = 120;
-            FaceVoxel[,,] faces = faceVoxels.Replicate();
             /*
             switch(facing)
             {
