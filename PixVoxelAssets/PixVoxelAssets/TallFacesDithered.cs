@@ -4869,7 +4869,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
-
+            
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter_S");
@@ -4909,8 +4909,9 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
+            */
             processUnitHugeWMilitarySuper("Boat_T");
-
+            /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -4918,9 +4919,9 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Factory");
             processUnitHugeWMilitarySuper("Castle");
             processUnitHugeWMilitarySuper("Estate");
-            */
+            
             processReceivingMilitaryWSuper();
-
+            */
         }
     }
 }

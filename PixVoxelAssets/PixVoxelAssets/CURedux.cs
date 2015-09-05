@@ -2283,7 +2283,7 @@ namespace AssetsPV
                 sparks[s] = SparksDouble(new MagicaVoxelData
                 {
                     x = (byte)(66 + r.Next(10)),
-                    y = (byte)(30 + s * 12),
+                    y = (byte)(27 + s * 12),
                     z = 0,
                     color = yellow_fire
                 }, 2 * (3 + strength));
@@ -3554,7 +3554,7 @@ namespace AssetsPV
                 List<MagicaVoxelData> vlist = new List<MagicaVoxelData>(voxelFrames[i].Length);
                 for(int j = 0; j < voxelFrames[i].Length; j++)
                 {
-                    MagicaVoxelData m = new MagicaVoxelData { x = (byte)(voxelFrames[i][j].x * 0.66), y = (byte)(voxelFrames[i][j].y * 0.66), z = (byte)(voxelFrames[i][j].z * 0.66), color = voxelFrames[i][j].color };
+                    MagicaVoxelData m = new MagicaVoxelData { x = (byte)(voxelFrames[i][j].x * 0.65), y = (byte)(voxelFrames[i][j].y * 0.65), z = (byte)(voxelFrames[i][j].z * 0.65), color = voxelFrames[i][j].color };
                     vlist.Add(m);
                     vlist.Add(VoxelLogic.AlterVoxel(m, 0, 0, 1, m.color));
                     vlist.Add(VoxelLogic.AlterVoxel(m, 0, 0, -1, m.color));

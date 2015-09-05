@@ -220,16 +220,17 @@ namespace AssetsPV
             for(int v = 1; v < 3; v++)
             {
                 vs[v] = new byte[xSize, ySize, zSize];
-                for(int x = 1; x < xSize - 1; x++)
+                for(int x = 0; x < xSize - 1; x++)
                 {
-                    for(int y = 1; y < ySize - 1; y++)
+                    for(int y = 0; y < ySize - 1; y++)
                     {
-                        for(int z = 1; z < zSize - 1; z++)
+                        for(int z = 0; z < zSize - 1; z++)
                         {
                             colorCount.Clear();
                             int emptyCount = 0;
                             byte best = 0;
-                            if((254 - vs[v - 1][x, y, z]) % 4 == 0)
+                            if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == zSize - 1 || z == zSize - 1
+                                || (254 - vs[v - 1][x, y, z]) % 4 == 0)
                             {
                                 colorCount[vs[v - 1][x, y, z]] = 100;
                                 goto END_INNER;
