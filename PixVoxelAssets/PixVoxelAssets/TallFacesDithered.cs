@@ -684,33 +684,33 @@ namespace AssetsPV
         public static byte[][][][] wrendered, wdithered;
         public static byte[][][] wcurrent, wditheredcurrent;
 
-        public static int[][][] simplepalettes;
-        public static int[][] basepalette;
+        public static byte[][][] simplepalettes;
+        public static byte[][] basepalette;
 
         public static void InitializeWPalette()
         {
             wrendered = storeColorCubesWBold();
-            simplepalettes = new int[wrendered.Length][][];
+            simplepalettes = new byte[wrendered.Length][][];
             int colorcount = Math.Min(VoxelLogic.wpalettes[0].Length, 63);
             for(int i = 0; i < simplepalettes.Length; i++)
             {
-                simplepalettes[i] = new int[256][];
+                simplepalettes[i] = new byte[256][];
                 for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
                 {
-                    simplepalettes[i][j] = new int[] { wrendered[i][c][0][2], wrendered[i][c][0][1], wrendered[i][c][0][0] };
-                    simplepalettes[i][j - 1] = new int[] { wrendered[i][c][0][2 + 16 + 16], wrendered[i][c][0][1 + 16 + 16], wrendered[i][c][0][0 + 16 + 16] };
-                    simplepalettes[i][j - 2] = new int[] { wrendered[i][c][0][2 + 24 + 16], wrendered[i][c][0][1 + 24 + 16], wrendered[i][c][0][0 + 24 + 16] };
-                    simplepalettes[i][j - 3] = new int[] { wrendered[i][c][0][2 + 64], wrendered[i][c][0][1 + 64], wrendered[i][c][0][0 + 64] };
+                    simplepalettes[i][j] = new byte[] { wrendered[i][c][0][2], wrendered[i][c][0][1], wrendered[i][c][0][0] };
+                    simplepalettes[i][j - 1] = new byte[] { wrendered[i][c][0][2 + 16 + 16], wrendered[i][c][0][1 + 16 + 16], wrendered[i][c][0][0 + 16 + 16] };
+                    simplepalettes[i][j - 2] = new byte[] { wrendered[i][c][0][2 + 24 + 16], wrendered[i][c][0][1 + 24 + 16], wrendered[i][c][0][0 + 24 + 16] };
+                    simplepalettes[i][j - 3] = new byte[] { wrendered[i][c][0][2 + 64], wrendered[i][c][0][1 + 64], wrendered[i][c][0][0 + 64] };
                 }
-                simplepalettes[i][0] = new int[] { 0, 0, 0 };
-                simplepalettes[i][1] = new int[] { 0, 0, 0 };
-                simplepalettes[i][254] = new int[] { 0, 0, 0 };
-                simplepalettes[i][255] = new int[] { 0, 0, 0 };
+                simplepalettes[i][0] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][1] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][254] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][255] = new byte[] { 0, 0, 0 };
             }
-            basepalette = new int[256][];
-            for(int i = 1; i < 255; i++)
+            basepalette = new byte[256][];
+            for(byte i = 1; i < 255; i++)
             {
-                basepalette[i] = new int[] { i, i, i };
+                basepalette[i] = new byte[] { i, i, i };
             }
 
             wdithered = storeIndexCubesW();
@@ -735,7 +735,7 @@ namespace AssetsPV
         Slope.BackBack
         };
 
-        public static void WritePNG(PngWriter png, byte[][] b, int[][] palette)
+        public static void WritePNG(PngWriter png, byte[][] b, byte[][] palette)
         {
             png.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
             PngChunkPLTE pal = png.GetMetadata().CreatePLTEChunk();
@@ -751,7 +751,7 @@ namespace AssetsPV
             png.End();
         }
 
-        public static void AlterPNGPalette(string input, string output, int[][][] palettes)
+        public static void AlterPNGPalette(string input, string output, byte[][][] palettes)
         {
             PngReader pngr = FileHelper.CreatePngReader(input);
             ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
@@ -761,7 +761,7 @@ namespace AssetsPV
 
             for(int p = 0; p < palettes.Length; p++)
             {
-                int[][] palette = palettes[p];
+                byte[][] palette = palettes[p];
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
 
                 pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
@@ -778,7 +778,22 @@ namespace AssetsPV
                 pngw.End();
             }
         }
-
+        public static void writePaletteImages()
+        {
+            Directory.CreateDirectory("palettes");
+            for(int c = 0; c < simplepalettes.Length; c++)
+            {
+                ImageInfo imi = new ImageInfo(256, 1, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter("palettes" + "/color" + c + ".png", imi, true);
+                byte[][] b = new byte[1][];
+                b[0] = new byte[256];
+                for(int i = 0; i < 256; i++)
+                {
+                    b[0][i] = (byte)i;
+                }
+                WritePNG(png, b, simplepalettes[c]);
+            }
+        }
         public static void processUnitLargeW(string u, int palette, bool still, bool shadowless)
         {
 
@@ -4399,7 +4414,7 @@ namespace AssetsPV
             }
             return data;
         }
-
+        
 
         //public static Bitmap makeFlatTiling()
         //{
@@ -4895,33 +4910,34 @@ namespace AssetsPV
 
             processReceivingMilitaryW();
             */
-/*
-            processUnitHugeWMilitarySuper("Copter");
-            processUnitHugeWMilitarySuper("Copter_P");
-            processUnitHugeWMilitarySuper("Copter_S");
-            processUnitHugeWMilitarySuper("Copter_T");
-
-            processUnitHugeWMilitarySuper("Plane");
-            processUnitHugeWMilitarySuper("Plane_P");
-            processUnitHugeWMilitarySuper("Plane_S");
-            processUnitHugeWMilitarySuper("Plane_T");
-
-            processUnitHugeWMilitarySuper("Boat");
-            processUnitHugeWMilitarySuper("Boat_P");
-            processUnitHugeWMilitarySuper("Boat_S");
-            */
-            processUnitHugeWMilitarySuper("Boat_T");
             /*
-            processUnitHugeWMilitarySuper("Laboratory");
-            processUnitHugeWMilitarySuper("Dock");
-            processUnitHugeWMilitarySuper("Airport");
-            processUnitHugeWMilitarySuper("City");
-            processUnitHugeWMilitarySuper("Factory");
-            processUnitHugeWMilitarySuper("Castle");
-            processUnitHugeWMilitarySuper("Estate");
-            
-            processReceivingMilitaryWSuper();
+                        processUnitHugeWMilitarySuper("Copter");
+                        processUnitHugeWMilitarySuper("Copter_P");
+                        processUnitHugeWMilitarySuper("Copter_S");
+                        processUnitHugeWMilitarySuper("Copter_T");
+
+                        processUnitHugeWMilitarySuper("Plane");
+                        processUnitHugeWMilitarySuper("Plane_P");
+                        processUnitHugeWMilitarySuper("Plane_S");
+                        processUnitHugeWMilitarySuper("Plane_T");
+
+                        processUnitHugeWMilitarySuper("Boat");
+                        processUnitHugeWMilitarySuper("Boat_P");
+                        processUnitHugeWMilitarySuper("Boat_S");
+
+                        processUnitHugeWMilitarySuper("Boat_T");
+
+                        processUnitHugeWMilitarySuper("Laboratory");
+                        processUnitHugeWMilitarySuper("Dock");
+                        processUnitHugeWMilitarySuper("Airport");
+                        processUnitHugeWMilitarySuper("City");
+                        processUnitHugeWMilitarySuper("Factory");
+                        processUnitHugeWMilitarySuper("Castle");
+                        processUnitHugeWMilitarySuper("Estate");
+
+                        processReceivingMilitaryWSuper();
             */
+            writePaletteImages();
         }
     }
 }
