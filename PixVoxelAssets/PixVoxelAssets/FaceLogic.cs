@@ -40,6 +40,17 @@ namespace AssetsPV
     class FaceLogic
     {
 
+        public static byte[,,] VoxListToArrayPure(List<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
+        {
+            byte[,,] data = new byte[xSize, ySize, zSize];
+            foreach(MagicaVoxelData mvd in voxelData)
+            {
+                if(mvd.x >= xSize || mvd.y >= ySize || mvd.z >= zSize)
+                    continue;
+                data[mvd.x, mvd.y, mvd.z] = mvd.color;
+            }
+            return data;
+        }
         public static byte[,,] VoxListToArray(List<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize, byte shadowColor)
         {
             byte[,,] data = new byte[xSize, ySize, zSize];
@@ -750,6 +761,8 @@ namespace AssetsPV
                     return ImportantVisualCU(fv);
                 case "Mecha":
                     return ImportantVisualMecha(fv);
+                case "None":
+                    return false;
                 default:
                     return ImportantVisualW(fv);
             }

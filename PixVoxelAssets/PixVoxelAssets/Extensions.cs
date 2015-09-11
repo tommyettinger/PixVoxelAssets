@@ -181,6 +181,24 @@ namespace AssetsPV
             }
             return a;
         }
+        public static T[] Flatten<T>(this T[][] mat)
+        {
+            if(mat.Length == 0)
+                return new T[0];
+            int xs = mat.Length, ys = mat[0].Length;
+            T[] a = new T[xs * ys];
+            int idx = 0;
+
+            for(int j = 0; j < ys; j++)
+            {
+                for(int i = 0; i < xs; i++)
+                {
+                    a[idx++] = mat[i][j];
+                }
+            }
+            
+            return a;
+        }
         public static T[,,] Replicate<T>(this T[,,] mat)
         {
             if(mat.Length == 0)

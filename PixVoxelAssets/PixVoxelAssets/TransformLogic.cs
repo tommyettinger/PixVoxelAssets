@@ -198,7 +198,8 @@ namespace AssetsPV
                     {
                         for(int z = 0; z < multiplier; z++)
                         {
-                            data[mvd.x * multiplier + x, mvd.y * multiplier + y, mvd.z * multiplier + z] = mvd.color;
+                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear)
+                                data[mvd.x * multiplier + x, mvd.y * multiplier + y, mvd.z * multiplier + z] = mvd.color;
 
                         }
                     }
@@ -228,7 +229,6 @@ namespace AssetsPV
                         {
                             colorCount.Clear();
                             int emptyCount = 0;
-                            byte best = 0;
                             if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == zSize - 1 || z == zSize - 1
                                 || (254 - vs[v - 1][x, y, z]) % 4 == 0)
                             {

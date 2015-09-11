@@ -75,12 +75,15 @@ namespace AssetsPV
             {
                 for(int current_color = 0; current_color < VoxelLogic.wpalettes[0].Length; current_color++)
                 {
+                    if(current_color >= VoxelLogic.wpalettes[p].Length)
+                        continue;
+                    
                     Bitmap b =
                     new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
                     Graphics g = Graphics.FromImage((Image)b);
 
-                    if(current_color == 25)
+                    if(!VoxelLogic.terrainPalettes.Contains(p) && current_color == 25)
                     {
                         colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
@@ -121,7 +124,7 @@ namespace AssetsPV
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
 
-                    string which_image = ((current_color >= 18 && current_color <= 20) || current_color == 40 || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 40)) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -433,13 +436,16 @@ namespace AssetsPV
 
             for(int p = 0; p < VoxelLogic.wpalettes.Length; p++)
             {
-                for(int current_color = 0; current_color < VoxelLogic.wcolorcount; current_color++)
+                for(int current_color = 0; current_color < VoxelLogic.wpalettes[0].Length; current_color++)
                 {
+                    if(current_color >= VoxelLogic.wpalettes[p].Length)
+                        continue;
+
                     byte topi = (byte)(253 - current_color * 4);
                     byte brighti = (byte)(topi - 1);
                     byte dimi = (byte)(topi - 2);
                     byte darki = (byte)(topi - 3);
-                    string which_image = ((current_color >= 18 && current_color <= 20) || current_color == 40 || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 40)) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -759,7 +765,7 @@ namespace AssetsPV
 
             pngr.End();
 
-            for(int p = 0; p < palettes.Length; p++)
+            for(int p = 0; p < 8; p++)
             {
                 byte[][] palette = palettes[p];
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
@@ -1016,7 +1022,7 @@ namespace AssetsPV
             string folder = (altFolder);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
             Console.WriteLine("Processing: " + u + ", palette " + 99);
-
+            
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
@@ -1045,7 +1051,7 @@ namespace AssetsPV
                     WritePNG(png, b, basepalette);
                 }
             }
-
+            
             for(int dir = 0; dir < 4; dir++)
             {
                 for(int f = 0; f < framelimit; f++)
@@ -1088,7 +1094,7 @@ namespace AssetsPV
                 }
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
-
+                    
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
                     MagicaVoxelData[][] flying = CURedux.Flyover(parsed);
@@ -1135,6 +1141,7 @@ namespace AssetsPV
 
                         }
                     }
+                    
                     for(int dir = 0; dir < 4; dir++)
                     {
                         for(int f = 0; f < 16; f++)
@@ -1147,8 +1154,9 @@ namespace AssetsPV
                 }
                 else if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
+                    
                     Directory.CreateDirectory(folder);
-
+                    
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
                     MagicaVoxelData[][] firing = CURedux.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
@@ -1167,7 +1175,7 @@ namespace AssetsPV
                             WritePNG(png, b, basepalette);
                         }
                     }
-
+                    
 
                     for(int dir = 0; dir < 4; dir++)
                     {
@@ -1299,7 +1307,7 @@ namespace AssetsPV
             Directory.CreateDirectory(folder); //("color" + i);
             Console.WriteLine("Processing: " + u + ", palette " + 99 + " Super");
 
-
+            
             BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
             Directory.CreateDirectory("vox/" + altFolder);
@@ -1327,7 +1335,7 @@ namespace AssetsPV
                     WritePNG(png, b, basepalette);
                 }
             }
-
+            
             for(int dir = 0; dir < 4; dir++)
             {
                 for(int f = 0; f < framelimit; f++)
@@ -1349,8 +1357,7 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();
 
             processExplosionHugeWSuper(u, -1, explode_parsed, false);
-            //            processExplosionLargeW(u, -1, new MagicaVoxelData[] { }, false);
-
+            //            processExplosionHugeWSuper(u, -1, new MagicaVoxelData[] { }, false);
 
             processUnitHugeWFiringSuper(u);
         }
@@ -1371,7 +1378,7 @@ namespace AssetsPV
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
                     Directory.CreateDirectory(folder);
-
+                    
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
                     List<MagicaVoxelData>[] firing;
@@ -1394,7 +1401,7 @@ namespace AssetsPV
                             WritePNG(png, b, basepalette);
                         }
                     }
-
+                    
 
                     for(int dir = 0; dir < 4; dir++)
                     {
@@ -1963,7 +1970,7 @@ namespace AssetsPV
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
             Directory.CreateDirectory(folder); //("color" + i);
-
+            
             for(int d = 0; d < 4; d++)
             {
 
@@ -1980,7 +1987,7 @@ namespace AssetsPV
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
-
+            
             if(palette >= 0)
             {
                 Directory.CreateDirectory("gifs/" + altFolder);
@@ -2140,9 +2147,9 @@ namespace AssetsPV
             }
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
-            
-            Directory.CreateDirectory(folder); //("color" + i);
 
+            Directory.CreateDirectory(folder); //("color" + i);
+            
             for(int d = 0; d < 4; d++)
             {
                 FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 2, 60, 60, 40), 1), 120, 120, 80);
@@ -2180,7 +2187,7 @@ namespace AssetsPV
             else
             {
 
-                
+
                 for(int dir = 0; dir < 4; dir++)
                 {
                     for(int f = 0; f < 12; f++)
@@ -3772,26 +3779,29 @@ namespace AssetsPV
                         Slope slope = faces[fx, fy, fz].slope;
                         int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - VoxelLogic.clear) / 4 : (253 - vx.color) / 4;
                         int p = 0;
-                        if((255 - vx.color) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
+                        bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
+                        if(useColorIndices)
+                        {
+                            if((255 - vx.color) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
                             continue;
+                        
+                            if(current_color >= 21 && current_color <= 24)
+                                current_color = 21 + ((current_color + frame) % 4);
 
-                        if(current_color >= 21 && current_color <= 24)
-                            current_color = 21 + ((current_color + frame) % 4);
-
-                        if(current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
-                            current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
-                        if(current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
-                            current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
-                        if(current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
-                            current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
-
+                            if(current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
+                                current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
+                            if(current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
+                                current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
+                            if(current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
+                                current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
+                        }
                         if((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                             continue;
                         else if((frame % 2 != 1) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_1))
                             continue;
                         else if(VoxelLogic.wcolors[current_color][3] == 0F)
                             continue;
-                        else if(current_color >= 17 && current_color <= 20)
+                        else if(useColorIndices && current_color >= 17 && current_color <= 20)
                         {
                             int mod_color = current_color;
                             if(mod_color == 17 && r.Next(7) < 3) //smoke
@@ -3848,7 +3858,7 @@ namespace AssetsPV
                                 }
                             }
                         }
-                        else if(current_color == 25)
+                        else if(useColorIndices && current_color == 25)
                         {
                             taken[vx.x, vx.y] = true;
                             for(int j = 0; j < 4; j++)
@@ -3869,14 +3879,14 @@ namespace AssetsPV
                             int mod_color = current_color;
                             //if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                             //  continue;
-                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            if(useColorIndices && (mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
                             }
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
-                            if(mod_color == 27) //water
+                            if(useColorIndices && mod_color == 27) //water
                                 sp = 1;
 
 
@@ -3934,7 +3944,7 @@ namespace AssetsPV
                                             }
                                             else
                                             {*/
-                                            if(mod_color == 27) //water
+                                            if(useColorIndices && mod_color == 27) //water
                                                 argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                             else
                                                 argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
@@ -4414,150 +4424,228 @@ namespace AssetsPV
             }
             return data;
         }
-        
 
-        //public static Bitmap makeFlatTiling()
-        //{
-        //    Bitmap b = new Bitmap(48 * 4 * 8, 12 * 4 * 16);
-        //    Graphics g = Graphics.FromImage(b);
 
-        //    Bitmap[] tilings = new Bitmap[11];
+        public static void renderTerrain()
+        {
 
-        //    BinaryReader bin = new BinaryReader(File.Open("Terrain_Huge_W.vox", FileMode.Open));
-        //    FaceVoxel[,,] voxes = FaceLogic.FaceListToArray(VoxelLogic.FromMagicaRaw(bin).Select(m => new FaceVoxel(m, Slope.Cube)).ToList(), 80, 80, 60, 153);
-        //    for(int i = 0; i < 11; i++)
-        //    {
-        //        wcurrent = wrendered[VoxelLogic.wpalettecount - 11 + i];
-        //        tilings[i] = renderWSmartHuge(voxes, 0, VoxelLogic.wpalettecount - 11 + i, 0, 1, true, true);
-        //    }
-        //    int[,] grid = new int[9, 17];
+            //byte[][][] tilings = new byte[12][][];
 
-        //    int[,] takenLocations = new int[9, 17];
-        //    for(int i = 0; i < 9; i++)
-        //    {
-        //        for(int j = 0; j < 17; j++)
-        //        {
-        //            takenLocations[i, j] = 0;
-        //            grid[i, j] = 0;
-        //            if(i > 0 && i < 8 && j > 0 && j < 16 && r.Next(3) > 0)
-        //            {
-        //                grid[i, j] = r.Next(11);
-        //            }
-        //        }
-        //    }
-        //    /*
-        //    int numMountains = r.Next(17, 30);
-        //    int iter = 0;
-        //    int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
-        //    do
-        //    {
-        //        if(takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
-        //        {
-        //            takenLocations[rx, ry] = 2;
-        //            grid[rx, ry] = r.Next(9) + 1;
-        //            int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
-        //            int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
-        //            if(xdir <= 1) xdir++;
-        //            if(xdir >= 9) xdir--;
-        //            rx = xdir;
-        //            ry = ry + ydir;
+            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain_Huge_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
+            
+            wcurrent = wrendered[8];
 
-        //        }
-        //        else
-        //        {
-        //            rx = r.Next(8) + 1;
-        //            ry = r.Next(15) + 2;
-        //        }
-        //        iter++;
-        //    } while(iter < numMountains);
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[8];
+            wditheredcurrent = wdithered[8];
 
-        //    int extreme = 0;
-        //    switch(r.Next(5))
-        //    {
-        //        case 0:
-        //            extreme = 7;
-        //            break;
-        //        case 1:
-        //            extreme = 2;
-        //            break;
-        //        case 2:
-        //            extreme = 2;
-        //            break;
-        //        case 3:
-        //            extreme = 1;
-        //            break;
-        //        case 4:
-        //            extreme = 1;
-        //            break;
-        //    }
-        //    */
-        //    /*
-        //    for(int i = 1; i < 8; i++)
-        //    {
-        //        for(int j = 2; j < 15; j++)
-        //        {
-        //            for(int v = 0; v < 3; v++)
-        //            {
+            for(int i = 0; i < 15; i++)
+            {
+                Console.WriteLine("Palette " + i);
+                byte[,,] colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color - 16 * i)).ToList(), 120, 120, 80);
+                Console.WriteLine(colors.ToList().Max());
 
-        //                int[] adj = { 0, 0, 0, 0,
-        //                                0,0,0,0,
-        //                            0, 0, 0, 0, };
-        //                adj[0] = grid[i, j + 1];
-        //                adj[1] = grid[i, j - 1];
-        //                if(j % 2 == 0)
-        //                {
-        //                    adj[2] = grid[i + 1, j + 1];
-        //                    adj[3] = grid[i + 1, j - 1];
-        //                }
-        //                else
-        //                {
-        //                    adj[2] = grid[i - 1, j + 1];
-        //                    adj[3] = grid[i - 1, j - 1];
-        //                }
-        //                adj[4] = grid[i, j + 2];
-        //                adj[5] = grid[i, j - 2];
-        //                adj[6] = grid[i + 1, j];
-        //                adj[7] = grid[i - 1, j];
-        //                int likeliest = 0;
-        //                if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
-        //                    likeliest = extreme;
-        //                if((adj.Contains(2) && r.Next(4) == 0))
-        //                    likeliest = extreme;
-        //                if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
-        //                    likeliest = extreme;
-        //                if((adj.Contains(1) && r.Next(5) > 1) || r.Next(4) == 0)
-        //                    likeliest = r.Next(2) * 2 + 1;
-        //                if(adj.Contains(5) && r.Next(3) == 0)
-        //                    likeliest = r.Next(4, 6);
-        //                if(r.Next(45) == 0)
-        //                    likeliest = 6;
-        //                if(takenLocations[i, j] == 0)
-        //                {
-        //                    grid[i, j] = likeliest;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    */
+                for(int shp = 0; shp < 16; shp++)
+                {
+                    byte[,,] c2 = colors.Replicate();
+                    string nm = CURedux.Terrains[i];
 
-        //    for(int j = 0; j < 17; j++)
-        //    {
-        //        for(int i = 0; i < 9; i++)
-        //        {
-        //            g.DrawImageUnscaled(tilings[grid[i, j]], (48 * 4 * i) - ((j % 2 == 0) ? 0 : 24 * 4) - 24 * 4 + 20, (12 * 4 * j) - 12 * 2 * 17 - 40);
-        //        }
-        //    }
-        //    return b;
-        //}
+                    if((shp & 8) != 0)
+                    {
+                        nm += "_SE";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[80 + q, side, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+                    if((shp & 1) != 0)
+                    {
+                        nm += "_SW";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[side, 39 - q, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+                    if((shp & 2) != 0)
+                    {
+                        nm += "_NW";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[39 - q, side, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+                    if((shp & 4) != 0)
+                    {
+                        nm += "_NE";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[side, 80 + q, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(c2);
+                    PngWriter png = FileHelper.CreatePngWriter("Terrains2/" + nm + ".png", imi, true);
+                    WritePNG(png, processFrameHugeW(faces, 8, 0, 0, 1, true, true), simplepalettes[8]);
+                    PngWriter png2 = FileHelper.CreatePngWriter("TerrainsBlank/" + nm + ".png", imi, true);
+                    WritePNG(png2, processFrameHugeW(faces, 8, 0, 0, 1, true, true), basepalette);
+                }
+            }
+            //int[,] grid = new int[9, 17];
+
+            //int[,] takenLocations = new int[9, 17];
+            //for(int i = 0; i < 9; i++)
+            //{
+            //    for(int j = 0; j < 17; j++)
+            //    {
+            //        takenLocations[i, j] = 0;
+            //        grid[i, j] = 0;
+            //        if(i > 0 && i < 8 && j > 0 && j < 16 && r.Next(3) > 0)
+            //        {
+            //            grid[i, j] = r.Next(11);
+            //        }
+            //    }
+            //}
+            ///*
+            //int numMountains = r.Next(17, 30);
+            //int iter = 0;
+            //int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
+            //do
+            //{
+            //    if(takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
+            //    {
+            //        takenLocations[rx, ry] = 2;
+            //        grid[rx, ry] = r.Next(9) + 1;
+            //        int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
+            //        int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
+            //        if(xdir <= 1) xdir++;
+            //        if(xdir >= 9) xdir--;
+            //        rx = xdir;
+            //        ry = ry + ydir;
+
+            //    }
+            //    else
+            //    {
+            //        rx = r.Next(8) + 1;
+            //        ry = r.Next(15) + 2;
+            //    }
+            //    iter++;
+            //} while(iter < numMountains);
+
+            //int extreme = 0;
+            //switch(r.Next(5))
+            //{
+            //    case 0:
+            //        extreme = 7;
+            //        break;
+            //    case 1:
+            //        extreme = 2;
+            //        break;
+            //    case 2:
+            //        extreme = 2;
+            //        break;
+            //    case 3:
+            //        extreme = 1;
+            //        break;
+            //    case 4:
+            //        extreme = 1;
+            //        break;
+            //}
+            //*/
+            ///*
+            //for(int i = 1; i < 8; i++)
+            //{
+            //    for(int j = 2; j < 15; j++)
+            //    {
+            //        for(int v = 0; v < 3; v++)
+            //        {
+
+            //            int[] adj = { 0, 0, 0, 0,
+            //                            0,0,0,0,
+            //                        0, 0, 0, 0, };
+            //            adj[0] = grid[i, j + 1];
+            //            adj[1] = grid[i, j - 1];
+            //            if(j % 2 == 0)
+            //            {
+            //                adj[2] = grid[i + 1, j + 1];
+            //                adj[3] = grid[i + 1, j - 1];
+            //            }
+            //            else
+            //            {
+            //                adj[2] = grid[i - 1, j + 1];
+            //                adj[3] = grid[i - 1, j - 1];
+            //            }
+            //            adj[4] = grid[i, j + 2];
+            //            adj[5] = grid[i, j - 2];
+            //            adj[6] = grid[i + 1, j];
+            //            adj[7] = grid[i - 1, j];
+            //            int likeliest = 0;
+            //            if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+            //                likeliest = extreme;
+            //            if((adj.Contains(2) && r.Next(4) == 0))
+            //                likeliest = extreme;
+            //            if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+            //                likeliest = extreme;
+            //            if((adj.Contains(1) && r.Next(5) > 1) || r.Next(4) == 0)
+            //                likeliest = r.Next(2) * 2 + 1;
+            //            if(adj.Contains(5) && r.Next(3) == 0)
+            //                likeliest = r.Next(4, 6);
+            //            if(r.Next(45) == 0)
+            //                likeliest = 6;
+            //            if(takenLocations[i, j] == 0)
+            //            {
+            //                grid[i, j] = likeliest;
+            //            }
+            //        }
+            //    }
+            //}
+            //*/
+
+            //for(int j = 0; j < 17; j++)
+            //{
+            //    for(int i = 0; i < 9; i++)
+            //    {
+            //        g.DrawImageUnscaled(tilings[grid[i, j]], (48 * 4 * i) - ((j % 2 == 0) ? 0 : 24 * 4) - 24 * 4 + 20, (12 * 4 * j) - 12 * 2 * 17 - 40);
+            //    }
+            //}
+            //return b;
+        }
 
         static void Main(string[] args)
         {
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
-            FaceLogic.VisualMode = "CU";
+            FaceLogic.VisualMode = "None";
+            //FaceLogic.VisualMode = "CU";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             altFolder = "CU3/";
+            System.IO.Directory.CreateDirectory("Terrains2");
+            System.IO.Directory.CreateDirectory("TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -4858,6 +4946,8 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
+            writePaletteImages();
+            renderTerrain();
             /*
             processUnitLargeWMilitary("Civilian");
 
@@ -4887,14 +4977,15 @@ namespace AssetsPV
             
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
+
             processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
-
+            
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
             processUnitLargeWMilitary("Plane_S");
             processUnitLargeWMilitary("Plane_T");
-
+            
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
@@ -4908,36 +4999,37 @@ namespace AssetsPV
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
 
-            processReceivingMilitaryW();
+            //processReceivingMilitaryW();
+            
+            processUnitHugeWMilitarySuper("Laboratory");
+            processUnitHugeWMilitarySuper("Dock");
+            processUnitHugeWMilitarySuper("Airport");
+            processUnitHugeWMilitarySuper("City");
+            processUnitHugeWMilitarySuper("Factory");
+            processUnitHugeWMilitarySuper("Castle");
+            processUnitHugeWMilitarySuper("Estate");
+            
+            processUnitHugeWMilitarySuper("Copter");
+            
+            processUnitHugeWMilitarySuper("Copter_P");
+            processUnitHugeWMilitarySuper("Copter_S");
+            processUnitHugeWMilitarySuper("Copter_T");
+
+            processUnitHugeWMilitarySuper("Plane");
+            processUnitHugeWMilitarySuper("Plane_P");
+            processUnitHugeWMilitarySuper("Plane_S");
+            processUnitHugeWMilitarySuper("Plane_T");
+
+            processUnitHugeWMilitarySuper("Boat");
+            
+            processUnitHugeWMilitarySuper("Boat_P");
+            processUnitHugeWMilitarySuper("Boat_S");
+            processUnitHugeWMilitarySuper("Boat_T");
             */
-            /*
-                        processUnitHugeWMilitarySuper("Copter");
-                        processUnitHugeWMilitarySuper("Copter_P");
-                        processUnitHugeWMilitarySuper("Copter_S");
-                        processUnitHugeWMilitarySuper("Copter_T");
 
-                        processUnitHugeWMilitarySuper("Plane");
-                        processUnitHugeWMilitarySuper("Plane_P");
-                        processUnitHugeWMilitarySuper("Plane_S");
-                        processUnitHugeWMilitarySuper("Plane_T");
+            //            processReceivingMilitaryWSuper();
 
-                        processUnitHugeWMilitarySuper("Boat");
-                        processUnitHugeWMilitarySuper("Boat_P");
-                        processUnitHugeWMilitarySuper("Boat_S");
-
-                        processUnitHugeWMilitarySuper("Boat_T");
-
-                        processUnitHugeWMilitarySuper("Laboratory");
-                        processUnitHugeWMilitarySuper("Dock");
-                        processUnitHugeWMilitarySuper("Airport");
-                        processUnitHugeWMilitarySuper("City");
-                        processUnitHugeWMilitarySuper("Factory");
-                        processUnitHugeWMilitarySuper("Castle");
-                        processUnitHugeWMilitarySuper("Estate");
-
-                        processReceivingMilitaryWSuper();
-            */
-            writePaletteImages();
+            
         }
     }
 }

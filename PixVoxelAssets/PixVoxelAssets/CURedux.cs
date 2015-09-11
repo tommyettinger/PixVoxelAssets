@@ -67,7 +67,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.4F,0.35F,0.5F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.27F,0.17F,0.07F,waver_alpha},
             //18 yellow fire
@@ -194,7 +194,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.15F,0.27F,0.33F,waver_alpha},
             //18 yellow fire
@@ -321,7 +321,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -448,7 +448,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -575,7 +575,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -702,7 +702,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -829,7 +829,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -956,7 +956,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.1F,0.1F,0.09F,1F},
+            new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -1054,73 +1054,73 @@ namespace AssetsPV
         {
             new float[][] { //0 (50) plains
             //terrain dark
-            new float[] {0.63F,0.92F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F},
             //terrain mid
-            new float[] {0.63F,0.92F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F},
             //terrain light
-            new float[] {0.63F,0.92F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F},
             //terrain highlight
-            new float[] {0.63F,0.92F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F},
             },
             new float[][] { //1 (51) forest
             //terrain dark
-            new float[] {0.2F,0.7F,0.15F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F},
             //terrain mid
-            new float[] {0.2F,0.7F,0.15F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F},
             //terrain light
-            new float[] {0.2F,0.7F,0.15F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F},
             //terrain highlight
-            new float[] {0.2F,0.7F,0.15F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F},
             },
             new float[][] { //2 (52) desert
             //terrain dark
-            new float[] {1.05F,0.9F,0.3F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F},
             //terrain mid
-            new float[] {1.05F,0.9F,0.3F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F},
             //terrain light
-            new float[] {1.05F,0.9F,0.3F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F},
             //terrain highlight
-            new float[] {1.05F,0.9F,0.3F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F},
             },
             new float[][] { //3 (53) jungle
             //terrain dark
-            new float[] {0F,0.55F,0.35F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F},
             //terrain mid
-            new float[] {0F,0.55F,0.35F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F},
             //terrain light
-            new float[] {0F,0.55F,0.35F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F},
             //terrain highlight
-            new float[] {0F,0.55F,0.35F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F},
             },
             new float[][] { //4 (54) hills
             //terrain dark
-            new float[] {0.95F,0.7F,0.4F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F},
             //terrain mid
-            new float[] {0.95F,0.7F,0.4F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F},
             //terrain light
-            new float[] {0.95F,0.7F,0.4F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F},
             //terrain highlight
-            new float[] {0.95F,0.7F,0.4F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F},
             },
             new float[][] { //5 (55) mountains
             //terrain dark
-            new float[] {0.8F,0.83F,0.86F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F},
             //terrain mid
-            new float[] {0.8F,0.83F,0.86F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F},
             //terrain light
-            new float[] {0.8F,0.83F,0.86F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F},
             //terrain highlight
-            new float[] {0.8F,0.83F,0.86F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F},
             },
             new float[][] { //6 (56) ruins
             //terrain dark
-            new float[] {0.8F,0.45F,0.75F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F},
             //terrain mid
-            new float[] {0.8F,0.45F,0.75F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F},
             //terrain light
-            new float[] {0.8F,0.45F,0.75F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F},
             //terrain highlight
-            new float[] {0.8F,0.45F,0.75F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F},
             },
             new float[][] { //7 (57) tundra
             //terrain dark
@@ -1134,33 +1134,73 @@ namespace AssetsPV
             },
             new float[][] { //8 (58) road
             //terrain dark
-            new float[] {0.5F,0.5F,0.5F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F},
             //terrain mid
-            new float[] {0.5F,0.5F,0.5F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F},
             //terrain light
-            new float[] {0.5F,0.5F,0.5F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F},
             //terrain highlight
-            new float[] {0.5F,0.5F,0.5F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F},
             },
             new float[][] { //9 (59) river
             //terrain dark
-            new float[] {0.2F,0.4F,0.95F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F},
             //terrain mid
-            new float[] {0.2F,0.4F,0.95F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F},
             //terrain light
-            new float[] {0.2F,0.4F,0.95F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F},
             //terrain highlight
-            new float[] {0.2F,0.4F,0.95F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F},
             },
-            new float[][] { //10 (60) sea
+            new float[][] { //10 (60) basement
             //terrain dark
-            new float[] {0F,0.3F,0.7F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F},
             //terrain mid
-            new float[] {0F,0.3F,0.7F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F},
             //terrain light
-            new float[] {0F,0.3F,0.7F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F},
             //terrain highlight
-            new float[] {0F,0.3F,0.7F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F},
+            },
+            new float[][] { //11 (61) sea
+            //terrain dark
+            new float[] {0.05F,0.45F,0.8F,1F},
+            //terrain mid
+            new float[] {0.05F,0.45F,0.8F,1F},
+            //terrain light
+            new float[] {0.05F,0.45F,0.8F,1F},
+            //terrain highlight
+            new float[] {0.05F,0.45F,0.8F,1F},
+            },
+            new float[][] { //12 (62) custom 0
+            //terrain dark
+            new float[] {1.0F,0.2F,-0.1F,1F},
+            //terrain mid
+            new float[] {1.0F,0.2F,-0.1F,1F},
+            //terrain light
+            new float[] {1.0F,0.2F,-0.1F,1F},
+            //terrain highlight
+            new float[] {1.0F,0.2F,-0.1F,1F},
+            },
+            new float[][] { //13 (63) custom 1
+            //terrain dark
+            new float[] {1.05F,0.15F,0.95F,1F},
+            //terrain mid
+            new float[] {1.05F,0.15F,0.95F,1F},
+            //terrain light
+            new float[] {1.05F,0.15F,0.95F,1F},
+            //terrain highlight
+            new float[] {1.05F,0.15F,0.95F,1F},
+            },
+            new float[][] { //14 (64) custom 2
+            //terrain dark
+            new float[] {1.15F,1.1F,-0.1F,1F},
+            //terrain mid
+            new float[] {1.15F,1.1F,-0.1F,1F},
+            //terrain light
+            new float[] {1.15F,1.1F,-0.1F,1F},
+            //terrain highlight
+            new float[] {1.15F,1.1F,-0.1F,1F},
             },
 
         };
@@ -1279,49 +1319,53 @@ namespace AssetsPV
             },
         };
 
+        public static string[] Terrains = new string[]
+        {"Plains","Forest","Desert","Jungle","Hills"
+        ,"Mountains","Ruins","Tundra","Road","River", "Basement", "Sea"
+        ,"Custom0","Custom1","Custom2"};
         public static void Initialize()
         {
             VoxelLogic.wpalettecount = wpalettes.Length;
             int wpc = VoxelLogic.wpalettecount;
-            VoxelLogic.subtlePalettes = new int[] { 35, 36, wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5, wpc + 6, wpc + 7, wpc + 8, wpc + 9, wpc + 10 };
+            VoxelLogic.terrainPalettes = new int[] { wpc };
+            VoxelLogic.subtlePalettes = new int[] { wpc };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
-/*            wpalettes = wpalettes.Concat(wpalettes[0].Repeat(wterrains.Length)).ToArray();
-            for (int p = 0; p < wterrains.Length; p++)
+            wpalettes = wpalettes.Concat(wpalettes[0].Repeat(1)).ToArray();
+            for(int p = 0; p < wterrains.Length; p++)
             {
-                float[][] temp = new float[wpalettes[0].Length][];
-                temp[0] = wterrains[p][0];
-                temp[0][0] -= 0.4f;
-                temp[0][1] -= 0.4f;
-                temp[0][2] -= 0.4f;
-                
-                temp[1] = wterrains[p][1];
-                temp[1][0] -= 0.25f;
-                temp[1][1] -= 0.25f;
-                temp[1][2] -= 0.25f;
-                
-                temp[2] = wterrains[p][2];
-                temp[2][0] -= 0.1f;
-                temp[2][1] -= 0.1f;
-                temp[2][2] -= 0.1f;
-                
-                temp[3] = wterrains[p][3];
-                temp[3][0] += 0.05f;
-                temp[3][1] += 0.05f;
-                temp[3][2] += 0.05f;
-                
-                for(int c = 4; c < wpalettes[0].Length; c++)
-                {
-                    temp[c] = wpalettes[0][c];
-                }
-                wpalettes[VoxelLogic.wpalettecount + p] = temp;
+                wpalettes[wpc][0 + p*4] = wterrains[p][0];
+                wpalettes[wpc][0 + p * 4][0] -= 0.4f;
+                wpalettes[wpc][0 + p * 4][1] -= 0.4f;
+                wpalettes[wpc][0 + p * 4][2] -= 0.4f;
+                wpalettes[wpc][0 + p * 4][3] = 1F;
+
+                wpalettes[wpc][1 + p * 4] = wterrains[p][1];
+                wpalettes[wpc][1 + p * 4][0] -= 0.25f;
+                wpalettes[wpc][1 + p * 4][1] -= 0.25f;
+                wpalettes[wpc][1 + p * 4][2] -= 0.25f;
+                wpalettes[wpc][1 + p * 4][3] = 1F;
+
+                wpalettes[wpc][2 + p * 4] = wterrains[p][2];
+                wpalettes[wpc][2 + p * 4][0] -= 0.1f;
+                wpalettes[wpc][2 + p * 4][1] -= 0.1f;
+                wpalettes[wpc][2 + p * 4][2] -= 0.1f;
+                wpalettes[wpc][2 + p * 4][3] = 1F;
+
+                wpalettes[wpc][3 + p * 4] = wterrains[p][3];
+                wpalettes[wpc][3 + p * 4][0] += 0.05f;
+                wpalettes[wpc][3 + p * 4][1] += 0.05f;
+                wpalettes[wpc][3 + p * 4][2] += 0.05f;
+                wpalettes[wpc][3 + p * 4][3] = 1F;
+
             }
-            */
+
             VoxelLogic.wpalettecount = wpalettes.Length;
 
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
-            
-            for (int p = 0; p < VoxelLogic.wpalettecount; p++)
+            VoxelLogic.wcolorcount = wpalettes[wpc].Length;
+
+            for(int p = 0; p < VoxelLogic.wpalettecount; p++)
             {
                 float[] drip = wpalettes[p][27].ToArray(), transp = wpalettes[p][VoxelLogic.wcolorcount - 1];
                 drip[3] = 1F;
@@ -1329,7 +1373,7 @@ namespace AssetsPV
                 zap[3] = spin_alpha_1;
                 wpalettes[p] = wpalettes[p].Concat(new float[][] { drip, transp, transp, transp, drip, zap }).ToArray();
             }
-            
+
             VoxelLogic.wpalettes = wpalettes;
         }
 
