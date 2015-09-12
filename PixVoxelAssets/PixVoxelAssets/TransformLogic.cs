@@ -207,25 +207,57 @@ namespace AssetsPV
             }
             return data;
         }
-
-        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int multiplier)
-        {
-            return VoxLargerArrayToList(voxelData, multiplier, multiplier, multiplier);
-        }
-        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int xmultiplier, int ymultiplier, int zmultiplier)
+        public static byte[,,] Translate(byte[,,] voxelData, int xMove, int yMove, int zMove)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+
+            byte[,,] vs = new byte[xSize, ySize, zSize];
+
+            int xmin = 0, ymin = 0, zmin = 0,
+                xmax = xSize, ymax = ySize, zmax = zSize;
+            if(xMove < 0)
+                xmin -= xMove;
+            else if(xMove > 0)
+                xmax -= xMove;
+            if(yMove < 0)
+                ymin -= yMove;
+            else if(yMove > 0)
+                ymax -= yMove;
+            if(zMove < 0)
+                zmin -= zMove;
+            else if(zMove > 0)
+                zmax -= zMove;
+
+            for(int x = xmin; x < xmax; x++)
+            {
+                for(int y = ymin; y < ymax; y++)
+                {
+                    for(int z = zmin; z < zmax; z++)
+                    {
+                        vs[x + xMove, y + yMove, z + zMove] = voxelData[x, y, z];
+                    }
+                }
+            }
+
+            return vs;
+
+        }
+        public static byte[,,] RunCA(byte[,,] voxelData, int smoothLevel)
+        {
+            if(smoothLevel <= 1)
+                return voxelData;
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
-            byte[][,,] vs = new byte[3][,,];
+            byte[][,,] vs = new byte[smoothLevel][,,];
             vs[0] = voxelData.Replicate();
-            for(int v = 1; v < 3; v++)
+            for(int v = 1; v < smoothLevel; v++)
             {
                 vs[v] = new byte[xSize, ySize, zSize];
-                for(int x = 0; x < xSize - 1; x++)
+                for(int x = 0; x < xSize; x++)
                 {
-                    for(int y = 0; y < ySize - 1; y++)
+                    for(int y = 0; y < ySize; y++)
                     {
-                        for(int z = 0; z < zSize - 1; z++)
+                        for(int z = 0; z < zSize; z++)
                         {
                             colorCount.Clear();
                             int emptyCount = 0;
@@ -262,12 +294,51 @@ namespace AssetsPV
                                 vs[v][x, y, z] = 0;
                             else
                                 vs[v][x, y, z] = colorCount.OrderByDescending(kv => kv.Value).First().Key;
-
-
                         }
                     }
                 }
             }
+            return vs[smoothLevel - 1];
+        }
+        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int multiplier)
+        {
+            return VoxLargerArrayToList(voxelData, multiplier, multiplier, multiplier);
+        }
+
+        public static byte[,,] SealGaps(byte[,,] voxelData)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte[,,] vls = voxelData.Replicate();
+            for(int z = 0; z < zSize - 1; z++)
+            {
+                for(int y = 1; y < ySize - 1; y++)
+                {
+                    for(int x = 1; x < xSize - 1; x++)
+                    {
+                        if(voxelData[x - 1, y, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x - 1, y, z + 1] == 0)
+                            vls[x, y, z] = voxelData[x - 1, y, z];
+                        else if(voxelData[x + 1, y, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x + 1, y, z + 1] == 0)
+                            vls[x, y, z] = voxelData[x + 1, y, z];
+                        else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z + 1] == 0)
+                            vls[x, y, z] = voxelData[x, y - 1, z];
+                        else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z + 1] == 0)
+                            vls[x, y, z] = voxelData[x, y + 1, z];
+                    }
+                }
+            }
+            return vls;
+        }
+
+
+        public static byte[,,] Shrink(byte[,,] voxelData, int multiplier)
+        {
+            return Shrink(voxelData, multiplier, multiplier, multiplier);
+        }
+        public static byte[,,] Shrink(byte[,,] voxelData, int xmultiplier, int ymultiplier, int zmultiplier)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
+
             byte[,,] vfinal = new byte[xSize / xmultiplier, ySize / ymultiplier, zSize / zmultiplier];
             Dictionary<byte, MagicaVoxelData> specialColors = new Dictionary<byte, MagicaVoxelData>();
             for(int x = 0; x < xSize / xmultiplier; x++)
@@ -286,7 +357,7 @@ namespace AssetsPV
                             {
                                 for(int zz = 0; zz < zmultiplier; zz++)
                                 {
-                                    byte smallColor = vs[2][x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
+                                    byte smallColor = voxelData[x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
                                     if((254 - smallColor) % 4 == 0)
                                     {
                                         specialCount++;
@@ -335,7 +406,11 @@ namespace AssetsPV
             {
                 vfinal[kv.Value.x, kv.Value.y, kv.Value.z] = kv.Key;
             }
-            return VoxArrayToList(vfinal);
+            return vfinal;
+        }
+        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int xmultiplier, int ymultiplier, int zmultiplier)
+        {
+            return VoxArrayToList(RunCA(voxelData, 3));
         }
 
         public static byte[,,] TransformStartLarge(IEnumerable<MagicaVoxelData> voxels)
@@ -345,6 +420,14 @@ namespace AssetsPV
         public static byte[,,] TransformStartHuge(IEnumerable<MagicaVoxelData> voxels)
         {
             return VoxListToLargerArray(voxels, 4, 120, 120, 80);
+        }
+        public static byte[,,] TransformStartLarge(IEnumerable<MagicaVoxelData> voxels, int multiplier)
+        {
+            return VoxListToLargerArray(voxels, multiplier, 60, 60, 60);
+        }
+        public static byte[,,] TransformStartHuge(IEnumerable<MagicaVoxelData> voxels, int multiplier)
+        {
+            return VoxListToLargerArray(voxels, multiplier, 120, 120, 80);
         }
         public static byte[,,] TransformStart(IEnumerable<MagicaVoxelData> voxels, int xSize, int ySize, int zSize)
         {

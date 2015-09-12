@@ -52,7 +52,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallFacesDithered</StartupObject>
+    <StartupObject>AssetsPV.OrthoDithered</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Pngcs, Version=1.1.4.1, Culture=neutral, processorArchitecture=MSIL">
@@ -77,6 +77,7 @@
     <Compile Include="LocalMap.cs" />
     <Compile Include="ForaysVoxels.cs" />
     <Compile Include="CURedux.cs" />
+    <Compile Include="OrthoDithered.cs" />
     <Compile Include="TallFacesDithered.cs" />
     <Compile Include="TallFaces.cs" />
     <Compile Include="TinyOrthoVoxels.cs" />
