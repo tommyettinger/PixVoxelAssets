@@ -138,7 +138,7 @@ namespace AssetsPV
                             Color c2 = Color.Transparent;
                             double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
                                     v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-                            v_alter *= Math.Pow(v_alter, 0.6);
+                            v_alter *= Math.Pow(v_alter, 0.3);
                             if(j == height - 1)
                             {
                                 c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
@@ -147,10 +147,10 @@ namespace AssetsPV
                             {
                                 switch(j)
                                 {
-                                    case 1:
+                                    case 0:
                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
                                         break;
-                                    case 0:
+                                    case 1:
                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
                                         break;
                                     case 2:
@@ -245,11 +245,11 @@ namespace AssetsPV
                                     switch(j)
                                     {
                                         
-                                        case 1:
-                                            c2 = new byte[] { topi, topi, topi, topi };
+                                        case 0:
+                                            c2 = new byte[] { topi, brighti, dimi, darki };
                                             //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
                                             break;
-                                        case 0:
+                                        case 1:
                                             c2 = new byte[] { brighti, brighti, brighti, brighti };
                                             // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
                                             break;
@@ -3017,10 +3017,15 @@ namespace AssetsPV
                 cols * (dim * multiplier * (vheight - top) + x / 2 - z * (vheight - top) + innerY);
         }
 
-        private static byte Dither(byte[] sprite, int innerX, int innerY, int x, int y, int z)
+        private static byte Shade(byte[] sprite, int innerX, int innerY, int aboveback, int above, int abovefront)
         {
             //            switch((((7 * innerX) * (3 * innerY) + x + y + z) ^ ((11 * innerX) * (5 * innerY) + x + y + z) ^ (7 - innerX - innerY)) % 16)
-            return sprite[innerY * 4 * vwidth];
+            if(above > 0)
+                return sprite[1];
+            else if(aboveback > 0 || abovefront > 0)
+                return sprite[1];
+            else
+                return sprite[0];
         }
         private static byte RandomDither(byte[] sprite, int innerX, int innerY, Random rng)
         {
@@ -3147,7 +3152,11 @@ namespace AssetsPV
                                                 zbuffer[p] = fz;
                                                 xbuffer[p] = fx;
                                             }
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color], i, j, fx, fy, fz);
+                                            if(fz == zSize - 1 || fx == xSize - 1 || fx == 0)
+                                                argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, 0, 0, 0);
+                                            else
+                                                argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, colors[fx - 1, fy, fz + 1], colors[fx, fy, fz + 1], colors[fx + 1, fy, fz + 1]);
+
                                         }
 
                                         if(!barePositions[p] && outlineValues[p] == 0)
@@ -3242,7 +3251,12 @@ namespace AssetsPV
                                             if(mod_color == 27) //water
                                                 argbValues[p] = RandomDither(wditheredcurrent[mod_color], i, j, rng);
                                             else
-                                                argbValues[p] = Dither(wditheredcurrent[mod_color], i, j, fx, fy, fz);
+                                            {
+                                                if(fz == zSize - 1 || fx == xSize - 1 || fx == 0)
+                                                    argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, 0, 0, 0);
+                                                else
+                                                    argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, colors[fx - 1, fy, fz + 1], colors[fx, fy, fz + 1], colors[fx + 1, fy, fz + 1]);
+                                            }
 
                                             //}
 
