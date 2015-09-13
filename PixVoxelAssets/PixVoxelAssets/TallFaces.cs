@@ -2359,17 +2359,17 @@ namespace AssetsPV
         {
 
             Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
-            { {"Left_Leg", VoxelLogic.readBone(left_leg + "_LLeg")},
-              {"Right_Leg", VoxelLogic.readBone(right_leg + "_RLeg")},
-              {"Torso", VoxelLogic.readBone(torso + "_Torso")},
-              {"Left_Upper_Arm", VoxelLogic.readBone(left_upper_arm + "_LUpperArm")},
-              {"Right_Upper_Arm", VoxelLogic.readBone(right_upper_arm + "_RUpperArm")},
-              {"Left_Lower_Arm", VoxelLogic.readBone(left_lower_arm + "_LLowerArm")},
-              {"Right_Lower_Arm", VoxelLogic.readBone(right_lower_arm + "_RLowerArm")},
-              {"Face",  VoxelLogic.readBone(face + "_Face")},
-              {"Head",  VoxelLogic.readBone(head + "_Head")},
-              {"Left_Weapon", VoxelLogic.readBone(left_weapon)},
-              {"Right_Weapon", VoxelLogic.readBone(right_weapon)}
+            { {"Left_Leg", VoxelLogic.readComponent(left_leg + "_LLeg")},
+              {"Right_Leg", VoxelLogic.readComponent(right_leg + "_RLeg")},
+              {"Torso", VoxelLogic.readComponent(torso + "_Torso")},
+              {"Left_Upper_Arm", VoxelLogic.readComponent(left_upper_arm + "_LUpperArm")},
+              {"Right_Upper_Arm", VoxelLogic.readComponent(right_upper_arm + "_RUpperArm")},
+              {"Left_Lower_Arm", VoxelLogic.readComponent(left_lower_arm + "_LLowerArm")},
+              {"Right_Lower_Arm", VoxelLogic.readComponent(right_lower_arm + "_RLowerArm")},
+              {"Face",  VoxelLogic.readComponent(face + "_Face")},
+              {"Head",  VoxelLogic.readComponent(head + "_Head")},
+              {"Left_Weapon", VoxelLogic.readComponent(left_weapon)},
+              {"Right_Weapon", VoxelLogic.readComponent(right_weapon)}
             };
             byte[,,] work = TransformLogic.MergeVoxels(TransformLogic.TransformStartLarge(components["Head"]), TransformLogic.TransformStartLarge(components["Face"]), 9);
             work = TransformLogic.MergeVoxels(work, TransformLogic.TransformStartLarge(components["Torso"]), 8);

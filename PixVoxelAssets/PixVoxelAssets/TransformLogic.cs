@@ -6,9 +6,248 @@ using System.Threading.Tasks;
 
 namespace AssetsPV
 {
+    public class Bone
+    {
+        public byte[,,] Colors;
+        public Quaternion q;
+        public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f;
+        public byte[] SpreadColors = null;
+
+        public Bone(byte[,,] c)
+        {
+            Colors = c;
+            q = new Quaternion();
+        }
+        public Bone(byte[,,] colors, float yaw, float pitch, float roll)
+        {
+            this.Colors = colors;
+            this.Yaw = yaw;
+            this.Pitch = pitch;
+            this.Roll = roll;
+            this.q = new Quaternion();
+        }
+        public byte[,,] FinalizeSimple()
+        {
+            q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+
+            int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
+                hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
+            Vector3 v = new Vector3(0f, 0f, 0f);
+
+            byte[,,] c2 = new byte[xSize, ySize, zSize];
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(Colors[x, y, z] > 0)
+                        {
+                            v.z = z - hzs;
+                            v.y = y - hys;
+                            v.x = x - hxs;
+                            q.transform(v);
+                            int x2 = (int)(v.x + 0.5f + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                c2[x2, y2, z2] = Colors[x, y, z];
+                        }
+                    }
+                }
+            }
+            return c2;
+        }
+
+        public byte[,,] Finalize()
+        {
+            if(SpreadColors == null)
+                return FinalizeSimple();
+
+            q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+
+            Quaternion q0 = new Quaternion().setEulerAngles(360 - StartYaw, 360 - StartPitch, 360 - StartRoll), q2 = q0.cpy();
+
+            float distance = Math.Abs(Yaw - StartYaw) % 360 + Math.Abs(Pitch - StartPitch) % 360 + Math.Abs(Roll - StartRoll) % 360;
+
+            float levels = Math.Max(distance / 7.5f, 1f);
+
+            int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
+                hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
+            Vector3 v = new Vector3(0f, 0f, 0f);
+
+            byte[,,] c2 = new byte[xSize, ySize, zSize];
+
+            for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+            {
+                q2 = q0.cpy().slerp(q, a);
+                for(int z = 0; z < zSize; z++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        for(int x = 0; x < xSize; x++)
+                        {
+                            for(int c = 0; c < SpreadColors.Length; c++)
+                            {
+                                if(Colors[x, y, z] == SpreadColors[c])
+                                {
+                                    v.z = z - hzs;
+                                    v.y = y - hys;
+                                    v.x = x - hxs;
+                                    q.transform(v);
+                                    int x2 = (int)(v.x + 0.5f + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                                    if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                        c2[x2, y2, z2] = Colors[x, y, z];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(Colors[x, y, z] > 0)
+                        {
+                            v.z = z - hzs;
+                            v.y = y - hys;
+                            v.x = x - hxs;
+                            q.transform(v);
+                            int x2 = (int)(v.x + 0.5f + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+
+                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                c2[x2, y2, z2] = Colors[x, y, z];
+                        }
+                    }
+                }
+            }
+            return c2;
+        }
+
+        public Bone[] Interpolate(int frames, float yaw, float pitch, float roll)
+        {
+            q.setEulerAngles(-Yaw, -Pitch, -Roll);
+
+            Quaternion q0 = new Quaternion().setEulerAngles(-yaw, -pitch, -roll), q2 = q0.cpy();
+
+            float levels = Math.Max(frames - 1f, 1f);
+
+            int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
+                hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
+            Vector3 v = new Vector3(0f, 0f, 0f), v2;
+
+            byte[,,] c2 = new byte[xSize, ySize, zSize];
+            Bone[] midBones = new Bone[frames];
+            byte[,,] tmpColors;
+            int ctr = 0;
+            for(float a = 0.0f; a <= 1.0f && ctr < frames; a += 1.0f / levels, ctr++)
+            {
+                tmpColors = new byte[xSize, ySize, zSize];
+                q2 = q0.cpy().slerp(q, a);
+                for(int z = 0; z < zSize; z++)
+                {
+                    v.z = z - hzs;
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        v.y = y - hys;
+                        for(int x = 0; x < xSize; x++)
+                        {
+                            if(Colors[x, y, z] > 0)
+                            {
+                                v.x = x - hxs;
+                                v2 = q2.transform(v);
+                                int x2 = (int)(v2.x + 0.5f + hxs), y2 = (int)(v2.y + 0.5f + hys), z2 = (int)(v2.z + 0.5f + hzs);
+                                if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                    tmpColors[x2, y2, z2] = Colors[x, y, z];
+                                break;
+                            }
+                        }
+                    }
+                }
+                midBones[ctr] = new Bone(tmpColors);
+            }
+            return midBones;
+        }
+    }
+    public struct Connector
+    {
+        public string plug;
+        public string socket;
+        public int matchColor;
+        public Connector(string plug, string socket, int matchColor)
+        {
+            this.plug = plug;
+            this.socket = socket;
+            this.matchColor = matchColor;
+        }
+    }
+    public class Model
+    {
+        public Dictionary<string, Bone> Bones = new Dictionary<string, Bone>(16);
+        public Model()
+        {
+
+        }
+        public Model(Dictionary<string, Bone> bones)
+        {
+            Bones = bones;
+        }
+
+
+        public Model AddBone(string boneName, Bone bone)
+        {
+            Bones.Add(boneName, bone);
+            return this;
+        }
+
+        public Model AddBone(string boneName, byte[,,] bone)
+        {
+            Bones.Add(boneName, new Bone(bone));
+            return this;
+        }
+        public Model AddYaw(float yaw, params string[] names)
+        {
+            foreach(string nm in names)
+            {
+                Bones[nm].Yaw += yaw;
+            }
+            return this;
+        }
+        public Model AddPitch(float pitch, params string[] names)
+        {
+            foreach(string nm in names)
+            {
+                Bones[nm].Pitch += pitch;
+            }
+            return this;
+        }
+        public Model AddRoll(float roll, params string[] names)
+        {
+            foreach(string nm in names)
+            {
+                Bones[nm].Roll += roll;
+            }
+            return this;
+        }
+        public byte[,,] Finalize(params Connector[] anatomy)
+        {
+            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize());
+            string finished = "";
+            foreach(Connector conn in anatomy)
+            {
+                finals[conn.socket] = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor);
+                finished = conn.socket;
+            }
+            return finals[finished];
+        }
+    }
+
     public class TransformLogic
     {
-
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
             int plugX = -1, plugY = -1, plugZ = -1, socketX = -1, socketY = -1, socketZ = -1;

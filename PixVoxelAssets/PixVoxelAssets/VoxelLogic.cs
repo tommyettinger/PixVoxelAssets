@@ -9252,7 +9252,7 @@ MovementType.Foot                                                         };
 
         public static string voxFolder = "";
 
-        public static List<MagicaVoxelData> readBone(string file)
+        public static List<MagicaVoxelData> readComponent(string file)
         {
             if(file == null)
                 return new List<MagicaVoxelData>();

@@ -14,7 +14,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
-        public const int multiplier = 2, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 2, bonus = 2, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = 60 * multiplier * (vheight - top) * 2 + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = 60 * (vheight - top) * 2 + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = 120 * multiplier * (vheight - top) * 2 + 2,
@@ -2907,27 +2907,57 @@ namespace AssetsPV
         //    }
         //}
 
+        public static Bone readBone(string file)
+        {
+            if(file == null)
+                return new Bone(new byte[60 * multiplier * bonus, 60 * multiplier * bonus, 60 * multiplier * bonus]);
+            BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
+            List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
+            return new Bone(TransformLogic.TransformStartLarge(raw, multiplier * bonus));
+        }
         public static void processUnitLargeWBones(string moniker = "Dude", bool still = true,
         string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
         string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
         string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, int palette = 0)
         {
-
+            /*
             Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
-            { {"Left_Leg", VoxelLogic.readBone(left_leg + "_LLeg")},
-              {"Right_Leg", VoxelLogic.readBone(right_leg + "_RLeg")},
-              {"Torso", VoxelLogic.readBone(torso + "_Torso")},
-              {"Left_Upper_Arm", VoxelLogic.readBone(left_upper_arm + "_LUpperArm")},
-              {"Right_Upper_Arm", VoxelLogic.readBone(right_upper_arm + "_RUpperArm")},
-              {"Left_Lower_Arm", VoxelLogic.readBone(left_lower_arm + "_LLowerArm")},
-              {"Right_Lower_Arm", VoxelLogic.readBone(right_lower_arm + "_RLowerArm")},
-              {"Face",  VoxelLogic.readBone(face + "_Face")},
-              {"Head",  VoxelLogic.readBone(head + "_Head")},
-              {"Left_Weapon", VoxelLogic.readBone(left_weapon)},
-              {"Right_Weapon", VoxelLogic.readBone(right_weapon)}
+            { {"Left_Leg", VoxelLogic.readComponent(left_leg + "_LLeg")},
+              {"Right_Leg", VoxelLogic.readComponent(right_leg + "_RLeg")},
+              {"Torso", VoxelLogic.readComponent(torso + "_Torso")},
+              {"Left_Upper_Arm", VoxelLogic.readComponent(left_upper_arm + "_LUpperArm")},
+              {"Right_Upper_Arm", VoxelLogic.readComponent(right_upper_arm + "_RUpperArm")},
+              {"Left_Lower_Arm", VoxelLogic.readComponent(left_lower_arm + "_LLowerArm")},
+              {"Right_Lower_Arm", VoxelLogic.readComponent(right_lower_arm + "_RLowerArm")},
+              {"Face",  VoxelLogic.readComponent(face + "_Face")},
+              {"Head",  VoxelLogic.readComponent(head + "_Head")},
+              {"Left_Weapon", VoxelLogic.readComponent(left_weapon)},
+              {"Right_Weapon", VoxelLogic.readComponent(right_weapon)}
             };
-            int bonus = 2;
-            byte[,,] work = TransformLogic.MergeVoxels(TransformLogic.TransformStartLarge(components["Head"], multiplier * bonus), TransformLogic.TransformStartLarge(components["Face"], multiplier * bonus), 9);
+            */
+            Model model = new Model();
+            model.AddBone("Left_Leg", readBone(left_leg + "_LLeg"));
+            model.AddBone("Right_Leg", readBone(right_leg + "_RLeg"));
+            model.AddBone("Torso", readBone(torso + "_Torso"));
+            model.AddBone("Face", readBone(face + "_Face"));
+            model.AddBone("Head", readBone(head + "_Head"));
+            model.AddBone("Left_Upper_Arm", readBone(left_upper_arm + "_LUpperArm"));
+            model.AddBone("Right_Upper_Arm", readBone(right_upper_arm + "_RUpperArm"));
+            model.AddBone("Left_Lower_Arm", readBone(left_lower_arm + "_LLowerArm"));
+            model.AddBone("Right_Lower_Arm", readBone(right_lower_arm + "_RLowerArm"));
+            model.AddBone("Left_Weapon", readBone(left_weapon));
+            model.AddBone("Right_Weapon", readBone(right_weapon));
+
+            model.AddPitch(15, "Left_Weapon");
+            model.AddYaw(10, "Left_Lower_Arm", "Left_Weapon");
+            model.AddPitch(315, "Left_Lower_Arm", "Left_Weapon");
+            model.AddPitch(315, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon");
+
+            byte[,,] work = model.Finalize(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
+                new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
+                new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
+            /*
+            byte[,,] work = TransformLogic.MergeVoxels(TransformLogic.TransformStartLarge(components["Face"], multiplier * bonus), TransformLogic.TransformStartLarge(components["Head"], multiplier * bonus), 9);
             work = TransformLogic.MergeVoxels(work, TransformLogic.TransformStartLarge(components["Torso"], multiplier * bonus), 8);
             byte[,,] right_weapon_arm = TransformLogic.MergeVoxels(TransformLogic.TransformStartLarge(components["Right_Weapon"], multiplier * bonus),
                 TransformLogic.TransformStartLarge(components["Right_Lower_Arm"], multiplier * bonus), 6);
@@ -2943,6 +2973,7 @@ namespace AssetsPV
             work = TransformLogic.MergeVoxels(left_weapon_arm, work, 2);
             work = TransformLogic.MergeVoxels(work, TransformLogic.TransformStartLarge(components["Left_Leg"], multiplier * bonus), 0);
             work = TransformLogic.MergeVoxels(TransformLogic.TransformStartLarge(components["Right_Leg"], multiplier * bonus), work, 1);
+            */
             work = TransformLogic.Translate(work, 10 * multiplier * bonus, 10 * multiplier * bonus, 0);
 
             //Directory.CreateDirectory("vox/" + altFolder);
