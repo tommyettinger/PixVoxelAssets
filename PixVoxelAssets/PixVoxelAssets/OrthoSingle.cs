@@ -2915,10 +2915,11 @@ namespace AssetsPV
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
             return new Bone(TransformLogic.TransformStartLarge(raw, multiplier * bonus));
         }
+
         public static void processUnitLargeWBones(string moniker = "Dude", bool still = true,
         string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
         string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
-        string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, int palette = 0)
+        string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Pose pose = null, int palette = 0)
         {
             /*
             Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
@@ -2948,14 +2949,15 @@ namespace AssetsPV
             model.AddBone("Left_Weapon", readBone(left_weapon));
             model.AddBone("Right_Weapon", readBone(right_weapon));
 
-            model.AddPitch(15, "Left_Weapon");
-            model.AddYaw(10, "Left_Lower_Arm", "Left_Weapon");
-            model.AddPitch(315, "Left_Lower_Arm", "Left_Weapon");
-            model.AddPitch(315, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon");
 
-            byte[,,] work = model.Finalize(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
+            model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
                 new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
                 new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
+            if(pose != null)
+            {
+                model = pose(model);
+            }
+            byte[,,] work = model.Finalize();
             /*
             byte[,,] work = TransformLogic.MergeVoxels(TransformLogic.TransformStartLarge(components["Face"], multiplier * bonus), TransformLogic.TransformStartLarge(components["Head"], multiplier * bonus), 9);
             work = TransformLogic.MergeVoxels(work, TransformLogic.TransformStartLarge(components["Torso"], multiplier * bonus), 8);
@@ -2990,7 +2992,7 @@ namespace AssetsPV
             for(int dir = 0; dir < 4; dir++)
             {
 //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(TransformLogic.RunCA(work, 3), 90 * dir), bonus), 2));
+                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(TransformLogic.RunCA(work, 1), 90 * dir), bonus), 2));
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -4053,8 +4055,16 @@ namespace AssetsPV
 
             //            processReceivingMilitaryWSuper();
 
-
-            processUnitLargeWBones(left_weapon: "Longsword");
+            Pose pose0 = (model => model),
+                pose1 = (model => model.AddPitch(15, "Left_Weapon")
+            .AddYaw(10, "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(315, "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(315, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
+                pose2 = (model => model.AddPitch(30, "Left_Weapon")
+            .AddPitch(290, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddSpread("Left_Weapon", 0f, 30f, 0f, 253 - 12 * 4));
+//            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
+            processUnitLargeWBones(moniker: "Dude_Swinging", left_weapon: "Longsword", pose: pose2);
         }
     }
 }
