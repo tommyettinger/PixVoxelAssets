@@ -86,9 +86,9 @@ namespace AssetsPV
 
             q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
 
-            Quaternion q0 = new Quaternion().setEulerAngles(0 - Yaw + StartYaw, 0 - Pitch + StartPitch, 0 - Roll + StartRoll), q2;
+            Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
 
-            float distance = Math.Abs(Yaw - StartYaw) % 360 + Math.Abs(Pitch - StartPitch) % 360 + Math.Abs(Roll - StartRoll) % 360;
+            float distance = Math.Abs(Yaw + StartYaw) % 360 + Math.Abs(Pitch + StartPitch) % 360 + Math.Abs(Roll + StartRoll) % 360;
 
             float levels = Math.Max(distance / 7.5f, 1f);
 
@@ -97,8 +97,7 @@ namespace AssetsPV
             Vector3 v = new Vector3(0f, 0f, 0f);
 
             byte[,,] c2 = new byte[xSize, ySize, zSize];
-
-
+            
             for(int z = 0; z < zSize; z++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -108,13 +107,16 @@ namespace AssetsPV
                         if(Colors[x, y, z] > 0)
                         {
                             v.z = z - hzs;
-                            v.y = y - hys + yOffset;
+                            v.y = y - hys - yOffset;
                             v.x = x - hxs + xOffset;
                             q.transform(v);
-                            int x2 = (int)(v.x + 0.5f + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                            int x2 = (int)(v.x + 0.5f + hxs - xOffset), y2 = (int)(v.y + 0.5f + hys + yOffset), z2 = (int)(v.z + hzs + 0.5f);
+                            //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
 
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                            {
                                 c2[x2, y2, z2] = Colors[x, y, z];
+                            }
                         }
                     }
                 }
@@ -134,11 +136,13 @@ namespace AssetsPV
                                 if(Colors[x, y, z] == SpreadColors[c])
                                 {
                                     v.z = z - hzs;
-                                    v.y = y - hys + yOffset;
+                                    v.y = y - hys - yOffset;
                                     v.x = x - hxs + xOffset;
                                     q2.transform(v);
-                                    int x2 = (int)(v.x + 0.5f + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
-                                    if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                    int x2 = (int)(v.x + 0.5f + hxs - xOffset), y2 = (int)(v.y + 0.5f + hys + yOffset), z2 = (int)(v.z + hzs + 0.5f);
+                                    //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
+
+                                    if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0)
                                         c2[x2, y2, z2] = Colors[x, y, z];
                                     break;
                                 }
