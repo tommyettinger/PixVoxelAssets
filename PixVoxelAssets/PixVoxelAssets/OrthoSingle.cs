@@ -4058,30 +4058,45 @@ namespace AssetsPV
             Pose pose0 = (model => model),
                 pose1 = (model => model.AddPitch(15, "Left_Weapon")
             .AddYaw(10, "Left_Lower_Arm", "Left_Weapon")
-            .AddPitch(315, "Left_Lower_Arm", "Left_Weapon")
-            .AddPitch(315, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
-                pose2 = (model => model.AddPitch(30, "Left_Weapon")
-            .AddPitch(290, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
-            .AddSpread("Left_Weapon", 0f, 27f, 0f, 253 - 12 * 4));
+            .AddPitch(45, "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(45, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
+                pose2 = (model => model.AddPitch(-30, "Left_Weapon")
+            .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddYaw(20, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddSpread("Left_Weapon", 60f, 0f, 0f, 253 - 12 * 4));
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             
             processUnitLargeWBones(moniker: "Dude_Swinging", left_weapon: "Longsword", pose: pose2);
-          /*  
+            
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", readBone("Longsword") } });
             Pose pose3 = (model => model.AddPitch(30, "Left_Weapon")
-            //.AddPitch(290, "Left_Weapon")
-            .AddSpread("Left_Weapon", 0f, 45f, 0f, 253 - 12 * 4));
+            .AddYaw(20, "Left_Weapon")
+            .AddPitch(-70, "Left_Weapon")
+            .AddSpread("Left_Weapon", 80f, 30f, 0f, 253 - 12 * 4));
             
             byte[,,] by = pose3(m).Bones["Left_Weapon"].Finalize(40, 40);
             by = TransformLogic.Translate(by, 10 * multiplier * bonus, 10 * multiplier * bonus, 0);
-            by = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(TransformLogic.RunCA(by, 1), 90), bonus), 2));
-            
-                byte[][] b = processFrameLargeW(by, 0, 1, 0, 1, true, false);
+            for(int d = 0; d < 4; d++)
+            {
+                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(TransformLogic.RunCA(by, 1), 90 * d), bonus), 2));
+
+                byte[][] b = processFrameLargeW(colors, 0, d, 0, 1, true, false);
 
                 ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Large_face" + 1 + "_" + 0 + ".png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Large_face" + d + "_" + 0 + ".png", imi, true);
                 WritePNG(png, b, simplepalettes[0]);
-        */
+            }
+
+
+            Directory.CreateDirectory("gifs/" + altFolder);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+
         }
     }
 }

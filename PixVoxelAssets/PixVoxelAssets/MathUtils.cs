@@ -26,6 +26,7 @@ namespace AssetsPV
      * @author badlogicgames@gmail.com */
     public class Vector3
     {
+        public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
 
         /** the x-component of this vector **/
         public float x;
@@ -551,6 +552,20 @@ namespace AssetsPV
             this.z = 0;
             return this;
         }
+        public Vector3 fromAngles(float yaw, float pitch, float roll)
+        {
+            return fromAnglesRad(yaw * DegreesToRadians, pitch * DegreesToRadians, roll * DegreesToRadians);
+        }
+
+
+        public Vector3 fromAnglesRad(float yaw, float pitch, float roll)
+        {
+            y = (float)(Math.Cos(yaw) * Math.Cos(roll));
+            x = (float)(Math.Cos(pitch) * Math.Sin(yaw));
+            z = (float)(Math.Sin(pitch) * Math.Sin(roll));
+            return this.nor();
+
+        }
     }
     /** A simple quaternion class.
      * @see <a href="http://en.wikipedia.org/wiki/Quaternion">http://en.wikipedia.org/wiki/Quaternion</a>
@@ -559,7 +574,7 @@ namespace AssetsPV
      * @author xoppa */
     public class Quaternion
     {
-        private static float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
+        public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
         private static Quaternion tmp1 = new Quaternion(0, 0, 0, 0);
         private static Quaternion tmp2 = new Quaternion(0, 0, 0, 0);
 
@@ -798,10 +813,10 @@ namespace AssetsPV
         {
             tmp2.set(this);
             tmp2.conjugate();
-            tmp2.mulLeft(tmp1.set(v.y, v.x, v.z, 0)).mulLeft(this);
+            tmp2.mulLeft(tmp1.set(v.x, v.y, v.z, 0)).mulLeft(this);
 
-            v.x = tmp2.y;
-            v.y = tmp2.x;
+            v.x = tmp2.x;
+            v.y = tmp2.y;
             v.z = tmp2.z;
             return v;
         }
@@ -1266,9 +1281,9 @@ namespace AssetsPV
          * @return the angle in degrees
          * @see <a href="http://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">wikipedia</a>
          * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle">calculation</a> */
-        public float getAxisAngle(Vector3 axis)
+        public float getAxisAngle(out Vector3 axis)
         {
-            return getAxisAngleRad(axis) * RadiansToDegrees;
+            return getAxisAngleRad(out axis) * RadiansToDegrees;
         }
 
         /** Get the axis-angle representation of the rotation in radians. The supplied vector will receive the axis (x, y and z values)
@@ -1281,8 +1296,9 @@ namespace AssetsPV
          * @return the angle in radians
          * @see <a href="http://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">wikipedia</a>
          * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle">calculation</a> */
-        public float getAxisAngleRad(Vector3 axis)
+        public float getAxisAngleRad(out Vector3 axis)
         {
+            axis = new Vector3();
             if(this.w > 1) this.nor(); // if w>1 acos and sqrt will produce errors, this cant happen if quaternion is normalised
             float angle = (float)(2.0 * Math.Acos(this.w));
             double s = Math.Sqrt(1 - this.w * this.w); // assuming quaternion normalised then w is less than 1, so term always positive.
@@ -1301,6 +1317,27 @@ namespace AssetsPV
             }
 
             return angle;
+        }
+        public Vector3 getAxis()
+        {
+            Vector3 axis = new Vector3();
+            if(this.w > 1) this.nor(); // if w>1 acos and sqrt will produce errors, this cant happen if quaternion is normalised
+            double s = Math.Sqrt(1 - this.w * this.w); // assuming quaternion normalised then w is less than 1, so term always positive.
+            if(s < 0.000001f)
+            { // test to avoid divide by zero, s is always positive due to sqrt
+              // if s close to zero then direction of axis not important
+                axis.x = this.x; // if it is important that axis is normalised then replace with x=1; y=z=0;
+                axis.y = this.y;
+                axis.z = this.z;
+            }
+            else
+            {
+                axis.x = (float)(this.x / s); // normalise axis
+                axis.y = (float)(this.y / s);
+                axis.z = (float)(this.z / s);
+            }
+
+            return axis;
         }
 
         /** Get the angle in radians of the rotation this quaternion represents. Does not normalize the quaternion. Use

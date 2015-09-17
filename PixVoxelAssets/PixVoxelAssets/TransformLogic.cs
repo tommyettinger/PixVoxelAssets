@@ -10,13 +10,22 @@ namespace AssetsPV
     {
         public byte[,,] Colors;
         public Quaternion q;
+        //public Vector3 dir;
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f;
+
+        /*
+         * @param yaw the rotation around the y axis in radians
+         * @param pitch the rotation around the x axis in radians
+         * @param roll the rotation around the z axis in radians
+         * @return this quaternion */
+        private static Vector3 YawAxis = new Vector3(0f, 1f, 0f), PitchAxis = new Vector3(1f, 0f, 0f), RollAxis = new Vector3(0f, 0f, 1f);
         public byte[] SpreadColors = null;
 
         public Bone(byte[,,] c)
         {
             Colors = c;
             q = new Quaternion();
+            // dir = new Vector3();
         }
         public Bone(byte[,,] colors, float yaw, float pitch, float roll)
         {
@@ -25,6 +34,8 @@ namespace AssetsPV
             this.Pitch = pitch;
             this.Roll = roll;
             this.q = new Quaternion();
+            // this.dir = new Vector3();
+
         }
         public Bone InitSpread(byte[] spreadColors, float yaw_back, float pitch_back, float roll_back)
         {
@@ -47,10 +58,13 @@ namespace AssetsPV
             return this;
         }
 
-        public byte[,,] FinalizeSimple()
+        public byte[,,] FinalizeSimple(int xOffset, int yOffset)
         {
-            q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+            //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+//            q = q.idt().slerp(new Quaternion[] { new Quaternion(YawAxis, (360 - Pitch) % 360f), new Quaternion(PitchAxis, (360 - Roll) % 360f), new Quaternion(RollAxis, (360 - Yaw) % 360f) });
+            q = q.idt().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
 
+            //dir = dir.fromAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
                 hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
             Vector3 v = new Vector3(0f, 0f, 0f);
@@ -67,9 +81,9 @@ namespace AssetsPV
                         {
                             v.z = z - hzs;
                             v.y = y - hys;
-                            v.x = x - hxs;
+                            v.x = x - hxs - xOffset;
                             q.transform(v);
-                            int x2 = (int)(v.x + 0.5f + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                            int x2 = (int)(v.x + 0.5f + hxs + xOffset), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
                                 c2[x2, y2, z2] = Colors[x, y, z];
                         }
@@ -82,22 +96,30 @@ namespace AssetsPV
         public byte[,,] Finalize(int xOffset, int yOffset)
         {
             if(SpreadColors == null)
-                return FinalizeSimple();
+                return FinalizeSimple(xOffset, yOffset);
 
-            q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+            //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+            q = q.idt().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
+            //q = q.idt().slerp(new Quaternion[] { new Quaternion(RollAxis, (360 - Roll) % 360f), new Quaternion(PitchAxis, (360 - Pitch) % 360f), new Quaternion(YawAxis, (360 - Yaw) % 360f) });
 
-            Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
+            //Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
+            Quaternion q0 = q.cpy().mulLeft(new Quaternion(YawAxis, -StartPitch))
+                .mulLeft(new Quaternion(PitchAxis, -StartRoll))
+                .mulLeft(new Quaternion(RollAxis, -StartYaw)),
+            q2;
+
+
 
             float distance = Math.Abs(Yaw + StartYaw) % 360 + Math.Abs(Pitch + StartPitch) % 360 + Math.Abs(Roll + StartRoll) % 360;
 
-            float levels = Math.Max(distance / 7.5f, 1f);
+            float levels = Math.Max(distance / 2.5f, 1f);
 
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
                 hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
             Vector3 v = new Vector3(0f, 0f, 0f);
 
             byte[,,] c2 = new byte[xSize, ySize, zSize];
-            
+
             for(int z = 0; z < zSize; z++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -106,11 +128,12 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
+                            v.x = x + xOffset - hxs;
+                            v.y = y - hys;
                             v.z = z - hzs;
-                            v.y = y - hys - yOffset;
-                            v.x = x - hxs + xOffset;
+                           // v.nor();
                             q.transform(v);
-                            int x2 = (int)(v.x + 0.5f + hxs - xOffset), y2 = (int)(v.y + 0.5f + hys + yOffset), z2 = (int)(v.z + hzs + 0.5f);
+                            int x2 = (int)(v.x + 0.5f - xOffset + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
                             //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
 
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
@@ -122,35 +145,41 @@ namespace AssetsPV
                 }
             }
 
-            for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+            for(int z = 0; z < zSize; z++)
             {
-                q2 = q0.cpy().slerp(q, a);
-                for(int z = 0; z < zSize; z++)
+                for(int y = 0; y < ySize; y++)
                 {
-                    for(int y = 0; y < ySize; y++)
+                    for(int x = 0; x < xSize; x++)
                     {
-                        for(int x = 0; x < xSize; x++)
+                        for(int c = 0; c < SpreadColors.Length; c++)
                         {
-                            for(int c = 0; c < SpreadColors.Length; c++)
+                            if(Colors[x, y, z] == SpreadColors[c])
                             {
-                                if(Colors[x, y, z] == SpreadColors[c])
+                                v.x = x + xOffset - hxs;
+                                v.y = y - hys;
+                                v.z = z - hzs;
+                                //v.nor();
+                                //Vector3 vOuter = q0.transform(v.cpy());
+
+                                for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                 {
-                                    v.z = z - hzs;
-                                    v.y = y - hys - yOffset;
-                                    v.x = x - hxs + xOffset;
-                                    q2.transform(v);
-                                    int x2 = (int)(v.x + 0.5f + hxs - xOffset), y2 = (int)(v.y + 0.5f + hys + yOffset), z2 = (int)(v.z + hzs + 0.5f);
+                                    q2 = q0.cpy().slerp(q, a);
+                                    //Vector3 v2 = vOuter.cpy().slerp(v, a);
+                                    Vector3 v2 = q2.transform(v.cpy());
+
+                                    int x2 = (int)(v2.x + 0.5f + hxs - xOffset), y2 = (int)(v2.y + hys + 0.5f), z2 = (int)(v2.z + hzs + 0.5f);
                                     //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
 
                                     if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0)
                                         c2[x2, y2, z2] = Colors[x, y, z];
-                                    break;
                                 }
+                                break;
                             }
                         }
                     }
                 }
             }
+
             return c2;
         }
 
@@ -244,9 +273,9 @@ namespace AssetsPV
             Bones.Add(boneName, new Bone(bone));
             return this;
         }
-        public Model AddSpread(string boneName, float yaw_back, float pitch_back, float roll_back, params byte[] spreadColors)
+        public Model AddSpread(string boneName, float pitchy, float rolly, float yawy, params byte[] spreadColors)
         {
-            Bones[boneName].InitSpread(spreadColors, yaw_back, pitch_back, roll_back);
+            Bones[boneName].InitSpread(spreadColors, rolly, pitchy, yawy);
             return this;
         }
         public Model AddYaw(float yaw, params string[] names)
@@ -284,7 +313,12 @@ namespace AssetsPV
             string finished = "";
             foreach(Connector conn in Anatomy)
             {
-                finals[conn.socket] = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor);
+                byte[,,] bs = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor);
+                if(bs == finals[conn.socket])
+                    Console.WriteLine("PLUG NOT FOUND: " + conn.plug + " connecting to " + conn.socket);
+                else if(bs == finals[conn.plug])
+                    Console.WriteLine("SOCKET NOT FOUND: " + conn.socket + " connecting to " + conn.plug);
+                finals[conn.socket] = bs;
                 finished = conn.socket;
             }
             return finals[finished];
@@ -575,35 +609,36 @@ namespace AssetsPV
                         {
                             colorCount.Clear();
                             int emptyCount = 0;
-                            if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == zSize - 1 || z == zSize - 1
+                            if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
                                 || (254 - vs[v - 1][x, y, z]) % 4 == 0)
                             {
                                 colorCount[vs[v - 1][x, y, z]] = 100;
-                                goto END_INNER;
                             }
-                            for(int xx = -1; xx < 2; xx++)
+                            else
                             {
-                                for(int yy = -1; yy < 2; yy++)
+                                for(int xx = -1; xx < 2; xx++)
                                 {
-                                    for(int zz = -1; zz < 2; zz++)
+                                    for(int yy = -1; yy < 2; yy++)
                                     {
-                                        byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
-                                        if(smallColor == 0)
+                                        for(int zz = -1; zz < 2; zz++)
                                         {
-                                            emptyCount++;
-                                        }
-                                        else if(colorCount.ContainsKey(smallColor))
-                                        {
-                                            colorCount[smallColor]++;
-                                        }
-                                        else
-                                        {
-                                            colorCount[smallColor] = 1;
+                                            byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
+                                            if(smallColor == 0)
+                                            {
+                                                emptyCount++;
+                                            }
+                                            else if(colorCount.ContainsKey(smallColor))
+                                            {
+                                                colorCount[smallColor]++;
+                                            }
+                                            else
+                                            {
+                                                colorCount[smallColor] = 1;
+                                            }
                                         }
                                     }
                                 }
                             }
-                            END_INNER:
                             if(emptyCount > 17)
                                 vs[v][x, y, z] = 0;
                             else
