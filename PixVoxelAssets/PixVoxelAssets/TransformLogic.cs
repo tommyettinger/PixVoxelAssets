@@ -81,9 +81,9 @@ namespace AssetsPV
                         {
                             v.z = z - hzs;
                             v.y = y - hys;
-                            v.x = x - hxs - xOffset;
+                            v.x = x - hxs + xOffset;
                             q.transform(v);
-                            int x2 = (int)(v.x + 0.5f + hxs + xOffset), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                            int x2 = (int)(v.x + 0.5f + hxs - xOffset), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
                                 c2[x2, y2, z2] = Colors[x, y, z];
                         }
@@ -183,48 +183,44 @@ namespace AssetsPV
             return c2;
         }
 
-        public Bone[] Interpolate(int frames, float yaw, float pitch, float roll)
+        public Bone Interpolate(Bone target, float alpha)
         {
-            q.setEulerAngles(-Yaw, -Pitch, -Roll);
+            if(alpha <= 0.0)
+                return this;
+            else if(alpha >= 1.0)
+                return target;
+            q = q.idt().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
 
-            Quaternion q0 = new Quaternion().setEulerAngles(-yaw, -pitch, -roll), q2;
-
-            float levels = Math.Max(frames - 1f, 1f);
-
-            Bone[] midBones = new Bone[frames];
-            int ctr = 0;
-            for(float a = 0.0f; a <= 1.0f && ctr < frames; a += 1.0f / levels, ctr++)
+            Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
+                .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
+                .mulLeft(new Quaternion(RollAxis, (360 - target.Yaw) % 360f)),
+            q2;
+            Vector3 myStarts = new Vector3(StartYaw, StartPitch, StartRoll), tgtStarts = new Vector3(target.StartYaw, target.StartPitch, target.StartRoll);
+            myStarts.lerp(tgtStarts, alpha);
+            byte[] newSpread = null;
+            if(SpreadColors != null)
             {
-                q2 = q.cpy().slerp(q0, a);
-
-                Bone b = new Bone(Colors);
-                b.Yaw = 360f - q2.getYaw();
-                b.Pitch = 360f - q2.getPitch();
-                b.Roll = 360f - q2.getRoll();
-
-                midBones[ctr] = b;
+                newSpread = SpreadColors;
+                if(target.SpreadColors != null)
+                {
+                    newSpread = new byte[SpreadColors.Length + target.SpreadColors.Length];
+                    for(int i = 0; i < SpreadColors.Length; i++)
+                    {
+                        newSpread[i] = SpreadColors[i];
+                    }
+                    for(int i = 0; i < target.SpreadColors.Length; i++)
+                    {
+                        newSpread[SpreadColors.Length + i] = target.SpreadColors[i];
+                    }
+                }
             }
-            return midBones;
-        }
-        public Bone[] Interpolate(int frames, Bone target)
-        {
-            q.setEulerAngles(-Yaw, -Pitch, -Roll);
+            else if(target.SpreadColors != null)
+                newSpread = target.SpreadColors;
+            
 
-            Quaternion q0 = new Quaternion().setEulerAngles(-target.Yaw, -target.Pitch, -target.Roll), q2;
-
-            float levels = Math.Max(frames - 1f, 1f);
-
-            Bone[] midBones = new Bone[frames];
-            int ctr = 0;
-            for(float a = 0.0f; a <= 1.0f && ctr < frames; a += 1.0f / levels, ctr++)
-            {
-                q2 = q.cpy().slerp(q0, a);
-
-                Bone b = new Bone(Colors, 360f - q2.getYaw(), 360f - q2.getPitch(), 360f - q2.getRoll());
-
-                midBones[ctr] = b;
-            }
-            return midBones;
+            q2 = q.cpy().slerp(q0, alpha);
+            return new Bone(Colors, 360 - q2.getRoll(), 360 - q2.getYaw(), 360 - q2.getPitch()).InitSpread(newSpread, myStarts.x, myStarts.y, myStarts.z);
+            
         }
         public Bone Replicate()
         {
@@ -323,23 +319,16 @@ namespace AssetsPV
             }
             return finals[finished];
         }
-        public Model[] Interpolate(int frames, Model target)
+        public Model Interpolate(Model target, float alpha)
         {
-            Model[] ms = new Model[frames];
-            for(int f = 0; f < frames; f++)
-            {
-                ms[f] = new Model();
-                ms[f].Anatomy = Anatomy;
-            }
-            Dictionary<string, Bone[]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Interpolate(frames, target.Bones[kv.Key]));
+            Model m = new Model();
+            m.Anatomy = Anatomy;
+            Dictionary<string, Bone> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Interpolate(target.Bones[kv.Key], alpha));
             foreach(var kv in finals)
             {
-                for(int i = 0; i < kv.Value.Length; i++)
-                {
-                    ms[i].AddBone(kv.Key, kv.Value[i]);
-                }
+                m.AddBone(kv.Key, kv.Value);
             }
-            return ms;
+            return m;
 
         }
         public Model Replicate()
