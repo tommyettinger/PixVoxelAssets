@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +9,10 @@ namespace AssetsPV
 {
     public class Bone
     {
-        public byte[,,] Colors;
-        public Quaternion q;
-        //public Vector3 dir;
-        public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f;
+        public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
+        public readonly byte[,,] Colors;
+        public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
+            MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f;
 
         /*
          * @param yaw the rotation around the y axis in radians
@@ -24,8 +25,6 @@ namespace AssetsPV
         public Bone(byte[,,] c)
         {
             Colors = c;
-            q = new Quaternion();
-            // dir = new Vector3();
         }
         public Bone(byte[,,] colors, float yaw, float pitch, float roll)
         {
@@ -33,9 +32,6 @@ namespace AssetsPV
             this.Yaw = yaw;
             this.Pitch = pitch;
             this.Roll = roll;
-            this.q = new Quaternion();
-            // this.dir = new Vector3();
-
         }
         public Bone InitSpread(byte[] spreadColors, float yaw_back, float pitch_back, float roll_back)
         {
@@ -43,6 +39,20 @@ namespace AssetsPV
             StartYaw = yaw_back;
             StartPitch = pitch_back;
             StartRoll = roll_back;
+            return this;
+        }
+        public Bone InitStretch(float stretchX, float stretchY, float stretchZ)
+        {
+            StretchX = stretchX;
+            StretchY = stretchY;
+            StretchZ = stretchZ;
+            return this;
+        }
+        public Bone Translate(float moveX, float moveY, float moveZ)
+        {
+            MoveX += moveX;
+            MoveY += moveY;
+            MoveZ += moveZ;
             return this;
         }
 
@@ -54,6 +64,12 @@ namespace AssetsPV
             StartRoll = 0f;
             StartPitch = 0f;
             StartYaw = 0f;
+            MoveX = 0f;
+            MoveY = 0f;
+            MoveZ = 0f;
+            StretchX = 1f;
+            StretchY = 1f;
+            StretchZ = 1f;
             SpreadColors = null;
             return this;
         }
@@ -61,8 +77,8 @@ namespace AssetsPV
         public byte[,,] FinalizeSimple(int xOffset, int yOffset)
         {
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
-//            q = q.idt().slerp(new Quaternion[] { new Quaternion(YawAxis, (360 - Pitch) % 360f), new Quaternion(PitchAxis, (360 - Roll) % 360f), new Quaternion(RollAxis, (360 - Yaw) % 360f) });
-            q = q.idt().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
+            //            q = q.idt().slerp(new Quaternion[] { new Quaternion(YawAxis, (360 - Pitch) % 360f), new Quaternion(PitchAxis, (360 - Roll) % 360f), new Quaternion(RollAxis, (360 - Yaw) % 360f) });
+            Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
 
             //dir = dir.fromAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
@@ -79,11 +95,11 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            v.z = z - hzs;
-                            v.y = y - hys;
-                            v.x = x - hxs + xOffset;
+                            v.x = (x - hxs) * StretchX + xOffset;
+                            v.y = (y - hys) * StretchY;
+                            v.z = (z - hzs) * StretchZ;
                             q.transform(v);
-                            int x2 = (int)(v.x + 0.5f + hxs - xOffset), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                            int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
                                 c2[x2, y2, z2] = Colors[x, y, z];
                         }
@@ -99,7 +115,7 @@ namespace AssetsPV
                 return FinalizeSimple(xOffset, yOffset);
 
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
-            q = q.idt().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
+            Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
             //q = q.idt().slerp(new Quaternion[] { new Quaternion(RollAxis, (360 - Roll) % 360f), new Quaternion(PitchAxis, (360 - Pitch) % 360f), new Quaternion(YawAxis, (360 - Yaw) % 360f) });
 
             //Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
@@ -128,12 +144,13 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            v.x = x + xOffset - hxs;
-                            v.y = y - hys;
-                            v.z = z - hzs;
-                           // v.nor();
+                            v.x = (x - hxs) * StretchX + xOffset;
+                            v.y = (y - hys) * StretchY;
+                            v.z = (z - hzs) * StretchZ;
+                            // v.nor();
                             q.transform(v);
-                            int x2 = (int)(v.x + 0.5f - xOffset + hxs), y2 = (int)(v.y + 0.5f + hys), z2 = (int)(v.z + 0.5f + hzs);
+                            int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
+
                             //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
 
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
@@ -155,21 +172,19 @@ namespace AssetsPV
                         {
                             if(Colors[x, y, z] == SpreadColors[c])
                             {
-                                v.x = x + xOffset - hxs;
-                                v.y = y - hys;
-                                v.z = z - hzs;
+                                v.x = (x - hxs) * StretchX + xOffset;
+                                v.y = (y - hys) * StretchY;
+                                v.z = (z - hzs) * StretchZ;
                                 //v.nor();
                                 //Vector3 vOuter = q0.transform(v.cpy());
 
                                 for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                 {
                                     q2 = q0.cpy().slerp(q, a);
-                                    //Vector3 v2 = vOuter.cpy().slerp(v, a);
                                     Vector3 v2 = q2.transform(v.cpy());
-
-                                    int x2 = (int)(v2.x + 0.5f + hxs - xOffset), y2 = (int)(v2.y + hys + 0.5f), z2 = (int)(v2.z + hzs + 0.5f);
-                                    //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
-
+                                    
+                                    int x2 = (int)(v2.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.y + 0.5f + hys + MoveY), z2 = (int)(v2.z + 0.5f + hzs + MoveZ);
+                                    
                                     if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0)
                                         c2[x2, y2, z2] = Colors[x, y, z];
                                 }
@@ -182,21 +197,29 @@ namespace AssetsPV
 
             return c2;
         }
-
+        public bool RoughEquals(Bone target)
+        {
+            return (Pitch == target.Pitch && Roll == target.Roll && Yaw == target.Yaw && StartPitch == target.StartPitch && StartRoll == target.StartRoll && StartYaw == target.StartYaw &&
+                MoveX == target.MoveX && MoveY == target.MoveY && MoveZ == target.MoveZ && StretchX == target.StretchX && StretchY == target.StretchY && StretchZ == target.StretchZ);
+        }
         public Bone Interpolate(Bone target, float alpha)
         {
             if(alpha <= 0.0)
-                return this;
+                return this.Replicate();
             else if(alpha >= 1.0)
-                return target;
-            q = q.idt().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
+                return target.Replicate();
+            else if(RoughEquals(target))
+                return this.Replicate();
+            Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
 
             Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
                 .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
                 .mulLeft(new Quaternion(RollAxis, (360 - target.Yaw) % 360f)),
             q2;
-            Vector3 myStarts = new Vector3(StartYaw, StartPitch, StartRoll), tgtStarts = new Vector3(target.StartYaw, target.StartPitch, target.StartRoll);
+            Vector3 myStarts = new Vector3(StartYaw, StartPitch, StartRoll), tgtStarts = new Vector3(target.StartYaw, target.StartPitch, target.StartRoll),
+                myStretches = new Vector3(StretchX, StretchY, StretchZ), tgtStretches = new Vector3(target.StretchX, target.StretchY, target.StretchZ);
             myStarts.lerp(tgtStarts, alpha);
+            myStretches.lerp(tgtStretches, alpha);
             byte[] newSpread = null;
             if(SpreadColors != null)
             {
@@ -219,17 +242,30 @@ namespace AssetsPV
             
 
             q2 = q.cpy().slerp(q0, alpha);
-            return new Bone(Colors, 360 - q2.getRoll(), 360 - q2.getYaw(), 360 - q2.getPitch()).InitSpread(newSpread, myStarts.x, myStarts.y, myStarts.z);
-            
+            return new Bone(Colors, 360 - q2.getRoll(), 360 - q2.getYaw(), 360 - q2.getPitch())
+                .InitSpread(newSpread, myStarts.x, myStarts.y, myStarts.z)
+                .InitStretch(myStretches.x, myStretches.y, myStretches.z);
         }
         public Bone Replicate()
         {
-            Bone b = new Bone(Colors.Replicate(), Yaw, Pitch, Roll);
+            Bone b = new Bone(Colors, Yaw, Pitch, Roll);
             b.SpreadColors = SpreadColors.Replicate();
             b.StartYaw = StartYaw;
             b.StartPitch = StartPitch;
             b.StartRoll = StartRoll;
+            b.StretchX = StretchX;
+            b.StretchY = StretchY;
+            b.StretchZ = StretchZ;
             return b;
+        }
+
+        public static Bone readBone(string file)
+        {
+            if(file == null)
+                return new Bone(new byte[60 * Multiplier * Bonus, 60 * Multiplier * Bonus, 60 * Multiplier * Bonus]);
+            BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
+            List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
+            return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus));
         }
     }
     public struct Connector
@@ -256,19 +292,19 @@ namespace AssetsPV
         {
             Bones = bones;
         }
-
-
+        
         public Model AddBone(string boneName, Bone bone)
         {
-            Bones.Add(boneName, bone);
+            Bones[boneName] = bone;
             return this;
         }
 
         public Model AddBone(string boneName, byte[,,] bone)
         {
-            Bones.Add(boneName, new Bone(bone));
+            Bones[boneName] = new Bone(bone);
             return this;
         }
+
         public Model AddSpread(string boneName, float pitchy, float rolly, float yawy, params byte[] spreadColors)
         {
             Bones[boneName].InitSpread(spreadColors, rolly, pitchy, yawy);
@@ -276,25 +312,95 @@ namespace AssetsPV
         }
         public Model AddYaw(float yaw, params string[] names)
         {
-            foreach(string nm in names)
+            if(names.Length == 0)
             {
-                Bones[nm].Yaw += yaw;
+                foreach(string nm in Bones.Keys)
+                {
+                    Bones[nm].Yaw += yaw;
+                }
+            }
+            else
+            {
+                foreach(string nm in names)
+                {
+                    Bones[nm].Yaw += yaw;
+                }
             }
             return this;
         }
         public Model AddPitch(float pitch, params string[] names)
         {
-            foreach(string nm in names)
+            if(names.Length == 0)
             {
-                Bones[nm].Pitch += pitch;
+                foreach(string nm in Bones.Keys)
+                {
+                    Bones[nm].Pitch += pitch;
+                }
+            }
+            else
+            {
+                foreach(string nm in names)
+                {
+                    Bones[nm].Pitch += pitch;
+                }
             }
             return this;
         }
         public Model AddRoll(float roll, params string[] names)
         {
-            foreach(string nm in names)
+            if(names.Length == 0)
             {
-                Bones[nm].Roll += roll;
+                foreach(string nm in Bones.Keys)
+                {
+                    Bones[nm].Roll += roll;
+                }
+            }
+            else
+            {
+                foreach(string nm in names)
+                {
+                    Bones[nm].Roll += roll;
+                }
+            }
+            return this;
+        }
+        public Model Translate(float x, float y, float z, params string[] names)
+        {
+            if(names.Length == 0)
+            {
+                foreach(string nm in Bones.Keys)
+                {
+                    Bones[nm].Translate(x, y, z);
+                }
+            }
+            else
+            {
+                foreach(string nm in names)
+                {
+                    Bones[nm].Translate(x, y, z);
+                }
+            }
+            return this;
+        }
+        public Model AddStretch(float x, float y, float z, params string[] names)
+        {
+            if(names.Length == 0)
+            {
+                foreach(string nm in Bones.Keys)
+                {
+                    Bones[nm].StretchX *= x;
+                    Bones[nm].StretchY *= y;
+                    Bones[nm].StretchZ *= z;
+                }
+            }
+            else
+            {
+                foreach(string nm in names)
+                {
+                    Bones[nm].StretchX *= x;
+                    Bones[nm].StretchY *= y;
+                    Bones[nm].StretchZ *= z;
+                }
             }
             return this;
         }
@@ -337,7 +443,30 @@ namespace AssetsPV
             Model m = new Model(bones);
             m.Anatomy = Anatomy.Replicate();
             return m;
+        }
 
+        public static Model Humanoid(string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
+            string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
+            string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null)
+        {
+            Model model = new Model();
+            model.AddBone("Left_Leg", Bone.readBone(left_leg + "_LLeg"));
+            model.AddBone("Right_Leg", Bone.readBone(right_leg + "_RLeg"));
+            model.AddBone("Torso", Bone.readBone(torso + "_Torso"));
+            model.AddBone("Face", Bone.readBone(face + "_Face"));
+            model.AddBone("Head", Bone.readBone(head + "_Head"));
+            model.AddBone("Left_Upper_Arm", Bone.readBone(left_upper_arm + "_LUpperArm"));
+            model.AddBone("Right_Upper_Arm", Bone.readBone(right_upper_arm + "_RUpperArm"));
+            model.AddBone("Left_Lower_Arm", Bone.readBone(left_lower_arm + "_LLowerArm"));
+            model.AddBone("Right_Lower_Arm", Bone.readBone(right_lower_arm + "_RLowerArm"));
+            model.AddBone("Left_Weapon", Bone.readBone(left_weapon));
+            model.AddBone("Right_Weapon", Bone.readBone(right_weapon));
+
+
+            model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
+                new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
+                new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
+            return model;
         }
     }
 
@@ -776,8 +905,59 @@ namespace AssetsPV
             return VoxLargerArrayToList(colors, 4);
         }
 
+        public static byte[,,] RotateYaw(byte[,,] colors, int amount)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            byte[,,] vls = new byte[xSize, ySize, zSize];
+            switch(amount / 90)
+            {
+                case 0:
+                    vls = colors.Replicate();
+                    break;
+                case 1:
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        for(int y = 0; y < ySize; y++)
+                        {
+                            for(int z = 0; z < zSize; z++)
+                            {
+                                vls[y, xSize - x - 1, z] = colors[x,y,z];
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        for(int y = 0; y < ySize; y++)
+                        {
+                            for(int z = 0; z < zSize; z++)
+                            {
+                                vls[xSize - x - 1,  ySize - y - 1, z] = colors[x, y, z];
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        for(int y = 0; y < ySize; y++)
+                        {
+                            for(int z = 0; z < zSize; z++)
+                            {
+                                vls[ySize - y - 1, x, z] = colors[x, y, z];
+                            }
+                        }
+                    }
+                    break;
+            }
+            return vls;
+        }
         public static byte[,,] RotateYawPartial(byte[,,] colors, int degrees)
         {
+            if(degrees % 90 == 0)
+                return RotateYaw(colors, degrees);
             int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
 
             byte[,,] vls = new byte[xSize, ySize, zSize];

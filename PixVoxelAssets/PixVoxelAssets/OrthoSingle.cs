@@ -2916,63 +2916,21 @@ namespace AssetsPV
             return new Bone(TransformLogic.TransformStartLarge(raw, multiplier * bonus));
         }
 
-        public static void processUnitLargeWBones(string moniker = "Dude", bool still = true,
-        string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
-        string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
-        string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Pose[] poses = null, float[][] frames = null, int palette = 0)
+        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames)
         {
-            /*
-            Dictionary<string, List<MagicaVoxelData>> components = new Dictionary<string, List<MagicaVoxelData>>
-            { {"Left_Leg", VoxelLogic.readComponent(left_leg + "_LLeg")},
-              {"Right_Leg", VoxelLogic.readComponent(right_leg + "_RLeg")},
-              {"Torso", VoxelLogic.readComponent(torso + "_Torso")},
-              {"Left_Upper_Arm", VoxelLogic.readComponent(left_upper_arm + "_LUpperArm")},
-              {"Right_Upper_Arm", VoxelLogic.readComponent(right_upper_arm + "_RUpperArm")},
-              {"Left_Lower_Arm", VoxelLogic.readComponent(left_lower_arm + "_LLowerArm")},
-              {"Right_Lower_Arm", VoxelLogic.readComponent(right_lower_arm + "_RLowerArm")},
-              {"Face",  VoxelLogic.readComponent(face + "_Face")},
-              {"Head",  VoxelLogic.readComponent(head + "_Head")},
-              {"Left_Weapon", VoxelLogic.readComponent(left_weapon)},
-              {"Right_Weapon", VoxelLogic.readComponent(right_weapon)}
-            };
-            */
-            
-            Model model = new Model();
-            model.AddBone("Left_Leg", readBone(left_leg + "_LLeg"));
-            model.AddBone("Right_Leg", readBone(right_leg + "_RLeg"));
-            model.AddBone("Torso", readBone(torso + "_Torso"));
-            model.AddBone("Face", readBone(face + "_Face"));
-            model.AddBone("Head", readBone(head + "_Head"));
-            model.AddBone("Left_Upper_Arm", readBone(left_upper_arm + "_LUpperArm"));
-            model.AddBone("Right_Upper_Arm", readBone(right_upper_arm + "_RUpperArm"));
-            model.AddBone("Left_Lower_Arm", readBone(left_lower_arm + "_LLowerArm"));
-            model.AddBone("Right_Lower_Arm", readBone(right_lower_arm + "_RLowerArm"));
-            model.AddBone("Left_Weapon", readBone(left_weapon));
-            model.AddBone("Right_Weapon", readBone(right_weapon));
-
-
-            model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
-                new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
-                new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
-
-            
-            Model[] modelFrames = (frames != null && frames.Length > 0) ? new Model[frames.Length] : new Model[] { };
-            
-            int framelimit = modelFrames.Length;
-
-
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
-
             string folder = (altFolder);
             Directory.CreateDirectory(folder);
-
+            Model[] modelFrames = (frames != null && frames.Length > 0) ? new Model[frames.Length] : new Model[] { model };
             
+            int framelimit = modelFrames.Length;
+            /*
             if(poses != null && poses.Length > 0 && frames != null && frames.Length > 0 && frames[0] != null && frames[0].Length == 3)
             {
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]);
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier * bonus, 10 * multiplier * bonus, 0);
                 }
             }
 
@@ -2982,12 +2940,12 @@ namespace AssetsPV
             //MagicaVoxelData[] explodeParsed = parsed.Replicate();
             for(int f = 0; f < framelimit; f++)
             {
-                byte[,,] work = TransformLogic.Translate(modelFrames[f].Finalize(), 10 * multiplier * bonus, 10 * multiplier * bonus, 0);
+                byte[,,] work = modelFrames[f].Finalize();
 
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(work, 90 * dir), bonus), 2));
+                    byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYaw(work, 90 * dir), bonus), 2));
 
 
                     byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
@@ -2997,7 +2955,7 @@ namespace AssetsPV
                     WritePNG(png, b, simplepalettes[palette]);
                 }
             }
-            
+            */
 
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -3010,7 +2968,7 @@ namespace AssetsPV
                     s += folder + "/palette" + palette + "_" + moniker + "_Large_face" + dir + "_" + f + ".png ";
                 }
             }
-            startInfo.Arguments = "-dispose background -delay 10 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + ".gif";
+            startInfo.Arguments = "-dispose background -delay 9 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + ".gif";
             Process.Start(startInfo).WaitForExit();
 
             //bin.Close();
@@ -4053,21 +4011,24 @@ namespace AssetsPV
             */
 
             //            processReceivingMilitaryWSuper();
-
+            Bone altFace = Bone.readBone("Happy_Face");
             Pose pose0 = (model => model),
-                pose1 = (model => model.AddPitch(10, "Left_Weapon")
+                pose1 = (model => model.AddBone("Face", altFace)
+            .AddPitch(10, "Left_Weapon")
             .AddPitch(70, "Left_Lower_Arm", "Left_Weapon")
-            .AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddPitch(75, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
-                pose2 = (model => model.AddPitch(-30, "Left_Weapon")
+                pose2 = (model => model.AddBone("Face", altFace)
+            .AddPitch(-30, "Left_Weapon")
             .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
+            Model dude = Model.Humanoid(left_weapon: "Mace");
 
-            processUnitLargeWBones(moniker: "Dude_Animation", left_weapon: "Longsword",
-                poses: new Pose[] { pose0, pose1, pose2 },
-                frames: new float[][] {
+            processUnitLargeWModel("Dude_Animation", true, 0, dude,
+                new Pose[] { pose0, pose1, pose2 },
+                new float[][] {
                 new float[] { 0, 1, 0.0f },
                 new float[] { 0, 1, 0.3f },
                 new float[] { 0, 1, 0.55f },
