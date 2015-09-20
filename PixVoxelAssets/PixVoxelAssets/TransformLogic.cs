@@ -98,9 +98,12 @@ namespace AssetsPV
                             v.x = (x - hxs) * StretchX + xOffset;
                             v.y = (y - hys) * StretchY;
                             v.z = (z - hzs) * StretchZ;
+                            float normod = (float)Math.Sqrt(v.len2());
+                            v.scl(1f / normod);
                             q.transform(v);
+                            v.scl(normod);
                             int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
-                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                 c2[x2, y2, z2] = Colors[x, y, z];
                         }
                     }
@@ -147,13 +150,15 @@ namespace AssetsPV
                             v.x = (x - hxs) * StretchX + xOffset;
                             v.y = (y - hys) * StretchY;
                             v.z = (z - hzs) * StretchZ;
-                            // v.nor();
+                            float normod = (float)Math.Sqrt(v.len2());
+                            v.scl(1f / normod);
                             q.transform(v);
+                            v.scl(normod);
                             int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
 
                             //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
 
-                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                             {
                                 c2[x2, y2, z2] = Colors[x, y, z];
                             }
@@ -175,13 +180,14 @@ namespace AssetsPV
                                 v.x = (x - hxs) * StretchX + xOffset;
                                 v.y = (y - hys) * StretchY;
                                 v.z = (z - hzs) * StretchZ;
-                                //v.nor();
+                                float normod = (float)Math.Sqrt(v.len2());
+                                v.scl(1f / normod);
                                 //Vector3 vOuter = q0.transform(v.cpy());
 
                                 for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                 {
                                     q2 = q0.cpy().slerp(q, a);
-                                    Vector3 v2 = q2.transform(v.cpy());
+                                    Vector3 v2 = q2.transform(v.cpy()).scl(normod);
                                     
                                     int x2 = (int)(v2.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.y + 0.5f + hys + MoveY), z2 = (int)(v2.z + 0.5f + hzs + MoveZ);
                                     
@@ -411,7 +417,7 @@ namespace AssetsPV
         }
         public byte[,,] Finalize()
         {
-            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(40, 40));
+            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(10 * Bone.Multiplier * Bone.Bonus, 0));
             string finished = "";
             foreach(Connector conn in Anatomy)
             {
@@ -757,7 +763,7 @@ namespace AssetsPV
                                     }
                                 }
                             }
-                            if(emptyCount > 17)
+                            if(emptyCount >= 18)
                                 vs[v][x, y, z] = 0;
                             else
                                 vs[v][x, y, z] = colorCount.OrderByDescending(kv => kv.Value).First().Key;
@@ -775,21 +781,37 @@ namespace AssetsPV
         public static byte[,,] SealGaps(byte[,,] voxelData)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
-            byte[,,] vls = voxelData.Replicate();
+            byte[,,] vls = new byte[xSize, ySize, zSize];// = voxelData.Replicate();
             for(int z = 0; z < zSize - 1; z++)
             {
-                for(int y = 1; y < ySize - 1; y++)
+                for(int y = 2; y < ySize - 2; y++)
                 {
-                    for(int x = 1; x < xSize - 1; x++)
+                    for(int x = 1; x < xSize - 2; x++)
                     {
-                        if(voxelData[x - 1, y, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x - 1, y, z + 1] == 0)
-                            vls[x, y, z] = voxelData[x - 1, y, z];
+                        if(voxelData[x,y,z] > 0 && (voxelData[x, y, z + 1] == 0 || voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y + 1, z] == 0 || voxelData[x, y - 1, z] == 0))
+                            vls[x, y, z] = voxelData[x, y, z];
+                        else if(voxelData[x + 2, y, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x + 1, y, z] > 0 && voxelData[x, y, z] > 0)
+                            vls[x, y, z] = voxelData[x + 1, y, z];
                         else if(voxelData[x + 1, y, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x + 1, y, z + 1] == 0)
                             vls[x, y, z] = voxelData[x + 1, y, z];
-                        else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z + 1] == 0)
-                            vls[x, y, z] = voxelData[x, y - 1, z];
-                        else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z + 1] == 0)
+                        /*
+                        else if(voxelData[x, y + 2, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z] > 0)
                             vls[x, y, z] = voxelData[x, y + 1, z];
+                        else if(voxelData[x, y - 2, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z] > 0)
+                            vls[x, y, z] = voxelData[x, y - 1, z];*/
+
+                        else if(voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
+                            vls[x, y, z] = voxelData[x, y, z+1];
+                        else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
+                            vls[x, y, z] = voxelData[x, y - 1, z];
+                        else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
+                            vls[x, y, z] = voxelData[x, y + 1, z];
+
+                        else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z + 1] == 0)
+                            vls[x, y, z] = voxelData[x, y-1, z];
+                        else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z + 1] == 0)
+                            vls[x, y, z] = voxelData[x, y+1, z];
+
                     }
                 }
             }
@@ -799,6 +821,7 @@ namespace AssetsPV
 
         public static byte[,,] Shrink(byte[,,] voxelData, int multiplier)
         {
+            if(multiplier == 1) return voxelData;
             return Shrink(voxelData, multiplier, multiplier, multiplier);
         }
         public static byte[,,] Shrink(byte[,,] voxelData, int xmultiplier, int ymultiplier, int zmultiplier)

@@ -15,10 +15,10 @@ namespace AssetsPV
     class OrthoSingle
     {
         public const int multiplier = 2, bonus = 2, vwidth = 1, vheight = 1, top = 0,
-            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = 60 * multiplier * (vheight - top) * 2 + 2,
-            widthSmall = 60 * vwidth + 2, heightSmall = 60 * (vheight - top) * 2 + 2,
-            widthHuge = 120 * multiplier * vwidth + 2, heightHuge = 120 * multiplier * (vheight - top) * 2 + 2,
-            widthMassive = 160 * multiplier * vwidth + 2, heightMassive = 160 * multiplier * (vheight - top) * 2 + 2;
+            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/4) * multiplier * (vheight - top) + 2,
+            widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/4) * (vheight - top) + 2,
+            widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/4) * multiplier * (vheight - top) + 2,
+            widthMassive = 160 * multiplier * vwidth + 2, heightMassive = (120 + 160/4) * multiplier * (vheight - top) + 2;
         public static Random r = new Random(0x1337BEEF);
         public static string altFolder = "";
 
@@ -2924,13 +2924,13 @@ namespace AssetsPV
             Model[] modelFrames = (frames != null && frames.Length > 0) ? new Model[frames.Length] : new Model[] { model };
             
             int framelimit = modelFrames.Length;
-            /*
+            
             if(poses != null && poses.Length > 0 && frames != null && frames.Length > 0 && frames[0] != null && frames[0].Length == 3)
             {
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier * bonus, 10 * multiplier * bonus, 0);
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier * bonus, 10 * multiplier * bonus, 0, "Left_Leg");
                 }
             }
 
@@ -2945,7 +2945,9 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYaw(work, 90 * dir), bonus), 2));
+                    byte[,,] colors = TransformLogic.SealGaps(
+                        TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYaw(work, 90 * dir), bonus), 1 + bonus / 2)
+                        );
 
 
                     byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
@@ -2955,7 +2957,7 @@ namespace AssetsPV
                     WritePNG(png, b, simplepalettes[palette]);
                 }
             }
-            */
+            
 
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -3000,11 +3002,11 @@ namespace AssetsPV
                 cols * (160 * multiplier * (vheight - 1) + x * 1 - z * (vheight - 1) + innerY);
         }
 
-        private static int voxelToPixelGenericW(int innerX, int innerY, int x, int y, int z, int current_color, int cols, int jitter, bool still, int dim)
+        private static int voxelToPixelGenericW(int innerX, int innerY, int x, int y, int z, int current_color, int cols, int jitter, bool still, int xdim, int zdim)
         {
             return ((y) * vwidth + 1)
                 + innerX +
-                cols * (dim * multiplier * (vheight - top) + x / 2 - z * (vheight - top) + innerY);
+                cols * ((zdim + xdim/2) * multiplier / 2 * (vheight - top) + x / 2 - z * (vheight - top) + innerY);
         }
 
         private static byte Shade(byte[] sprite, int innerX, int innerY, int aboveback, int above, int abovefront)
@@ -3049,7 +3051,8 @@ namespace AssetsPV
         private static byte[][] renderGenericW(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
         {
             rng = new Random(0xb335 + frame / 2);
-            int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
+            //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
+            int rows = (xDim / 4 + zDim) * multiplier * (vheight - top) + 2, cols = yDim * multiplier * vwidth + 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
                 data[i] = new byte[cols];
@@ -3131,7 +3134,7 @@ namespace AssetsPV
                             {
                                 for(int i = 0; i < vwidth; i++)
                                 {
-                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim);
+                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim, zDim);
                                     if(argbValues[p] == 0)
                                     {
                                         if(wditheredcurrent[mod_color][i * 4 + j * vwidth * 4] != 0)
@@ -3163,7 +3166,7 @@ namespace AssetsPV
                             {
                                 for(int i = 0; i < vwidth; i++)
                                 {
-                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, current_color, cols, jitter, still, xDim);
+                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, current_color, cols, jitter, still, xDim, zDim);
 
                                     if(shadowValues[p] == 0)
                                     {
@@ -3188,7 +3191,7 @@ namespace AssetsPV
                             {
                                 for(int i = 0; i < vwidth; i++)
                                 {
-                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim);
+                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim, zDim);
 
                                     if(argbValues[p] == 0)
                                     {
@@ -3304,7 +3307,7 @@ namespace AssetsPV
                         {
                             for(int i = 0; i < vwidth; i++)
                             {
-                                p = voxelToPixelGenericW(i, j, x, y, 0, 25, cols, jitter, still, xDim);
+                                p = voxelToPixelGenericW(i, j, x, y, 0, 25, cols, jitter, still, xDim, zDim);
 
                                 if(shadowValues[p] == 0)
                                 {
@@ -4026,7 +4029,7 @@ namespace AssetsPV
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Mace");
 
-            processUnitLargeWModel("Dude_Animation", true, 0, dude,
+            processUnitLargeWModel("Dude_Mace", true, 0, dude,
                 new Pose[] { pose0, pose1, pose2 },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
@@ -4048,11 +4051,11 @@ namespace AssetsPV
             .AddPitch(-70, "Left_Weapon")
             .AddSpread("Left_Weapon", 80f, 30f, 0f, 253 - 12 * 4));
             
-            byte[,,] by = poseSword(m).Bones["Left_Weapon"].Finalize(40, 40);
+            byte[,,] by = poseSword(m).Bones["Left_Weapon"].Finalize(10 * multiplier * bonus, 0);
             by = TransformLogic.Translate(by, 10 * multiplier * bonus, 10 * multiplier * bonus, 0);
             for(int d = 0; d < 4; d++)
             {
-                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(TransformLogic.RunCA(by, 1), 90 * d), bonus), 2));
+                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(by, 90 * d), bonus), 1 + bonus/2));
 
                 byte[][] b = processFrameLargeW(colors, 0, d, 0, 1, true, false);
 
@@ -4067,7 +4070,7 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Large_face* ";
+            s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Small_face* ";
             startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
