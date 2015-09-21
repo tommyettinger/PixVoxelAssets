@@ -12,9 +12,9 @@ using Hjg.Pngcs.Chunks;
 
 namespace AssetsPV
 {
-    class OrthoSingle
+    class IsoSingle
     {
-        public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 1, bonus = 2, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/4) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/4) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/4) * multiplier * (vheight - top) + 2,

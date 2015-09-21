@@ -784,22 +784,28 @@ namespace AssetsPV
             byte[,,] vls = new byte[xSize, ySize, zSize];// = voxelData.Replicate();
             for(int z = 0; z < zSize - 1; z++)
             {
-                for(int y = 2; y < ySize - 2; y++)
+                for(int y = 1; y < ySize - 1; y++)
                 {
-                    for(int x = 1; x < xSize - 2; x++)
+                    byte currentFill = 0;
+                    for(int x = xSize - 2; x > 0; x--)
                     {
+                        if(voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y, z+1] == 0)
+                            currentFill = voxelData[x, y, z];
+                        vls[x, y, z] = currentFill;
+                        /*
                         if(voxelData[x,y,z] > 0 && (voxelData[x, y, z + 1] == 0 || voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y + 1, z] == 0 || voxelData[x, y - 1, z] == 0))
                             vls[x, y, z] = voxelData[x, y, z];
                         else if(voxelData[x + 2, y, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x + 1, y, z] > 0 && voxelData[x, y, z] > 0)
                             vls[x, y, z] = voxelData[x + 1, y, z];
                         else if(voxelData[x + 1, y, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x + 1, y, z + 1] == 0)
                             vls[x, y, z] = voxelData[x + 1, y, z];
+                            */
                         /*
                         else if(voxelData[x, y + 2, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z] > 0)
                             vls[x, y, z] = voxelData[x, y + 1, z];
                         else if(voxelData[x, y - 2, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z] > 0)
                             vls[x, y, z] = voxelData[x, y - 1, z];*/
-
+                            /*
                         else if(voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
                             vls[x, y, z] = voxelData[x, y, z+1];
                         else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
@@ -811,11 +817,28 @@ namespace AssetsPV
                             vls[x, y, z] = voxelData[x, y-1, z];
                         else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z + 1] == 0)
                             vls[x, y, z] = voxelData[x, y+1, z];
-
+                            */
                     }
                 }
             }
             return vls;
+        }
+
+        public static int ColorValue(int color)
+        {
+            if(color == 0)
+                return 5;
+            switch(VoxelLogic.VisualMode)
+            {
+                case "CU":
+                    return (VoxelLogic.ImportantColorCU(color)) ? 50: 16;
+                case "Mecha":
+                    return (VoxelLogic.ImportantColorMecha(color)) ? 50 : 16;
+                case "None":
+                    return 16;
+                default:
+                    return (VoxelLogic.ImportantColorW(color)) ? 50 : 16;
+            }
         }
 
 
@@ -845,8 +868,10 @@ namespace AssetsPV
                         {
                             for(int yy = 0; yy < ymultiplier; yy++)
                             {
-                                for(int zz = 0; zz < zmultiplier; zz++)
+                                for(int zz =  0; zz < zmultiplier; zz++)
                                 {
+                                    if(x * xmultiplier + xx >= xSize || y* ymultiplier +yy < 0 || z* zmultiplier +zz >= zSize)
+                                        continue;
                                     byte smallColor = voxelData[x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
                                     if((254 - smallColor) % 4 == 0)
                                     {
@@ -867,13 +892,13 @@ namespace AssetsPV
                                     {
                                         if(colorCount.ContainsKey(smallColor))
                                         {
-                                            colorCount[smallColor] = colorCount[smallColor] + 16;
+                                            colorCount[smallColor] = colorCount[smallColor] + ColorValue(smallColor);
                                         }
                                         else
                                         {
-                                            colorCount[smallColor] = 16;
+                                            colorCount[smallColor] = ColorValue(smallColor);
                                         }
-                                        fullCount += 16;
+                                        fullCount += ColorValue(smallColor);
                                     }
                                     else
                                     {

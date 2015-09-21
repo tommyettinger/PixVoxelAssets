@@ -4639,7 +4639,7 @@ namespace AssetsPV
         {
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
-            FaceLogic.VisualMode = "None";
+            VoxelLogic.VisualMode = "None";
             //FaceLogic.VisualMode = "CU";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;

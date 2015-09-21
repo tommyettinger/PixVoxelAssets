@@ -594,7 +594,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -717,7 +717,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -838,7 +838,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -959,7 +959,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1080,7 +1080,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1201,7 +1201,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1322,7 +1322,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1443,7 +1443,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1564,7 +1564,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1685,7 +1685,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1806,7 +1806,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -1927,7 +1927,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2048,7 +2048,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2169,7 +2169,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2290,7 +2290,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2411,7 +2411,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2532,7 +2532,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2653,7 +2653,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2774,7 +2774,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -2998,7 +2998,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3119,7 +3119,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3240,7 +3240,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3361,7 +3361,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3482,7 +3482,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3603,7 +3603,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3724,7 +3724,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3845,7 +3845,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -3966,7 +3966,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4087,7 +4087,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4208,7 +4208,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4329,7 +4329,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4450,7 +4450,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4571,7 +4571,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4692,7 +4692,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4813,7 +4813,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -4934,7 +4934,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5055,7 +5055,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5176,7 +5176,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5297,7 +5297,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5418,7 +5418,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5539,7 +5539,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5660,7 +5660,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5781,7 +5781,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -5902,7 +5902,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6023,7 +6023,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6144,7 +6144,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6265,7 +6265,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6386,7 +6386,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6507,7 +6507,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6628,7 +6628,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6749,7 +6749,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -6981,7 +6981,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -7102,7 +7102,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -7223,7 +7223,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -7344,7 +7344,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -7465,7 +7465,7 @@ MovementType.Foot                                                         };
                 //54 always violet
                 new float[] {0.3F,0.15F,0.5F,1F},
                 //55 always gold
-                new float[] {0.92F,0.85F,0.4F,1F},
+                new float[] {0.89F,0.8F,0.3F,1F},
                 //56 always silver
                 new float[] {0.7F,0.77F,0.83F,1F},
                 //57 eraser
@@ -17634,5 +17634,59 @@ MovementType.Foot                                                         };
             }
             return vls.ToList();
         }
+
+        public static string VisualMode = "W";
+
+        public static bool ImportantColorMecha(int fv)
+        {
+            if((253 - fv) % 4 != 0) return false;
+            switch((253 - fv) / 4)
+            {
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    {
+                        return true;
+                    }
+                default: return false;
+            }
+        }
+        public static bool ImportantColorW(int fv)
+        {
+            if((253 - fv) % 4 != 0) return false;
+            switch((253 - fv) / 4)
+            {
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    {
+                        return true;
+                    }
+                default: return false;
+            }
+        }
+
+        public static bool ImportantColorCU(int fv)
+        {
+            if((253 - fv) % 4 != 0) return false;
+            switch((253 - fv) / 4)
+            {
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    {
+                        return true;
+                    }
+                default: return false;
+            }
+        }
+
     }
 }

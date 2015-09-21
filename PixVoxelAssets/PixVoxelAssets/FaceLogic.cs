@@ -749,73 +749,20 @@ namespace AssetsPV
             AddBrightBottom, AddDimBottom, AddCorners
         };
 
-        public static string VisualMode = "CU";
-
         public static bool ImportantVisual(FaceVoxel fv)
         {
             if(fv == null)
                 return false;
-            switch(VisualMode)
+            switch(VoxelLogic.VisualMode)
             {
                 case "CU":
-                    return ImportantVisualCU(fv);
+                    return VoxelLogic.ImportantColorCU(fv.vox.color);
                 case "Mecha":
-                    return ImportantVisualMecha(fv);
+                    return VoxelLogic.ImportantColorMecha(fv.vox.color);
                 case "None":
                     return false;
                 default:
-                    return ImportantVisualW(fv);
-            }
-        }
-
-        public static bool ImportantVisualMecha(FaceVoxel fv)
-        {
-            if((253 - fv.vox.color) % 4 != 0) return false;
-            switch((253 - fv.vox.color) / 4)
-            {
-                case 8:
-                case 9:
-                case 10:
-                case 11:
-                    {
-                        return true;
-                    }
-                default: return false;
-            }
-        }
-        public static bool ImportantVisualW(FaceVoxel fv)
-        {
-            if((253 - fv.vox.color) % 4 != 0) return false;
-            switch((253 - fv.vox.color) / 4)
-            {
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                case 11:
-                    {
-                        return true;
-                    }
-                default: return false;
-            }
-        }
-
-        public static bool ImportantVisualCU(FaceVoxel fv)
-        {
-            if((253 - fv.vox.color) % 4 != 0) return false;
-            switch((253 - fv.vox.color) / 4)
-            {
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                case 11:
-                    {
-                        return true;
-                    }
-                default: return false;
+                    return VoxelLogic.ImportantColorW(fv.vox.color);
             }
         }
 
