@@ -446,7 +446,7 @@ namespace AssetsPV
                 byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 3);
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, shadowless);
+                    byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, shadowless);
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);
@@ -516,7 +516,7 @@ namespace AssetsPV
                 }
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameLargeW(colors[f % 4], palette, dir, f, framelimit, true, false);
+                    byte[][] b = processFrameLargeW(colors[f % 4], palette, f, framelimit, true, false);
 
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png", imi, true);
@@ -548,13 +548,13 @@ namespace AssetsPV
 
         }
 
-        private static byte[][] processFrameLargeW(byte[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] processFrameLargeW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
-            return renderWSmart(parsed, dir, palette, frame, maxFrames, still, shadowless);
+            return renderWSmart(parsed, palette, frame, maxFrames, still, shadowless);
             /*
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still, shadowless);
             //            return b;
@@ -583,13 +583,13 @@ namespace AssetsPV
             */
         }
 
-        private static byte[][] processFrameSmallW(byte[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] processFrameSmallW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
-            return renderWSmartSmall(parsed, dir, palette, frame, maxFrames, still, shadowless);
+            return renderWSmartSmall(parsed, palette, frame, maxFrames, still, shadowless);
             /*
             b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still, shadowless);
             b2 = new byte[heightHuge][];
@@ -616,13 +616,13 @@ namespace AssetsPV
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
             */
         }
-        private static byte[][] processFrameHugeW(byte[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] processFrameHugeW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
-            return renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still, shadowless);
+            return renderWSmartHuge(parsed, palette, frame, maxFrames, still, shadowless);
             /*
             b = renderWSmartHuge(parsed, dir, palette, frame, maxFrames, still, shadowless);
             b2 = new byte[heightHuge][];
@@ -649,13 +649,13 @@ namespace AssetsPV
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
             */
         }
-        private static byte[][] processFrameMassiveW(byte[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] processFrameMassiveW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
-            return renderWSmartMassive(parsed, dir, palette, frame, maxFrames, still, shadowless);
+            return renderWSmartMassive(parsed, palette, frame, maxFrames, still, shadowless);
             /*
             b = renderWSmartMassive(parsed, dir, palette, frame, maxFrames, still, shadowless);
             //            return b;
@@ -701,7 +701,7 @@ namespace AssetsPV
                 byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(parsed, dir), multiplier, 120, 120, 80), 3);
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameHugeW(colors, palette, dir, f, framelimit, still, shadowless);
+                    byte[][] b = processFrameHugeW(colors, palette, f, framelimit, still, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
@@ -756,7 +756,7 @@ namespace AssetsPV
 
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameLargeW(colors, 0, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+                    byte[][] b = processFrameLargeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
 
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
@@ -845,7 +845,7 @@ namespace AssetsPV
                             byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(flying[frame], d), multiplier, 120, 120, 80), 3);
 
 
-                            byte[][] b = processFrameHugeW(colors, 0, d, frame, 16, true, false);
+                            byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                             PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
@@ -880,7 +880,7 @@ namespace AssetsPV
                         {
                             byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(firing[frame], d), multiplier, 120, 120, 80), 3);
 
-                            byte[][] b = processFrameHugeW(colors, 0, d, frame, 16, true, false);
+                            byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                             PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
@@ -941,7 +941,7 @@ namespace AssetsPV
                         {
                             byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(receive[frame], d), multiplier, 120, 120, 80), 3);
 
-                            byte[][] b = processFrameHugeW(colors, 0, d, frame, 16, true, false);
+                            byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                             PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
@@ -1040,7 +1040,7 @@ namespace AssetsPV
                 for(int f = 0; f < framelimit; f++)
                 {
 
-                    byte[][] b = processFrameHugeW(colors, 0, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+                    byte[][] b = processFrameHugeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
@@ -1107,7 +1107,7 @@ namespace AssetsPV
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
                             byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60), 5);
 
-                            byte[][] b = processFrameMassiveW(colors, 0, d, frame, 16, true, false);
+                            byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                             PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
@@ -1171,7 +1171,7 @@ namespace AssetsPV
                    //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
                             byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60), 5);
 
-                            byte[][] b = processFrameMassiveW(colors, 0, d, frame, 16, true, false);
+                            byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                             PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
@@ -1269,7 +1269,7 @@ namespace AssetsPV
                 for(int f = 0; f < framelimit; f++)
                 {
 
-                    byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, true, true);
+                    byte[][] b = processFrameLargeW(colors, palette, f, framelimit, true, true);
 
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/" + "palette" + palette + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", imi, true);
@@ -1326,7 +1326,7 @@ namespace AssetsPV
                 }
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameHugeW(faces[f % 4], palette, dir, f, framelimit, true, false);
+                    byte[][] b = processFrameHugeW(faces[f % 4], palette, f, framelimit, true, false);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", imi, true);
@@ -1456,7 +1456,7 @@ namespace AssetsPV
             //{ //
             //    for (int dir = 0; dir < 4; dir++)
             //    {
-            //        Bitmap b = processSingleOutlinedWDouble(parsed, palette, dir, f, framelimit, true);
+            //        Bitmap b = processSingleOutlinedWDouble(parsed, palette, f, framelimit, true);
             //        b.Save(folder + "/" + u + "_" + hat + "_Hat_face" + dir + "_" + f + ".png", ImageFormat.Png);
             //        b.Dispose();
             //    }
@@ -1493,7 +1493,7 @@ namespace AssetsPV
 
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
+                    byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
 
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Dead_Large_face" + dir + "_" + f + ".png", imi, true);
@@ -2021,7 +2021,7 @@ namespace AssetsPV
                 {
                     byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(attacking[frame], d), multiplier, 60, 60, 60), 3);
 
-                    byte[][] b = processFrameLargeW(colors, palette, d, frame, 12, true, true);
+                    byte[][] b = processFrameLargeW(colors, palette, frame, 12, true, true);
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Attack_face" + d + "_" + frame + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);
@@ -2090,7 +2090,7 @@ namespace AssetsPV
 
                     for(int f = 0; f < framelimit; f++)
                     {
-                        byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
+                        byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
                         ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                         PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Large_face" + dir + "_" + f + ".png", imi, true);
                         WritePNG(png, b, simplepalettes[palette]);
@@ -2225,7 +2225,7 @@ namespace AssetsPV
 
         //                for(int f = 0; f < framelimit; f++)
         //                {
-        //                    byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
+        //                    byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
         //                    ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
         //                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_"
         //                        + left_name + "_" + right_name + "_" + firing_name + "_Large_face" + dir + "_" + f + ".png", imi, true);
@@ -2424,7 +2424,7 @@ namespace AssetsPV
         //            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
         //            for(int f = 0; f < framelimit; f++)
         //            {
-        //                byte[][] b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
+        //                byte[][] b = processFrameLargeW(faces, palette, f, framelimit, still, false);
         //                ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
         //                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_" + right_name + "_Firing_Both_Large_face" + dir + "_" + f + ".png", imi, true);
         //                WritePNG(png, b, simplepalettes[palette]);
@@ -2626,7 +2626,7 @@ namespace AssetsPV
         //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
         //                for(int f = 0; f < framelimit; f++)
         //                {
-        //                    byte[][] b = processFrameLargeW(faces, palette, dir, f, framelimit, still, false);
+        //                    byte[][] b = processFrameLargeW(faces, palette, f, framelimit, still, false);
         //                    ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
         //                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_" + left_name + "_" + right_name + "_" + firing_name + "_Large_face" + dir + "_" + f + ".png", imi, true);
         //                    WritePNG(png, b, simplepalettes[palette]);
@@ -2932,14 +2932,12 @@ namespace AssetsPV
             for(int f = 0; f < framelimit; f++)
             {
                 byte[,,] work = modelFrames[f].Finalize();
-
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
                     byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus / 2), bonus);
-
-
-                    byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
+                    
+                    byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
 
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Ortho_face" + dir + "_" + f + ".png", imi, true);
@@ -3037,7 +3035,7 @@ namespace AssetsPV
         }
         public static Random rng = new Random(0x1337BEEF);
 
-        private static byte[][] renderGenericW(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
+        private static byte[][] renderGenericW(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
         {
             rng = new Random(0xb335 + frame / 2);
             //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
@@ -3380,21 +3378,21 @@ namespace AssetsPV
         }
 
 
-        private static byte[][] renderWSmart(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] renderWSmart(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            return renderGenericW(colors, facing, palette, frame, maxFrames, still, shadowless, 60, 60, 60);
+            return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 60, 60, 60);
         }
-        private static byte[][] renderWSmartSmall(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] renderWSmartSmall(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            return renderGenericW(colors, facing, palette, frame, maxFrames, still, shadowless, 60 / multiplier, 60 / multiplier, 60 / multiplier);
+            return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 60 / multiplier, 60 / multiplier, 60 / multiplier);
         }
-        private static byte[][] renderWSmartHuge(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] renderWSmartHuge(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            return renderGenericW(colors, facing, palette, frame, maxFrames, still, shadowless, 120, 120, 80);
+            return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 120, 120, 80);
         }
-        private static byte[][] renderWSmartMassive(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] renderWSmartMassive(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            return renderGenericW(colors, facing, palette, frame, maxFrames, still, shadowless, 160, 160, 120);
+            return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 160, 160, 120);
         }
 
         public static void renderTerrain()
@@ -3482,9 +3480,9 @@ namespace AssetsPV
                     c2 = TransformLogic.RunCA(TransformLogic.ScalePartial(c2, multiplier, multiplier, multiplier), 3);
 
                     PngWriter png = FileHelper.CreatePngWriter("Terrains2/" + nm + ".png", imi, true);
-                    WritePNG(png, processFrameHugeW(c2, 8, 0, 0, 1, true, true), simplepalettes[8]);
+                    WritePNG(png, processFrameHugeW(c2, 8, 0, 1, true, true), simplepalettes[8]);
                     PngWriter png2 = FileHelper.CreatePngWriter("TerrainsBlank/" + nm + ".png", imi, true);
-                    WritePNG(png2, processFrameHugeW(c2, 8, 0, 0, 1, true, true), basepalette);
+                    WritePNG(png2, processFrameHugeW(c2, 8, 0, 1, true, true), basepalette);
                 }
             }
             //int[,] grid = new int[9, 17];
@@ -4005,14 +4003,61 @@ namespace AssetsPV
             */
 
             //            processReceivingMilitaryWSuper();
-            Bone altFace = Bone.readBone("Happy_Face");
-            Pose pose0 = (model => model),
-                pose1 = (model => model.AddBone("Face", altFace)
+
+            Pose bow0 = (model => model
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(30, "Right_Upper_Arm")
+            .AddYaw(-15, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            ),
+                bow1 = (model => model
+           .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+           .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+           .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+           .AddYaw(40, "Right_Upper_Arm")
+           .AddYaw(-25, "Right_Lower_Arm")
+           .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+           .AddStretch(0.85f, 0.0f, 1.6f, "Left_Weapon")
+            ),
+
+                bow2 = (model => model
+           .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+           .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+           .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+           .AddYaw(50, "Right_Upper_Arm")
+           .AddYaw(-10, "Right_Lower_Arm")
+           .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+           );
+            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
+            Model dude = Model.Humanoid(left_weapon: "Bow");
+
+            processUnitLargeWModel("Dude_Bow", true, 0, dude,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+
+            /*
+            Pose swing0 = (model => model),
+                swing1 = (model => model
             .AddPitch(10, "Left_Weapon")
             .AddPitch(70, "Left_Lower_Arm", "Left_Weapon")
             //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddPitch(75, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
-                pose2 = (model => model.AddBone("Face", altFace)
+                swing2 = (model => model
             .AddPitch(-30, "Left_Weapon")
             .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
@@ -4021,7 +4066,7 @@ namespace AssetsPV
             Model dude = Model.Humanoid(left_weapon: "Longsword");
 
             processUnitLargeWModel("Dude_Sword", true, 0, dude,
-                new Pose[] { pose0, pose1, pose2 },
+                new Pose[] { swing0, swing1, swing2 },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
                 new float[] { 0, 1, 0.3f },
@@ -4035,7 +4080,9 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
+            */
             
+            /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });
             Pose poseSword = (model => model.AddPitch(30, "Left_Weapon")
             .AddYaw(20, "Left_Weapon")
@@ -4048,7 +4095,7 @@ namespace AssetsPV
             {
                 byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(by, 90 * d), bonus), 1 + bonus/2));
 
-                byte[][] b = processFrameLargeW(colors, 0, d, 0, 1, true, false);
+                byte[][] b = processFrameLargeW(colors, 0, 0, 1, true, false);
 
                 ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Ortho_face" + d + "_" + 0 + ".png", imi, true);
@@ -4064,7 +4111,7 @@ namespace AssetsPV
             s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Ortho_face* ";
             startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Ortho_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
         }
     }
 }

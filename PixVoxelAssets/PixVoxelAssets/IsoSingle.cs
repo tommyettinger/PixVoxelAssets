@@ -14,11 +14,11 @@ namespace AssetsPV
 {
     class IsoSingle
     {
-        public const int multiplier = 1, bonus = 2, vwidth = 1, vheight = 1, top = 0,
-            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/4) * multiplier * (vheight - top) + 2,
-            widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/4) * (vheight - top) + 2,
-            widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/4) * multiplier * (vheight - top) + 2,
-            widthMassive = 160 * multiplier * vwidth + 2, heightMassive = (120 + 160/4) * multiplier * (vheight - top) + 2;
+        public const int multiplier = 2, bonus = 1, vwidth = 1, vheight = 1, top = 0,
+            widthLarge = 60  * multiplier * vwidth + 2, heightLarge = (60 + 60/2)  * multiplier * (vheight - top) + 2,
+            widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2)  * (vheight - top) + 2,
+            widthHuge = 120  * multiplier * vwidth + 2, heightHuge = (80 + 120/2)  * multiplier * (vheight - top) + 2,
+            widthMassive = 160 * 2 * multiplier * vwidth + 2, heightMassive = (120 + 160/2) * 2 * multiplier * (vheight - top) + 2;
         public static Random r = new Random(0x1337BEEF);
         public static string altFolder = "";
 
@@ -2936,13 +2936,13 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus / 2), bonus);
+                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.RotateYaw(work, 90 * dir), 1);
 
 
                     byte[][] b = processFrameLargeW(colors, palette, dir, f, framelimit, still, false);
 
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Ortho_face" + dir + "_" + f + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Iso_face" + dir + "_" + f + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);
                 }
             }
@@ -2956,10 +2956,10 @@ namespace AssetsPV
             {
                 for(int f = 0; f < framelimit; f++)
                 {
-                    s += folder + "/palette" + palette + "_" + moniker + "_Ortho_face" + dir + "_" + f + ".png ";
+                    s += folder + "/palette" + palette + "_" + moniker + "_Iso_face" + dir + "_" + f + ".png ";
                 }
             }
-            startInfo.Arguments = "-dispose background -delay 9 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Ortho.gif";
+            startInfo.Arguments = "-dispose background -delay 9 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Iso.gif";
             Process.Start(startInfo).WaitForExit();
 
             //bin.Close();
@@ -2991,22 +2991,24 @@ namespace AssetsPV
                 cols * (160 * multiplier * (vheight - 1) + x * 1 - z * (vheight - 1) + innerY);
         }
 
-        private static int voxelToPixelGenericW(int innerX, int innerY, int x, int y, int z, int current_color, int cols, int jitter, bool still, int xdim, int zdim)
+        private static int voxelToPixelGenericW(int innerX, int innerY, int x, int y, int z, int current_color, int cols, int jitter, bool still, int xdim, int ydim, int zdim)
         {
-            return ((y) * vwidth + 1)
+            return ((x + y) / 2 * vwidth + 1)
                 + innerX +
-                cols * ((zdim + xdim/2) * multiplier / 2 * (vheight - top) + x / 2 - z * (vheight - top) + innerY);
+                cols * ((zdim + (ydim + xdim)/2) / 2 * multiplier * (vheight - top) + (x - y) / 4 - z * (vheight - top) + innerY);
         }
 
-        private static byte Shade(byte[] sprite, int innerX, int innerY, int aboveback, int above, int abovefront)
+        private static byte Shade(byte[] sprite, int innerX, int innerY, int above, int left, int right)
         {
             //            switch((((7 * innerX) * (3 * innerY) + x + y + z) ^ ((11 * innerX) * (5 * innerY) + x + y + z) ^ (7 - innerX - innerY)) % 16)
-            if(above > 0)
-                return sprite[1];
-            else if(aboveback > 0 || abovefront > 0)
-                return sprite[1];
-            else
+            if(above == 0)
                 return sprite[0];
+            else if(left == 0)
+                return sprite[1];
+            else if(right == 0)
+                return sprite[2];
+            else
+                return sprite[3];
         }
         private static byte RandomDither(byte[] sprite, int innerX, int innerY, Random rng)
         {
@@ -3041,7 +3043,7 @@ namespace AssetsPV
         {
             rng = new Random(0xb335 + frame / 2);
             //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
-            int rows = (xDim / 4 + zDim) * multiplier * (vheight - top) + 2, cols = yDim * multiplier * vwidth + 2;
+            int rows = ((xDim+yDim) + zDim) * multiplier * (vheight - top) + 2, cols = (xDim + yDim) * multiplier * vwidth + 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
                 data[i] = new byte[cols];
@@ -3057,8 +3059,6 @@ namespace AssetsPV
             int xSize = xDim * multiplier, ySize = yDim * multiplier, zSize = zDim * multiplier;
             int[] zbuffer = new int[numBytes];
             zbuffer.Fill<int>(-999);
-            int[] xbuffer = new int[numBytes];
-            xbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3)) * 2;
             if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
@@ -3123,7 +3123,7 @@ namespace AssetsPV
                             {
                                 for(int i = 0; i < vwidth; i++)
                                 {
-                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim, zDim);
+                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim, yDim, zDim);
                                     if(argbValues[p] == 0)
                                     {
                                         if(wditheredcurrent[mod_color][i * 4 + j * vwidth * 4] != 0)
@@ -3131,18 +3131,17 @@ namespace AssetsPV
                                             barePositions[p] = !(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                                             if(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                             {
-                                                zbuffer[p] = fz;
-                                                xbuffer[p] = fx;
+                                                zbuffer[p] = fz + fx - fy;
                                             }
-                                            if(fz == zSize - 1 || fx == xSize - 1 || fx == 0)
+                                            if(fz == zSize - 1 || fx == xSize - 1 || fy == 0)
                                                 argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, 0, 0, 0);
                                             else
-                                                argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, colors[fx - 1, fy, fz + 1], colors[fx, fy, fz + 1], colors[fx + 1, fy, fz + 1]);
+                                                argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, colors[fx, fy, fz + 1], colors[fx, fy - 1, fz], colors[fx + 1, fy, fz]);
 
                                         }
 
                                         if(!barePositions[p] && outlineValues[p] == 0)
-                                            outlineValues[p] = wditheredcurrent[mod_color][8 * vwidth];
+                                            outlineValues[p] = wditheredcurrent[mod_color][12 * vwidth];
 
                                     }
                                 }
@@ -3155,7 +3154,7 @@ namespace AssetsPV
                             {
                                 for(int i = 0; i < vwidth; i++)
                                 {
-                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, current_color, cols, jitter, still, xDim, zDim);
+                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, current_color, cols, jitter, still, xDim, yDim, zDim);
 
                                     if(shadowValues[p] == 0)
                                     {
@@ -3180,7 +3179,7 @@ namespace AssetsPV
                             {
                                 for(int i = 0; i < vwidth; i++)
                                 {
-                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim, zDim);
+                                    p = voxelToPixelGenericW(i, j, fx, fy, fz, mod_color, cols, jitter, still, xDim, yDim, zDim);
 
                                     if(argbValues[p] == 0)
                                     {
@@ -3234,17 +3233,16 @@ namespace AssetsPV
                                                 argbValues[p] = RandomDither(wditheredcurrent[mod_color], i, j, rng);
                                             else
                                             {
-                                                if(fz == zSize - 1 || fx == xSize - 1 || fx == 0)
+                                                if(fz == zSize - 1 || fx == xSize - 1 || fy == 0)
                                                     argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, 0, 0, 0);
                                                 else
-                                                    argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, colors[fx - 1, fy, fz + 1], colors[fx, fy, fz + 1], colors[fx + 1, fy, fz + 1]);
+                                                    argbValues[p] = Shade(wditheredcurrent[mod_color], i, j, colors[fx, fy, fz + 1], colors[fx, fy-1, fz], colors[fx + 1, fy, fz]);
                                             }
 
                                             //}
 
 
-                                            zbuffer[p] = fz;
-                                            xbuffer[p] = fx;
+                                            zbuffer[p] = fz + fx - fy;
 
 
                                             barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 ||
@@ -3252,7 +3250,7 @@ namespace AssetsPV
                                                 VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flat_alpha);
 
                                             if(!barePositions[p] && outlineValues[p] == 0)
-                                                outlineValues[p] = wditheredcurrent[mod_color][8 * vwidth];      //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                                outlineValues[p] = wditheredcurrent[mod_color][12 * vwidth];      //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
                                         }
 
                                     }
@@ -3296,7 +3294,7 @@ namespace AssetsPV
                         {
                             for(int i = 0; i < vwidth; i++)
                             {
-                                p = voxelToPixelGenericW(i, j, x, y, 0, 25, cols, jitter, still, xDim, zDim);
+                                p = voxelToPixelGenericW(i, j, x, y, 0, 25, cols, jitter, still, xDim, yDim, zDim);
 
                                 if(shadowValues[p] == 0)
                                 {
@@ -3322,10 +3320,10 @@ namespace AssetsPV
                     */
 
 
-                    if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i - 1] || xbuffer[i] - vwidth - 1 > xbuffer[i - 1])))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i + 1] || xbuffer[i] - vwidth - 1 > xbuffer[i + 1])))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i - cols] || xbuffer[i] - vwidth - 1 > xbuffer[i - cols])))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i + cols] || xbuffer[i] - vwidth - 0 > xbuffer[i + cols])))) { editValues[i + cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i - 1])))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i + 1])))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i - cols])))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && (zbuffer[i] - vheight + top - 2 > zbuffer[i + cols])))) { editValues[i + cols] = outlineValues[i]; if(!blacken) shade = true; }
 
 
 
@@ -4046,12 +4044,12 @@ namespace AssetsPV
             by = TransformLogic.Translate(by, 10 * multiplier * bonus, 10 * multiplier * bonus, 0);
             for(int d = 0; d < 4; d++)
             {
-                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.Shrink(TransformLogic.RotateYawPartial(by, 90 * d), bonus), 1 + bonus/2));
+                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.RotateYawPartial(by, 90 * d), 1 + bonus/2));
 
                 byte[][] b = processFrameLargeW(colors, 0, d, 0, 1, true, false);
 
                 ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Ortho_face" + d + "_" + 0 + ".png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Iso_face" + d + "_" + 0 + ".png", imi, true);
                 WritePNG(png, b, simplepalettes[0]);
             }
 
@@ -4061,8 +4059,8 @@ namespace AssetsPV
             startInfo.UseShellExecute = false;
             string s = "";
 
-            s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Ortho_face* ";
-            startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Ortho_animated.gif";
+            s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Iso_face* ";
+            startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Iso_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
         }

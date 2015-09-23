@@ -248,7 +248,7 @@ namespace AssetsPV
             
 
             q2 = q.cpy().slerp(q0, alpha);
-            return new Bone(Colors, 360 - q2.getRoll(), 360 - q2.getYaw(), 360 - q2.getPitch())
+            return new Bone(Colors, 360 - q2.getPitch(), 360 - q2.getYaw(), 360 - q2.getRoll())
                 .InitSpread(newSpread, myStarts.x, myStarts.y, myStarts.z)
                 .InitStretch(myStretches.x, myStretches.y, myStretches.z);
         }
@@ -483,7 +483,7 @@ namespace AssetsPV
     {
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
-            int plugX = -1, plugY = -1, plugZ = -1, socketX = -1, socketY = -1, socketZ = -1;
+            double plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
             if(socket == null)
                 return plug;
             else if(plug == null)
@@ -498,17 +498,21 @@ namespace AssetsPV
                     {
                         if(plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
                         {
-                            plugX = x;
-                            plugY = y;
-                            plugZ = z;
-                            goto END_PLUG;
+                            plugCount++;
+                            plugX += x;
+                            plugY += y;
+                            plugZ += z;
                         }
                     }
                 }
             }
-            END_PLUG:
-            if(plugX < 0)
+            
+            if(plugCount <= 0)
                 return socket;
+
+            plugX /= plugCount;
+            plugY /= plugCount;
+            plugZ /= plugCount;
 
             for(int z = 0; z < zSize; z++)
             {
@@ -518,15 +522,20 @@ namespace AssetsPV
                     {
                         if(socket[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
                         {
-                            socketX = x;
-                            socketY = y;
-                            socketZ = z;
-                            goto END_SOCKET;
+                            socketCount++;
+                            socketX += x;
+                            socketY += y;
+                            socketZ += z;
                         }
                     }
                 }
             }
-            END_SOCKET:
+            if(socketCount <= 0)
+                return plug;
+            socketX /= socketCount;
+            socketY /= socketCount;
+            socketZ /= socketCount;
+
             byte[,,] working = socket.Replicate();
 
             for(int z = 0; z < zSize; z++)
@@ -539,9 +548,9 @@ namespace AssetsPV
                            x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
                            x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
                         {
-                            working[(x - plugX + socketX),
-                                    (y - plugY + socketY),
-                                    (z - plugZ + socketZ)] = plug[x, y, z];
+                            working[(int)Math.Round(x - plugX + socketX),
+                                    (int)Math.Round(y - plugY + socketY),
+                                    (int)Math.Round(z - plugZ + socketZ)] = plug[x, y, z];
                         }
                     }
                 }
@@ -551,7 +560,7 @@ namespace AssetsPV
         }
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor, int removeColor, int replaceColor)
         {
-            int plugX = -1, plugY = -1, plugZ = -1, socketX = -1, socketY = -1, socketZ = -1;
+            double plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
             if(socket == null)
                 return plug;
             else if(plug == null)
@@ -566,17 +575,20 @@ namespace AssetsPV
                     {
                         if(plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
                         {
-                            plugX = x;
-                            plugY = y;
-                            plugZ = z;
-                            goto END_PLUG;
+                            plugCount++;
+                            plugX += x;
+                            plugY += y;
+                            plugZ += z;
                         }
                     }
                 }
             }
-            END_PLUG:
-            if(plugX < 0)
+            
+            if(plugCount <= 0)
                 return socket;
+            plugX /= plugCount;
+            plugY /= plugCount;
+            plugZ /= plugCount;
 
             for(int z = 0; z < zSize; z++)
             {
@@ -586,15 +598,21 @@ namespace AssetsPV
                     {
                         if(socket[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
                         {
-                            socketX = x;
-                            socketY = y;
-                            socketZ = z;
-                            goto END_SOCKET;
+                            socketCount++;
+                            socketX += x;
+                            socketY += y;
+                            socketZ += z;
                         }
                     }
                 }
             }
-            END_SOCKET:
+            if(socketCount <= 0)
+                return plug;
+
+            socketX /= socketCount;
+            socketY /= socketCount;
+            socketZ /= socketCount;
+
             byte[,,] working = socket.Replicate();
 
             for(int z = 0; z < zSize; z++)
@@ -607,9 +625,9 @@ namespace AssetsPV
                            x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
                            x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
                         {
-                            working[(x - plugX + socketX),
-                                    (y - plugY + socketY),
-                                    (z - plugZ + socketZ)] = plug[x, y, z];
+                            working[(int)Math.Round(x - plugX + socketX),
+                                    (int)Math.Round(y - plugY + socketY),
+                                    (int)Math.Round(z - plugZ + socketZ)] = plug[x, y, z];
                         }
                     }
                 }
