@@ -1331,7 +1331,7 @@ namespace AssetsPV
             VoxelLogic.subtlePalettes = new int[] { wpc };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
-            wpalettes = wpalettes.Concat(wpalettes[0].Repeat(1)).ToArray();
+            wpalettes = wpalettes.Concat(new float[][][] { wpalettes[0].Replicate()}).ToArray();
             for(int p = 0; p < wterrains.Length; p++)
             {
                 wpalettes[wpc][0 + p*4] = wterrains[p][0];
@@ -1363,7 +1363,7 @@ namespace AssetsPV
             VoxelLogic.wpalettecount = wpalettes.Length;
 
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
-            VoxelLogic.wcolorcount = wpalettes[wpc].Length;
+            VoxelLogic.wcolorcount = wpalettes[0].Length;
 
             for(int p = 0; p < VoxelLogic.wpalettecount; p++)
             {

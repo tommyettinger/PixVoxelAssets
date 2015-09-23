@@ -4639,7 +4639,7 @@ namespace AssetsPV
         {
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
-            VoxelLogic.VisualMode = "None";
+            VoxelLogic.VisualMode = "CU";
             //FaceLogic.VisualMode = "CU";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
@@ -4947,8 +4947,9 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             writePaletteImages();
-            renderTerrain();
             /*
+            renderTerrain();
+            
             processUnitLargeWMilitary("Civilian");
 
             processUnitLargeWMilitary("Infantry_PS");
@@ -5027,9 +5028,13 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             */
 
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
+            //processUnitLargeWMilitary("Volunteer_S");
+            //processUnitLargeWMilitary("Volunteer_T");
             //            processReceivingMilitaryWSuper();
 
-            
+
         }
     }
 }
