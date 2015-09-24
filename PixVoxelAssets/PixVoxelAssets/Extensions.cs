@@ -258,6 +258,106 @@ namespace AssetsPV
             }
             return dupe;
         }
+        public static bool IsPresent(this byte[] mat, byte elem)
+        {
+            for(int i = 0; i < mat.Length; i++)
+            {
+                if(mat[i] == elem)
+                    return true;
+            }
+            return false;
+        }
+
+
+        public static int MinXAtZ(this byte[,,] mat, int z, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1);
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    if(!dismiss.IsPresent(mat[x, y, z]))
+                        return x;
+                }
+            }
+            return xSize - 1;
+        }
+        public static int MinYAtZ(this byte[,,] mat, int z, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1);
+
+            for(int y = 0; y < ySize; y++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    if(!dismiss.IsPresent(mat[x, y, z]))
+                        return y;
+                }
+            }
+            return ySize - 1;
+        }
+        public static int MaxXAtZ(this byte[,,] mat, int z, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1);
+            for(int x = xSize-1; x >= 0; x--)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    if(!dismiss.IsPresent(mat[x, y, z]))
+                        return x;
+                }
+            }
+            return 0;
+        }
+        public static int MaxYAtZ(this byte[,,] mat, int z, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1);
+
+            for(int y = ySize-1; y >= 0; y--)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    if(!dismiss.IsPresent(mat[x, y, z]))
+                        return y;
+                }
+            }
+            return 0;
+        }
+
+        public static int MinZ(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            return z;
+                    }
+                }
+            }
+            return zSize - 1;
+        }
+        public static int MaxZ(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
+
+            for(int z = zSize - 1; z >= 0; z--)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            return z;
+                    }
+                }
+            }
+            return 0;
+        }
 
     }
 }

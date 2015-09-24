@@ -15,10 +15,10 @@ namespace AssetsPV
     class OrthoSingle
     {
         public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
-            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/4) * multiplier * (vheight - top) + 2,
-            widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/4) * (vheight - top) + 2,
-            widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/4) * multiplier * (vheight - top) + 2,
-            widthMassive = 160 * multiplier * vwidth + 2, heightMassive = (120 + 160/4) * multiplier * (vheight - top) + 2;
+            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
+            widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
+            widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
+            widthMassive = 160 * multiplier * vwidth + 2, heightMassive = (120 + 160/2) * multiplier * (vheight - top) + 2;
         public static Random r = new Random(0x1337BEEF);
         public static string altFolder = "";
 
@@ -222,10 +222,11 @@ namespace AssetsPV
                     byte brighti = (byte)(topi - 1);
                     byte dimi = (byte)(topi - 2);
                     byte darki = (byte)(topi - 3);
-                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 40)) || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = (((current_color >= 18 && current_color <= 20) || current_color == 40) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
+                    if(VoxelLogic.terrainPalettes.Contains(p)) which_image = "image";
                     for(int i = 0; i < width; i++)
                     {
                         for(int j = 0; j < height; j++)
@@ -443,7 +444,7 @@ namespace AssetsPV
             Directory.CreateDirectory(folder); //("color" + i);
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 3);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 1 + bonus * multiplier / 2);
                 for(int f = 0; f < framelimit; f++)
                 {
                     byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, shadowless);
@@ -512,7 +513,7 @@ namespace AssetsPV
             {
                 for(int i = 0; i < 4; i++)
                 {
-                    colors[i] = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed[i], dir), multiplier, 60, 60, 60), 3);
+                    colors[i] = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed[i], dir), multiplier, 60, 60, 60), 1 + bonus * multiplier / 2);
                 }
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -698,7 +699,7 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(parsed, dir), multiplier, 120, 120, 80), 3);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(parsed, dir), multiplier, 120, 120, 80), 1 + bonus * multiplier / 2);
                 for(int f = 0; f < framelimit; f++)
                 {
                     byte[][] b = processFrameHugeW(colors, palette, f, framelimit, still, shadowless);
@@ -723,7 +724,7 @@ namespace AssetsPV
 
             //            processFiringHuge(u);
 
-            //processExplosionHugeW(u, palette);
+            processExplosionHugeW(u, palette);
 
         }
 
@@ -752,7 +753,7 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 3);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60)), 1 + bonus * multiplier / 2);
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -784,7 +785,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            //processExplosionLargeW(u, -1, explode_parsed, false);
+            processExplosionLargeW(u, -1, explode_parsed, false);
             //            processExplosionLargeW(u, -1, new MagicaVoxelData[] { }, false);
 
 
@@ -796,7 +797,7 @@ namespace AssetsPV
             string filename = "CU2/" + u + "_Large_W.vox";
             BinaryReader bin;
             MagicaVoxelData[] parsed;
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
 
             for(int w = 0; w < 2; w++)
             {
@@ -842,7 +843,7 @@ namespace AssetsPV
                     {
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(flying[frame], d), multiplier, 120, 120, 80), 3);
+                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(flying[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
 
                             byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
@@ -878,7 +879,7 @@ namespace AssetsPV
 
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(firing[frame], d), multiplier, 120, 120, 80), 3);
+                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(firing[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
                             byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
@@ -926,7 +927,7 @@ namespace AssetsPV
 
         public static void processReceivingMilitaryW()
         {
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             for(int i = 2; i < 8; i++)
             {
@@ -939,7 +940,7 @@ namespace AssetsPV
 
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(receive[frame], d), multiplier, 120, 120, 80), 3);
+                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(receive[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
                             byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
@@ -1035,7 +1036,7 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60), 7);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)), 1 + bonus * multiplier * 2);
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -1068,7 +1069,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
 
-            //processExplosionHugeWSuper(u, -1, explode_parsed, false);
+            processExplosionHugeWSuper(u, -1, explode_parsed, false);
             //            processExplosionHugeWSuper(u, -1, new MagicaVoxelData[] { }, false);
 
             processUnitHugeWFiringSuper(u);
@@ -1079,7 +1080,7 @@ namespace AssetsPV
             string filename = "CU2/" + u + "_Large_W.vox";
             BinaryReader bin;
             MagicaVoxelData[] parsed;
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
 
             for(int w = 0; w < 2; w++)
             {
@@ -1105,7 +1106,7 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60), 5);
+                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -1153,7 +1154,7 @@ namespace AssetsPV
 
         public static void processReceivingMilitaryWSuper()
         {
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             for(int i = 0; i < 8; i++)
             {
@@ -1169,7 +1170,7 @@ namespace AssetsPV
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
                    //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60), 5);
+                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -1265,7 +1266,7 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 3);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 1 + bonus * multiplier / 2);
                 for(int f = 0; f < framelimit; f++)
                 {
 
@@ -1321,7 +1322,7 @@ namespace AssetsPV
                 for(int i = 0; i < 4; i++)
                 {
 //                    faces[i] = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed[i], dir), 120, 120, 80, 153));
-                    faces[i] = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(parsed[i], dir), multiplier, 120, 120, 80), 3);
+                    faces[i] = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(parsed[i], dir), multiplier, 120, 120, 80), 1 + bonus * multiplier / 2);
 
                 }
                 for(int f = 0; f < framelimit; f++)
@@ -1489,7 +1490,7 @@ namespace AssetsPV
             for(int dir = 0; dir < 4; dir++)
             {
 //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 3);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 1 + bonus * multiplier / 2);
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -1567,7 +1568,7 @@ namespace AssetsPV
             // //
         }
         */
-        /*
+        
         public static void processExplosionLargeW(string u, int palette, bool shadowless)
         {
             Console.WriteLine("Processing: " + u);
@@ -1577,19 +1578,18 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
             // MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
             Directory.CreateDirectory(folder); //("color" + i);
 
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(parsed, d), 60, 60, 60, 153));
-
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(parsed, d), multiplier, 40, 40, 120, 120, 80), 1 + bonus * multiplier / 2);
+                byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
                 {
 
-                    byte[][] b = processFrameHugeW(explode[frame], palette, d, frame, 8, true, shadowless);
+                    byte[][] b = processFrameHugeW(explode[frame], palette, frame, 16, true, false);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
@@ -1633,19 +1633,18 @@ namespace AssetsPV
                 wditheredcurrent = wdithered[0];
             }
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
             Directory.CreateDirectory(folder); //("color" + i);
             
             for(int d = 0; d < 4; d++)
             {
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier, 40, 40, 120, 120, 80), 1 + bonus * multiplier / 2);
+                byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 60, 60, 60, 153));
-
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
 
-                    byte[][] b = processFrameHugeW(explode[frame], (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
+                    byte[][] b = processFrameHugeW(TransformLogic.SealGaps(explode[frame]), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
@@ -1725,18 +1724,18 @@ namespace AssetsPV
                 wditheredcurrent = wdithered[0];
             }
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
-            string folder = ("frames");
+            string folder = ("frames/" + altFolder);
 
             Directory.CreateDirectory(folder); //("color" + i);
             
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 2, 60, 60, 40), 1), 120, 120, 80);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 120, 120, 80), 1 + bonus * multiplier);
+                byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionHugeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
-                    byte[][] b = processFrameMassiveW(explode[frame], (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
+                    byte[][] b = processFrameMassiveW(TransformLogic.SealGaps(explode[frame]), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
@@ -1795,7 +1794,7 @@ namespace AssetsPV
                 Process.Start(startInfo).WaitForExit();
             }
         }
-
+        /*
         public static void processExplosionLargeWHat(string u, int palette, string hat, MagicaVoxelData[] headpoints)
         {
             Console.WriteLine("Processing: " + u + " " + hat + ", palette " + palette);
@@ -1887,6 +1886,7 @@ namespace AssetsPV
 
             //bin.Close();
         }
+        */
         public static void processExplosionHugeW(string u, int palette)
         {
             Console.WriteLine("Processing: " + u + ", palette " + palette);
@@ -1904,14 +1904,13 @@ namespace AssetsPV
 
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed, d), 120, 120, 80, 153));
-
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionHugeW(faces, false, false);
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostHuge(parsed, d), multiplier, 80, 80, 160, 160, 120), 1 + bonus * multiplier / 2);
+                byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
                 {
 
-                    byte[][] b = processFrameMassiveW(explode[frame], palette, d, frame, 8, true, false);
+                    byte[][] b = processFrameMassiveW(explode[frame], palette, frame, 8, true, false);
 
                     ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
@@ -1955,12 +1954,12 @@ namespace AssetsPV
 
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(parsed, d), 120, 120, 80, 153));
+                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostHuge(parsed, d), multiplier, 80, 80, 160, 160, 120), 1 + bonus * multiplier / 2);
+                byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionHugeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
-                    byte[][] b = processFrameMassiveW(explode[frame], palette, d, frame, 8, true, shadowless);
+                    byte[][] b = processFrameMassiveW(explode[frame], palette, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
@@ -1988,7 +1987,7 @@ namespace AssetsPV
 
             //bin.Close();
         }
-        */
+
         public static void processPureAttackW(string u, int palette)
         {
             Console.WriteLine("Processing: " + u);
@@ -2019,7 +2018,7 @@ namespace AssetsPV
             {
                 for(int frame = 0; frame < 12; frame++)
                 {
-                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(attacking[frame], d), multiplier, 60, 60, 60), 3);
+                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(attacking[frame], d), multiplier, 60, 60, 60), 1 + bonus * multiplier / 2);
 
                     byte[][] b = processFrameLargeW(colors, palette, frame, 12, true, true);
                     ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
@@ -2086,7 +2085,7 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
 //                    FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 3);
+                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60), 1 + bonus * multiplier / 2);
 
                     for(int f = 0; f < framelimit; f++)
                     {
@@ -2111,7 +2110,7 @@ namespace AssetsPV
 
                 //            processFiringDouble(u);
 
-                //processExplosionLargeW(moniker, palette, work.ToArray(), false);
+                processExplosionLargeW(moniker, palette, work.ToArray(), false);
 
             }
         }
@@ -2993,7 +2992,7 @@ namespace AssetsPV
         {
             return ((y) * vwidth + 1)
                 + innerX +
-                cols * ((zdim + xdim/2) * multiplier / 2 * (vheight - top) + x / 2 - z * (vheight - top) + innerY);
+                cols * ((zdim) * multiplier * (vheight - top) + x / 2 - z * (vheight - top) + innerY);
         }
 
         private static byte Shade(byte[] sprite, int innerX, int innerY, int aboveback, int above, int abovefront)
@@ -3039,7 +3038,7 @@ namespace AssetsPV
         {
             rng = new Random(0xb335 + frame / 2);
             //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
-            int rows = (xDim / 4 + zDim) * multiplier * (vheight - top) + 2, cols = yDim * multiplier * vwidth + 2;
+            int rows = (xDim / 2 + zDim) * multiplier * (vheight - top) + 2, cols = yDim * multiplier * vwidth + 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
                 data[i] = new byte[cols];
@@ -3071,26 +3070,29 @@ namespace AssetsPV
                         byte vx = colors[fx, fy, fz];
                         int current_color = ((255 - vx) % 4 == 0) ? (255 - vx) / 4 + VoxelLogic.wcolorcount : ((254 - vx) % 4 == 0) ? (253 - VoxelLogic.clear) / 4 : (253 - vx) / 4;
                         int p = 0;
-                        if((255 - vx) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
-                            continue;
+                        bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
+                        if(useColorIndices)
+                        {
+                            if((255 - vx) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
+                                continue;
 
-                        if(current_color >= 21 && current_color <= 24)
-                            current_color = 21 + ((current_color + frame) % 4);
+                            if(current_color >= 21 && current_color <= 24)
+                                current_color = 21 + ((current_color + frame) % 4);
 
-                        if(current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
-                            current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
-                        if(current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
-                            current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
-                        if(current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
-                            current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
-
+                            if(current_color >= VoxelLogic.wcolorcount && current_color < VoxelLogic.wcolorcount + 4)
+                                current_color = VoxelLogic.wcolorcount + ((current_color + frame) % 4);
+                            if(current_color >= VoxelLogic.wcolorcount + 6 && current_color < VoxelLogic.wcolorcount + 10)
+                                current_color = VoxelLogic.wcolorcount + 6 + ((current_color + frame) % 4);
+                            if(current_color >= VoxelLogic.wcolorcount + 14 && current_color < VoxelLogic.wcolorcount + 18)
+                                current_color = VoxelLogic.wcolorcount + 14 + ((current_color + frame) % 4);
+                        }
                         if((frame % 2 != 0) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_0 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_0))
                             continue;
                         else if((frame % 2 != 1) && (VoxelLogic.wcolors[current_color][3] == VoxelLogic.spin_alpha_1 || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flash_alpha_1))
                             continue;
                         else if(VoxelLogic.wcolors[current_color][3] == 0F)
                             continue;
-                        else if(current_color >= 17 && current_color <= 20)
+                        else if(useColorIndices && current_color >= 17 && current_color <= 20)
                         {
                             int mod_color = current_color;
                             if(mod_color == 17 && r.Next(7) < 3) //smoke
@@ -3146,7 +3148,7 @@ namespace AssetsPV
                                 }
                             }
                         }
-                        else if(current_color == 25)
+                        else if(useColorIndices && current_color == 25)
                         {
                             taken[fx, fy] = true;
                             for(int j = 0; j < vheight; j++)
@@ -3167,7 +3169,7 @@ namespace AssetsPV
                             int mod_color = current_color;
                             //                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                             //                              continue;
-                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            if(useColorIndices && (mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
                             }
@@ -3228,7 +3230,7 @@ namespace AssetsPV
                                             }
                                             else
                                             {*/
-                                            if(mod_color == 27) //water
+                                            if(useColorIndices && mod_color == 27) //water
                                                 argbValues[p] = RandomDither(wditheredcurrent[mod_color], i, j, rng);
                                             else
                                             {
@@ -3411,8 +3413,8 @@ namespace AssetsPV
             for(int i = 0; i < 15; i++)
             {
                 Console.WriteLine("Palette " + i);
-                byte[,,] colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color - 16 * i)).ToList(), 120, 120, 80);
-                Console.WriteLine(colors.ToList().Max());
+                byte[,,] colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color - 16 * i)).ToList(), 120, 120, 80);
+                //Console.WriteLine(colors.ToList().Max());
 
                 for(int shp = 0; shp < 16; shp++)
                 {
@@ -3477,11 +3479,11 @@ namespace AssetsPV
                     }
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                    c2 = TransformLogic.RunCA(TransformLogic.ScalePartial(c2, multiplier, multiplier, multiplier), 3);
+                    c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.ScalePartial(c2, multiplier)), 1 + bonus * multiplier / 2);
 
-                    PngWriter png = FileHelper.CreatePngWriter("Terrains2/" + nm + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter("CU_Ortho/Terrains2/" + nm + ".png", imi, true);
                     WritePNG(png, processFrameHugeW(c2, 8, 0, 1, true, true), simplepalettes[8]);
-                    PngWriter png2 = FileHelper.CreatePngWriter("TerrainsBlank/" + nm + ".png", imi, true);
+                    PngWriter png2 = FileHelper.CreatePngWriter("CU_Ortho/TerrainsBlank/" + nm + ".png", imi, true);
                     WritePNG(png2, processFrameHugeW(c2, 8, 0, 1, true, true), basepalette);
                 }
             }
@@ -3609,8 +3611,10 @@ namespace AssetsPV
         {
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
-            VoxelLogic.VisualMode = "Forays";
-            altFolder = "Forays2/";
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "CU_Ortho/";
+            //altFolder = "Forays2/";
+            System.IO.Directory.CreateDirectory("CU_Ortho");
             System.IO.Directory.CreateDirectory("Forays2");
             VoxelLogic.voxFolder = "ForaysBones/";
 
@@ -3618,14 +3622,14 @@ namespace AssetsPV
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
-            System.IO.Directory.CreateDirectory("Terrains2");
-            System.IO.Directory.CreateDirectory("TerrainsBlank");
+            System.IO.Directory.CreateDirectory("CU_Ortho/Terrains2");
+            System.IO.Directory.CreateDirectory("CU_Ortho/TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
 
-            //CURedux.Initialize();
+            CURedux.Initialize();
             //            SaPalettes.Initialize();
             InitializeWPalette();
 
@@ -3920,21 +3924,27 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            /*
+            
             writePaletteImages();
             renderTerrain();
-            
+
             processUnitLargeWMilitary("Civilian");
+
+            processUnitLargeWMilitary("Tank");
+            /*
+            processUnitLargeWMilitary("Tank_P");
+            processUnitLargeWMilitary("Tank_S");
+            processUnitLargeWMilitary("Tank_T");
+
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer_S");
 
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
 
-            processUnitLargeWMilitary("Tank");
-            processUnitLargeWMilitary("Tank_P");
-            processUnitLargeWMilitary("Tank_S");
-            processUnitLargeWMilitary("Tank_T");
-
+            
             processUnitLargeWMilitary("Infantry");
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
@@ -4000,10 +4010,10 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            */
+            
 
             //            processReceivingMilitaryWSuper();
-
+            /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4048,7 +4058,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-
+            */
 
             /*
             Pose swing0 = (model => model),

@@ -5028,9 +5028,9 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             */
 
-            processUnitLargeWMilitary("Volunteer");
-            processUnitLargeWMilitary("Volunteer_P");
-            //processUnitLargeWMilitary("Volunteer_S");
+            //processUnitLargeWMilitary("Volunteer");
+            //processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer_S");
             //processUnitLargeWMilitary("Volunteer_T");
             //            processReceivingMilitaryWSuper();
 

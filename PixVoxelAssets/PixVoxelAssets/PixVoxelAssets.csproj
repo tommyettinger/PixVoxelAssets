@@ -52,7 +52,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallFacesDithered</StartupObject>
+    <StartupObject>AssetsPV.OrthoSingle</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Pngcs, Version=1.1.4.1, Culture=neutral, processorArchitecture=MSIL">
@@ -780,6 +780,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Volunteer_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Volunteer_S_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Damned_Large_W.vox">

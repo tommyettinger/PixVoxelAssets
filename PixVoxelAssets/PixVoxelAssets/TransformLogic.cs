@@ -269,7 +269,7 @@ namespace AssetsPV
         {
             if(file == null)
                 return new Bone(new byte[60 * Multiplier * Bonus, 60 * Multiplier * Bonus, 60 * Multiplier * Bonus]);
-            BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
+            BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
             return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus));
         }
@@ -481,6 +481,8 @@ namespace AssetsPV
 
     public class TransformLogic
     {
+        public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
+
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
             double plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
@@ -690,7 +692,25 @@ namespace AssetsPV
                         {
                             if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear)
                                 data[mvd.x * multiplier + x, mvd.y * multiplier + y, mvd.z * multiplier + z] = mvd.color;
-
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+        public static byte[,,] VoxListToLargerArray(IEnumerable<MagicaVoxelData> voxelData, int multiplier, int originalX, int originalY, int xSize, int ySize, int zSize)
+        {
+            byte[,,] data = new byte[xSize * multiplier, ySize * multiplier, zSize * multiplier];
+            foreach(MagicaVoxelData mvd in voxelData)
+            {
+                for(int x = 0; x < multiplier; x++)
+                {
+                    for(int y = 0; y < multiplier; y++)
+                    {
+                        for(int z = 0; z < multiplier; z++)
+                        {
+                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear)
+                                data[(mvd.x + (xSize - originalX) / 2) * multiplier + x, (mvd.y + (ySize - originalY) / 2) * multiplier + y, mvd.z * multiplier + z] = mvd.color;
                         }
                     }
                 }
@@ -725,6 +745,26 @@ namespace AssetsPV
                     for(int z = zmin; z < zmax; z++)
                     {
                         vs[x + xMove, y + yMove, z + zMove] = voxelData[x, y, z];
+                    }
+                }
+            }
+
+            return vs;
+
+        }
+        public static byte[,,] ExpandBounds(byte[,,] voxelData, int newXSize, int newYSize, int newZSize)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+
+            byte[,,] vs = new byte[newXSize, newYSize, newZSize];
+            
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        vs[x + (newXSize - xSize) / 2, y + (newYSize - ySize) / 2, z] = voxelData[x, y, z];
                     }
                 }
             }
@@ -1167,7 +1207,11 @@ namespace AssetsPV
 
             return vls;
         }
-
+        public static byte[,,] ScalePartial(byte[,,] colors, double scale)
+        {
+            if(scale == 1.0) return colors;
+            return ScalePartial(colors, scale, scale, scale);
+        }
         public static byte[,,] ScalePartial(byte[,,] colors, double xScale, double yScale, double zScale)
         {
             int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
@@ -1205,6 +1249,492 @@ namespace AssetsPV
             }
             return vls;
         }
+
+        public static byte[] dismiss = new byte[] { 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1, };
+        
+        public static byte[][,,] FieryExplosionW(byte[,,] colors, bool blowback, bool shadowless)
+        {
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+            byte[][,,] voxelFrames = new byte[13][,,];
+            voxelFrames[0] = colors;
+            
+            for(int f = 1; f < 5; f++)
+            {
+                byte[,,] working = voxelFrames[f - 1].Replicate();
+
+                int[] minX = new int[zSize];
+                int[] maxX = new int[zSize];
+                float[] midX = new float[zSize];
+                for(int level = 0; level < zSize; level++)
+                {
+                    minX[level] = working.MinXAtZ(level, dismiss);
+                    maxX[level] = working.MaxXAtZ(level, dismiss);
+                    midX[level] = (maxX[level] + minX[level]) / 2F;
+                }
+
+                int[] minY = new int[zSize];
+                int[] maxY = new int[zSize];
+                float[] midY = new float[zSize];
+                for(int level = 0; level < zSize; level++)
+                {
+                    minY[level] = working.MinYAtZ(level, dismiss);
+                    maxY[level] = working.MaxYAtZ(level, dismiss);
+                    midY[level] = (maxY[level] + minY[level]) / 2F;
+                }
+
+                int minZ = working.MinZ(dismiss);
+                int maxZ = working.MaxZ(dismiss);
+                float midZ = (maxZ + minZ) / 2F;
+
+                for(int vx = 0; vx < xSize; vx++)
+                {
+                    for(int vy = 0; vy < ySize; vy++)
+                    {
+                        for(int vz = 0; vz < zSize; vz++)
+                        {
+                            byte vcolor = voxelFrames[f - 1][vx, vy, vz];
+                            int x = 0, y = 0, z = 0;
+                            byte color = 0;
+                            int c = ((255 - vcolor) % 4 == 0) ? (255 - vcolor) / 4 + VoxelLogic.wcolorcount : (253 - vcolor) / 4;
+                            if(c == 8 || c == 9) //flesh
+                                color = (byte)((TallFaces.r.Next(1 + f) == 0) ? 253 - 34 * 4 : (TallFaces.r.Next(8) == 0) ? 253 - 19 * 4 : vcolor); //random transform to guts
+                            else if(c == 34) //guts
+                                color = (byte)((TallFaces.r.Next(18) == 0) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
+                            else if(c == VoxelLogic.wcolorcount - 1) //clear
+                                color = VoxelLogic.clear; //clear stays clear
+                            else if(c == 16)
+                                color = VoxelLogic.clear; //clear inner shadow
+                            else if(c == 25)
+                                color = 253 - 25 * 4; //shadow stays shadow
+                            else if(c == 27)
+                                color = 253 - 27 * 4; //water stays water
+                            else if(c >= VoxelLogic.wcolorcount && c < VoxelLogic.wcolorcount + 5)
+                                color = vcolor; // falling water stays falling water
+                            else if(c == 40)
+                                color = 253 - 20 * 4; //flickering sparks become normal sparks
+                            else if(c >= 21 && c <= 24) //lights
+                                color = 253 - 35 * 4; //glass color for broken lights
+                            else if(c == 35) //windows
+                                color = (byte)((TallFaces.r.Next(3) == 0) ? VoxelLogic.clear : vcolor); //random transform to clear
+                            else if(c == 36) //rotor contrast
+                                color = 253 - 0 * 4; //"foot contrast" or "raw metal contrast" color for broken rotors contrast
+                            else if(c == 37) //rotor
+                                color = 253 - 1 * 4; //"foot" or "raw metal" color for broken rotors
+                            else if(c == 38 || c == 39)
+                                color = VoxelLogic.clear; //clear non-active rotors
+                            else if(c == 19) //orange fire
+                                color = (byte)((TallFaces.r.Next(3) <= 1) ? 253 - 18 * 4 : ((TallFaces.r.Next(5) == 0) ? 253 - 17 * 4 : vcolor)); //random transform to yellow fire or smoke
+                            else if(c == 18) //yellow fire
+                                color = (byte)((TallFaces.r.Next(4) <= 1) ? 253 - 19 * 4 : ((TallFaces.r.Next(4) == 0) ? 253 - 20 * 4 : vcolor)); //random transform to orange fire or sparks
+                            else if(c == 20) //sparks
+                                color = (byte)((TallFaces.r.Next(4) == 0) ? VoxelLogic.clear : vcolor); //random transform to clear
+                            else if(c == 17)
+                                color = vcolor; // smoke stays smoke
+                            else
+                                color = (byte)((TallFaces.r.Next(9 - f) == 0) ? 253 - ((TallFaces.r.Next(4) == 0) ? 18 * 4 : 19 * 4) : vcolor); //random transform to orange or yellow fire
+                            float xMove = 0, yMove = 0, zMove = 0;
+
+                            if(color == 253 - 19 * 4 || color == 253 - 18 * 4 || color == 253 - 17 * 4)
+                            {
+                                zMove = (f - 1) * 1.8f;
+                                xMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
+                                yMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
+                            }
+                            else
+                            {
+                                if(vx > midX[vz])
+                                    xMove = ((0 - TallFaces.r.Next(3) - ((blowback) ? 9 : 0) + (vx - midX[vz])) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                else if(vx < midX[vz])
+                                    xMove = ((0 + TallFaces.r.Next(3) - ((blowback) ? 8 : 0) - midX[vz] + vx) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (vz + 5); //5 -
+                                if(vy > midY[vz])
+                                    yMove = ((0 - TallFaces.r.Next(3) + (vy - midY[vz])) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F))); //maxX[vz] - minX[vz]
+                                else if(vy < midY[vz])
+                                    yMove = ((0 + TallFaces.r.Next(3) - midY[vz] + vy) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                if(color == 253 - 20 * 4)
+                                {
+                                    zMove = 0.1f;
+                                    xMove *= 2;
+                                    yMove *= 2;
+                                }
+                                else if(minZ > 0)
+                                    zMove = ((vz) * (1 - f) / 6F);
+                                else
+                                    zMove = (vz / ((maxZ + 1 + midZ) * (0.15F))) * (4 - f) * 1.1F;
+                            }
+
+                            if(xMove > 20) xMove = 20;
+                            if(xMove < -20) xMove = -20;
+                            if(yMove > 20) yMove = 20;
+                            if(yMove < -20) yMove = -20;
+                            //float magnitude = Math.Abs(xMove) + Math.Abs(yMove);
+                            float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
+                            if(xMove > 0)
+                            {
+                                float nv = vx + (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * f / 0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(Math.Sqrt(Math.Abs(Math.Abs((xMove * f / 3)) - Math.Abs((yMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > xSize - 1)
+                                {
+                                    nv = xSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                x = (byte)(Math.Floor(nv));
+                            }
+                            else if(xMove < 0)
+                            {
+                                float nv = vx - (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * f / -0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((xMove * f / 3)) - Math.Abs((yMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > xSize - 1)
+                                {
+                                    nv = xSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                x = (byte)(Math.Floor(nv));
+                            }
+                            else
+                            {
+                                if(vx < 0)
+                                {
+                                    x = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(vx > xSize - 1)
+                                {
+                                    x = xSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                else x = vx;
+                            }
+                            if(yMove > 0)
+                            {
+                                float nv = vy + (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * f / 0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > ySize - 1)
+                                {
+                                    nv = ySize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                y = (byte)(Math.Floor(nv));
+                            }
+                            else if(yMove < 0)
+                            {
+                                float nv = vy - (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * f / -0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > ySize - 1)
+                                {
+                                    nv = ySize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                y = (byte)(Math.Floor(nv));
+                            }
+                            else
+                            {
+                                if(vy < 0)
+                                {
+                                    y = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(vy > ySize - 1)
+                                {
+                                    y = ySize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                else y = vy;
+                            }
+
+                            if(zMove != 0)
+                            {
+                                float nv = (vz + (zMove * 1.5f / f));
+
+                                if(nv <= 0 && f < 8) nv = TallFaces.r.Next(2); //bounce
+                                else if(nv < 0) nv = 0;
+
+                                if(nv > zSize - 1) nv = zSize - 1;
+                                z = (byte)Math.Round(nv);
+                            }
+                            else
+                            {
+                                z = vz;
+                            }
+                            working[x, y, z] = color;
+                        }
+                    }
+                }
+                voxelFrames[f] = working;
+            }
+            for(int f = 5; f < 13; f++)
+            {
+                byte[,,] working = voxelFrames[f - 1].Replicate();
+
+                int[] minX = new int[zSize];
+                int[] maxX = new int[zSize];
+                float[] midX = new float[zSize];
+                for(int level = 0; level < zSize; level++)
+                {
+                    minX[level] = working.MinXAtZ(level, dismiss);
+                    maxX[level] = working.MaxXAtZ(level, dismiss);
+                    midX[level] = (maxX[level] + minX[level]) / 2F;
+                }
+
+                int[] minY = new int[zSize];
+                int[] maxY = new int[zSize];
+                float[] midY = new float[zSize];
+                for(int level = 0; level < zSize; level++)
+                {
+                    minY[level] = working.MinYAtZ(level, dismiss);
+                    maxY[level] = working.MaxYAtZ(level, dismiss);
+                    midY[level] = (maxY[level] + minY[level]) / 2F;
+                }
+
+                int minZ = working.MinZ(dismiss);
+                int maxZ = working.MaxZ(dismiss);
+                float midZ = (maxZ + minZ) / 2F;
+
+                for(int vx = 0; vx < xSize; vx++)
+                {
+                    for(int vy = 0; vy < ySize; vy++)
+                    {
+                        for(int vz = 0; vz < zSize; vz++)
+                        {
+                            byte vcolor = voxelFrames[f - 1][vx, vy, vz];
+                            int x = 0, y = 0, z = 0;
+                            byte color = 0;
+                            int c = ((255 - vcolor) % 4 == 0) ? (255 - vcolor) / 4 + VoxelLogic.wcolorcount : (253 - vcolor) / 4;
+                            if(c == 8 || c == 9) //flesh
+                                color = (byte)((TallFaces.r.Next(f) == 0) ? 253 - 34 * 4 : (TallFaces.r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to guts
+                            else if(c == 34) //guts
+                                color = (byte)((TallFaces.r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
+                            else if(c == VoxelLogic.wcolorcount - 1) //VoxelLogic.clear and markers
+                                color = (byte)VoxelLogic.clear; //VoxelLogic.clear stays VoxelLogic.clear
+                            else if(c == 16)
+                                color = VoxelLogic.clear; //VoxelLogic.clear inner shadow
+                            else if(c == 25)
+                                color = 253 - 25 * 4; //shadow stays shadow
+                            else if(c == 27)
+                                color = 253 - 27 * 4; //water stays water
+                            else if(c >= VoxelLogic.wcolorcount && c < VoxelLogic.wcolorcount + 5)
+                                color = (byte)(255 - (c - VoxelLogic.wcolorcount) * 4); // falling water stays falling water
+                            else if(c == 40)
+                                color = 253 - 20 * 4; //flickering sparks become normal sparks
+                            else if(c >= 21 && c <= 24) //lights
+                                color = 253 - 35 * 4; //glass color for broken lights
+                            else if(c == 35) //windows
+                                color = (byte)((TallFaces.r.Next(3) == 0) ? VoxelLogic.clear : vcolor); //random transform to VoxelLogic.clear
+                            else if(c == 36) //rotor contrast
+                                color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
+                            else if(c == 37) //rotor
+                                color = 253 - 1 * 4; //"foot" color for broken rotors
+                            else if(c == 38 || c == 39)
+                                color = VoxelLogic.clear; //VoxelLogic.clear non-active rotors
+                            else if(c == 19) //orange fire
+                                color = (byte)((TallFaces.r.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((TallFaces.r.Next(3) <= 1) ? 253 - 18 * 4 : ((TallFaces.r.Next(3) == 0) ? 253 - 17 * 4 : vcolor))); //random transform to yellow fire or smoke
+                            else if(c == 18) //yellow fire
+                                color = (byte)((TallFaces.r.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((TallFaces.r.Next(3) <= 1) ? 253 - 19 * 4 : ((TallFaces.r.Next(4) == 0) ? 253 - 17 * 4 : ((TallFaces.r.Next(4) == 0) ? 253 - 20 * 4 : vcolor)))); //random transform to orange fire, smoke, or sparks
+                            else if(c == 20) //sparks
+                                color = (byte)((TallFaces.r.Next(4) > 0 && TallFaces.r.Next(12) > f) ? vcolor : VoxelLogic.clear); //random transform to VoxelLogic.clear
+                            else if(c == 17) //smoke
+                                color = (byte)((TallFaces.r.Next(10) + 3 <= f) ? VoxelLogic.clear : 253 - 17 * 4); //random transform to VoxelLogic.clear
+                            else
+                                color = (byte)((TallFaces.r.Next(f * 4) <= 6) ? 253 - ((TallFaces.r.Next(4) == 0) ? 18 * 4 : 19 * 4) : vcolor); //random transform to orange or yellow fire
+
+                            float xMove = 0, yMove = 0, zMove = 0;
+                            if(color == 253 - 19 * 4 || color == 253 - 18 * 4 || color == 253 - 17 * 4)
+                            {
+                                zMove = f * 0.5f;
+                                xMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
+                                yMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
+                            }
+                            else
+                            {
+                                /*
+                                 if (vx > midX[vz])
+                                    xMove = ((0 - TallFaces.r.Next(3) - ((blowback) ? 9 : 0) + (vx - midX[vz])) * 2F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                //for lower values: distance from current voxel x to center + (between 2 to 0), times variable based on height
+                                else if (vx < midX[vz])
+                                    xMove = ((0 + TallFaces.r.Next(3) - ((blowback) ? 8 : 0) - midX[vz] + vx) * 2F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (vz + 5); //5 -
+                                if (vy > midY[vz])
+                                    yMove = ((0 - TallFaces.r.Next(3) + (vy - midY[vz])) * 2F * ((vz - minZ + 3) / (maxZ - minZ + 1F))); //maxX[vz] - minX[vz]
+                                else if (vy < midY[vz])
+                                    yMove = ((0 + TallFaces.r.Next(3) - midY[vz] + vy) * 2F * ((vz - minZ + 3) / (maxZ - minZ + 1F)));
+                                 */
+
+
+                                if(vx > midX[vz])
+                                    xMove = ((0 - TallFaces.r.Next(3) - ((blowback) ? 7 : 0) + (vx - midX[vz])) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                else if(vx < midX[vz])
+                                    xMove = ((0 + TallFaces.r.Next(3) - ((blowback) ? 6 : 0) - midX[vz] + vx) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                if(vy > midY[vz])
+                                    yMove = ((0 - TallFaces.r.Next(3) + (vy - midY[vz])) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                else if(vy < midY[vz])
+                                    yMove = ((0 + TallFaces.r.Next(3) - midY[vz] + vy) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+
+                                if(color == 253 - 20 * 4)
+                                {
+                                    zMove = 0.1f;
+                                    xMove *= 2;
+                                    yMove *= 2;
+                                }
+                                else if(f < 6 && minZ == 0)
+                                    zMove = (vz / ((maxZ + 1) * (0.2F))) * (5 - f) * 0.6F;
+                                else
+                                    zMove = (1 - f * 1.85F);
+                            }
+                            if(vz <= 1 && f >= 10)
+                            {
+                                xMove = 0;
+                                yMove = 0;
+                            }
+                            if(xMove > 20) xMove = 20;
+                            if(xMove < -20) xMove = -20;
+                            if(yMove > 20) yMove = 20;
+                            if(yMove < -20) yMove = -20;
+                            // float magnitude = Math.Abs(xMove) + Math.Abs(yMove);
+                            float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
+
+                            if(xMove > 0)
+                            {
+                                float nv = vx + (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
+                                //                        float nv = (float)(vx + Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > xSize - 1)
+                                {
+                                    nv = xSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                x = (byte)(Math.Floor(nv));
+                            }
+                            else if(xMove < 0)
+                            {
+                                float nv = vx - (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * -35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
+
+                                //float nv = (float)(vx - Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > xSize - 1)
+                                {
+                                    nv = xSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                x = (byte)(Math.Floor(nv));
+                            }
+                            else
+                            {
+                                if(vx < 0)
+                                {
+                                    x = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(vx > xSize - 1)
+                                {
+                                    x = xSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                else x = vx;
+                            }
+                            if(yMove > 0)
+                            {
+                                float nv = vy + (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * 35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
+                                //float nv = (float)(vy + Math.Sqrt(Math.Abs(Math.Abs(yMove / (0.07f * (f + 5))) - Math.Abs((xMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > ySize - 1)
+                                {
+                                    nv = ySize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                y = (byte)(Math.Floor(nv));
+                            }
+                            else if(yMove < 0)
+                            {
+                                float nv = vy - (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * -35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
+                                //(float)(vy - Math.Sqrt(Math.Abs(Math.Abs(yMove / (0.07f * (f + 5))) - Math.Abs((xMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                if(nv < 0)
+                                {
+                                    nv = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(nv > ySize - 1)
+                                {
+                                    nv = ySize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                y = (byte)(Math.Ceiling(nv));
+                            }
+                            else
+                            {
+                                if(vy < 0)
+                                {
+                                    y = 0;
+                                    color = VoxelLogic.clear;
+                                }
+                                if(vy > ySize - 1)
+                                {
+                                    y = ySize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                else y = vy;
+                            }
+
+                            if(zMove != 0)
+                            {
+                                float nv = (vz + (zMove * 1.3f));
+
+                                if(nv <= 0 && f < 8) nv = TallFaces.r.Next(2); //bounce
+                                else if(nv < 0) nv = 0;
+
+                                if(nv > zSize - 1)
+                                {
+                                    nv = zSize - 1;
+                                    color = VoxelLogic.clear;
+                                }
+                                z = (byte)Math.Round(nv);
+                            }
+                            else
+                            {
+                                z = vz;
+                            }
+                            working[x, y, z] = color;
+                        }
+                    }
+                }
+                voxelFrames[f] = working;
+
+            }
+            
+            byte[][,,] frames = new byte[12][,,];
+
+            for(int f = 1; f < 13; f++)
+            {
+                frames[f - 1] = voxelFrames[f];
+            }
+            return frames;
+        }
+
 
     }
 }
