@@ -3926,7 +3926,7 @@ namespace AssetsPV
             */
             
             writePaletteImages();
-            renderTerrain();
+            //renderTerrain();
 
             processUnitLargeWMilitary("Civilian");
 

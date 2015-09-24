@@ -1260,7 +1260,7 @@ namespace AssetsPV
             
             for(int f = 1; f < 5; f++)
             {
-                byte[,,] working = voxelFrames[f - 1].Replicate();
+                byte[,,] working = voxelFrames[f - 1].Replicate(), vls = new byte[working.GetLength(0), working.GetLength(1), working.GetLength(2)]; ;
 
                 int[] minX = new int[zSize];
                 int[] maxX = new int[zSize];
@@ -1293,6 +1293,9 @@ namespace AssetsPV
                         for(int vz = 0; vz < zSize; vz++)
                         {
                             byte vcolor = voxelFrames[f - 1][vx, vy, vz];
+
+                            if(vcolor == 0) continue;
+
                             int x = 0, y = 0, z = 0;
                             byte color = 0;
                             int c = ((255 - vcolor) % 4 == 0) ? (255 - vcolor) / 4 + VoxelLogic.wcolorcount : (253 - vcolor) / 4;
@@ -1300,10 +1303,10 @@ namespace AssetsPV
                                 color = (byte)((TallFaces.r.Next(1 + f) == 0) ? 253 - 34 * 4 : (TallFaces.r.Next(8) == 0) ? 253 - 19 * 4 : vcolor); //random transform to guts
                             else if(c == 34) //guts
                                 color = (byte)((TallFaces.r.Next(18) == 0) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
-                            else if(c == VoxelLogic.wcolorcount - 1) //clear
-                                color = VoxelLogic.clear; //clear stays clear
+                            else if(c == VoxelLogic.clear || vcolor == 0) //clear
+                                color = 0; //clear stays clear
                             else if(c == 16)
-                                color = VoxelLogic.clear; //clear inner shadow
+                                color = 0; //clear inner shadow
                             else if(c == 25)
                                 color = 253 - 25 * 4; //shadow stays shadow
                             else if(c == 27)
@@ -1471,15 +1474,15 @@ namespace AssetsPV
                             {
                                 z = vz;
                             }
-                            working[x, y, z] = color;
+                            vls[x, y, z] = color;
                         }
                     }
                 }
-                voxelFrames[f] = working;
+                voxelFrames[f] = vls;
             }
             for(int f = 5; f < 13; f++)
             {
-                byte[,,] working = voxelFrames[f - 1].Replicate();
+                byte[,,] working = voxelFrames[f - 1].Replicate(), vls = new byte[working.GetLength(0), working.GetLength(1), working.GetLength(2)];
 
                 int[] minX = new int[zSize];
                 int[] maxX = new int[zSize];
@@ -1512,6 +1515,9 @@ namespace AssetsPV
                         for(int vz = 0; vz < zSize; vz++)
                         {
                             byte vcolor = voxelFrames[f - 1][vx, vy, vz];
+
+                            if(vcolor == 0) continue;
+
                             int x = 0, y = 0, z = 0;
                             byte color = 0;
                             int c = ((255 - vcolor) % 4 == 0) ? (255 - vcolor) / 4 + VoxelLogic.wcolorcount : (253 - vcolor) / 4;
@@ -1519,10 +1525,10 @@ namespace AssetsPV
                                 color = (byte)((TallFaces.r.Next(f) == 0) ? 253 - 34 * 4 : (TallFaces.r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to guts
                             else if(c == 34) //guts
                                 color = (byte)((TallFaces.r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
-                            else if(c == VoxelLogic.wcolorcount - 1) //VoxelLogic.clear and markers
-                                color = (byte)VoxelLogic.clear; //VoxelLogic.clear stays VoxelLogic.clear
+                            else if(c == VoxelLogic.clear || vcolor == 0) //clear
+                                color = 0; //clear stays clear
                             else if(c == 16)
-                                color = VoxelLogic.clear; //VoxelLogic.clear inner shadow
+                                color = 0; //VoxelLogic.clear inner shadow
                             else if(c == 25)
                                 color = 253 - 25 * 4; //shadow stays shadow
                             else if(c == 27)
@@ -1718,11 +1724,11 @@ namespace AssetsPV
                             {
                                 z = vz;
                             }
-                            working[x, y, z] = color;
+                            vls[x, y, z] = color;
                         }
                     }
                 }
-                voxelFrames[f] = working;
+                voxelFrames[f] = vls;
 
             }
             
