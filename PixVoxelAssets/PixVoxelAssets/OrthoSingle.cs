@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Hjg.Pngcs;
 using Hjg.Pngcs.Chunks;
+using ImageMagick;
 
 namespace AssetsPV
 {
@@ -49,7 +50,7 @@ namespace AssetsPV
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0,  0,  0,  0, 1F}};
 
-            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+            System.Drawing.Imaging.ColorMatrix colorMatrix = new System.Drawing.Imaging.ColorMatrix(colorMatrixElements);
 
             imageAttributes.SetColorMatrix(
                colorMatrix,
@@ -69,7 +70,7 @@ namespace AssetsPV
 
                     if(!VoxelLogic.terrainPalettes.Contains(p) && current_color == 25)
                     {
-                        colorMatrix = new ColorMatrix(new float[][]{
+                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
    new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
@@ -78,7 +79,7 @@ namespace AssetsPV
                     }
                     else if(VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.eraser_alpha)
                     {
-                        colorMatrix = new ColorMatrix(new float[][]{
+                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
@@ -87,7 +88,7 @@ namespace AssetsPV
                     }
                     else if(VoxelLogic.wpalettes[p][current_color][3] == 0F)
                     {
-                        colorMatrix = new ColorMatrix(new float[][]{
+                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
@@ -96,7 +97,7 @@ namespace AssetsPV
                     }
                     else
                     {
-                        colorMatrix = new ColorMatrix(new float[][]{
+                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
    new float[] {0.235F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.26F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.30F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
@@ -420,6 +421,27 @@ namespace AssetsPV
                 WritePNG(png, b, simplepalettes[c]);
             }
         }
+
+        public static void WriteGIF(List<string> images, int delay, string output)
+        {
+            using(MagickImageCollection collection = new MagickImageCollection())
+            {
+                foreach(string s in images)
+                {
+                    MagickImage mimg = new MagickImage(s);
+                    mimg.AnimationDelay = delay;
+                    mimg.GifDisposeMethod = GifDisposeMethod.Background;
+                    collection.Add(mimg);
+                }
+                //QuantizeSettings settings = new QuantizeSettings();
+                //settings.Colors = 256;
+                //collection.Quantize(settings);
+                collection.Optimize();
+                // Save gif
+                collection.Write(output + ".gif");
+            }
+        }
+
         public static void processUnitLargeW(string u, int palette, bool still, bool shadowless)
         {
 
@@ -652,7 +674,7 @@ namespace AssetsPV
         }
         private static byte[][] processFrameMassiveW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            byte[][] b, b2;
+            //byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
@@ -764,7 +786,6 @@ namespace AssetsPV
                     WritePNG(png, b, basepalette);
                 }
             }
-            
             for(int dir = 0; dir < 4; dir++)
             {
                 for(int f = 0; f < framelimit; f++)
@@ -773,17 +794,20 @@ namespace AssetsPV
                         folder + "/color{0}_" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
-
-            Directory.CreateDirectory("gifs/" + altFolder);
-            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-            startInfo.UseShellExecute = false;
-            string s = "";
-            for(int i = 0; i < 8; i++)
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int p = 0; p < 8; p++)
             {
-                s += folder + "/color" + i + "_" + u + "_Large_face* ";
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_" + f + ".png");
+                    }
+                }
             }
-            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Large_animated.gif";
-            Process.Start(startInfo).WaitForExit();
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Large_animated");
 
             processExplosionLargeW(u, -1, explode_parsed, false);
             //            processExplosionLargeW(u, -1, new MagicaVoxelData[] { }, false);
@@ -791,6 +815,7 @@ namespace AssetsPV
 
             processUnitLargeWFiring(u);
         }
+
         public static void processUnitLargeWFiring(string u)
         {
             Console.WriteLine("Processing: " + u);
@@ -903,23 +928,21 @@ namespace AssetsPV
                 }
                 else continue;
 
-                Directory.CreateDirectory("gifs/" + altFolder);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
-                string s = "";
-                for(int i = 0; i < 8; i++)
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+
+                for(int p = 0; p < 8; p++)
                 {
-                    for(int d = 0; d < 4; d++)
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        for(int frame = 0; frame < 16; frame++)
+                        for(int f = 0; f < 16; f++)
                         {
-                            s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png ";
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
                         }
                     }
                 }
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_attack_" + w + "_animated.gif";
-                Console.WriteLine("Running convert.exe ...");
-                Process.Start(startInfo).WaitForExit();
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_"+w+"_animated");
 
             }
 
@@ -929,7 +952,7 @@ namespace AssetsPV
         {
             string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            for(int i = 2; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 for(int s = 0; s < 4; s++)
                 {
@@ -988,26 +1011,24 @@ namespace AssetsPV
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
 
-                for(int color = 0; color < 8; color++)
+                List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
+                for(int strength = 0; strength < 4; strength++)
                 {
-                    string st = "";
-
-                    for(int strength = 0; strength < 4; strength++)
+                    for(int p = 0; p < 8; p++)
                     {
                         for(int d = 0; d < 4; d++)
                         {
-                            for(int frame = 0; frame < 16; frame++)
+                            for(int f = 0; f < 16; f++)
                             {
-                                st += folder + "/color" + color + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png ";
+                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + f + ".png");
                             }
                         }
                     }
-                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + st + " gifs/" + altFolder + "color" + color + "_" + VoxelLogic.WeaponTypes[i] + "_animated.gif";
-                    Console.WriteLine("Running convert.exe ...");
-                    Console.WriteLine("Args: " + st);
-                    Process.Start(startInfo).WaitForExit();
                 }
-
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated.gif");
+                
             }
         }
 
@@ -1036,7 +1057,9 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)), 1 + bonus * multiplier * 2);
+                byte[,,] colors = TransformLogic.RunCA(
+                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
+                    1 + bonus * multiplier * 2);
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -1106,8 +1129,11 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
+                            //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
+                            byte[,,] colors = TransformLogic.RunCA(
+                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+                                1 + bonus * multiplier * 2);
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
@@ -1131,23 +1157,22 @@ namespace AssetsPV
                 else continue;
 
                 Directory.CreateDirectory("gifs/" + altFolder);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
-                string s = "";
-                for(int i = 0; i < 8; i++)
+
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+
+                for(int p = 0; p < 8; p++)
                 {
-                    for(int d = 0; d < 4; d++)
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        for(int frame = 0; frame < 16; frame++)
+                        for(int f = 0; f < 16; f++)
                         {
-                            s += folder + "/color" + i + "_" + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png ";
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
                         }
                     }
                 }
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_attack_" + w + "_Huge_animated.gif";
-                Console.WriteLine("Running convert.exe ...");
-                Process.Start(startInfo).WaitForExit();
-
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Huge_animated");
             }
 
         }
@@ -1170,7 +1195,11 @@ namespace AssetsPV
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
                    //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
+                            //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
+
+                            byte[,,] colors = TransformLogic.RunCA(
+                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+                                1 + bonus * multiplier * 2);
 
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -1215,29 +1244,25 @@ namespace AssetsPV
                     }
                 }
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
 
-                for(int color = 0; color < 8; color++)
+                List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
+                for(int strength = 0; strength < 4; strength++)
                 {
-                    string st = "";
-
-                    for(int strength = 0; strength < 4; strength++)
+                    for(int p = 0; p < 8; p++)
                     {
                         for(int d = 0; d < 4; d++)
                         {
-                            for(int frame = 0; frame < 16; frame++)
+                            for(int f = 0; f < 16; f++)
                             {
-                                st += folder + "/color" + color + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png ";
+                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + f + ".png");
                             }
                         }
                     }
-                    startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + st + " gifs/" + altFolder + "color" + color + "_" + VoxelLogic.WeaponTypes[i] + "_Huge_animated.gif";
-                    Console.WriteLine("Running convert.exe ...");
-                    Console.WriteLine("Args: " + st);
-                    Process.Start(startInfo).WaitForExit();
                 }
-
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_Huge_animated.gif");
+                
             }
         }
 
@@ -1684,23 +1709,23 @@ namespace AssetsPV
                 }
 
                 Directory.CreateDirectory("gifs/" + altFolder);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
-                string s = "";
-                for(int i = 0; i < 8; i++)
+
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+
+                for(int p = 0; p < 8; p++)
                 {
-                    for(int d = 0; d < 4; d++)
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        for(int frame = 0; frame < 12; frame++)
+                        for(int f = 0; f < 12; f++)
                         {
-                            s += folder + "/color" + i + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
                         }
                     }
                 }
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_explosion_animated.gif";
-                Console.WriteLine("Running convert.exe ...");
-                Process.Start(startInfo).WaitForExit();
-
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_animated");
+                
             }
 
         }
@@ -1730,7 +1755,11 @@ namespace AssetsPV
             
             for(int d = 0; d < 4; d++)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 120, 120, 80), 1 + bonus * multiplier);
+                //byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60), 1 + bonus * multiplier);
+
+                byte[,,] colors = TransformLogic.RunCA(
+                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60)),
+                    1 + bonus * multiplier * 2);
                 byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
@@ -1776,22 +1805,22 @@ namespace AssetsPV
                 }
 
                 Directory.CreateDirectory("gifs/" + altFolder);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
-                string s = "";
-                for(int i = 0; i < 8; i++)
+
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+
+                for(int p = 0; p < 8; p++)
                 {
-                    for(int d = 0; d < 4; d++)
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        for(int frame = 0; frame < 12; frame++)
+                        for(int f = 0; f < 12; f++)
                         {
-                            s += folder + "/color" + i + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png ";
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png");
                         }
                     }
                 }
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_explosion_super_animated.gif";
-                Console.WriteLine("Running convert.exe ...");
-                Process.Start(startInfo).WaitForExit();
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_super_animated");
             }
         }
         /*
@@ -2934,7 +2963,7 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus / 2), bonus);
+                    byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus), bonus);
                     
                     byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
 
@@ -3423,7 +3452,7 @@ namespace AssetsPV
 
                     if((shp & 8) != 0)
                     {
-                        nm += "_SE";
+                        nm += "_S";
                         for(int side = 20; side < 100; side++)
                         {
                             for(int q = 0; q < 12; q++)
@@ -3437,7 +3466,7 @@ namespace AssetsPV
                     }
                     if((shp & 1) != 0)
                     {
-                        nm += "_SW";
+                        nm += "_W";
                         for(int side = 20; side < 100; side++)
                         {
                             for(int q = 0; q < 12; q++)
@@ -3451,7 +3480,7 @@ namespace AssetsPV
                     }
                     if((shp & 2) != 0)
                     {
-                        nm += "_NW";
+                        nm += "_N";
                         for(int side = 20; side < 100; side++)
                         {
                             for(int q = 0; q < 12; q++)
@@ -3465,7 +3494,7 @@ namespace AssetsPV
                     }
                     if((shp & 4) != 0)
                     {
-                        nm += "_NE";
+                        nm += "_E";
                         for(int side = 20; side < 100; side++)
                         {
                             for(int q = 0; q < 12; q++)
@@ -3609,6 +3638,8 @@ namespace AssetsPV
 
         static void Main(string[] args)
         {
+
+            //MagickNET.UseOpenCL = true;
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
             VoxelLogic.VisualMode = "CU";
@@ -3926,20 +3957,21 @@ namespace AssetsPV
             */
             
             writePaletteImages();
-            //renderTerrain();
-
+            renderTerrain();
+            /*
             processUnitLargeWMilitary("Civilian");
 
             processUnitLargeWMilitary("Tank");
-            /*
+            
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
             processUnitLargeWMilitary("Tank_T");
-
+            
             processUnitLargeWMilitary("Volunteer");
             processUnitLargeWMilitary("Volunteer_P");
             processUnitLargeWMilitary("Volunteer_S");
-
+            processUnitLargeWMilitary("Volunteer_T");
+            
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
@@ -3961,9 +3993,10 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_T");
             
             processUnitLargeWMilitary("Copter");
+            
             processUnitLargeWMilitary("Copter_P");
-
             processUnitLargeWMilitary("Copter_S");
+            
             processUnitLargeWMilitary("Copter_T");
             
             processUnitLargeWMilitary("Plane");
@@ -3983,11 +4016,12 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-
+            */
             //processReceivingMilitaryW();
-            
+            /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
+            
             processUnitHugeWMilitarySuper("Airport");
             processUnitHugeWMilitarySuper("City");
             processUnitHugeWMilitarySuper("Factory");
@@ -3998,6 +4032,7 @@ namespace AssetsPV
             
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
+            
             processUnitHugeWMilitarySuper("Copter_T");
 
             processUnitHugeWMilitarySuper("Plane");
@@ -4010,9 +4045,8 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            
-
-            //            processReceivingMilitaryWSuper();
+            */
+            //processReceivingMilitaryWSuper();
             /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
@@ -4091,7 +4125,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
             */
-            
+
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });
             Pose poseSword = (model => model.AddPitch(30, "Left_Weapon")

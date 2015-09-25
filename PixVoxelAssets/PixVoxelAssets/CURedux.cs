@@ -3467,6 +3467,10 @@ namespace AssetsPV
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
             parsedFrames.CopyTo(voxelFrames, 0);
+
+            VoxelLogic.sizex = 120;
+            VoxelLogic.sizey = 120;
+            VoxelLogic.sizez = 120;
             for(int i = 0; i < parsedFrames[0].Length; i++)
             {
                 voxelFrames[0][i].x += 40;
@@ -3481,9 +3485,6 @@ namespace AssetsPV
             {
                 voxelFrames = weaponAnimationsDouble[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
             }
-            VoxelLogic.sizex = 120;
-            VoxelLogic.sizey = 120;
-            VoxelLogic.sizez = 120;
 
             return voxelFrames;
         }

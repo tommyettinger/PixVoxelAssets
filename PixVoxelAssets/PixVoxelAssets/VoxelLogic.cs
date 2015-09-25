@@ -17728,6 +17728,10 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                 case 9:
                 case 10:
                 case 11:
+                case 36:
+                case 37:
+                case 38:
+                case 39:
                     {
                         return true;
                     }

@@ -690,7 +690,8 @@ namespace AssetsPV
                     {
                         for(int z = 0; z < multiplier; z++)
                         {
-                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear)
+                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear &&
+                                mvd.x * multiplier + x < xSize * multiplier && mvd.y * multiplier + y < ySize * multiplier && mvd.z * multiplier + z < zSize * multiplier)
                                 data[mvd.x * multiplier + x, mvd.y * multiplier + y, mvd.z * multiplier + z] = mvd.color;
                         }
                     }
@@ -709,7 +710,9 @@ namespace AssetsPV
                     {
                         for(int z = 0; z < multiplier; z++)
                         {
-                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear)
+                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear &&
+                                (mvd.x + (xSize - originalX) / 2) * multiplier + x < xSize * multiplier && (mvd.y + (ySize - originalY) / 2) * multiplier + y < ySize * multiplier && 
+                                mvd.z * multiplier + z < zSize * multiplier)
                                 data[(mvd.x + (xSize - originalX) / 2) * multiplier + x, (mvd.y + (ySize - originalY) / 2) * multiplier + y, mvd.z * multiplier + z] = mvd.color;
                         }
                     }
@@ -847,9 +850,19 @@ namespace AssetsPV
                     byte currentFill = 0;
                     for(int x = xSize - 2; x > 0; x--)
                     {
-                        if(voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y, z+1] == 0)
-                            currentFill = voxelData[x, y, z];
-                        vls[x, y, z] = currentFill;
+                        if((253 - voxelData[x, y, z]) / 4 >= 36 && (253 - voxelData[x, y, z]) / 4 <= 39)
+                        {
+                            vls[x, y, z] = voxelData[x, y, z];
+                            currentFill = voxelData[x-1, y, z];
+                        }
+                        else
+                        {
+                            if(voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y, z + 1] == 0)
+                            {
+                                currentFill = voxelData[x, y, z];
+                            }
+                            vls[x, y, z] = currentFill;
+                        }
                         /*
                         if(voxelData[x,y,z] > 0 && (voxelData[x, y, z + 1] == 0 || voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y + 1, z] == 0 || voxelData[x, y - 1, z] == 0))
                             vls[x, y, z] = voxelData[x, y, z];

@@ -784,6 +784,27 @@ namespace AssetsPV
                 pngw.End();
             }
         }
+
+        public static void WriteGIF(List<string> images, int delay, string output)
+        {
+            using(ImageMagick.MagickImageCollection collection = new ImageMagick.MagickImageCollection())
+            {
+                foreach(string s in images)
+                {
+                    ImageMagick.MagickImage mimg = new ImageMagick.MagickImage(s);
+                    mimg.AnimationDelay = delay;
+                    mimg.GifDisposeMethod = ImageMagick.GifDisposeMethod.Background;
+                    collection.Add(mimg);
+                }
+                //QuantizeSettings settings = new QuantizeSettings();
+                //settings.Colors = 256;
+                //collection.Quantize(settings);
+                collection.Optimize();
+                // Save gif
+                collection.Write(output + ".gif");
+            }
+        }
+
         public static void writePaletteImages()
         {
             Directory.CreateDirectory("palettes");
@@ -1060,7 +1081,22 @@ namespace AssetsPV
                         folder + "/color{0}_" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int p = 0; p < 8; p++)
+            {
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_" + f + ".png");
+                    }
+                }
+            }
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Large_animated");
 
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -1071,7 +1107,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
             processExplosionLargeW(u, -1, explode_parsed, false);
             //            processExplosionLargeW(u, -1, new MagicaVoxelData[] { }, false);
 
@@ -1191,6 +1227,22 @@ namespace AssetsPV
                 else continue;
 
                 Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 16; f++)
+                        {
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_animated");
+
+                /*
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -1207,7 +1259,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_attack_" + w + "_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-
+                */
             }
 
         }
@@ -1271,7 +1323,28 @@ namespace AssetsPV
                         }
                     }
                 }
-                System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+
+                Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
+
+                for(int strength = 0; strength < 4; strength++)
+                {
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_" + f + ".png ");
+                            }
+                        }
+                    }
+                }
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated");
+
+                /*
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
 
@@ -1294,7 +1367,7 @@ namespace AssetsPV
                     Console.WriteLine("Args: " + st);
                     Process.Start(startInfo).WaitForExit();
                 }
-
+                */
             }
         }
 
@@ -1344,7 +1417,22 @@ namespace AssetsPV
                         folder + "/color{0}_" + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int p = 0; p < 8; p++)
+            {
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_" + f + ".png");
+                    }
+                }
+            }
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Huge_animated");
 
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -1355,7 +1443,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
             processExplosionHugeWSuper(u, -1, explode_parsed, false);
             //            processExplosionHugeWSuper(u, -1, new MagicaVoxelData[] { }, false);
 
@@ -1417,6 +1505,22 @@ namespace AssetsPV
                 else continue;
 
                 Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 16; f++)
+                        {
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Huge_animated");
+                /*
+                Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -1433,7 +1537,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_attack_" + w + "_Huge_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-
+                */
             }
 
         }
@@ -1499,6 +1603,27 @@ namespace AssetsPV
                         }
                     }
                 }
+
+                Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
+
+                for(int strength = 0; strength < 4; strength++)
+                {
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_super_" + f + ".png ");
+                            }
+                        }
+                    }
+                }
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_Huge_animated");
+                /*
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
@@ -1522,7 +1647,7 @@ namespace AssetsPV
                     Console.WriteLine("Args: " + st);
                     Process.Start(startInfo).WaitForExit();
                 }
-
+                */
             }
         }
 
@@ -2020,6 +2145,22 @@ namespace AssetsPV
                 }
 
                 Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 8 * 12);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_animated");
+                /*
+                Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -2036,7 +2177,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_explosion_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
-
+                */
             }
 
         }
@@ -2198,6 +2339,22 @@ namespace AssetsPV
                 }
 
                 Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 8 * 12);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_super_animated");
+                /*
+                Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
                 string s = "";
@@ -2214,6 +2371,7 @@ namespace AssetsPV
                 startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + u + "_explosion_super_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
+                */
             }
         }
 
@@ -5028,10 +5186,10 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             */
 
-            //processUnitLargeWMilitary("Volunteer");
-            //processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
             processUnitLargeWMilitary("Volunteer_S");
-            //processUnitLargeWMilitary("Volunteer_T");
+            processUnitLargeWMilitary("Volunteer_T");
             //            processReceivingMilitaryWSuper();
 
 
