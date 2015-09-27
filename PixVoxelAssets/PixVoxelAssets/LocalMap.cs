@@ -203,7 +203,7 @@ namespace AssetsPV
         public static string[] Terrains = new string[]
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River",
-        "Basement"};
+        "Basement", "Sea"};
 
         public static int[] Depths = new int[]
             {
@@ -220,16 +220,16 @@ namespace AssetsPV
             Height = MapHeight;
             Land = new int[Width, Height];
             takenLocations = new int[Width, Height];
-            for (int i = 0; i < Width; i++)
+            for(int i = 0; i < Width; i++)
             {
-                for (int j = 0; j < Height; j++)
+                for(int j = 0; j < Height; j++)
                 {
                     takenLocations[i, j] = 0;
                     Land[i, j] = 0;
                 }
             }
             List<Position> rivers = MakeSoftPath(RandomSpot(), RandomSpot());
-            foreach (Position t in rivers)
+            foreach(Position t in rivers)
             {
                 Land[t.x, t.y] = 9;
                 takenLocations[t.x, t.y] = 2;
@@ -237,43 +237,48 @@ namespace AssetsPV
             int numMountains = r.Next((int)(Width * 0.25), (int)(Width));
             MakeMountains(numMountains);
             List<Position> roads = MakeHardPath(RandomSpot(), RandomSpot());
-            foreach (Position t in roads)
+            foreach(Position t in roads)
             {
                 Land[t.x, t.y] = 8;
                 takenLocations[t.x, t.y] = 4;
             }
             roads = MakeHardPath(RandomSpot(), RandomSpot());
-            foreach (Position t in roads)
+            foreach(Position t in roads)
             {
                 Land[t.x, t.y] = 8;
                 takenLocations[t.x, t.y] = 4;
             }
             roads = MakeHardPath(RandomSpot(), RandomSpot());
-            foreach (Position t in roads)
+            foreach(Position t in roads)
             {
                 Land[t.x, t.y] = 8;
                 takenLocations[t.x, t.y] = 4;
             }
 
             int extreme = 0;
-            switch (r.Next(5))
+            switch(r.Next(5))
             {
-                case 0: extreme = 7;
+                case 0:
+                    extreme = 7;
                     break;
-                case 1: extreme = 2;
+                case 1:
+                    extreme = 2;
                     break;
-                case 2: extreme = 2;
+                case 2:
+                    extreme = 2;
                     break;
-                case 3: extreme = 1;
+                case 3:
+                    extreme = 1;
                     break;
-                case 4: extreme = 1;
+                case 4:
+                    extreme = 1;
                     break;
             }
-            for (int i = 1; i < Width - 1; i++)
+            for(int i = 1; i < Width - 1; i++)
             {
-                for (int j = 2; j < Height - 2; j++)
+                for(int j = 2; j < Height - 2; j++)
                 {
-                    for (int v = 0; v < 3; v++)
+                    for(int v = 0; v < 3; v++)
                     {
 
                         List<Position> near = new Position(i, j).Nearby(Width, Height, 2);
@@ -283,41 +288,177 @@ namespace AssetsPV
                             adj.Add(Land[p.x, p.y]);
                         }
                         int likeliest = 0;
-                        if (!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+                        if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
                             likeliest = extreme;
-                        if ((adj.Contains(2) && r.Next(4) == 0))
+                        if((adj.Contains(2) && r.Next(4) == 0))
                             likeliest = extreme;
-                        if (extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+                        if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
                             likeliest = extreme;
-                        if ((adj.Contains(1) && r.Next(5) > 2) || r.Next(7) == 0)
+                        if((adj.Contains(1) && r.Next(5) > 2) || r.Next(7) == 0)
                             likeliest = r.Next(2) * 2 + 1;
-                        if (adj.Contains(5) && r.Next(3) == 0)
+                        if(adj.Contains(5) && r.Next(3) == 0)
                             likeliest = r.Next(4, 6);
-                        if (r.Next(45) == 0)
+                        if(r.Next(45) == 0)
                             likeliest = 6;
-                        if (takenLocations[i, j] == 0)
+                        if(takenLocations[i, j] == 0)
                         {
                             Land[i, j] = likeliest;
                         }
                     }
                 }
             }
-            for (int i = 0; i < Width; i++)
+            for(int i = 0; i < Width; i++)
             {
                 Land[i, 0] = 0;
                 Land[i, Height - 1] = 0;
             }
-            for (int i = 0; i < 18; i++)
+            for(int i = 0; i < 18; i++)
             {
                 Land[0, i] = 0;
                 Land[Width - 1, i] = 0;
             }
-            return;
+        }
+
+        public LocalMap(int MapWidth, int MapHeight, int dominantTerrain)
+        {
+
+            Width = MapWidth;
+            Height = MapHeight;
+            Land = new int[Width, Height];
+            takenLocations = new int[Width, Height];
+            for(int i = 0; i < Width; i++)
+            {
+                for(int j = 0; j < Height; j++)
+                {
+                    takenLocations[i, j] = 0;
+                    Land[i, j] = 0;
+                }
+            }
+            for(int i = 0; i < Width; i++)
+            {
+                Land[i, 0] = 11;
+                takenLocations[i, 0] = 1;
+                Land[i, Height - 1] = 11;
+                takenLocations[i, Height - 1] = 1;
+
+                List<Position> edge = Position.Nearby(i, 0, Width, Height, (i == 0 || i == Width - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
+                foreach(Position pos in edge)
+                {
+                    Land[pos.x, pos.y] = 11;
+                    takenLocations[pos.x, pos.y] = 1;
+                }
+                edge = Position.Nearby(i, Height - 1, Width, Height, (i == 0 || i == Width - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
+                foreach(Position pos in edge)
+                {
+                    Land[pos.x, pos.y] = 11;
+                    takenLocations[pos.x, pos.y] = 1;
+                }
+            }
+
+            for(int j = 0; j < Height; j++)
+            {
+                Land[0, j] = 11;
+                takenLocations[0, j] = 1;
+                Land[Width - 1, j] = 11;
+                takenLocations[Width - 1, j] = 1;
+
+                List<Position> edge = Position.Nearby(0, j, Width, Height, (j == 0 || j == Height - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
+                foreach(Position pos in edge)
+                {
+                    Land[pos.x, pos.y] = 11;
+                    takenLocations[pos.x, pos.y] = 1;
+                }
+                edge = Position.Nearby(Width - 1, j, Width, Height, (j == 0 || j == Height - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
+                foreach(Position pos in edge)
+                {
+                    Land[pos.x, pos.y] = 11;
+                    takenLocations[pos.x, pos.y] = 1;
+                }
+            }
+            List<Position> rivers = new List<Position>();
+            for(int i = 0; i < Width; i++)
+            {
+                for(int j = 0; j < Height; j++)
+                {
+                    if(Land[i,j] == 0)
+                    {
+                        foreach(Position pos in Position.Adjacent(i, j, Width, Height))
+                        {
+                            if(Land[pos.x, pos.y] == 11)
+                            {
+                                Land[i, j] = 2;
+                                takenLocations[i, j] = 1;
+                                rivers.Add(pos);
+                            }
+                        }
+                    }
+                }
+            }
+
+            rivers.AddRange(MakeSoftPath(rivers.RandomElement(), rivers.RandomElement()));
+            foreach(Position t in rivers)
+            {
+                Land[t.x, t.y] = 9;
+                takenLocations[t.x, t.y] = 2;
+            }
+            int numMountains = r.Next(Width / 4, Width);
+            MakeMountains(numMountains);
+            List<Position> roads = MakeHardPath(RandomSpot(), RandomSpot());
+            foreach(Position t in roads)
+            {
+                Land[t.x, t.y] = 8;
+                takenLocations[t.x, t.y] = 4;
+            }
+            roads = MakeHardPath(RandomSpot(), RandomSpot());
+            foreach(Position t in roads)
+            {
+                Land[t.x, t.y] = 8;
+                takenLocations[t.x, t.y] = 4;
+            }
+
+            int extreme = dominantTerrain;
+
+            for(int v = 0; v < 3; v++)
+            {
+                for(int i = 1; i < Width - 1; i++)
+                {
+                    for(int j = 2; j < Height - 2; j++)
+                    {
+
+                        List<Position> near = new Position(i, j).Nearby(Width, Height, 2);
+                        List<int> adj = new List<int>(12);
+                        foreach(Position p in near)
+                        {
+                            adj.Add(Land[p.x, p.y]);
+                        }
+                        int likeliest = 0;
+                        if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+                            likeliest = extreme;
+                        if((adj.Contains(2) && r.Next(4) == 0))
+                            likeliest = extreme;
+                        if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+                            likeliest = extreme;
+                        if((adj.Contains(1) && r.Next(5) > 2) || r.Next(7) == 0)
+                            likeliest = r.Next(2) * 2 + 1;
+                        if(adj.Contains(5) && r.Next(3) == 0)
+                            likeliest = r.Next(4, 6);
+                        if(r.Next(45) == 0)
+                            likeliest = 6;
+                        if(takenLocations[i, j] == 0)
+                        {
+                            Land[i, j] = likeliest;
+                        }
+                    }
+                }
+            }
         }
 
         public Position RandomSpot()
         {
-            return new Position(r.Next(0, Width - 1), r.Next(0, Height - 1));
+            Position p = new Position(r.Next(1, Width - 2), r.Next(1, Height - 2));
+            while(takenLocations[p.x, p.y] > 0)
+                p = new Position(r.Next(1, Width - 2), r.Next(1, Height - 2));
+            return p;
         }
 
         public static List<Position> Bresenham(Position start, Position end)
