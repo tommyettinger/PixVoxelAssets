@@ -2963,7 +2963,7 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus), bonus);
+                    byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus / 2), bonus);
                     
                     byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
 
@@ -3671,9 +3671,9 @@ namespace AssetsPV
             //MagickNET.UseOpenCL = true;
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
-            VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_Ortho/";
-            //altFolder = "Forays2/";
+            VoxelLogic.VisualMode = "W";
+            //altFolder = "CU_Ortho/";
+            altFolder = "Forays2/";
             System.IO.Directory.CreateDirectory("CU_Ortho");
             System.IO.Directory.CreateDirectory("Forays2");
             VoxelLogic.voxFolder = "ForaysBones/";
@@ -3689,7 +3689,7 @@ namespace AssetsPV
 
             VoxelLogic.Initialize();
 
-            CURedux.Initialize();
+            //CURedux.Initialize();
             //            SaPalettes.Initialize();
             InitializeWPalette();
 
@@ -3984,12 +3984,12 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            
+            /*
             writePaletteImages();
             //renderTerrain();
             makeFlatTiling();
 
-            /*
+            
             processUnitLargeWMilitary("Civilian");
 
             processUnitLargeWMilitary("Tank");
@@ -4125,7 +4125,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
             */
 
-            /*
+            
             Pose swing0 = (model => model),
                 swing1 = (model => model
             .AddPitch(10, "Left_Weapon")
@@ -4138,7 +4138,12 @@ namespace AssetsPV
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude = Model.Humanoid(left_weapon: "Longsword");
+            Model dude = Model.Humanoid(left_weapon: "Longsword", patterns: new Dictionary<byte, Pattern>() {
+                { 253 - 5 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 3, 1, 1, 0.9f) },
+                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+                { 253 - 3 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 4, 1, 1, 0.65f) },
+                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+            });
 
             processUnitLargeWModel("Dude_Sword", true, 0, dude,
                 new Pose[] { swing0, swing1, swing2 },
@@ -4155,7 +4160,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-            */
+            
 
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });

@@ -11,6 +11,7 @@ namespace AssetsPV
     {
         public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
         public readonly byte[,,] Colors;
+        public static Dictionary<byte, Pattern> Patterns = null;
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
             MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f;
 
@@ -269,9 +270,12 @@ namespace AssetsPV
         {
             if(file == null)
                 return new Bone(new byte[60 * Multiplier * Bonus, 60 * Multiplier * Bonus, 60 * Multiplier * Bonus]);
-            BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W", FileMode.Open));
+            BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
-            return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus));
+            if(Bone.Patterns == null)
+                return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus));
+            else
+                return new Bone(PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus), Bone.Patterns));
         }
     }
     public struct Connector
@@ -453,8 +457,9 @@ namespace AssetsPV
 
         public static Model Humanoid(string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
             string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
-            string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null)
+            string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Dictionary<byte, Pattern> patterns = null)
         {
+            Bone.Patterns = patterns;
             Model model = new Model();
             model.AddBone("Left_Leg", Bone.readBone(left_leg + "_LLeg"));
             model.AddBone("Right_Leg", Bone.readBone(right_leg + "_RLeg"));
