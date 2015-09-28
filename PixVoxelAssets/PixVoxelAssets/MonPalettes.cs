@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AssetsPV
 {
-    class ForaysPalettes
+    class MonPalettes
     {
         public const float flat_alpha = VoxelLogic.flat_alpha;
         public const float fuzz_alpha = VoxelLogic.fuzz_alpha;
@@ -1112,40 +1112,39 @@ namespace AssetsPV
             //58 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
-            new float[][] { //9 primitive houses
-            //0 wooden wall contrast
-            new float[] {0.25F,0.15F,0.05F,grain_some_alpha},
-            //1 wooden wall
-            new float[] {0.45F,0.35F,0.15F,grain_some_alpha},
-            //2 new lumber contrast
-            new float[] {0.85F,0.65F,0.3F,grain_some_alpha},
-            //3 new lumber
-            new float[] {0.95F,0.8F,0.5F,grain_some_alpha},
-            //4 grassy ground contrast
-            new float[] {0.22F,0.6F,0.05F,1F},
-            //5 grassy ground
-            new float[] {0.35F,0.75F,0.15F,1F},
-            //6 dead leaves contrast
-            new float[] {0.7F,0.57F,0.45F,1F},
-            //7 dead leaves
-            new float[] {0.78F,0.7F,0.55F,1F},
-            //8 skin contrast
-            new float[] {0.8F,0.5F,0.12F,1F},
-            //9 skin
-            new float[] {0.93F,0.74F,0.39F,1F},
+            new float[][] { //9 Burnbruin
+            //0 claws, teeth contrast
+            new float[] {0.75F,0.7F,0.3F,1F},
+            //1 claws, teeth
+            new float[] {0.85F,0.8F,0.4F,1F},
+            //2 markings contrast
+            new float[] {0.85F,0.0F,-0.05F,1F},
+            //3 markings
+            new float[] {1.0F,0.1F,0.05F,1F},
+            //4 body contrast
+            new float[] {0.45F,0.28F,0.15F,1F},
+            //5 body
+            new float[] {0.6F,0.4F,0.25F,1F},
+            //6 element contrast
+            new float[] {0.25F,0.2F,0.2F,1F},
+            //7 element
+            new float[] {0.35F,0.3F,0.3F,1F},
+            //8 bare skin contrast
+            new float[] {0.5F,0.15F,0.1F,1F},
+            //9 bare skin
+            new float[] {0.99F,0.65F,0.7F,1F},
             //10 eyes shine
-            new float[] {1.4F,1.4F,1.4F,1F},
+            new float[] {1.4F,0.9F,0.6F,1F},
             //11 eyes
-            new float[] {0.15F,0.1F,0.0F,1F},
+            new float[] {0.25F,0.15F,0.0F,1F},
             //12 metal contrast
-            new float[] {0.7F,0.85F,1.1F,1F},
+            new float[] {0.7F,0.75F,0.85F,1F},
             //13 metal
-            new float[] {0.6F,0.65F,0.75F,1F},
-            //14 flowing clothes contrast
-            new float[] {0.15F,0.45F,0.1F,waver_alpha},
-            //15 flowing clothes
-            new float[] {0.3F,0.55F,0.3F,waver_alpha},
+            new float[] {0.6F,0.63F,0.7F,1F},
+            //14 wiggling body contrast
+            new float[] {0.6F,0.42F,0.25F,waver_alpha},
+            //15 wiggling body
+            new float[] {0.75F,0.55F,0.35F,waver_alpha},
             //16 inner shadow
             new float[] {0.1F,0.1F,0.09F,1F},
             //17 smoke
@@ -1171,31 +1170,31 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.5F,0.45F,0.3F,fuzz_alpha},
-            //29 fuzz deep            
-            new float[] {0.6F,0.55F,0.39F,fuzz_alpha},
+            new float[] {0.5F,0.0F,-0.05F,1F},
+            //29 fuzz deep
+            new float[] {0.55F,0.05F,-0.05F,1F},
             //30 fuzz mid-deep
-            new float[] {0.7F,0.65F,0.43F,fuzz_alpha},
+            new float[] {0.6F,0.1F,0.0F,1F},
             //31 fuzz mid-light
-            new float[] {0.8F,0.75F,0.47F,fuzz_alpha},
+            new float[] {0.65F,0.15F,0.05F,1F},
             //32 fuzz light
-            new float[] {0.9F,0.85F,0.51F,fuzz_alpha},
+            new float[] {0.7F,0.2F,0.1F,1F},
             //33 fuzz lightest
-            new float[] {0.95F,0.9F,0.55F,fuzz_alpha},
-            //34 gore
-            new float[] {0.67F,0.05F,-0.1F,1F},
+            new float[] {0.8F,0.25F,0.15F,1F},
+            //34 slime
+            new float[] {0.8F,0.0F,0.7F,1F},
             //35 glass
             new float[] {0.5F,0.8F,1.1F,1F},
-            //36 placeholder
-            new float[] {0F,0F,0F,0F},
-            //37 placeholder
-            new float[] {0F,0F,0F,0F},
-            //38 placeholder
-            new float[] {0F,0F,0F,0F},
-            //39 placeholder
-            new float[] {0F,0F,0F,0F},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //36 wings frame 0 contrast
+            new float[] {0.8F,0.65F,0.25F,spin_alpha_0},
+            //37 wings frame 0
+            new float[] {0.8F,0.25F,0.25F,spin_alpha_0},
+            //38 wings frame 1 contrast
+            new float[] {0.8F,0.65F,0.25F,spin_alpha_1},
+            //39 wings frame 1
+            new float[] {0.8F,0.25F,0.25F,spin_alpha_1},
+            //40 flickering sparks
+            new float[] {1.1F,0.7F,1.2F,flash_alpha_0},
             //41 always green contrast
             new float[] {0.12F,0.35F,0.0F,1F},
             //42 always green
@@ -1228,11 +1227,12 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
-            new float[] {0F,0F,0F,eraser_alpha},
+            //56 always dark gray
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 total transparent
             new float[] {0F,0F,0F,0F},
             },
+
             new float[][] { //10 orc
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.3F,0.05F,1F},

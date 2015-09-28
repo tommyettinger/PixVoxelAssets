@@ -96,16 +96,42 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            v.x = (x - hxs) * StretchX + xOffset;
-                            v.y = (y - hys) * StretchY;
-                            v.z = (z - hzs) * StretchZ;
-                            float normod = (float)Math.Sqrt(v.len2());
-                            v.scl(1f / normod);
-                            q.transform(v);
-                            v.scl(normod);
-                            int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
-                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
-                                c2[x2, y2, z2] = Colors[x, y, z];
+                            for(double sx = 0.9; sx <= 1.1; sx += 0.1)
+                            {
+                                for(double sy = 0.9; sy <= 1.1; sy += 0.1)
+                                {
+                                    for(double sz = 0.9; sz <= 1.1; sz += 0.1)
+                                    {
+                                        v.x = (x - hxs) * (float)Math.Pow(StretchX, sx) + xOffset;
+                                        v.y = (y - hys) * (float)Math.Pow(StretchY, sy);
+                                        v.z = (z - hzs) * (float)Math.Pow(StretchZ, sz);
+                                        float normod = (float)Math.Sqrt(v.len2());
+                                        v.scl(1f / normod);
+                                        q.transform(v);
+                                        v.scl(normod);
+                                        int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
+                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                            c2[x2, y2, z2] = Colors[x, y, z];
+
+                                        if(StretchZ == 1.0) break;
+                                    }
+                                    if(StretchY == 1.0) break;
+                                }
+                                if(StretchX == 1.0) break;
+                            }
+                            //int x2, y2, z2;
+                            //float stretchiest = 2f;
+                            //for(float sf = stretchiest; sf >= -2f; sf -= 0.5f)
+                            //{
+                            //    x2 = (int)(v.x + 0.5 + sf * Math.Max(StretchX - 1.0, 0) + hxs - xOffset + MoveX);
+                            //    y2 = (int)(v.y + 0.5 + sf * Math.Max(StretchY - 1.0, 0) + hys + MoveY);
+                            //    z2 = (int)(v.z + 0.5 + sf * Math.Max(StretchZ - 1.0, 0) + hzs + MoveZ);
+
+                            //    if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                            //    {
+                            //        c2[x2, y2, z2] = Colors[x, y, z];
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -148,21 +174,54 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            v.x = (x - hxs) * StretchX + xOffset;
-                            v.y = (y - hys) * StretchY;
-                            v.z = (z - hzs) * StretchZ;
-                            float normod = (float)Math.Sqrt(v.len2());
-                            v.scl(1f / normod);
-                            q.transform(v);
-                            v.scl(normod);
-                            int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
-
-                            //int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
-
-                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                            for(double sx = 0.9; sx <= 1.1; sx += 0.1)
                             {
-                                c2[x2, y2, z2] = Colors[x, y, z];
+                                for(double sy = 0.9; sy <= 1.1; sy += 0.1)
+                                {
+                                    for(double sz = 0.9; sz <= 1.1; sz += 0.1)
+                                    {
+                                        v.x = (x - hxs) * (float)Math.Pow(StretchX, sx) + xOffset;
+                                        v.y = (y - hys) * (float)Math.Pow(StretchY, sy);
+                                        v.z = (z - hzs) * (float)Math.Pow(StretchZ, sz);
+                                        float normod = (float)Math.Sqrt(v.len2());
+                                        v.scl(1f / normod);
+                                        q.transform(v);
+                                        v.scl(normod);
+                                        int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
+                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                            c2[x2, y2, z2] = Colors[x, y, z];
+
+                                        if(StretchZ == 1.0) break;
+                                    }
+                                    if(StretchY == 1.0) break;
+                                }
+                                if(StretchX == 1.0) break;
                             }
+
+                            //v.x = (x - hxs) * StretchX + xOffset;
+                            //v.y = (y - hys) * StretchY;
+                            //v.z = (z - hzs) * StretchZ;
+                            //float normod = (float)Math.Sqrt(v.len2());
+                            //v.scl(1f / normod);
+                            //q.transform(v);
+                            //v.scl(normod);
+
+                            ////int x2 = (int)(v.x + 0.5f), y2 = (int)(v.y + 0.5f), z2 = (int)(v.z + 0.5f);
+
+                            //int x2, y2, z2;
+                            //float stretchiest = 2f;
+                            //for(float sf = stretchiest; sf >= -2f; sf -= 0.5f)
+                            //{
+                            //    x2 = (int)(v.x + 0.5 + sf * Math.Max(StretchX - 1.0, 0) + hxs - xOffset + MoveX);
+                            //    y2 = (int)(v.y + 0.5 + sf * Math.Max(StretchY - 1.0, 0) + hys + MoveY);
+                            //    z2 = (int)(v.z + 0.5 + sf * Math.Max(StretchZ - 1.0, 0) + hzs + MoveZ);
+
+                            //    if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                            //    {
+                            //        c2[x2, y2, z2] = Colors[x, y, z];
+                            //    }
+                            //}
+
                         }
                     }
                 }
@@ -853,7 +912,8 @@ namespace AssetsPV
                     byte currentFill = 0;
                     for(int x = xSize - 2; x > 0; x--)
                     {
-                        if((253 - voxelData[x, y, z]) / 4 >= 36 && (253 - voxelData[x, y, z]) / 4 <= 39)
+                        int clr = 253 - voxelData[x, y, z] / 4;
+                        if((clr >= 36 && clr <= 39) || (clr < VoxelLogic.wcolors.Length && VoxelLogic.wcolors[clr][3] == VoxelLogic.waver_alpha))
                         {
                             vls[x, y, z] = voxelData[x, y, z];
                             currentFill = voxelData[x-1, y, z];
@@ -908,6 +968,8 @@ namespace AssetsPV
                     return (VoxelLogic.ImportantColorCU(color)) ? 50: 16;
                 case "Mecha":
                     return (VoxelLogic.ImportantColorMecha(color)) ? 50 : 16;
+                case "Mon":
+                    return (VoxelLogic.ImportantColorMon(color)) ? 50 : 16;
                 case "None":
                     return 16;
                 default:

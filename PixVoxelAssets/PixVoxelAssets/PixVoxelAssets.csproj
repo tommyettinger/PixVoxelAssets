@@ -80,6 +80,7 @@
     <Compile Include="AlternatePalettes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FaceLogic.cs" />
+    <Compile Include="MonPalettes.cs" />
     <Compile Include="IOrderedDictionary.cs" />
     <Compile Include="DungeonPalettes.cs" />
     <Compile Include="LocalMap.cs" />
@@ -1616,6 +1617,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Mini\Warrior_Male_K.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Mon\Burnbruin_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Mummy_Large_W.vox">

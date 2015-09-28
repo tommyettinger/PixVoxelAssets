@@ -17717,6 +17717,22 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
             }
         }
 
+        public static bool ImportantColorMon(int fv)
+        {
+            if((253 - fv) % 4 != 0) return false;
+            switch((253 - fv) / 4)
+            {
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    {
+                        return true;
+                    }
+                default: return false;
+            }
+        }
+
         public static bool ImportantColorCU(int fv)
         {
             if((253 - fv) % 4 != 0) return false;
