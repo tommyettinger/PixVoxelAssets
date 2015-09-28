@@ -455,21 +455,19 @@ namespace AssetsPV
             return m;
         }
 
-        public static Model Humanoid(string right_leg = "Human_Male", string left_leg = "Human_Male", string torso = "Human_Male",
-            string left_upper_arm = "Human_Male", string left_lower_arm = "Human_Male", string right_upper_arm = "Human_Male", string right_lower_arm = "Human_Male",
-            string head = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Dictionary<byte, Pattern> patterns = null)
+        public static Model Humanoid(string body = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Dictionary<byte, Pattern> patterns = null)
         {
             Bone.Patterns = patterns;
             Model model = new Model();
-            model.AddBone("Left_Leg", Bone.readBone(left_leg + "_LLeg"));
-            model.AddBone("Right_Leg", Bone.readBone(right_leg + "_RLeg"));
-            model.AddBone("Torso", Bone.readBone(torso + "_Torso"));
-            model.AddBone("Face", Bone.readBone(face + "_Face"));
-            model.AddBone("Head", Bone.readBone(head + "_Head"));
-            model.AddBone("Left_Upper_Arm", Bone.readBone(left_upper_arm + "_LUpperArm"));
-            model.AddBone("Right_Upper_Arm", Bone.readBone(right_upper_arm + "_RUpperArm"));
-            model.AddBone("Left_Lower_Arm", Bone.readBone(left_lower_arm + "_LLowerArm"));
-            model.AddBone("Right_Lower_Arm", Bone.readBone(right_lower_arm + "_RLowerArm"));
+            model.AddBone("Left_Leg", Bone.readBone(body + "/LLeg"));
+            model.AddBone("Right_Leg", Bone.readBone(body + "/RLeg"));
+            model.AddBone("Torso", Bone.readBone(body + "/Torso"));
+            model.AddBone("Face", Bone.readBone(body + "/"+ face + "_Face"));
+            model.AddBone("Head", Bone.readBone(body + "/Head"));
+            model.AddBone("Left_Upper_Arm", Bone.readBone(body + "/LUpperArm"));
+            model.AddBone("Right_Upper_Arm", Bone.readBone(body + "/RUpperArm"));
+            model.AddBone("Left_Lower_Arm", Bone.readBone(body + "/LLowerArm"));
+            model.AddBone("Right_Lower_Arm", Bone.readBone(body + "/RLowerArm"));
             model.AddBone("Left_Weapon", Bone.readBone(left_weapon));
             model.AddBone("Right_Weapon", Bone.readBone(right_weapon));
 
@@ -490,7 +488,7 @@ namespace AssetsPV
 
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
-            double plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
+            int plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
             if(socket == null)
                 return plug;
             else if(plug == null)
@@ -555,9 +553,9 @@ namespace AssetsPV
                            x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
                            x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
                         {
-                            working[(int)Math.Round(x - plugX + socketX),
-                                    (int)Math.Round(y - plugY + socketY),
-                                    (int)Math.Round(z - plugZ + socketZ)] = plug[x, y, z];
+                            working[x - plugX + socketX,
+                                    y - plugY + socketY,
+                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x, y, z] - 1) : plug[x, y, z];
                         }
                     }
                 }
@@ -567,7 +565,7 @@ namespace AssetsPV
         }
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor, int removeColor, int replaceColor)
         {
-            double plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
+            int plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
             if(socket == null)
                 return plug;
             else if(plug == null)
@@ -632,9 +630,9 @@ namespace AssetsPV
                            x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
                            x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
                         {
-                            working[(int)Math.Round(x - plugX + socketX),
-                                    (int)Math.Round(y - plugY + socketY),
-                                    (int)Math.Round(z - plugZ + socketZ)] = plug[x, y, z];
+                            working[x - plugX + socketX,
+                                    y - plugY + socketY,
+                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x,y,z] - 1) : plug[x, y, z];
                         }
                     }
                 }

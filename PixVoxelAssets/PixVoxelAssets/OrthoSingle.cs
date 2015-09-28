@@ -3691,6 +3691,7 @@ namespace AssetsPV
 
             //CURedux.Initialize();
             //            SaPalettes.Initialize();
+            ForaysPalettes.Initialize();
             InitializeWPalette();
 
             //            altFolder = "sau10/";
@@ -4078,7 +4079,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             */
             //processReceivingMilitaryWSuper();
-            /*
+            
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4094,7 +4095,7 @@ namespace AssetsPV
            .AddYaw(40, "Right_Upper_Arm")
            .AddYaw(-25, "Right_Lower_Arm")
            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
-           .AddStretch(0.85f, 0.0f, 1.6f, "Left_Weapon")
+           .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
             ),
 
                 bow2 = (model => model
@@ -4106,7 +4107,32 @@ namespace AssetsPV
            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
            );
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude = Model.Humanoid(left_weapon: "Bow");
+            Model dude = Model.Humanoid(left_weapon: "Bow"),
+                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
+                { 253 - 29 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
+                { 253 - 5 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 3, 1, 1, 0.9f) },
+                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+                { 253 - 3 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 4, 1, 1, 0.65f) },
+                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+            });
+
+            processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+
 
             processUnitLargeWModel("Dude_Bow", true, 0, dude,
                 new Pose[] { bow0, bow1, bow2 },
@@ -4123,9 +4149,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-            */
 
-            
             Pose swing0 = (model => model),
                 swing1 = (model => model
             .AddPitch(10, "Left_Weapon")
@@ -4138,14 +4162,14 @@ namespace AssetsPV
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude = Model.Humanoid(left_weapon: "Longsword", patterns: new Dictionary<byte, Pattern>() {
+            Model dude_sword = Model.Humanoid(left_weapon: "Longsword", patterns: new Dictionary<byte, Pattern>() {
                 { 253 - 5 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 3, 1, 1, 0.9f) },
                 { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
                 { 253 - 3 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 4, 1, 1, 0.65f) },
                 { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
             });
 
-            processUnitLargeWModel("Dude_Sword", true, 0, dude,
+            processUnitLargeWModel("Dude_Sword", true, 0, dude_sword,
                 new Pose[] { swing0, swing1, swing2 },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
