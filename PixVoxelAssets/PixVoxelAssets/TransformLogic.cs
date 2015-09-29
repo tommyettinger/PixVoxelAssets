@@ -96,11 +96,11 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            for(double sx = 0.9; sx <= 1.1; sx += 0.1)
+                            for(double sx = 0.95; sx <= 1.05; sx += 0.05)
                             {
-                                for(double sy = 0.9; sy <= 1.1; sy += 0.1)
+                                for(double sy = 0.95; sy <= 1.05; sy += 0.05)
                                 {
-                                    for(double sz = 0.9; sz <= 1.1; sz += 0.1)
+                                    for(double sz = 0.95; sz <= 1.05; sz += 0.05)
                                     {
                                         v.x = (x - hxs) * (float)Math.Pow(StretchX, sx) + xOffset;
                                         v.y = (y - hys) * (float)Math.Pow(StretchY, sy);
@@ -174,11 +174,11 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            for(double sx = 0.9; sx <= 1.1; sx += 0.1)
+                            for(double sx = 0.95; sx <= 1.05; sx += 0.05)
                             {
-                                for(double sy = 0.9; sy <= 1.1; sy += 0.1)
+                                for(double sy = 0.95; sy <= 1.05; sy += 0.05)
                                 {
-                                    for(double sz = 0.9; sz <= 1.1; sz += 0.1)
+                                    for(double sz = 0.95; sz <= 1.05; sz += 0.05)
                                     {
                                         v.x = (x - hxs) * (float)Math.Pow(StretchX, sx) + xOffset;
                                         v.y = (y - hys) * (float)Math.Pow(StretchY, sy);

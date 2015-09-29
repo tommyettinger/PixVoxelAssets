@@ -3560,6 +3560,64 @@ namespace AssetsPV
             }
 
         }
+
+
+        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames)
+        {
+            Console.WriteLine("Processing: " + moniker + ", palette " + palette);
+            string folder = (altFolder);
+            Directory.CreateDirectory(folder);
+            Model[] modelFrames = (frames != null && frames.Length > 0) ? new Model[frames.Length] : new Model[] { model };
+
+            int framelimit = modelFrames.Length;
+
+            if(poses != null && poses.Length > 0 && frames != null && frames.Length > 0 && frames[0] != null && frames[0].Length == 3)
+            {
+                Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
+                for(int i = 0; i < modelFrames.Length; i++)
+                {
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * 1, 10 * 1, 0, "Left_Leg");
+                }
+            }
+
+            //Directory.CreateDirectory("vox/" + altFolder);
+            //VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + palette + ".vox", work, "W", palette, 40, 40, 40);
+
+            //MagicaVoxelData[] explodeParsed = parsed.Replicate();
+            for(int f = 0; f < framelimit; f++)
+            {
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(modelFrames[f].Finalize(), dir * 90));
+
+                    //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                    byte[][] b = processFrameLargeW(work, palette, dir, f, framelimit, still, false);
+
+                    ImageInfo imi = new ImageInfo(88, 108, 8, false, false, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Iso_face" + dir + "_" + f + ".png", imi, true);
+                    WritePNG(png, b, simplepalettes[palette]);
+                }
+            }
+
+
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int p = 0; p < 8; p++)
+            {
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/palette" + palette + "_" + moniker + "_Iso_face" + dir + "_" + f + ".png");
+                    }
+                }
+            }
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 9, "gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Iso");
+
+        }
+
+
         public static Random rng = new Random(0x1337BEEF);
         private static byte[][] renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
@@ -4796,20 +4854,26 @@ namespace AssetsPV
         static void Main(string[] args)
         {
             //            altFolder = "botl6/";
-            //            FaceLogic.VisualMode = "Mecha";
-            VoxelLogic.VisualMode = "CU";
-            //FaceLogic.VisualMode = "CU";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
-            altFolder = "CU3/";
             System.IO.Directory.CreateDirectory("Terrains2");
             System.IO.Directory.CreateDirectory("TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
+            //VoxelLogic.VisualMode = "CU";
+            //altFolder = "CU3/";
+            //CURedux.Initialize();
 
-            CURedux.Initialize();
+            VoxelLogic.VisualMode = "W";
+            altFolder = "Forays2/";
+            VoxelLogic.voxFolder = "ForaysBones/";
+            ForaysPalettes.Initialize();
+
+            //VoxelLogic.VisualMode = "Mon";
+            //altFolder = "Mon/";
+            //MonPalettes.Initialize();
             //            SaPalettes.Initialize();
             InitializeWPalette();
 
@@ -5104,7 +5168,7 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            writePaletteImages();
+            //writePaletteImages();
             /*
             renderTerrain();
             
@@ -5136,7 +5200,6 @@ namespace AssetsPV
             
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
-
             processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
             
@@ -5169,7 +5232,6 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Estate");
             
             processUnitHugeWMilitarySuper("Copter");
-            
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
             processUnitHugeWMilitarySuper("Copter_T");
@@ -5180,17 +5242,125 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane_T");
 
             processUnitHugeWMilitarySuper("Boat");
-            
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            */
-
+            
             processUnitLargeWMilitary("Volunteer");
             processUnitLargeWMilitary("Volunteer_P");
             processUnitLargeWMilitary("Volunteer_S");
             processUnitLargeWMilitary("Volunteer_T");
+            */
             //            processReceivingMilitaryWSuper();
+
+            Pose bow0 = (model => model
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(30, "Right_Upper_Arm")
+            .AddYaw(-15, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            ),
+                bow1 = (model => model
+           .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+           .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+           .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+           .AddYaw(40, "Right_Upper_Arm")
+           .AddYaw(-25, "Right_Lower_Arm")
+           .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+           .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
+            ),
+
+                bow2 = (model => model
+           .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+           .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+           .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+           .AddYaw(50, "Right_Upper_Arm")
+           .AddYaw(-10, "Right_Lower_Arm")
+           .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+           );
+
+            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
+            Model dude = Model.Humanoid(left_weapon: "Bow"),
+                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
+                { 253 - 29 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 5 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                //{ 253 - 29 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
+                //{ 253 - 5 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 3, 1, 1, 0.9f) },
+                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 3 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                //{ 253 - 3 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 4, 1, 1, 0.65f) },
+                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+            });
+
+            processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+
+
+            processUnitLargeWModel("Dude_Bow", true, 0, dude,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            Pose swing0 = (model => model),
+                swing1 = (model => model
+            .AddPitch(10, "Left_Weapon")
+            .AddPitch(70, "Left_Lower_Arm", "Left_Weapon")
+            //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(75, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
+                swing2 = (model => model
+            .AddPitch(-30, "Left_Weapon")
+            .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
+            .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
+            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
+            Model dude_sword = Model.Humanoid(left_weapon: "Longsword", patterns: new Dictionary<byte, Pattern>() {
+                { 253 - 5 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 3, 1, 1, 0.9f) },
+                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+                { 253 - 3 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 4, 1, 1, 0.65f) },
+                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+            });
+
+            processUnitLargeWModel("Dude_Sword", true, 0, dude_sword,
+                new Pose[] { swing0, swing1, swing2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
 
 
         }

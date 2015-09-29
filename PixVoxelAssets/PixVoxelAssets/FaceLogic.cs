@@ -300,23 +300,23 @@ namespace AssetsPV
                 {
                     for(int y = ySize - 1; y >= 0; y--)
                     {
-                        if(z == 0 || x == 0 || y == 0 || z == zSize - 1 || x == xSize - 1 || y == ySize - 1 || faces[x,y,z] != null)
+                        if(z == 0 || x == 0 || y == 0 || z == zSize - 1 || x == xSize - 1 || y == ySize - 1 || faces[x, y, z] != null)
                         {
                             faces2[x, y, z] = faces[x, y, z];
                         }
                         else
                         {
-                            if(ImportantVisual(faces[x + 1, y, z]) || ImportantVisual(faces[x - 1, y, z]) ||
-                               ImportantVisual(faces[x, y + 1, z]) || ImportantVisual(faces[x, y - 1, z]) ||
-                               ImportantVisual(faces[x, y, z + 1]) || ImportantVisual(faces[x, y, z - 1]))
+                            if(ImportantNeighborhood(faces, x, y, z))
+                            {
                                 continue;
+                            }
                             bool xup = faces[x + 1, y, z] != null,
                                  xdown = faces[x - 1, y, z] != null,
                                  yup = faces[x, y + 1, z] != null,
                                  ydown = faces[x, y - 1, z] != null,
                                  zup = faces[x, y, z + 1] != null,
                                  zdown = faces[x, y, z - 1] != null;
-                            
+
                             if(zdown)
                             {
 
@@ -384,8 +384,8 @@ namespace AssetsPV
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x - 1, y, z].vox.color }, Slope.DimBack);
                                 }
                             }
-//                            if(faces2[x, y, z] != null)
-//                                Console.WriteLine("x,y,z:" + x + "," + y + "," + z + ": " + faces2[x,y,z].slope.ToString());
+                            //                            if(faces2[x, y, z] != null)
+                            //                                Console.WriteLine("x,y,z:" + x + "," + y + "," + z + ": " + faces2[x,y,z].slope.ToString());
                         }
                     }
                 }
@@ -480,7 +480,7 @@ namespace AssetsPV
                            ((faces[x + 1, y + 1, z] != null && (faces[x + 1, y + 1, z].slope & Slope.Cube) == Slope.Cube && !ImportantVisual(faces[x + 1, y + 1, z])))
                                //                         (faces[x + 1, y + 1, z - 1] == null || (faces[x + 1, y + 1, z - 1] != null && (faces[x + 1, y + 1, z - 1].slope & Slope.Top) == Slope.Top)) &&
                                //                       (faces[x + 1, y + 1, z + 1] == null || (faces[x + 1, y + 1, z + 1] != null && (faces[x + 1, y + 1, z + 1].slope & Slope.Top) == Slope.Top))
-                               && ((faces[x+1, y, z + 1] == null || (faces[x+1, y, z + 1].slope & Slope.Cube) != Slope.Cube) || (faces[x+1, y, z - 1] == null || (faces[x+1, y, z - 1].slope & Slope.Cube) != Slope.Cube))
+                               && ((faces[x + 1, y, z + 1] == null || (faces[x + 1, y, z + 1].slope & Slope.Cube) != Slope.Cube) || (faces[x + 1, y, z - 1] == null || (faces[x + 1, y, z - 1].slope & Slope.Cube) != Slope.Cube))
 
      )
                         {
@@ -764,6 +764,31 @@ namespace AssetsPV
                 default:
                     return VoxelLogic.ImportantColorW(fv.vox.color);
             }
+        }
+
+        public static bool ImportantNeighborhood(FaceVoxel[,,] faces, int x, int y, int z)
+        {
+            if(faces == null)
+                return false;
+            FaceVoxel a = faces[x + 1, y, z], b = faces[x - 1, y, z], c = faces[x, y + 1, z], d = faces[x, y - 1, z], e = faces[x, y, z + 1], f = faces[x, y, z - 1];
+            byte ac = 255, bc = 255, cc = 255, dc = 255, ec = 255, fc = 255;
+            int tgt =  512;
+            if(a != null) { ac = a.vox.color; if(tgt == 512) tgt = ac; else if(tgt != ac) tgt = 1024; }
+            if(b != null) { bc = b.vox.color; if(tgt == 512) tgt = bc; else if(tgt != bc) tgt = 1024; }
+            if(c != null) { cc = c.vox.color; if(tgt == 512) tgt = cc; else if(tgt != cc) tgt = 1024; }
+            if(d != null) { dc = d.vox.color; if(tgt == 512) tgt = dc; else if(tgt != dc) tgt = 1024; }
+            if(e != null) { ec = e.vox.color; if(tgt == 512) tgt = ec; else if(tgt != ec) tgt = 1024; }
+            if(f != null) { fc = f.vox.color; if(tgt == 512) tgt = fc; else if(tgt != fc) tgt = 1024; }
+
+            if((ac & bc & cc & dc & ec & fc) == tgt)
+            {
+                //if(tgt == (253 - 9 * 4) && faces[x,y,z] == null)
+                //    Console.WriteLine("Homogeneous area: " + ((253 - tgt) / 4));
+                return false;
+            }
+            return (ImportantVisual(faces[x + 1, y, z]) || ImportantVisual(faces[x - 1, y, z]) ||
+                    ImportantVisual(faces[x, y + 1, z]) || ImportantVisual(faces[x, y - 1, z]) ||
+                    ImportantVisual(faces[x, y, z + 1]) || ImportantVisual(faces[x, y, z - 1]));
         }
 
         public static FaceVoxel[][,,] FieryExplosionLargeW(FaceVoxel[,,] faces, bool blowback, bool shadowless)

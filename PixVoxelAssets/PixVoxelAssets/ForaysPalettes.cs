@@ -120,9 +120,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -241,9 +241,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -280,7 +280,7 @@ namespace AssetsPV
             //5 shirt
             new float[] {0.8F,0.0F,0.0F,1F},
             //6 hair contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.09F,0.06F,-0.01F,1F},
             //7 hair
             new float[] {0.05F,0.0F,-0.05F,1F},
             //8 skin contrast
@@ -362,9 +362,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -483,9 +483,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -604,9 +604,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -725,9 +725,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -846,9 +846,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -967,9 +967,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -1088,9 +1088,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -1209,9 +1209,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white
@@ -1251,9 +1251,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.35F,0.3F,0.3F,1F},
             //8 skin contrast
-            new float[] {0.6F,0.15F,0.2F,1F},
+            new float[] {0.68F,0.5F,0.45F,1F},
             //9 skin
-            new float[] {0.99F,0.65F,0.7F,1F},
+            new float[] {0.83F,0.7F,0.65F,1F},
             //10 eyes shine
             new float[] {1.4F,0.8F,0.8F,1F},
             //11 eyes
@@ -1261,7 +1261,7 @@ namespace AssetsPV
             //12 metal contrast
             new float[] {0.7F,0.75F,0.85F,1F},
             //13 metal
-            new float[] {0.6F,0.63F,0.7F,1F},
+            new float[] {0.5F,0.53F,0.6F,1F},
             //14 flowing clothes contrast
             new float[] {0.9F,0.0F,0.05F,waver_alpha},
             //15 flowing clothes
@@ -1329,9 +1329,9 @@ namespace AssetsPV
             //46 always tan
             new float[] {0.85F,0.7F,0.45F,1F},
             //47 always black contrast
-            new float[] {0.09F,0.06F,0F,1F},
+            new float[] {0.19F,0.16F,0.1F,1F},
             //48 always black
-            new float[] {0.25F,0.22F,0.19F,1F},
+            new float[] {0.35F,0.32F,0.29F,1F},
             //49 always white contrast
             new float[] {1.25F,1.25F,0.75F,1F},
             //50 always white

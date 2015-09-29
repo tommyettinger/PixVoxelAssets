@@ -15,7 +15,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
-        public const int multiplier = 2, bonus = 1, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
@@ -2986,27 +2986,22 @@ namespace AssetsPV
                     WritePNG(png, b, simplepalettes[palette]);
                 }
             }
-            
 
-            Directory.CreateDirectory("gifs/" + altFolder);
-            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-            startInfo.UseShellExecute = false;
-            string s = "";
-            for(int dir = 0; dir < 4; dir++)
+
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int p = 0; p < 8; p++)
             {
-                for(int f = 0; f < framelimit; f++)
+                for(int dir = 0; dir < 4; dir++)
                 {
-                    s += folder + "/palette" + palette + "_" + moniker + "_Ortho_face" + dir + "_" + f + ".png ";
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/palette" + palette + "_" + moniker + "_Ortho_face" + dir + "_" + f + ".png");
+                    }
                 }
             }
-            startInfo.Arguments = "-dispose background -delay 9 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Ortho.gif";
-            Process.Start(startInfo).WaitForExit();
-
-            //bin.Close();
-
-            //            processFiringDouble(u);
-
-           // processExplosionLargeW(moniker, palette, explodeParsed, false);
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 9, "gifs/" + altFolder + "palette" + palette + "_" + moniker + "_Ortho");
 
         }
 
@@ -3035,7 +3030,7 @@ namespace AssetsPV
         {
             return ((y) * vwidth + 1 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
                 + innerX +
-                cols * ((zdim) * multiplier * (vheight - top) + x / 2 - z * (vheight - top) + innerY - ((still || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? 0 : jitter));
+                cols * ((zdim) * multiplier * (vheight - top) + x / 2 - z * (vheight - top) + innerY + ((still || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? 0 : jitter - 1));
         }
 
         private static byte Shade(byte[] sprite, int innerX, int innerY, int aboveback, int above, int abovefront)
@@ -3103,7 +3098,7 @@ namespace AssetsPV
             xbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3));
-            if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
+            if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) - 4) : frame % 8);
             bool[,] taken = new bool[xSize, ySize];
             for(int fz = zSize - 1; fz >= 0; fz--)
             {
@@ -3681,19 +3676,27 @@ namespace AssetsPV
 
         static void Main(string[] args)
         {
+            VoxelLogic.Initialize();
 
-            //MagickNET.UseOpenCL = true;
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
-            VoxelLogic.VisualMode = "Mon";
+
+            //VoxelLogic.VisualMode = "CU";
             //altFolder = "CU_Ortho/";
-            //altFolder = "Forays2/";
-            altFolder = "Mon/";
+            //CURedux.Initialize();
+
+            VoxelLogic.VisualMode = "W";
+            altFolder = "Forays2/";
+            VoxelLogic.voxFolder = "ForaysBones/";
+            ForaysPalettes.Initialize();
+
+            //VoxelLogic.VisualMode = "Mon";
+            //altFolder = "Mon/";
+            //MonPalettes.Initialize();
+
             System.IO.Directory.CreateDirectory("Mon");
             System.IO.Directory.CreateDirectory("Forays2");
-            VoxelLogic.voxFolder = "ForaysBones/";
 
-            //FaceLogic.VisualMode = "CU";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
@@ -3702,13 +3705,10 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
-            VoxelLogic.Initialize();
-
-            //CURedux.Initialize();
+            
             //            SaPalettes.Initialize();
-            MonPalettes.Initialize();
             InitializeWPalette();
-            processUnitLargeW("Burnbruin", 9, true, false);
+            //processUnitLargeW("Burnbruin", 9, true, false);
 
             //            altFolder = "sau10/";
             //            makeFlatTiling().Save("tiling_flat_gray.png");
@@ -4001,16 +4001,30 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            /*
+            
             writePaletteImages();
             //renderTerrain();
-            makeFlatTiling();
+            //makeFlatTiling();
 
-            
+            /*
             processUnitLargeWMilitary("Civilian");
 
+            processUnitLargeWMilitary("Copter");
+            processUnitLargeWMilitary("Copter_P");
+            processUnitLargeWMilitary("Copter_S");
+            processUnitLargeWMilitary("Copter_T");
+
+            processUnitLargeWMilitary("Plane");
+            processUnitLargeWMilitary("Plane_P");
+            processUnitLargeWMilitary("Plane_S");
+            processUnitLargeWMilitary("Plane_T");
+
+            processUnitLargeWMilitary("Boat");
+            processUnitLargeWMilitary("Boat_P");
+            processUnitLargeWMilitary("Boat_S");
+            processUnitLargeWMilitary("Boat_T");
+
             processUnitLargeWMilitary("Tank");
-            
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
             processUnitLargeWMilitary("Tank_T");
@@ -4039,23 +4053,6 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
-            
-            processUnitLargeWMilitary("Copter");
-            
-            processUnitLargeWMilitary("Copter_P");
-            processUnitLargeWMilitary("Copter_S");
-            
-            processUnitLargeWMilitary("Copter_T");
-            
-            processUnitLargeWMilitary("Plane");
-            processUnitLargeWMilitary("Plane_P");
-            processUnitLargeWMilitary("Plane_S");
-            processUnitLargeWMilitary("Plane_T");
-            
-            processUnitLargeWMilitary("Boat");
-            processUnitLargeWMilitary("Boat_P");
-            processUnitLargeWMilitary("Boat_S");
-            processUnitLargeWMilitary("Boat_T");
             
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
@@ -4095,7 +4092,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             */
             //processReceivingMilitaryWSuper();
-            /*
+            
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4122,14 +4119,18 @@ namespace AssetsPV
            .AddYaw(-10, "Right_Lower_Arm")
            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
            );
+            
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Bow"),
                 orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
-                { 253 - 29 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
-                { 253 - 5 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 3, 1, 1, 0.9f) },
-                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
-                { 253 - 3 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 4, 1, 1, 0.65f) },
-                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
+                { 253 - 29 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 5 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                //{ 253 - 29 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
+                //{ 253 - 5 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 3, 1, 1, 0.9f) },
+                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 3 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                //{ 253 - 3 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 4, 1, 1, 0.65f) },
+                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
             });
 
             processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
@@ -4201,7 +4202,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
             
-            */
+
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });
             Pose poseSword = (model => model.AddPitch(30, "Left_Weapon")
