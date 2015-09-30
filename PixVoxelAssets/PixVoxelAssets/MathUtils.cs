@@ -24,7 +24,7 @@ namespace AssetsPV
 {
     /** Encapsulates a 3D vector. Allows chaining operations by returning a reference to itself in all modification methods.
      * @author badlogicgames@gmail.com */
-    public class Vector3
+    public class Vector3GDX
     {
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
 
@@ -35,13 +35,13 @@ namespace AssetsPV
         /** the z-component of this vector **/
         public float z;
 
-        public static Vector3 X = new Vector3(1, 0, 0);
-        public static Vector3 Y = new Vector3(0, 1, 0);
-        public static Vector3 Z = new Vector3(0, 0, 1);
-        public static Vector3 Zero = new Vector3(0, 0, 0);
+        public static Vector3GDX X = new Vector3GDX(1, 0, 0);
+        public static Vector3GDX Y = new Vector3GDX(0, 1, 0);
+        public static Vector3GDX Z = new Vector3GDX(0, 0, 1);
+        public static Vector3GDX Zero = new Vector3GDX(0, 0, 0);
 
         /** Constructs a vector at (0,0,0) */
-        public Vector3()
+        public Vector3GDX()
         {
         }
 
@@ -49,14 +49,14 @@ namespace AssetsPV
          * @param x The x-component
          * @param y The y-component
          * @param z The z-component */
-        public Vector3(float x, float y, float z)
+        public Vector3GDX(float x, float y, float z)
         {
             this.set(x, y, z);
         }
 
         /** Creates a vector from the given vector
          * @param vector The vector */
-        public Vector3(Vector3 vector)
+        public Vector3GDX(Vector3GDX vector)
         {
             this.set(vector);
         }
@@ -64,7 +64,7 @@ namespace AssetsPV
         /** Creates a vector from the given array. The array must have at least 3 elements.
          *
          * @param values The array */
-        public Vector3(float[] values)
+        public Vector3GDX(float[] values)
         {
             this.set(values[0], values[1], values[2]);
         }
@@ -75,7 +75,7 @@ namespace AssetsPV
          * @param y The y-component
          * @param z The z-component
          * @return this vector for chaining */
-        public Vector3 set(float x, float y, float z)
+        public Vector3GDX set(float x, float y, float z)
         {
             this.x = x;
             this.y = y;
@@ -84,7 +84,7 @@ namespace AssetsPV
         }
 
 
-        public Vector3 set(Vector3 vector)
+        public Vector3GDX set(Vector3GDX vector)
         {
             return this.set(vector.x, vector.y, vector.z);
         }
@@ -93,19 +93,19 @@ namespace AssetsPV
          *
          * @param values The array
          * @return this vector for chaining */
-        public Vector3 set(float[] values)
+        public Vector3GDX set(float[] values)
         {
             return this.set(values[0], values[1], values[2]);
         }
 
 
-        public Vector3 cpy()
+        public Vector3GDX cpy()
         {
-            return new Vector3(this);
+            return new Vector3GDX(this);
         }
 
 
-        public Vector3 add(Vector3 vector)
+        public Vector3GDX add(Vector3GDX vector)
         {
             return this.add(vector.x, vector.y, vector.z);
         }
@@ -115,7 +115,7 @@ namespace AssetsPV
          * @param y The y-component of the other vector
          * @param z The z-component of the other vector
          * @return This vector for chaining. */
-        public Vector3 add(float x, float y, float z)
+        public Vector3GDX add(float x, float y, float z)
         {
             return this.set(this.x + x, this.y + y, this.z + z);
         }
@@ -124,13 +124,13 @@ namespace AssetsPV
          *
          * @param values The value
          * @return This vector for chaining */
-        public Vector3 add(float values)
+        public Vector3GDX add(float values)
         {
             return this.set(this.x + values, this.y + values, this.z + values);
         }
 
 
-        public Vector3 sub(Vector3 a_vec)
+        public Vector3GDX sub(Vector3GDX a_vec)
         {
             return this.sub(a_vec.x, a_vec.y, a_vec.z);
         }
@@ -141,7 +141,7 @@ namespace AssetsPV
          * @param y The y-component of the other vector
          * @param z The z-component of the other vector
          * @return This vector for chaining */
-        public Vector3 sub(float x, float y, float z)
+        public Vector3GDX sub(float x, float y, float z)
         {
             return this.set(this.x - x, this.y - y, this.z - z);
         }
@@ -150,19 +150,19 @@ namespace AssetsPV
          *
          * @param value The value
          * @return This vector for chaining */
-        public Vector3 sub(float value)
+        public Vector3GDX sub(float value)
         {
             return this.set(this.x - value, this.y - value, this.z - value);
         }
 
 
-        public Vector3 scl(float scalar)
+        public Vector3GDX scl(float scalar)
         {
             return this.set(this.x * scalar, this.y * scalar, this.z * scalar);
         }
 
 
-        public Vector3 scl(Vector3 other)
+        public Vector3GDX scl(Vector3GDX other)
         {
             return this.set(x * other.x, y * other.y, z * other.z);
         }
@@ -172,13 +172,13 @@ namespace AssetsPV
          * @param vy Y value
          * @param vz Z value
          * @return This vector for chaining */
-        public Vector3 scl(float vx, float vy, float vz)
+        public Vector3GDX scl(float vx, float vy, float vz)
         {
             return this.set(this.x * vx, this.y * vy, this.z * vz);
         }
 
 
-        public Vector3 mulAdd(Vector3 vec, float scalar)
+        public Vector3GDX mulAdd(Vector3GDX vec, float scalar)
         {
             this.x += vec.x * scalar;
             this.y += vec.y * scalar;
@@ -187,7 +187,7 @@ namespace AssetsPV
         }
 
 
-        public Vector3 mulAdd(Vector3 vec, Vector3 mulVec)
+        public Vector3GDX mulAdd(Vector3GDX vec, Vector3GDX mulVec)
         {
             this.x += vec.x * mulVec.x;
             this.y += vec.y * mulVec.y;
@@ -221,7 +221,7 @@ namespace AssetsPV
 
         /** @param vector The other vector
          * @return Whether this and the other vector are equal */
-        public bool idt(Vector3 vector)
+        public bool idt(Vector3GDX vector)
         {
             return x == vector.x && y == vector.y && z == vector.z;
         }
@@ -236,7 +236,7 @@ namespace AssetsPV
         }
 
 
-        public float dst(Vector3 vector)
+        public float dst(Vector3GDX vector)
         {
             float a = vector.x - x;
             float b = vector.y - y;
@@ -263,7 +263,7 @@ namespace AssetsPV
         }
 
 
-        public float dst2(Vector3 point)
+        public float dst2(Vector3GDX point)
         {
             float a = point.x - x;
             float b = point.y - y;
@@ -285,7 +285,7 @@ namespace AssetsPV
         }
 
 
-        public Vector3 nor()
+        public Vector3GDX nor()
         {
             float len2 = this.len2();
             if(len2 == 0f || len2 == 1f) return this;
@@ -299,7 +299,7 @@ namespace AssetsPV
         }
 
 
-        public float dot(Vector3 vector)
+        public float dot(Vector3GDX vector)
         {
             return x * vector.x + y * vector.y + z * vector.z;
         }
@@ -317,7 +317,7 @@ namespace AssetsPV
         /** Sets this vector to the cross product between it and the other vector.
          * @param vector The other vector
          * @return This vector for chaining */
-        public Vector3 crs(Vector3 vector)
+        public Vector3GDX crs(Vector3GDX vector)
         {
             return this.set(y * vector.z - z * vector.y, z * vector.x - x * vector.z, x * vector.y - y * vector.x);
         }
@@ -327,7 +327,7 @@ namespace AssetsPV
          * @param y The y-component of the other vector
          * @param z The z-component of the other vector
          * @return This vector for chaining */
-        public Vector3 crs(float x, float y, float z)
+        public Vector3GDX crs(float x, float y, float z)
         {
             return this.set(this.y * z - this.z * y, this.z * x - this.x * z, this.x * y - this.y * x);
         }
@@ -336,7 +336,7 @@ namespace AssetsPV
          * rotation and scale plus a 1x3 matrix representing the translation.
          * @param matrix The matrix
          * @return This vector for chaining */
-        public Vector3 mul4x3(float[] matrix)
+        public Vector3GDX mul4x3(float[] matrix)
         {
             return set(x * matrix[0] + y * matrix[3] + z * matrix[6] + matrix[9], x * matrix[1] + y * matrix[4] + z * matrix[7]
                 + matrix[10], x * matrix[2] + y * matrix[5] + z * matrix[8] + matrix[11]);
@@ -345,7 +345,7 @@ namespace AssetsPV
 
         /** Multiplies the vector by the given {@link Quaternion}.
          * @return This vector for chaining */
-        public Vector3 mul(Quaternion quat)
+        public Vector3GDX mul(QuaternionGDX quat)
         {
             return quat.transform(this);
         }
@@ -374,67 +374,67 @@ namespace AssetsPV
         }
 
 
-        public bool isOnLine(Vector3 other, float epsilon)
+        public bool isOnLine(Vector3GDX other, float epsilon)
         {
             return len2(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x) <= epsilon;
         }
 
 
-        public bool isOnLine(Vector3 other)
+        public bool isOnLine(Vector3GDX other)
         {
             return len2(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x) <= 0.000000001f;
         }
 
 
-        public bool isCollinear(Vector3 other, float epsilon)
+        public bool isCollinear(Vector3GDX other, float epsilon)
         {
             return isOnLine(other, epsilon) && hasSameDirection(other);
         }
 
 
-        public bool isCollinear(Vector3 other)
+        public bool isCollinear(Vector3GDX other)
         {
             return isOnLine(other) && hasSameDirection(other);
         }
 
 
-        public bool isCollinearOpposite(Vector3 other, float epsilon)
+        public bool isCollinearOpposite(Vector3GDX other, float epsilon)
         {
             return isOnLine(other, epsilon) && hasOppositeDirection(other);
         }
 
 
-        public bool isCollinearOpposite(Vector3 other)
+        public bool isCollinearOpposite(Vector3GDX other)
         {
             return isOnLine(other) && hasOppositeDirection(other);
         }
 
 
-        public bool isPerpendicular(Vector3 vector)
+        public bool isPerpendicular(Vector3GDX vector)
         {
-            return Quaternion.IsEqual(dot(vector), 0f);
+            return QuaternionGDX.IsEqual(dot(vector), 0f);
         }
 
 
-        public bool isPerpendicular(Vector3 vector, float epsilon)
+        public bool isPerpendicular(Vector3GDX vector, float epsilon)
         {
             return Math.Abs(dot(vector)) <= epsilon;
         }
 
 
-        public bool hasSameDirection(Vector3 vector)
+        public bool hasSameDirection(Vector3GDX vector)
         {
             return dot(vector) > 0;
         }
 
 
-        public bool hasOppositeDirection(Vector3 vector)
+        public bool hasOppositeDirection(Vector3GDX vector)
         {
             return dot(vector) < 0;
         }
 
 
-        public Vector3 lerp(Vector3 target, float alpha)
+        public Vector3GDX lerp(Vector3GDX target, float alpha)
         {
             x += alpha * (target.x - x);
             y += alpha * (target.y - y);
@@ -449,7 +449,7 @@ namespace AssetsPV
          * @param target The target vector
          * @param alpha The interpolation coefficient
          * @return This vector for chaining. */
-        public Vector3 slerp(Vector3 target, float alpha)
+        public Vector3GDX slerp(Vector3GDX target, float alpha)
         {
             float d = dot(target);
             // If the inputs are too close for comfort, simply linearly interpolate.
@@ -478,13 +478,13 @@ namespace AssetsPV
 
 
 
-        public Vector3 limit(float limit)
+        public Vector3GDX limit(float limit)
         {
             return limit2(limit * limit);
         }
 
 
-        public Vector3 limit2(float limit2)
+        public Vector3GDX limit2(float limit2)
         {
             float l = len2();
             if(l > limit2)
@@ -495,13 +495,13 @@ namespace AssetsPV
         }
 
 
-        public Vector3 setLength(float len)
+        public Vector3GDX setLength(float len)
         {
             return setLength2(len * len);
         }
 
 
-        public Vector3 setLength2(float len)
+        public Vector3GDX setLength2(float len)
         {
             float oldLen2 = len2();
             return (oldLen2 == 0 || oldLen2 == len)
@@ -510,7 +510,7 @@ namespace AssetsPV
         }
 
 
-        public Vector3 clamp(float min, float max)
+        public Vector3GDX clamp(float min, float max)
         {
             float l = len2();
             if(l == 0f)
@@ -525,7 +525,7 @@ namespace AssetsPV
         }
 
 
-        public bool epsilonEquals(Vector3 other, float epsilon)
+        public bool epsilonEquals(Vector3GDX other, float epsilon)
         {
             if(other == null) return false;
             if(Math.Abs(other.x - x) > epsilon) return false;
@@ -545,20 +545,20 @@ namespace AssetsPV
         }
 
 
-        public Vector3 setZero()
+        public Vector3GDX setZero()
         {
             this.x = 0;
             this.y = 0;
             this.z = 0;
             return this;
         }
-        public Vector3 fromAngles(float yaw, float pitch, float roll)
+        public Vector3GDX fromAngles(float yaw, float pitch, float roll)
         {
             return fromAnglesRad(yaw * DegreesToRadians, pitch * DegreesToRadians, roll * DegreesToRadians);
         }
 
 
-        public Vector3 fromAnglesRad(float yaw, float pitch, float roll)
+        public Vector3GDX fromAnglesRad(float yaw, float pitch, float roll)
         {
             y = (float)(Math.Cos(yaw) * Math.Cos(roll));
             x = (float)(Math.Cos(pitch) * Math.Sin(yaw));
@@ -572,11 +572,11 @@ namespace AssetsPV
      * @author badlogicgames@gmail.com
      * @author vesuvio
      * @author xoppa */
-    public class Quaternion
+    public class QuaternionGDX
     {
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
-        private static Quaternion tmp1 = new Quaternion(0, 0, 0, 0);
-        private static Quaternion tmp2 = new Quaternion(0, 0, 0, 0);
+        private static QuaternionGDX tmp1 = new QuaternionGDX(0, 0, 0, 0);
+        private static QuaternionGDX tmp2 = new QuaternionGDX(0, 0, 0, 0);
 
         public float x;
         public float y;
@@ -588,12 +588,12 @@ namespace AssetsPV
          * @param y The y-component
          * @param z The z-component
          * @param w The w-component */
-        public Quaternion(float x, float y, float z, float w)
+        public QuaternionGDX(float x, float y, float z, float w)
         {
             this.set(x, y, z, w);
         }
 
-        public Quaternion()
+        public QuaternionGDX()
         {
             idt();
         }
@@ -601,7 +601,7 @@ namespace AssetsPV
         /** Constructor, sets the quaternion components from the given quaternion.
          * 
          * @param quaternion The quaternion to copy. */
-        public Quaternion(Quaternion quaternion)
+        public QuaternionGDX(QuaternionGDX quaternion)
         {
             this.set(quaternion);
         }
@@ -610,7 +610,7 @@ namespace AssetsPV
          * 
          * @param axis The axis
          * @param angle The angle in degrees. */
-        public Quaternion(Vector3 axis, float angle)
+        public QuaternionGDX(Vector3GDX axis, float angle)
         {
             this.set(axis, angle);
         }
@@ -621,7 +621,7 @@ namespace AssetsPV
          * @param z The z-component
          * @param w The w-component
          * @return This quaternion for chaining */
-        public Quaternion set(float x, float y, float z, float w)
+        public QuaternionGDX set(float x, float y, float z, float w)
         {
             this.x = x;
             this.y = y;
@@ -633,7 +633,7 @@ namespace AssetsPV
         /** Sets the quaternion components from the given quaternion.
          * @param quaternion The quaternion.
          * @return This quaternion for chaining. */
-        public Quaternion set(Quaternion quaternion)
+        public QuaternionGDX set(QuaternionGDX quaternion)
         {
             return this.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
         }
@@ -643,15 +643,15 @@ namespace AssetsPV
          * @param axis The axis
          * @param angle The angle in degrees
          * @return This quaternion for chaining. */
-        public Quaternion set(Vector3 axis, float angle)
+        public QuaternionGDX set(Vector3GDX axis, float angle)
         {
             return setFromAxis(axis.x, axis.y, axis.z, angle);
         }
 
         /** @return a copy of this quaternion */
-        public Quaternion cpy()
+        public QuaternionGDX cpy()
         {
-            return new Quaternion(this);
+            return new QuaternionGDX(this);
         }
 
         /** @return the euclidean length of the specified quaternion */
@@ -677,7 +677,7 @@ namespace AssetsPV
          * @param pitch the rotation around the x axis in degrees
          * @param roll the rotation around the z axis degrees
          * @return this quaternion */
-        public Quaternion setEulerAngles(float yaw, float pitch, float roll)
+        public QuaternionGDX setEulerAngles(float yaw, float pitch, float roll)
         {
             return setEulerAnglesRad(yaw * DegreesToRadians, pitch * DegreesToRadians, roll
                 * DegreesToRadians);
@@ -688,7 +688,7 @@ namespace AssetsPV
          * @param pitch the rotation around the x axis in radians
          * @param roll the rotation around the z axis in radians
          * @return this quaternion */
-        public Quaternion setEulerAnglesRad(float yaw, float pitch, float roll)
+        public QuaternionGDX setEulerAnglesRad(float yaw, float pitch, float roll)
         {
             float hr = roll * 0.5f;
             float shr = (float)Math.Sin(hr);
@@ -781,7 +781,7 @@ namespace AssetsPV
 
         /** Normalizes this quaternion to unit length
          * @return the quaternion for chaining */
-        public Quaternion nor()
+        public QuaternionGDX nor()
         {
             float len = len2();
             if(len != 0.0f && !IsEqual(len, 1f))
@@ -798,7 +798,7 @@ namespace AssetsPV
         /** Conjugate the quaternion.
          * 
          * @return This quaternion for chaining */
-        public Quaternion conjugate()
+        public QuaternionGDX conjugate()
         {
             x = -x;
             y = -y;
@@ -809,7 +809,7 @@ namespace AssetsPV
         /** Transforms the given vector using this quaternion
          * 
          * @param v Vector to transform */
-        public Vector3 transform(Vector3 v)
+        public Vector3GDX transform(Vector3GDX v)
         {
             tmp2.set(this);
             tmp2.conjugate();
@@ -825,7 +825,7 @@ namespace AssetsPV
          * 
          * @param other Quaternion to multiply with
          * @return This quaternion for chaining */
-        public Quaternion mul(Quaternion other)
+        public QuaternionGDX mul(QuaternionGDX other)
         {
             float newX = this.w * other.x + this.x * other.w + this.y * other.z - this.z * other.y;
             float newY = this.w * other.y + this.y * other.w + this.z * other.x - this.x * other.z;
@@ -845,7 +845,7 @@ namespace AssetsPV
          * @param z the z component of the other quaternion to multiply with
          * @param w the w component of the other quaternion to multiply with
          * @return This quaternion for chaining */
-        public Quaternion mul(float x, float y, float z, float w)
+        public QuaternionGDX mul(float x, float y, float z, float w)
         {
             float newX = this.w * x + this.x * w + this.y * z - this.z * y;
             float newY = this.w * y + this.y * w + this.z * x - this.x * z;
@@ -862,7 +862,7 @@ namespace AssetsPV
          * 
          * @param other Quaternion to multiply with
          * @return This quaternion for chaining */
-        public Quaternion mulLeft(Quaternion other)
+        public QuaternionGDX mulLeft(QuaternionGDX other)
         {
             float newX = other.w * this.x + other.x * this.w + other.y * this.z - other.z * y;
             float newY = other.w * this.y + other.y * this.w + other.z * this.x - other.x * z;
@@ -882,7 +882,7 @@ namespace AssetsPV
          * @param z the z component of the other quaternion to multiply with
          * @param w the w component of the other quaternion to multiply with
          * @return This quaternion for chaining */
-        public Quaternion mulLeft(float x, float y, float z, float w)
+        public QuaternionGDX mulLeft(float x, float y, float z, float w)
         {
             float newX = w * this.x + x * this.w + y * this.z - z * y;
             float newY = w * this.y + y * this.w + z * this.x - x * z;
@@ -896,7 +896,7 @@ namespace AssetsPV
         }
 
         /** Add the x,y,z,w components of the passed in quaternion to the ones of this quaternion */
-        public Quaternion add(Quaternion quaternion)
+        public QuaternionGDX add(QuaternionGDX quaternion)
         {
             this.x += quaternion.x;
             this.y += quaternion.y;
@@ -906,7 +906,7 @@ namespace AssetsPV
         }
 
         /** Add the x,y,z,w components of the passed in quaternion to the ones of this quaternion */
-        public Quaternion add(float qx, float qy, float qz, float qw)
+        public QuaternionGDX add(float qx, float qy, float qz, float qw)
         {
             this.x += qx;
             this.y += qy;
@@ -918,7 +918,7 @@ namespace AssetsPV
 
         /** Sets the quaternion to an identity Quaternion
          * @return this quaternion for chaining */
-        public Quaternion idt()
+        public QuaternionGDX idt()
         {
             return this.set(0, 0, 0, 1);
         }
@@ -936,7 +936,7 @@ namespace AssetsPV
          * @param axis The axis
          * @param degrees The angle in degrees
          * @return This quaternion for chaining. */
-        public Quaternion setFromAxis(Vector3 axis, float degrees)
+        public QuaternionGDX setFromAxis(Vector3GDX axis, float degrees)
         {
             return setFromAxis(axis.x, axis.y, axis.z, degrees);
         }
@@ -946,7 +946,7 @@ namespace AssetsPV
          * @param axis The axis
          * @param radians The angle in radians
          * @return This quaternion for chaining. */
-        public Quaternion setFromAxisRad(Vector3 axis, float radians)
+        public QuaternionGDX setFromAxisRad(Vector3GDX axis, float radians)
         {
             return setFromAxisRad(axis.x, axis.y, axis.z, radians);
         }
@@ -957,7 +957,7 @@ namespace AssetsPV
          * @param z Z direction of the axis
          * @param degrees The angle in degrees
          * @return This quaternion for chaining. */
-        public Quaternion setFromAxis(float x, float y, float z, float degrees)
+        public QuaternionGDX setFromAxis(float x, float y, float z, float degrees)
         {
             return setFromAxisRad(x, y, z, degrees * DegreesToRadians);
         }
@@ -968,9 +968,9 @@ namespace AssetsPV
          * @param z Z direction of the axis
          * @param radians The angle in radians
          * @return This quaternion for chaining. */
-        public Quaternion setFromAxisRad(float x, float y, float z, float radians)
+        public QuaternionGDX setFromAxisRad(float x, float y, float z, float radians)
         {
-            float d = Vector3.len(x, y, z);
+            float d = Vector3GDX.len(x, y, z);
             if(d == 0f) return idt();
             d = 1f / d;
             float l_ang = (float)(radians < 0 ? (Math.PI * 2) - (-radians % (Math.PI * 2)) : radians % (Math.PI * 2));
@@ -998,7 +998,7 @@ namespace AssetsPV
          * @param zx z-axis x-coordinate
          * @param zy z-axis y-coordinate
          * @param zz z-axis z-coordinate */
-        public Quaternion setFromAxes(float xx, float xy, float xz, float yx, float yy, float yz, float zx, float zy, float zz)
+        public QuaternionGDX setFromAxes(float xx, float xy, float xz, float yx, float yy, float yz, float zx, float zy, float zz)
         {
             return setFromAxes(false, xx, xy, xz, yx, yy, yz, zx, zy, zz);
         }
@@ -1022,14 +1022,14 @@ namespace AssetsPV
          * @param zx z-axis x-coordinate
          * @param zy z-axis y-coordinate
          * @param zz z-axis z-coordinate */
-        public Quaternion setFromAxes(bool normalizeAxes, float xx, float xy, float xz, float yx, float yy, float yz, float zx,
+        public QuaternionGDX setFromAxes(bool normalizeAxes, float xx, float xy, float xz, float yx, float yy, float yz, float zx,
         float zy, float zz)
         {
             if(normalizeAxes)
             {
-                float lx = 1f / Vector3.len(xx, xy, xz);
-                float ly = 1f / Vector3.len(yx, yy, yz);
-                float lz = 1f / Vector3.len(zx, zy, zz);
+                float lx = 1f / Vector3GDX.len(xx, xy, xz);
+                float ly = 1f / Vector3GDX.len(yx, yy, yz);
+                float lz = 1f / Vector3GDX.len(zx, zy, zz);
                 xx *= lx;
                 xy *= lx;
                 xz *= lx;
@@ -1089,7 +1089,7 @@ namespace AssetsPV
          * @param v1 The base vector, which should be normalized.
          * @param v2 The target vector, which should be normalized.
          * @return This quaternion for chaining */
-        public Quaternion setFromCross(Vector3 v1, Vector3 v2)
+        public QuaternionGDX setFromCross(Vector3GDX v1, Vector3GDX v2)
         {
             float dot = (float)VoxelLogic.Clamp(v1.dot(v2), -1f, 1f);
             float angle = (float)Math.Acos(dot);
@@ -1104,9 +1104,9 @@ namespace AssetsPV
          * @param y2 The target vector y value, which should be normalized.
          * @param z2 The target vector z value, which should be normalized.
          * @return This quaternion for chaining */
-        public Quaternion setFromCross(float x1, float y1, float z1, float x2, float y2, float z2)
+        public QuaternionGDX setFromCross(float x1, float y1, float z1, float x2, float y2, float z2)
         {
-            float dot = (float)VoxelLogic.Clamp(Vector3.dot(x1, y1, z1, x2, y2, z2), -1f, 1f);
+            float dot = (float)VoxelLogic.Clamp(Vector3GDX.dot(x1, y1, z1, x2, y2, z2), -1f, 1f);
             float angle = (float)Math.Acos(dot);
             return setFromAxisRad(y1 * z2 - z1 * y2, z1 * x2 - x1 * z2, x1 * y2 - y1 * x2, angle);
         }
@@ -1116,7 +1116,7 @@ namespace AssetsPV
          * @param end the end quaternion
          * @param alpha alpha in the range [0,1]
          * @return this quaternion for chaining */
-        public Quaternion slerp(Quaternion end, float alpha)
+        public QuaternionGDX slerp(QuaternionGDX end, float alpha)
         {
             float d = this.x * end.x + this.y * end.y + this.z * end.z + this.w * end.w;
             float absDot = d < 0f ? -d : d;
@@ -1158,7 +1158,7 @@ namespace AssetsPV
          * result = (q_1^w_1)*(q_2^w_2)* ... *(q_n^w_n) where w_i=1/n.
          * @param q List of quaternions
          * @return This quaternion for chaining */
-        public Quaternion slerp(Quaternion[] q)
+        public QuaternionGDX slerp(QuaternionGDX[] q)
         {
 
             //Calculate exponents and multiply everything from left to right
@@ -1178,7 +1178,7 @@ namespace AssetsPV
          * @param q List of quaternions
          * @param w List of weights
          * @return This quaternion for chaining */
-        public Quaternion slerp(Quaternion[] q, float[] w)
+        public QuaternionGDX slerp(QuaternionGDX[] q, float[] w)
         {
 
             //Calculate exponents and multiply everything from left to right
@@ -1194,7 +1194,7 @@ namespace AssetsPV
          * See http://en.wikipedia.org/wiki/Quaternion#Exponential.2C_logarithm.2C_and_power
          * @param alpha Exponent
          * @return This quaternion for chaining */
-        public Quaternion exp(float alpha)
+        public QuaternionGDX exp(float alpha)
         {
 
             //Calculate |q|^alpha
@@ -1243,7 +1243,7 @@ namespace AssetsPV
         /** Get the dot product between this and the other quaternion (commutative).
          * @param other the other quaternion.
          * @return the dot product of this and the other quaternion. */
-        public float dot(Quaternion other)
+        public float dot(QuaternionGDX other)
         {
             return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
         }
@@ -1262,7 +1262,7 @@ namespace AssetsPV
         /** Multiplies the components of this quaternion with the given scalar.
          * @param scalar the scalar.
          * @return this quaternion for chaining. */
-        public Quaternion mul(float scalar)
+        public QuaternionGDX mul(float scalar)
         {
             this.x *= scalar;
             this.y *= scalar;
@@ -1281,7 +1281,7 @@ namespace AssetsPV
          * @return the angle in degrees
          * @see <a href="http://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">wikipedia</a>
          * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle">calculation</a> */
-        public float getAxisAngle(out Vector3 axis)
+        public float getAxisAngle(out Vector3GDX axis)
         {
             return getAxisAngleRad(out axis) * RadiansToDegrees;
         }
@@ -1296,9 +1296,9 @@ namespace AssetsPV
          * @return the angle in radians
          * @see <a href="http://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">wikipedia</a>
          * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle">calculation</a> */
-        public float getAxisAngleRad(out Vector3 axis)
+        public float getAxisAngleRad(out Vector3GDX axis)
         {
-            axis = new Vector3();
+            axis = new Vector3GDX();
             if(this.w > 1) this.nor(); // if w>1 acos and sqrt will produce errors, this cant happen if quaternion is normalised
             float angle = (float)(2.0 * Math.Acos(this.w));
             double s = Math.Sqrt(1 - this.w * this.w); // assuming quaternion normalised then w is less than 1, so term always positive.
@@ -1318,9 +1318,9 @@ namespace AssetsPV
 
             return angle;
         }
-        public Vector3 getAxis()
+        public Vector3GDX getAxis()
         {
-            Vector3 axis = new Vector3();
+            Vector3GDX axis = new Vector3GDX();
             if(this.w > 1) this.nor(); // if w>1 acos and sqrt will produce errors, this cant happen if quaternion is normalised
             double s = Math.Sqrt(1 - this.w * this.w); // assuming quaternion normalised then w is less than 1, so term always positive.
             if(s < 0.000001f)
@@ -1369,10 +1369,10 @@ namespace AssetsPV
          * @param swing will receive the swing rotation: the rotation around an axis perpendicular to the specified axis
          * @param twist will receive the twist rotation: the rotation around the specified axis
          * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a> */
-        public void getSwingTwist(float axisX, float axisY, float axisZ, Quaternion swing,
-        Quaternion twist)
+        public void getSwingTwist(float axisX, float axisY, float axisZ, QuaternionGDX swing,
+        QuaternionGDX twist)
         {
-            float d = Vector3.dot(this.x, this.y, this.z, axisX, axisY, axisZ);
+            float d = Vector3GDX.dot(this.x, this.y, this.z, axisX, axisY, axisZ);
             twist.set(axisX * d, axisY * d, axisZ * d, this.w).nor();
             swing.set(twist).conjugate().mulLeft(this);
         }
@@ -1387,7 +1387,7 @@ namespace AssetsPV
          * @param swing will receive the swing rotation: the rotation around an axis perpendicular to the specified axis
          * @param twist will receive the twist rotation: the rotation around the specified axis
          * @see <a href="http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a> */
-        public void getSwingTwist(Vector3 axis, Quaternion swing, Quaternion twist)
+        public void getSwingTwist(Vector3GDX axis, QuaternionGDX swing, QuaternionGDX twist)
         {
             getSwingTwist(axis.x, axis.y, axis.z, swing, twist);
         }
@@ -1399,15 +1399,15 @@ namespace AssetsPV
          * @return the angle in radians of the rotation around the specified axis */
         public float getAngleAroundRad(float axisX, float axisY, float axisZ)
         {
-            float d = Vector3.dot(this.x, this.y, this.z, axisX, axisY, axisZ);
-            float l2 = Quaternion.len2(axisX * d, axisY * d, axisZ * d, this.w);
+            float d = Vector3GDX.dot(this.x, this.y, this.z, axisX, axisY, axisZ);
+            float l2 = QuaternionGDX.len2(axisX * d, axisY * d, axisZ * d, this.w);
             return IsEqual(l2, 0f) ? 0f : (float)(2.0 * Math.Acos(VoxelLogic.Clamp((float)(this.w / Math.Sqrt(l2)), -1f, 1f)));
         }
 
         /** Get the angle in radians of the rotation around the specified axis. The axis must be normalized.
          * @param axis the normalized axis for which to get the angle
          * @return the angle in radians of the rotation around the specified axis */
-        public float getAngleAroundRad(Vector3 axis)
+        public float getAngleAroundRad(Vector3GDX axis)
         {
             return getAngleAroundRad(axis.x, axis.y, axis.z);
         }
@@ -1425,7 +1425,7 @@ namespace AssetsPV
         /** Get the angle in degrees of the rotation around the specified axis. The axis must be normalized.
          * @param axis the normalized axis for which to get the angle
          * @return the angle in degrees of the rotation around the specified axis */
-        public float getAngleAround(Vector3 axis)
+        public float getAngleAround(Vector3GDX axis)
         {
             return getAngleAround(axis.x, axis.y, axis.z);
         }

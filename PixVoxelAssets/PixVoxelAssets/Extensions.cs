@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssetsPV;
+using System.Numerics;
+
 namespace AssetsPV
 {
     public static class Extensions
     {
+        public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
         private static Random r = new Random();
         public static T RandomElement<T>(this IEnumerable<T> list)
         {
@@ -358,6 +361,24 @@ namespace AssetsPV
             }
             return 0;
         }
-
+        public static int GimbalPole(this Quaternion q)
+        {
+            float t = q.Y * q.X + q.Z * q.W;
+            return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
+        }
+        public static float Roll(this Quaternion q)
+        {
+            int pole = q.GimbalPole();
+            return (float)(pole == 0 ? Math.Atan2(2f * (q.W * q.Z + q.Y * q.X), 1f - 2f * (q.X * q.X + q.Z * q.Z)) : pole * 2f * Math.Atan2(q.Y, q.W)) * RadiansToDegrees;
+        }
+        public static float Pitch(this Quaternion q)
+        {
+            int pole = q.GimbalPole();
+            return (pole == 0 ? (float)Math.Asin(VoxelLogic.Clamp(2 * (q.W * q.X - q.Z * q.Y), -1, 1)) : (float)(pole * Math.PI * 0.5)) * RadiansToDegrees;
+        }
+        public static float Yaw(this Quaternion q)
+        {
+            return (q.GimbalPole() == 0 ? (float)Math.Atan2(2f * (q.Y * q.W +q.X * q.Z), 1f - 2f * (q.Y * q.Y + q.X * q.X)) : 0f) * RadiansToDegrees;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace AssetsPV
     public class Bone
     {
         public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
+        public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
+
         public readonly byte[,,] Colors;
         public static Dictionary<byte, Pattern> Patterns = null;
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
@@ -20,7 +23,7 @@ namespace AssetsPV
          * @param pitch the rotation around the x axis in radians
          * @param roll the rotation around the z axis in radians
          * @return this quaternion */
-        private static Vector3 YawAxis = new Vector3(0f, 1f, 0f), PitchAxis = new Vector3(1f, 0f, 0f), RollAxis = new Vector3(0f, 0f, 1f);
+        //private static Vector3GDX YawAxis = new Vector3GDX(0f, 1f, 0f), PitchAxis = new Vector3GDX(1f, 0f, 0f), RollAxis = new Vector3GDX(0f, 0f, 1f);
         public byte[] SpreadColors = null;
 
         public Bone(byte[,,] c)
@@ -79,13 +82,14 @@ namespace AssetsPV
         {
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             //            q = q.idt().slerp(new Quaternion[] { new Quaternion(YawAxis, (360 - Pitch) % 360f), new Quaternion(PitchAxis, (360 - Roll) % 360f), new Quaternion(RollAxis, (360 - Yaw) % 360f) });
-            Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
-
+            //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
+            Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            
             //dir = dir.fromAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
                 hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
             Vector3 v = new Vector3(0f, 0f, 0f);
-
+            
             byte[,,] c2 = new byte[xSize, ySize, zSize];
 
             for(int z = 0; z < zSize; z++)
@@ -96,29 +100,31 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            for(double sx = 0.95; sx <= 1.05; sx += 0.05)
+                            /*
+                            for(double sx = 1.0; sx <= 1.00; sx += 0.02)
                             {
-                                for(double sy = 0.95; sy <= 1.05; sy += 0.05)
+                                for(double sy = 0.94; sy <= 1.06; sy += 0.06)
                                 {
-                                    for(double sz = 0.95; sz <= 1.05; sz += 0.05)
-                                    {
-                                        v.x = (x - hxs) * (float)Math.Pow(StretchX, sx) + xOffset;
-                                        v.y = (y - hys) * (float)Math.Pow(StretchY, sy);
-                                        v.z = (z - hzs) * (float)Math.Pow(StretchZ, sz);
-                                        float normod = (float)Math.Sqrt(v.len2());
-                                        v.scl(1f / normod);
-                                        q.transform(v);
-                                        v.scl(normod);
-                                        int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
-                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
-                                            c2[x2, y2, z2] = Colors[x, y, z];
+                                    for(double sz = 0.94; sz <= 1.06; sz += 0.06)
+                                    {*/
+                            v.X = (x - hxs) * StretchX + xOffset;
+                            v.Y = (y - hys) * StretchY;
+                            v.Z = (z - hzs) * StretchZ;
+                            float normod = (float)Math.Sqrt(v.LengthSquared());
+                            v = Vector3.Multiply(1f / normod, v);
+                            v = Vector3.Transform(v, q);
+                            v = Vector3.Multiply(normod, v);
 
-                                        if(StretchZ == 1.0) break;
-                                    }
-                                    if(StretchY == 1.0) break;
-                                }
-                                if(StretchX == 1.0) break;
-                            }
+                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                c2[x2, y2, z2] = Colors[x, y, z];
+                            /*
+                            if(StretchZ == 1.0) break;
+                        }
+                        if(StretchY == 1.0) break;
+                    }
+                    if(StretchX == 1.0) break;
+                }*/
                             //int x2, y2, z2;
                             //float stretchiest = 2f;
                             //for(float sf = stretchiest; sf >= -2f; sf -= 0.5f)
@@ -136,6 +142,32 @@ namespace AssetsPV
                     }
                 }
             }
+
+            for(int z = 1; z < zSize - 1; z++)
+            {
+                for(int y = 1; y < ySize - 1; y++)
+                {
+                    for(int x = 1; x < xSize - 1; x++)
+                    {
+                        if(c2[x, y, z] != 0) continue;
+                        if(c2[x - 1, y, z] != 0 && c2[x - 1, y, z] == c2[x + 1, y, z])
+                        {
+                            c2[x, y, z] = c2[x - 1, y, z];
+                            continue;
+                        }
+                        if(c2[x, y-1, z] != 0 && c2[x, y-1, z] == c2[x, y+1, z])
+                        {
+                            c2[x, y, z] = c2[x, y-1, z];
+                            continue;
+                        }
+                        if(c2[x, y, z-1] != 0 && c2[x, y, z-1] == c2[x, y, z+1])
+                        {
+                            c2[x, y, z] = c2[x, y, z+1];
+                            continue;
+                        }
+                    }
+                }
+            }
             return c2;
         }
 
@@ -145,14 +177,12 @@ namespace AssetsPV
                 return FinalizeSimple(xOffset, yOffset);
 
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
-            Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
+            //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
+            Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
             //q = q.idt().slerp(new Quaternion[] { new Quaternion(RollAxis, (360 - Roll) % 360f), new Quaternion(PitchAxis, (360 - Pitch) % 360f), new Quaternion(YawAxis, (360 - Yaw) % 360f) });
 
             //Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
-            Quaternion q0 = q.cpy().mulLeft(new Quaternion(YawAxis, -StartPitch))
-                .mulLeft(new Quaternion(PitchAxis, -StartRoll))
-                .mulLeft(new Quaternion(RollAxis, -StartYaw)),
-            q2;
+            Quaternion q0 = Quaternion.CreateFromYawPitchRoll(-StartPitch * DegreesToRadians, -StartRoll * DegreesToRadians, -StartYaw * DegreesToRadians), q2;
 
 
 
@@ -162,7 +192,7 @@ namespace AssetsPV
 
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
                 hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
-            Vector3 v = new Vector3(0f, 0f, 0f);
+            Vector3 v = new Vector3(0f, 0f, 0f), v2;
 
             byte[,,] c2 = new byte[xSize, ySize, zSize];
 
@@ -174,30 +204,31 @@ namespace AssetsPV
                     {
                         if(Colors[x, y, z] > 0)
                         {
-                            for(double sx = 0.95; sx <= 1.05; sx += 0.05)
+                            /*for(double sx = 0.94; sx <= 1.06; sx += 0.06)
                             {
-                                for(double sy = 0.95; sy <= 1.05; sy += 0.05)
+                                for(double sy = 0.94; sy <= 1.06; sy += 0.06)
                                 {
-                                    for(double sz = 0.95; sz <= 1.05; sz += 0.05)
-                                    {
-                                        v.x = (x - hxs) * (float)Math.Pow(StretchX, sx) + xOffset;
-                                        v.y = (y - hys) * (float)Math.Pow(StretchY, sy);
-                                        v.z = (z - hzs) * (float)Math.Pow(StretchZ, sz);
-                                        float normod = (float)Math.Sqrt(v.len2());
-                                        v.scl(1f / normod);
-                                        q.transform(v);
-                                        v.scl(normod);
-                                        int x2 = (int)(v.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.y + 0.5f + hys + MoveY), z2 = (int)(v.z + 0.5f + hzs + MoveZ);
-                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
-                                            c2[x2, y2, z2] = Colors[x, y, z];
+                                    for(double sz = 0.94; sz <= 1.06; sz += 0.06)
+                                    {*/
+                            v.X = (x - hxs) * StretchX + xOffset;
+                            v.Y = (y - hys) * StretchY;
+                            v.Z = (z - hzs) * StretchZ;
+                            float normod = (float)Math.Sqrt(v.LengthSquared());
+                            v = Vector3.Multiply(1f / normod, v);
+                            v = Vector3.Transform(v, q);
+                            v = Vector3.Multiply(normod, v);
 
-                                        if(StretchZ == 1.0) break;
-                                    }
-                                    if(StretchY == 1.0) break;
-                                }
-                                if(StretchX == 1.0) break;
-                            }
-
+                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                            if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                c2[x2, y2, z2] = Colors[x, y, z];
+                            /*
+                            if(StretchZ == 1.0) break;
+                        }
+                        if(StretchY == 1.0) break;
+                    }
+                    if(StretchX == 1.0) break;
+                }
+                */
                             //v.x = (x - hxs) * StretchX + xOffset;
                             //v.y = (y - hys) * StretchY;
                             //v.z = (z - hzs) * StretchZ;
@@ -237,20 +268,19 @@ namespace AssetsPV
                         {
                             if(Colors[x, y, z] == SpreadColors[c])
                             {
-                                v.x = (x - hxs) * StretchX + xOffset;
-                                v.y = (y - hys) * StretchY;
-                                v.z = (z - hzs) * StretchZ;
-                                float normod = (float)Math.Sqrt(v.len2());
-                                v.scl(1f / normod);
-                                //Vector3 vOuter = q0.transform(v.cpy());
+                                v.X = (x - hxs) * StretchX + xOffset;
+                                v.Y = (y - hys) * StretchY;
+                                v.Z = (z - hzs) * StretchZ;
+                                float normod = (float)Math.Sqrt(v.LengthSquared());
+                                v = Vector3.Multiply(1f / normod, v);
 
                                 for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                 {
-                                    q2 = q0.cpy().slerp(q, a);
-                                    Vector3 v2 = q2.transform(v.cpy()).scl(normod);
-                                    
-                                    int x2 = (int)(v2.x + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.y + 0.5f + hys + MoveY), z2 = (int)(v2.z + 0.5f + hzs + MoveZ);
-                                    
+                                    q2 = Quaternion.Slerp(q0, q, a);
+                                    v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
+
+                                    int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+
                                     if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0)
                                         c2[x2, y2, z2] = Colors[x, y, z];
                                 }
@@ -261,6 +291,31 @@ namespace AssetsPV
                 }
             }
 
+            for(int z = 1; z < zSize - 1; z++)
+            {
+                for(int y = 1; y < ySize - 1; y++)
+                {
+                    for(int x = 1; x < xSize - 1; x++)
+                    {
+                        if(c2[x, y, z] != 0) continue;
+                        if(c2[x - 1, y, z] != 0 && c2[x - 1, y, z] == c2[x + 1, y, z])
+                        {
+                            c2[x, y, z] = c2[x - 1, y, z];
+                            continue;
+                        }
+                        if(c2[x, y - 1, z] != 0 && c2[x, y - 1, z] == c2[x, y + 1, z])
+                        {
+                            c2[x, y, z] = c2[x, y - 1, z];
+                            continue;
+                        }
+                        if(c2[x, y, z - 1] != 0 && c2[x, y, z - 1] == c2[x, y, z + 1])
+                        {
+                            c2[x, y, z] = c2[x, y, z + 1];
+                            continue;
+                        }
+                    }
+                }
+            }
             return c2;
         }
         public bool RoughEquals(Bone target)
@@ -276,16 +331,25 @@ namespace AssetsPV
                 return target.Replicate();
             else if(RoughEquals(target))
                 return this.Replicate();
-            Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f)).mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f)).mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f));
+            //QuaternionGDX q = new QuaternionGDX().setEulerAngles(-Pitch, -Roll, -Yaw);
+            Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            //Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f))
+            //    .mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f))
+            //    .mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f))
+            //    .nor();
 
-            Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
-                .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
-                .mulLeft(new Quaternion(RollAxis, (360 - target.Yaw) % 360f)),
-            q2;
+            //QuaternionGDX q0 = new QuaternionGDX().setEulerAngles(-target.Pitch, -target.Roll, -target.Yaw), q2;
+            Quaternion q0 = Quaternion.CreateFromYawPitchRoll(-target.Pitch * DegreesToRadians, -target.Roll * DegreesToRadians, -target.Yaw * DegreesToRadians), q2;
+
+            //Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
+            //    .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
+            //    .mulLeft(new Quaternion(RollAxis, (360 - target.Yaw) % 360f))
+            //    .nor(),
+
             Vector3 myStarts = new Vector3(StartYaw, StartPitch, StartRoll), tgtStarts = new Vector3(target.StartYaw, target.StartPitch, target.StartRoll),
                 myStretches = new Vector3(StretchX, StretchY, StretchZ), tgtStretches = new Vector3(target.StretchX, target.StretchY, target.StretchZ);
-            myStarts.lerp(tgtStarts, alpha);
-            myStretches.lerp(tgtStretches, alpha);
+            myStarts = Vector3.Lerp(myStarts, tgtStarts, alpha);
+            myStretches = Vector3.Lerp(myStretches, tgtStretches, alpha);
             byte[] newSpread = null;
             if(SpreadColors != null)
             {
@@ -305,12 +369,11 @@ namespace AssetsPV
             }
             else if(target.SpreadColors != null)
                 newSpread = target.SpreadColors;
+            q2 = Quaternion.Normalize(Quaternion.Slerp(q, q0, alpha));
             
-
-            q2 = q.cpy().slerp(q0, alpha);
-            return new Bone(Colors, 360 - q2.getPitch(), 360 - q2.getYaw(), 360 - q2.getRoll())
-                .InitSpread(newSpread, myStarts.x, myStarts.y, myStarts.z)
-                .InitStretch(myStretches.x, myStretches.y, myStretches.z);
+            return new Bone(Colors, 360 - q2.Roll(), 360 - q2.Yaw(), 360 - q2.Pitch())
+                .InitSpread(newSpread, myStarts.X, myStarts.Y, myStarts.Z)
+                .InitStretch(myStretches.X, myStretches.Y, myStretches.Z);
         }
         public Bone Replicate()
         {
@@ -328,13 +391,13 @@ namespace AssetsPV
         public static Bone readBone(string file)
         {
             if(file == null)
-                return new Bone(new byte[60 * Multiplier * Bonus, 60 * Multiplier * Bonus, 60 * Multiplier * Bonus]);
+                return new Bone(new byte[60 * Multiplier, 60 * Multiplier, 60 * Multiplier]);
             BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
             if(Bone.Patterns == null)
-                return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus));
+                return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier));
             else
-                return new Bone(PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier * Bonus), Bone.Patterns));
+                return new Bone(PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier), Bone.Patterns));
         }
     }
     public struct Connector
@@ -480,7 +543,7 @@ namespace AssetsPV
         }
         public byte[,,] Finalize()
         {
-            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(10 * Bone.Multiplier * Bone.Bonus, 0));
+            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(10 * Bone.Multiplier, 0));
             string finished = "";
             foreach(Connector conn in Anatomy)
             {
@@ -857,9 +920,9 @@ namespace AssetsPV
                             colorCount.Clear();
                             int emptyCount = 0;
                             if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
-                                || (254 - vs[v - 1][x, y, z]) % 4 == 0)
+                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || ColorValue(vs[v - 1][x, y, z]) > 50)
                             {
-                                colorCount[vs[v - 1][x, y, z]] = 100;
+                                colorCount[vs[v - 1][x, y, z]] = 10000;
                             }
                             else
                             {
@@ -965,15 +1028,15 @@ namespace AssetsPV
             switch(VoxelLogic.VisualMode)
             {
                 case "CU":
-                    return (VoxelLogic.ImportantColorCU(color)) ? 50: 16;
+                    return VoxelLogic.ImportantColorCU(color);
                 case "Mecha":
-                    return (VoxelLogic.ImportantColorMecha(color)) ? 50 : 16;
+                    return VoxelLogic.ImportantColorMecha(color);
                 case "Mon":
-                    return (VoxelLogic.ImportantColorMon(color)) ? 50 : 16;
+                    return VoxelLogic.ImportantColorMon(color);
                 case "None":
                     return 16;
                 default:
-                    return (VoxelLogic.ImportantColorW(color)) ? 50 : 16;
+                    return VoxelLogic.ImportantColorW(color);
             }
         }
 

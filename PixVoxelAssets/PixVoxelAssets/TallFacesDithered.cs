@@ -5283,14 +5283,14 @@ namespace AssetsPV
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Bow"),
                 orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
-                { 253 - 29 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                { 253 - 5 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 29 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 5 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
                 //{ 253 - 29 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
                 //{ 253 - 5 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 3, 1, 1, 0.9f) },
-                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                { 253 - 3 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 4 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 3 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
                 //{ 253 - 3 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 4, 1, 1, 0.65f) },
-                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 2 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
             });
 
             processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,

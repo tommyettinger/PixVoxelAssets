@@ -15,7 +15,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
-        public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 2, bonus = 2, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
@@ -2963,7 +2963,7 @@ namespace AssetsPV
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier * bonus, 10 * multiplier * bonus, 0, "Left_Leg");
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier, 10 * multiplier, 0, "Left_Leg");
                 }
             }
 
@@ -2977,7 +2977,7 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
-                    byte[,,] colors = TransformLogic.Shrink(TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(work, 90 * dir)), 1 + multiplier * bonus / 2), bonus);
+                    byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RunCA(TransformLogic.RotateYaw(work, 90 * dir), 1 + multiplier * bonus / 2));
                     
                     byte[][] b = processFrameLargeW(colors, palette, f, framelimit, still, false);
 
@@ -4123,14 +4123,14 @@ namespace AssetsPV
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Bow"),
                 orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
-                { 253 - 29 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                { 253 - 5 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 29 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 5 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
                 //{ 253 - 29 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
                 //{ 253 - 5 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 3, 1, 1, 0.9f) },
-                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                { 253 - 3 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 4 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 3 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
                 //{ 253 - 3 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 4, 1, 1, 0.65f) },
-                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f) },
+                { 253 - 2 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
             });
 
             processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,

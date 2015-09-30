@@ -756,13 +756,13 @@ namespace AssetsPV
             switch(VoxelLogic.VisualMode)
             {
                 case "CU":
-                    return VoxelLogic.ImportantColorCU(fv.vox.color);
+                    return VoxelLogic.ImportantColorCU(fv.vox.color) > 16;
                 case "Mecha":
-                    return VoxelLogic.ImportantColorMecha(fv.vox.color);
+                    return VoxelLogic.ImportantColorMecha(fv.vox.color) > 16;
                 case "None":
                     return false;
                 default:
-                    return VoxelLogic.ImportantColorW(fv.vox.color);
+                    return VoxelLogic.ImportantColorW(fv.vox.color) > 16;
             }
         }
 

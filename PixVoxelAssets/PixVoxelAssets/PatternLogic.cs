@@ -67,8 +67,8 @@ namespace AssetsPV
                             {
                                 colorCount[c]++;
                             }
-                            if(adjEmpty && z % (pat.FrequencyHigh * Multiplier * Bonus) < (pat.SpanHigh * Multiplier * Bonus) &&
-                                colorCount[c] % (pat.FrequencyWide * Multiplier * Bonus) < (pat.SpanWide * Multiplier * Bonus) &&
+                            if(adjEmpty && z % (pat.FrequencyHigh * Multiplier) < (pat.SpanHigh * Multiplier) &&
+                                colorCount[c] % (pat.FrequencyWide * Multiplier) < (pat.SpanWide * Multiplier) &&
                                 rng.NextDouble() < pat.Probability)
                             {
                                 neo[x, y, z] = pat.CenterChangeOn;

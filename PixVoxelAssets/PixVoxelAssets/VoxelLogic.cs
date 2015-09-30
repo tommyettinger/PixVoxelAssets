@@ -17684,74 +17684,86 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
 
         public static string VisualMode = "W";
 
-        public static bool ImportantColorMecha(int fv)
+        public static int ImportantColorMecha(int fv)
         {
-            if((253 - fv) % 4 != 0) return false;
+            if((253 - fv) % 4 != 0) return 16;
             switch((253 - fv) / 4)
             {
-                case 8:
                 case 9:
+                    {
+                        return 50;
+                    }
+                case 8: return 51;
                 case 10:
                 case 11:
                     {
-                        return true;
+                        return 52;
                     }
-                default: return false;
+                default: return 16;
             }
         }
-        public static bool ImportantColorW(int fv)
+        public static int ImportantColorW(int fv)
         {
-            if((253 - fv) % 4 != 0) return false;
+            if((253 - fv) % 4 != 0) return 16;
             switch((253 - fv) / 4)
             {
                 case 6:
                 case 7:
-                case 8:
                 case 9:
+                    {
+                        return 50;
+                    }
+                case 8: return 51;
                 case 10:
                 case 11:
                     {
-                        return true;
+                        return 52;
                     }
-                default: return false;
+                default: return 16;
             }
         }
 
-        public static bool ImportantColorMon(int fv)
+        public static int ImportantColorMon(int fv)
         {
-            if((253 - fv) % 4 != 0) return false;
+            if((253 - fv) % 4 != 0) return 16;
             switch((253 - fv) / 4)
             {
-                case 8:
                 case 9:
+                    {
+                        return 50;
+                    }
+                case 8: return 51;
                 case 10:
                 case 11:
                     {
-                        return true;
+                        return 52;
                     }
-                default: return false;
+                default: return 16;
             }
         }
 
-        public static bool ImportantColorCU(int fv)
+        public static int ImportantColorCU(int fv)
         {
-            if((253 - fv) % 4 != 0) return false;
+            if((253 - fv) % 4 != 0) return 16;
             switch((253 - fv) / 4)
             {
                 case 6:
                 case 7:
-                case 8:
                 case 9:
-                case 10:
-                case 11:
                 case 36:
                 case 37:
                 case 38:
                 case 39:
                     {
-                        return true;
+                        return 50;
                     }
-                default: return false;
+                case 8: return 51;
+                case 10:
+                case 11:
+                    {
+                        return 52;
+                    }
+                default: return 16;
             }
         }
 
