@@ -361,6 +361,7 @@ namespace AssetsPV
             }
             return 0;
         }
+        
         public readonly static Vector3
             YawAxis = new Vector3(0f, 0f, 1f),
             PitchAxis = new Vector3(0f, 1f, 0f),

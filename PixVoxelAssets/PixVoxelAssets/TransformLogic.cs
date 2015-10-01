@@ -19,6 +19,21 @@ namespace AssetsPV
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
             MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f;
 
+
+        public static float Lerp(float start, float end, float alpha)
+        {
+            return (end - start < -180) ? CCW(start, end, alpha) : CW(start, end, alpha);
+        }
+        public static float CW(float start, float end, float alpha)
+        {
+            float e = (1080 + end) % 360, s = (end - start > 180) ? 360 + (1080 + start) % 360 : (1080 + start) % 360;
+            return (1080 + s + (e - s) * alpha) % 360;
+        }
+        public static float CCW(float start, float end, float alpha)
+        {
+            float s = (1080 + start) % 360, e = (end - start < -180) ? 360 + (1080 + end) % 360 : (1080 + end) % 360;
+            return (1080 + s + (e - s) * alpha) % 360;
+        }
         /*
          * @param yaw the rotation around the y axis in radians
          * @param pitch the rotation around the x axis in radians
@@ -373,16 +388,17 @@ namespace AssetsPV
             }
             else if(target.SpreadColors != null)
                 newSpread = target.SpreadColors;
-            Console.WriteLine(Name);
-            Console.WriteLine("q before slerp.  Yaw:" +
-                q.Yaw() + " Pitch:" + q.Pitch() + " Roll:" + q.Roll());
-            Console.WriteLine("q0 before slerp. Yaw:" +
-                q0.Yaw() + " Pitch:" + q0.Pitch() + " Roll:" + q0.Roll());
-            q2 = Quaternion.Slerp(q, q0, alpha);
+            //Console.WriteLine(Name);
+            //Console.WriteLine("q before slerp.  Yaw:" +
+            //    q.Yaw() + " Pitch:" + q.Pitch() + " Roll:" + q.Roll());
+            //Console.WriteLine("q0 before slerp. Yaw:" +
+            //    q0.Yaw() + " Pitch:" + q0.Pitch() + " Roll:" + q0.Roll());
+            //q2 = Quaternion.Slerp(q, q0, alpha);
 
-            Console.WriteLine("q2 after slerp.  Yaw:" +
-                q2.Yaw() + " Pitch:" + q2.Pitch() + " Roll:" + q2.Roll());
-            return new Bone(Name, Colors, (720 - q2.Yaw()) % 360, (720 - q2.Pitch()) % 360, (720 - q2.Roll()) % 360)
+            //Console.WriteLine("q2 after slerp.  Yaw:" +
+            //    q2.Yaw() + " Pitch:" + q2.Pitch() + " Roll:" + q2.Roll());
+            float y2 = Lerp(Yaw, target.Yaw, alpha), p2 = Lerp(Pitch, target.Pitch, alpha), r2 = Lerp(Roll, target.Roll, alpha);
+            return new Bone(Name, Colors, y2, p2, r2)
                 .InitSpread(newSpread, myStarts.X, myStarts.Y, myStarts.Z)
                 .InitStretch(myStretches.X, myStretches.Y, myStretches.Z);
         }

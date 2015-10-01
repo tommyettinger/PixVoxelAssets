@@ -2963,12 +2963,10 @@ namespace AssetsPV
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    Console.WriteLine("Frame " + i);
-                    Console.WriteLine();
                     modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier, 10 * multiplier, 0, "Left_Leg");
                 }
             }
-            Console.WriteLine("INTERPOLATED.");
+
             //Directory.CreateDirectory("vox/" + altFolder);
             //VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + palette + ".vox", work, "W", palette, 40, 40, 40);
             
@@ -4109,8 +4107,8 @@ namespace AssetsPV
            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
-           .AddYaw(40, "Right_Upper_Arm")
-           .AddYaw(-25, "Right_Lower_Arm")
+           .AddYaw(50, "Right_Upper_Arm")
+           .AddYaw(-35, "Right_Lower_Arm")
            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
            .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
             ),
@@ -4119,8 +4117,8 @@ namespace AssetsPV
            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
-           .AddYaw(50, "Right_Upper_Arm")
-           .AddYaw(-10, "Right_Lower_Arm")
+           .AddYaw(60, "Right_Upper_Arm")
+           .AddYaw(-15, "Right_Lower_Arm")
            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
            );
             
@@ -4183,12 +4181,7 @@ namespace AssetsPV
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude_sword = Model.Humanoid(left_weapon: "Longsword", patterns: new Dictionary<byte, Pattern>() {
-                { 253 - 5 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 3, 1, 1, 0.9f) },
-                { 253 - 4 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
-                { 253 - 3 * 4, new Pattern(253 - 12 * 4, 253 - 12 * 4, 253 - 48 * 4, 0, 3, 4, 1, 1, 0.65f) },
-                { 253 - 2 * 4, new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 3, 2, 3, 2, 0.7f) },
-            });
+            Model dude_sword = Model.Humanoid(left_weapon: "Longsword");
 
             processUnitLargeWModel("Dude_Sword", true, 0, dude_sword,
                 new Pose[] { swing0, swing1, swing2 },
