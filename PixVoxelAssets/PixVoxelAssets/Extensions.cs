@@ -361,24 +361,104 @@ namespace AssetsPV
             }
             return 0;
         }
+        public readonly static Vector3
+            YawAxis = new Vector3(0f, 0f, 1f),
+            PitchAxis = new Vector3(0f, 1f, 0f),
+            RollAxis = new Vector3(1f, 0f, 0f);
+
+        /*
+        YawAxis = new Vector3(0f, 1f, 0f),
+        PitchAxis = new Vector3(1f, 0f, 0f),
+        RollAxis = new Vector3(0f, 0f, 1f);
+        */
+
+        // WHEN YOU FIND q.X : replace with Y , sideways.
+        // WHEN YOU FIND q.Y : replace with Z , up/down.
+        // WHEN YOU FIND q.Z : replace with X , depth.
+
+            /*
+        public static int GimbalPole(this Quaternion q)
+        {
+            float t = q.Z * q.Y + q.X * q.W;
+            return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
+        }
+        /// <summary>
+        /// WAS ROLL
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static float Roll(this Quaternion q)
+        {
+            int pole = q.GimbalPole();
+            return (float)(pole == 0 ? Math.Atan2(2f * (q.W * q.X + q.Z * q.Y), 1f - 2f * (q.Y * q.Y + q.X * q.X)) : pole * 2f * Math.Atan2(q.Z, q.W)) * RadiansToDegrees;
+        }
+        /// <summary>
+        /// WAS PITCH
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static float Pitch(this Quaternion q)
+        {
+            int pole = q.GimbalPole();
+            return (pole == 0 ? (float)Math.Asin(VoxelLogic.Clamp(2 * (q.W * q.Y - q.X * q.Z), -1, 1)) : (float)(pole * Math.PI * 0.5)) * RadiansToDegrees;
+        }
+        /// <summary>
+        /// WAS YAW
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static float Yaw(this Quaternion q)
+        {
+            return (q.GimbalPole() == 0 ? (float)Math.Atan2(2f * (q.Z * q.W + q.Y * q.X), 1f - 2f * (q.Z * q.Z + q.Y * q.Y)) : 0f) * RadiansToDegrees;
+        }
+        */
+        
         public static int GimbalPole(this Quaternion q)
         {
             float t = q.Y * q.X + q.Z * q.W;
             return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
         }
+        /// <summary>
+        /// WAS ROLL originally, then PITCH
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
         public static float Roll(this Quaternion q)
         {
             int pole = q.GimbalPole();
             return (float)(pole == 0 ? Math.Atan2(2f * (q.W * q.Z + q.Y * q.X), 1f - 2f * (q.X * q.X + q.Z * q.Z)) : pole * 2f * Math.Atan2(q.Y, q.W)) * RadiansToDegrees;
         }
-        public static float Pitch(this Quaternion q)
+        /// <summary>
+        /// WAS PITCH originally, then ROLL
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static float Yaw(this Quaternion q)
         {
             int pole = q.GimbalPole();
             return (pole == 0 ? (float)Math.Asin(VoxelLogic.Clamp(2 * (q.W * q.X - q.Z * q.Y), -1, 1)) : (float)(pole * Math.PI * 0.5)) * RadiansToDegrees;
         }
-        public static float Yaw(this Quaternion q)
+        /// <summary>
+        /// WAS YAW
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        public static float Pitch(this Quaternion q)
         {
             return (q.GimbalPole() == 0 ? (float)Math.Atan2(2f * (q.Y * q.W +q.X * q.Z), 1f - 2f * (q.Y * q.Y + q.X * q.X)) : 0f) * RadiansToDegrees;
+        }
+            
+        public static Quaternion MulLeft(this Quaternion qRight, Quaternion qLeft)
+        {
+            return Quaternion.Multiply(qLeft, qRight);
+        }
+        public static Quaternion Euler(float yaw, float pitch, float roll)
+        {
+            return Quaternion.Normalize(
+                Quaternion.Identity
+                .MulLeft(Quaternion.CreateFromAxisAngle(RollAxis, ((720 - roll) % 360) * DegreesToRadians))
+                .MulLeft(Quaternion.CreateFromAxisAngle(PitchAxis, ((720 - pitch) % 360) * DegreesToRadians))
+                .MulLeft(Quaternion.CreateFromAxisAngle(YawAxis, ((720 - yaw) % 360) * DegreesToRadians)));
         }
     }
 }

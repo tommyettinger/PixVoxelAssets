@@ -2963,10 +2963,12 @@ namespace AssetsPV
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
+                    Console.WriteLine("Frame " + i);
+                    Console.WriteLine();
                     modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier, 10 * multiplier, 0, "Left_Leg");
                 }
             }
-
+            Console.WriteLine("INTERPOLATED.");
             //Directory.CreateDirectory("vox/" + altFolder);
             //VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + palette + ".vox", work, "W", palette, 40, 40, 40);
             
@@ -4093,6 +4095,8 @@ namespace AssetsPV
             */
             //processReceivingMilitaryWSuper();
             
+            
+
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4166,7 +4170,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-
+            
             Pose swing0 = (model => model),
                 swing1 = (model => model
             .AddPitch(10, "Left_Weapon")

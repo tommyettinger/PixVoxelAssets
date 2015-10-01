@@ -14,6 +14,7 @@ namespace AssetsPV
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
 
         public readonly byte[,,] Colors;
+        public string Name;
         public static Dictionary<byte, Pattern> Patterns = null;
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
             MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f;
@@ -26,12 +27,14 @@ namespace AssetsPV
         //private static Vector3GDX YawAxis = new Vector3GDX(0f, 1f, 0f), PitchAxis = new Vector3GDX(1f, 0f, 0f), RollAxis = new Vector3GDX(0f, 0f, 1f);
         public byte[] SpreadColors = null;
 
-        public Bone(byte[,,] c)
+        public Bone(string name, byte[,,] c)
         {
+            Name = name;
             Colors = c;
         }
-        public Bone(byte[,,] colors, float yaw, float pitch, float roll)
+        public Bone(string name, byte[,,] colors, float yaw, float pitch, float roll)
         {
+            Name = name;
             this.Colors = colors;
             this.Yaw = yaw;
             this.Pitch = pitch;
@@ -83,7 +86,7 @@ namespace AssetsPV
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             //            q = q.idt().slerp(new Quaternion[] { new Quaternion(YawAxis, (360 - Pitch) % 360f), new Quaternion(PitchAxis, (360 - Roll) % 360f), new Quaternion(RollAxis, (360 - Yaw) % 360f) });
             //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
-            Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            Quaternion q = Extensions.Euler(Yaw, Pitch, Roll);
             
             //dir = dir.fromAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
@@ -110,8 +113,8 @@ namespace AssetsPV
                             v.X = (x - hxs) * StretchX + xOffset;
                             v.Y = (y - hys) * StretchY;
                             v.Z = (z - hzs) * StretchZ;
-                            float normod = (float)Math.Sqrt(v.LengthSquared());
-                            v = Vector3.Multiply(1f / normod, v);
+                            float normod = v.Length();
+                            v = Vector3.Divide(v, normod);
                             v = Vector3.Transform(v, q);
                             v = Vector3.Multiply(normod, v);
 
@@ -178,12 +181,13 @@ namespace AssetsPV
 
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
-            Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            //Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            Quaternion q = Extensions.Euler(Yaw, Pitch, Roll);
             //q = q.idt().slerp(new Quaternion[] { new Quaternion(RollAxis, (360 - Roll) % 360f), new Quaternion(PitchAxis, (360 - Pitch) % 360f), new Quaternion(YawAxis, (360 - Yaw) % 360f) });
 
             //Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
-            Quaternion q0 = Quaternion.CreateFromYawPitchRoll(-StartPitch * DegreesToRadians, -StartRoll * DegreesToRadians, -StartYaw * DegreesToRadians), q2;
-
+            //Quaternion q0 = Quaternion.CreateFromYawPitchRoll(-StartPitch * DegreesToRadians, -StartRoll * DegreesToRadians, -StartYaw * DegreesToRadians), q2;
+            Quaternion q0 = q.MulLeft(Extensions.Euler(StartYaw, StartPitch, StartRoll)), q2;
 
 
             float distance = Math.Abs(Yaw + StartYaw) % 360 + Math.Abs(Pitch + StartPitch) % 360 + Math.Abs(Roll + StartRoll) % 360;
@@ -214,7 +218,7 @@ namespace AssetsPV
                             v.Y = (y - hys) * StretchY;
                             v.Z = (z - hzs) * StretchZ;
                             float normod = (float)Math.Sqrt(v.LengthSquared());
-                            v = Vector3.Multiply(1f / normod, v);
+                            v = Vector3.Divide(v, normod);
                             v = Vector3.Transform(v, q);
                             v = Vector3.Multiply(normod, v);
 
@@ -271,15 +275,15 @@ namespace AssetsPV
                                 v.X = (x - hxs) * StretchX + xOffset;
                                 v.Y = (y - hys) * StretchY;
                                 v.Z = (z - hzs) * StretchZ;
-                                float normod = (float)Math.Sqrt(v.LengthSquared());
-                                v = Vector3.Multiply(1f / normod, v);
+                                float normod = v.Length();
+                                v = Vector3.Divide(v, normod);
 
                                 for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                 {
-                                    q2 = Quaternion.Slerp(q0, q, a);
+                                    q2 = Quaternion.Slerp(q, q0, a);
                                     v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
-                                    int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                                    int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
 
                                     if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0)
                                         c2[x2, y2, z2] = Colors[x, y, z];
@@ -332,14 +336,14 @@ namespace AssetsPV
             else if(RoughEquals(target))
                 return this.Replicate();
             //QuaternionGDX q = new QuaternionGDX().setEulerAngles(-Pitch, -Roll, -Yaw);
-            Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            Quaternion q = Extensions.Euler(Yaw, Pitch, Roll);
             //Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f))
             //    .mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f))
             //    .mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f))
             //    .nor();
 
             //QuaternionGDX q0 = new QuaternionGDX().setEulerAngles(-target.Pitch, -target.Roll, -target.Yaw), q2;
-            Quaternion q0 = Quaternion.CreateFromYawPitchRoll(-target.Pitch * DegreesToRadians, -target.Roll * DegreesToRadians, -target.Yaw * DegreesToRadians), q2;
+            Quaternion q0 = Extensions.Euler(target.Yaw, target.Pitch, target.Roll), q2;
 
             //Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
             //    .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
@@ -369,15 +373,22 @@ namespace AssetsPV
             }
             else if(target.SpreadColors != null)
                 newSpread = target.SpreadColors;
-            q2 = Quaternion.Normalize(Quaternion.Slerp(q, q0, alpha));
-            
-            return new Bone(Colors, 360 - q2.Roll(), 360 - q2.Yaw(), 360 - q2.Pitch())
+            Console.WriteLine(Name);
+            Console.WriteLine("q before slerp.  Yaw:" +
+                q.Yaw() + " Pitch:" + q.Pitch() + " Roll:" + q.Roll());
+            Console.WriteLine("q0 before slerp. Yaw:" +
+                q0.Yaw() + " Pitch:" + q0.Pitch() + " Roll:" + q0.Roll());
+            q2 = Quaternion.Slerp(q, q0, alpha);
+
+            Console.WriteLine("q2 after slerp.  Yaw:" +
+                q2.Yaw() + " Pitch:" + q2.Pitch() + " Roll:" + q2.Roll());
+            return new Bone(Name, Colors, (720 - q2.Yaw()) % 360, (720 - q2.Pitch()) % 360, (720 - q2.Roll()) % 360)
                 .InitSpread(newSpread, myStarts.X, myStarts.Y, myStarts.Z)
                 .InitStretch(myStretches.X, myStretches.Y, myStretches.Z);
         }
         public Bone Replicate()
         {
-            Bone b = new Bone(Colors, Yaw, Pitch, Roll);
+            Bone b = new Bone(Name, Colors, Yaw, Pitch, Roll);
             b.SpreadColors = SpreadColors.Replicate();
             b.StartYaw = StartYaw;
             b.StartPitch = StartPitch;
@@ -391,13 +402,13 @@ namespace AssetsPV
         public static Bone readBone(string file)
         {
             if(file == null)
-                return new Bone(new byte[60 * Multiplier, 60 * Multiplier, 60 * Multiplier]);
+                return new Bone(file, new byte[60 * Multiplier, 60 * Multiplier, 60 * Multiplier]);
             BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
             if(Bone.Patterns == null)
-                return new Bone(TransformLogic.TransformStartLarge(raw, Multiplier));
+                return new Bone(file, TransformLogic.TransformStartLarge(raw, Multiplier));
             else
-                return new Bone(PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier), Bone.Patterns));
+                return new Bone(file, PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier), Bone.Patterns));
         }
     }
     public struct Connector
@@ -433,7 +444,7 @@ namespace AssetsPV
 
         public Model AddBone(string boneName, byte[,,] bone)
         {
-            Bones[boneName] = new Bone(bone);
+            Bones[boneName] = new Bone(boneName, bone);
             return this;
         }
 
