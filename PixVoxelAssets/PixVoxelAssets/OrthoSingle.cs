@@ -15,7 +15,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
-        public const int multiplier = 2, bonus = 2, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 1, bonus = 2, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
@@ -1071,9 +1071,13 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
+
                 byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
+                    TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2, 2, 2),
                     1 + bonus * multiplier * 2);
+//                byte[,,] colors = TransformLogic.RunCA(
+//                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
+//                    1 + bonus * multiplier * 2);
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -1146,7 +1150,7 @@ namespace AssetsPV
                             //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
                             byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)), 2, 2, 2),
                                 1 + bonus * multiplier * 2);
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -1208,12 +1212,15 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
-                   //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
+                            //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
                             //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
                             byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2, 2, 2),
                                 1 + bonus * multiplier * 2);
+//                            byte[,,] colors = TransformLogic.RunCA(
+//                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+//                                1 + bonus * multiplier * 2);
 
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -3681,14 +3688,14 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
-            //VoxelLogic.VisualMode = "CU";
-            //altFolder = "CU_Ortho/";
-            //CURedux.Initialize();
-
-            VoxelLogic.VisualMode = "W";
-            altFolder = "Forays2/";
-            VoxelLogic.voxFolder = "ForaysBones/";
-            ForaysPalettes.Initialize();
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "CU_Ortho/";
+            CURedux.Initialize();
+            
+            //VoxelLogic.VisualMode = "W";
+            //altFolder = "Forays2/";
+            //VoxelLogic.voxFolder = "ForaysBones/";
+            //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -4063,7 +4070,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Estate");
             */
             //processReceivingMilitaryW();
-            /*
+            
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             
@@ -4083,18 +4090,19 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");
+            
             processUnitHugeWMilitarySuper("Plane_T");
-
+            
             processUnitHugeWMilitarySuper("Boat");
             
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            */
-            //processReceivingMilitaryWSuper();
+            
+            processReceivingMilitaryWSuper();
             
             
-
+            /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4198,7 +4206,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-            
+            */
 
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });

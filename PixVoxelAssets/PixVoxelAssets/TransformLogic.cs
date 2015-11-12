@@ -1403,11 +1403,11 @@ namespace AssetsPV
                                     int tempX = (x - (xSize / 2));
                                     int tempY = (y - (ySize / 2));
                                     int tempZ = (z - (zSize / 2));
-                                    int x2 = (int)Math.Round((xScale * tempX) + (xSize / 2) + ((tempX < 0) ? xsc : -xsc));
-                                    int y2 = (int)Math.Round((yScale * tempY) + (ySize / 2) + ((tempY < 0) ? ysc : -ysc));
-                                    int z2 = (int)Math.Round((zScale * tempZ) + (zSize / 2) + ((tempZ < 0) ? zsc : -zsc));
+                                    int x2 = (int)Math.Round((xScale * tempX) + (xScale * xSize / 2) + ((tempX < 0) ? xsc : -xsc));
+                                    int y2 = (int)Math.Round((yScale * tempY) + (yScale * ySize / 2) + ((tempY < 0) ? ysc : -ysc));
+                                    int z2 = (int)Math.Round((zScale * tempZ) + (zScale * zSize / 2) + ((tempZ < 0) ? zsc : -zsc));
 
-                                    if(colors[x, y, z] > 0 && x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize)
+                                    if(colors[x, y, z] > 0 && x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize * xScale && y2 < ySize * yScale && z2 < zSize * zScale)
                                         vls[x2, y2, z2] = colors[x, y, z];
                                 }
                             }
