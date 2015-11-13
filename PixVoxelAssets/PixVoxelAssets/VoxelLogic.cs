@@ -14998,9 +14998,9 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                         extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 6), y = (byte)(launcher.y - 6), z = (byte)(launcher.z + 4), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
                         extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 6), y = (byte)(launcher.y - 6), z = (byte)(launcher.z + 8), color = 249 - 160 }, (249 - 160 + (r.Next(2) * 8))));
 
-                        extra[f] = extra[f].Where(v => r.Next(9) > f).ToList();
-
                     }
+                    extra[f] = extra[f].Distinct().Where(v => r.Next(9) > f).ToList();
+
                 }
                 else if (f == 3)
                 {
@@ -15012,7 +15012,7 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                         extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 1), color = 249 - 160 }, 249 - 136));
                         extra[f].AddRange(generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 3), color = 249 - 160 }, 249 - 136));
                     }
-                    extra[f] = extra[f].Where(v => r.Next(6) > 2).ToList();
+                    extra[f] = extra[f].Distinct().Where(v => r.Next(8) > 2).ToList();
 
                 }
                 else if (f == 4)
@@ -15133,7 +15133,7 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
             voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
             parsedFrames[0].CopyTo(voxelFrames[0], 0);
             parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
-            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(4), trails = new List<MagicaVoxelData>(4);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(8), trails = new List<MagicaVoxelData>(8);
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2], missile = new List<MagicaVoxelData>[voxelFrames.Length - 2];
             foreach (MagicaVoxelData mvd in voxelFrames[0])
             {
@@ -15149,9 +15149,9 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
             int maxY = launchers.Max(v => v.y);
             int minY = launchers.Max(v => v.y);
             float midY = (maxY + minY) / 2F;
-            MagicaVoxelData launcher = launchers.RandomElement();
-            MagicaVoxelData trail = trails.RandomElement();
-            for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x - mvd.y).First();
+            MagicaVoxelData trail = trails.OrderBy(mvd => mvd.z * 3 + mvd.x - mvd.y).First();
+            for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
                 extra[f] = new List<MagicaVoxelData>(20);
                 missile[f] = new List<MagicaVoxelData>(20);
@@ -15307,7 +15307,7 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
             voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
             parsedFrames[0].CopyTo(voxelFrames[0], 0);
             parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
-            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(4), trails = new List<MagicaVoxelData>(4);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(8), trails = new List<MagicaVoxelData>(8);
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2], missile = new List<MagicaVoxelData>[voxelFrames.Length - 2];
             foreach (MagicaVoxelData mvd in voxelFrames[0])
             {
@@ -15319,9 +15319,9 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
             int maxY = launchers.Max(v => v.y);
             int minY = launchers.Max(v => v.y);
             float midY = (maxY + minY) / 2F;
-            MagicaVoxelData launcher = launchers.RandomElement();
-            MagicaVoxelData trail = trails.RandomElement();
-            for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x - mvd.y).First();
+            for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
                 extra[f] = new List<MagicaVoxelData>(160);
                 missile[f] = new List<MagicaVoxelData>(160);
@@ -15710,9 +15710,9 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                     launchers.Add(mvd);
                 }
             }
-            MagicaVoxelData launcher = launchers.RandomElement();
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x + mvd.y).First();
             //            MagicaVoxelData trail = trails.RandomElement();
-            for (int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
                 extra[f] = new List<MagicaVoxelData>(20);
                 missile[f] = new List<MagicaVoxelData>(20);
@@ -17762,6 +17762,13 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                 case 11:
                     {
                         return 52;
+                    }
+                case 57:
+                case 58:
+                case 59:
+                case 60:
+                    {
+                        return 1;
                     }
                 default: return 16;
             }

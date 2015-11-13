@@ -960,7 +960,7 @@ namespace AssetsPV
                                         for(int zz = -1; zz < 2; zz++)
                                         {
                                             byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
-                                            if(smallColor == 0)
+                                            if(smallColor == 0 || ColorValue(smallColor) < 16)
                                             {
                                                 emptyCount++;
                                             }
@@ -1006,13 +1006,16 @@ namespace AssetsPV
                         if((clr >= 36 && clr <= 39) || (clr < VoxelLogic.wcolors.Length && VoxelLogic.wcolors[clr][3] == VoxelLogic.waver_alpha))
                         {
                             vls[x, y, z] = voxelData[x, y, z];
-                            currentFill = voxelData[x-1, y, z];
+                            if(voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0)
+                                currentFill = voxelData[x-1, y, z];
                         }
                         else
                         {
-                            if(voxelData[x + 1, y, z] == 0 || voxelData[x - 1, y, z] == 0 || voxelData[x, y, z + 1] == 0)
+                            if((voxelData[x + 1, y, z] <= 253 - 57 * 4 || voxelData[x - 1, y, z] <= 253 - 57 * 4 || voxelData[x, y, z + 1] <= 253 - 57 * 4)
+                                && (voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0))
                             {
-                                currentFill = voxelData[x, y, z];
+                                //if(voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0)
+                                    currentFill = voxelData[x, y, z];
                             }
                             vls[x, y, z] = currentFill;
                         }

@@ -2641,9 +2641,9 @@ namespace AssetsPV
                         extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 6), y = (byte)(launcher.y - 6), z = (byte)(launcher.z + 4), color = yellow_fire }, (yellow_fire - (r.Next(2) * 4))));
                         extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 6), y = (byte)(launcher.y - 6), z = (byte)(launcher.z + 8), color = yellow_fire }, (yellow_fire - (r.Next(2) * 4))));
 
-                        extra[f] = extra[f].Where(v => r.Next(9) > f).ToList();
-
                     }
+                    extra[f] = extra[f].GroupBy(mvd => mvd.x + mvd.y * 256 + mvd.z * 256 * 256).Select(g => g.First()).Where(v => r.Next(6) > f && r.Next(5) > 1).ToList();
+
                 }
                 else if(f == 3)
                 {
@@ -2655,7 +2655,7 @@ namespace AssetsPV
                         extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 1), color = yellow_fire }, smoke));
                         extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 3), color = yellow_fire }, smoke));
                     }
-                    extra[f] = extra[f].Where(v => r.Next(6) > 2).ToList();
+                    extra[f] = extra[f].GroupBy(mvd => mvd.x + mvd.y * 256 + mvd.z * 256 * 256).Select(g => g.First()).Where(v => r.Next(6) > 2).ToList();
 
                 }
                 else if(f == 4)
@@ -2790,10 +2790,11 @@ namespace AssetsPV
                 }
             }
             int maxY = launchers.Max(v => v.y);
-            int minY = launchers.Max(v => v.y);
-            float midY = (maxY + minY) / 2F;
-            MagicaVoxelData launcher = launchers.RandomElement();
-            MagicaVoxelData trail = trails.RandomElement();
+            int minY = launchers.Min(v => v.y);
+            int midY = (maxY + minY) / 2;
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x + mvd.y).First();
+            launcher.y = (byte)midY;
+            MagicaVoxelData trail = trails.OrderBy(mvd => mvd.z * 3 + mvd.x + mvd.y).First();
             for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
                 extra[f] = new List<MagicaVoxelData>(20);
@@ -2960,10 +2961,10 @@ namespace AssetsPV
                 }
             }
             int maxY = launchers.Max(v => v.y);
-            int minY = launchers.Max(v => v.y);
-            float midY = (maxY + minY) / 2F;
-            MagicaVoxelData launcher = launchers.RandomElement();
-            MagicaVoxelData trail = trails.RandomElement();
+            int minY = launchers.Min(v => v.y);
+            int midY = (maxY + minY) / 2;
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x + mvd.y).First();
+            launcher.y = (byte)midY;
             for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
                 extra[f] = new List<MagicaVoxelData>(160);
@@ -3353,7 +3354,13 @@ namespace AssetsPV
                     launchers.Add(mvd);
                 }
             }
-            MagicaVoxelData launcher = launchers.RandomElement();
+
+            int maxY = launchers.Max(v => v.y);
+            int minY = launchers.Min(v => v.y);
+            int midY = (maxY + minY) / 2;
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x + mvd.y).First();
+            launcher.y = (byte)midY;
+
             //            MagicaVoxelData trail = trails.RandomElement();
             for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
             {
@@ -3596,7 +3603,7 @@ namespace AssetsPV
             voxelFrames = receiveAnimations[weaponType](voxelFrames, strength);
             for(int i = 0; i < 16; i++)
             {
-                List<MagicaVoxelData> vlist = new List<MagicaVoxelData>(voxelFrames[i].Length);
+                HashSet<MagicaVoxelData> vlist = new HashSet<MagicaVoxelData>();
                 for(int j = 0; j < voxelFrames[i].Length; j++)
                 {
                     MagicaVoxelData m = new MagicaVoxelData { x = (byte)(voxelFrames[i][j].x * 0.65), y = (byte)(voxelFrames[i][j].y * 0.65), z = (byte)(voxelFrames[i][j].z * 0.65), color = voxelFrames[i][j].color };
@@ -3608,7 +3615,7 @@ namespace AssetsPV
                     vlist.Add(VoxelLogic.AlterVoxel(m, 1, 0, 0, m.color));
                     vlist.Add(VoxelLogic.AlterVoxel(m, -1, 0, 0, m.color));
                 }
-                vf2[i] = vlist;
+                vf2[i] = vlist.ToList();
             }
             VoxelLogic.sizex = 80;
             VoxelLogic.sizey = 80;

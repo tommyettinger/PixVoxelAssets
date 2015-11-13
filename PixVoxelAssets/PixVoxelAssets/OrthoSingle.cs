@@ -15,7 +15,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
-        public const int multiplier = 1, bonus = 2, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
@@ -1073,7 +1073,7 @@ namespace AssetsPV
             {
 
                 byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2, 2, 2),
+                    TransformLogic.ScalePartial(TransformLogic.SealGaps( TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2, 2, 2),
                     1 + bonus * multiplier * 2);
 //                byte[,,] colors = TransformLogic.RunCA(
 //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
@@ -1779,8 +1779,12 @@ namespace AssetsPV
                 //byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60), 1 + bonus * multiplier);
 
                 byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60)),
+                    TransformLogic.ExpandBounds(
+                            TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 40, 40, 40), 2, 2, 2), 160, 160, 120),
                     1 + bonus * multiplier * 2);
+//                byte[,,] colors = TransformLogic.RunCA(
+//                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60)),
+//                    1 + bonus * multiplier * 2);
                 byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
@@ -4068,39 +4072,35 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-            */
+            
             //processReceivingMilitaryW();
             
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
-            
             processUnitHugeWMilitarySuper("Airport");
             processUnitHugeWMilitarySuper("City");
             processUnitHugeWMilitarySuper("Factory");
             processUnitHugeWMilitarySuper("Castle");
             processUnitHugeWMilitarySuper("Estate");
-            
+
             processUnitHugeWMilitarySuper("Copter");
-            
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
-            
             processUnitHugeWMilitarySuper("Copter_T");
 
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");
-            
             processUnitHugeWMilitarySuper("Plane_T");
             
             processUnitHugeWMilitarySuper("Boat");
-            
+            */
             processUnitHugeWMilitarySuper("Boat_P");
-            processUnitHugeWMilitarySuper("Boat_S");
+/*            processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
             
             processReceivingMilitaryWSuper();
-            
+  */          
             
             /*
             Pose bow0 = (model => model
