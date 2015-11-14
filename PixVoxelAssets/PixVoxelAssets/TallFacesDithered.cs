@@ -4853,7 +4853,7 @@ namespace AssetsPV
 
         static void Main(string[] args)
         {
-            //            altFolder = "botl6/";
+            altFolder = "botl6/";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             System.IO.Directory.CreateDirectory("Terrains2");
@@ -4867,9 +4867,9 @@ namespace AssetsPV
             //CURedux.Initialize();
 
             VoxelLogic.VisualMode = "W";
-            altFolder = "Forays2/";
-            VoxelLogic.voxFolder = "ForaysBones/";
-            ForaysPalettes.Initialize();
+            //altFolder = "Forays2/";
+            //VoxelLogic.voxFolder = "ForaysBones/";
+            //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -5091,8 +5091,9 @@ namespace AssetsPV
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
 
             processHats("Birthday_Necromancer", 65, true, classes);
-
-
+            */
+            processUnitLargeW("Necroslasher", 65, true, false);
+            /*
             offsets.Close();
             offbin.Close();
 
@@ -5253,6 +5254,8 @@ namespace AssetsPV
             */
             //            processReceivingMilitaryWSuper();
 
+
+            /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -5361,6 +5364,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
+                */
 
 
         }

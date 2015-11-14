@@ -572,15 +572,35 @@ namespace AssetsPV
         {
             Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(10 * Bone.Multiplier, 0));
             string finished = "";
-            foreach(Connector conn in Anatomy)
+            if(Anatomy.Length == 0)
             {
-                byte[,,] bs = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor);
-                if(bs == finals[conn.socket])
-                    Console.WriteLine("PLUG NOT FOUND: " + conn.plug + " connecting to " + conn.socket);
-                else if(bs == finals[conn.plug])
-                    Console.WriteLine("SOCKET NOT FOUND: " + conn.socket + " connecting to " + conn.plug);
-                finals[conn.socket] = bs;
-                finished = conn.socket;
+                foreach(var kv in finals)
+                {
+                    if(finals.ContainsKey(finished))
+                    {
+                        finals[kv.Key] = TransformLogic.Overlap(finals[finished], kv.Value);
+                        finished = kv.Key;
+                    }
+                    else
+                    {
+                        finished = kv.Key;
+                        finals[finished] = kv.Value;
+                    }
+
+                }
+            }
+            else
+            {
+                foreach(Connector conn in Anatomy)
+                {
+                    byte[,,] bs = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor);
+                    if(bs == finals[conn.socket])
+                        Console.WriteLine("PLUG NOT FOUND: " + conn.plug + " connecting to " + conn.socket);
+                    else if(bs == finals[conn.plug])
+                        Console.WriteLine("SOCKET NOT FOUND: " + conn.socket + " connecting to " + conn.plug);
+                    finals[conn.socket] = bs;
+                    finished = conn.socket;
+                }
             }
             return finals[finished];
         }
@@ -611,7 +631,7 @@ namespace AssetsPV
             model.AddBone("Left_Leg", Bone.readBone(body + "/LLeg"));
             model.AddBone("Right_Leg", Bone.readBone(body + "/RLeg"));
             model.AddBone("Torso", Bone.readBone(body + "/Torso"));
-            model.AddBone("Face", Bone.readBone(body + "/"+ face + "_Face"));
+            model.AddBone("Face", Bone.readBone(body + "/" + face + "_Face"));
             model.AddBone("Head", Bone.readBone(body + "/Head"));
             model.AddBone("Left_Upper_Arm", Bone.readBone(body + "/LUpperArm"));
             model.AddBone("Right_Upper_Arm", Bone.readBone(body + "/RUpperArm"));
@@ -624,6 +644,90 @@ namespace AssetsPV
             model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
                 new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
                 new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
+            return model;
+        }
+        private static List<MagicaVoxelData> findContinuousParts(ref byte[,,] data, List<MagicaVoxelData> previous, int x0, int y0, int z0, Func<byte, bool> pred)
+        {
+            int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
+            if(x0 - 1 >= 0 && pred(data[x0 - 1, y0, z0]))
+            {
+                previous.Add(new MagicaVoxelData(x0 - 1, y0, z0, data[x0 - 1, y0, z0]));
+                data[x0 - 1, y0, z0] = 0;
+                previous = findContinuousParts(ref data, previous, x0 - 1, y0, z0, pred);
+            }
+            if(x0 + 1 < xSize && pred(data[x0 + 1, y0, z0]))
+            {
+                previous.Add(new MagicaVoxelData(x0 + 1, y0, z0, data[x0 + 1, y0, z0]));
+                data[x0 + 1, y0, z0] = 0;
+                previous = findContinuousParts(ref data, previous, x0 + 1, y0, z0, pred);
+            }
+            if(y0 - 1 >= 0 && pred(data[x0, y0 - 1, z0]))
+            {
+                previous.Add(new MagicaVoxelData(x0, y0 - 1, z0, data[x0, y0 - 1, z0]));
+                data[x0, y0 - 1, z0] = 0;
+                previous = findContinuousParts(ref data, previous, x0, y0 - 1, z0, pred);
+            }
+            if(y0 + 1 < ySize && pred(data[x0, y0 + 1, z0]))
+            {
+                previous.Add(new MagicaVoxelData(x0, y0 + 1, z0, data[x0, y0 + 1, z0]));
+                data[x0, y0 + 1, z0] = 0;
+                previous = findContinuousParts(ref data, previous, x0, y0 + 1, z0, pred);
+            }
+            if(z0 - 1 >= 0 && pred(data[x0, y0, z0 - 1]))
+            {
+                previous.Add(new MagicaVoxelData(x0, y0, z0 - 1, data[x0, y0, z0 - 1]));
+                data[x0, y0, z0 - 1] = 0;
+                previous = findContinuousParts(ref data, previous, x0, y0, z0 - 1, pred);
+            }
+            if(z0 + 1 < zSize && pred(data[x0, y0, z0 + 1]))
+            {
+                previous.Add(new MagicaVoxelData(x0, y0, z0 + 1, data[x0, y0, z0 + 1]));
+                data[x0, y0, z0 + 1] = 0;
+                previous = findContinuousParts(ref data, previous, x0, y0, z0 + 1, pred);
+            }
+            return previous;
+
+
+        }
+        public static Model FromModelCU(byte[,,] data)
+        {
+            byte[,,] data2 = data.Replicate();
+            Bone.Patterns = null;
+            Model model = new Model();
+            int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
+
+            List<byte[,,]> components = new List<byte[,,]>(8);
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(data2[x, y, z] <= 253 - 14 * 4 && data2[x, y, z] >= 253 - 16 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            components.Add(TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
+                                bt => bt <= 253 - 14 * 4 && bt >= 253 - 16 * 4), xSize, ySize, zSize));
+                        }
+                        else
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            components.Add(TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
+                                bt => bt > 253 - 14 * 4 || bt < 253 - 16 * 4), xSize, ySize, zSize));
+                        }
+                    }
+                }
+            }
+            int ctr = 0;
+            foreach(byte[,,] b in components)
+            {
+                string nm = "Bone" + ctr++;
+                model.AddBone(nm, new Bone(nm, b));
+            }
+
+            model.SetAnatomy();
             return model;
         }
     }
@@ -801,6 +905,24 @@ namespace AssetsPV
             }
             return working;
 
+        }
+        public static byte[,,] Overlap(byte[,,] start, byte[,,] adding)
+        {
+            byte[,,] next = start.Replicate();
+            int xSize = start.GetLength(0), ySize = start.GetLength(1), zSize = start.GetLength(2);
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(adding[x, y, z] > 0)
+                            next[x, y, z] = adding[x, y, z];
+                    }
+                }
+            }
+            return next;
         }
 
         public static byte[,,] VoxListToArray(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)

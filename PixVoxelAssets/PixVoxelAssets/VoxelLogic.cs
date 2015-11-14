@@ -23,6 +23,14 @@ namespace AssetsPV
             z = (byte)stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
             color = stream.ReadByte();
         }
+        public MagicaVoxelData(int x, int y, int z, int color)
+        {
+            this.x = (byte)x;
+            this.y = (byte)y;
+            this.z = (byte)z;
+
+            this.color = (byte)color;
+        }
     }
     public struct TotalVoxel
     {
