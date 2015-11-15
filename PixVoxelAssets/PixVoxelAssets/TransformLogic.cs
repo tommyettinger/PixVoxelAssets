@@ -17,8 +17,8 @@ namespace AssetsPV
         public string Name;
         public static Dictionary<byte, Pattern> Patterns = null;
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
-            MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f;
-
+            MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f, SpreadChance = 1f;
+        public bool SpreadAll = false;
 
         public static float Lerp(float start, float end, float alpha)
         {
@@ -58,6 +58,16 @@ namespace AssetsPV
         public Bone InitSpread(byte[] spreadColors, float yaw_back, float pitch_back, float roll_back)
         {
             SpreadColors = spreadColors;
+            StartYaw = yaw_back;
+            StartPitch = pitch_back;
+            StartRoll = roll_back;
+            return this;
+        }
+        public Bone InitFierySpreadCU(float yaw_back, float pitch_back, float roll_back, float spread_chance)
+        {
+            SpreadColors = new byte[] { 253 - 18 * 4, 253 - 18 * 4, 253 - 17 * 4, 253 - 19 * 4 };
+            SpreadAll = true;
+            SpreadChance = spread_chance;
             StartYaw = yaw_back;
             StartPitch = pitch_back;
             StartRoll = roll_back;
@@ -283,27 +293,248 @@ namespace AssetsPV
                 {
                     for(int x = 0; x < xSize; x++)
                     {
-                        for(int c = 0; c < SpreadColors.Length; c++)
+                        if(SpreadAll)
                         {
-                            if(Colors[x, y, z] == SpreadColors[c])
+                            v.X = (x - hxs) * StretchX + xOffset;
+                            v.Y = (y - hys) * StretchY;
+                            v.Z = (z - hzs) * StretchZ;
+                            float normod = v.Length();
+                            v = Vector3.Divide(v, normod);
+
+                            for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                             {
-                                v.X = (x - hxs) * StretchX + xOffset;
-                                v.Y = (y - hys) * StretchY;
-                                v.Z = (z - hzs) * StretchZ;
-                                float normod = v.Length();
-                                v = Vector3.Divide(v, normod);
+                                q2 = Quaternion.Slerp(q, q0, a);
+                                v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
-                                for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+
+                                if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance < TransformLogic.rng.NextDouble())
+                                    c2[x2, y2, z2] = SpreadColors.RandomElement();
+                            }
+
+                        }
+                        else
+                        {
+                            for(int c = 0; c < SpreadColors.Length; c++)
+                            {
+                                if(Colors[x, y, z] == SpreadColors[c])
                                 {
-                                    q2 = Quaternion.Slerp(q, q0, a);
-                                    v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
+                                    v.X = (x - hxs) * StretchX + xOffset;
+                                    v.Y = (y - hys) * StretchY;
+                                    v.Z = (z - hzs) * StretchZ;
+                                    float normod = v.Length();
+                                    v = Vector3.Divide(v, normod);
 
-                                    int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                    for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+                                    {
+                                        q2 = Quaternion.Slerp(q, q0, a);
+                                        v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
-                                    if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0)
-                                        c2[x2, y2, z2] = Colors[x, y, z];
+                                        int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+
+                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance < TransformLogic.rng.NextDouble())
+                                            c2[x2, y2, z2] = Colors[x, y, z];
+                                    }
+                                    break;
                                 }
-                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(int z = 1; z < zSize - 1; z++)
+            {
+                for(int y = 1; y < ySize - 1; y++)
+                {
+                    for(int x = 1; x < xSize - 1; x++)
+                    {
+                        if(c2[x, y, z] != 0) continue;
+                        if(c2[x - 1, y, z] != 0 && c2[x - 1, y, z] == c2[x + 1, y, z])
+                        {
+                            c2[x, y, z] = c2[x - 1, y, z];
+                            continue;
+                        }
+                        if(c2[x, y - 1, z] != 0 && c2[x, y - 1, z] == c2[x, y + 1, z])
+                        {
+                            c2[x, y, z] = c2[x, y - 1, z];
+                            continue;
+                        }
+                        if(c2[x, y, z - 1] != 0 && c2[x, y, z - 1] == c2[x, y, z + 1])
+                        {
+                            c2[x, y, z] = c2[x, y, z + 1];
+                            continue;
+                        }
+                    }
+                }
+            }
+            return c2;
+        }
+        public byte[,,] FinalizeScatter(int xOffset, int yOffset)
+        {
+            if(SpreadColors == null)
+                return FinalizeSimple(xOffset, yOffset);
+
+            //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
+            //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
+            //Quaternion q = Quaternion.CreateFromYawPitchRoll(-Pitch * DegreesToRadians, -Roll * DegreesToRadians, -Yaw * DegreesToRadians);
+            Quaternion q = Extensions.Euler(Yaw, Pitch, Roll);
+            //q = q.idt().slerp(new Quaternion[] { new Quaternion(RollAxis, (360 - Roll) % 360f), new Quaternion(PitchAxis, (360 - Pitch) % 360f), new Quaternion(YawAxis, (360 - Yaw) % 360f) });
+
+            //Quaternion q0 = new Quaternion().setEulerAngles((StartYaw - Yaw + 360) % 360, (StartPitch - Pitch + 360) % 360, (StartRoll - Roll + 360) % 360), q2;
+            //Quaternion q0 = Quaternion.CreateFromYawPitchRoll(-StartPitch * DegreesToRadians, -StartRoll * DegreesToRadians, -StartYaw * DegreesToRadians), q2;
+            Quaternion q0 = q.MulLeft(Extensions.Euler(StartYaw, StartPitch, StartRoll)), q2;
+
+
+            float distance = Math.Abs(Yaw + StartYaw) % 360 + Math.Abs(Pitch + StartPitch) % 360 + Math.Abs(Roll + StartRoll) % 360;
+
+            float levels = Math.Max(distance / 2.5f, 1f);
+
+            int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
+                hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
+            Vector3 v = new Vector3(0f, 0f, 0f), v2;
+
+            byte[,,] c2 = new byte[xSize, ySize, zSize];
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(Colors[x, y, z] > 0)
+                        {
+                            v.X = (x - hxs) * StretchX + xOffset;
+                            v.Y = (y - hys) * StretchY;
+                            v.Z = (z - hzs) * StretchZ;
+                            float normod = (float)Math.Sqrt(v.LengthSquared());
+                            v = Vector3.Divide(v, normod);
+                            v = Vector3.Transform(v, q);
+                            v = Vector3.Multiply(normod, v);
+
+                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                            if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                            {
+                                if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                {
+                                    c2[x2, y2, z2] = Colors[x, y, z];
+                                }
+                                else if(z2 < 0)
+                                {
+                                    double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
+                                    double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
+
+                                    xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                    yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+
+                                    x2 += (int)Math.Round(xMove);
+                                    y2 += (int)Math.Round(yMove);
+
+                                    z2 = TransformLogic.rng.Next(3);
+                                    if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                                    {
+                                        c2[x2, y2, z2] = Colors[x, y, z];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(SpreadAll)
+                        {
+                            v.X = (x - hxs) * StretchX + xOffset;
+                            v.Y = (y - hys) * StretchY;
+                            v.Z = (z - hzs) * StretchZ;
+                            float normod = v.Length();
+                            v = Vector3.Divide(v, normod);
+
+                            for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+                            {
+                                q2 = Quaternion.Slerp(q, q0, a);
+                                v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
+
+                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance < TransformLogic.rng.NextDouble())
+                                {
+                                    if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                    {
+                                        c2[x2, y2, z2] = SpreadColors.RandomElement();
+                                    }
+                                    else if(z2 < 0)
+                                    {
+                                        double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
+                                        double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
+
+                                        xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                        yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+
+                                        x2 += (int)Math.Round(xMove);
+                                        y2 += (int)Math.Round(yMove);
+
+                                        z2 = TransformLogic.rng.Next(4);
+                                        if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                                        {
+                                            c2[x2, y2, z2] = SpreadColors.RandomElement();
+                                        }
+                                    }
+                                }
+                                
+                            }
+
+                        }
+                        else
+                        {
+                            for(int c = 0; c < SpreadColors.Length; c++)
+                            {
+                                if(Colors[x, y, z] == SpreadColors[c])
+                                {
+                                    v.X = (x - hxs) * StretchX + xOffset;
+                                    v.Y = (y - hys) * StretchY;
+                                    v.Z = (z - hzs) * StretchZ;
+                                    float normod = v.Length();
+                                    v = Vector3.Divide(v, normod);
+
+                                    for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+                                    {
+                                        q2 = Quaternion.Slerp(q, q0, a);
+                                        v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
+
+                                        int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                        if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance < TransformLogic.rng.NextDouble())
+                                        {
+                                            if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                            {
+                                                c2[x2, y2, z2] = Colors[x, y, z];
+                                            }
+                                            else if(z2 < 0)
+                                            {
+                                                double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
+                                                double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
+
+                                                xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                                yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+
+                                                x2 += (int)Math.Round(xMove);
+                                                y2 += (int)Math.Round(yMove);
+
+                                                z2 = TransformLogic.rng.Next(3);
+                                                if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                                                {
+                                                    c2[x2, y2, z2] = Colors[x, y, z];
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
                             }
                         }
                     }
@@ -358,7 +589,7 @@ namespace AssetsPV
             //    .nor();
 
             //QuaternionGDX q0 = new QuaternionGDX().setEulerAngles(-target.Pitch, -target.Roll, -target.Yaw), q2;
-            Quaternion q0 = Extensions.Euler(target.Yaw, target.Pitch, target.Roll), q2;
+            Quaternion q0 = Extensions.Euler(target.Yaw, target.Pitch, target.Roll);
 
             //Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
             //    .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
@@ -572,19 +803,21 @@ namespace AssetsPV
         {
             Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(10 * Bone.Multiplier, 0));
             string finished = "";
+            string[] vals = finals.Keys.ToArray();
             if(Anatomy.Length == 0)
             {
-                foreach(var kv in finals)
+                foreach(var s in vals)
                 {
                     if(finals.ContainsKey(finished))
                     {
-                        finals[kv.Key] = TransformLogic.Overlap(finals[finished], kv.Value);
-                        finished = kv.Key;
+                        finals[s] = TransformLogic.Overlap(finals[finished], finals[s]);
+                        finished = s;
                     }
                     else
                     {
-                        finished = kv.Key;
-                        finals[finished] = kv.Value;
+                        byte[,,] v = finals[s];
+                        finished = s;
+                        finals[finished] = v;
                     }
 
                 }
@@ -696,7 +929,7 @@ namespace AssetsPV
             Model model = new Model();
             int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
 
-            List<byte[,,]> components = new List<byte[,,]>(8);
+            int regular_ctr = 0, gun_ctr = 0;
             for(int x = 0; x < xSize; x++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -707,26 +940,20 @@ namespace AssetsPV
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
-                            components.Add(TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
+                            model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
                                 bt => bt <= 253 - 14 * 4 && bt >= 253 - 16 * 4), xSize, ySize, zSize));
                         }
-                        else
+                        else if(data2[x,y,z] > 0)
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
-                            components.Add(TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
-                                bt => bt > 253 - 14 * 4 || bt < 253 - 16 * 4), xSize, ySize, zSize));
+                            model.AddBone("Bone" + regular_ctr++, TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
+                                bt => bt > 0 && (bt > 253 - 14 * 4 || bt < 253 - 16 * 4)), xSize, ySize, zSize));
                         }
                     }
                 }
             }
-            int ctr = 0;
-            foreach(byte[,,] b in components)
-            {
-                string nm = "Bone" + ctr++;
-                model.AddBone(nm, new Bone(nm, b));
-            }
-
+            
             model.SetAnatomy();
             return model;
         }
@@ -738,6 +965,7 @@ namespace AssetsPV
     public class TransformLogic
     {
         public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
+        public static Random rng = new Random(0x1337beef);
 
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
@@ -1108,9 +1336,9 @@ namespace AssetsPV
             }
             return vs[smoothLevel - 1];
         }
-        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int multiplier)
+        public static List<MagicaVoxelData> VoxArrayToListSmoothed(byte[,,] voxelData)
         {
-            return VoxLargerArrayToList(voxelData, multiplier, multiplier, multiplier);
+            return VoxArrayToList(RunCA(voxelData, 3));
         }
 
         public static byte[,,] SealGaps(byte[,,] voxelData)
@@ -1274,10 +1502,6 @@ namespace AssetsPV
             }
             return vfinal;
         }
-        public static List<MagicaVoxelData> VoxLargerArrayToList(byte[,,] voxelData, int xmultiplier, int ymultiplier, int zmultiplier)
-        {
-            return VoxArrayToList(RunCA(voxelData, 3));
-        }
 
         public static byte[,,] TransformStartLarge(IEnumerable<MagicaVoxelData> voxels)
         {
@@ -1301,7 +1525,7 @@ namespace AssetsPV
         }
         public static List<MagicaVoxelData> TransformEnd(byte[,,] colors)
         {
-            return VoxLargerArrayToList(colors, 4);
+            return VoxArrayToListSmoothed(Shrink(colors, 4));
         }
 
         public static byte[,,] RotateYaw(byte[,,] colors, int amount)
@@ -1544,13 +1768,13 @@ namespace AssetsPV
         }
 
         public static byte[] dismiss = new byte[] { 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1, };
-        
+
         public static byte[][,,] FieryExplosionW(byte[,,] colors, bool blowback, bool shadowless)
         {
             int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
             byte[][,,] voxelFrames = new byte[13][,,];
             voxelFrames[0] = colors;
-            
+
             for(int f = 1; f < 5; f++)
             {
                 byte[,,] working = voxelFrames[f - 1].Replicate(), vls = new byte[working.GetLength(0), working.GetLength(1), working.GetLength(2)]; ;
@@ -1593,9 +1817,9 @@ namespace AssetsPV
                             byte color = 0;
                             int c = ((255 - vcolor) % 4 == 0) ? (255 - vcolor) / 4 + VoxelLogic.wcolorcount : (253 - vcolor) / 4;
                             if(c == 8 || c == 9) //flesh
-                                color = (byte)((TallFaces.r.Next(1 + f) == 0) ? 253 - 34 * 4 : (TallFaces.r.Next(8) == 0) ? 253 - 19 * 4 : vcolor); //random transform to guts
+                                color = (byte)((rng.Next(1 + f) == 0) ? 253 - 34 * 4 : (rng.Next(8) == 0) ? 253 - 19 * 4 : vcolor); //random transform to guts
                             else if(c == 34) //guts
-                                color = (byte)((TallFaces.r.Next(18) == 0) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
+                                color = (byte)((rng.Next(18) == 0) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
                             else if(c == VoxelLogic.clear || vcolor == 0) //clear
                                 color = 0; //clear stays clear
                             else if(c == 16)
@@ -1611,7 +1835,7 @@ namespace AssetsPV
                             else if(c >= 21 && c <= 24) //lights
                                 color = 253 - 35 * 4; //glass color for broken lights
                             else if(c == 35) //windows
-                                color = (byte)((TallFaces.r.Next(3) == 0) ? VoxelLogic.clear : vcolor); //random transform to clear
+                                color = (byte)((rng.Next(3) == 0) ? VoxelLogic.clear : vcolor); //random transform to clear
                             else if(c == 36) //rotor contrast
                                 color = 253 - 0 * 4; //"foot contrast" or "raw metal contrast" color for broken rotors contrast
                             else if(c == 37) //rotor
@@ -1619,33 +1843,33 @@ namespace AssetsPV
                             else if(c == 38 || c == 39)
                                 color = VoxelLogic.clear; //clear non-active rotors
                             else if(c == 19) //orange fire
-                                color = (byte)((TallFaces.r.Next(3) <= 1) ? 253 - 18 * 4 : ((TallFaces.r.Next(5) == 0) ? 253 - 17 * 4 : vcolor)); //random transform to yellow fire or smoke
+                                color = (byte)((rng.Next(3) <= 1) ? 253 - 18 * 4 : ((rng.Next(5) == 0) ? 253 - 17 * 4 : vcolor)); //random transform to yellow fire or smoke
                             else if(c == 18) //yellow fire
-                                color = (byte)((TallFaces.r.Next(4) <= 1) ? 253 - 19 * 4 : ((TallFaces.r.Next(4) == 0) ? 253 - 20 * 4 : vcolor)); //random transform to orange fire or sparks
+                                color = (byte)((rng.Next(4) <= 1) ? 253 - 19 * 4 : ((rng.Next(4) == 0) ? 253 - 20 * 4 : vcolor)); //random transform to orange fire or sparks
                             else if(c == 20) //sparks
-                                color = (byte)((TallFaces.r.Next(4) == 0) ? VoxelLogic.clear : vcolor); //random transform to clear
+                                color = (byte)((rng.Next(4) == 0) ? VoxelLogic.clear : vcolor); //random transform to clear
                             else if(c == 17)
                                 color = vcolor; // smoke stays smoke
                             else
-                                color = (byte)((TallFaces.r.Next(9 - f) == 0) ? 253 - ((TallFaces.r.Next(4) == 0) ? 18 * 4 : 19 * 4) : vcolor); //random transform to orange or yellow fire
+                                color = (byte)((rng.Next(9 - f) == 0) ? 253 - ((rng.Next(4) == 0) ? 18 * 4 : 19 * 4) : vcolor); //random transform to orange or yellow fire
                             float xMove = 0, yMove = 0, zMove = 0;
 
                             if(color == 253 - 19 * 4 || color == 253 - 18 * 4 || color == 253 - 17 * 4)
                             {
                                 zMove = (f - 1) * 1.8f;
-                                xMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
-                                yMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
+                                xMove = (float)(rng.NextDouble() * 2.0 - 1.0);
+                                yMove = (float)(rng.NextDouble() * 2.0 - 1.0);
                             }
                             else
                             {
                                 if(vx > midX[vz])
-                                    xMove = ((0 - TallFaces.r.Next(3) - ((blowback) ? 9 : 0) + (vx - midX[vz])) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    xMove = ((0 - rng.Next(3) - ((blowback) ? 9 : 0) + (vx - midX[vz])) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
                                 else if(vx < midX[vz])
-                                    xMove = ((0 + TallFaces.r.Next(3) - ((blowback) ? 8 : 0) - midX[vz] + vx) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (vz + 5); //5 -
+                                    xMove = ((0 + rng.Next(3) - ((blowback) ? 8 : 0) - midX[vz] + vx) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (vz + 5); //5 -
                                 if(vy > midY[vz])
-                                    yMove = ((0 - TallFaces.r.Next(3) + (vy - midY[vz])) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F))); //maxX[vz] - minX[vz]
+                                    yMove = ((0 - rng.Next(3) + (vy - midY[vz])) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F))); //maxX[vz] - minX[vz]
                                 else if(vy < midY[vz])
-                                    yMove = ((0 + TallFaces.r.Next(3) - midY[vz] + vy) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    yMove = ((0 + rng.Next(3) - midY[vz] + vy) * 25F / f * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
                                 if(color == 253 - 20 * 4)
                                 {
                                     zMove = 0.1f;
@@ -1666,7 +1890,7 @@ namespace AssetsPV
                             float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
                             if(xMove > 0)
                             {
-                                float nv = vx + (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * f / 0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(Math.Sqrt(Math.Abs(Math.Abs((xMove * f / 3)) - Math.Abs((yMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vx + (float)rng.NextDouble() * ((xMove / magnitude) * f / 0.3F) + (float)(rng.NextDouble() * 6.0 - 3.0); //(Math.Sqrt(Math.Abs(Math.Abs((xMove * f / 3)) - Math.Abs((yMove * f / 4)))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1681,7 +1905,7 @@ namespace AssetsPV
                             }
                             else if(xMove < 0)
                             {
-                                float nv = vx - (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * f / -0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((xMove * f / 3)) - Math.Abs((yMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vx - (float)rng.NextDouble() * ((xMove / magnitude) * f / -0.3F) + (float)(rng.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((xMove * f / 3)) - Math.Abs((yMove * f / 4)))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1710,7 +1934,7 @@ namespace AssetsPV
                             }
                             if(yMove > 0)
                             {
-                                float nv = vy + (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * f / 0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vy + (float)rng.NextDouble() * ((yMove / magnitude) * f / 0.3F) + (float)(rng.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1725,7 +1949,7 @@ namespace AssetsPV
                             }
                             else if(yMove < 0)
                             {
-                                float nv = vy - (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * f / -0.3F) + (float)(TallFaces.r.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vy - (float)rng.NextDouble() * ((yMove / magnitude) * f / -0.3F) + (float)(rng.NextDouble() * 6.0 - 3.0); //(float)(Math.Sqrt(Math.Abs(Math.Abs((yMove * f / 3)) - Math.Abs((xMove * f / 4)))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1757,7 +1981,7 @@ namespace AssetsPV
                             {
                                 float nv = (vz + (zMove * 1.5f / f));
 
-                                if(nv <= 0 && f < 8) nv = TallFaces.r.Next(2); //bounce
+                                if(nv <= 0 && f < 8) nv = rng.Next(2); //bounce
                                 else if(nv < 0) nv = 0;
 
                                 if(nv > zSize - 1) nv = zSize - 1;
@@ -1815,9 +2039,9 @@ namespace AssetsPV
                             byte color = 0;
                             int c = ((255 - vcolor) % 4 == 0) ? (255 - vcolor) / 4 + VoxelLogic.wcolorcount : (253 - vcolor) / 4;
                             if(c == 8 || c == 9) //flesh
-                                color = (byte)((TallFaces.r.Next(f) == 0) ? 253 - 34 * 4 : (TallFaces.r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to guts
+                                color = (byte)((rng.Next(f) == 0) ? 253 - 34 * 4 : (rng.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to guts
                             else if(c == 34) //guts
-                                color = (byte)((TallFaces.r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
+                                color = (byte)((rng.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : vcolor); //random transform to orange fire
                             else if(c == VoxelLogic.clear || vcolor == 0) //clear
                                 color = 0; //clear stays clear
                             else if(c == 16)
@@ -1833,7 +2057,7 @@ namespace AssetsPV
                             else if(c >= 21 && c <= 24) //lights
                                 color = 253 - 35 * 4; //glass color for broken lights
                             else if(c == 35) //windows
-                                color = (byte)((TallFaces.r.Next(3) == 0) ? VoxelLogic.clear : vcolor); //random transform to VoxelLogic.clear
+                                color = (byte)((rng.Next(3) == 0) ? VoxelLogic.clear : vcolor); //random transform to VoxelLogic.clear
                             else if(c == 36) //rotor contrast
                                 color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
                             else if(c == 37) //rotor
@@ -1841,46 +2065,46 @@ namespace AssetsPV
                             else if(c == 38 || c == 39)
                                 color = VoxelLogic.clear; //VoxelLogic.clear non-active rotors
                             else if(c == 19) //orange fire
-                                color = (byte)((TallFaces.r.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((TallFaces.r.Next(3) <= 1) ? 253 - 18 * 4 : ((TallFaces.r.Next(3) == 0) ? 253 - 17 * 4 : vcolor))); //random transform to yellow fire or smoke
+                                color = (byte)((rng.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((rng.Next(3) <= 1) ? 253 - 18 * 4 : ((rng.Next(3) == 0) ? 253 - 17 * 4 : vcolor))); //random transform to yellow fire or smoke
                             else if(c == 18) //yellow fire
-                                color = (byte)((TallFaces.r.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((TallFaces.r.Next(3) <= 1) ? 253 - 19 * 4 : ((TallFaces.r.Next(4) == 0) ? 253 - 17 * 4 : ((TallFaces.r.Next(4) == 0) ? 253 - 20 * 4 : vcolor)))); //random transform to orange fire, smoke, or sparks
+                                color = (byte)((rng.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((rng.Next(3) <= 1) ? 253 - 19 * 4 : ((rng.Next(4) == 0) ? 253 - 17 * 4 : ((rng.Next(4) == 0) ? 253 - 20 * 4 : vcolor)))); //random transform to orange fire, smoke, or sparks
                             else if(c == 20) //sparks
-                                color = (byte)((TallFaces.r.Next(4) > 0 && TallFaces.r.Next(12) > f) ? vcolor : VoxelLogic.clear); //random transform to VoxelLogic.clear
+                                color = (byte)((rng.Next(4) > 0 && rng.Next(12) > f) ? vcolor : VoxelLogic.clear); //random transform to VoxelLogic.clear
                             else if(c == 17) //smoke
-                                color = (byte)((TallFaces.r.Next(10) + 3 <= f) ? VoxelLogic.clear : 253 - 17 * 4); //random transform to VoxelLogic.clear
+                                color = (byte)((rng.Next(10) + 3 <= f) ? VoxelLogic.clear : 253 - 17 * 4); //random transform to VoxelLogic.clear
                             else
-                                color = (byte)((TallFaces.r.Next(f * 4) <= 6) ? 253 - ((TallFaces.r.Next(4) == 0) ? 18 * 4 : 19 * 4) : vcolor); //random transform to orange or yellow fire
+                                color = (byte)((rng.Next(f * 4) <= 6) ? 253 - ((rng.Next(4) == 0) ? 18 * 4 : 19 * 4) : vcolor); //random transform to orange or yellow fire
 
                             float xMove = 0, yMove = 0, zMove = 0;
                             if(color == 253 - 19 * 4 || color == 253 - 18 * 4 || color == 253 - 17 * 4)
                             {
                                 zMove = f * 0.5f;
-                                xMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
-                                yMove = (float)(TallFaces.r.NextDouble() * 2.0 - 1.0);
+                                xMove = (float)(rng.NextDouble() * 2.0 - 1.0);
+                                yMove = (float)(rng.NextDouble() * 2.0 - 1.0);
                             }
                             else
                             {
                                 /*
                                  if (vx > midX[vz])
-                                    xMove = ((0 - TallFaces.r.Next(3) - ((blowback) ? 9 : 0) + (vx - midX[vz])) * 2F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    xMove = ((0 - rng.Next(3) - ((blowback) ? 9 : 0) + (vx - midX[vz])) * 2F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
                                 //for lower values: distance from current voxel x to center + (between 2 to 0), times variable based on height
                                 else if (vx < midX[vz])
-                                    xMove = ((0 + TallFaces.r.Next(3) - ((blowback) ? 8 : 0) - midX[vz] + vx) * 2F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (vz + 5); //5 -
+                                    xMove = ((0 + rng.Next(3) - ((blowback) ? 8 : 0) - midX[vz] + vx) * 2F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));// / 300F) * (vz + 5); //5 -
                                 if (vy > midY[vz])
-                                    yMove = ((0 - TallFaces.r.Next(3) + (vy - midY[vz])) * 2F * ((vz - minZ + 3) / (maxZ - minZ + 1F))); //maxX[vz] - minX[vz]
+                                    yMove = ((0 - rng.Next(3) + (vy - midY[vz])) * 2F * ((vz - minZ + 3) / (maxZ - minZ + 1F))); //maxX[vz] - minX[vz]
                                 else if (vy < midY[vz])
-                                    yMove = ((0 + TallFaces.r.Next(3) - midY[vz] + vy) * 2F * ((vz - minZ + 3) / (maxZ - minZ + 1F)));
+                                    yMove = ((0 + rng.Next(3) - midY[vz] + vy) * 2F * ((vz - minZ + 3) / (maxZ - minZ + 1F)));
                                  */
 
 
                                 if(vx > midX[vz])
-                                    xMove = ((0 - TallFaces.r.Next(3) - ((blowback) ? 7 : 0) + (vx - midX[vz])) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    xMove = ((0 - rng.Next(3) - ((blowback) ? 7 : 0) + (vx - midX[vz])) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
                                 else if(vx < midX[vz])
-                                    xMove = ((0 + TallFaces.r.Next(3) - ((blowback) ? 6 : 0) - midX[vz] + vx) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    xMove = ((0 + rng.Next(3) - ((blowback) ? 6 : 0) - midX[vz] + vx) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
                                 if(vy > midY[vz])
-                                    yMove = ((0 - TallFaces.r.Next(3) + (vy - midY[vz])) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    yMove = ((0 - rng.Next(3) + (vy - midY[vz])) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
                                 else if(vy < midY[vz])
-                                    yMove = ((0 + TallFaces.r.Next(3) - midY[vz] + vy) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
+                                    yMove = ((0 + rng.Next(3) - midY[vz] + vy) / (f + 8) * 25F * ((vz - minZ + 1) / (maxZ - minZ + 1F)));
 
                                 if(color == 253 - 20 * 4)
                                 {
@@ -1907,8 +2131,8 @@ namespace AssetsPV
 
                             if(xMove > 0)
                             {
-                                float nv = vx + (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
-                                //                        float nv = (float)(vx + Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vx + (float)rng.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(rng.NextDouble() * 8.0 - 4.0);
+                                //                        float nv = (float)(vx + Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1923,9 +2147,9 @@ namespace AssetsPV
                             }
                             else if(xMove < 0)
                             {
-                                float nv = vx - (float)TallFaces.r.NextDouble() * ((xMove / magnitude) * -35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
+                                float nv = vx - (float)rng.NextDouble() * ((xMove / magnitude) * -35F / f) + (float)(rng.NextDouble() * 8.0 - 4.0);
 
-                                //float nv = (float)(vx - Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                //float nv = (float)(vx - Math.Sqrt(Math.Abs(Math.Abs(xMove / (0.07f * (f + 5))) - Math.Abs((yMove / (0.09f * (f + 5)))))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1954,8 +2178,8 @@ namespace AssetsPV
                             }
                             if(yMove > 0)
                             {
-                                float nv = vy + (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * 35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
-                                //float nv = (float)(vy + Math.Sqrt(Math.Abs(Math.Abs(yMove / (0.07f * (f + 5))) - Math.Abs((xMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vy + (float)rng.NextDouble() * ((yMove / magnitude) * 35F / f) + (float)(rng.NextDouble() * 8.0 - 4.0);
+                                //float nv = (float)(vy + Math.Sqrt(Math.Abs(Math.Abs(yMove / (0.07f * (f + 5))) - Math.Abs((xMove / (0.09f * (f + 5)))))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -1970,8 +2194,8 @@ namespace AssetsPV
                             }
                             else if(yMove < 0)
                             {
-                                float nv = vy - (float)TallFaces.r.NextDouble() * ((yMove / magnitude) * -35F / f) + (float)(TallFaces.r.NextDouble() * 8.0 - 4.0);
-                                //(float)(vy - Math.Sqrt(Math.Abs(Math.Abs(yMove / (0.07f * (f + 5))) - Math.Abs((xMove / (0.09f * (f + 5)))))) + (float)(TallFaces.r.NextDouble() * 2.0 - 1.0));
+                                float nv = vy - (float)rng.NextDouble() * ((yMove / magnitude) * -35F / f) + (float)(rng.NextDouble() * 8.0 - 4.0);
+                                //(float)(vy - Math.Sqrt(Math.Abs(Math.Abs(yMove / (0.07f * (f + 5))) - Math.Abs((xMove / (0.09f * (f + 5)))))) + (float)(rng.NextDouble() * 2.0 - 1.0));
                                 if(nv < 0)
                                 {
                                     nv = 0;
@@ -2003,7 +2227,7 @@ namespace AssetsPV
                             {
                                 float nv = (vz + (zMove * 1.3f));
 
-                                if(nv <= 0 && f < 8) nv = TallFaces.r.Next(2); //bounce
+                                if(nv <= 0 && f < 8) nv = rng.Next(2); //bounce
                                 else if(nv < 0) nv = 0;
 
                                 if(nv > zSize - 1)
@@ -2024,7 +2248,7 @@ namespace AssetsPV
                 voxelFrames[f] = vls;
 
             }
-            
+
             byte[][,,] frames = new byte[12][,,];
 
             for(int f = 1; f < 13; f++)
@@ -2033,7 +2257,6 @@ namespace AssetsPV
             }
             return frames;
         }
-
-
+        
     }
 }

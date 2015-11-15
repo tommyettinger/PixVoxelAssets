@@ -1142,7 +1142,7 @@ namespace AssetsPV
                         flying[i].CopyTo(voxelFrames[i], 0);
                     }
 
-                    voxelFrames = CURedux.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
+                    voxelFrames = CURedux.weaponAnimationsLarge[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
 
                     for(int f = 0; f < 16; f++)
                     {
@@ -1195,7 +1195,7 @@ namespace AssetsPV
                     
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
-                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
 
                     for(int d = 0; d < 4; d++)
                     {
@@ -1272,7 +1272,7 @@ namespace AssetsPV
             {
                 for(int s = 0; s < 4; s++)
                 {
-                    MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationDouble(i, s + 1);
+                    MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationLarge(i, s + 1);
                     for(int d = 0; d < 4; d++)
                     {
                         Directory.CreateDirectory(folder); //("color" + i);
@@ -1396,8 +1396,11 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), 2, 60, 60, 60), 1), 120, 120, 80);
 
+                //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), 2, 60, 60, 60)), 120, 120, 80);
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunCA(
+                        TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2, 2, 2),
+                        3)), 120, 120, 80);
                 for(int f = 0; f < framelimit; f++)
                 {
 
@@ -1480,8 +1483,10 @@ namespace AssetsPV
 
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-
+                            //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60)), 160, 160, 120);
+                            FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunCA(
+                                TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2, 2, 2),
+                                3)), 160, 160, 120);
                             byte[][] b = processFrameMassiveW(faces, 0, d, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
@@ -1559,8 +1564,10 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
-                            FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-
+                            //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60)), 160, 160, 120);
+                            FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunCA(
+                                TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60), 2, 2, 2),
+                                3)), 160, 160, 120);
                             byte[][] b = processFrameMassiveW(faces, 0, d, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
@@ -2293,7 +2300,7 @@ namespace AssetsPV
             
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 2, 60, 60, 40), 1), 120, 120, 80);
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 2, 60, 60, 40)), 120, 120, 80);
 
                 FaceVoxel[][,,] explode = FaceLogic.FieryExplosionHugeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
@@ -4862,9 +4869,9 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
-            //VoxelLogic.VisualMode = "CU";
-            //altFolder = "CU3/";
-            //CURedux.Initialize();
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "CU3/";
+            CURedux.Initialize(true);
 
             VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
@@ -5091,8 +5098,9 @@ namespace AssetsPV
             File.WriteAllText("hats.txt", hat_headpoints.ToString());
 
             processHats("Birthday_Necromancer", 65, true, classes);
-            */
+            
             processUnitLargeW("Necroslasher", 65, true, false);
+            */
             /*
             offsets.Close();
             offbin.Close();
@@ -5223,7 +5231,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Estate");
 
             //processReceivingMilitaryW();
-            
+            */
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -5236,7 +5244,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
             processUnitHugeWMilitarySuper("Copter_T");
-
+            
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");
@@ -5246,7 +5254,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            
+            /*
             processUnitLargeWMilitary("Volunteer");
             processUnitLargeWMilitary("Volunteer_P");
             processUnitLargeWMilitary("Volunteer_S");

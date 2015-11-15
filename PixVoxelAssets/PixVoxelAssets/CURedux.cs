@@ -1323,10 +1323,23 @@ namespace AssetsPV
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River", "Basement", "Sea"
         ,"Custom0","Custom1","Custom2"};
-        public static void Initialize()
+
+        public static byte[][][,,] Explosions;
+        public const int maxExplosionFrames = 6;
+
+        public static void Initialize(bool disableGore)
         {
             VoxelLogic.wpalettecount = wpalettes.Length;
             int wpc = VoxelLogic.wpalettecount;
+
+            if(disableGore)
+            {
+                for(int p = 0; p < wpc; p++)
+                {
+                    wpalettes[p][34] = wpalettes[p][9].Replicate();
+                }
+            }
+
             VoxelLogic.terrainPalettes = new int[] { wpc };
             VoxelLogic.subtlePalettes = new int[] { wpc };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
@@ -1375,11 +1388,23 @@ namespace AssetsPV
             }
 
             VoxelLogic.wpalettes = wpalettes;
+
+            Explosions = new byte[10][][,,];
+            for(int e = 0; e < 10; e++)
+            {
+                MagicaVoxelData[][] expl = FireballSwitchable(randomFill(30 - (e + 1) * 2, 30 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3, 
+                    new int[] { orange_fire, orange_fire, smoke, yellow_fire}).ToArray(), 0, maxExplosionFrames, 2, 120, 120, 80);
+                Explosions[e] = new byte[maxExplosionFrames][,,];
+                for(int f = 0; f < maxExplosionFrames; f++)
+                {
+                    Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
+                }
+            }
         }
 
 
 
-        public static MagicaVoxelData[][] SmokePlumeDouble(MagicaVoxelData start, int height, int effectDuration)
+        public static MagicaVoxelData[][] SmokePlumeLarge(MagicaVoxelData start, int height, int effectDuration)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[16];
             voxelFrames[0] = new List<MagicaVoxelData>(height * 8);
@@ -1417,7 +1442,7 @@ namespace AssetsPV
             }
             return frames;
         }
-        public static MagicaVoxelData[][] BurstDouble(MagicaVoxelData start, int maxFrames, bool bigger)
+        public static MagicaVoxelData[][] BurstLarge(MagicaVoxelData start, int maxFrames, bool bigger)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[maxFrames];
             voxelFrames[0] = new List<MagicaVoxelData>(10);
@@ -1472,7 +1497,7 @@ namespace AssetsPV
             }
             return frames;
         }
-        public static MagicaVoxelData[][] SparksDouble(MagicaVoxelData start, int sweepDuration)
+        public static MagicaVoxelData[][] SparksLarge(MagicaVoxelData start, int sweepDuration)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[16];
             voxelFrames[0] = new List<MagicaVoxelData>(80);
@@ -1522,7 +1547,7 @@ namespace AssetsPV
             return frames;
         }
 
-        private static List<MagicaVoxelData> generateMissileDouble(MagicaVoxelData start, int length)
+        private static List<MagicaVoxelData> generateMissileLarge(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for(int x = 0; x < 3; x++)
@@ -1574,7 +1599,7 @@ namespace AssetsPV
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateMissileFieryTrailDouble(MagicaVoxelData start, int length)
+        private static List<MagicaVoxelData> generateMissileFieryTrailLarge(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for(int x = 0; x < 3; x++)
@@ -1661,7 +1686,7 @@ namespace AssetsPV
             return vox;
         }
 
-        private static List<MagicaVoxelData> generateConeDouble(MagicaVoxelData start, int segments, int color)
+        private static List<MagicaVoxelData> generateConeLarge(MagicaVoxelData start, int segments, int color)
         {
             List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
             for(int x = 0; x < segments; x++)
@@ -1685,7 +1710,7 @@ namespace AssetsPV
             return cone;
 
         }
-        private static List<MagicaVoxelData> generateDownwardMissileDouble(MagicaVoxelData start, int length)
+        private static List<MagicaVoxelData> generateDownwardMissileLarge(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for(int x = 0; x < 3; x++)
@@ -1737,7 +1762,7 @@ namespace AssetsPV
             }
             return vox;
         }
-        private static List<MagicaVoxelData> generateDownwardMissileFieryTrailDouble(MagicaVoxelData start, int length)
+        private static List<MagicaVoxelData> generateDownwardMissileFieryTrailLarge(MagicaVoxelData start, int length)
         {
             List<MagicaVoxelData> vox = new List<MagicaVoxelData>(128);
             for(int x = 0; x < 3; x++)
@@ -1806,7 +1831,7 @@ namespace AssetsPV
             return vox;
         }
 
-        private static List<MagicaVoxelData> generateDownwardConeDouble(MagicaVoxelData start, int segments, int color)
+        private static List<MagicaVoxelData> generateDownwardConeLarge(MagicaVoxelData start, int segments, int color)
         {
             List<MagicaVoxelData> cone = new List<MagicaVoxelData>(40);
             for(int x = 0; x < segments; x++)
@@ -1847,36 +1872,41 @@ namespace AssetsPV
             return box;
 
         }
-        public static MagicaVoxelData[][] HugeExplosionDouble(MagicaVoxelData[] voxels, int blowback, int maxFrames, int trimLevel)
+
+        public static MagicaVoxelData[][] FireballLarge(MagicaVoxelData[] voxels, int blowback, int maxFrames, int trimLevel)
+        {
+            return FireballSwitchable(voxels, blowback, maxFrames, trimLevel, 120, 120, 80);
+        }
+        public static MagicaVoxelData[][] FireballSwitchable(MagicaVoxelData[] voxels, int blowback, int maxFrames, int trimLevel, int xSize, int ySize, int zSize)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[maxFrames + 1][];
             voxelFrames[0] = new MagicaVoxelData[voxels.Length];
             voxels.CopyTo(voxelFrames[0], 0);
-            //for (int i = 0; i < voxels.Length; i++)
-            //{
-            //    voxelFrames[0][i].x += 20;
-            //    voxelFrames[0][i].y += 20;
-            //}
+            
             for(int f = 1; f <= maxFrames; f++)
             {
                 List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxels.Length), working = new List<MagicaVoxelData>(voxelFrames[f - 1].Length * 2);
                 MagicaVoxelData[] vls = new MagicaVoxelData[voxelFrames[f - 1].Length]; //.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)
                 voxelFrames[f - 1].CopyTo(vls, 0);
-
-                int[] minX = new int[60];
-                int[] maxX = new int[60];
-                float[] midX = new float[60];
-                for(int level = 0; level < 60; level++)
+                if(vls.Count() == 0)
+                {
+                    voxelFrames[f] = new MagicaVoxelData[0];
+                    continue;
+                }
+                int[] minX = new int[zSize];
+                int[] maxX = new int[zSize];
+                float[] midX = new float[zSize];
+                for(int level = 0; level < zSize; level++)
                 {
                     minX[level] = vls.Min(v => v.x * ((v.z != level || v.color < VoxelLogic.clear) ? 100 : 1));
                     maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color < VoxelLogic.clear) ? 0 : 1));
                     midX[level] = (maxX[level] + minX[level]) / 2F;
                 }
 
-                int[] minY = new int[60];
-                int[] maxY = new int[60];
-                float[] midY = new float[60];
-                for(int level = 0; level < 60; level++)
+                int[] minY = new int[zSize];
+                int[] maxY = new int[zSize];
+                float[] midY = new float[zSize];
+                for(int level = 0; level < zSize; level++)
                 {
                     minY[level] = vls.Min(v => v.y * ((v.z != level || v.color < VoxelLogic.clear) ? 100 : 1));
                     maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color < VoxelLogic.clear) ? 0 : 1));
@@ -1959,71 +1989,6 @@ namespace AssetsPV
                         else
                             zMove = (1 - f * 2.1F);
                     }
-
-                    /*
-                    MagicaVoxelData mvd = new MagicaVoxelData();
-                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + VoxelLogic.wcolorcount : (253 - v.color) / 4;
-                    if(c == 8 || c == 9) //flesh
-                        mvd.color = (byte)((r.Next(1 + f) == 0) ? 253 - 34 * 4 : (r.Next(8) == 0) ? orange_fire : v.color); //random transform to guts
-                    else if(c == 34) //guts
-                        mvd.color = (byte)((r.Next(18) == 0) ? orange_fire : v.color); //random transform to orange fire
-                    else if(c == VoxelLogic.clear) //clear
-                        mvd.color = VoxelLogic.clear; //clear stays clear
-                    else if(c == 16)
-                        mvd.color = VoxelLogic.clear; //clear inner shadow
-                    else if(c == 25)
-                        mvd.color = shadow; //shadow stays shadow
-                    else if(c == 27)
-                        mvd.color = 253 - 27 * 4; //water stays water
-                    else if(c >= VoxelLogic.wcolorcount && c < VoxelLogic.wcolorcount + 5)
-                        mvd.color = v.color; // falling water stays falling water
-                    else if(c == 40)
-                        mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
-                    else if(c >= 21 && c <= 24) //lights
-                        mvd.color = 253 - 35 * 4; //glass color for broken lights
-                    else if(c == 35) //windows
-                        mvd.color = (byte)((r.Next(3) == 0) ? VoxelLogic.clear : v.color); //random transform to clear
-                    else if(c == 36) //rotor contrast
-                        mvd.color = 253 - 0 * 4; //"foot contrast" or "raw metal contrast" color for broken rotors contrast
-                    else if(c == 37) //rotor
-                        mvd.color = 253 - 1 * 4; //"foot" or "raw metal" color for broken rotors
-                    else if(c == 38 || c == 39)
-                        mvd.color = VoxelLogic.clear; //clear non-active rotors
-                    else if(c == 19) //orange fire
-                        mvd.color = (f > maxFrames / 2 && r.Next(maxFrames) <= f + 2) ? smoke : ((r.Next(3) <= 1) ? yellow_fire : ((r.Next(3) == 0) ? smoke : orange_fire)); //random transform to smoke or yellow_fire
-                    else if(c == 18) //yellow fire
-                        mvd.color = (f > maxFrames / 2 && r.Next(maxFrames) <= f + 2) ? smoke : ((r.Next(3) <= 1) ? orange_fire : ((r.Next(4) == 0) ? sparks : yellow_fire)); //random transform to orange fire or sparks
-                    else if(c == 20) //sparks
-                        mvd.color = ((r.Next(4) == 0) ? VoxelLogic.clear : v.color); //random transform to clear
-                    else if(c == 17)
-                        mvd.color = ((f > maxFrames * 3 / 5 && r.Next(maxFrames) <= f) ? VoxelLogic.clear : smoke); //random transform to clear
-                    else
-                        mvd.color = (byte)((r.Next((f + 3) * 2) <= 2) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19 * 4) : v.color); //random transform to orange or yellow fire
-                    
-                    float xMove = 0, yMove = 0, zMove = 0;
-                    if(f > maxFrames / 2 && (mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke))
-                    {
-                        zMove = f * (16F * 0.4F / maxFrames);
-                    }
-                    else
-                    {
-                        if(v.x > midX[v.z])
-                            xMove = r.Next(10) + 5 + blowback;//((midX[v.z] - r.Next(4) - ((blowback) ? 7 : 0) - (maxX[v.z] - v.x)) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //5 -
-                        else if(v.x < midX[v.z])// && v.x < minX + 5)
-                            xMove = blowback - r.Next(10) - 6;// ((0 + (v.x - midX[v.z] + r.Next(4) - ((blowback) ? 6 : 0))) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //-5 +
-                        if(v.y > midY[v.z])// && v.y > maxY - 5)
-                            yMove = r.Next(10) + 5;//((midY[v.z] - r.Next(4) - (maxY[v.z] - v.y)) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));//5 -
-                        else if(v.y < midY[v.z])// && v.y < minY + 5)
-                            yMove = 0 - r.Next(10) - 6;//((0 + (v.y - midY[v.z] + r.Next(4))) * 0.6F * ((v.z - minZ + 1) / (maxZ - minZ + 1F))); //-5 +
-
-                        if(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)
-                            zMove = f * 0.55F;
-                        else if(f < (maxFrames - 3) && minZ <= 1)
-                            zMove = (v.z / ((maxZ + 1) * (0.3F))) * ((maxFrames - 3) - f) * 0.8F;
-                        else
-                            zMove = (1 - f * 2.1F);
-                    }
-                    */
                     float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
 
                     if(xMove > 0)
@@ -2031,7 +1996,7 @@ namespace AssetsPV
                         //float nv = (v.x + (xMove / (0.2f * (f + 4)))) - Math.Abs((yMove / (0.5f * (f + 3))));
                         float nv = v.x + (float)r.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
                         if(nv < 1) nv = 1;
-                        if(nv > 118) nv = 118;
+                        if(nv > xSize - 2) nv = xSize - 2;
                         mvd.x = (byte)((blowback <= 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
                     }
                     else if(xMove < 0)
@@ -2040,13 +2005,13 @@ namespace AssetsPV
                         float nv = v.x - (float)r.NextDouble() * ((xMove / magnitude) * -35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
 
                         if(nv < 1) nv = 1;
-                        if(nv > 118) nv = 118;
+                        if(nv > xSize - 2) nv = xSize - 2;
                         mvd.x = (byte)((blowback > 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
                     }
                     else
                     {
                         if(v.x < 1) mvd.x = 1;
-                        if(v.x > 118) mvd.x = 118;
+                        if(v.x > xSize - 2) mvd.x = (byte)(xSize - 2);
                         else mvd.x = v.x;
                     }
                     if(yMove > 0)
@@ -2055,7 +2020,7 @@ namespace AssetsPV
                         float nv = v.y + (float)r.NextDouble() * ((yMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
 
                         if(nv < 1) nv = 1;
-                        if(nv > 118) nv = 118;
+                        if(nv > ySize - 2) nv = ySize - 2;
                         mvd.y = (byte)(Math.Floor(nv));
                     }
                     else if(yMove < 0)
@@ -2064,7 +2029,7 @@ namespace AssetsPV
                         float nv = v.y - (float)r.NextDouble() * ((yMove / magnitude) * -35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
 
                         if(nv < 1) nv = 1;
-                        if(nv > 118) nv = 118;
+                        if(nv > ySize - 2) nv = ySize - 2;
                         mvd.y = (byte)(Math.Ceiling(nv));
                     }
                     else
@@ -2078,9 +2043,9 @@ namespace AssetsPV
                         if(nv <= 0 && f < maxFrames && !(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)) nv = r.Next(2); //bounce
                         else if(nv < 0) nv = 0;
 
-                        if(nv > 59)
+                        if(nv > zSize - 1)
                         {
-                            nv = 59;
+                            nv = zSize - 1;
                             mvd.color = VoxelLogic.clear;
                         }
                         mvd.z = (byte)Math.Round(nv);
@@ -2106,7 +2071,7 @@ namespace AssetsPV
             return frames;
         }
 
-        public static MagicaVoxelData[][] HandgunAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] HandgunAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -2156,7 +2121,7 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        public static MagicaVoxelData[][] HandgunReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int strength)
+        public static MagicaVoxelData[][] HandgunReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -2166,14 +2131,14 @@ namespace AssetsPV
             MagicaVoxelData[][][] bursts = new MagicaVoxelData[strength * 2][][];
             for(int s = 0; s < 2 * strength; s++)
             {
-                plumes[s] = SmokePlumeDouble(new MagicaVoxelData
+                plumes[s] = SmokePlumeLarge(new MagicaVoxelData
                 {
                     x = (byte)((s % 2 == 0) ? 90 - r.Next(20) : r.Next(20) + 30),
                     y = (byte)((s % 2 == 0) ? (r.Next(30) + 20) : (100 - r.Next(30))),
                     z = 0,
                     color = smoke
                 }, 8, 7);
-                bursts[s] = BurstDouble(new MagicaVoxelData
+                bursts[s] = BurstLarge(new MagicaVoxelData
                 {
                     x = (byte)(35 + r.Next(3)),
                     y = (byte)(32 - r.Next(4)),
@@ -2230,7 +2195,7 @@ namespace AssetsPV
             }
             return finalFrames;
         }
-        public static MagicaVoxelData[][] MachineGunAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] MachineGunAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -2315,7 +2280,7 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        public static MagicaVoxelData[][] MachineGunReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int strength)
+        public static MagicaVoxelData[][] MachineGunReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -2324,7 +2289,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] sparks = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                sparks[s] = SparksDouble(new MagicaVoxelData
+                sparks[s] = SparksLarge(new MagicaVoxelData
                 {
                     x = (byte)(66 + r.Next(10)),
                     y = (byte)(27 + s * 12),
@@ -2359,7 +2324,7 @@ namespace AssetsPV
             return finalFrames;
         }
 
-        public static MagicaVoxelData[][] CannonAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] CannonAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -2551,7 +2516,7 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        public static MagicaVoxelData[][] CannonReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int strength)
+        public static MagicaVoxelData[][] CannonReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -2560,7 +2525,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = HugeExplosionDouble(randomFill(75, 56 + s, 16 + s, 4, 4, 4, new int[] { orange_fire, orange_fire, yellow_fire, yellow_fire, smoke }).ToArray(), 3, 6 + strength, 2);
+                explosions[s] = FireballLarge(randomFill(75, 56 + s, 16 + s, 4, 4, 4, new int[] { orange_fire, orange_fire, yellow_fire, yellow_fire, smoke }).ToArray(), 3, 6 + strength, 2);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -2582,7 +2547,7 @@ namespace AssetsPV
             return finalFrames;
         }
 
-        public static MagicaVoxelData[][] LongCannonAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] LongCannonAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -2739,7 +2704,7 @@ namespace AssetsPV
             return voxelFrames;
         }
 
-        public static MagicaVoxelData[][] LongCannonReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int strength)
+        public static MagicaVoxelData[][] LongCannonReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -2748,7 +2713,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = HugeExplosionDouble(randomFill(75, 56 + s, 0, 4, 4, 8, new int[] { smoke, orange_fire, smoke, orange_fire, yellow_fire }).ToArray(), 1, 5 + strength, 2);
+                explosions[s] = FireballLarge(randomFill(75, 56 + s, 0, 4, 4, 8, new int[] { smoke, orange_fire, smoke, orange_fire, yellow_fire }).ToArray(), 1, 5 + strength, 2);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -2769,7 +2734,7 @@ namespace AssetsPV
             return finalFrames;
         }
 
-        public static MagicaVoxelData[][] RocketAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] RocketAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -2918,13 +2883,13 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        public static MagicaVoxelData[][] RocketReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int distance)
+        public static MagicaVoxelData[][] RocketReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int distance)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
 
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
-            MagicaVoxelData[][] explosion = HugeExplosionDouble(randomFill(70, 48, 20, 8, 5, 5, new int[] { smoke, orange_fire, yellow_fire, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
+            MagicaVoxelData[][] explosion = FireballLarge(randomFill(70, 48, 20, 8, 5, 5, new int[] { smoke, orange_fire, yellow_fire, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
 
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -2944,7 +2909,7 @@ namespace AssetsPV
             return finalFrames;
         }
 
-        public static MagicaVoxelData[][] ArcMissileAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] ArcMissileAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -2985,23 +2950,23 @@ namespace AssetsPV
                 }*/
                 if(f == 0)
                 {
-                    missile[f].AddRange(generateMissileDouble(launcher, 0));
+                    missile[f].AddRange(generateMissileLarge(launcher, 0));
                 }
                 if(f == 1)
                 {
-                    missile[f].AddRange(generateMissileDouble(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = launcher.y, z = (byte)(launcher.z + 4), color = bold_paint }, 4));
+                    missile[f].AddRange(generateMissileLarge(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = launcher.y, z = (byte)(launcher.z + 4), color = bold_paint }, 4));
                 }
                 else if(f == 2)
                 {
-                    missile[f].AddRange(generateMissileDouble(new MagicaVoxelData { x = (byte)(launcher.x + 12), y = launcher.y, z = (byte)(launcher.z + 12), color = bold_paint }, 12));
+                    missile[f].AddRange(generateMissileLarge(new MagicaVoxelData { x = (byte)(launcher.x + 12), y = launcher.y, z = (byte)(launcher.z + 12), color = bold_paint }, 12));
                 }
                 else if(f == 3)
                 {
-                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 20), y = launcher.y, z = (byte)(launcher.z + 20), color = bold_paint }, 12));
+                    missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 20), y = launcher.y, z = (byte)(launcher.z + 20), color = bold_paint }, 12));
                 }
                 else if(f == 4)
                 {
-                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 28), y = launcher.y, z = (byte)(launcher.z + 28), color = bold_paint }, 12));
+                    missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 28), y = launcher.y, z = (byte)(launcher.z + 28), color = bold_paint }, 12));
 
                     extra[f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 1), z = launcher.z, color = smoke }, 6, smoke));
 
@@ -3011,7 +2976,7 @@ namespace AssetsPV
                 }
                 else if(f == 5)
                 {
-                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 36), y = launcher.y, z = (byte)(launcher.z + 36), color = bold_paint }, 12));
+                    missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 36), y = launcher.y, z = (byte)(launcher.z + 36), color = bold_paint }, 12));
 
                     extra[f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 1), z = launcher.z, color = smoke }, 6, smoke));
 
@@ -3021,7 +2986,7 @@ namespace AssetsPV
                 }
                 else if(f == 6)
                 {
-                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 44), y = launcher.y, z = (byte)(launcher.z + 44), color = bold_paint }, 12));
+                    missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 44), y = launcher.y, z = (byte)(launcher.z + 44), color = bold_paint }, 12));
 
                     extra[f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 2), z = launcher.z, color = smoke }, 8, smoke));
 
@@ -3030,11 +2995,11 @@ namespace AssetsPV
                 }
                 else if(f > 6)
                 {
-                    missile[f].AddRange(generateMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x + 8 + f * 8), y = launcher.y, z = (byte)(launcher.z + 8 + f * 8), color = bold_paint }, 12));
+                    missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 8 + f * 8), y = launcher.y, z = (byte)(launcher.z + 8 + f * 8), color = bold_paint }, 12));
                 }
                 if(f >= 4)
                 {
-                    extra[f].AddRange(generateConeDouble(new MagicaVoxelData { x = (byte)(launcher.x + 3 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z + 3 * (f - 3)), color = smoke }, (f * 3) / 2, smoke).
+                    extra[f].AddRange(generateConeLarge(new MagicaVoxelData { x = (byte)(launcher.x + 3 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z + 3 * (f - 3)), color = smoke }, (f * 3) / 2, smoke).
                         Where(v => r.Next(15) > f && r.Next(15) > f));
                 }
             }
@@ -3047,7 +3012,7 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        public static MagicaVoxelData[][] ArcMissileReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int strength)
+        public static MagicaVoxelData[][] ArcMissileReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
         {
 
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
@@ -3080,7 +3045,7 @@ namespace AssetsPV
                         if(missile[f - 1][i].x - 4 < 64)
                         {
                             isExploding = true;
-                            explosion = HugeExplosionDouble(randomFill(50, 55, missile[f - 1][i].z, 8, 10, 7, new int[] { smoke, orange_fire, yellow_fire }).Concat(missile[f - 1]).ToArray(), 0, 14 - f, 2);
+                            explosion = FireballLarge(randomFill(50, 55, missile[f - 1][i].z, 8, 10, 7, new int[] { smoke, orange_fire, yellow_fire }).Concat(missile[f - 1]).ToArray(), 0, 14 - f, 2);
                             missile[f].Clear();
                             firstBurst = f;
                             break;
@@ -3089,7 +3054,7 @@ namespace AssetsPV
                 }
                 if(f == 0 && !isExploding)
                 {
-                    missile[f].AddRange(generateDownwardMissileDouble(launcher, 0));
+                    missile[f].AddRange(generateDownwardMissileLarge(launcher, 0));
 
                     /*                    missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x - 2), y = (byte)(launcher.y), z = (byte)(launcher.z - 2), color = bold_paint });
                                         missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x - 3), y = (byte)(launcher.y), z = (byte)(launcher.z - 2), color = bold_paint });
@@ -3118,7 +3083,7 @@ namespace AssetsPV
                 }
                 if(f == 1 && !isExploding)
                 {
-                    missile[f].AddRange(generateDownwardMissileDouble(new MagicaVoxelData { x = (byte)(launcher.x - 8), y = launcher.y, z = (byte)(launcher.z - 8), color = bold_paint }, 8));
+                    missile[f].AddRange(generateDownwardMissileLarge(new MagicaVoxelData { x = (byte)(launcher.x - 8), y = launcher.y, z = (byte)(launcher.z - 8), color = bold_paint }, 8));
 
                     /*
                     missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x - 3), y = (byte)(launcher.y), z = (byte)(launcher.z - 3), color = metal });
@@ -3157,7 +3122,7 @@ namespace AssetsPV
                 }
                 else if(f >= 2 && !isExploding)
                 {
-                    missile[f].AddRange(generateDownwardMissileFieryTrailDouble(new MagicaVoxelData { x = (byte)(launcher.x - 8 * f), y = launcher.y, z = (byte)(launcher.z - 8 * f), color = bold_paint }, 12));
+                    missile[f].AddRange(generateDownwardMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x - 8 * f), y = launcher.y, z = (byte)(launcher.z - 8 * f), color = bold_paint }, 12));
                     /*
                     missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x - 3), y = (byte)(launcher.y), z = (byte)(launcher.z - 3), color = metal });
                     missile[f].Add(new MagicaVoxelData { x = (byte)(launcher.x - 3), y = (byte)(launcher.y + 1), z = (byte)(launcher.z - 3), color = metal });
@@ -3192,7 +3157,7 @@ namespace AssetsPV
                 }
                 if(f >= 4)
                 {
-                    extra[f].AddRange(generateDownwardConeDouble(new MagicaVoxelData { x = (byte)(launcher.x - 8 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z - 8 * (f - 3)), color = smoke },
+                    extra[f].AddRange(generateDownwardConeLarge(new MagicaVoxelData { x = (byte)(launcher.x - 8 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z - 8 * (f - 3)), color = smoke },
                         8, smoke).Where(v => r.Next(95) > (f + 1) * (f + 1) && r.Next(95) > (f + 1) * f));
                 }
                 if(f < 14 && isExploding)
@@ -3210,7 +3175,7 @@ namespace AssetsPV
             return finalFrames; ;
         }
 
-        public static MagicaVoxelData[][] BombAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] BombAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -3286,7 +3251,7 @@ namespace AssetsPV
                     {
                         if(exploding[m] == 0)
                         {
-                            explosions[m] = HugeExplosionDouble(randomFill(centers[m].x - 3, centers[m].y - 3, 0, 10, 10, 8, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 4);
+                            explosions[m] = FireballLarge(randomFill(centers[m].x - 3, centers[m].y - 3, 0, 10, 10, 8, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 4);
                         }
                         exploding[m]++;
                     }
@@ -3308,7 +3273,7 @@ namespace AssetsPV
             return voxelFrames;
         }
 
-        public static MagicaVoxelData[][] BombReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int strength)
+        public static MagicaVoxelData[][] BombReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
@@ -3317,7 +3282,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = HugeExplosionDouble(randomFill(84, 50 + r.Next(11), r.Next(5), 8, 6, 6, new int[] { orange_fire, yellow_fire, smoke }).ToArray(), -3, 9, 2);
+                explosions[s] = FireballLarge(randomFill(84, 50 + r.Next(11), r.Next(5), 8, 6, 6, new int[] { orange_fire, yellow_fire, smoke }).ToArray(), -3, 9, 2);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -3338,7 +3303,7 @@ namespace AssetsPV
             return finalFrames;
         }
 
-        public static MagicaVoxelData[][] TorpedoAnimationDouble(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        public static MagicaVoxelData[][] TorpedoAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
             voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -3414,13 +3379,13 @@ namespace AssetsPV
             }
             return voxelFrames;
         }
-        public static MagicaVoxelData[][] TorpedoReceiveAnimationDouble(MagicaVoxelData[][] parsedFrames, int distance)
+        public static MagicaVoxelData[][] TorpedoReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int distance)
         {
             List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
 
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
-            MagicaVoxelData[][] explosion = HugeExplosionDouble(randomFill(62, 47, 0, 8, 8, 7, new int[] { 253 - 27 * 4, 253 - 27 * 4, 253 - 27 * 4, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
+            MagicaVoxelData[][] explosion = FireballLarge(randomFill(62, 47, 0, 8, 8, 7, new int[] { 253 - 27 * 4, 253 - 27 * 4, 253 - 27 * 4, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
 
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -3454,17 +3419,17 @@ namespace AssetsPV
         //176 Handgun
         public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "AA_Gun", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb" };
 
-        public static AnimationGenerator[] weaponAnimationsDouble = { HandgunAnimationDouble, MachineGunAnimationDouble, TorpedoAnimationDouble, CannonAnimationDouble,
-                                                                       LongCannonAnimationDouble, RocketAnimationDouble, ArcMissileAnimationDouble, BombAnimationDouble };
-        private static ReceiveAnimationGenerator[] receiveAnimations = { HandgunReceiveAnimationDouble, MachineGunReceiveAnimationDouble, TorpedoReceiveAnimationDouble,
-                                                                    CannonReceiveAnimationDouble, LongCannonReceiveAnimationDouble,
-                                                                    RocketReceiveAnimationDouble,
-                                                                    ArcMissileReceiveAnimationDouble,
-                                                                    BombReceiveAnimationDouble
+        public static AnimationGenerator[] weaponAnimationsLarge = { HandgunAnimationLarge, MachineGunAnimationLarge, TorpedoAnimationLarge, CannonAnimationLarge,
+                                                                       LongCannonAnimationLarge, RocketAnimationLarge, ArcMissileAnimationLarge, BombAnimationLarge };
+        private static ReceiveAnimationGenerator[] receiveAnimations = { HandgunReceiveAnimationLarge, MachineGunReceiveAnimationLarge, TorpedoReceiveAnimationLarge,
+                                                                    CannonReceiveAnimationLarge, LongCannonReceiveAnimationLarge,
+                                                                    RocketReceiveAnimationLarge,
+                                                                    ArcMissileReceiveAnimationLarge,
+                                                                    BombReceiveAnimationLarge
                                                                 };
 
 
-        public static MagicaVoxelData[][] makeFiringAnimationDouble(MagicaVoxelData[] parsed, int unit, int weapon)
+        public static MagicaVoxelData[][] makeFiringAnimationLarge(MagicaVoxelData[] parsed, int unit, int weapon)
         {
             MagicaVoxelData[][] parsedFrames = new MagicaVoxelData[][] {
                 parsed, parsed, parsed, parsed,
@@ -3490,7 +3455,7 @@ namespace AssetsPV
             }
             else
             {
-                voxelFrames = weaponAnimationsDouble[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
+                voxelFrames = weaponAnimationsLarge[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
             }
 
             return voxelFrames;
@@ -3518,7 +3483,7 @@ namespace AssetsPV
             }
             else
             {
-                voxelFrames = weaponAnimationsDouble[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
+                voxelFrames = weaponAnimationsLarge[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
             }
             VoxelLogic.sizex = 80;
             VoxelLogic.sizey = 80;
@@ -3561,7 +3526,7 @@ namespace AssetsPV
             }
             else
             {
-                voxelFrames = weaponAnimationsDouble[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
+                voxelFrames = weaponAnimationsLarge[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
             }
             VoxelLogic.sizex = 80;
             VoxelLogic.sizey = 80;
@@ -3582,7 +3547,7 @@ namespace AssetsPV
             return vf2;
         }
 
-        public static MagicaVoxelData[][] makeReceiveAnimationDouble(int weaponType, int strength)
+        public static MagicaVoxelData[][] makeReceiveAnimationLarge(int weaponType, int strength)
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
             //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -3723,7 +3688,198 @@ namespace AssetsPV
             
             return voxelFrames;
         }
-        public static byte ColorConversion(byte original)
+
+        private static byte[] dismiss = TransformLogic.dismiss;
+
+        public static byte[][,,] FieryDeathW(Model m)
+        {
+            byte[,,] colors = m.Finalize();
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+            byte[][,,] voxelFrames = new byte[13][,,];
+            voxelFrames[0] = colors;
+
+            int initialMinZ = colors.MinZ(dismiss);
+
+            if(initialMinZ > 1)
+            {
+                return FieryDeathFallW(m, voxelFrames);
+            }
+            else
+            {
+                return FieryHaymakerW(m, voxelFrames);
+            }
+        }
+
+        public static byte[][,,] FieryDeathFallW(Model m, byte[][,,] voxelFrames)
+        {
+            int[] minZ = new int[m.Bones.Count];
+            int[] maxZ = new int[m.Bones.Count];
+            int[] midZ = new int[m.Bones.Count];
+            int[] minX = new int[m.Bones.Count];
+            int[] maxX = new int[m.Bones.Count];
+            int[] midX = new int[m.Bones.Count];
+            int[] minY = new int[m.Bones.Count];
+            int[] maxY = new int[m.Bones.Count];
+            int[] midY = new int[m.Bones.Count];
+            int[] sizes = new int[m.Bones.Count];
+            Bone[] bones = m.Bones.Values.ToArray(), ends = new Bone[bones.Length], wrecks = new Bone[bones.Length];
+            byte[][,,] finals = bones.Select(b => b.Finalize(10 * Bone.Multiplier, 0)).ToArray();
+            for(int i = 0; i < bones.Length; i++)
+            {
+                minZ[i] = finals[i].MinZ(dismiss);
+                maxZ[i] = finals[i].MaxZ(dismiss);
+                midZ[i] = (maxZ[i] + minZ[i]) / 2;
+
+                minX[i] = finals[i].MinXAtZ(midZ[i], dismiss);
+                maxX[i] = finals[i].MaxXAtZ(midZ[i], dismiss);
+                midX[i] = (maxX[i] + minX[i]) / 2;
+
+                minY[i] = finals[i].MinYAtZ(midZ[i], dismiss);
+                maxY[i] = finals[i].MaxYAtZ(midZ[i], dismiss);
+                midY[i] = (maxY[i] + minY[i]) / 2;
+
+                sizes[i] = finals[i].Tally(dismiss);
+                sizes[i] = (int)Math.Log10(sizes[i] * sizes[i]);
+                if(sizes[i] > 9)
+                    sizes[i] = 9;
+
+
+                ends[i] = bones[i].Replicate();
+                ends[i].Pitch -= 50;
+                ends[i].MoveZ = -midZ[i];
+                ends[i].MoveX -= 10;
+                ends[i].Roll = r.Next(40) - 20f;
+                ends[i].Yaw = r.Next(120) - 60f;
+                ends[i].InitFierySpreadCU(-ends[i].Yaw / 1.5f, 40, -ends[i].Roll / 1.5f, 0.15f);
+
+
+                wrecks[i] = bones[i].Replicate();
+                wrecks[i].Pitch -= 40;
+                wrecks[i].MoveZ = -(midZ[i] + maxZ[i]) / 2;
+                wrecks[i].Roll = ends[i].Roll;
+                wrecks[i].Yaw = ends[i].Yaw;
+                wrecks[i].InitFierySpreadCU(0, 10, 0, 0.09f);
+            }
+
+            for(int f = 1; f < 9; f++)
+            {
+                voxelFrames[f] = bones[0].Interpolate(ends[0], f * 0.125f).FinalizeScatter(10 * Bone.Multiplier, 0);
+                for(int b = 1; b < bones.Length; b++)
+                {
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], bones[b].Interpolate(ends[b], f * 0.125f).FinalizeScatter(10 * Bone.Multiplier, 0));
+                }
+            }
+            for(int f = 9; f < 13; f++)
+            {
+                voxelFrames[f] = ends[0].Interpolate(wrecks[0], f * 0.25f).FinalizeScatter(10 * Bone.Multiplier, 0);
+                for(int b = 1; b < bones.Length; b++)
+                {
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], ends[b].Interpolate(wrecks[b], f * 0.25f).FinalizeScatter(10 * Bone.Multiplier, 0));
+                }
+            }
+            for(int f = 1, e = 0; f < 6 && e < maxExplosionFrames; f++, e++)
+            {
+                for(int b = 0; b < bones.Length; b++)
+                {
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], TransformLogic.Translate(Explosions[sizes[b]][e], midX[b] - 30, midY[b] - 30, 0));
+                }
+            }
+
+            byte[][,,] frames = new byte[12][,,];
+
+            for(int f = 1; f < 13; f++)
+            {
+                frames[f - 1] = voxelFrames[f];
+            }
+            return frames;
+        }
+        public static byte[][,,] FieryHaymakerW(Model m, byte[][,,] voxelFrames)
+        {
+            int[] minZ = new int[m.Bones.Count];
+            int[] maxZ = new int[m.Bones.Count];
+            int[] midZ = new int[m.Bones.Count];
+            int[] minX = new int[m.Bones.Count];
+            int[] maxX = new int[m.Bones.Count];
+            int[] midX = new int[m.Bones.Count];
+            int[] minY = new int[m.Bones.Count];
+            int[] maxY = new int[m.Bones.Count];
+            int[] midY = new int[m.Bones.Count];
+            int[] sizes = new int[m.Bones.Count];
+            Bone[] bones = m.Bones.Values.ToArray(), aerial = new Bone[bones.Length], wasted = new Bone[bones.Length];
+            byte[][,,] finals = bones.Select(b => b.Finalize(10 * Bone.Multiplier, 0)).ToArray();
+            for(int i = 0; i < bones.Length; i++)
+            {
+                minZ[i] = finals[i].MinZ(dismiss);
+                maxZ[i] = finals[i].MaxZ(dismiss);
+                midZ[i] = (maxZ[i] + minZ[i]) / 2;
+
+                minX[i] = finals[i].MinXAtZ(midZ[i], dismiss);
+                maxX[i] = finals[i].MaxXAtZ(midZ[i], dismiss);
+                midX[i] = (maxX[i] + minX[i]) / 2;
+
+                minY[i] = finals[i].MinYAtZ(midZ[i], dismiss);
+                maxY[i] = finals[i].MaxYAtZ(midZ[i], dismiss);
+                midY[i] = (maxY[i] + minY[i]) / 2;
+
+                sizes[i] = finals[i].Tally(dismiss);
+                sizes[i] = (int)Math.Log10(sizes[i] * sizes[i]);
+                if(sizes[i] > 9)
+                    sizes[i] = 9;
+
+
+                aerial[i] = bones[i].Replicate();
+                aerial[i].Pitch += 90;
+                aerial[i].MoveZ = (midZ[i] + minZ[i]) / 2;
+                aerial[i].MoveX -= 15;
+                aerial[i].Roll = (i + 1) * (r.Next(20) - 10f);
+                aerial[i].Yaw = (i + 0.5f) * (r.Next(10) - 5f);
+                aerial[i].InitFierySpreadCU(-aerial[i].Yaw / 1.5f, -20, -aerial[i].Roll / 1.5f, 0.1f);
+
+
+                wasted[i] = bones[i].Replicate();
+                wasted[i].Pitch = 90;
+                wasted[i].MoveZ = -(midZ[i] + minZ[i]) / 2;
+                wasted[i].Roll = aerial[i].Roll * 30 + r.Next(30, 90) * (r.Next(2) == 1 ? -1 : 1);
+                wasted[i].Yaw = aerial[i].Yaw * 60 + r.Next(40, 110) * (r.Next(2) == 1 ? -1 : 1);
+                wasted[i].InitFierySpreadCU(0, 10, 0, 0.09f);
+            }
+
+            for(int f = 1; f < 7; f++)
+            {
+                voxelFrames[f] = bones[0].Interpolate(aerial[0], f * 1f / 6f).Finalize(10 * Bone.Multiplier, 0);
+                for(int b = 1; b < bones.Length; b++)
+                {
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], bones[b].Interpolate(aerial[b], f * 1f / 6f).Finalize(10 * Bone.Multiplier, 0));
+                }
+            }
+            for(int f = 7; f < 13; f++)
+            {
+                voxelFrames[f] = aerial[0].Interpolate(wasted[0], f * 1f / 6f).Finalize(10 * Bone.Multiplier, 0);
+                for(int b = 1; b < bones.Length; b++)
+                {
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], aerial[b].Interpolate(wasted[b], f * 1f / 6f).Finalize(10 * Bone.Multiplier, 0));
+                }
+            }
+            for(int f = 1, e = 0; f < 6 && e < maxExplosionFrames; f++, e++)
+            {
+                for(int b = 0; b < bones.Length; b++)
+                {
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], TransformLogic.Translate(Explosions[sizes[b]][e], midX[b] - 30, midY[b] - 30, 0));
+                }
+            }
+
+            byte[][,,] frames = new byte[12][,,];
+
+            for(int f = 1; f < 13; f++)
+            {
+                frames[f - 1] = voxelFrames[f];
+            }
+            return frames;
+        }
+
+
+
+    public static byte ColorConversion(byte original)
         {
             if((249 - original) > 168)
                 return (byte)(emitter0 - 4 * ((249 - original) % 4));

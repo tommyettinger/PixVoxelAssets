@@ -693,7 +693,7 @@ namespace AssetsPV
                                             voxelFrames[0][i].y += 20;
                                         }*/
 
-                    voxelFrames = CURedux.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
+                    voxelFrames = CURedux.weaponAnimationsLarge[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
 
                     for(int f = 0; f < 16; f++)
                     {
@@ -734,7 +734,7 @@ namespace AssetsPV
                 {
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
-                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
                     for(int color = 0; color < 8; color++)
                     {
                         for(int d = 0; d < 4; d++)

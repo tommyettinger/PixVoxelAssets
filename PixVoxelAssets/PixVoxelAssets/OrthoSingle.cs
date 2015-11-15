@@ -858,7 +858,7 @@ namespace AssetsPV
                         flying[i].CopyTo(voxelFrames[i], 0);
                     }
 
-                    voxelFrames = CURedux.weaponAnimationsDouble[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
+                    voxelFrames = CURedux.weaponAnimationsLarge[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
 
                     for(int f = 0; f < 16; f++)
                     {
@@ -911,7 +911,7 @@ namespace AssetsPV
                     
                     bin = new BinaryReader(File.Open(filename, FileMode.Open));
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
-                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationDouble(parsed, VoxelLogic.UnitLookup[u], w);
+                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
 
                     for(int d = 0; d < 4; d++)
                     {
@@ -970,7 +970,7 @@ namespace AssetsPV
             {
                 for(int s = 0; s < 4; s++)
                 {
-                    MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationDouble(i, s + 1);
+                    MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationLarge(i, s + 1);
                     for(int d = 0; d < 4; d++)
                     {
                         Directory.CreateDirectory(folder); //("color" + i);
@@ -1681,7 +1681,97 @@ namespace AssetsPV
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames/" + altFolder);
             Directory.CreateDirectory(folder); //("color" + i);
-            
+            byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, multiplier, 40, 40, 120, 120, 80);
+
+            Model m = Model.FromModelCU(colors);
+
+            for(int d = 0; d < 4; d++)
+            {
+                byte[][,,] explode = CURedux.FieryDeathW(m);
+
+                for(int frame = 0; frame < 12; frame++)
+                {
+
+                    byte[][] b = processFrameHugeW(TransformLogic.SealGaps(explode[frame]), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+
+                    ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_fiery_death_" + frame + ".png", imi, true);
+                    WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
+                }
+            }
+
+            if(palette >= 0)
+            {
+                Directory.CreateDirectory("gifs/" + altFolder);
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                startInfo.UseShellExecute = false;
+                string s = "";
+
+                for(int d = 0; d < 4; d++)
+                {
+                    for(int frame = 0; frame < 12; frame++)
+                    {
+                        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_death_" + frame + ".png ";
+                    }
+                }
+
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_death_animated.gif";
+                Console.WriteLine("Running convert.exe ...");
+                Process.Start(startInfo).WaitForExit();
+            }
+            else
+            {
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < 12; f++)
+                    {
+                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_fiery_death_" + f + ".png",
+                            folder + "/color{0}_" + u + "_Large_face" + dir + "_fiery_death_" + f + ".png", simplepalettes);
+                    }
+                }
+
+                Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 8 * 16);
+
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_fiery_death_" + f + ".png");
+                        }
+                    }
+                }
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_animated");
+
+            }
+
+        }
+
+        public static void OLD_processExplosionLargeW(string u, int palette, MagicaVoxelData[] voxels, bool shadowless)
+        {
+            Console.WriteLine("Processing: " + u);
+            //            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
+            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
+            if(palette >= 0)
+            {
+                VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+                wditheredcurrent = wdithered[palette];
+            }
+            else
+            {
+                VoxelLogic.wcolors = VoxelLogic.wpalettes[0];
+                wditheredcurrent = wdithered[0];
+            }
+            //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+            string folder = ("frames/" + altFolder);
+            Directory.CreateDirectory(folder); //("color" + i);
+
             for(int d = 0; d < 4; d++)
             {
                 byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier, 40, 40, 120, 120, 80), 1 + bonus * multiplier / 2);
@@ -1697,7 +1787,7 @@ namespace AssetsPV
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
-            
+
             if(palette >= 0)
             {
                 Directory.CreateDirectory("gifs/" + altFolder);
@@ -1746,11 +1836,10 @@ namespace AssetsPV
                 Directory.CreateDirectory("gifs/" + altFolder);
                 Console.WriteLine("Running GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_animated");
-                
+
             }
 
         }
-        
 
 
 
@@ -3694,7 +3783,7 @@ namespace AssetsPV
 
             VoxelLogic.VisualMode = "CU";
             altFolder = "CU_Ortho/";
-            CURedux.Initialize();
+            CURedux.Initialize(true);
             
             //VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
@@ -4049,7 +4138,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
 
-            
+            */
             processUnitLargeWMilitary("Infantry");
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
@@ -4064,7 +4153,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
-            
+            /*
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
             processUnitLargeWMilitary("Airport");
@@ -4094,9 +4183,9 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane_T");
             
             processUnitHugeWMilitarySuper("Boat");
-            */
+            
             processUnitHugeWMilitarySuper("Boat_P");
-/*            processUnitHugeWMilitarySuper("Boat_S");
+            processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
             
             processReceivingMilitaryWSuper();

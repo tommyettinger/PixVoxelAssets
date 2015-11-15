@@ -361,7 +361,25 @@ namespace AssetsPV
             }
             return 0;
         }
-        
+
+
+        public static int Tally(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2), tally = 0;
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            tally++; ;
+                    }
+                }
+            }
+            return tally;
+        }
         public readonly static Vector3
             YawAxis = new Vector3(0f, 0f, 1f),
             PitchAxis = new Vector3(0f, 1f, 0f),
