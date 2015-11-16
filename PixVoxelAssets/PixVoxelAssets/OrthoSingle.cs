@@ -1685,14 +1685,14 @@ namespace AssetsPV
 
             Model m = Model.FromModelCU(colors);
 
+            byte[][,,] explode = CURedux.FieryDeathW(u, m);
+
             for(int d = 0; d < 4; d++)
             {
-                byte[][,,] explode = CURedux.FieryDeathW(m);
-
                 for(int frame = 0; frame < 12; frame++)
                 {
 
-                    byte[][] b = processFrameHugeW(TransformLogic.SealGaps(explode[frame]), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+                    byte[][] b = processFrameHugeW(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame], d * 90)), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_fiery_death_" + frame + ".png", imi, true);
@@ -4106,39 +4106,6 @@ namespace AssetsPV
             //renderTerrain();
             //makeFlatTiling();
 
-            /*
-            processUnitLargeWMilitary("Civilian");
-
-            processUnitLargeWMilitary("Copter");
-            processUnitLargeWMilitary("Copter_P");
-            processUnitLargeWMilitary("Copter_S");
-            processUnitLargeWMilitary("Copter_T");
-
-            processUnitLargeWMilitary("Plane");
-            processUnitLargeWMilitary("Plane_P");
-            processUnitLargeWMilitary("Plane_S");
-            processUnitLargeWMilitary("Plane_T");
-
-            processUnitLargeWMilitary("Boat");
-            processUnitLargeWMilitary("Boat_P");
-            processUnitLargeWMilitary("Boat_S");
-            processUnitLargeWMilitary("Boat_T");
-
-            processUnitLargeWMilitary("Tank");
-            processUnitLargeWMilitary("Tank_P");
-            processUnitLargeWMilitary("Tank_S");
-            processUnitLargeWMilitary("Tank_T");
-            
-            processUnitLargeWMilitary("Volunteer");
-            processUnitLargeWMilitary("Volunteer_P");
-            processUnitLargeWMilitary("Volunteer_S");
-            processUnitLargeWMilitary("Volunteer_T");
-            
-            processUnitLargeWMilitary("Infantry_PS");
-            processUnitLargeWMilitary("Infantry_PT");
-            processUnitLargeWMilitary("Infantry_ST");
-
-            */
             processUnitLargeWMilitary("Infantry");
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
@@ -4153,7 +4120,40 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
-            /*
+
+            processUnitLargeWMilitary("Civilian");
+
+            processUnitLargeWMilitary("Copter");
+            processUnitLargeWMilitary("Copter_P");
+            processUnitLargeWMilitary("Copter_S");
+            processUnitLargeWMilitary("Copter_T");
+            
+            processUnitLargeWMilitary("Tank");
+            processUnitLargeWMilitary("Tank_P");
+            processUnitLargeWMilitary("Tank_S");
+            processUnitLargeWMilitary("Tank_T");
+            
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer_S");
+            processUnitLargeWMilitary("Volunteer_T");
+            
+            processUnitLargeWMilitary("Infantry_PS");
+            processUnitLargeWMilitary("Infantry_PT");
+            processUnitLargeWMilitary("Infantry_ST");
+
+            
+            
+            processUnitLargeWMilitary("Plane");
+            processUnitLargeWMilitary("Plane_P");
+            processUnitLargeWMilitary("Plane_S");
+            processUnitLargeWMilitary("Plane_T");
+            
+            processUnitLargeWMilitary("Boat");
+            processUnitLargeWMilitary("Boat_P");
+            processUnitLargeWMilitary("Boat_S");
+            processUnitLargeWMilitary("Boat_T");
+
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
             processUnitLargeWMilitary("Airport");
@@ -4163,7 +4163,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Estate");
             
             //processReceivingMilitaryW();
-            
+            /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -4189,8 +4189,8 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             
             processReceivingMilitaryWSuper();
-  */          
-            
+  */
+
             /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")

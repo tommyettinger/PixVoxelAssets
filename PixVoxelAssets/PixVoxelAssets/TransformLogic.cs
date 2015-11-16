@@ -13,11 +13,12 @@ namespace AssetsPV
         public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
 
-        public readonly byte[,,] Colors;
+        public byte[,,] Colors;
         public string Name;
         public static Dictionary<byte, Pattern> Patterns = null;
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
-            MoveX = 0f, MoveY = 0f, MoveZ = 0f, StretchX = 1f, StretchY = 1f, StretchZ = 1f, SpreadChance = 1f;
+            MoveX = 0f, MoveY = 0f, MoveZ = 0f, ZeroOutX = 0f, ZeroOutY = 0f, ZeroOutZ = 0f, 
+            StretchX = 1f, StretchY = 1f, StretchZ = 1f, SpreadChance = 1f;
         public bool SpreadAll = false;
 
         public static float Lerp(float start, float end, float alpha)
@@ -65,12 +66,24 @@ namespace AssetsPV
         }
         public Bone InitFierySpreadCU(float yaw_back, float pitch_back, float roll_back, float spread_chance)
         {
-            SpreadColors = new byte[] { 253 - 18 * 4, 253 - 18 * 4, 253 - 17 * 4, 253 - 19 * 4 };
-            SpreadAll = true;
-            SpreadChance = spread_chance;
-            StartYaw = yaw_back;
-            StartPitch = pitch_back;
-            StartRoll = roll_back;
+            if(spread_chance <= 0)
+            {
+                SpreadColors = null;
+                SpreadAll = false;
+                SpreadChance = 0;
+                StartYaw = 0;
+                StartPitch = 0;
+                StartRoll = 0;
+            }
+            else
+            {
+                SpreadColors = new byte[] { 253 - 18 * 4, 253 - 18 * 4, 253 - 17 * 4, 253 - 19 * 4 };
+                SpreadAll = true;
+                SpreadChance = spread_chance;
+                StartYaw = yaw_back;
+                StartPitch = pitch_back;
+                StartRoll = roll_back;
+            }
             return this;
         }
         public Bone InitStretch(float stretchX, float stretchY, float stretchZ)
@@ -78,6 +91,13 @@ namespace AssetsPV
             StretchX = stretchX;
             StretchY = stretchY;
             StretchZ = stretchZ;
+            return this;
+        }
+        public Bone ZeroOut(float zeroX, float zeroY, float zeroZ)
+        {
+            ZeroOutX = zeroX;
+            ZeroOutY = zeroY;
+            ZeroOutZ = zeroZ;
             return this;
         }
         public Bone Translate(float moveX, float moveY, float moveZ)
@@ -120,6 +140,21 @@ namespace AssetsPV
             
             byte[,,] c2 = new byte[xSize, ySize, zSize];
 
+            float zx = 0, zy = 0, zz = 0;
+            {
+
+                v.X = (ZeroOutX - hxs) + xOffset;
+                v.Y = (ZeroOutY - hys);
+                v.Z = (ZeroOutZ - hzs);
+                float normod = v.Length();
+                v = Vector3.Divide(v, normod);
+                v = Vector3.Transform(v, q);
+                v = Vector3.Multiply(normod, v);
+                zz = (int)(v.Z + 0.5f + hzs + MoveZ);
+                zx = 0;
+                zy = 0;
+                if(ZeroOutZ == 0) zz = 0;
+            }
             for(int z = 0; z < zSize; z++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -143,7 +178,7 @@ namespace AssetsPV
                             v = Vector3.Transform(v, q);
                             v = Vector3.Multiply(normod, v);
 
-                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v.Z + 0.5f + hzs + MoveZ - zz);
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                 c2[x2, y2, z2] = Colors[x, y, z];
                             /*
@@ -225,6 +260,22 @@ namespace AssetsPV
 
             byte[,,] c2 = new byte[xSize, ySize, zSize];
 
+            float zx = 0, zy = 0, zz = 0;
+            {
+
+                v.X = (ZeroOutX - hxs) + xOffset;
+                v.Y = (ZeroOutY - hys);
+                v.Z = (ZeroOutZ - hzs);
+                float normod = v.Length();
+                v = Vector3.Divide(v, normod);
+                v = Vector3.Transform(v, q);
+                v = Vector3.Multiply(normod, v);
+                zz = (int)(v.Z + 0.5f + hzs + MoveZ);
+                zx = 0;
+                zy = 0;
+                if(ZeroOutZ == 0) zz = 0;
+            }
+
             for(int z = 0; z < zSize; z++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -247,7 +298,7 @@ namespace AssetsPV
                             v = Vector3.Transform(v, q);
                             v = Vector3.Multiply(normod, v);
 
-                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v.Z + 0.5f + hzs + MoveZ - zz);
                             if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                 c2[x2, y2, z2] = Colors[x, y, z];
                             /*
@@ -305,8 +356,7 @@ namespace AssetsPV
                             {
                                 q2 = Quaternion.Slerp(q, q0, a);
                                 v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
-
-                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
 
                                 if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance < TransformLogic.rng.NextDouble())
                                     c2[x2, y2, z2] = SpreadColors.RandomElement();
@@ -329,8 +379,7 @@ namespace AssetsPV
                                     {
                                         q2 = Quaternion.Slerp(q, q0, a);
                                         v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
-
-                                        int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                        int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
 
                                         if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance < TransformLogic.rng.NextDouble())
                                             c2[x2, y2, z2] = Colors[x, y, z];
@@ -396,6 +445,22 @@ namespace AssetsPV
 
             byte[,,] c2 = new byte[xSize, ySize, zSize];
 
+            float zx = 0, zy = 0, zz = 0;
+            {
+
+                v.X = (ZeroOutX - hxs) + xOffset;
+                v.Y = (ZeroOutY - hys);
+                v.Z = (ZeroOutZ - hzs);
+                float normod = v.Length();
+                v = Vector3.Divide(v, normod);
+                v = Vector3.Transform(v, q);
+                v = Vector3.Multiply(normod, v);
+                zz = (int)(v.Z + 0.5f + hzs + MoveZ);
+                zx = 0;
+                zy = 0;
+                if(ZeroOutZ == 0) zz = 0;
+            }
+
             for(int z = 0; z < zSize; z++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -412,7 +477,7 @@ namespace AssetsPV
                             v = Vector3.Transform(v, q);
                             v = Vector3.Multiply(normod, v);
 
-                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v.Y + 0.5f + hys + MoveY), z2 = (int)(v.Z + 0.5f + hzs + MoveZ);
+                            int x2 = (int)(v.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v.Z + 0.5f + hzs + MoveZ - zz);
                             if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
                             {
                                 if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
@@ -424,8 +489,8 @@ namespace AssetsPV
                                     double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
                                     double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
 
-                                    xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
-                                    yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                    xMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
+                                    yMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
 
                                     x2 += (int)Math.Round(xMove);
                                     y2 += (int)Math.Round(yMove);
@@ -461,7 +526,7 @@ namespace AssetsPV
                                 q2 = Quaternion.Slerp(q, q0, a);
                                 v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
-                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
                                 if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance < TransformLogic.rng.NextDouble())
                                 {
                                     if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
@@ -473,8 +538,8 @@ namespace AssetsPV
                                         double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
                                         double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
 
-                                        xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
-                                        yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                        xMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
+                                        yMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
 
                                         x2 += (int)Math.Round(xMove);
                                         y2 += (int)Math.Round(yMove);
@@ -507,7 +572,7 @@ namespace AssetsPV
                                         q2 = Quaternion.Slerp(q, q0, a);
                                         v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
-                                        int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX), y2 = (int)(v2.Y + 0.5f + hys + MoveY), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ);
+                                        int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
                                         if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance < TransformLogic.rng.NextDouble())
                                         {
                                             if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
@@ -597,9 +662,13 @@ namespace AssetsPV
             //    .nor(),
 
             Vector3 myStarts = new Vector3(StartYaw, StartPitch, StartRoll), tgtStarts = new Vector3(target.StartYaw, target.StartPitch, target.StartRoll),
-                myStretches = new Vector3(StretchX, StretchY, StretchZ), tgtStretches = new Vector3(target.StretchX, target.StretchY, target.StretchZ);
+                myStretches = new Vector3(StretchX, StretchY, StretchZ), tgtStretches = new Vector3(target.StretchX, target.StretchY, target.StretchZ),
+                myMoves = new Vector3(MoveX, MoveY, MoveZ), tgtMoves = new Vector3(target.MoveX, target.MoveY, target.MoveZ),
+                myZeroes = new Vector3(ZeroOutX, ZeroOutY, ZeroOutZ), tgtZeroes = new Vector3(target.ZeroOutX, target.ZeroOutY, target.ZeroOutZ);
             myStarts = Vector3.Lerp(myStarts, tgtStarts, alpha);
             myStretches = Vector3.Lerp(myStretches, tgtStretches, alpha);
+            myMoves = Vector3.Lerp(myMoves, tgtMoves, alpha);
+            myZeroes = Vector3.Lerp(myZeroes, tgtZeroes, alpha);
             byte[] newSpread = null;
             if(SpreadColors != null)
             {
@@ -631,11 +700,13 @@ namespace AssetsPV
             float y2 = Lerp(Yaw, target.Yaw, alpha), p2 = Lerp(Pitch, target.Pitch, alpha), r2 = Lerp(Roll, target.Roll, alpha);
             return new Bone(Name, Colors, y2, p2, r2)
                 .InitSpread(newSpread, myStarts.X, myStarts.Y, myStarts.Z)
-                .InitStretch(myStretches.X, myStretches.Y, myStretches.Z);
+                .InitStretch(myStretches.X, myStretches.Y, myStretches.Z)
+                .Translate(myMoves.X, myMoves.Y, myMoves.Z)
+                .ZeroOut(myZeroes.X, myZeroes.Y, myZeroes.Z);
         }
         public Bone Replicate()
         {
-            Bone b = new Bone(Name, Colors, Yaw, Pitch, Roll);
+            Bone b = new Bone(Name, Colors.Replicate(), Yaw, Pitch, Roll);
             b.SpreadColors = SpreadColors.Replicate();
             b.StartYaw = StartYaw;
             b.StartPitch = StartPitch;
@@ -643,6 +714,12 @@ namespace AssetsPV
             b.StretchX = StretchX;
             b.StretchY = StretchY;
             b.StretchZ = StretchZ;
+            b.MoveX = MoveX;
+            b.MoveY = MoveY;
+            b.MoveZ = MoveZ;
+            b.ZeroOutX = ZeroOutX;
+            b.ZeroOutY = ZeroOutY;
+            b.ZeroOutZ = ZeroOutZ;
             return b;
         }
 
@@ -879,46 +956,52 @@ namespace AssetsPV
                 new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
             return model;
         }
-        private static List<MagicaVoxelData> findContinuousParts(ref byte[,,] data, List<MagicaVoxelData> previous, int x0, int y0, int z0, Func<byte, bool> pred)
+        private static List<MagicaVoxelData> findContinuousParts(ref byte[,,] data, List<MagicaVoxelData> previous, Func<byte, bool> pred)
         {
             int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
-            if(x0 - 1 >= 0 && pred(data[x0 - 1, y0, z0]))
+            List<MagicaVoxelData> next = new List<MagicaVoxelData>(256), result = new List<MagicaVoxelData>(2048);
+            result.AddRange(previous);
+            do
             {
-                previous.Add(new MagicaVoxelData(x0 - 1, y0, z0, data[x0 - 1, y0, z0]));
-                data[x0 - 1, y0, z0] = 0;
-                previous = findContinuousParts(ref data, previous, x0 - 1, y0, z0, pred);
-            }
-            if(x0 + 1 < xSize && pred(data[x0 + 1, y0, z0]))
-            {
-                previous.Add(new MagicaVoxelData(x0 + 1, y0, z0, data[x0 + 1, y0, z0]));
-                data[x0 + 1, y0, z0] = 0;
-                previous = findContinuousParts(ref data, previous, x0 + 1, y0, z0, pred);
-            }
-            if(y0 - 1 >= 0 && pred(data[x0, y0 - 1, z0]))
-            {
-                previous.Add(new MagicaVoxelData(x0, y0 - 1, z0, data[x0, y0 - 1, z0]));
-                data[x0, y0 - 1, z0] = 0;
-                previous = findContinuousParts(ref data, previous, x0, y0 - 1, z0, pred);
-            }
-            if(y0 + 1 < ySize && pred(data[x0, y0 + 1, z0]))
-            {
-                previous.Add(new MagicaVoxelData(x0, y0 + 1, z0, data[x0, y0 + 1, z0]));
-                data[x0, y0 + 1, z0] = 0;
-                previous = findContinuousParts(ref data, previous, x0, y0 + 1, z0, pred);
-            }
-            if(z0 - 1 >= 0 && pred(data[x0, y0, z0 - 1]))
-            {
-                previous.Add(new MagicaVoxelData(x0, y0, z0 - 1, data[x0, y0, z0 - 1]));
-                data[x0, y0, z0 - 1] = 0;
-                previous = findContinuousParts(ref data, previous, x0, y0, z0 - 1, pred);
-            }
-            if(z0 + 1 < zSize && pred(data[x0, y0, z0 + 1]))
-            {
-                previous.Add(new MagicaVoxelData(x0, y0, z0 + 1, data[x0, y0, z0 + 1]));
-                data[x0, y0, z0 + 1] = 0;
-                previous = findContinuousParts(ref data, previous, x0, y0, z0 + 1, pred);
-            }
-            return previous;
+                next = new List<MagicaVoxelData>(256);
+                foreach(MagicaVoxelData mvd in previous)
+                {
+                    int x = mvd.x, y = mvd.y, z = mvd.z;
+                    if(x - 1 >= 0 && pred(data[x - 1, y, z]))
+                    {
+                        next.Add(new MagicaVoxelData(x - 1, y, z, data[x - 1, y, z]));
+                        data[x - 1, y, z] = 0;
+                    }
+                    if(x + 1 < xSize && pred(data[x + 1, y, z]))
+                    {
+                        next.Add(new MagicaVoxelData(x + 1, y, z, data[x + 1, y, z]));
+                        data[x + 1, y, z] = 0;
+                    }
+                    if(y - 1 >= 0 && pred(data[x, y - 1, z]))
+                    {
+                        next.Add(new MagicaVoxelData(x, y - 1, z, data[x, y - 1, z]));
+                        data[x, y - 1, z] = 0;
+                    }
+                    if(y + 1 < ySize && pred(data[x, y + 1, z]))
+                    {
+                        next.Add(new MagicaVoxelData(x, y + 1, z, data[x, y + 1, z]));
+                        data[x, y + 1, z] = 0;
+                    }
+                    if(z - 1 >= 0 && pred(data[x, y, z - 1]))
+                    {
+                        next.Add(new MagicaVoxelData(x, y, z - 1, data[x, y, z - 1]));
+                        data[x, y, z - 1] = 0;
+                    }
+                    if(z + 1 < zSize && pred(data[x, y, z + 1]))
+                    {
+                        next.Add(new MagicaVoxelData(x, y, z + 1, data[x, y, z + 1]));
+                        data[x, y, z + 1] = 0;
+                    }
+                }
+                result.AddRange(next);
+                previous = new List<MagicaVoxelData>(next);
+            } while(next.Count > 0);
+            return result;
 
 
         }
@@ -936,19 +1019,23 @@ namespace AssetsPV
                 {
                     for(int z = 0; z < zSize; z++)
                     {
-                        if(data2[x, y, z] <= 253 - 14 * 4 && data2[x, y, z] >= 253 - 16 * 4)
+                        if(data2[x, y, z] <= 253 - 12 * 4 && data2[x, y, z] >= 253 - 16 * 4)
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
-                            model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
-                                bt => bt <= 253 - 14 * 4 && bt >= 253 - 16 * 4), xSize, ySize, zSize));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt <= 253 - 12 * 4 && bt >= 253 - 16 * 4);
+                            if(bn.Count > 0)
+                                model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
                         else if(data2[x,y,z] > 0)
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
-                            model.AddBone("Bone" + regular_ctr++, TransformLogic.VoxListToArray(findContinuousParts(ref data2, l, x, y, z,
-                                bt => bt > 0 && (bt > 253 - 14 * 4 || bt < 253 - 16 * 4)), xSize, ySize, zSize));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt > 0 && (bt > 253 - 12 * 4 || bt < 253 - 16 * 4));
+                            if(bn.Count > 0)
+                                model.AddBone("Bone" + regular_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
                     }
                 }
@@ -1769,6 +1856,26 @@ namespace AssetsPV
 
         public static byte[] dismiss = new byte[] { 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1, };
 
+        public static void MorphInPlace(ref byte[,,] colors, byte[] changing, float chance)
+        {
+            if(chance <= 0)
+                return;
+            int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
+
+            for(int vx = 0; vx < xSize; vx++)
+            {
+                for(int vy = 0; vy < ySize; vy++)
+                {
+                    for(int vz = 0; vz < zSize; vz++)
+                    {
+                        if(!dismiss.IsPresent(colors[vx,vy,vz]) && rng.NextDouble() < chance)
+                        {
+                            colors[vx, vy, vz] = changing.RandomElement();
+                        }
+                    }
+                }
+            }
+        }
         public static byte[][,,] FieryExplosionW(byte[,,] colors, bool blowback, bool shadowless)
         {
             int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);

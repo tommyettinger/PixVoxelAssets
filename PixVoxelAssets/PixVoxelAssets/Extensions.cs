@@ -327,23 +327,80 @@ namespace AssetsPV
             return 0;
         }
 
-        public static int MinZ(this byte[,,] mat, byte[] dismiss)
+        public static int MaxX(this byte[,,] mat, byte[] dismiss)
         {
             int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
 
-            for(int z = 0; z < zSize; z++)
+            for(int x = xSize - 1; x >= 0; x--)
             {
-                for(int x = 0; x < xSize; x++)
+                for(int z = 0; z < zSize; z++)
                 {
                     for(int y = 0; y < ySize; y++)
                     {
                         if(!dismiss.IsPresent(mat[x, y, z]))
-                            return z;
+                            return x;
                     }
                 }
             }
-            return zSize - 1;
+            return 0;
         }
+        public static int MinX(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
+
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int z = 0; z < zSize; z++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            return x;
+                    }
+                }
+            }
+            return xSize - 1;
+        }
+
+
+
+        public static int MaxY(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
+
+            for(int y = ySize - 1; y >= 0; y--)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            return y;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        public static int MinY(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
+
+            for(int y = 0; y < ySize; y++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            return y;
+                    }
+                }
+            }
+            return ySize - 1;
+        }
+
+
         public static int MaxZ(this byte[,,] mat, byte[] dismiss)
         {
             int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
@@ -362,6 +419,23 @@ namespace AssetsPV
             return 0;
         }
 
+        public static int MinZ(this byte[,,] mat, byte[] dismiss)
+        {
+            int xSize = mat.GetLength(0), ySize = mat.GetLength(1), zSize = mat.GetLength(2);
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        if(!dismiss.IsPresent(mat[x, y, z]))
+                            return z;
+                    }
+                }
+            }
+            return zSize - 1;
+        }
 
         public static int Tally(this byte[,,] mat, byte[] dismiss)
         {
