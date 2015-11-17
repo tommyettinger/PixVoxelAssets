@@ -3981,7 +3981,7 @@ namespace AssetsPV
                 wasted[i] = bones[i].Replicate();
                 wasted[i].Pitch = 90;
                 //wasted[i].ZeroOut(midZ[i], midY[i], midX[i]);//.ZeroOutZ = (midX[i] + minX[i]) * 0.5f;
-                wasted[i].MoveZ = -midX[i] + (maxX[i] - minX[i]) * 0.75f + midZ[i] * 0.25f;
+                wasted[i].MoveZ = -midX[i] * 0.8f - minZ[i] * 0.45f; // + minZ[i] * 0.25f
                 wasted[i].MoveX -= 36 - minZ[i] * 2f;
                 wasted[i].MoveY = aerial[i].MoveY * 1.5f;
                 wasted[i].Roll = 0;// aerial[i].Roll * 1.4f + r.Next(2, 6) / 10f * (r.Next(2) == 1 ? -1 : 1);
@@ -4109,7 +4109,7 @@ namespace AssetsPV
 
                 wasted[i] = bones[i].Replicate();
                 wasted[i].Pitch = 180;
-                wasted[i].ZeroOut(0, 0, (midZ[i] + maxZ[i]) * 0.5f);
+                wasted[i].ZeroOut(0, 0, midZ[i]);
                 wasted[i].MoveX = 0;// aerial[i].MoveX + midX[i] * 2f - 10 - r.Next(10);
                 wasted[i].MoveY = aerial[i].MoveY * 1.7f;
                 wasted[i].Roll = 0;// aerial[i].Roll * 1.4f + r.Next(2, 6) / 10f * (r.Next(2) == 1 ? -1 : 1);
@@ -4124,9 +4124,9 @@ namespace AssetsPV
                 aerialFrames[i][0] = aerial[i].Replicate();
                 wastedFrames[i][0] = wasted[i].Replicate();
 
-                TransformLogic.MorphInPlace(ref boneFrames[i][0].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire }, 0.1f);
-                TransformLogic.MorphInPlace(ref aerialFrames[i][0].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire }, 0.1f);
-                TransformLogic.MorphInPlace(ref wastedFrames[i][0].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire }, 0.1f);
+                TransformLogic.MorphInPlace(ref boneFrames[i][0].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire }, 0.02f);
+                TransformLogic.MorphInPlace(ref aerialFrames[i][0].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire }, 0.02f);
+                TransformLogic.MorphInPlace(ref wastedFrames[i][0].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire }, 0.02f);
 
                 for(int f = 1; f < 12; f++)
                 {
@@ -4134,9 +4134,9 @@ namespace AssetsPV
                     aerialFrames[i][f] = aerialFrames[i][f - 1].Replicate();
                     wastedFrames[i][f] = wastedFrames[i][f - 1].Replicate();
 
-                    TransformLogic.MorphInPlace(ref boneFrames[i][f].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire, orange_fire, orange_fire, smoke, yellow_fire, 0, 0, 0 }, 0.0f + 0.04f * f);
-                    TransformLogic.MorphInPlace(ref aerialFrames[i][f].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire, orange_fire, orange_fire, smoke, yellow_fire, 0, 0, 0 }, 0.0f + 0.04f * f);
-                    TransformLogic.MorphInPlace(ref wastedFrames[i][f].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire, orange_fire, orange_fire, smoke, yellow_fire, 0, 0, 0 }, 0.0f + 0.04f * f);
+                    TransformLogic.MorphInPlace(ref boneFrames[i][f].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire, orange_fire, orange_fire, smoke, yellow_fire, 0, 0, 0 }, 0.0f + 0.005f * f);
+                    TransformLogic.MorphInPlace(ref aerialFrames[i][f].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire, orange_fire, orange_fire, smoke, yellow_fire, 0, 0, 0 }, 0.0f + 0.005f * f);
+                    TransformLogic.MorphInPlace(ref wastedFrames[i][f].Colors, new byte[] { orange_fire, orange_fire, smoke, yellow_fire, orange_fire, orange_fire, smoke, yellow_fire, 0, 0, 0 }, 0.0f + 0.005f * f);
                 }
 
             }
@@ -4146,27 +4146,23 @@ namespace AssetsPV
                 voxelFrames[f] = boneFrames[0][f - 1].Interpolate(aerialFrames[0][f - 1], f * 1f / 5f).Finalize(10 * Bone.Multiplier, 0);
                 for(int b = 1; b < bones.Length; b++)
                 {
-                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], boneFrames[b][f - 1].Interpolate(aerialFrames[b][f - 1], f * 1f / 5f).Finalize(10 * Bone.Multiplier, 0));
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], boneFrames[b][f - 1].Interpolate(aerialFrames[b][f - 1], f * 1f / 5f).FinalizeScatter(10 * Bone.Multiplier, 0));
                 }
             }
-            for(int f = 5; f < 11; f++)
+            for(int f = 5; f < 10; f++)
             {
-                voxelFrames[f] = aerialFrames[0][f - 1].Interpolate(wastedFrames[0][f - 1], (f - 5) * 1f / 5f).Finalize(10 * Bone.Multiplier, 0);
+                voxelFrames[f] = aerialFrames[0][f - 1].Interpolate(wastedFrames[0][f - 1], (f - 5) * 1f / 4f).Finalize(10 * Bone.Multiplier, 0);
                 for(int b = 1; b < bones.Length; b++)
                 {
-                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], aerialFrames[b][f - 1].Interpolate(wastedFrames[b][f - 1], (f - 5) * 1f / 5f).Finalize(10 * Bone.Multiplier, 0));
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], aerialFrames[b][f - 1].Interpolate(wastedFrames[b][f - 1], (f - 5) * 1f / 4f).FinalizeScatter(10 * Bone.Multiplier, 0));
                 }
             }
-            for(int b = 0; b < bones.Length; b++)
-            {
-                wasted[b].InitFierySpreadCU(0, 0, 0, 0);
-            }
-            for(int f = 11; f < 13; f++)
+            for(int f = 10; f < 13; f++)
             {
                 voxelFrames[f] = wastedFrames[0][f - 1].Finalize(10 * Bone.Multiplier, 0);
                 for(int b = 1; b < bones.Length; b++)
                 {
-                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], wastedFrames[b][f - 1].Finalize(10 * Bone.Multiplier, 0));
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], wastedFrames[b][f - 1].FinalizeScatter(10 * Bone.Multiplier, 0));
                 }
             }
             for(int f = 1, e = 0; f < 7 && e < maxExplosionFrames; f++, e++)

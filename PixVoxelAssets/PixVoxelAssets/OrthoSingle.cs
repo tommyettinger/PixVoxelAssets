@@ -4106,8 +4106,8 @@ namespace AssetsPV
             //renderTerrain();
             //makeFlatTiling();
 
-            processUnitLargeWMilitary("Infantry");
-            processUnitLargeWMilitary("Infantry_P");
+//            processUnitLargeWMilitary("Infantry");
+//            processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
             

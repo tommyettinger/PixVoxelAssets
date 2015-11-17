@@ -2102,20 +2102,25 @@ namespace AssetsPV
             //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames");
             Directory.CreateDirectory(folder); //("color" + i);
-            
+            byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, 1, 40, 40, 120, 120, 80);
+
+            Model m = Model.FromModelCU(colors);
+
+            byte[][,,] explosion = CURedux.FieryDeathW(u, m);
+
             for(int d = 0; d < 4; d++)
             {
 
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 60, 60, 60, 153));
+                //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 60, 60, 60, 153));
 
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
+                //FaceVoxel[][,,] explode = FaceLogic.FieryExplosionLargeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
-
-                    byte[][] b = processFrameHugeW(explode[frame], (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.RotateYaw(explosion[frame], d * 90));
+                    byte[][] b = processFrameHugeW(faces, (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_death_" + frame + ".png", imi, true);
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
@@ -2131,11 +2136,11 @@ namespace AssetsPV
                 {
                     for(int frame = 0; frame < 12; frame++)
                     {
-                        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png ";
+                        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_death_" + frame + ".png ";
                     }
                 }
 
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_death_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
             }
@@ -2146,8 +2151,8 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < 12; f++)
                     {
-                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png", simplepalettes);
+                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_death_" + f + ".png",
+                            folder + "/color{0}_" + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -2160,12 +2165,12 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_death_" + f + ".png");
                         }
                     }
                 }
                 Console.WriteLine("Running GIF conversion ...");
-                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_animated");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_animated");
                 /*
                 Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -5178,8 +5183,8 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             //writePaletteImages();
-            /*
-            renderTerrain();
+            
+            //renderTerrain();
             
             processUnitLargeWMilitary("Civilian");
 
@@ -5231,7 +5236,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Estate");
 
             //processReceivingMilitaryW();
-            */
+            /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -5254,12 +5259,12 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            /*
+            */
             processUnitLargeWMilitary("Volunteer");
             processUnitLargeWMilitary("Volunteer_P");
             processUnitLargeWMilitary("Volunteer_S");
             processUnitLargeWMilitary("Volunteer_T");
-            */
+            
             //            processReceivingMilitaryWSuper();
 
 
