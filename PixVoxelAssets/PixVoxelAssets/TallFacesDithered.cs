@@ -1450,7 +1450,7 @@ namespace AssetsPV
             processExplosionHugeWSuper(u, -1, explode_parsed, false);
             //            processExplosionHugeWSuper(u, -1, new MagicaVoxelData[] { }, false);
 
-            //processUnitHugeWFiringSuper(u);
+            processUnitHugeWFiringSuper(u);
         }
         public static void processUnitHugeWFiringSuper(string u)
         {
@@ -5193,12 +5193,9 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             //writePaletteImages();
-
+            
             //renderTerrain();
-            processUnitHugeWMilitarySuper("Copter_S");
-            processUnitLargeWMilitary("Copter_S");
-
-
+            /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -5208,26 +5205,23 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Estate");
 
             processUnitHugeWMilitarySuper("Copter");
+            */
             processUnitHugeWMilitarySuper("Copter_P");
-            processUnitHugeWMilitarySuper("Copter_T");
+            processUnitHugeWMilitarySuper("Copter_S");
+            //processUnitHugeWMilitarySuper("Copter_T");
 
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");
             processUnitHugeWMilitarySuper("Plane_T");
-
+            
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            
-            
-            processUnitLargeWMilitary("Civilian");
 
-            processUnitLargeWMilitary("Infantry_PS");
-            processUnitLargeWMilitary("Infantry_PT");
-            processUnitLargeWMilitary("Infantry_ST");
-
+            
+            /*
             processUnitLargeWMilitary("Tank");
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
@@ -5237,6 +5231,17 @@ namespace AssetsPV
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
+
+            processUnitLargeWMilitary("Civilian");
+
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer_S");
+            processUnitLargeWMilitary("Volunteer_T");
+
+            processUnitLargeWMilitary("Infantry_PS");
+            processUnitLargeWMilitary("Infantry_PT");
+            processUnitLargeWMilitary("Infantry_ST");
             
             processUnitLargeWMilitary("Truck");
             processUnitLargeWMilitary("Truck_P");
@@ -5250,6 +5255,7 @@ namespace AssetsPV
             
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
+            processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
             
             processUnitLargeWMilitary("Plane");
@@ -5261,11 +5267,6 @@ namespace AssetsPV
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
-
-            processUnitLargeWMilitary("Volunteer");
-            processUnitLargeWMilitary("Volunteer_P");
-            processUnitLargeWMilitary("Volunteer_S");
-            processUnitLargeWMilitary("Volunteer_T");
             
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
@@ -5274,9 +5275,9 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-            
+            */
             //processReceivingMilitaryW();
-            
+
 
             //            processReceivingMilitaryWSuper();
 
