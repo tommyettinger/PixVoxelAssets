@@ -1225,12 +1225,13 @@ namespace AssetsPV
         {
             byte[,,] next = start.Replicate();
             int xSize = start.GetLength(0), ySize = start.GetLength(1), zSize = start.GetLength(2);
+            int xSize2 = adding.GetLength(0), ySize2 = adding.GetLength(1), zSize2 = adding.GetLength(2);
 
-            for(int z = 0; z < zSize; z++)
+            for(int z = 0; z < zSize && z < zSize2; z++)
             {
-                for(int y = 0; y < ySize; y++)
+                for(int y = 0; y < ySize && y < ySize2; y++)
                 {
-                    for(int x = 0; x < xSize; x++)
+                    for(int x = 0; x < xSize && x < xSize2; x++)
                     {
                         if(adding[x, y, z] > 0)
                             next[x, y, z] = adding[x, y, z];
@@ -1349,15 +1350,25 @@ namespace AssetsPV
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
 
             byte[,,] vs = new byte[newXSize, newYSize, newZSize];
-            
+
             for(int x = 0; x < xSize; x++)
             {
-                for(int y = 0; y < ySize; y++)
+                if(x + (newXSize - xSize) / 2 >= 0 && x + (newXSize - xSize) / 2 < newXSize)
                 {
-                    for(int z = 0; z < zSize; z++)
+                    for(int y = 0; y < ySize; y++)
                     {
-                        vs[x + (newXSize - xSize) / 2, y + (newYSize - ySize) / 2, z] = voxelData[x, y, z];
+                        if(y + (newYSize - ySize) / 2 >= 0 && y + (newYSize - ySize) / 2 < newYSize)
+                        {
+                            for(int z = 0; z < zSize; z++)
+                            {
+                                if(z < newZSize)
+                                {
+                                    vs[x + (newXSize - xSize) / 2, y + (newYSize - ySize) / 2, z] = voxelData[x, y, z];
+                                }
+                            }
+                        }
                     }
+
                 }
             }
 

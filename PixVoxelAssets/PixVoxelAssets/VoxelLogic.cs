@@ -71,7 +71,7 @@ namespace AssetsPV
 "Artillery", "Artillery_P", "Artillery_S", "Artillery_T",
 "Tank", "Tank_P", "Tank_S", "Tank_T",
 "Plane", "Plane_P", "Plane_S", "Plane_T",
-"Supply", "Supply_P", "Supply_S", "Supply_T",
+"Truck", "Truck_P", "Truck_S", "Truck_T",
 "Copter", "Copter_P", "Copter_S", "Copter_T",
 "Boat", "Boat_P", "Boat_S", "Boat_T",
 "City", "Factory", "Airport", "Dock", "Laboratory", "Castle", "Estate",

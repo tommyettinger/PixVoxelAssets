@@ -765,16 +765,16 @@
     <None Include="CU2\Plane_T_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Supply_Large_W.vox">
+    <None Include="CU2\Truck_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Supply_P_Large_W.vox">
+    <None Include="CU2\Truck_P_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Supply_S_Large_W.vox">
+    <None Include="CU2\Truck_S_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Supply_T_Large_W.vox">
+    <None Include="CU2\Truck_T_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Tank_Large_W.vox">
@@ -1797,16 +1797,16 @@
     <None Include="Spirit_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Supply_Part_X.vox">
+    <None Include="Truck_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Supply_P_Part_X.vox">
+    <None Include="Truck_P_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Supply_S_Part_X.vox">
+    <None Include="Truck_S_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Supply_T_Part_X.vox">
+    <None Include="Truck_T_Part_X.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Table_Huge_W.vox">

@@ -1450,7 +1450,7 @@ namespace AssetsPV
             processExplosionHugeWSuper(u, -1, explode_parsed, false);
             //            processExplosionHugeWSuper(u, -1, new MagicaVoxelData[] { }, false);
 
-            processUnitHugeWFiringSuper(u);
+            //processUnitHugeWFiringSuper(u);
         }
         public static void processUnitHugeWFiringSuper(string u)
         {
@@ -2302,18 +2302,26 @@ namespace AssetsPV
             string folder = ("frames");
 
             Directory.CreateDirectory(folder); //("color" + i);
-            
+
+            byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, 2, 40, 40, 80, 80, 60);
+
+            Model m = Model.FromModelCU(colors);
+
+            byte[][,,] explosion = CURedux.FieryDeathW(u, m);
+
             for(int d = 0; d < 4; d++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 2, 60, 60, 40)), 120, 120, 80);
+                //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 2, 60, 60, 40)), 120, 120, 80);
 
-                FaceVoxel[][,,] explode = FaceLogic.FieryExplosionHugeW(faces, false, false);
+                //FaceVoxel[][,,] explode = FaceLogic.FieryExplosionHugeW(faces, false, false);
                 for(int frame = 0; frame < 12; frame++)
                 {
-                    byte[][] b = processFrameMassiveW(explode[frame], (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.RotateYaw(explosion[frame], d * 90));
+
+                    byte[][] b = processFrameMassiveW(faces, (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true);
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
@@ -2329,11 +2337,11 @@ namespace AssetsPV
                 {
                     for(int frame = 0; frame < 12; frame++)
                     {
-                        s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png ";
+                        s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png ";
                     }
                 }
 
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_super_animated.gif";
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_death_super_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
             }
@@ -2345,8 +2353,8 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < 12; f++)
                     {
-                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png", simplepalettes);
+                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png",
+                            folder + "/color{0}_" + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -2359,12 +2367,12 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png");
                         }
                     }
                 }
                 Console.WriteLine("Running GIF conversion ...");
-                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_super_animated");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_super_animated");
                 /*
                 Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -4866,8 +4874,10 @@ namespace AssetsPV
         static void Main(string[] args)
         {
             altFolder = "botl6/";
+            //altFolder = "other/";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
+            System.IO.Directory.CreateDirectory(altFolder);
             System.IO.Directory.CreateDirectory("Terrains2");
             System.IO.Directory.CreateDirectory("TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
@@ -5183,8 +5193,34 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             //writePaletteImages();
-            
+
             //renderTerrain();
+            processUnitHugeWMilitarySuper("Copter_S");
+            processUnitLargeWMilitary("Copter_S");
+
+
+            processUnitHugeWMilitarySuper("Laboratory");
+            processUnitHugeWMilitarySuper("Dock");
+            processUnitHugeWMilitarySuper("Airport");
+            processUnitHugeWMilitarySuper("City");
+            processUnitHugeWMilitarySuper("Factory");
+            processUnitHugeWMilitarySuper("Castle");
+            processUnitHugeWMilitarySuper("Estate");
+
+            processUnitHugeWMilitarySuper("Copter");
+            processUnitHugeWMilitarySuper("Copter_P");
+            processUnitHugeWMilitarySuper("Copter_T");
+
+            processUnitHugeWMilitarySuper("Plane");
+            processUnitHugeWMilitarySuper("Plane_P");
+            processUnitHugeWMilitarySuper("Plane_S");
+            processUnitHugeWMilitarySuper("Plane_T");
+
+            processUnitHugeWMilitarySuper("Boat");
+            processUnitHugeWMilitarySuper("Boat_P");
+            processUnitHugeWMilitarySuper("Boat_S");
+            processUnitHugeWMilitarySuper("Boat_T");
+            
             
             processUnitLargeWMilitary("Civilian");
 
@@ -5196,16 +5232,16 @@ namespace AssetsPV
             processUnitLargeWMilitary("Tank_P");
             processUnitLargeWMilitary("Tank_S");
             processUnitLargeWMilitary("Tank_T");
-
+            
             processUnitLargeWMilitary("Infantry");
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
             
-            processUnitLargeWMilitary("Supply");
-            processUnitLargeWMilitary("Supply_P");
-            processUnitLargeWMilitary("Supply_S");
-            processUnitLargeWMilitary("Supply_T");
+            processUnitLargeWMilitary("Truck");
+            processUnitLargeWMilitary("Truck_P");
+            processUnitLargeWMilitary("Truck_S");
+            processUnitLargeWMilitary("Truck_T");
             
             processUnitLargeWMilitary("Artillery");
             processUnitLargeWMilitary("Artillery_P");
@@ -5214,7 +5250,6 @@ namespace AssetsPV
             
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_P");
-            processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
             
             processUnitLargeWMilitary("Plane");
@@ -5226,6 +5261,11 @@ namespace AssetsPV
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
+
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer_S");
+            processUnitLargeWMilitary("Volunteer_T");
             
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
@@ -5234,39 +5274,13 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-
+            
             //processReceivingMilitaryW();
-            /*
-            processUnitHugeWMilitarySuper("Laboratory");
-            processUnitHugeWMilitarySuper("Dock");
-            processUnitHugeWMilitarySuper("Airport");
-            processUnitHugeWMilitarySuper("City");
-            processUnitHugeWMilitarySuper("Factory");
-            processUnitHugeWMilitarySuper("Castle");
-            processUnitHugeWMilitarySuper("Estate");
             
-            processUnitHugeWMilitarySuper("Copter");
-            processUnitHugeWMilitarySuper("Copter_P");
-            processUnitHugeWMilitarySuper("Copter_S");
-            processUnitHugeWMilitarySuper("Copter_T");
-            
-            processUnitHugeWMilitarySuper("Plane");
-            processUnitHugeWMilitarySuper("Plane_P");
-            processUnitHugeWMilitarySuper("Plane_S");
-            processUnitHugeWMilitarySuper("Plane_T");
 
-            processUnitHugeWMilitarySuper("Boat");
-            processUnitHugeWMilitarySuper("Boat_P");
-            processUnitHugeWMilitarySuper("Boat_S");
-            processUnitHugeWMilitarySuper("Boat_T");
-            */
-            processUnitLargeWMilitary("Volunteer");
-            processUnitLargeWMilitary("Volunteer_P");
-            processUnitLargeWMilitary("Volunteer_S");
-            processUnitLargeWMilitary("Volunteer_T");
-            
             //            processReceivingMilitaryWSuper();
 
+            //processUnitLargeW("Charlie", 1, true, false);
 
             /*
             Pose bow0 = (model => model

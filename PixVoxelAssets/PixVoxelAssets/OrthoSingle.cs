@@ -1073,7 +1073,7 @@ namespace AssetsPV
             {
 
                 byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.ScalePartial(TransformLogic.SealGaps( TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2, 2, 2),
+                    TransformLogic.ScalePartial(TransformLogic.SealGaps( TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
                     1 + bonus * multiplier * 2);
 //                byte[,,] colors = TransformLogic.RunCA(
 //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
@@ -1150,7 +1150,7 @@ namespace AssetsPV
                             //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
                             byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)), 2, 2, 2),
+                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)), 2),
                                 1 + bonus * multiplier * 2);
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -1216,7 +1216,7 @@ namespace AssetsPV
                             //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
                             byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2, 2, 2),
+                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2),
                                 1 + bonus * multiplier * 2);
 //                            byte[,,] colors = TransformLogic.RunCA(
 //                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
@@ -1695,7 +1695,7 @@ namespace AssetsPV
                     byte[][] b = processFrameHugeW(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame], d * 90)), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_fiery_death_" + frame + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_death_" + frame + ".png", imi, true);
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
@@ -1711,7 +1711,7 @@ namespace AssetsPV
                 {
                     for(int frame = 0; frame < 12; frame++)
                     {
-                        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_death_" + frame + ".png ";
+                        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_death_" + frame + ".png ";
                     }
                 }
 
@@ -1726,8 +1726,8 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < 12; f++)
                     {
-                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_fiery_death_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Large_face" + dir + "_fiery_death_" + f + ".png", simplepalettes);
+                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_death_" + f + ".png",
+                            folder + "/color{0}_" + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -1741,7 +1741,7 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_fiery_death_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_death_" + f + ".png");
                         }
                     }
                 }
@@ -1862,26 +1862,37 @@ namespace AssetsPV
             string folder = ("frames/" + altFolder);
 
             Directory.CreateDirectory(folder); //("color" + i);
-            
+            byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, 2, 40, 40, 120, 120, 80);
+
+            Model m = Model.FromModelCU(colors);
+
+            byte[][,,] explode = CURedux.FieryDeathW(u, m);
+
             for(int d = 0; d < 4; d++)
             {
                 //byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60), 1 + bonus * multiplier);
 
-                byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.ExpandBounds(
-                            TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 40, 40, 40), 2, 2, 2), 160, 160, 120),
-                    1 + bonus * multiplier * 2);
+                // byte[,,] colors = TransformLogic.RunCA(
+                //     TransformLogic.ExpandBounds(
+                //             TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 40, 40, 40), 2, 2, 2), 160, 160, 120),
+                //     1 + bonus * multiplier * 2);
+
+
 //                byte[,,] colors = TransformLogic.RunCA(
 //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60)),
 //                    1 + bonus * multiplier * 2);
-                byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
+                //byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
 
                 for(int frame = 0; frame < 12; frame++)
                 {
-                    byte[][] b = processFrameMassiveW(TransformLogic.SealGaps(explode[frame]), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+                    byte[][] b = processFrameMassiveW(TransformLogic.SealGaps(
+                           TransformLogic.ExpandBounds(
+                               TransformLogic.RotateYaw(explode[frame], d * 90)
+                           , 160, 160, 120)
+                        ), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true);
                     WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                 }
             }
@@ -1897,11 +1908,11 @@ namespace AssetsPV
                 {
                     for(int frame = 0; frame < 12; frame++)
                     {
-                        s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png ";
+                        s += folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png ";
                     }
                 }
 
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_super_animated.gif";
+                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_death_super_animated.gif";
                 Console.WriteLine("Running convert.exe ...");
                 Process.Start(startInfo).WaitForExit();
             }
@@ -1913,8 +1924,8 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < 12; f++)
                     {
-                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png", simplepalettes);
+                        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png",
+                            folder + "/color{0}_" + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -1928,13 +1939,13 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_fiery_explode_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png");
                         }
                     }
                 }
                 Directory.CreateDirectory("gifs/" + altFolder);
                 Console.WriteLine("Running GIF conversion ...");
-                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_explosion_super_animated");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_super_animated");
             }
         }
         /*
@@ -4106,15 +4117,39 @@ namespace AssetsPV
             //renderTerrain();
             //makeFlatTiling();
 
-//            processUnitLargeWMilitary("Infantry");
-//            processUnitLargeWMilitary("Infantry_P");
+            processUnitHugeWMilitarySuper("Laboratory");
+            processUnitHugeWMilitarySuper("Dock");
+            processUnitHugeWMilitarySuper("Airport");
+            processUnitHugeWMilitarySuper("City");
+            processUnitHugeWMilitarySuper("Factory");
+            processUnitHugeWMilitarySuper("Castle");
+            processUnitHugeWMilitarySuper("Estate");
+
+            processUnitHugeWMilitarySuper("Copter");
+            processUnitHugeWMilitarySuper("Copter_P");
+            processUnitHugeWMilitarySuper("Copter_S");
+            processUnitHugeWMilitarySuper("Copter_T");
+
+            processUnitHugeWMilitarySuper("Plane");
+            processUnitHugeWMilitarySuper("Plane_P");
+            processUnitHugeWMilitarySuper("Plane_S");
+            processUnitHugeWMilitarySuper("Plane_T");
+
+            processUnitHugeWMilitarySuper("Boat");
+
+            processUnitHugeWMilitarySuper("Boat_P");
+            processUnitHugeWMilitarySuper("Boat_S");
+            processUnitHugeWMilitarySuper("Boat_T");
+
+            processUnitLargeWMilitary("Infantry");
+            processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
             processUnitLargeWMilitary("Infantry_T");
             
-            processUnitLargeWMilitary("Supply");
-            processUnitLargeWMilitary("Supply_P");
-            processUnitLargeWMilitary("Supply_S");
-            processUnitLargeWMilitary("Supply_T");
+            processUnitLargeWMilitary("Truck");
+            processUnitLargeWMilitary("Truck_P");
+            processUnitLargeWMilitary("Truck_S");
+            processUnitLargeWMilitary("Truck_T");
             
             processUnitLargeWMilitary("Artillery");
             processUnitLargeWMilitary("Artillery_P");
@@ -4163,33 +4198,9 @@ namespace AssetsPV
             processUnitLargeWMilitary("Estate");
             
             //processReceivingMilitaryW();
-            /*
-            processUnitHugeWMilitarySuper("Laboratory");
-            processUnitHugeWMilitarySuper("Dock");
-            processUnitHugeWMilitarySuper("Airport");
-            processUnitHugeWMilitarySuper("City");
-            processUnitHugeWMilitarySuper("Factory");
-            processUnitHugeWMilitarySuper("Castle");
-            processUnitHugeWMilitarySuper("Estate");
-
-            processUnitHugeWMilitarySuper("Copter");
-            processUnitHugeWMilitarySuper("Copter_P");
-            processUnitHugeWMilitarySuper("Copter_S");
-            processUnitHugeWMilitarySuper("Copter_T");
-
-            processUnitHugeWMilitarySuper("Plane");
-            processUnitHugeWMilitarySuper("Plane_P");
-            processUnitHugeWMilitarySuper("Plane_S");
-            processUnitHugeWMilitarySuper("Plane_T");
             
-            processUnitHugeWMilitarySuper("Boat");
-            
-            processUnitHugeWMilitarySuper("Boat_P");
-            processUnitHugeWMilitarySuper("Boat_S");
-            processUnitHugeWMilitarySuper("Boat_T");
-            
-            processReceivingMilitaryWSuper();
-  */
+            //processReceivingMilitaryWSuper();
+  
 
             /*
             Pose bow0 = (model => model
