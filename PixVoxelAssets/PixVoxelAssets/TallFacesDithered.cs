@@ -5193,8 +5193,12 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             //writePaletteImages();
-            
+
             //renderTerrain();
+
+            processUnitHugeWMilitarySuper("Plane_P");
+            processUnitLargeWMilitary("Plane_P");
+
             /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
@@ -5205,10 +5209,9 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Estate");
 
             processUnitHugeWMilitarySuper("Copter");
-            */
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
-            //processUnitHugeWMilitarySuper("Copter_T");
+            processUnitHugeWMilitarySuper("Copter_T");
 
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");

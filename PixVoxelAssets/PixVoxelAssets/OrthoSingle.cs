@@ -4115,8 +4115,11 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
             //makeFlatTiling();
-            
-            
+
+
+            processUnitHugeWMilitarySuper("Plane_P");
+            processUnitLargeWMilitary("Plane_P");
+
             /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
@@ -4127,7 +4130,6 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Estate");
 
             processUnitHugeWMilitarySuper("Copter");
-            */
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
             processUnitHugeWMilitarySuper("Copter_T");
@@ -4141,7 +4143,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            /*
+            
             processUnitLargeWMilitary("Truck");
             processUnitLargeWMilitary("Truck_P");
             processUnitLargeWMilitary("Truck_S");

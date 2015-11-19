@@ -3278,7 +3278,7 @@ namespace AssetsPV
                     {
                         if(exploding[m] == 0)
                         {
-                            explosions[m] = FireballLarge(randomFill(centers[m].x - 3, centers[m].y - 3, 0, 10, 10, 8, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 4);
+                            explosions[m] = FireballLarge(randomFill(centers[m].x - 5, centers[m].y - 5, 0, 12, 12, 8, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 0);
                         }
                         exploding[m]++;
                     }
