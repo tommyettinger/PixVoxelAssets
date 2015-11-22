@@ -139,9 +139,13 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -260,12 +264,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
+
             new float[][] { //2 gold-skinned human
             //0 shoes, boots, tennis shoes contrast
             new float[] {0.5F,0.5F,0.5F,1F},
@@ -381,12 +389,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
+
             new float[][] { //3 dark-skinned human
             //0 shoes, boots contrast
             new float[] {0.0F,-0.05F,-0.1F,1F},
@@ -502,9 +514,13 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -623,12 +639,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
+
             new float[][] { //5 olive skin human
             //0 shoes, boots, brown leather contrast
             new float[] {0.2F,0.08F,-0.02F,1F},
@@ -744,9 +764,13 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -865,12 +889,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
+
             new float[][] { //7 grass and plants
             //0 dry bark contrast
             new float[] {0.25F,0.13F,0.03F,grain_some_alpha},
@@ -986,9 +1014,13 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
 
@@ -1107,12 +1139,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
+
             new float[][] { //9 primitive houses
             //0 wooden wall contrast
             new float[] {0.25F,0.15F,0.05F,grain_some_alpha},
@@ -1228,11 +1264,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
+
             new float[][] { //10 orc assassin
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.3F,0.05F,1F},
@@ -1348,12 +1389,16 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
-            
+
             new float[][] { //10 orc
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.3F,0.05F,1F},
@@ -1469,9 +1514,13 @@ namespace AssetsPV
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
-            //57 eraser
+            //57 always gray contrast
+            new float[] {0.4F,0.4F,0.4F,1F},
+            //58 always gray
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //59 eraser
             new float[] {0F,0F,0F,eraser_alpha},
-            //58 total transparent
+            //60 total transparent
             new float[] {0F,0F,0F,0F},
             },
 

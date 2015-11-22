@@ -52,7 +52,7 @@ namespace AssetsPV
             byte c = 0;
             for(int z = 0; z < zSize; z++)
             {
-                colorCount = patterns.ToDictionary(kv => kv.Key, kv => 0);
+                colorCount = patterns.ToDictionary(kv => kv.Key, kv => z % 2 * Multiplier);
 
                 for(int x = 0; x < xSize; x++)
                 {

@@ -358,7 +358,7 @@ namespace AssetsPV
                                 v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
                                 int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
 
-                                if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance < TransformLogic.rng.NextDouble())
+                                if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance > TransformLogic.rng.NextDouble())
                                     c2[x2, y2, z2] = SpreadColors.RandomElement();
                             }
 
@@ -381,7 +381,7 @@ namespace AssetsPV
                                         v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
                                         int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
 
-                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance < TransformLogic.rng.NextDouble())
+                                        if(x2 >= 0 && y2 >= 0 && z2 >= 0 && x2 < xSize && y2 < ySize && z2 < zSize && c2[x2, y2, z2] == 0 && SpreadChance > TransformLogic.rng.NextDouble())
                                             c2[x2, y2, z2] = Colors[x, y, z];
                                     }
                                     break;
@@ -527,7 +527,7 @@ namespace AssetsPV
                                 v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
                                 int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
-                                if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance < TransformLogic.rng.NextDouble())
+                                if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance > TransformLogic.rng.NextDouble())
                                 {
                                     if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                     {
@@ -573,7 +573,7 @@ namespace AssetsPV
                                         v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
                                         int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
-                                        if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance < TransformLogic.rng.NextDouble())
+                                        if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance > TransformLogic.rng.NextDouble())
                                         {
                                             if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                             {
@@ -699,7 +699,7 @@ namespace AssetsPV
             //    q2.Yaw() + " Pitch:" + q2.Pitch() + " Roll:" + q2.Roll());
             float y2 = Lerp(Yaw, target.Yaw, alpha), p2 = Lerp(Pitch, target.Pitch, alpha), r2 = Lerp(Roll, target.Roll, alpha);
             return new Bone(Name, Colors, y2, p2, r2)
-                .InitSpread(newSpread, myStarts.X, myStarts.Y, myStarts.Z)
+                .InitSpread(newSpread, myStarts.Z, myStarts.Y, myStarts.X) // not a typo, this IS in ZYX order
                 .InitStretch(myStretches.X, myStretches.Y, myStretches.Z)
                 .Translate(myMoves.X, myMoves.Y, myMoves.Z)
                 .ZeroOut(myZeroes.X, myZeroes.Y, myZeroes.Z);

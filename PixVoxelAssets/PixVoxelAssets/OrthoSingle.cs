@@ -3791,14 +3791,14 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
-            VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_Ortho/";
-            CURedux.Initialize(true);
+            //VoxelLogic.VisualMode = "CU";
+            //altFolder = "CU_Ortho/";
+            //CURedux.Initialize(true);
             
-            //VoxelLogic.VisualMode = "W";
-            //altFolder = "Forays2/";
-            //VoxelLogic.voxFolder = "ForaysBones/";
-            //ForaysPalettes.Initialize();
+            VoxelLogic.VisualMode = "W";
+            altFolder = "Forays2/";
+            VoxelLogic.voxFolder = "ForaysBones/";
+            ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -4116,10 +4116,7 @@ namespace AssetsPV
             //renderTerrain();
             //makeFlatTiling();
 
-
-            processUnitHugeWMilitarySuper("Plane_P");
-            processUnitLargeWMilitary("Plane_P");
-
+            
             /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
@@ -4205,7 +4202,7 @@ namespace AssetsPV
             //processReceivingMilitaryWSuper();
 
 
-            /*
+            
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4215,37 +4212,45 @@ namespace AssetsPV
             .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
             ),
                 bow1 = (model => model
-           .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
-           .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
-           .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
-           .AddYaw(50, "Right_Upper_Arm")
-           .AddYaw(-35, "Right_Lower_Arm")
-           .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
-           .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(50, "Right_Upper_Arm")
+            .AddYaw(-35, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
             ),
 
                 bow2 = (model => model
-           .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
-           .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
-           .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
-           .AddYaw(60, "Right_Upper_Arm")
-           .AddYaw(-15, "Right_Lower_Arm")
-           .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
-           );
-            
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(60, "Right_Upper_Arm")
+            .AddYaw(-15, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            );
+            Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f),
+                brownLeatherPattern = new Pattern(253 - 44 * 4, 0, 253 - 43 * 4, 0, 3, 2, 2, 1, 0.6f),
+                tanLeatherPattern = new Pattern(253 - 45 * 4, 0, 253 - 46 * 4, 0, 3, 2, 2, 1, 0.6f),
+                mailPattern = new Pattern(253 - 56 * 4, 0, 253 - 57 * 4, 0, 2, 1, 1, 1, 1f);
+            Dictionary<byte, Pattern> leather = new Dictionary<byte, Pattern>() {
+                { 253 - 29 * 4, brownLeatherPattern },
+                { 253 - 5 * 4, brownLeatherPattern },
+                { 253 - 4 * 4, brownLeatherPattern },
+                { 253 - 3 * 4, brownLeatherPattern },
+                { 253 - 2 * 4, brownLeatherPattern },
+            }, chain = new Dictionary<byte, Pattern>() {
+                { 253 - 29 * 4, mailPattern },
+                { 253 - 5 * 4, mailPattern },
+                { 253 - 4 * 4, mailPattern },
+                { 253 - 3 * 4, tanLeatherPattern },
+                { 253 - 2 * 4, tanLeatherPattern },
+            };
+
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Bow"),
-                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
-                { 253 - 29 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                { 253 - 5 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                //{ 253 - 29 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
-                //{ 253 - 5 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 3, 1, 1, 0.9f) },
-                { 253 - 4 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                { 253 - 3 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
-                //{ 253 - 3 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 4, 4, 1, 1, 0.65f) },
-                { 253 - 2 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
-            });
-
+                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: leather);
+            /*
             processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
                 new Pose[] { bow0, bow1, bow2 },
                 new float[][] {
@@ -4279,23 +4284,36 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-            
-            Pose swing0 = (model => model),
-                swing1 = (model => model
+            */
+            Pose swing0l = (model => model),
+                swing1l = (model => model
             .AddPitch(10, "Left_Weapon")
             .AddPitch(70, "Left_Lower_Arm", "Left_Weapon")
             //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddPitch(75, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
-                swing2 = (model => model
+                swing2l = (model => model
             .AddPitch(-30, "Left_Weapon")
             .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
-            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude_sword = Model.Humanoid(left_weapon: "Longsword");
 
-            processUnitLargeWModel("Dude_Sword", true, 0, dude_sword,
-                new Pose[] { swing0, swing1, swing2 },
+            Pose swing0r = (model => model),
+                swing1r = (model => model
+            .AddPitch(10, "Right_Weapon")
+            .AddPitch(70, "Right_Lower_Arm", "Right_Weapon")
+            //.AddYaw(-10, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")),
+                swing2r = (model => model
+            .AddPitch(-30, "Right_Weapon")
+            .AddPitch(40, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddYaw(330, "Right_Lower_Arm", "Right_Weapon")
+            .AddSpread("Right_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
+
+            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1l);
+            Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+            
+            processUnitLargeWModel("Hero_Leather_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
                 new float[] { 0, 1, 0.3f },
@@ -4309,7 +4327,24 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-            */
+            
+            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
 
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });
