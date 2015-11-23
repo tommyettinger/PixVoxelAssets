@@ -1388,8 +1388,12 @@ namespace AssetsPV
             }
 
             VoxelLogic.wpalettes = wpalettes;
+            TransformLogic.dismiss = new byte[] {
+                0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
+            };
 
-            Explosions = new byte[10][][,,];
+
+        Explosions = new byte[10][][,,];
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,

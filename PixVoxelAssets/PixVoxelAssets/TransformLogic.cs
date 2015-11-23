@@ -1274,13 +1274,16 @@ namespace AssetsPV
             byte[,,] data = new byte[xSize * multiplier, ySize * multiplier, zSize * multiplier];
             foreach(MagicaVoxelData mvd in voxelData)
             {
+                if(mvd.color == 0)
+                    continue;
                 for(int x = 0; x < multiplier; x++)
                 {
                     for(int y = 0; y < multiplier; y++)
                     {
                         for(int z = 0; z < multiplier; z++)
                         {
-                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear &&
+                            if((VoxelLogic.VisualMode != "CU" || (mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1))
+                                && mvd.color != VoxelLogic.clear &&
                                 mvd.x * multiplier + x < xSize * multiplier && mvd.y * multiplier + y < ySize * multiplier && mvd.z * multiplier + z < zSize * multiplier)
                                 data[mvd.x * multiplier + x, mvd.y * multiplier + y, mvd.z * multiplier + z] = mvd.color;
                         }
@@ -1300,7 +1303,8 @@ namespace AssetsPV
                     {
                         for(int z = 0; z < multiplier; z++)
                         {
-                            if(mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1 && mvd.color != VoxelLogic.clear &&
+                            if((VoxelLogic.VisualMode != "CU" || (mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1))
+                                && mvd.color != VoxelLogic.clear &&
                                 (mvd.x + (xSize - originalX) / 2) * multiplier + x < xSize * multiplier && (mvd.y + (ySize - originalY) / 2) * multiplier + y < ySize * multiplier && 
                                 mvd.z * multiplier + z < zSize * multiplier)
                                 data[(mvd.x + (xSize - originalX) / 2) * multiplier + x, (mvd.y + (ySize - originalY) / 2) * multiplier + y, mvd.z * multiplier + z] = mvd.color;
@@ -1454,13 +1458,13 @@ namespace AssetsPV
                         if((clr >= 36 && clr <= 39) || (clr < VoxelLogic.wcolors.Length && VoxelLogic.wcolors[clr][3] == VoxelLogic.waver_alpha))
                         {
                             vls[x, y, z] = voxelData[x, y, z];
-                            if(voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0)
+                            if(voxelData[x, y, z] > VoxelLogic.clear || voxelData[x, y, z] == 0)
                                 currentFill = voxelData[x-1, y, z];
                         }
                         else
                         {
-                            if((voxelData[x + 1, y, z] <= 253 - 57 * 4 || voxelData[x - 1, y, z] <= 253 - 57 * 4 || voxelData[x, y, z + 1] <= 253 - 57 * 4)
-                                && (voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0))
+                            if((voxelData[x + 1, y, z] <= VoxelLogic.clear || voxelData[x - 1, y, z] <= VoxelLogic.clear || voxelData[x, y, z + 1] <= VoxelLogic.clear)
+                                && (voxelData[x, y, z] > VoxelLogic.clear || voxelData[x, y, z] == 0))
                             {
                                 //if(voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0)
                                     currentFill = voxelData[x, y, z];
@@ -1865,7 +1869,7 @@ namespace AssetsPV
             return vls;
         }
 
-        public static byte[] dismiss = new byte[] { 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1, };
+        public static byte[] dismiss = new byte[] { 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4 };
 
         public static void MorphInPlace(ref byte[,,] colors, byte[] changing, float chance)
         {

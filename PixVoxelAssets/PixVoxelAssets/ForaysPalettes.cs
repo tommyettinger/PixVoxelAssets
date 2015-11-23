@@ -140,7 +140,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -265,7 +265,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -390,7 +390,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -515,7 +515,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -640,7 +640,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -765,7 +765,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -784,7 +784,7 @@ namespace AssetsPV
             //3 pants, jeans
             new float[] {0.1F,0.2F,0.35F,1F},
             //4 shirt contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.4F,0.4F,0.37F,1F},
             //5 shirt
             new float[] {0.55F,0.55F,0.55F,1F},
             //6 hair contrast
@@ -890,7 +890,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -1015,7 +1015,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -1140,7 +1140,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -1265,7 +1265,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -1390,7 +1390,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -1399,7 +1399,7 @@ namespace AssetsPV
             new float[] {0F,0F,0F,0F},
             },
 
-            new float[][] { //10 orc
+            new float[][] { //11 orc
             //0 shoes, boots, brown leather contrast
             new float[] {0.35F,0.3F,0.05F,1F},
             //1 shoes, boots, brown leather
@@ -1515,7 +1515,7 @@ namespace AssetsPV
             //56 always silver
             new float[] {0.7F,0.77F,0.83F,1F},
             //57 always gray contrast
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.5F,0.5F,0.5F,1F},
             //58 always gray
             new float[] {0.6F,0.6F,0.6F,1F},
             //59 eraser
@@ -1736,13 +1736,13 @@ namespace AssetsPV
             },
             new float[][] { //9 (59) river
             //terrain dark
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.45F,0.45F,0.45F,1F},
             //terrain mid
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.45F,0.45F,0.45F,1F},
             //terrain light
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.45F,0.45F,0.45F,1F},
             //terrain highlight
-            new float[] {0.4F,0.4F,0.4F,1F},
+            new float[] {0.45F,0.45F,0.45F,1F},
             },
             new float[][] { //10 (60) sea
             //terrain dark
@@ -1758,6 +1758,7 @@ namespace AssetsPV
 
         public static void Initialize()
         {
+            VoxelLogic.Initialize();
             VoxelLogic.wpalettecount = wpalettes.Length;
             int wpc = VoxelLogic.wpalettecount;
             VoxelLogic.subtlePalettes = new int[] { 7, 8, wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5, wpc + 6, wpc + 7, wpc + 8, wpc + 9, wpc + 10 };

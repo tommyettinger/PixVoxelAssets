@@ -58,8 +58,8 @@ namespace AssetsPV
             {
                 if(mvd.x >= xSize || mvd.y >= ySize || mvd.z >= zSize)
                     continue;
-                if(!(mvd.color == VoxelLogic.clear || mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
-                     || mvd.color == CURedux.emitter1 || mvd.color == CURedux.trail1)
+                if(!(mvd.color == VoxelLogic.clear || (VoxelLogic.VisualMode == "CU" && (mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
+                     || mvd.color == CURedux.emitter1 || mvd.color == CURedux.trail1)))
                      && (data[mvd.x, mvd.y, mvd.z] == 0 || data[mvd.x, mvd.y, mvd.z] == shadowColor))
                     data[mvd.x, mvd.y, mvd.z] = mvd.color;
             }
@@ -1901,8 +1901,8 @@ namespace AssetsPV
                 if(mvd == null || mvd.vox.x >= xSize || mvd.vox.y >= ySize || mvd.vox.z >= zSize)
                     continue;
                 if(data[mvd.vox.x, mvd.vox.y, mvd.vox.z] == null ||
-                    (!(mvd.vox.color == VoxelLogic.clear || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.emitter0 || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.trail0
-                     || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.emitter1 || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.trail1)
+                    (!(mvd.vox.color == VoxelLogic.clear || (VoxelLogic.VisualMode == "CU" && (data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.emitter0 || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.trail0
+                     || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.emitter1 || data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == CURedux.trail1)))
                      && data[mvd.vox.x, mvd.vox.y, mvd.vox.z].vox.color == shadowColor))
                     data[mvd.vox.x, mvd.vox.y, mvd.vox.z] = mvd;
             }
