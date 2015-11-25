@@ -4888,7 +4888,7 @@ namespace AssetsPV
             altFolder = "CU3/";
             CURedux.Initialize(true);
 
-            VoxelLogic.VisualMode = "W";
+            //VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
             //VoxelLogic.voxFolder = "ForaysBones/";
             //ForaysPalettes.Initialize();
@@ -5196,8 +5196,10 @@ namespace AssetsPV
 
             //renderTerrain();
 
-            processUnitHugeWMilitarySuper("Plane_P");
-            processUnitLargeWMilitary("Plane_P");
+            processUnitHugeWMilitarySuper("Boat_P");
+            processUnitLargeWMilitary("Boat_P");
+            //processUnitHugeWMilitarySuper("Copter_P");
+            //processUnitLargeWMilitary("Copter_P");
 
             /*
             processUnitHugeWMilitarySuper("Laboratory");

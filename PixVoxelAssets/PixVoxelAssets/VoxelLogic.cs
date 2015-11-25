@@ -17775,9 +17775,11 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                 case 58:
                 case 59:
                 case 60:
+                case 61:
                     {
                         return 1;
                     }
+                case 16: return 24;
                 default: return 16;
             }
         }

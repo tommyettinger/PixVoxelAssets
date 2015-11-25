@@ -76,7 +76,7 @@ namespace AssetsPV
                 {
                     for(byte z = 0; z < zSize; z++)
                     {
-                        if(voxelData[x, y, z] > 0)
+                        if(voxelData[x, y, z] > 0 && (VoxelLogic.VisualMode != "CU" || voxelData[x, y, z] > CURedux.emitter0))
                             vlist.Add(new MagicaVoxelData { x = x, y = y, z = z, color = voxelData[x, y, z] });
                     }
                 }
@@ -259,7 +259,7 @@ namespace AssetsPV
                     for(int y = 0; y < ySize; y++)
                     {
                         byte mvd = voxelData[x, y, z];
-                        if(mvd > 0)
+                        if(mvd > 0 && (VoxelLogic.VisualMode != "CU" || mvd > CURedux.emitter0))
                         {
                             data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = mvd }, Slope.Cube);
                         }
