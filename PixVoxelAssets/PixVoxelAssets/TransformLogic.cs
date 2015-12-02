@@ -349,12 +349,12 @@ namespace AssetsPV
                             v.X = (x - hxs) * StretchX + xOffset;
                             v.Y = (y - hys) * StretchY;
                             v.Z = (z - hzs) * StretchZ;
-                            float normod = v.Length();
+                            float normod = (float)Math.Sqrt(v.LengthSquared());
                             v = Vector3.Divide(v, normod);
 
                             for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                             {
-                                q2 = Quaternion.Slerp(q, q0, a);
+                                q2 = Quaternion.Lerp(q, q0, a);
                                 v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
                                 int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
 
@@ -372,12 +372,12 @@ namespace AssetsPV
                                     v.X = (x - hxs) * StretchX + xOffset;
                                     v.Y = (y - hys) * StretchY;
                                     v.Z = (z - hzs) * StretchZ;
-                                    float normod = v.Length();
+                                    float normod = (float)Math.Sqrt(v.LengthSquared());
                                     v = Vector3.Divide(v, normod);
 
                                     for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                     {
-                                        q2 = Quaternion.Slerp(q, q0, a);
+                                        q2 = Quaternion.Lerp(q, q0, a);
                                         v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
                                         int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
 
@@ -518,12 +518,12 @@ namespace AssetsPV
                             v.X = (x - hxs) * StretchX + xOffset;
                             v.Y = (y - hys) * StretchY;
                             v.Z = (z - hzs) * StretchZ;
-                            float normod = v.Length();
+                            float normod = (float)Math.Sqrt(v.LengthSquared());
                             v = Vector3.Divide(v, normod);
 
                             for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                             {
-                                q2 = Quaternion.Slerp(q, q0, a);
+                                q2 = Quaternion.Lerp(q, q0, a);
                                 v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
                                 int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
@@ -564,12 +564,12 @@ namespace AssetsPV
                                     v.X = (x - hxs) * StretchX + xOffset;
                                     v.Y = (y - hys) * StretchY;
                                     v.Z = (z - hzs) * StretchZ;
-                                    float normod = v.Length();
+                                    float normod = (float)Math.Sqrt(v.LengthSquared());
                                     v = Vector3.Divide(v, normod);
 
                                     for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
                                     {
-                                        q2 = Quaternion.Slerp(q, q0, a);
+                                        q2 = Quaternion.Lerp(q, q0, a);
                                         v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
 
                                         int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
@@ -647,14 +647,12 @@ namespace AssetsPV
             else if(RoughEquals(target))
                 return this.Replicate();
             //QuaternionGDX q = new QuaternionGDX().setEulerAngles(-Pitch, -Roll, -Yaw);
-            Quaternion q = Extensions.Euler(Yaw, Pitch, Roll);
             //Quaternion q = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - Pitch) % 360f))
             //    .mulLeft(new Quaternion(PitchAxis, (360 - Roll) % 360f))
             //    .mulLeft(new Quaternion(RollAxis, (360 - Yaw) % 360f))
             //    .nor();
 
             //QuaternionGDX q0 = new QuaternionGDX().setEulerAngles(-target.Pitch, -target.Roll, -target.Yaw), q2;
-            Quaternion q0 = Extensions.Euler(target.Yaw, target.Pitch, target.Roll);
 
             //Quaternion q0 = new Quaternion().mulLeft(new Quaternion(YawAxis, (360 - target.Pitch) % 360f))
             //    .mulLeft(new Quaternion(PitchAxis, (360 - target.Roll) % 360f))
@@ -878,9 +876,11 @@ namespace AssetsPV
         }
         public byte[,,] Finalize()
         {
-            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(10 * Bone.Multiplier, 0));
+            Dictionary<string, byte[,,]> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Finalize(0 * Bone.Multiplier, 0));
             string finished = "";
             string[] vals = finals.Keys.ToArray();
+            byte[,,] first = finals[vals[0]];
+            int origX = first.GetLength(0), origY = first.GetLength(1), origZ = first.GetLength(2);
             if(Anatomy.Length == 0)
             {
                 foreach(var s in vals)
@@ -903,7 +903,7 @@ namespace AssetsPV
             {
                 foreach(Connector conn in Anatomy)
                 {
-                    byte[,,] bs = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor);
+                    byte[,,] bs = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor, origX + 20, origY + 20, origZ + 20);
                     if(bs == finals[conn.socket])
                         Console.WriteLine("PLUG NOT FOUND: " + conn.plug + " connecting to " + conn.socket);
                     else if(bs == finals[conn.plug])
@@ -912,7 +912,7 @@ namespace AssetsPV
                     finished = conn.socket;
                 }
             }
-            return finals[finished];
+            return TransformLogic.ExpandBounds(finals[finished], origX, origY, origZ);
         }
         public Model Interpolate(Model target, float alpha)
         {
@@ -1079,7 +1079,7 @@ namespace AssetsPV
                     }
                 }
             }
-            
+
             if(plugCount <= 0)
                 return socket;
 
@@ -1109,7 +1109,88 @@ namespace AssetsPV
             socketY /= socketCount;
             socketZ /= socketCount;
 
-            byte[,,] working = socket.Replicate();
+            byte[,,] working = ExpandBounds(socket, xSize + 20, ySize + 20, zSize + 20);
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(plug[x, y, z] > 0 &&
+                           x - plugX + socketX >= -10 && y - plugY + socketY >= -10 && z - plugZ + socketZ >= 0 &&
+                           x - plugX + socketX < xSize + 10 && y - plugY + socketY < ySize + 10 && z - plugZ + socketZ < zSize + 20)
+                        {
+                            working[x - plugX + socketX + 10,
+                                    y - plugY + socketY + 10,
+                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x, y, z] - 1) : plug[x, y, z];
+                        }
+                    }
+                }
+            }
+            return working;
+
+        }
+        public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor, int newXSize, int newYSize, int newZSize)
+        {
+            int plugX = 0, plugY = 0, plugZ = 0, socketX = 0, socketY = 0, socketZ = 0, plugCount = 0, socketCount = 0;
+            if(socket == null)
+                return ExpandBounds(plug, newXSize, newYSize, newZSize);
+            else if(plug == null)
+                return ExpandBounds(socket, newXSize, newYSize, newZSize);
+
+            plug = ExpandBounds(plug, newXSize, newYSize, newZSize);
+            socket = ExpandBounds(socket, newXSize, newYSize, newZSize);
+
+            int xSize = socket.GetLength(0), ySize = socket.GetLength(1), zSize = socket.GetLength(2);
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4)
+                        {
+                            plugCount++;
+                            plugX += x;
+                            plugY += y;
+                            plugZ += z;
+                        }
+                    }
+                }
+            }
+
+            if(plugCount <= 0)
+                return socket;
+
+            plugX /= plugCount;
+            plugY /= plugCount;
+            plugZ /= plugCount;
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int x = 0; x < xSize; x++)
+                    {
+                        if(socket[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - socket[x, y, z]) == matchColor * 4)
+                        {
+                            socketCount++;
+                            socketX += x;
+                            socketY += y;
+                            socketZ += z;
+                        }
+                    }
+                }
+            }
+            if(socketCount <= 0)
+                return plug;
+            socketX /= socketCount;
+            socketY /= socketCount;
+            socketZ /= socketCount;
+
+            byte[,,] working = socket;
 
             for(int z = 0; z < zSize; z++)
             {
@@ -1186,7 +1267,7 @@ namespace AssetsPV
             socketY /= socketCount;
             socketZ /= socketCount;
 
-            byte[,,] working = socket.Replicate();
+            byte[,,] working = ExpandBounds(socket, xSize + 20, ySize + 20, zSize + 20);
 
             for(int z = 0; z < zSize; z++)
             {
@@ -1195,11 +1276,11 @@ namespace AssetsPV
                     for(int x = 0; x < xSize; x++)
                     {
                         if(plug[x, y, z] > 0 &&
-                           x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
-                           x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
+                           x - plugX + socketX >= -10 && y - plugY + socketY >= -10 && z - plugZ + socketZ >= 0 &&
+                           x - plugX + socketX < xSize + 10 && y - plugY + socketY < ySize + 10 && z - plugZ + socketZ < zSize + 20)
                         {
-                            working[x - plugX + socketX,
-                                    y - plugY + socketY,
+                            working[x - plugX + socketX + 10,
+                                    y - plugY + socketY + 10,
                                     z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x,y,z] - 1) : plug[x, y, z];
                         }
                     }
@@ -1211,9 +1292,9 @@ namespace AssetsPV
                 {
                     for(int x = 0; x < xSize; x++)
                     {
-                        if(254L - working[x, y, z] == removeColor * 4L)
+                        if(254L - working[x + 10, y + 10, z] == removeColor * 4L)
                         {
-                            working[x, y, z] = (byte)replaceColor;
+                            working[x + 10, y + 10, z] = (byte)replaceColor;
                         }
                     }
                 }
