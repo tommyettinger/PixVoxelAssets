@@ -759,6 +759,9 @@
     <None Include="CU2\Factory_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Head_Helmet_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Head_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

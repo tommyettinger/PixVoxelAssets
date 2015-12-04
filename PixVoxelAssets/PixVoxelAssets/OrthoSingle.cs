@@ -386,7 +386,7 @@ namespace AssetsPV
 
             pngr.End();
 
-            for(int p = 0; p < 8; p++)
+            for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
             {
                 byte[][] palette = palettes[p];
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
@@ -587,7 +587,6 @@ namespace AssetsPV
 
         private static byte[][] processFrameLargeW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
@@ -622,7 +621,6 @@ namespace AssetsPV
 
         private static byte[][] processFrameSmallW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
@@ -655,7 +653,6 @@ namespace AssetsPV
         }
         private static byte[][] processFrameHugeW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
 
@@ -3791,14 +3788,14 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
-            //VoxelLogic.VisualMode = "CU";
-            //altFolder = "CU_Ortho/";
-            //CURedux.Initialize(true);
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "CU_Ortho_S/";
+            CURedux.Initialize(true);
             
-            VoxelLogic.VisualMode = "W";
-            altFolder = "Forays2/";
-            VoxelLogic.voxFolder = "ForaysBones/";
-            ForaysPalettes.Initialize();
+            //VoxelLogic.VisualMode = "W";
+            //altFolder = "Forays2/";
+            //VoxelLogic.voxFolder = "ForaysBones/";
+            //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -3810,8 +3807,9 @@ namespace AssetsPV
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
-            System.IO.Directory.CreateDirectory("CU_Ortho/Terrains2");
-            System.IO.Directory.CreateDirectory("CU_Ortho/TerrainsBlank");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S/Terrains2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S/TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -4116,8 +4114,60 @@ namespace AssetsPV
             //renderTerrain();
             //makeFlatTiling();
 
+            processUnitLargeWMilitary("Infantry_PS");
+            processUnitLargeWMilitary("Infantry_PT");
+            processUnitLargeWMilitary("Infantry_ST");
+
+            processUnitLargeWMilitary("Civilian");
+
+            processUnitLargeWMilitary("Infantry");
+            processUnitLargeWMilitary("Infantry_P");
+            processUnitLargeWMilitary("Infantry_S");
+            processUnitLargeWMilitary("Infantry_T");
+
+            processUnitLargeWMilitary("Volunteer");
+            processUnitLargeWMilitary("Volunteer_P");
+            processUnitLargeWMilitary("Volunteer_S");
+            processUnitLargeWMilitary("Volunteer_T");
             
-            /*
+            processUnitLargeWMilitary("Tank");
+            processUnitLargeWMilitary("Tank_P");
+            processUnitLargeWMilitary("Tank_S");
+            processUnitLargeWMilitary("Tank_T");
+
+            processUnitLargeWMilitary("Truck");
+            processUnitLargeWMilitary("Truck_P");
+            processUnitLargeWMilitary("Truck_S");
+            processUnitLargeWMilitary("Truck_T");
+            
+            processUnitLargeWMilitary("Artillery");
+            processUnitLargeWMilitary("Artillery_P");
+            processUnitLargeWMilitary("Artillery_S");
+            processUnitLargeWMilitary("Artillery_T");
+
+            processUnitLargeWMilitary("Copter");
+            processUnitLargeWMilitary("Copter_P");
+            processUnitLargeWMilitary("Copter_S");
+            processUnitLargeWMilitary("Copter_T");
+            
+            processUnitLargeWMilitary("Plane");
+            processUnitLargeWMilitary("Plane_P");
+            processUnitLargeWMilitary("Plane_S");
+            processUnitLargeWMilitary("Plane_T");
+            
+            processUnitLargeWMilitary("Boat");
+            processUnitLargeWMilitary("Boat_P");
+            processUnitLargeWMilitary("Boat_S");
+            processUnitLargeWMilitary("Boat_T");
+
+            processUnitLargeWMilitary("Laboratory");
+            processUnitLargeWMilitary("Dock");
+            processUnitLargeWMilitary("Airport");
+            processUnitLargeWMilitary("City");
+            processUnitLargeWMilitary("Factory");
+            processUnitLargeWMilitary("Castle");
+            processUnitLargeWMilitary("Estate");
+
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -4140,69 +4190,15 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            
-            processUnitLargeWMilitary("Truck");
-            processUnitLargeWMilitary("Truck_P");
-            processUnitLargeWMilitary("Truck_S");
-            processUnitLargeWMilitary("Truck_T");
-            
-            processUnitLargeWMilitary("Artillery");
-            processUnitLargeWMilitary("Artillery_P");
-            processUnitLargeWMilitary("Artillery_S");
-            processUnitLargeWMilitary("Artillery_T");
 
-            processUnitLargeWMilitary("Copter");
-            processUnitLargeWMilitary("Copter_P");
-            processUnitLargeWMilitary("Copter_S");
-            processUnitLargeWMilitary("Copter_T");
 
-            processUnitLargeWMilitary("Tank");
-            processUnitLargeWMilitary("Tank_P");
-            processUnitLargeWMilitary("Tank_S");
-            processUnitLargeWMilitary("Tank_T");
-            
-            processUnitLargeWMilitary("Civilian");
 
-            processUnitLargeWMilitary("Infantry");
-            processUnitLargeWMilitary("Infantry_P");
-            processUnitLargeWMilitary("Infantry_S");
-            processUnitLargeWMilitary("Infantry_T");
-
-            processUnitLargeWMilitary("Volunteer");
-            processUnitLargeWMilitary("Volunteer_P");
-            processUnitLargeWMilitary("Volunteer_S");
-            processUnitLargeWMilitary("Volunteer_T");
-            
-            processUnitLargeWMilitary("Infantry_PS");
-            processUnitLargeWMilitary("Infantry_PT");
-            processUnitLargeWMilitary("Infantry_ST");
-
-            
-            
-            processUnitLargeWMilitary("Plane");
-            processUnitLargeWMilitary("Plane_P");
-            processUnitLargeWMilitary("Plane_S");
-            processUnitLargeWMilitary("Plane_T");
-            
-            processUnitLargeWMilitary("Boat");
-            processUnitLargeWMilitary("Boat_P");
-            processUnitLargeWMilitary("Boat_S");
-            processUnitLargeWMilitary("Boat_T");
-
-            processUnitLargeWMilitary("Laboratory");
-            processUnitLargeWMilitary("Dock");
-            processUnitLargeWMilitary("Airport");
-            processUnitLargeWMilitary("City");
-            processUnitLargeWMilitary("Factory");
-            processUnitLargeWMilitary("Castle");
-            processUnitLargeWMilitary("Estate");
-            */
             //processReceivingMilitaryW();
 
             //processReceivingMilitaryWSuper();
 
 
-            
+            /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -4253,6 +4249,7 @@ namespace AssetsPV
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Bow"),
                 orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: leather);
+            */
             /*
             processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
                 new Pose[] { bow0, bow1, bow2 },
@@ -4288,6 +4285,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
             */
+            /*
             Pose swing0l = (model => model),
                 swing1l = (model => model
             .AddPitch(10, "Left_Weapon")
@@ -4653,6 +4651,8 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
+                
+            */
 
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });

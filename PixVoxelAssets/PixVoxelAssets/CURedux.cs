@@ -29,7 +29,7 @@ namespace AssetsPV
 
         public const byte shadow = 253 - 25 * 4, smoke = 253 - 17 * 4, yellow_fire = 253 - 18 * 4, orange_fire = 253 - 19 * 4,
             sparks = 253 - 20 * 4, bold_paint = 253 - 31 * 4, metal = 253 - 13 * 4,
-            emitter0 = 253 - 57 * 4, trail0 = 253 - 58 * 4, emitter1= 253 - 59 * 4, trail1 = 253 - 60 * 4;
+            emitter0 = 253 - 57 * 4, trail0 = 253 - 58 * 4, emitter1 = 253 - 59 * 4, trail1 = 253 - 60 * 4;
 
         public static float[][][] wpalettes = new float[][][]
         {
@@ -1050,6 +1050,900 @@ namespace AssetsPV
             },
         };
 
+        public static float[][][] wspecies = new float[][][]
+        {
+            //0 very pale skin, blonde hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.67F,0.57F,0.27F,1F},
+            //7 hair
+            new float[] {0.84F,0.74F,0.38F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.5F,0.29F,1F},
+            //9 skin
+            new float[] {1.0F,0.82F,0.53F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.15F,0.27F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //1 very pale skin, red hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.8F,0.33F,0.0F,1F},
+            //7 hair
+            new float[] {0.9F,0.4F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.5F,0.29F,1F},
+            //9 skin
+            new float[] {1.02F,0.84F,0.55F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.02F,0.18F,0.29F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //2 very pale skin, gray hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.73F,0.73F,0.7F,1F},
+            //7 hair
+            new float[] {0.64F,0.64F,0.6F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.5F,0.29F,1F},
+            //            new float[] {0.88F,0.41F,0.18F,1F},
+            //9 skin
+            new float[] {1.02F,0.84F,0.55F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.02F,0.18F,0.29F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //3 very pale skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {1.02F,0.84F,0.55F,1F},
+            //7 hair
+            new float[] {1.02F,0.84F,0.55F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.5F,0.29F,1F},
+            //9 skin
+            new float[] {1.02F,0.84F,0.55F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.02F,0.18F,0.29F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //4 light skin, mid brown hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.5F,0.2F,0.08F,1F},
+            //7 hair
+            new float[] {0.4F,0.15F,0.05F,1F},
+            //8 skin contrast
+            new float[] {0.8F,0.5F,0.12F,1F},
+            //9 skin
+            new float[] {0.93F,0.74F,0.39F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.09F,0.15F,-0.01F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //5 light skin, dark brown/black hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.22F,0.13F,0.05F,1F},
+            //7 hair
+            new float[] {0.15F,0.09F,0.02F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.53F,0.13F,1F},
+            //9 skin
+            new float[] {0.94F,0.77F,0.4F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.05F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //6 light skin, blonde hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.65F,0.55F,0.25F,1F},
+            //7 hair
+            new float[] {0.82F,0.72F,0.35F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.53F,0.13F,1F},
+            //9 skin
+            new float[] {0.94F,0.77F,0.4F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.05F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //7 light skin, gray hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.73F,0.73F,0.7F,1F},
+            //7 hair
+            new float[] {0.64F,0.64F,0.6F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.53F,0.13F,1F},
+            //9 skin
+            new float[] {0.94F,0.77F,0.4F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.05F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //8 light skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.94F,0.77F,0.4F,1F},
+            //7 hair
+            new float[] {0.94F,0.77F,0.4F,1F},
+            //8 skin contrast
+            new float[] {0.81F,0.53F,0.13F,1F},
+            //9 skin
+            new float[] {0.94F,0.77F,0.4F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.05F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //9  gold skin, black hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.09F,0.06F,-0.01F,1F},
+            //7 hair
+            new float[] {0.05F,0.0F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.72F,0.53F,0.05F,1F},
+            //9 skin
+            new float[] {0.94F,0.79F,0.37F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.1F,0.05F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //10 gold skin, gray hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.73F,0.73F,0.7F,1F},
+            //7 hair
+            new float[] {0.64F,0.64F,0.6F,1F},
+            //8 skin contrast
+            new float[] {0.72F,0.53F,0.05F,1F},
+            //9 skin
+            new float[] {0.94F,0.79F,0.37F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.1F,0.05F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //11 gold skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.94F,0.79F,0.37F,1F},
+            //7 hair
+            new float[] {0.94F,0.79F,0.37F,1F},
+            //8 skin contrast
+            new float[] {0.72F,0.53F,0.05F,1F},
+            //9 skin
+            new float[] {0.94F,0.79F,0.37F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.1F,0.05F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //12 gold skin, scarlet hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.65F,0.0F,-0.04F,1F},
+            //7 hair
+            new float[] {0.85F,0.08F,0.0F,1F},
+            //8 skin contrast
+            new float[] {0.8F,0.5F,0.12F,1F},
+            //9 skin
+            new float[] {0.93F,0.74F,0.39F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //13 gold skin, green hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.3F,0.95F,0.23F,1F},
+            //7 hair
+            new float[] {0.2F,0.88F,0.15F,1F},
+            //8 skin contrast
+            new float[] {0.8F,0.5F,0.12F,1F},
+            //9 skin
+            new float[] {0.93F,0.74F,0.39F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //14 gold skin, blue hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.39F,0.42F,0.8F,1F},
+            //7 hair
+            new float[] {0.35F,0.38F,0.73F,1F},
+            //8 skin contrast
+            new float[] {0.8F,0.5F,0.12F,1F},
+            //9 skin
+            new float[] {0.93F,0.74F,0.39F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //15 gold skin, magenta hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.75F,0.03F,0.75F,1F},
+            //7 hair
+            new float[] {0.88F,0.07F,0.88F,1F},
+            //8 skin contrast
+            new float[] {0.8F,0.5F,0.12F,1F},
+            //9 skin
+            new float[] {0.93F,0.74F,0.39F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //16 olive skin, dark hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {-0.05F,-0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {0.0F,0.0F,0.0F,1F},
+            //8 skin contrast
+            new float[] {0.51F,0.3F,0.1F,1F},
+            //9 skin
+            new float[] {0.66F,0.42F,0.2F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,-0.03F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //17 olive skin, gray hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.73F,0.73F,0.7F,1F},
+            //7 hair
+            new float[] {0.64F,0.64F,0.6F,1F},
+            //8 skin contrast
+            new float[] {0.51F,0.3F,0.1F,1F},
+            //9 skin
+            new float[] {0.66F,0.42F,0.2F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,-0.03F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //18 olive skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.66F,0.42F,0.2F,1F},
+            //7 hair
+            new float[] {0.66F,0.42F,0.2F,1F},
+            //8 skin contrast
+            new float[] {0.51F,0.3F,0.1F,1F},
+            //9 skin
+            new float[] {0.66F,0.42F,0.2F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,-0.03F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //19 warm-brown skin, dark hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.12F,0.05F,0.0F,1F},
+            //7 hair
+            new float[] {0.05F,0.0F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //20 warm-brown skin, gray hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.73F,0.73F,0.7F,1F},
+            //7 hair
+            new float[] {0.64F,0.64F,0.6F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //21 warm-brown skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //7 hair
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //22 dark-brown skin, dark hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.12F,0.05F,0.0F,1F},
+            //7 hair
+            new float[] {0.05F,0.0F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //23 dark-brown skin, blonde hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.71F,0.61F,0.27F,1F},
+            //7 hair
+            new float[] {0.78F,0.68F,0.32F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //24 dark-brown skin, gray hair
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.63F,0.63F,0.6F,1F},
+            //7 hair
+            new float[] {0.54F,0.54F,0.5F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+            //25 dark-brown skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //7 hair
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            new float[] {0.65F,0.3F,0.15F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.05F,-0.1F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
+
+            
+            //26 milk-white skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //7 hair
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //8 skin contrast
+            new float[] {0.88F,0.88F,0.88F,1F},
+            //9 skin
+            new float[] {1.1F,1.1F,1.1F,1F},
+            //10 eyes shine
+            new float[] {0.4F,0.2F,0.4F,1F},
+            //11 eyes
+            new float[] {0.0F,0.0F,0.0F,1F},
+            //17 smoke
+            new float[] {0.7F,0.82F,0.8F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.0F,1.1F,0.9F,1F},
+            //19 orange fire
+            new float[] {0.95F,1.0F,0.85F,1F},
+            //20 sparks
+            new float[] {1.1F,1.2F,0.95F,1F},
+            },
+            //27 gray skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.45F,0.45F,0.45F,1F},
+            //7 hair
+            new float[] {0.45F,0.45F,0.45F,1F},
+            //8 skin contrast
+            new float[] {0.3F,0.3F,0.3F,1F},
+            //9 skin
+            new float[] {0.45F,0.45F,0.45F,1F},
+            //10 eyes shine
+            new float[] {0.6F,0.25F,0.6F,1F},
+            //11 eyes
+            new float[] {0.05F,0.05F,0.05F,1F},
+            //17 smoke
+            new float[] {0.29F,0.2F,0.29F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.85F,0.65F,0.85F,1F},
+            //19 orange fire
+            new float[] {0.75F,0.7F,0.75F,1F},
+            //20 sparks
+            new float[] {0.95F,0.85F,0.95F,1F},
+            },
+            //28 featureless black skin, bald, no visible eyes
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.0F,-0.02F,-0.05F,1F},
+            //7 hair
+            new float[] {0.0F,-0.02F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.0F,-0.02F,-0.05F,1F},
+            //9 skin
+            new float[] {0.0F,-0.02F,-0.05F,1F},
+            //10 eyes shine
+            new float[] {0.0F,-0.02F,-0.05F,1F},
+            //11 eyes
+            new float[] {0.0F,-0.02F,-0.05F,1F},
+            //17 smoke
+            new float[] {0.35F,0.15F,0.2F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.8F,0.3F,0.4F,1F},
+            //19 orange fire
+            new float[] {0.75F,0.3F,0.2F,1F},
+            //20 sparks
+            new float[] {1.2F,0.3F,0.3F,1F},
+            },
+            //29 pink skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {1.0F,0.65F,0.9F,1F},
+            //7 hair
+            new float[] {1.0F,0.65F,0.9F,1F},
+            //8 skin contrast
+            new float[] {0.85F,0.5F,0.75F,1F},
+            //9 skin
+            new float[] {1.0F,0.65F,0.9F,1F},
+            //10 eyes shine
+            new float[] {1.2F,0.9F,1.15F,1F},
+            //11 eyes
+            new float[] {0.15F,0.03F,0.1F,1F},
+            //17 smoke
+            new float[] {0.75F,0.6F,0.68F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.1F,0.5F,1.0F,1F},
+            //19 orange fire
+            new float[] {1.05F,0.7F,0.9F,1F},
+            //20 sparks
+            new float[] {1.3F,0.8F,1.1F,1F},
+            },
+            //30 carrot orange skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.75F,0.3F,-0.02F,1F},
+            //7 hair
+            new float[] {0.75F,0.3F,-0.02F,1F},
+            //8 skin contrast
+            new float[] {0.6F,0.22F,-0.07F,1F},
+            //9 skin
+            new float[] {0.75F,0.3F,-0.02F,1F},
+            //10 eyes shine
+            new float[] {0.9F,0.85F,1.25F,1F},
+            //11 eyes
+            new float[] {0.0F,0.0F,0.25F,1F},
+            //17 smoke
+            new float[] {0.35F,0.5F,0.6F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.7F,0.95F,1.05F,1F},
+            //19 orange fire
+            new float[] {0.8F,0.92F,1.0F,1F},
+            //20 sparks
+            new float[] {0.9F,1.15F,1.25F,1F},
+            },
+            //31 sickly yellow skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.75F,0.81F,0.2F,1F},
+            //7 hair
+            new float[] {0.75F,0.81F,0.2F,1F},
+            //8 skin contrast
+            new float[] {0.61F,0.67F,0.13F,1F},
+            //9 skin
+            new float[] {0.75F,0.81F,0.2F,1F},
+            //10 eyes shine
+            new float[] {0.65F,0.75F,1.05F,1F},
+            //11 eyes
+            new float[] {0.15F,0.2F,0.45F,1F},
+            //17 smoke
+            new float[] {0.15F,0.3F,0.3F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.47F,0.72F,0.78F,1F},
+            //19 orange fire
+            new float[] {0.53F,0.63F,0.67F,1F},
+            //20 sparks
+            new float[] {0.55F,0.85F,0.85F,1F},
+            },
+            //32 mint green skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.7F,0.9F,0.4F,1F},
+            //7 hair
+            new float[] {0.7F,0.9F,0.4F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.8F,0.35F,1F},
+            //9 skin
+            new float[] {0.7F,0.9F,0.4F,1F},
+            //10 eyes shine
+            new float[] {1.0F,1.1F,1.1F,1F},
+            //11 eyes
+            new float[] {0.05F,0.08F,0.12F,1F},
+            //17 smoke
+            new float[] {0.15F,0.27F,0.33F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.55F,1.3F,0.6F,1F},
+            //19 orange fire
+            new float[] {0.52F,1.1F,0.4F,1F},
+            //20 sparks
+            new float[] {0.8F,1.3F,1.15F,1F},
+            },
+            //33 ice blue skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.7F,0.95F,1.1F,1F},
+            //7 hair
+            new float[] {0.7F,0.95F,1.1F,1F},
+            //8 skin contrast
+            new float[] {0.58F,0.8F,0.95F,1F},
+            //9 skin
+            new float[] {0.7F,0.95F,1.1F,1F},
+            //10 eyes shine
+            new float[] {1.2F,0.4F,0.4F,1F},
+            //11 eyes
+            new float[] {0.1F,0.0F,0.0F,1F},
+            //17 smoke
+            new float[] {0.39F,0.2F,0.29F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.95F,0.65F,0.85F,1F},
+            //19 orange fire
+            new float[] {0.85F,0.7F,0.75F,1F},
+            //20 sparks
+            new float[] {1.05F,0.85F,0.95F,1F},
+            },
+            //33 deep blue skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.2F,0.15F,0.5F,1F},
+            //7 hair
+            new float[] {0.2F,0.15F,0.5F,1F},
+            //8 skin contrast
+            new float[] {0.13F,0.07F,0.38F,1F},
+            //9 skin
+            new float[] {0.2F,0.15F,0.5F,1F},
+            //10 eyes shine
+            new float[] {1.15F,0.93F,0.5F,1F},
+            //11 eyes
+            new float[] {0.17F,0.13F,0.03F,1F},
+            //17 smoke
+            new float[] {0.6F,0.72F,0.7F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.9F,1.0F,0.8F,1F},
+            //19 orange fire
+            new float[] {0.85F,0.9F,0.75F,1F},
+            //20 sparks
+            new float[] {1.0F,1.1F,0.85F,1F},
+            },
+            //34 deep indigo skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.25F,0.05F,0.3F,1F},
+            //7 hair
+            new float[] {0.25F,0.05F,0.3F,1F},
+            //8 skin contrast
+            new float[] {0.12F,-0.02F,0.17F,1F},
+            //9 skin
+            new float[] {0.25F,0.05F,0.3F,1F},
+            //10 eyes shine
+            new float[] {0.8F,0.8F,0.8F,1F},
+            //11 eyes
+            new float[] {0.9F,0.9F,0.9F,1F},
+            //17 smoke
+            new float[] {0.2F,0.32F,0.3F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.5F,0.5F,0.4F,1F},
+            //19 orange fire
+            new float[] {0.45F,0.5F,0.35F,1F},
+            //20 sparks
+            new float[] {0.5F,0.7F,0.45F,1F},
+            },
+            //35 bright purple skin, bald
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.75F,0.3F,0.7F,1F},
+            //7 hair
+            new float[] {0.75F,0.3F,0.7F,1F},
+            //8 skin contrast
+            new float[] {0.6F,0.2F,0.55F,1F},
+            //9 skin
+            new float[] {0.75F,0.3F,0.7F,1F},
+            //10 eyes shine
+            new float[] {0.6F,0.6F,0.6F,1F},
+            //11 eyes
+            new float[] {0.35F,0.35F,0.35F,1F},
+            //17 smoke
+            new float[] {0.45F,0.75F,0.35F,waver_alpha},
+            //18 yellow fire
+            new float[] {0.4F,0.95F,0.3F,1F},
+            //19 orange fire
+            new float[] {0.35F,1.05F,0.25F,1F},
+            //20 sparks
+            new float[] {0.65F,1.2F,0.5F,1F},
+            },
+        };
         public static float[][][] wterrains = new float[][][]
         {
             new float[][] { //0 (50) plains
@@ -1329,8 +2223,57 @@ namespace AssetsPV
 
         public static void Initialize(bool disableGore)
         {
+
             VoxelLogic.wpalettecount = wpalettes.Length;
             int wpc = VoxelLogic.wpalettecount;
+            for(int c = 6; c <= 11; c++)
+            {
+                for(int p = 0; p < wpc; p++)
+                {
+                    wpalettes[p][c] = wspecies[0][c - 6];
+                }
+            }
+            for(int c = 17; c <= 20; c++)
+            {
+                for(int p = 0; p < wpc; p++)
+                {
+                    wpalettes[p][c] = wspecies[0][c - 11];
+                }
+            }
+            float[][][] copy = wpalettes.Replicate();
+            for(int i = 1; i < wspecies.Length; i++)
+            {
+                float[][][] addon = new float[copy.Length][][];
+                for(int j = 0; j < copy.Length; j++)
+                {
+                    addon[j] = new float[copy[j].Length][];
+                    for(int k = 0; k < copy[j].Length; k++)
+                    {
+                        addon[j][k] = new float[copy[j][k].Length];
+                        for(int l = 0; l < copy[j][k].Length; l++)
+                        {
+                            addon[j][k][l] = copy[j][k][l];
+                        }
+                    }
+                }
+                for(int c = 6; c <= 11; c++)
+                {
+                    for(int p = 0; p < wpc; p++)
+                    {
+                        addon[p][c] = wspecies[i][c - 6];
+                    }
+                }
+                for(int c = 17; c <= 20; c++)
+                {
+                    for(int p = 0; p < wpc; p++)
+                    {
+                        addon[p][c] = wspecies[i][c - 11];
+                    }
+                }
+                wpalettes = wpalettes.Concat(addon).ToArray();
+            }
+            VoxelLogic.wpalettecount = wpalettes.Length;
+            wpc = VoxelLogic.wpalettecount;
 
             if(disableGore)
             {
