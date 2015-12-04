@@ -421,8 +421,8 @@ namespace AssetsPV
         }
         public byte[,,] FinalizeScatter(int xOffset, int yOffset)
         {
-            if(SpreadColors == null)
-                return FinalizeSimple(xOffset, yOffset);
+            //if(SpreadColors == null)
+            //    return FinalizeSimple(xOffset, yOffset);
 
             //q.setEulerAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
@@ -506,61 +506,25 @@ namespace AssetsPV
                     }
                 }
             }
-
-            for(int z = 0; z < zSize; z++)
+            if(SpreadColors != null)
             {
-                for(int y = 0; y < ySize; y++)
+                for(int z = 0; z < zSize; z++)
                 {
-                    for(int x = 0; x < xSize; x++)
+                    for(int y = 0; y < ySize; y++)
                     {
-                        if(SpreadAll)
+                        for(int x = 0; x < xSize; x++)
                         {
-                            v.X = (x - hxs) * StretchX + xOffset;
-                            v.Y = (y - hys) * StretchY;
-                            v.Z = (z - hzs) * StretchZ;
-                            float normod = (float)Math.Sqrt(v.LengthSquared());
-                            v = Vector3.Divide(v, normod);
-
-                            for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+                            if(SpreadAll)
                             {
-                                q2 = Quaternion.Lerp(q, q0, a);
-                                v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
-
-                                int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
-                                if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance > TransformLogic.rng.NextDouble())
+                                if(Colors[x, y, z] > 0)
                                 {
-                                    if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
-                                    {
-                                        c2[x2, y2, z2] = SpreadColors.RandomElement();
-                                    }
-                                    else if(z2 < 0)
-                                    {
-                                        double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
-                                        double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
+                                    if(x > 0 && x < xSize - 1 && y > 0 && y < ySize - 1 && z > 0 && z < zSize - 1 &&
+                                        Colors[x - 1, y, z] > 0 && Colors[x + 1, y, z] > 0 &&
+                                        Colors[x, y - 1, z] > 0 && Colors[x, y + 1, z] > 0 &&
+                                        Colors[x, y, z - 1] > 0 && Colors[x, y, z + 1] > 0)
 
-                                        xMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
-                                        yMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
+                                        continue;
 
-                                        x2 += (int)Math.Round(xMove);
-                                        y2 += (int)Math.Round(yMove);
-
-                                        z2 = TransformLogic.rng.Next(4);
-                                        if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
-                                        {
-                                            c2[x2, y2, z2] = SpreadColors.RandomElement();
-                                        }
-                                    }
-                                }
-                                
-                            }
-
-                        }
-                        else
-                        {
-                            for(int c = 0; c < SpreadColors.Length; c++)
-                            {
-                                if(Colors[x, y, z] == SpreadColors[c])
-                                {
                                     v.X = (x - hxs) * StretchX + xOffset;
                                     v.Y = (y - hys) * StretchY;
                                     v.Z = (z - hzs) * StretchZ;
@@ -577,35 +541,81 @@ namespace AssetsPV
                                         {
                                             if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                             {
-                                                c2[x2, y2, z2] = Colors[x, y, z];
+                                                c2[x2, y2, z2] = SpreadColors.RandomElement();
                                             }
                                             else if(z2 < 0)
                                             {
                                                 double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
                                                 double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
 
-                                                xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
-                                                yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                                xMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
+                                                yMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
 
                                                 x2 += (int)Math.Round(xMove);
                                                 y2 += (int)Math.Round(yMove);
 
-                                                z2 = TransformLogic.rng.Next(3);
+                                                z2 = TransformLogic.rng.Next(4);
                                                 if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
                                                 {
-                                                    c2[x2, y2, z2] = Colors[x, y, z];
+                                                    c2[x2, y2, z2] = SpreadColors.RandomElement();
                                                 }
                                             }
                                         }
+
                                     }
-                                    break;
+                                }
+                            }
+                            else
+                            {
+                                for(int c = 0; c < SpreadColors.Length; c++)
+                                {
+                                    if(Colors[x, y, z] == SpreadColors[c])
+                                    {
+                                        v.X = (x - hxs) * StretchX + xOffset;
+                                        v.Y = (y - hys) * StretchY;
+                                        v.Z = (z - hzs) * StretchZ;
+                                        float normod = (float)Math.Sqrt(v.LengthSquared());
+                                        v = Vector3.Divide(v, normod);
+
+                                        for(float a = 0.0f; a <= 1.0f; a += 1.0f / levels)
+                                        {
+                                            q2 = Quaternion.Lerp(q, q0, a);
+                                            v2 = Vector3.Multiply(normod, Vector3.Transform(v, q2));
+
+                                            int x2 = (int)(v2.X + 0.5f + hxs - xOffset + MoveX - zx), y2 = (int)(v2.Y + 0.5f + hys + MoveY - zy), z2 = (int)(v2.Z + 0.5f + hzs + MoveZ - zz);
+                                            if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && SpreadChance > TransformLogic.rng.NextDouble())
+                                            {
+                                                if(z2 >= 0 && z2 < zSize && (254 - c2[x2, y2, z2]) % 4 != 0)
+                                                {
+                                                    c2[x2, y2, z2] = Colors[x, y, z];
+                                                }
+                                                else if(z2 < 0)
+                                                {
+                                                    double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
+                                                    double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
+
+                                                    xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                                    yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+
+                                                    x2 += (int)Math.Round(xMove);
+                                                    y2 += (int)Math.Round(yMove);
+
+                                                    z2 = TransformLogic.rng.Next(3);
+                                                    if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                                                    {
+                                                        c2[x2, y2, z2] = Colors[x, y, z];
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-
             for(int z = 1; z < zSize - 1; z++)
             {
                 for(int y = 1; y < ySize - 1; y++)
@@ -706,6 +716,7 @@ namespace AssetsPV
         {
             Bone b = new Bone(Name, Colors.Replicate(), Yaw, Pitch, Roll);
             b.SpreadColors = SpreadColors.Replicate();
+            b.SpreadAll = SpreadAll;
             b.StartYaw = StartYaw;
             b.StartPitch = StartPitch;
             b.StartRoll = StartRoll;

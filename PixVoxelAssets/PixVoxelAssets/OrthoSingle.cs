@@ -1018,10 +1018,29 @@ namespace AssetsPV
                         }
                     }
                 }
+                List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
+
+                for(int strength = 0; strength < 4; strength++)
+                {
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_" + f + ".png");
+                            }
+                        }
+                    }
+                }
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running receiving GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated");
+                /*
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
                 startInfo.UseShellExecute = false;
-
+                
                 List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
                 for(int strength = 0; strength < 4; strength++)
                 {
@@ -1039,7 +1058,7 @@ namespace AssetsPV
                 Directory.CreateDirectory("gifs/" + altFolder);
                 Console.WriteLine("Running GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated.gif");
-                
+                */
             }
         }
 
@@ -1095,7 +1114,21 @@ namespace AssetsPV
                         folder + "/color{0}_" + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
-
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int p = 0; p < 8; p++)
+            {
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_" + f + ".png");
+                    }
+                }
+            }
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running standing GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Huge_animated");
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -1106,7 +1139,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
             processExplosionHugeWSuper(u, -1, explode_parsed, false);
             //            processExplosionHugeWSuper(u, -1, new MagicaVoxelData[] { }, false);
 
@@ -1699,22 +1732,50 @@ namespace AssetsPV
 
             if(palette >= 0)
             {
-                Directory.CreateDirectory("gifs/" + altFolder);
-                ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
-                startInfo.UseShellExecute = false;
-                string s = "";
+                //Directory.CreateDirectory("gifs/" + altFolder);
+                //ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+                //startInfo.UseShellExecute = false;
+                //string s = "";
 
-                for(int d = 0; d < 4; d++)
+                //for(int d = 0; d < 4; d++)
+                //{
+                //    for(int frame = 0; frame < 12; frame++)
+                //    {
+                //        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_death_" + frame + ".png ";
+                //    }
+                //}
+
+                //startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_death_animated.gif";
+                //Console.WriteLine("Running convert.exe ...");
+                //Process.Start(startInfo).WaitForExit();
+
+                //for(int dir = 0; dir < 4; dir++)
+                //{
+                //    for(int f = 0; f < 12; f++)
+                //    {
+                //        AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_death_" + f + ".png",
+                //            folder + "/color{0}_" + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
+                //    }
+                //}
+
+                //Directory.CreateDirectory("gifs/" + altFolder);
+
+                List<string> imageNames = new List<string>(4 * 8 * 12);
+
+                for(int p = 0; p < 8; p++)
                 {
-                    for(int frame = 0; frame < 12; frame++)
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        s += folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_death_" + frame + ".png ";
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_death_" + f + ".png ");
+                        }
                     }
                 }
+                Directory.CreateDirectory("gifs/" + altFolder);
+                Console.WriteLine("Running explosion GIF conversion ...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "palette" + palette + "_" + u + "_death_animated");
 
-                startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_death_animated.gif";
-                Console.WriteLine("Running convert.exe ...");
-                Process.Start(startInfo).WaitForExit();
             }
             else
             {
@@ -1743,7 +1804,7 @@ namespace AssetsPV
                     }
                 }
                 Directory.CreateDirectory("gifs/" + altFolder);
-                Console.WriteLine("Running GIF conversion ...");
+                Console.WriteLine("Running explosion GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_animated");
 
             }
@@ -3807,9 +3868,9 @@ namespace AssetsPV
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
-            System.IO.Directory.CreateDirectory("CU_Ortho_S");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S/Terrains2");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S/TerrainsBlank");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S_temp");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S_temp/Terrains2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S_temp/TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -4113,7 +4174,7 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
             //makeFlatTiling();
-
+            
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
@@ -4190,8 +4251,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-
-
+            
 
             //processReceivingMilitaryW();
 

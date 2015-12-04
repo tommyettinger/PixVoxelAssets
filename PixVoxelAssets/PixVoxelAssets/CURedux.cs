@@ -1871,7 +1871,7 @@ namespace AssetsPV
             //20 sparks
             new float[] {1.05F,0.85F,0.95F,1F},
             },
-            //33 deep blue skin, bald
+            //34 deep blue skin, bald
             new float[][]
             {
             //6 hair contrast
@@ -1895,7 +1895,7 @@ namespace AssetsPV
             //20 sparks
             new float[] {1.0F,1.1F,0.85F,1F},
             },
-            //34 deep indigo skin, bald
+            //35 deep indigo skin, bald
             new float[][]
             {
             //6 hair contrast
@@ -1919,7 +1919,7 @@ namespace AssetsPV
             //20 sparks
             new float[] {0.5F,0.7F,0.45F,1F},
             },
-            //35 bright purple skin, bald
+            //36 bright purple skin, bald
             new float[][]
             {
             //6 hair contrast
@@ -4741,7 +4741,7 @@ namespace AssetsPV
                 crashes[i].MoveX = xSize / 8f;
                 crashes[i].Roll = 0;// r.Next(40) - 20f;
                 crashes[i].Yaw = 0;// r.Next(120) - 60f;
-                crashes[i].InitFierySpreadCU(-crashes[i].Yaw / 1.5f, 40, -crashes[i].Roll / 1.5f, 0.15f);
+                //crashes[i].InitFierySpreadCU(-crashes[i].Yaw / 1.5f, 40, -crashes[i].Roll / 1.5f, 0.15f);
 
 
                 wrecks[i] = bones[i].Replicate();
@@ -4750,7 +4750,7 @@ namespace AssetsPV
                 wrecks[i].MoveX = xSize / 6f;
                 wrecks[i].Roll = crashes[i].Roll;
                 wrecks[i].Yaw = crashes[i].Yaw;
-                wrecks[i].InitFierySpreadCU(0, 10, 0, 0.09f);
+                //wrecks[i].InitFierySpreadCU(0, 10, 0, 0.09f);
 
 
                 boneFrames[i] = new Bone[12];
@@ -4955,7 +4955,7 @@ namespace AssetsPV
                 aerial[i].MoveY = ((r.Next(3) + 1) * (r.Next(2) == 0 ? 1 : -1)) * minZ[i] * 0.8f;
                 aerial[i].Roll = 0;// (i + 1) * 0.2f * (r.Next(20) - 10f);
                 aerial[i].Yaw = 0;// (i + 0.5f) * 0.2f * (r.Next(10) - 5f);
-                aerial[i].InitFierySpreadCU(0, 30, 0, 0.2f);
+                //aerial[i].InitFierySpreadCU(0, 30, 0, 0.2f);
 
 
                 wasted[i] = bones[i].Replicate();
@@ -4966,7 +4966,7 @@ namespace AssetsPV
                 wasted[i].MoveY = aerial[i].MoveY * 1.5f;
                 wasted[i].Roll = 0;// aerial[i].Roll * 1.4f + r.Next(2, 6) / 10f * (r.Next(2) == 1 ? -1 : 1);
                 wasted[i].Yaw = 0;// aerial[i].Yaw * 2 + r.Next(4, 11) / 10f * (r.Next(2) == 1 ? -1 : 1);
-                wasted[i].InitFierySpreadCU(0, -5, 0, 0.05f);
+                //wasted[i].InitFierySpreadCU(0, -5, 0, 0.05f);
 
                 boneFrames[i] = new Bone[12];
                 aerialFrames[i] = new Bone[12];
@@ -5089,7 +5089,7 @@ namespace AssetsPV
                 aerial[i].MoveY = (r.Next(5) - 2) * (i + 0.4f) * 0.7f;
                 aerial[i].Roll = 0;// (i + 1) * 0.2f * (r.Next(20) - 10f);
                 aerial[i].Yaw = 0;// (i + 0.5f) * 0.2f * (r.Next(10) - 5f);
-                aerial[i].InitFierySpreadCU(0, 40, 0, 0.2f);
+                //aerial[i].InitFierySpreadCU(0, 40, 0, 0.2f);
 
 
                 wasted[i] = bones[i].Replicate();
@@ -5099,7 +5099,7 @@ namespace AssetsPV
                 wasted[i].MoveY = aerial[i].MoveY * 1.4f;
                 wasted[i].Roll = 0;// aerial[i].Roll * 1.4f + r.Next(2, 6) / 10f * (r.Next(2) == 1 ? -1 : 1);
                 wasted[i].Yaw = 0;// aerial[i].Yaw * 2 + r.Next(4, 11) / 10f * (r.Next(2) == 1 ? -1 : 1);
-                wasted[i].InitFierySpreadCU(0, -15, 0, 0.1f);
+                //wasted[i].InitFierySpreadCU(0, -15, 0, 0.1f);
 
                 boneFrames[i] = new Bone[12];
                 aerialFrames[i] = new Bone[12];
