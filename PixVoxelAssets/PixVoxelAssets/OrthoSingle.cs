@@ -328,6 +328,12 @@ namespace AssetsPV
 
         public static void InitializeWPalette()
         {
+
+            for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
+            {
+                Directory.CreateDirectory(altFolder + "color" + p);
+                Directory.CreateDirectory("frames/" + altFolder + "color" + p);
+            }
             wrendered = storeColorCubesWBold();
             simplepalettes = new byte[wrendered.Length][][];
             int colorcount = Math.Min(VoxelLogic.wpalettes[0].Length, 63);
@@ -802,7 +808,7 @@ namespace AssetsPV
                 for(int f = 0; f < framelimit; f++)
                 {
                     AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_" + f + ".png",
-                        folder + "/color{0}_" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
+                        folder + "/color{0}/" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
             List<string> imageNames = new List<string>(4 * 8 * framelimit);
@@ -812,7 +818,7 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < framelimit; f++)
                     {
-                        imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_" + f + ".png");
+                        imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                     }
                 }
             }
@@ -896,7 +902,7 @@ namespace AssetsPV
                         for(int f = 0; f < 16; f++)
                         {
                             AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                folder + "/color{0}_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                folder + "/color{0}/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
                     }
                     //bin.Close();
@@ -931,7 +937,7 @@ namespace AssetsPV
                         for(int f = 0; f < 16; f++)
                         {
                             AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                folder + "/color{0}_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                folder + "/color{0}/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
                     }
                     //bin.Close();
@@ -947,7 +953,7 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 16; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
                         }
                     }
                 }
@@ -1014,7 +1020,7 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             AlterPNGPalette(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                folder + "/color{0}" + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
+                                folder + "/color{0}/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
                         }
                     }
                 }
@@ -1028,7 +1034,7 @@ namespace AssetsPV
                         {
                             for(int f = 0; f < 16; f++)
                             {
-                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_" + f + ".png");
+                                imageNames.Add(folder + "/color" + p + "/" + VoxelLogic.WeaponTypes[i] + "_face" + dir + "_strength_" + strength + "_" + f + ".png");
                             }
                         }
                     }
@@ -1089,11 +1095,16 @@ namespace AssetsPV
             {
 
                 byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.ScalePartial(TransformLogic.SealGaps( TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
+                    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2),
                     1 + bonus * multiplier * 2);
-//                byte[,,] colors = TransformLogic.RunCA(
-//                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
-//                    1 + bonus * multiplier * 2);
+                /*
+                byte[,,] colors = TransformLogic.RunCA(
+                    TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
+                    1 + bonus * multiplier * 2);
+                    */
+                //                byte[,,] colors = TransformLogic.RunCA(
+                //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
+                //                    1 + bonus * multiplier * 2);
 
                 for(int f = 0; f < framelimit; f++)
                 {
@@ -1111,7 +1122,7 @@ namespace AssetsPV
                 for(int f = 0; f < framelimit; f++)
                 {
                     AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_" + f + ".png",
-                        folder + "/color{0}_" + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
+                        folder + "/color{0}/" + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
             List<string> imageNames = new List<string>(4 * 8 * framelimit);
@@ -1121,7 +1132,7 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < framelimit; f++)
                     {
-                        imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        imageNames.Add(folder + "/color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
                     }
                 }
             }
@@ -1178,9 +1189,14 @@ namespace AssetsPV
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
                             //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
-
+                            /*
                             byte[,,] colors = TransformLogic.RunCA(
                                 TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)), 2),
+                                1 + bonus * multiplier * 2);
+                                */
+
+                            byte[,,] colors = TransformLogic.RunCA(
+                                TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2),
                                 1 + bonus * multiplier * 2);
                             byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
@@ -1196,7 +1212,7 @@ namespace AssetsPV
                         for(int f = 0; f < 16; f++)
                         {
                             AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                folder + "/color{0}_" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                folder + "/color{0}/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
                     }
                     //bin.Close();
@@ -1214,7 +1230,7 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 16; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
                         }
                     }
                 }
@@ -1290,7 +1306,7 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             AlterPNGPalette(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
-                                folder + "/color{0}" + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
+                                folder + "/color{0}/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
                         }
                     }
                 }
@@ -1305,7 +1321,7 @@ namespace AssetsPV
                         {
                             for(int f = 0; f < 16; f++)
                             {
-                                imageNames.Add(folder + "/color" + p + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + f + ".png");
+                                imageNames.Add(folder + "/color" + p + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + f + ".png");
                             }
                         }
                     }
@@ -1785,7 +1801,7 @@ namespace AssetsPV
                     for(int f = 0; f < 12; f++)
                     {
                         AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_death_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
+                            folder + "/color{0}/" + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -1799,7 +1815,7 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
                         }
                     }
                 }
@@ -1873,7 +1889,7 @@ namespace AssetsPV
                     for(int f = 0; f < 12; f++)
                     {
                         AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png", simplepalettes);
+                            folder + "/color{0}/" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -1887,7 +1903,7 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_fiery_explode_" + f + ".png");
                         }
                     }
                 }
@@ -1982,7 +1998,7 @@ namespace AssetsPV
                     for(int f = 0; f < 12; f++)
                     {
                         AlterPNGPalette(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png",
-                            folder + "/color{0}_" + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
+                            folder + "/color{0}/" + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
 
@@ -1996,7 +2012,7 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 12; f++)
                         {
-                            imageNames.Add(folder + "/color" + p + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+                            imageNames.Add(folder + "/color" + p + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
                         }
                     }
                 }
@@ -4174,11 +4190,11 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
             //makeFlatTiling();
-            
+            /*
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
-
+            
             processUnitLargeWMilitary("Civilian");
 
             processUnitLargeWMilitary("Infantry");
@@ -4220,7 +4236,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
-
+            
             processUnitLargeWMilitary("Laboratory");
             processUnitLargeWMilitary("Dock");
             processUnitLargeWMilitary("Airport");
@@ -4228,7 +4244,8 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-
+            */
+            /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -4236,12 +4253,14 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Factory");
             processUnitHugeWMilitarySuper("Castle");
             processUnitHugeWMilitarySuper("Estate");
-
+            
             processUnitHugeWMilitarySuper("Copter");
             processUnitHugeWMilitarySuper("Copter_P");
+            */
+            
             processUnitHugeWMilitarySuper("Copter_S");
             processUnitHugeWMilitarySuper("Copter_T");
-
+            
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");

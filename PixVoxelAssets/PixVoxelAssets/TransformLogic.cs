@@ -594,8 +594,8 @@ namespace AssetsPV
                                                     double xMove = x2 - xSize / 2.0, yMove = y2 - ySize / 2.0;
                                                     double mag = Math.Sqrt(xMove * xMove + yMove * yMove);
 
-                                                    xMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
-                                                    yMove *= TransformLogic.rng.NextDouble() * -z2 * 5 / mag;
+                                                    xMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
+                                                    yMove *= TransformLogic.rng.NextDouble() * -z2 * 2 / mag;
 
                                                     x2 += (int)Math.Round(xMove);
                                                     y2 += (int)Math.Round(yMove);
@@ -1476,7 +1476,8 @@ namespace AssetsPV
             if(smoothLevel <= 1)
                 return voxelData;
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
-            Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
+            //Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
+            int[] colorCount = new int[256];
             byte[][,,] vs = new byte[smoothLevel][,,];
             vs[0] = voxelData.Replicate();
             for(int v = 1; v < smoothLevel; v++)
@@ -1488,7 +1489,7 @@ namespace AssetsPV
                     {
                         for(int z = 0; z < zSize; z++)
                         {
-                            colorCount.Clear();
+                            Array.Clear(colorCount, 0, 256);
                             int emptyCount = 0;
                             if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
                                 || (254 - vs[v - 1][x, y, z]) % 4 == 0 || ColorValue(vs[v - 1][x, y, z]) > 50)
@@ -1508,13 +1509,8 @@ namespace AssetsPV
                                             {
                                                 emptyCount++;
                                             }
-                                            else if(colorCount.ContainsKey(smallColor))
-                                            {
+                                            else                                            {
                                                 colorCount[smallColor]++;
-                                            }
-                                            else
-                                            {
-                                                colorCount[smallColor] = 1;
                                             }
                                         }
                                     }
@@ -1523,7 +1519,19 @@ namespace AssetsPV
                             if(emptyCount >= 18)
                                 vs[v][x, y, z] = 0;
                             else
-                                vs[v][x, y, z] = colorCount.OrderByDescending(kv => kv.Value).First().Key;
+                            {
+                                int max = 0, cc = colorCount[0], tmp;
+                                for(int idx = 1; idx < 256; idx++)
+                                {
+                                    tmp = colorCount[idx];
+                                    if(tmp > cc)
+                                    {
+                                        cc = tmp;
+                                        max = idx;
+                                    }
+                                }
+                                vs[v][x, y, z] = (byte)max;
+                            }
                         }
                     }
                 }
