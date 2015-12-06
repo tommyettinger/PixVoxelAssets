@@ -11,6 +11,25 @@ namespace AssetsPV
     {
         public static Random r = new Random(0x1337BEEF);
 
+        public static string[] normal_units = new string[]
+        {
+            "Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T",
+            "Infantry", "Infantry_P", "Infantry_S", "Infantry_T", "Infantry_PS", "Infantry_PT", "Infantry_ST",
+            "Tank", "Tank_P", "Tank_S", "Tank_T",
+            "Truck", "Truck_P", "Truck_S", "Truck_T",
+            "Artillery", "Artillery_P", "Artillery_S", "Artillery_T",
+            "Copter", "Copter_P", "Copter_S", "Copter_T",
+            "Plane", "Plane_P", "Plane_S", "Plane_T",
+            "Boat", "Boat_P", "Boat_S", "Boat_T",
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"
+        }, super_units = new string[]
+        {
+            "Copter", "Copter_P", "Copter_S", "Copter_T",
+            "Plane", "Plane_P", "Plane_S", "Plane_T",
+            "Boat", "Boat_P", "Boat_S", "Boat_T",
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"
+        };
+
         public const float flat_alpha = VoxelLogic.flat_alpha;
         public const float fuzz_alpha = VoxelLogic.fuzz_alpha;
         public const float waver_alpha = VoxelLogic.waver_alpha;
@@ -1944,6 +1963,46 @@ namespace AssetsPV
             new float[] {0.65F,1.2F,0.5F,1F},
             },
         };
+        public static int[]
+            humanHighlights = new int[]
+            {
+                0 + 6 * 8,
+                0 + 13 * 8,
+                1 + 1 * 8,
+                1 + 7 * 8,
+                2 + 16 * 8,
+                2 + 18 * 8,
+                3 + 4 * 8,
+                3 + 19 * 8,
+                4 + 23 * 8,
+                4 + 8 * 8,
+                5 + 20 * 8,
+                5 + 22 * 8,
+                6 + 5 * 8,
+                6 + 2 * 8,
+                7 + 9 * 8,
+                7 + 15 * 8,
+            },
+            alienHighlights = new int[]
+            {
+                0 + 35 * 8,
+                0 + 28 * 8,
+                1 + 32 * 8,
+                1 + 26 * 8,
+                2 + 30 * 8,
+                2 + 27 * 8,
+                3 + 34 * 8,
+                3 + 26 * 8,
+                4 + 29 * 8,
+                4 + 27 * 8,
+                5 + 31 * 8,
+                5 + 27 * 8,
+                6 + 33 * 8,
+                6 + 28 * 8,
+                7 + 36 * 8,
+                7 + 26 * 8,
+            };
+
         public static float[][][] wterrains = new float[][][]
         {
             new float[][] { //0 (50) plains
@@ -4832,7 +4891,12 @@ namespace AssetsPV
             Bone[] bones = m.Bones.Values.ToArray(), sunks = new Bone[bones.Length];
             Bone[][] boneFrames = new Bone[bones.Length][], sunkFrames = new Bone[bones.Length][];
 
-            byte[][,,] finals = bones.Select(b => b.Finalize(10 * Bone.Multiplier, 0)).ToArray();
+            byte[][,,] finals = new byte[bones.Length][,,];
+            for(int i = 0; i < bones.Length; i++)
+            {
+                finals[i] = bones[i].Finalize(0, 0);
+            }
+                //bones.Select(b => b.Finalize(0 * Bone.Multiplier, 0)).ToArray();
             for(int i = 0; i < bones.Length; i++)
             {
                 minZ[i] = finals[i].MinZ(dismiss);
@@ -4857,11 +4921,8 @@ namespace AssetsPV
 
 
                 sunks[i] = bones[i].Replicate();
-                sunks[i].Pitch = 0;
                 sunks[i].ZeroOut(0, 0, maxZ[i] + 10);
                 sunks[i].MoveX = xSize / -7f;
-                sunks[i].Roll = 0;// r.Next(40) - 20f;
-                sunks[i].Yaw = 0;// r.Next(120) - 60f;
                 
                 boneFrames[i] = new Bone[12];
                 sunkFrames[i] = new Bone[12];
@@ -4883,10 +4944,10 @@ namespace AssetsPV
             }
             for(int f = 1; f < 13; f++)
             {
-                voxelFrames[f] = boneFrames[0][f - 1].Interpolate(sunkFrames[0][f - 1], f / 12f).Finalize(10 * Bone.Multiplier, 0);
+                voxelFrames[f] = boneFrames[0][f - 1].Interpolate(sunkFrames[0][f - 1], f / 12f).Finalize(0 * Bone.Multiplier, 0);
                 for(int b = 1; b < bones.Length; b++)
                 {
-                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], boneFrames[b][f - 1].Interpolate(sunkFrames[b][f - 1], f / 12f).Finalize(10 * Bone.Multiplier, 0));
+                    voxelFrames[f] = TransformLogic.Overlap(voxelFrames[f], boneFrames[b][f - 1].Interpolate(sunkFrames[b][f - 1], f / 12f).Finalize(0 * Bone.Multiplier, 0));
                 }
             }
             for(int f = 1, e = 0; f < 8 && e < maxExplosionFrames; f++, e++)

@@ -1039,19 +1039,19 @@ namespace AssetsPV
                             if(bn.Count > 0)
                                 model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
-                        else if(data2[x,y,z] > 0)
+                        else if(data2[x,y,z] > 0 && data2[x,y,z] != 253 - 27 * 4)
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
                             List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
-                                bt => bt > 0 && (bt > 253 - 12 * 4 || bt < 253 - 16 * 4));
+                                bt => bt > 0 && bt != 253 - 27 * 4 && (bt > 253 - 12 * 4 || bt < 253 - 16 * 4));
                             if(bn.Count > 0)
                                 model.AddBone("Bone" + regular_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
                     }
                 }
             }
-            
+            model.AddBone("Extra", data2);
             model.SetAnatomy();
             return model;
         }

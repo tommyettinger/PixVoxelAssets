@@ -448,6 +448,233 @@ namespace AssetsPV
             }
         }
 
+        public static void WriteAllGIFs()
+        {
+            Directory.CreateDirectory("gifs/" + altFolder + "skin/");
+
+            foreach(string u in CURedux.normal_units)
+            {
+                List<string> imageNames = new List<string>(4 * 16 * 4);
+                foreach(int p in CURedux.humanHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_Large_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                foreach(int p in CURedux.humanHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running explosion GIF conversion for " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_death_Large_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    foreach(int p in CURedux.humanHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_attack_" + w + "_Large_animated");
+                }
+
+                imageNames = new List<string>(4 * 16 * 4);
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_alien_Large_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running explosion GIF conversion for " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_death_alien_Large_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_attack_" + w + "_alien_Large_animated");
+                }
+            }
+            foreach(string u in CURedux.super_units)
+            {
+                List<string> imageNames = new List<string>(4 * 16 * 4);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_Huge_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+
+                        }
+                    }
+                }
+                Console.WriteLine("Running explosion GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_death_Huge_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_attack_" + w + "_Huge_animated");
+                }
+
+                imageNames = new List<string>(4 * 16 * 4);
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_alien_Huge_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add("frames/" + altFolder + "color" + p + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running explosion GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_death_alien_Huge_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add("frames/" + altFolder + "/color" + p + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + "skin/" + u + "_attack_" + w + "_alien_Huge_animated");
+                }
+            }
+        }
+
         public static void processUnitLargeW(string u, int palette, bool still, bool shadowless)
         {
 
@@ -826,10 +1053,7 @@ namespace AssetsPV
             Console.WriteLine("Running GIF conversion ...");
             WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Large_animated");
 
-            processExplosionLargeW(u, -1, explode_parsed, false);
-            //            processExplosionLargeW(u, -1, new MagicaVoxelData[] { }, false);
-
-
+            processExplosionLargeW(u, -1, explode_parsed, false);            
             processUnitLargeWFiring(u);
         }
 
@@ -1083,6 +1307,7 @@ namespace AssetsPV
             Directory.CreateDirectory("vox/" + altFolder);
             VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
             MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
+            
             for(int i = 0; i < parsed.Length; i++)
             {
                 parsed[i].x += 10;
@@ -1097,11 +1322,11 @@ namespace AssetsPV
                 byte[,,] colors = TransformLogic.RunCA(
                     TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2),
                     1 + bonus * multiplier * 2);
-                /*
-                byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
-                    1 + bonus * multiplier * 2);
-                    */
+                
+           //     byte[,,] colors = TransformLogic.RunCA(
+           //         TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
+           //         1 + bonus * multiplier * 2);
+                    
                 //                byte[,,] colors = TransformLogic.RunCA(
                 //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
                 //                    1 + bonus * multiplier * 2);
@@ -1139,6 +1364,9 @@ namespace AssetsPV
             Directory.CreateDirectory("gifs/" + altFolder);
             Console.WriteLine("Running standing GIF conversion ...");
             WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Huge_animated");
+            
+
+
             /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -2004,7 +2232,7 @@ namespace AssetsPV
 
                 Directory.CreateDirectory("gifs/" + altFolder);
 
-                List<string> imageNames = new List<string>(4 * 8 * 16);
+                List<string> imageNames = new List<string>(4 * 8 * 12);
 
                 for(int p = 0; p < 8; p++)
                 {
@@ -4188,6 +4416,7 @@ namespace AssetsPV
             */
             
             writePaletteImages();
+            WriteAllGIFs();
             //renderTerrain();
             //makeFlatTiling();
             /*
@@ -4256,8 +4485,6 @@ namespace AssetsPV
             
             processUnitHugeWMilitarySuper("Copter");
             processUnitHugeWMilitarySuper("Copter_P");
-            */
-            
             processUnitHugeWMilitarySuper("Copter_S");
             processUnitHugeWMilitarySuper("Copter_T");
             
@@ -4265,12 +4492,12 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");
             processUnitHugeWMilitarySuper("Plane_T");
-
+            
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            
+            */
 
             //processReceivingMilitaryW();
 
