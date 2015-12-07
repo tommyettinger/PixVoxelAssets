@@ -1406,23 +1406,20 @@ namespace AssetsPV
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
                     List<MagicaVoxelData>[] firing;
                     if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                    {
                         firing = CURedux.makeFiringAnimationSuper(CURedux.FlyoverSuper(parsed), VoxelLogic.UnitLookup[u], w);
+                    }
                     else
+                    {
                         firing = CURedux.makeFiringAnimationSuper(parsed, VoxelLogic.UnitLookup[u], w);
+
+                    }
 
                     for(int d = 0; d < 4; d++)
                     {
 
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-                            //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
-                            /*
-                            byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)), 2),
-                                1 + bonus * multiplier * 2);
-                                */
-
                             byte[,,] colors = TransformLogic.RunCA(
                                 TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2),
                                 1 + bonus * multiplier * 2);
@@ -1433,7 +1430,14 @@ namespace AssetsPV
                             WritePNG(png, b, basepalette);
                         }
                     }
-                    
+                    //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
+                    //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
+                    /*
+                    byte[,,] colors = TransformLogic.RunCA(
+                        TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)), 2),
+                        1 + bonus * multiplier * 2);
+                        */
+
 
                     for(int dir = 0; dir < 4; dir++)
                     {
@@ -4416,7 +4420,6 @@ namespace AssetsPV
             */
             
             writePaletteImages();
-            WriteAllGIFs();
             //renderTerrain();
             //makeFlatTiling();
             /*
@@ -4498,6 +4501,10 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
             */
+            //processUnitLargeWFiring("Plane_P");
+            processUnitHugeWFiringSuper("Plane_P");
+
+            WriteAllGIFs();
 
             //processReceivingMilitaryW();
 

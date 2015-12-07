@@ -1474,10 +1474,13 @@ namespace AssetsPV
                     parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
                     List<MagicaVoxelData>[] firing;
                     if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                    {
                         firing = CURedux.makeFiringAnimationSuper(CURedux.FlyoverSuper(parsed), VoxelLogic.UnitLookup[u], w);
+                    }
                     else
+                    {
                         firing = CURedux.makeFiringAnimationSuper(parsed, VoxelLogic.UnitLookup[u], w);
-
+                    }
                     for(int d = 0; d < 4; d++)
                     {
 
@@ -1494,8 +1497,6 @@ namespace AssetsPV
                             WritePNG(png, b, basepalette);
                         }
                     }
-                    
-
                     for(int dir = 0; dir < 4; dir++)
                     {
                         for(int f = 0; f < 16; f++)

@@ -12,7 +12,7 @@ namespace AssetsPV
         public static Random r = new Random(0x1337BEEF);
 
         public static string[] normal_units = new string[]
-        {
+        {/*
             "Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T",
             "Infantry", "Infantry_P", "Infantry_S", "Infantry_T", "Infantry_PS", "Infantry_PT", "Infantry_ST",
             "Tank", "Tank_P", "Tank_S", "Tank_T",
@@ -21,13 +21,13 @@ namespace AssetsPV
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"*/
         }, super_units = new string[]
-        {
+        {/*
             "Copter", "Copter_P", "Copter_S", "Copter_T",
-            "Plane", "Plane_P", "Plane_S", "Plane_T",
+            "Plane",*/ "Plane_P"/*, "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"*/
         };
 
         public const float flat_alpha = VoxelLogic.flat_alpha;
@@ -4286,7 +4286,105 @@ namespace AssetsPV
                     {
                         if(exploding[m] == 0)
                         {
-                            explosions[m] = FireballLarge(randomFill(centers[m].x - 5, centers[m].y - 5, 0, 12, 12, 8, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 0);
+                            explosions[m] = FireballLarge(randomFill(centers[m].x - 4, centers[m].y - 4, 0, 9, 9, 8, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 1);
+                        }
+                        exploding[m]++;
+                    }
+                }
+            }
+            for(int f = 1; f < voxelFrames.Length - 1; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(parsedFrames[f]);
+                for(int i = 0; i < launchers.Count; i++)
+                {
+                    working.AddRange(missiles[i][f - 1]);
+                    if(f + 1 - voxelFrames.Length + exploding[i] >= 0 && f + 1 - voxelFrames.Length + exploding[i] < explosions[i].Length)
+                        working.AddRange(explosions[i][f + 1 - voxelFrames.Length + exploding[i]]);
+                }
+                //working.AddRange(extra[f - 1]);
+                voxelFrames[f] = working.ToArray();
+            }
+
+            return voxelFrames;
+        }
+
+        public static MagicaVoxelData[][] BombAnimationHuge(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
+            parsedFrames[0].CopyTo(voxelFrames[0], 0);
+            parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(4);
+            // List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+            foreach(MagicaVoxelData mvd in voxelFrames[0])
+            {
+                if(mvd.color == emitter0 - which * 8)
+                {
+                    launchers.Add(mvd);
+                }
+            }
+            List<MagicaVoxelData>[][] missiles = new List<MagicaVoxelData>[launchers.Count][];
+            MagicaVoxelData[][][] explosions = new MagicaVoxelData[launchers.Count][][];
+            MagicaVoxelData[] centers = new MagicaVoxelData[launchers.Count];
+            int[] exploding = new int[launchers.Count];
+            for(int i = 0; i < launchers.Count; i++)
+            {
+                missiles[i] = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+                explosions[i] = new MagicaVoxelData[voxelFrames.Length - 2][];
+                exploding[i] = -1;
+            }
+            for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            {
+                //extra[f] = new List<MagicaVoxelData>(100);
+                for(int m = 0; m < missiles.Length; m++)
+                {
+
+                    launchers = new List<MagicaVoxelData>(4);
+                    foreach(MagicaVoxelData mvd in voxelFrames[0])
+                    {
+                        if(mvd.color == emitter0 - which * 8)
+                        {
+                            launchers.Add(mvd);
+                        }
+                    }
+                    MagicaVoxelData launcher = launchers[m];
+                    missiles[m][f] = new List<MagicaVoxelData>(40);
+
+                    if(f > 0)
+                    {
+                        double drop = f * (r.NextDouble() * 1.3 + 1.0);
+                        foreach(MagicaVoxelData missile in missiles[m][f - 1].OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128))
+                        {
+                            if(missile.z - drop < 1)
+                            {
+                                exploding[m] = 0;
+                                centers[m] = missile;
+                                missiles[m][f].Clear(); ;
+                                break;
+                            }
+                            else
+                            {
+                                missiles[m][f].Add(new MagicaVoxelData
+                                {
+                                    x = (byte)(missile.x),
+                                    y = (byte)(missile.y),
+                                    z = (byte)(missile.z - drop),
+                                    color = missile.color
+                                });
+                            }
+                        }
+                    }
+                    if(f <= 1)
+                    {
+                        missiles[m][f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = (byte)(launcher.x + 0), y = (byte)(launcher.y), z = (byte)(launcher.z - 1), color = bold_paint }, 4, bold_paint));
+                    }
+
+                    if(exploding[m] > -1)
+                    {
+                        if(exploding[m] == 0)
+                        {
+                            explosions[m] = FireballLarge(randomFill(centers[m].x - 3, centers[m].y - 3, 0, 6, 6, 7, new int[] { smoke, orange_fire, yellow_fire }).ToArray(), 0, voxelFrames.Length - 2 - f, 0);
                         }
                         exploding[m]++;
                     }
@@ -4559,26 +4657,41 @@ namespace AssetsPV
             {
                 return new List<MagicaVoxelData>[0];
             }
+            else if(VoxelLogic.CurrentWeapons[unit][weapon] == 7)
+            {
+                voxelFrames = BombAnimationHuge(voxelFrames, unit, weapon);
+                VoxelLogic.sizex = 80;
+                VoxelLogic.sizey = 80;
+                VoxelLogic.sizez = 60;
+                for(int i = 0; i < voxelFrames.Length; i++)
+                {
+                    vf2[i] = new List<MagicaVoxelData>();
+                    for(int j = 0; j < voxelFrames[i].Length; j++)
+                    {
+                        if(!(voxelFrames[i][j].x >= 80 || voxelFrames[i][j].y >= 80 || voxelFrames[i][j].z >= 60))
+                            vf2[i].Add(voxelFrames[i][j]);
+                    }
+
+                }
+            }
             else
             {
                 voxelFrames = weaponAnimationsLarge[VoxelLogic.CurrentWeapons[unit][weapon]](voxelFrames, unit, weapon);
-            }
-            VoxelLogic.sizex = 80;
-            VoxelLogic.sizey = 80;
-            VoxelLogic.sizez = 60;
-            for(int i = 0; i < voxelFrames.Length; i++)
-            {
-                vf2[i] = new List<MagicaVoxelData>();
-                for(int j = 0; j < voxelFrames[i].Length; j++)
+                VoxelLogic.sizex = 80;
+                VoxelLogic.sizey = 80;
+                VoxelLogic.sizez = 60;
+                for(int i = 0; i < voxelFrames.Length; i++)
                 {
-                    if(!(voxelFrames[i][j].x >= 80 || voxelFrames[i][j].y >= 80 || voxelFrames[i][j].z >= 60))
-                        vf2[i].Add(voxelFrames[i][j]);
+                    vf2[i] = new List<MagicaVoxelData>();
+                    for(int j = 0; j < voxelFrames[i].Length; j++)
+                    {
+                        if(!(voxelFrames[i][j].x >= 80 || voxelFrames[i][j].y >= 80 || voxelFrames[i][j].z >= 60))
+                            vf2[i].Add(voxelFrames[i][j]);
+                    }
+
                 }
-
             }
-
-
-
+            
             return vf2;
         }
 
