@@ -591,6 +591,10 @@ namespace AssetsPV
         /// </summary>
         public static readonly float[,,] NoiseGridFlatWater = new float[16, 0x10, 0x10];
         /// <summary>
+        /// 0.0 to 1.0
+        /// </summary>
+        public static readonly float[,,] NoiseGridFlatWaterHuge = new float[16, 120, 120];
+        /// <summary>
         /// 0.5 to 1.5
         /// </summary>
         public static readonly float[,,,] NoiseGridTight = new float[4, 160, 160, 160];
@@ -681,7 +685,7 @@ namespace AssetsPV
         }
         public static float FindNoiseFlatWater(int facing, int x, int y, int variant)
         {
-            switch (facing)
+            switch(facing)
             {
                 case 1:
                     return NoiseGridFlatWater[variant, y, 0x10 - 1 - x];
@@ -691,6 +695,20 @@ namespace AssetsPV
                     return NoiseGridFlatWater[variant, 0x10 - 1 - y, x];
                 default:
                     return NoiseGridFlatWater[variant, x, y];
+            }
+        }
+        public static float FindNoiseFlatWaterHuge(int facing, int x, int y, int variant)
+        {
+            switch(facing)
+            {
+                case 1:
+                    return NoiseGridFlatWaterHuge[variant, y, 120 - 1 - x];
+                case 2:
+                    return NoiseGridFlatWaterHuge[variant, 120 - 1 - x, 120 - 1 - y];
+                case 3:
+                    return NoiseGridFlatWaterHuge[variant, 120 - 1 - y, x];
+                default:
+                    return NoiseGridFlatWaterHuge[variant, x, y];
             }
         }
 
@@ -770,9 +788,9 @@ namespace AssetsPV
                 double dx = 6.0;
                 double dy = 6.0;
 
-                for (int x = 0; x < 0x10; x++)
+                for(int x = 0; x < 0x10; x++)
                 {
-                    for (int y = 0; y < 0x10; y++)
+                    for(int y = 0; y < 0x10; y++)
                     {
                         double s = x / 16.0;
                         double t = y / 16.0;
@@ -797,9 +815,9 @@ namespace AssetsPV
                 double dx = 7.0;
                 double dy = 7.0;
 
-                for (int x = 0; x < 0x10; x++)
+                for(int x = 0; x < 0x10; x++)
                 {
-                    for (int y = 0; y < 0x10; y++)
+                    for(int y = 0; y < 0x10; y++)
                     {
                         double s = x / 16.0;
                         double t = y / 16.0;
@@ -816,17 +834,17 @@ namespace AssetsPV
                     }
                 }
             }
-            for (int v = 0; v < 16; v++)
+            for(int v = 0; v < 16; v++)
             {
                 //true means use blue.
                 bool north = 0 < (v & 1);
                 bool east = 0 < (v & 2);
                 bool south = 0 < (v & 4);
                 bool west = 0 < (v & 8);
-                
-                for (int x = 0; x < 0x10; x++)
+
+                for(int x = 0; x < 0x10; x++)
                 {
-                    for (int y = 0; y < 0x10; y++)
+                    for(int y = 0; y < 0x10; y++)
                     {
                         /* From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
                         for x=0,bufferwidth-1,1 do
@@ -852,9 +870,9 @@ namespace AssetsPV
                         {
                             NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
                         }*/
-                        if (7.5 - Math.Abs(7.5 - x) >= y)
+                        if(7.5 - Math.Abs(7.5 - x) >= y)
                         {
-                            if (north)
+                            if(north)
                             {
                                 NoiseGridFlatWater[v, x, y] += blue[x, y];
                             }
@@ -863,9 +881,9 @@ namespace AssetsPV
                                 NoiseGridFlatWater[v, x, y] += orange[x, y];
                             }
                         }
-                        if (7.5 - Math.Abs(7.5 - x) >= 15 - y)
+                        if(7.5 - Math.Abs(7.5 - x) >= 15 - y)
                         {
-                            if (south)
+                            if(south)
                             {
                                 NoiseGridFlatWater[v, x, y] += blue[x, y];
                             }
@@ -875,9 +893,9 @@ namespace AssetsPV
                             }
                         }
 
-                        if (7.5 - Math.Abs(7.5 - y) > x)
+                        if(7.5 - Math.Abs(7.5 - y) > x)
                         {
-                            if (west)
+                            if(west)
                             {
                                 NoiseGridFlatWater[v, x, y] += blue[x, y];
                             }
@@ -886,9 +904,9 @@ namespace AssetsPV
                                 NoiseGridFlatWater[v, x, y] += orange[x, y];
                             }
                         }
-                        if (7.5 - Math.Abs(7.5 - y) > 15 - x)
+                        if(7.5 - Math.Abs(7.5 - y) > 15 - x)
                         {
-                            if (east)
+                            if(east)
                             {
                                 NoiseGridFlatWater[v, x, y] += blue[x, y];
                             }
@@ -901,6 +919,155 @@ namespace AssetsPV
                         NoiseGridFlatWater[v, x, y] /= 4.0F * 2.0F;
                         NoiseGridFlatWater[v, x, y] += 0.5F;
                         NoiseGridFlatWater[v, x, y] = (float)Math.Truncate(NoiseGridFlatWater[v, x, y] * 16) / 16.0F;
+
+                    }
+                }
+            }
+
+
+            blue = new float[120, 120];
+            orange = new float[120, 120];
+            {
+                //blue block
+                double x1 = 0.0;
+                double y1 = 0.0;
+
+                double dx = 2.0;
+                double dy = 2.0;
+
+                for(int x = 0; x < 120; x++)
+                {
+                    for(int y = 0; y < 120; y++)
+                    {
+                        double s = x / 120.0;
+                        double t = y / 120.0;
+
+                        double nx = x1 + Math.Cos(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
+                        double nz = x1 + Math.Sin(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double nw = y1 + Math.Sin(t * 2 * Math.PI) * dy / (2 * Math.PI);
+
+                        float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(59.5F - x), Math.Abs(59.5F - y)) / 50F))), 0.5F) * 4F;
+
+                        blue[x, y] = (float)(major.Evaluate(nx, ny, nz, nw) * (2.0F - contrib));
+                        //blue[x, y] = (float)(major.Evaluate(nx, ny, nz, nw) * contrib);
+
+                    }
+                }
+            }
+            {
+                //orange block
+                double x1 = 0.0;
+                double y1 = 0.0;
+
+                double dx = 2.0;
+                double dy = 2.0;
+
+                for(int x = 0; x < 120; x++)
+                {
+                    for(int y = 0; y < 120; y++)
+                    {
+                        double s = x / 120.0;
+                        double t = y / 120.0;
+
+                        double nx = x1 + Math.Cos(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double ny = y1 + Math.Cos(t * 2 * Math.PI) * dy / (2 * Math.PI);
+                        double nz = x1 + Math.Sin(s * 2 * Math.PI) * dx / (2 * Math.PI);
+                        double nw = y1 + Math.Sin(t * 2 * Math.PI) * dy / (2 * Math.PI);
+                        //less significant than the contrib used for the center; 0.0F to 2.0F
+                        float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(59.5F - x), Math.Abs(59.5F - y)) / 50F))), 0.5F) * 2F;
+
+                        orange[x, y] = (float)(minor.Evaluate(nx, ny, nz, nw) * (1F - contrib));
+                        //orange[x, y] = (float)(minor.Evaluate(nx, ny, nz, nw) * contrib);
+
+                    }
+                }
+            }
+            for(int v = 0; v < 16; v++)
+            {
+                //true means use blue.
+                bool north = 0 < (v & 1);
+                bool east = 0 < (v & 2);
+                bool south = 0 < (v & 4);
+                bool west = 0 < (v & 8);
+
+                for(int x = 0; x < 120; x++)
+                {
+                    for(int y = 0; y < 120; y++)
+                    {
+                        /* From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
+                        for x=0,bufferwidth-1,1 do
+        for y=0,bufferheight-1,1 do
+            local s=x/bufferwidth
+            local t=y/bufferheight
+            local dx=x2-x1
+            local dy=y2-y1
+
+            local nx=x1+cos(s*2*pi)*dx/(2*pi)
+            local ny=y1+cos(t*2*pi)*dy/(2*pi)
+            local nz=x1+sin(s*2*pi)*dx/(2*pi)
+            local nw=y1+sin(t*2*pi)*dy/(2*pi)
+
+            buffer:set(x,y,Noise4D(nx,ny,nz,nw))
+        end
+    end
+    */
+                        //always between 0.0F and 3.0F, tends strongly toward 3.0 anywhere close to center, 0.0 always at edges
+                        float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(59.5F - x), Math.Abs(59.5F - y)) / 50F))), 0.5F) * 6F;
+                        NoiseGridFlatWaterHuge[v, x, y] = (float)((major.EvaluateFloat(x / 5.5, y / 5.5, v * 0.25) * 3.0F + minor.EvaluateFloat(x / 2.2, y / 2.2, v * 0.35)) / 4.0F) * contrib;
+                        /*if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
+                        {
+                            NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
+                        }*/
+                        if(59.5 - Math.Abs(59.5 - x) >= y)
+                        {
+                            if(north)
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += orange[x, y];
+                            }
+                        }
+                        if(59.5 - Math.Abs(59.5 - x) >= 119 - y)
+                        {
+                            if(south)
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += orange[x, y];
+                            }
+                        }
+
+                        if(59.5 - Math.Abs(59.5 - y) > x)
+                        {
+                            if(west)
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += orange[x, y];
+                            }
+                        }
+                        if(59.5 - Math.Abs(59.5 - y) > 119 - x)
+                        {
+                            if(east)
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += blue[x, y];
+                            }
+                            else
+                            {
+                                NoiseGridFlatWaterHuge[v, x, y] += orange[x, y];
+                            }
+                        }
+
+                        NoiseGridFlatWaterHuge[v, x, y] /= 20.0F;
+                        NoiseGridFlatWaterHuge[v, x, y] += 0.4F;
+                        NoiseGridFlatWaterHuge[v, x, y] = (float)Math.Truncate(NoiseGridFlatWaterHuge[v, x, y] * 32) / 32.0F;
 
                     }
                 }

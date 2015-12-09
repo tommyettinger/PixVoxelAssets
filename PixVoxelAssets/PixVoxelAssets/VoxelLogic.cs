@@ -6527,7 +6527,7 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
 
             new float[][] { //48 stones
                             //0 stone contrast
-                new float[] {0.45F,0.4F,0.35F,1F},
+                new float[] {0.52F,0.48F,0.43F,1F},
                 //1 stone
                 new float[] {0.65F,0.6F,0.55F,1F},
                 //2 mud/dirt contrast
@@ -6581,7 +6581,7 @@ MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, Move
                 //26 mud
                 new float[] {0.2F,0.4F,0.3F,1F},
                 //27 water
-                new float[] {0.4F,0.6F,0.9F,flat_alpha},
+                new float[] {0.4F,0.6F,0.9F,1F},
                 //28 fuzz deepest
                 new float[] {0.0F,0.25F,-0.05F,fuzz_alpha},
                 //29 fuzz deep

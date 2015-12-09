@@ -13482,7 +13482,7 @@ namespace AssetsPV
             Directory.CreateDirectory("vox/K/mythos");
 
             VoxelLogic.InitializeKPalette();
-//            altFolder = "dungeon/";
+            //            altFolder = "dungeon/";
             //processUnitQuadK("Dragon", 6, true, true, true);
             //processUnitQuadK("Linnorm", 6, true, true, true);
             //processUnitK("Wolf", 3, true, true);
@@ -13495,6 +13495,8 @@ namespace AssetsPV
             processUnitK("Female_Base", 1, true);
             */
             /*
+            
+            VoxelLogic.InitializeKPalette();
             processTerrainK("Dungeon", "Floor", 4, false);
 
             processTerrainK("Dungeon", "Wall_Straight", 4, true);
@@ -13562,7 +13564,7 @@ namespace AssetsPV
             processUnitKMecha(moniker: "SYN-MM", legs: "Blocky", torso: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", head: "Blocky", right_weapon: "Rifle");
             processUnitKMechaAiming(moniker: "SYN-MM", legs: "Blocky", torso: "Blocky", left_arm: "Blocky_Aiming", right_arm: "Blocky_Aiming", head: "Blocky", right_weapon: "Rifle", right_projectile: "Beam");
             */
-            for (int p = 0; p < AlternatePalettes.schemes.Length; p++)
+            for(int p = 0; p < AlternatePalettes.schemes.Length; p++)
             {
                 /*
                 currentScheme = p;
