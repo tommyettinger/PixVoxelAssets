@@ -1038,7 +1038,7 @@ namespace AssetsPV
                         folder + "/color{0}/" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
-            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            List<string> imageNames = new List<string>(4 * 8 * 2 * framelimit);
             for(int p = 0; p < 8; p++)
             {
                 for(int dir = 0; dir < 4; dir++)
@@ -1047,11 +1047,15 @@ namespace AssetsPV
                     {
                         imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                     }
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                    }
                 }
             }
             Directory.CreateDirectory("gifs/" + altFolder);
             Console.WriteLine("Running GIF conversion ...");
-            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Large_animated");
+            WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
 
             processExplosionLargeW(u, -1, explode_parsed, false);            
             processUnitLargeWFiring(u);
@@ -1155,7 +1159,6 @@ namespace AssetsPV
                         }
                     }
                     
-
                     for(int dir = 0; dir < 4; dir++)
                     {
                         for(int f = 0; f < 16; f++)
@@ -1350,7 +1353,7 @@ namespace AssetsPV
                         folder + "/color{0}/" + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
-            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            List<string> imageNames = new List<string>(4 * 8 * 2 * framelimit);
             for(int p = 0; p < 8; p++)
             {
                 for(int dir = 0; dir < 4; dir++)
@@ -1359,11 +1362,15 @@ namespace AssetsPV
                     {
                         imageNames.Add(folder + "/color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
                     }
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        imageNames.Add(folder + "/color" + p + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                    }
                 }
             }
             Directory.CreateDirectory("gifs/" + altFolder);
             Console.WriteLine("Running standing GIF conversion ...");
-            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Huge_animated");
+            WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Huge_animated");
             
 
 
@@ -1969,7 +1976,6 @@ namespace AssetsPV
             {
                 for(int frame = 0; frame < 12; frame++)
                 {
-
                     byte[][] b = processFrameHugeW(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame], d * 90)), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
@@ -4422,6 +4428,9 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
             //makeFlatTiling();
+            
+            processUnitLargeWMilitary("Infantry");
+            processUnitLargeWMilitary("Infantry_P");
             /*
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
@@ -4476,8 +4485,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-            */
-            /*
+            
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("Airport");
@@ -4501,8 +4509,6 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
             */
-            //processUnitLargeWFiring("Plane_P");
-            processUnitHugeWFiringSuper("Plane_P");
 
             WriteAllGIFs();
 
