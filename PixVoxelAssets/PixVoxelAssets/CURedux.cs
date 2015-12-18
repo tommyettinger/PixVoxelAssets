@@ -3560,7 +3560,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = FireballLarge(randomFill(75, 56 + s, 16 + s, 4, 4, 4, new int[] { orange_fire, orange_fire, yellow_fire, yellow_fire, smoke }).ToArray(), 3, 6 + strength, 2);
+                explosions[s] = FireballLarge(randomFill(68 - s, 56 - s, 15 + s, 10 + s * 2, 8 + s * 2, 8, new int[] { orange_fire, orange_fire, yellow_fire, yellow_fire, smoke }).ToArray(), 3, 6 + strength, 0);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -3748,7 +3748,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = FireballLarge(randomFill(75, 56 + s, 0, 4, 4, 8, new int[] { smoke, orange_fire, smoke, orange_fire, yellow_fire }).ToArray(), 1, 5 + strength, 2);
+                explosions[s] = FireballLarge(randomFill(58 + r.Next(13), 52 + r.Next(9), 0, 9, 9, 11 + s * 2, new int[] { smoke, orange_fire, smoke, orange_fire, yellow_fire }).ToArray(), 1, 5 + strength, 0);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -3924,7 +3924,7 @@ namespace AssetsPV
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
 
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
-            MagicaVoxelData[][] explosion = FireballLarge(randomFill(70, 48, 20, 8, 5, 5, new int[] { smoke, orange_fire, yellow_fire, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
+            MagicaVoxelData[][] explosion = FireballLarge(randomFill(66, 48, 20, 13, 9, 9, new int[] { smoke, orange_fire, yellow_fire, orange_fire, yellow_fire }).ToArray(), -2, 7, 1);
 
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -4080,7 +4080,8 @@ namespace AssetsPV
                         if(missile[f - 1][i].x - 4 < 64)
                         {
                             isExploding = true;
-                            explosion = FireballLarge(randomFill(50, 55, missile[f - 1][i].z, 8, 10, 7, new int[] { smoke, orange_fire, yellow_fire }).Concat(missile[f - 1]).ToArray(), 0, 14 - f, 2);
+                            explosion = FireballLarge(randomFill(50 - strength, 55 - strength, Math.Max(2, missile[f - 1][i].z - 4), 12 + strength * 2, 10 + strength * 2, 14 + strength * 3,
+                                new int[] { smoke, orange_fire, yellow_fire }).Concat(missile[f - 1]).ToArray(), 0, 14 - f, 1);
                             missile[f].Clear();
                             firstBurst = f;
                             break;
@@ -4415,7 +4416,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = FireballLarge(randomFill(84, 50 + r.Next(11), r.Next(5), 8, 6, 6, new int[] { orange_fire, yellow_fire, smoke }).ToArray(), -3, 9, 2);
+                explosions[s] = FireballLarge(randomFill(84, 55 + r.Next(11), r.Next(5), 9, 12, 7, new int[] { orange_fire, yellow_fire, smoke }).ToArray(), -3, 9, 0);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -4518,7 +4519,7 @@ namespace AssetsPV
             MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
 
             List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
-            MagicaVoxelData[][] explosion = FireballLarge(randomFill(62, 47, 0, 8, 8, 7, new int[] { 253 - 27 * 4, 253 - 27 * 4, 253 - 27 * 4, orange_fire, yellow_fire }).ToArray(), -2, 7, 2);
+            MagicaVoxelData[][] explosion = FireballLarge(randomFill(64, 69, 0, 14, 12, 8, new int[] { 253 - 27 * 4, 253 - 27 * 4, 253 - 27 * 4, orange_fire, yellow_fire }).ToArray(), -2, 7, 1);
 
             for(int f = 0; f < voxelFrames.Length; f++)
             {

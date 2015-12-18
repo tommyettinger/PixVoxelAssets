@@ -333,6 +333,7 @@ namespace AssetsPV
             {
                 Directory.CreateDirectory(altFolder + "color" + p);
                 Directory.CreateDirectory("frames/" + altFolder + "color" + p);
+                Directory.CreateDirectory("frames/" + altFolder + "receiving/" + "color" + p);
             }
             wrendered = storeColorCubesWBold();
             simplepalettes = new byte[wrendered.Length][][];
@@ -393,6 +394,51 @@ namespace AssetsPV
             pngr.End();
 
             for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
+
+                pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                PngChunkPLTE pal = pngw.GetMetadata().CreatePLTEChunk();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+            }
+        }
+        public static void AlterPNGPaletteLimited(string input, string output, byte[][][] palettes)
+        {
+            PngReader pngr = FileHelper.CreatePngReader(input);
+            ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
+            ImageInfo imi = pngr.ImgInfo;
+
+            pngr.End();
+
+            for(int p = 0; p < 8; p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
+
+                pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                PngChunkPLTE pal = pngw.GetMetadata().CreatePLTEChunk();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+            }
+            for(int p = 208; p < 8 * CURedux.wspecies.Length; p++)
             {
                 byte[][] palette = palettes[p];
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
@@ -1194,10 +1240,11 @@ namespace AssetsPV
 
         public static void processReceivingMilitaryW()
         {
-            string folder = ("frames/" + altFolder);
+            string folder = ("frames/" + altFolder + "receiving/");
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             for(int i = 0; i < 8; i++)
             {
+                Console.WriteLine("Processing receive animation: " + VoxelLogic.WeaponTypes[i]);
                 for(int s = 0; s < 4; s++)
                 {
                     MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationLarge(i, s + 1);
@@ -1246,11 +1293,12 @@ namespace AssetsPV
                     {
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            AlterPNGPalette(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
+                            AlterPNGPaletteLimited(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
                                 folder + "/color{0}/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
                         }
                     }
                 }
+                /*
                 List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
 
                 for(int strength = 0; strength < 4; strength++)
@@ -1269,6 +1317,7 @@ namespace AssetsPV
                 Directory.CreateDirectory("gifs/" + altFolder);
                 Console.WriteLine("Running receiving GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated");
+                */
                 /*
                 System.IO.Directory.CreateDirectory("gifs/" + altFolder);
                 ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
@@ -1544,12 +1593,13 @@ namespace AssetsPV
                     {
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            AlterPNGPalette(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
+                            AlterPNGPaletteLimited(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
                                 folder + "/color{0}/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
                         }
                     }
                 }
-                System.IO.Directory.CreateDirectory("gifs/" + altFolder);
+                /*
+                Directory.CreateDirectory("gifs/" + altFolder);
 
                 List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
                 for(int strength = 0; strength < 4; strength++)
@@ -1568,7 +1618,7 @@ namespace AssetsPV
                 Directory.CreateDirectory("gifs/" + altFolder);
                 Console.WriteLine("Running GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_Huge_animated.gif");
-                
+                */
             }
         }
 
@@ -3520,7 +3570,7 @@ namespace AssetsPV
             xbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3));
-            if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) - 4) : frame % 8);
+            //if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
             bool[,] taken = new bool[xSize, ySize];
             for(int fz = zSize - 1; fz >= 0; fz--)
             {
@@ -4428,9 +4478,6 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
             //makeFlatTiling();
-            
-            processUnitLargeWMilitary("Infantry");
-            processUnitLargeWMilitary("Infantry_P");
             /*
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
@@ -4510,11 +4557,11 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_T");
             */
 
-            WriteAllGIFs();
+            //WriteAllGIFs();
 
-            //processReceivingMilitaryW();
+            processReceivingMilitaryW();
 
-            //processReceivingMilitaryWSuper();
+            processReceivingMilitaryWSuper();
 
 
             /*
