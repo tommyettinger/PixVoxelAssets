@@ -5577,6 +5577,10 @@ namespace AssetsPV
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
             renderTerrainDetailed("Jungle");
+            renderTerrainDetailed("Hill");
+            renderTerrainDetailed("Mountain");
+            renderTerrainDetailed("Road");
+            renderTerrainDetailed("Tundra");
 
             //WriteAllGIFs();
 
