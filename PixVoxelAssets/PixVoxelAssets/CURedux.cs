@@ -23,11 +23,11 @@ namespace AssetsPV
             "Boat", "Boat_P", "Boat_S", "Boat_T",
             "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"
         }, super_units = new string[]
-        {/*
+        {
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"*/
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate"
         };
 
         public const float flat_alpha = VoxelLogic.flat_alpha;
@@ -2077,13 +2077,13 @@ namespace AssetsPV
             },
             new float[][] { //7 (57) tundra
             //terrain dark
-            new float[] {0.8F,1F,1F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F},
             //terrain mid
-            new float[] {0.8F,1F,1F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F},
             //terrain light
-            new float[] {0.8F,1F,1F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F},
             //terrain highlight
-            new float[] {0.8F,1F,1F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F},
             },
             new float[][] { //8 (58) road
             //terrain dark
@@ -2368,9 +2368,9 @@ namespace AssetsPV
                 wpalettes[wpc][2 + p * 4][3] = 1F;
 
                 wpalettes[wpc][3 + p * 4] = wterrains[p][3];
-                wpalettes[wpc][3 + p * 4][0] += 0.05f;
-                wpalettes[wpc][3 + p * 4][1] += 0.05f;
-                wpalettes[wpc][3 + p * 4][2] += 0.05f;
+                wpalettes[wpc][3 + p * 4][0] += 0.15f;
+                wpalettes[wpc][3 + p * 4][1] += 0.15f;
+                wpalettes[wpc][3 + p * 4][2] += 0.15f;
                 wpalettes[wpc][3 + p * 4][3] = 1F;
 
             }
@@ -2380,7 +2380,7 @@ namespace AssetsPV
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
             VoxelLogic.wcolorcount = wpalettes[0].Length;
 
-            for(int p = 0; p < VoxelLogic.wpalettecount; p++)
+            for(int p = 0; p < VoxelLogic.wpalettecount - 1; p++)
             {
                 float[] drip = wpalettes[p][27].ToArray(), transp = wpalettes[p][VoxelLogic.wcolorcount - 1];
                 drip[3] = 1F;
@@ -2393,9 +2393,8 @@ namespace AssetsPV
             TransformLogic.dismiss = new byte[] {
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
             };
-
-
-        Explosions = new byte[10][][,,];
+            Explosions = new byte[10][][,,];
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2405,9 +2404,9 @@ namespace AssetsPV
                 {
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
-            }
+            }*/
             SuperExplosions = new byte[10][][,,];
-            for(int e = 0; e < 10; e++)
+            /*for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
                     new int[] { orange_fire, orange_fire, smoke, yellow_fire }).ToArray(), 0, maxExplosionFrames, 3, 160, 160, 120);
@@ -2416,7 +2415,7 @@ namespace AssetsPV
                 {
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
-            }
+            }*/
         }
 
 

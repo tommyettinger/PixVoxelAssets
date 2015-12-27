@@ -3916,16 +3916,17 @@ namespace AssetsPV
 
         public static void renderTerrain()
         {
-
+            string tmpVisual = VoxelLogic.VisualMode;
+            VoxelLogic.VisualMode = "None";
             //byte[][][] tilings = new byte[12][][];
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
             
-            wcurrent = wrendered[8];
+            wcurrent = wrendered[296];
 
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[8];
-            wditheredcurrent = wdithered[8];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[296];
+            wditheredcurrent = wdithered[296];
 
             for(int i = 0; i < 15; i++)
             {
@@ -3999,11 +4000,13 @@ namespace AssetsPV
                     c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.ScalePartial(c2, multiplier)), 1 + bonus * multiplier / 2);
 
                     PngWriter png = FileHelper.CreatePngWriter("CU_Ortho/Terrains2/" + nm + ".png", imi, true);
-                    WritePNG(png, processFrameHugeW(c2, 8, 0, 1, true, true), simplepalettes[8]);
+                    WritePNG(png, processFrameHugeW(c2, 8, 0, 1, true, true), simplepalettes[296]);
                     PngWriter png2 = FileHelper.CreatePngWriter("CU_Ortho/TerrainsBlank/" + nm + ".png", imi, true);
                     WritePNG(png2, processFrameHugeW(c2, 8, 0, 1, true, true), basepalette);
                 }
             }
+            VoxelLogic.VisualMode = tmpVisual;
+
             //int[,] grid = new int[9, 17];
 
             //int[,] takenLocations = new int[9, 17];
