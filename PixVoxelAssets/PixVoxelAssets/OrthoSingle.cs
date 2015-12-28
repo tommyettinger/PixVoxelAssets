@@ -4127,6 +4127,101 @@ namespace AssetsPV
             //return b;
         }
 
+        public static void renderTerrainDetailed(string name)
+        {
+
+            string tmpVisual = VoxelLogic.VisualMode;
+            VoxelLogic.VisualMode = "None";
+
+            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain/" + name + "_Huge_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
+
+            //NORMAL WEATHER
+            wcurrent = wrendered[296];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[296];
+            wditheredcurrent = wdithered[296];
+
+            Console.WriteLine("Terrain: " + name);
+            byte[,,] colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80);
+            Directory.CreateDirectory(altFolder + "Terrains2");
+            Directory.CreateDirectory(altFolder + "TerrainsBlank2");
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
+
+                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[296]);
+                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+            }
+
+
+            //RAINY WEATHER
+            wcurrent = wrendered[297];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[297];
+            wditheredcurrent = wdithered[297];
+
+            colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, (m.color != 0 && r.Next(15) <= 1) ? 253 - 37 * 4 : m.color)), 120, 120, 80);
+
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
+
+                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[297]);
+                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+            }
+
+            //SNOWY WEATHER
+            wcurrent = wrendered[298];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[298];
+            wditheredcurrent = wdithered[298];
+
+            colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, (m.color != 0 && r.Next(5) != 0) ? 253 - 31 * 4 : m.color)), 120, 120, 80);
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
+
+                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[298]);
+                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+            }
+
+            //TOXIC WEATHER
+            wcurrent = wrendered[299];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[299];
+            wditheredcurrent = wdithered[299];
+
+            colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, (m.color != 0 && r.Next(20) <= 1) ? 253 - 52 * 4 : (r.Next(8) == 0) ? 0 : m.color)), 120, 120, 80);
+
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
+
+                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[299]);
+                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+            }
+
+
+            VoxelLogic.VisualMode = tmpVisual;
+        }
+
         static void makeFlatTiling()
         {
             Bitmap[] tilings = new Bitmap[15];
@@ -4175,9 +4270,9 @@ namespace AssetsPV
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
-            System.IO.Directory.CreateDirectory("CU_Ortho_S_temp");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S_temp/Terrains2");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S_temp/TerrainsBlank");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S/Terrains2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S/TerrainsBlank2");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -4480,6 +4575,20 @@ namespace AssetsPV
             
             writePaletteImages();
             //renderTerrain();
+
+            
+            renderTerrainDetailed("Plains");
+            renderTerrainDetailed("Forest");
+            renderTerrainDetailed("Desert");
+            renderTerrainDetailed("Jungle");
+            renderTerrainDetailed("Hill");
+            renderTerrainDetailed("Mountain");
+            renderTerrainDetailed("Road");
+            renderTerrainDetailed("Tundra");
+            renderTerrainDetailed("Ruins");
+            renderTerrainDetailed("River");
+            renderTerrainDetailed("Ocean");
+            
             //makeFlatTiling();
             /*
             processUnitLargeWMilitary("Infantry_PS");
@@ -4561,11 +4670,11 @@ namespace AssetsPV
             */
 
             //WriteAllGIFs();
-
+            /*
             processReceivingMilitaryW();
 
             processReceivingMilitaryWSuper();
-
+            */
 
             /*
             Pose bow0 = (model => model

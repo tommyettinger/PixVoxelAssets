@@ -377,7 +377,7 @@ namespace AssetsPV
                         for(int j = 0; j < 80; j++)
                         {
                             cubes2[i][c][sp][j] = cubes[i, c, sp, j];
-                            if(sp == 1)
+                            if(sp == 0)
                             {
                                 VoxelLogic.wrendered[i][c][j] = cubes[i, c, sp, j];
                             }
@@ -629,6 +629,7 @@ namespace AssetsPV
                 else
                     voxes = VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin));
             }
+            VoxelLogic.WriteVOX("vox/" + altFolder + u + ".vox", voxes, "W", palette, 80, 80, 80);
             MagicaVoxelData[] parsed = voxes.ToArray();
             for(int i = 0; i < parsed.Length; i++)
             {
@@ -4164,7 +4165,7 @@ namespace AssetsPV
 
             //            altFolder = "sau10/";
             //            makeFlatTiling().Save("tiling_flat_gray.png");
-            /*
+            
             processTerrainHugeW("Floor", 48, true, false);
             processTerrainHugeW("Wall_Straight", 48, true, true);
             processTerrainHugeW("Wall_Corner", 48, true, true);
@@ -4173,8 +4174,8 @@ namespace AssetsPV
             processTerrainHugeW("Door_Closed", 48, true, true);
             processTerrainHugeW("Door_Open", 48, true, true);
             processTerrainHugeW("Boulder", 48, true, true);
-            */
-            processWater();
+            
+            //processWater();
 
             /*
             processUnitHugeW("Grass", 35, true, false);
