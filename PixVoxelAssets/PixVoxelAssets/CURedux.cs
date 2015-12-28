@@ -2342,37 +2342,111 @@ namespace AssetsPV
                 }
             }
 
-            VoxelLogic.terrainPalettes = new int[] { wpc };
-            VoxelLogic.subtlePalettes = new int[] { wpc };
+            VoxelLogic.terrainPalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
+            VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
-            wpalettes = wpalettes.Concat(new float[][][] { wpalettes[0].Replicate()}).ToArray();
+            wpalettes = wpalettes.Concat(new float[][][] { wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(),  }).ToArray();
             for(int p = 0; p < wterrains.Length; p++)
             {
-                wpalettes[wpc][0 + p*4] = wterrains[p][0];
+                wpalettes[wpc][0 + p * 4] = wterrains[p][0].Replicate();
                 wpalettes[wpc][0 + p * 4][0] -= 0.4f;
                 wpalettes[wpc][0 + p * 4][1] -= 0.4f;
                 wpalettes[wpc][0 + p * 4][2] -= 0.4f;
                 wpalettes[wpc][0 + p * 4][3] = 1F;
 
-                wpalettes[wpc][1 + p * 4] = wterrains[p][1];
+                wpalettes[wpc][1 + p * 4] = wterrains[p][1].Replicate();
                 wpalettes[wpc][1 + p * 4][0] -= 0.25f;
                 wpalettes[wpc][1 + p * 4][1] -= 0.25f;
                 wpalettes[wpc][1 + p * 4][2] -= 0.25f;
                 wpalettes[wpc][1 + p * 4][3] = 1F;
 
-                wpalettes[wpc][2 + p * 4] = wterrains[p][2];
+                wpalettes[wpc][2 + p * 4] = wterrains[p][2].Replicate();
                 wpalettes[wpc][2 + p * 4][0] -= 0.1f;
                 wpalettes[wpc][2 + p * 4][1] -= 0.1f;
                 wpalettes[wpc][2 + p * 4][2] -= 0.1f;
                 wpalettes[wpc][2 + p * 4][3] = 1F;
 
-                wpalettes[wpc][3 + p * 4] = wterrains[p][3];
+                wpalettes[wpc][3 + p * 4] = wterrains[p][3].Replicate();
                 wpalettes[wpc][3 + p * 4][0] += 0.15f;
                 wpalettes[wpc][3 + p * 4][1] += 0.15f;
                 wpalettes[wpc][3 + p * 4][2] += 0.15f;
                 wpalettes[wpc][3 + p * 4][3] = 1F;
 
+
+                wpalettes[wpc + 1][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes[wpc + 1][0 + p * 4][0] -= 0.55f;
+                wpalettes[wpc + 1][0 + p * 4][1] -= 0.4f;
+                wpalettes[wpc + 1][0 + p * 4][2] -= 0.35f;
+                wpalettes[wpc + 1][0 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 1][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes[wpc + 1][1 + p * 4][0] -= 0.4f;
+                wpalettes[wpc + 1][1 + p * 4][1] -= 0.25f;
+                wpalettes[wpc + 1][1 + p * 4][2] -= 0.2f;
+                wpalettes[wpc + 1][1 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 1][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes[wpc + 1][2 + p * 4][0] -= 0.25f;
+                wpalettes[wpc + 1][2 + p * 4][1] -= 0.1f;
+                wpalettes[wpc + 1][2 + p * 4][2] -= 0.05f;
+                wpalettes[wpc + 1][2 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 1][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes[wpc + 1][3 + p * 4][0] += 0.0f;
+                wpalettes[wpc + 1][3 + p * 4][1] += 0.15f;
+                wpalettes[wpc + 1][3 + p * 4][2] += 0.2f;
+                wpalettes[wpc + 1][3 + p * 4][3] = 1F;
+
+
+                wpalettes[wpc + 2][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes[wpc + 2][0 + p * 4][0] -= 0.3f;
+                wpalettes[wpc + 2][0 + p * 4][1] -= 0.25f;
+                wpalettes[wpc + 2][0 + p * 4][2] -= 0.2f;
+                wpalettes[wpc + 2][0 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 2][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes[wpc + 2][1 + p * 4][0] -= 0.15f;
+                wpalettes[wpc + 2][1 + p * 4][1] -= 0.1f;
+                wpalettes[wpc + 2][1 + p * 4][2] -= 0.05f;
+                wpalettes[wpc + 2][1 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 2][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes[wpc + 2][2 + p * 4][0] -= 0.0f;
+                wpalettes[wpc + 2][2 + p * 4][1] -= -0.05f;
+                wpalettes[wpc + 2][2 + p * 4][2] -= -0.1f;
+                wpalettes[wpc + 2][2 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 2][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes[wpc + 2][3 + p * 4][0] += 0.25f;
+                wpalettes[wpc + 2][3 + p * 4][1] += 0.3f;
+                wpalettes[wpc + 2][3 + p * 4][2] += 0.35f;
+                wpalettes[wpc + 2][3 + p * 4][3] = 1F;
+
+
+                wpalettes[wpc + 3][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes[wpc + 3][0 + p * 4][0] *= 0.7f;
+                wpalettes[wpc + 3][0 + p * 4][1] *= 0.45f;
+                wpalettes[wpc + 3][0 + p * 4][2] *= 0.75f;
+                wpalettes[wpc + 3][0 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 3][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes[wpc + 3][1 + p * 4][0] *= 0.85f;
+                wpalettes[wpc + 3][1 + p * 4][1] *= 0.6f;
+                wpalettes[wpc + 3][1 + p * 4][2] *= 0.9f;
+                wpalettes[wpc + 3][1 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 3][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes[wpc + 3][2 + p * 4][0] *= 1.05f;
+                wpalettes[wpc + 3][2 + p * 4][1] *= 0.75f;
+                wpalettes[wpc + 3][2 + p * 4][2] *= 1.1f;
+                wpalettes[wpc + 3][2 + p * 4][3] = 1F;
+
+                wpalettes[wpc + 3][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes[wpc + 3][3 + p * 4][0] *= 1.2f;
+                wpalettes[wpc + 3][3 + p * 4][1] *= 0.9f;
+                wpalettes[wpc + 3][3 + p * 4][2] *= 1.25f;
+                wpalettes[wpc + 3][3 + p * 4][3] = 1F;
             }
 
             VoxelLogic.wpalettecount = wpalettes.Length;

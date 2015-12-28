@@ -254,11 +254,7 @@ namespace AssetsPV
                 return new T[0];
             int xs = mat.Length;
             T[] dupe = new T[xs];
-
-            for(int i = 0; i < xs; i++)
-            {
-                dupe[i] = mat[i];
-            }
+            Array.Copy(mat, dupe, xs);
             return dupe;
         }
         public static bool IsPresent(this byte[] mat, byte elem)
