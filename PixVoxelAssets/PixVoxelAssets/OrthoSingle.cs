@@ -393,8 +393,8 @@ namespace AssetsPV
 
             pngr.End();
 
-            foreach(int p in new int[] { 2,78})
-            //for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
+            //foreach(int p in new int[] { 2,78})
+            for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
                 {
                     byte[][] palette = palettes[p];
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
@@ -403,10 +403,12 @@ namespace AssetsPV
                 int[] alphas = new int[256];
                 alphas.Fill(255);
                 alphas[0] = 0;
-                alphas[150] = 0;
-                alphas[151] = 0;
-                alphas[152] = 0;
-                alphas[153] = 0;
+                /*
+                alphas[150] = 127;
+                alphas[151] = 127;
+                alphas[152] = 127;
+                alphas[153] = 127;
+                */
                 pngw.GetMetadata().CreateTRNSChunk().SetPalletteAlpha(alphas);
                 PngChunkPLTE pal = pngw.GetMetadata().CreatePLTEChunk();
 
@@ -4265,7 +4267,7 @@ namespace AssetsPV
             //            FaceLogic.VisualMode = "Mecha";
 
             VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_Ortho_S_alt/";
+            altFolder = "CU_Ortho_S/";
             CURedux.Initialize(true);
             
             //VoxelLogic.VisualMode = "W";
@@ -4683,6 +4685,7 @@ namespace AssetsPV
             */
             processUnitLargeWMilitary("Oil_Well");
             processUnitHugeWMilitarySuper("Oil_Well");
+            /*
             Directory.CreateDirectory(altFolder + "standing_frames/color2");
             Directory.CreateDirectory(altFolder + "animation_frames/color2");
             Directory.CreateDirectory(altFolder + "standing_frames/color78");
@@ -4742,8 +4745,9 @@ namespace AssetsPV
                     }
                 }
             }
+            */
             
-            //WriteAllGIFs();
+            WriteAllGIFs();
             /*
             processReceivingMilitaryW();
 
