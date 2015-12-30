@@ -265,11 +265,7 @@ namespace AssetsPV
                         }
                     }
                 }
-            }/*
-            foreach(FaceModifier fm in Modifiers)
-            {
-                data = fm(data);
-            }*/
+            }
 
             data = AddAll(data);
 

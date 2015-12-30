@@ -74,11 +74,11 @@ namespace AssetsPV
 "Truck", "Truck_P", "Truck_S", "Truck_T",
 "Copter", "Copter_P", "Copter_S", "Copter_T",
 "Boat", "Boat_P", "Boat_S", "Boat_T",
-"City", "Factory", "Airport", "Dock", "Laboratory", "Castle", "Estate",
-"Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T" };
-        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(39), TerrainLookup = new Dictionary<string, int>(10);
-        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(39), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
-        public static List<int>[] TerrainToUnits = new List<int>[39];
+"Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T",
+"City", "Factory", "Airport", "Dock", "Laboratory", "Castle", "Estate", "Oil_Well", };
+        public static Dictionary<string, int> UnitLookup = new Dictionary<string, int>(40), TerrainLookup = new Dictionary<string, int>(10);
+        public static Dictionary<MovementType, List<int>> MobilityToUnits = new Dictionary<MovementType, List<int>>(40), MobilityToTerrains = new Dictionary<MovementType, List<int>>();
+        public static List<int>[] TerrainToUnits = new List<int>[40];
         public static Dictionary<int, List<MovementType>> TerrainToMobilities = new Dictionary<int, List<MovementType>>();
         public static int[] CurrentSpeeds = {
 3, 3, 5, 3,
@@ -89,8 +89,8 @@ namespace AssetsPV
 5, 5, 6, 6,
 7, 5, 8, 7,
 7, 4, 8, 5,
-0,0,0,0,0,0,0,
-1, 3, 3, 4, 3};
+1, 3, 3, 4, 3,
+0,0,0,0,0,0,0,0,};
         public static int[][] CurrentWeapons = {
 new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
 new int[] {6, -1}, new int[] {-1, 4}, new int[] {1, -1},
@@ -100,8 +100,8 @@ new int[] {1, -1}, new int[] {-1, 7}, new int[] {5, -1}, new int[] {5, -1},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
 new int[] {-1, -1}, new int[] {1, 5}, new int[] {1, -1}, new int[] {-1, -1},
 new int[] {1, -1}, new int[] {4, -1}, new int[] {2, 6}, new int[] {2, 6},
-new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
-new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
 };
         public static int[][] CurrentWeaponReceptions = {
 new int[] {1, -1}, new int[] {1, 3}, new int[] {2, -1}, new int[] {1, 1},
@@ -112,8 +112,8 @@ new int[] {2, -1}, new int[] {-1, 4}, new int[] {1, -1}, new int[] {2, -1},
 new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
 new int[] {-1, -1}, new int[] {2, 2}, new int[] {2, -1}, new int[] {-1, -1},
 new int[] {2, -1}, new int[] {4, -1}, new int[] {1, 3}, new int[] {1, 4},
-new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
-new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}};
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},
+new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1}, new int[] {-1, -1},};
         public static MovementType[] CurrentMobilities = {
 MovementType.Foot, MovementType.Foot, MovementType.WheelsTraverse, MovementType.Foot,
 MovementType.Foot, MovementType.Foot, MovementType.Flight,
@@ -123,8 +123,8 @@ MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flig
 MovementType.Wheels, MovementType.Treads, MovementType.TreadsAmphi, MovementType.Wheels,
 MovementType.Flight, MovementType.Flight, MovementType.Flight, MovementType.Flight,
 MovementType.Naval, MovementType.Naval, MovementType.Naval, MovementType.Naval,
-MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile,
-MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot
+MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot, MovementType.Foot,
+MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementType.Immobile,
         };
 
         public static void Initialize()
