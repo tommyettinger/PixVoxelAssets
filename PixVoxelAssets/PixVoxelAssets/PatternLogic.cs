@@ -8,26 +8,41 @@ namespace AssetsPV
 {
     public struct Pattern
     {
-        public byte CenterChangeOn;
-        public byte CenterChangeOff;
-        public byte EmptyChangeOn;
-        public byte EmptyChangeOff;
+        public byte[] CenterChangeOn;
+        public byte[] CenterChangeOff;
+        public byte[] EmptyChangeOn;
+        public byte[] EmptyChangeOff;
         public byte FrequencyHigh;
         public byte FrequencyWide;
         public byte SpanHigh;
         public byte SpanWide;
         public float Probability;
-        public Pattern(int centerOn, int emptyOn, int centerOff, int emptyOff, int freqWide, int freqHigh, int spanWide, int spanHigh, float probability)
+        public bool RandomShape;
+        public Pattern(int centerOn, int emptyOn, int centerOff, int emptyOff, int freqWide, int freqHigh, int spanWide, int spanHigh, float probability, bool randomShape = false)
         {
-            CenterChangeOn = (byte)centerOn;
-            CenterChangeOff = (byte)centerOff;
-            EmptyChangeOn = (byte)emptyOn;
-            EmptyChangeOff = (byte)emptyOff;
+            CenterChangeOn = new byte[] { (byte)centerOn };
+            CenterChangeOff = new byte[] { (byte)centerOff };
+            EmptyChangeOn = new byte[] { (byte)emptyOn };
+            EmptyChangeOff = new byte[] { (byte)emptyOff };
             FrequencyWide = (byte)freqWide;
             FrequencyHigh = (byte)freqHigh;
             SpanWide = (byte)spanWide;
             SpanHigh = (byte)spanHigh;
             Probability = probability;
+            RandomShape = randomShape;
+        }
+        public Pattern(byte[] centerOn, byte[] emptyOn, byte[] centerOff, byte[] emptyOff, int freqWide, int freqHigh, int spanWide, int spanHigh, float probability, bool randomShape = false)
+        {
+            CenterChangeOn = centerOn;
+            CenterChangeOff = centerOff;
+            EmptyChangeOn = emptyOn;
+            EmptyChangeOff = emptyOff;
+            FrequencyWide = (byte)freqWide;
+            FrequencyHigh = (byte)freqHigh;
+            SpanWide = (byte)spanWide;
+            SpanHigh = (byte)spanHigh;
+            Probability = probability;
+            RandomShape = randomShape;
         }
     }
     public class PatternLogic
@@ -50,6 +65,8 @@ namespace AssetsPV
             Pattern pat;
             Dictionary<byte, int> colorCount;
             byte c = 0;
+            byte CenterChangeOn=0, CenterChangeOff=0, EmptyChangeOn=0, EmptyChangeOff=0;
+            int seed = 1337;
             for(int z = 0; z < zSize; z++)
             {
                 colorCount = patterns.ToDictionary(kv => kv.Key, kv => z % 2 * Multiplier);
@@ -63,45 +80,54 @@ namespace AssetsPV
                         {
                             bool adjEmpty = HasAdjacentEmpty(voxelData, x, y, z, xSize, ySize, zSize);
                             pat = patterns[c];
+                            int randHigh = ((pat.RandomShape) ? rng.Next(4) - 1 : 0),
+                                randWide = ((pat.RandomShape) ? rng.Next(4) - 1 : 0);
                             if(adjEmpty)
                             {
                                 colorCount[c]++;
+                                Extensions.r = new Random(seed);
+                                CenterChangeOn = pat.CenterChangeOn.RandomElement();
+                                CenterChangeOff = pat.CenterChangeOff.RandomElement();
+                                EmptyChangeOn = pat.EmptyChangeOn.RandomElement();
+                                EmptyChangeOff = pat.EmptyChangeOff.RandomElement();
+                                Extensions.r = new Random(seed);
                             }
-                            if(adjEmpty && z % (pat.FrequencyHigh * Multiplier) < (pat.SpanHigh * Multiplier) &&
-                                colorCount[c] % (pat.FrequencyWide * Multiplier) < (pat.SpanWide * Multiplier) &&
+                            if(adjEmpty && z % (pat.FrequencyHigh * Multiplier) < (pat.SpanHigh * Multiplier + randHigh) &&
+                                colorCount[c] % (pat.FrequencyWide * Multiplier) < (pat.SpanWide * Multiplier + randWide) &&
                                 rng.NextDouble() < pat.Probability)
                             {
-                                neo[x, y, z] = pat.CenterChangeOn;
+                                neo[x, y, z] = CenterChangeOn;
                                 if(x > 0 && voxelData[x - 1, y, z] == 0)
-                                    neo[x - 1, y, z] = pat.EmptyChangeOn;
+                                    neo[x - 1, y, z] = EmptyChangeOn;
                                 if(y > 0 && voxelData[x, y - 1, z] == 0)
-                                    neo[x, y - 1, z] = pat.EmptyChangeOn;
+                                    neo[x, y - 1, z] = EmptyChangeOn;
                                 if(z > 0 && voxelData[x, y, z - 1] == 0)
-                                    neo[x, y, z - 1] = pat.EmptyChangeOn;
+                                    neo[x, y, z - 1] = EmptyChangeOn;
                                 if(x < xSize - 1 && voxelData[x + 1, y, z] == 0)
-                                    neo[x + 1, y, z] = pat.EmptyChangeOn;
+                                    neo[x + 1, y, z] = EmptyChangeOn;
                                 if(y < ySize - 1 && voxelData[x, y + 1, z] == 0)
-                                    neo[x, y + 1, z] = pat.EmptyChangeOn;
+                                    neo[x, y + 1, z] = EmptyChangeOn;
                                 if(z < zSize - 1 && voxelData[x, y, z + 1] == 0)
-                                    neo[x, y, z + 1] = pat.EmptyChangeOn;
+                                    neo[x, y, z + 1] = EmptyChangeOn;
                             }
                             else
                             {
-                                neo[x, y, z] = pat.CenterChangeOff;
+                                neo[x, y, z] = CenterChangeOff;
                                 if(adjEmpty)
                                 {
                                     if(x > 0 && voxelData[x - 1, y, z] == 0)
-                                        neo[x - 1, y, z] = pat.EmptyChangeOff;
+                                        neo[x - 1, y, z] = EmptyChangeOff;
                                     if(y > 0 && voxelData[x, y - 1, z] == 0)
-                                        neo[x, y - 1, z] = pat.EmptyChangeOff;
+                                        neo[x, y - 1, z] = EmptyChangeOff;
                                     if(z > 0 && voxelData[x, y, z - 1] == 0)
-                                        neo[x, y, z - 1] = pat.EmptyChangeOff;
+                                        neo[x, y, z - 1] = EmptyChangeOff;
                                     if(x < xSize - 1 && voxelData[x + 1, y, z] == 0)
-                                        neo[x + 1, y, z] = pat.EmptyChangeOff;
+                                        neo[x + 1, y, z] = EmptyChangeOff;
                                     if(y < ySize - 1 && voxelData[x, y + 1, z] == 0)
-                                        neo[x, y + 1, z] = pat.EmptyChangeOff;
+                                        neo[x, y + 1, z] = EmptyChangeOff;
                                     if(z < zSize - 1 && voxelData[x, y, z + 1] == 0)
-                                        neo[x, y, z + 1] = pat.EmptyChangeOff;
+                                        neo[x, y, z + 1] = EmptyChangeOff;
+                                    seed++;
                                 }
                             }
                         }

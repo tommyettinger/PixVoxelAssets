@@ -967,6 +967,30 @@ namespace AssetsPV
                 new Connector("Right_Leg", "Torso", 1), new Connector("Torso", "Left_Leg", 0));
             return model;
         }
+        public static Model HumanoidAlt(string body = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Dictionary<byte, Pattern> patterns = null)
+        {
+            Bone.Patterns = patterns;
+            Model model = new Model();
+            model.AddBone("Left_Lower_Leg", Bone.readBone(body + "/LLowerLeg"));
+            model.AddBone("Right_Lower_Leg", Bone.readBone(body + "/RLowerLeg"));
+            model.AddBone("Left_Upper_Leg", Bone.readBone(body + "/LUpperLeg"));
+            model.AddBone("Right_Upper_Leg", Bone.readBone(body + "/RUpperLeg"));
+            model.AddBone("Torso", Bone.readBone(body + "/Torso"));
+            model.AddBone("Face", Bone.readBone(body + "/" + face + "_Face"));
+            model.AddBone("Head", Bone.readBone(body + "/Head"));
+            model.AddBone("Left_Upper_Arm", Bone.readBone(body + "/LUpperArm"));
+            model.AddBone("Right_Upper_Arm", Bone.readBone(body + "/RUpperArm"));
+            model.AddBone("Left_Lower_Arm", Bone.readBone(body + "/LLowerArm"));
+            model.AddBone("Right_Lower_Arm", Bone.readBone(body + "/RLowerArm"));
+            model.AddBone("Left_Weapon", Bone.readBone(left_weapon));
+            model.AddBone("Right_Weapon", Bone.readBone(right_weapon));
+
+            model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
+                new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
+                new Connector("Right_Lower_Leg", "Right_Upper_Leg", 11), new Connector("Right_Upper_Leg", "Torso", 1),
+                new Connector("Left_Upper_Leg", "Left_Lower_Leg", 10), new Connector("Torso", "Left_Lower_Leg", 0));
+            return model;
+        }
         private static List<MagicaVoxelData> findContinuousParts(ref byte[,,] data, List<MagicaVoxelData> previous, Func<byte, bool> pred)
         {
             int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
@@ -1610,6 +1634,7 @@ namespace AssetsPV
             switch(VoxelLogic.VisualMode)
             {
                 case "CU":
+                case "CU_alt":
                     return VoxelLogic.ImportantColorCU(color);
                 case "Mecha":
                     return VoxelLogic.ImportantColorMecha(color);

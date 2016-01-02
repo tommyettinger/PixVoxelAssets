@@ -2271,7 +2271,135 @@ namespace AssetsPV
             new float[] {0.2F,0.2F,0.2F,1F},
             },
         };
-
+        public static float[][][] wpalettes_alt = new float[][][]
+        {
+        new float[][] { // 5 green
+            //0 tires, treads contrast
+            new float[] {0.31F,0.28F,0.28F,1F},
+            //1 tires, treads
+            new float[] {0.37F,0.35F,0.34F,1F},
+            //2 doors paint (dark) contrast
+            new float[] {0.0F,0.17F,-0.1F,1F},
+            //3 doors paint (dark)
+            new float[] {0.05F,0.3F,-0.05F,1F},
+            //4 main paint (mid) contrast
+            new float[] {0.05F,0.34F,0.05F,1F},
+            //5 main paint (mid)
+            new float[] {0.12F,0.43F,0.12F,1F},
+            //6 hair contrast
+            new float[] {0.5F,0.2F,0.08F,1F},
+            //7 hair
+            new float[] {0.4F,0.15F,0.05F,1F},
+            //8 skin contrast
+            new float[] {0.8F,0.5F,0.12F,1F},
+            //9 skin
+            new float[] {0.93F,0.74F,0.39F,1F},
+            //10 eyes shine
+            new float[] {1.4F,1.4F,1.4F,1F},
+            //11 eyes
+            new float[] {0.15F,0.1F,0.0F,1F},
+            //12 exposed metal contrast
+            new float[] {0.75F,0.85F,1.0F,1F},
+            //13 exposed metal
+            new float[] {0.65F,0.7F,0.75F,1F},
+            //14 gun peripheral
+            new float[] {0.2F,0.25F,0.2F,1F},
+            //15 gun barrel
+            new float[] {0.27F,0.3F,0.33F,1F},
+            //16 inner shadow
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.15F,1.0F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.12F,0.7F,0.25F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            //21 glow frame 0
+            new float[] {0.95F,0.95F,0.6F,1F},
+            //22 glow frame 1
+            new float[] {1.1F,1.1F,0.78F,1F},
+            //23 glow frame 2
+            new float[] {0.95F,0.95F,0.6F,1F},
+            //24 glow frame 3
+            new float[] {0.8F,0.8F,0.4F,1F},
+            //25 shadow
+            new float[] {0.19F,0.19F,0.19F,flat_alpha},
+            //26 mud, wood
+            new float[] {0.4F,0.25F,0.15F,1F},
+            //27 water
+            new float[] {0.5F,0.65F,0.85F,flat_alpha},
+            //28 cockpit paint (gray) contrast
+            new float[] {0.27F,0.15F,0.0F,1F},
+            //29 cockpit paint (gray)
+            new float[] {0.35F,0.22F,0.02F,1F},
+            //30 helmet paint (bold) contrast
+            new float[] {0.25F,0.45F,0.15F,1F},
+            //31 helmet paint (bold)
+            new float[] {0.35F,0.55F,0.25F,1F},
+            //32 alternate paint contrast
+            new float[] {0.48F,0.35F,0.2F,1F},
+            //33 alternate paint
+            new float[] {0.5F,0.35F,0.25F,1F},
+            //34 gore
+            new float[] {0.67F,0.05F,-0.1F,1F},
+            //35 glass
+            new float[] {0.54F,0.5F,0.47F,1F},
+            //36 rotor frame 0 contrast
+            new float[] {0.4F,0.4F,0.4F,spin_alpha_0},
+            //37 rotor frame 0
+            new float[] {0.5F,0.5F,0.5F,spin_alpha_0},
+            //38 rotor frame 1 contrast
+            new float[] {0.4F,0.4F,0.4F,spin_alpha_1},
+            //39 rotor frame 1
+            new float[] {0.5F,0.5F,0.5F,spin_alpha_1},
+            //40 placeholder
+            new float[] {0F,0F,0F,0F},
+            //41 always green contrast
+            new float[] {0.12F,0.35F,0.0F,1F},
+            //42 always green
+            new float[] {0.25F,0.55F,0.1F,1F},
+            //43 always brown contrast
+            new float[] {0.35F,0.21F,0.11F,1F},
+            //44 always brown
+            new float[] {0.5F,0.36F,0.21F,1F},
+            //45 always tan contrast
+            new float[] {0.7F,0.55F,0.3F,1F},
+            //46 always tan
+            new float[] {0.85F,0.7F,0.45F,1F},
+            //47 always black contrast
+            new float[] {0.0F,-0.03F,-0.09F,1F},
+            //48 always black
+            new float[] {0.15F,0.12F,0.06F,1F},
+            //49 always white contrast
+            new float[] {1.25F,1.25F,0.75F,1F},
+            //50 always white
+            new float[] {0.9F,0.9F,0.9F,1F},
+            //51 always red contrast
+            new float[] {0.85F,0.0F,-0.05F,1F},
+            //52 always red
+            new float[] {0.9F,0.05F,0.0F,1F},
+            //53 always violet contrast
+            new float[] {0.4F,0.1F,0.3F,1F},
+            //54 always violet
+            new float[] {0.3F,0.15F,0.5F,1F},
+            //55 always gold
+            new float[] {0.92F,0.85F,0.4F,1F},
+            //56 always silver
+            new float[] {0.7F,0.77F,0.83F,1F},
+            //57 weapon 0 emitter
+            new float[] {0F,0F,0F,0F},
+            //58 weapon 0 trail
+            new float[] {0F,0F,0F,0F},
+            //59 weapon 1 emitter
+            new float[] {0F,0F,0F,0F},
+            //60 weapon 1 trail
+            new float[] {0F,0F,0F,0F},
+            //61 total transparent
+            new float[] {0F,0F,0F,0F},
+            },
+        };
         public static string[] Terrains = new string[]
         {"Plains","Forest","Desert","Jungle","Hills"
         ,"Mountains","Ruins","Tundra","Road","River", "Basement", "Sea"
@@ -2345,7 +2473,7 @@ namespace AssetsPV
             VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
-            wpalettes = wpalettes.Concat(new float[][][] { wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(),  }).ToArray();
+            wpalettes = wpalettes.Concat(new float[][][] { wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), }).ToArray();
             for(int p = 0; p < wterrains.Length; p++)
             {
                 wpalettes[wpc][0 + p * 4] = wterrains[p][0].Replicate();
@@ -2467,7 +2595,7 @@ namespace AssetsPV
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
             };
             Explosions = new byte[10][][,,];
-            
+
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2489,6 +2617,212 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
+        }
+
+        public static void InitializeAlt()
+        {
+
+            VoxelLogic.wpalettecount = wpalettes_alt.Length;
+            int wpc = VoxelLogic.wpalettecount;
+            /*
+            for(int c = 6; c <= 11; c++)
+            {
+                for(int p = 0; p < wpc; p++)
+                {
+                    wpalettes[p][c] = wspecies[0][c - 6];
+                }
+            }
+            for(int c = 17; c <= 20; c++)
+            {
+                for(int p = 0; p < wpc; p++)
+                {
+                    wpalettes[p][c] = wspecies[0][c - 11];
+                }
+            }
+            float[][][] copy = wpalettes.Replicate();
+            for(int i = 1; i < wspecies.Length; i++)
+            {
+                float[][][] addon = new float[copy.Length][][];
+                for(int j = 0; j < copy.Length; j++)
+                {
+                    addon[j] = new float[copy[j].Length][];
+                    for(int k = 0; k < copy[j].Length; k++)
+                    {
+                        addon[j][k] = new float[copy[j][k].Length];
+                        for(int l = 0; l < copy[j][k].Length; l++)
+                        {
+                            addon[j][k][l] = copy[j][k][l];
+                        }
+                    }
+                }
+                for(int c = 6; c <= 11; c++)
+                {
+                    for(int p = 0; p < wpc; p++)
+                    {
+                        addon[p][c] = wspecies[i][c - 6];
+                    }
+                }
+                for(int c = 17; c <= 20; c++)
+                {
+                    for(int p = 0; p < wpc; p++)
+                    {
+                        addon[p][c] = wspecies[i][c - 11];
+                    }
+                }
+                wpalettes = wpalettes.Concat(addon).ToArray();
+            }
+            VoxelLogic.wpalettecount = wpalettes.Length;
+            wpc = VoxelLogic.wpalettecount;
+            */
+            
+            VoxelLogic.terrainPalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
+            VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
+            VoxelLogic.wcolorcount = wpalettes_alt[0].Length;
+            VoxelLogic.wcolors = wpalettes_alt[0].Replicate();
+            wpalettes_alt = wpalettes_alt.Concat(new float[][][] { wpalettes_alt[0].Replicate(), wpalettes_alt[0].Replicate(), wpalettes_alt[0].Replicate(), wpalettes_alt[0].Replicate(), }).ToArray();
+            for(int p = 0; p < wterrains.Length; p++)
+            {
+                wpalettes_alt[wpc][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes_alt[wpc][0 + p * 4][0] -= 0.4f;
+                wpalettes_alt[wpc][0 + p * 4][1] -= 0.4f;
+                wpalettes_alt[wpc][0 + p * 4][2] -= 0.4f;
+                wpalettes_alt[wpc][0 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes_alt[wpc][1 + p * 4][0] -= 0.25f;
+                wpalettes_alt[wpc][1 + p * 4][1] -= 0.25f;
+                wpalettes_alt[wpc][1 + p * 4][2] -= 0.25f;
+                wpalettes_alt[wpc][1 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes_alt[wpc][2 + p * 4][0] -= 0.1f;
+                wpalettes_alt[wpc][2 + p * 4][1] -= 0.1f;
+                wpalettes_alt[wpc][2 + p * 4][2] -= 0.1f;
+                wpalettes_alt[wpc][2 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes_alt[wpc][3 + p * 4][0] += 0.15f;
+                wpalettes_alt[wpc][3 + p * 4][1] += 0.15f;
+                wpalettes_alt[wpc][3 + p * 4][2] += 0.15f;
+                wpalettes_alt[wpc][3 + p * 4][3] = 1F;
+
+
+                wpalettes_alt[wpc + 1][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes_alt[wpc + 1][0 + p * 4][0] -= 0.55f;
+                wpalettes_alt[wpc + 1][0 + p * 4][1] -= 0.4f;
+                wpalettes_alt[wpc + 1][0 + p * 4][2] -= 0.35f;
+                wpalettes_alt[wpc + 1][0 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 1][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes_alt[wpc + 1][1 + p * 4][0] -= 0.4f;
+                wpalettes_alt[wpc + 1][1 + p * 4][1] -= 0.25f;
+                wpalettes_alt[wpc + 1][1 + p * 4][2] -= 0.2f;
+                wpalettes_alt[wpc + 1][1 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 1][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes_alt[wpc + 1][2 + p * 4][0] -= 0.25f;
+                wpalettes_alt[wpc + 1][2 + p * 4][1] -= 0.1f;
+                wpalettes_alt[wpc + 1][2 + p * 4][2] -= 0.05f;
+                wpalettes_alt[wpc + 1][2 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 1][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes_alt[wpc + 1][3 + p * 4][0] += 0.0f;
+                wpalettes_alt[wpc + 1][3 + p * 4][1] += 0.15f;
+                wpalettes_alt[wpc + 1][3 + p * 4][2] += 0.2f;
+                wpalettes_alt[wpc + 1][3 + p * 4][3] = 1F;
+
+
+                wpalettes_alt[wpc + 2][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes_alt[wpc + 2][0 + p * 4][0] -= 0.3f;
+                wpalettes_alt[wpc + 2][0 + p * 4][1] -= 0.25f;
+                wpalettes_alt[wpc + 2][0 + p * 4][2] -= 0.2f;
+                wpalettes_alt[wpc + 2][0 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 2][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes_alt[wpc + 2][1 + p * 4][0] -= 0.15f;
+                wpalettes_alt[wpc + 2][1 + p * 4][1] -= 0.1f;
+                wpalettes_alt[wpc + 2][1 + p * 4][2] -= 0.05f;
+                wpalettes_alt[wpc + 2][1 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 2][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes_alt[wpc + 2][2 + p * 4][0] -= 0.0f;
+                wpalettes_alt[wpc + 2][2 + p * 4][1] -= -0.05f;
+                wpalettes_alt[wpc + 2][2 + p * 4][2] -= -0.1f;
+                wpalettes_alt[wpc + 2][2 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 2][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes_alt[wpc + 2][3 + p * 4][0] += 0.25f;
+                wpalettes_alt[wpc + 2][3 + p * 4][1] += 0.3f;
+                wpalettes_alt[wpc + 2][3 + p * 4][2] += 0.35f;
+                wpalettes_alt[wpc + 2][3 + p * 4][3] = 1F;
+
+
+                wpalettes_alt[wpc + 3][0 + p * 4] = wterrains[p][0].Replicate();
+                wpalettes_alt[wpc + 3][0 + p * 4][0] *= 0.7f;
+                wpalettes_alt[wpc + 3][0 + p * 4][1] *= 0.45f;
+                wpalettes_alt[wpc + 3][0 + p * 4][2] *= 0.75f;
+                wpalettes_alt[wpc + 3][0 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 3][1 + p * 4] = wterrains[p][1].Replicate();
+                wpalettes_alt[wpc + 3][1 + p * 4][0] *= 0.85f;
+                wpalettes_alt[wpc + 3][1 + p * 4][1] *= 0.6f;
+                wpalettes_alt[wpc + 3][1 + p * 4][2] *= 0.9f;
+                wpalettes_alt[wpc + 3][1 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 3][2 + p * 4] = wterrains[p][2].Replicate();
+                wpalettes_alt[wpc + 3][2 + p * 4][0] *= 1.05f;
+                wpalettes_alt[wpc + 3][2 + p * 4][1] *= 0.75f;
+                wpalettes_alt[wpc + 3][2 + p * 4][2] *= 1.1f;
+                wpalettes_alt[wpc + 3][2 + p * 4][3] = 1F;
+
+                wpalettes_alt[wpc + 3][3 + p * 4] = wterrains[p][3].Replicate();
+                wpalettes_alt[wpc + 3][3 + p * 4][0] *= 1.2f;
+                wpalettes_alt[wpc + 3][3 + p * 4][1] *= 0.9f;
+                wpalettes_alt[wpc + 3][3 + p * 4][2] *= 1.25f;
+                wpalettes_alt[wpc + 3][3 + p * 4][3] = 1F;
+            }
+
+            VoxelLogic.wpalettecount = wpalettes_alt.Length;
+
+            VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
+            VoxelLogic.wcolorcount = wpalettes_alt[0].Length;
+
+            for(int p = 0; p < VoxelLogic.wpalettecount - 1; p++)
+            {
+                float[] drip = wpalettes_alt[p][27].ToArray(), transp = wpalettes_alt[p][VoxelLogic.wcolorcount - 1];
+                drip[3] = 1F;
+                float[] zap = wpalettes_alt[p][40].ToArray();
+                zap[3] = spin_alpha_1;
+                wpalettes_alt[p] = wpalettes_alt[p].Concat(new float[][] { drip, transp, transp, transp, drip, zap }).ToArray();
+            }
+
+            VoxelLogic.wpalettes = wpalettes_alt;
+            TransformLogic.dismiss = new byte[] {
+                0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
+            };
+            Explosions = new byte[10][][,,];
+
+            for(int e = 0; e < 10; e++)
+            {
+                MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
+                    new int[] { orange_fire, orange_fire, smoke, yellow_fire }).ToArray(), 0, maxExplosionFrames, 3, 120, 120, 80);
+                Explosions[e] = new byte[maxExplosionFrames][,,];
+                for(int f = 0; f < maxExplosionFrames; f++)
+                {
+                    Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
+                }
+            }
+            SuperExplosions = new byte[10][][,,];
+            /*for(int e = 0; e < 10; e++)
+            {
+                MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
+                    new int[] { orange_fire, orange_fire, smoke, yellow_fire }).ToArray(), 0, maxExplosionFrames, 3, 160, 160, 120);
+                SuperExplosions[e] = new byte[maxExplosionFrames][,,];
+                for(int f = 0; f < maxExplosionFrames; f++)
+                {
+                    SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
+                }
+            }*/
         }
 
 

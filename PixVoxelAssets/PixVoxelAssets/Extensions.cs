@@ -10,7 +10,7 @@ namespace AssetsPV
     public static class Extensions
     {
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
-        private static Random r = new Random();
+        public static Random r = new Random();
         public static T RandomElement<T>(this IEnumerable<T> list)
         {
             if(list == null || list.Count() == 0)

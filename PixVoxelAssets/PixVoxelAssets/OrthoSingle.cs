@@ -3435,8 +3435,8 @@ namespace AssetsPV
         //        }
         //    }
         //}
-        
-        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames)
+
+        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt=false)
         {
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
             string folder = (altFolder);
@@ -3450,7 +3450,7 @@ namespace AssetsPV
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier, 10 * multiplier, 0, "Left_Leg");
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier, 10 * multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg");
                 }
             }
 
@@ -4266,13 +4266,13 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
-            VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_Ortho_S/";
-            CURedux.Initialize(true);
+            VoxelLogic.VisualMode = "CU_alt";
+            altFolder = "Ortho_War/";
+            CURedux.InitializeAlt();
             
             //VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
-            //VoxelLogic.voxFolder = "ForaysBones/";
+            VoxelLogic.voxFolder = "MilitaryBone/";
             //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
@@ -4587,11 +4587,11 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            
-            writePaletteImages();
+
+            //writePaletteImages();
             //renderTerrain();
 
-            
+            /*
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4603,7 +4603,7 @@ namespace AssetsPV
             renderTerrainDetailed("Ruins");
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
-
+            */
             //makeFlatTiling();
             /*
             processUnitLargeWMilitary("Infantry_PS");
@@ -4682,9 +4682,10 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            */
+            
             processUnitLargeWMilitary("Oil_Well");
             processUnitHugeWMilitarySuper("Oil_Well");
+            */
             /*
             Directory.CreateDirectory(altFolder + "standing_frames/color2");
             Directory.CreateDirectory(altFolder + "animation_frames/color2");
@@ -4746,13 +4747,65 @@ namespace AssetsPV
                 }
             }
             */
-            
-            WriteAllGIFs();
+
+            //WriteAllGIFs();
             /*
             processReceivingMilitaryW();
 
             processReceivingMilitaryWSuper();
             */
+
+
+            Pose walk0 = (model => model
+            ),
+            walk1 = (model => model
+            .AddPitch(40, "Left_Upper_Leg")
+            .AddPitch(25, "Left_Lower_Leg")
+            .AddPitch(360-30, "Right_Upper_Leg")
+            .AddPitch(360-30, "Right_Lower_Leg")
+            .Translate(-5, -1, 7, "Left_Lower_Leg")
+            ),
+            walk2 = (model => model
+            //.AddStretch(1, 1, 0.85f)
+            //.AddStretch(1, 1, 1, "Left_Weapon")
+            ),
+            walk3 = (model => model
+            .AddPitch(40, "Right_Upper_Leg")
+            .AddPitch(25, "Right_Lower_Leg")
+            .AddPitch(360-30, "Left_Upper_Leg")
+            .AddPitch(360-30, "Left_Lower_Leg")
+            .Translate(6, 1, -8, "Left_Lower_Leg")
+            );
+            Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f),
+                brownLeatherPattern = new Pattern(253 - 44 * 4, 0, 253 - 43 * 4, 0, 3, 2, 2, 1, 0.6f),
+                tanLeatherPattern = new Pattern(253 - 46 * 4, 0, 253 - 45 * 4, 0, 3, 2, 2, 1, 0.6f),
+                mailPattern = new Pattern(253 - 56 * 4, 0, 253 - 57 * 4, 0, 2, 1, 1, 1, 1f),
+                camoPattern = new Pattern(new byte[] { 253 - 3 * 4, 253 - 5 * 4, 253 - 29 * 4, 253 - 33 * 4, }, new byte[] { 0 },
+                new byte[] { 253 - 2 * 4, 253 - 4 * 4, 253 - 28 * 4, 253 - 32 * 4, }, new byte[] { 0 }, 3, 3, 4, 4, 0.8f, true);
+            Dictionary<byte, Pattern> camo = new Dictionary<byte, Pattern>() {
+                { 253 - 5 * 4, camoPattern },
+                { 253 - 4 * 4, camoPattern },
+                { 253 - 3 * 4, camoPattern },
+                { 253 - 2 * 4, camoPattern },
+            };
+
+            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
+            Model soldier = Model.HumanoidAlt(left_weapon: "Machine_Gun", body: "Foot_Soldier", patterns: camo);
+            processUnitLargeWModel("Foot_Soldier", true, 0, soldier,
+                new Pose[] { walk0, walk1, walk2, walk3 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.33f },
+                new float[] { 0, 1, 0.66f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.33f },
+                new float[] { 1, 2, 0.66f },
+                new float[] { 1, 2, 1f },
+                new float[] { 2, 3, 0.33f },
+                new float[] { 2, 3, 0.66f },
+                new float[] { 2, 3, 1.0f },
+                new float[] { 3, 0, 0.33f },
+                new float[] { 3, 0, 0.66f },}, true);
 
             /*
             Pose bow0 = (model => model
@@ -4805,7 +4858,9 @@ namespace AssetsPV
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
             Model dude = Model.Humanoid(left_weapon: "Bow"),
                 orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: leather);
+            
             */
+
             /*
             processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
                 new Pose[] { bow0, bow1, bow2 },
