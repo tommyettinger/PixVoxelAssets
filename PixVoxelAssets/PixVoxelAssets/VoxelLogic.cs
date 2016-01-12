@@ -7698,6 +7698,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             saturation = (max == 0) ? 0 : 1d - (1d * min / max);
             value = max / 255d;
         }
+
         public static Color ColorFromHSV(double hue, double saturation, double value)
         {
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
@@ -7709,18 +7710,84 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             int q = Convert.ToInt32(value * (1 - f * saturation));
             int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
 
-            if (hi == 0)
+            if(hi == 0)
                 return Color.FromArgb(255, v, t, p);
-            else if (hi == 1)
+            else if(hi == 1)
                 return Color.FromArgb(255, q, v, p);
-            else if (hi == 2)
+            else if(hi == 2)
                 return Color.FromArgb(255, p, v, t);
-            else if (hi == 3)
+            else if(hi == 3)
                 return Color.FromArgb(255, p, q, v);
-            else if (hi == 4)
+            else if(hi == 4)
                 return Color.FromArgb(255, t, p, v);
             else
                 return Color.FromArgb(255, v, p, q);
+        }
+        public static double[] RGBToHSV(float r, float g, float b)
+        {
+            double vr = Clamp(r), vg = Clamp(g), vb = Clamp(b);
+            double max = Math.Max(vr, Math.Max(vg, vb));
+            double min = Math.Min(vr, Math.Min(vg, vb));
+            double delta = max - min;
+
+            double[] ret = new double[] { 0.0, 0.0, max };
+
+            if(delta != 0.0)
+            {
+                ret[1] = delta / max;
+
+                double dr = (((max - vr) / 6.0) + (delta / 2)) / delta;
+                double dg = (((max - vg) / 6.0) + (delta / 2)) / delta;
+                double db = (((max - vb) / 6.0) + (delta / 2)) / delta;
+
+                if(vr == max) ret[0] = db - dg;
+                else if(vg == max) ret[0] = (1 / 3.0) + dr - db;
+                else if(vb == max) ret[0] = (2 / 3.0) + dg - dr;
+
+                if(ret[0] < 0) ret[0]++;
+                if(ret[0] > 1) ret[0]--;
+            }
+            return ret;
+        }
+        public static float[] RGBFromHSV(double hue, double saturation, double value)
+        {
+            if(saturation == 0.0)
+            {
+                float v = (float)value;
+                return new float[] { v, v, v, 1f };
+            }
+            else
+            {
+                float[] rgb = new float[] { 0f, 0f, 0f, 1f };
+                float h = (float)(hue * 6), s = (float)saturation, v = (float)value;
+                h = (h + 360f) % 6f;
+                int i = (int)(h);
+                float p = v * (1 - s),
+                    q = v * (1 - s * (h - i)),
+                    r = v * (1 - s * (1 - (h - i)));
+                switch(i)
+                {
+                    case 0:
+                        { rgb[0] = v; rgb[1] = r; rgb[2] = p; }
+                        break;
+                    case 1:
+                        { rgb[0] = q; rgb[1] = v; rgb[2] = p; }
+                        break;
+                    case 2:
+                        { rgb[0] = p; rgb[1] = v; rgb[2] = r; }
+                        break;
+                    case 3:
+                        { rgb[0] = p; rgb[1] = q; rgb[2] = v; }
+                        break;
+                    case 4:
+                        { rgb[0] = r; rgb[1] = p; rgb[2] = v; }
+                        break;
+                    default:
+                        { rgb[0] = v; rgb[1] = p; rgb[2] = q; }
+                        break;
+                }
+                return rgb;
+            }
         }
 
         public static byte[][][][] krendered;

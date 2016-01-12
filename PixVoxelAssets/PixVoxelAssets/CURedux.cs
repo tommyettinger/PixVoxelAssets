@@ -2407,6 +2407,17 @@ namespace AssetsPV
 
         public static byte[][][,,] Explosions, SuperExplosions;
         public const int maxExplosionFrames = 7;
+        public static float[] multiplyColor(float[] color, float hue, float sat, float val)
+        {
+            double[] hsv = VoxelLogic.RGBToHSV(color[0], color[1], color[2]);
+            if(hue >= 0f)
+                hsv[0] = (hue + 12 + hsv[0]) * 0.5;
+            hsv[1] = VoxelLogic.Clamp(hsv[1] * sat);
+            hsv[2] = VoxelLogic.Clamp(hsv[2] * val);
+            float[] rt = VoxelLogic.RGBFromHSV(hsv[0], hsv[1], hsv[2]);
+            rt[3] = color[3];
+            return rt;
+        }
 
         public static void Initialize(bool disableGore)
         {
@@ -2473,7 +2484,9 @@ namespace AssetsPV
             VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
-            wpalettes = wpalettes.Concat(new float[][][] { wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), }).ToArray();
+            wpalettes = wpalettes.Concat(new float[][][] {
+                wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(), wpalettes[0].Replicate(),
+            }).ToArray();
             for(int p = 0; p < wterrains.Length; p++)
             {
                 wpalettes[wpc][0 + p * 4] = wterrains[p][0].Replicate();
@@ -2527,25 +2540,25 @@ namespace AssetsPV
 
 
                 wpalettes[wpc + 2][0 + p * 4] = wterrains[p][0].Replicate();
-                wpalettes[wpc + 2][0 + p * 4][0] -= 0.3f;
+                wpalettes[wpc + 2][0 + p * 4][0] -= 0.35f;
                 wpalettes[wpc + 2][0 + p * 4][1] -= 0.25f;
                 wpalettes[wpc + 2][0 + p * 4][2] -= 0.2f;
                 wpalettes[wpc + 2][0 + p * 4][3] = 1F;
 
                 wpalettes[wpc + 2][1 + p * 4] = wterrains[p][1].Replicate();
-                wpalettes[wpc + 2][1 + p * 4][0] -= 0.15f;
+                wpalettes[wpc + 2][1 + p * 4][0] -= 0.2f;
                 wpalettes[wpc + 2][1 + p * 4][1] -= 0.1f;
                 wpalettes[wpc + 2][1 + p * 4][2] -= 0.05f;
                 wpalettes[wpc + 2][1 + p * 4][3] = 1F;
 
                 wpalettes[wpc + 2][2 + p * 4] = wterrains[p][2].Replicate();
-                wpalettes[wpc + 2][2 + p * 4][0] -= 0.0f;
+                wpalettes[wpc + 2][2 + p * 4][0] -= 0.05f;
                 wpalettes[wpc + 2][2 + p * 4][1] -= -0.05f;
                 wpalettes[wpc + 2][2 + p * 4][2] -= -0.1f;
                 wpalettes[wpc + 2][2 + p * 4][3] = 1F;
 
                 wpalettes[wpc + 2][3 + p * 4] = wterrains[p][3].Replicate();
-                wpalettes[wpc + 2][3 + p * 4][0] += 0.25f;
+                wpalettes[wpc + 2][3 + p * 4][0] += 0.2f;
                 wpalettes[wpc + 2][3 + p * 4][1] += 0.3f;
                 wpalettes[wpc + 2][3 + p * 4][2] += 0.35f;
                 wpalettes[wpc + 2][3 + p * 4][3] = 1F;
@@ -2574,8 +2587,19 @@ namespace AssetsPV
                 wpalettes[wpc + 3][3 + p * 4][1] *= 0.9f;
                 wpalettes[wpc + 3][3 + p * 4][2] *= 1.25f;
                 wpalettes[wpc + 3][3 + p * 4][3] = 1F;
-            }
 
+                wpalettes[wpc + 4][0 + p * 4] = multiplyColor(wpalettes[wpc][0 + p * 4].Replicate(), -1, 1.1f, 0.6f);
+                wpalettes[wpc + 4][1 + p * 4] = multiplyColor(wpalettes[wpc][1 + p * 4].Replicate(), -1, 1.1f, 0.6f);
+                wpalettes[wpc + 4][2 + p * 4] = multiplyColor(wpalettes[wpc][2 + p * 4].Replicate(), -1, 1.1f, 0.6f);
+                wpalettes[wpc + 4][3 + p * 4] = multiplyColor(wpalettes[wpc][3 + p * 4].Replicate(), -1, 1.1f, 0.6f);
+                
+                wpalettes[wpc + 5][0 + p * 4] = multiplyColor(wpalettes[wpc][0 + p * 4].Replicate(), -1, 0.7f, 1.3f);
+                wpalettes[wpc + 5][1 + p * 4] = multiplyColor(wpalettes[wpc][1 + p * 4].Replicate(), -1, 0.7f, 1.3f);
+                wpalettes[wpc + 5][2 + p * 4] = multiplyColor(wpalettes[wpc][2 + p * 4].Replicate(), -1, 0.7f, 1.3f);
+                wpalettes[wpc + 5][3 + p * 4] = multiplyColor(wpalettes[wpc][3 + p * 4].Replicate(), -1, 0.7f, 1.3f);
+
+            }
+            
             VoxelLogic.wpalettecount = wpalettes.Length;
 
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
@@ -2595,7 +2619,7 @@ namespace AssetsPV
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
             };
             Explosions = new byte[10][][,,];
-
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2605,9 +2629,9 @@ namespace AssetsPV
                 {
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
-            }
+            }*/
             SuperExplosions = new byte[10][][,,];
-            for(int e = 0; e < 10; e++)
+            /*for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
                     new int[] { orange_fire, orange_fire, smoke, yellow_fire }).ToArray(), 0, maxExplosionFrames, 3, 160, 160, 120);
@@ -2616,7 +2640,7 @@ namespace AssetsPV
                 {
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
-            }
+            }*/
         }
 
         public static void InitializeAlt()

@@ -4171,9 +4171,19 @@ namespace AssetsPV
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[296]);
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
-            }
 
-            /*
+                png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[300]);
+                png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+
+                png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[301]);
+                png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+            }
+            
+
             //RAINY WEATHER
             wcurrent = wrendered[297];
 
@@ -4232,8 +4242,7 @@ namespace AssetsPV
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
             }
-            */
-
+            
             VoxelLogic.VisualMode = tmpVisual;
         }
 
@@ -4266,13 +4275,13 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
-            VoxelLogic.VisualMode = "CU_alt";
-            altFolder = "Ortho_War/";
-            CURedux.InitializeAlt();
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "CU_Ortho_S/";
+            CURedux.Initialize(true);
             
             //VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
-            VoxelLogic.voxFolder = "MilitaryBone/";
+            VoxelLogic.voxFolder = "ForaysBones/";
             //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
@@ -4285,9 +4294,9 @@ namespace AssetsPV
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
-            System.IO.Directory.CreateDirectory("CU_Ortho_S_alt");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S_alt/Terrains2");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S_alt/TerrainsBlank2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S/Terrains2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S/TerrainsBlank2");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -4591,7 +4600,7 @@ namespace AssetsPV
             //writePaletteImages();
             //renderTerrain();
 
-            /*
+            
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4603,7 +4612,7 @@ namespace AssetsPV
             renderTerrainDetailed("Ruins");
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
-            */
+            
             //makeFlatTiling();
             /*
             processUnitLargeWMilitary("Infantry_PS");
@@ -4755,7 +4764,7 @@ namespace AssetsPV
             processReceivingMilitaryWSuper();
             */
 
-
+            /*
             Pose walk0 = (model => model
             ),
             walk1 = (model => model
@@ -4806,7 +4815,7 @@ namespace AssetsPV
                 new float[] { 2, 3, 1.0f },
                 new float[] { 3, 0, 0.33f },
                 new float[] { 3, 0, 0.66f },}, true);
-
+            */
             /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
