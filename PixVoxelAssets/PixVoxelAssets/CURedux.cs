@@ -21,13 +21,13 @@ namespace AssetsPV
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate",*/ "Oil_Well"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate",*/ "Hospital", "Oil_Well"
         }, super_units = new string[]
         {/*
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", */"Oil_Well"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", */"Hospital", "Oil_Well"
         };
 
         public const float flat_alpha = VoxelLogic.flat_alpha;
@@ -2619,7 +2619,7 @@ namespace AssetsPV
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
             };
             Explosions = new byte[10][][,,];
-            /*
+
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2629,9 +2629,9 @@ namespace AssetsPV
                 {
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
-            }*/
+            }
             SuperExplosions = new byte[10][][,,];
-            /*for(int e = 0; e < 10; e++)
+            for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
                     new int[] { orange_fire, orange_fire, smoke, yellow_fire }).ToArray(), 0, maxExplosionFrames, 3, 160, 160, 120);
@@ -2640,7 +2640,7 @@ namespace AssetsPV
                 {
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
-            }*/
+            }
         }
 
         public static void InitializeAlt()

@@ -4597,10 +4597,10 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            //writePaletteImages();
+            writePaletteImages();
             //renderTerrain();
 
-            
+            /*
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4612,7 +4612,7 @@ namespace AssetsPV
             renderTerrainDetailed("Ruins");
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
-            
+            */
             //makeFlatTiling();
             /*
             processUnitLargeWMilitary("Infantry_PS");
@@ -4691,73 +4691,14 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            
+            */
+            processUnitLargeWMilitary("Hospital");
+            processUnitHugeWMilitarySuper("Hospital");
+
             processUnitLargeWMilitary("Oil_Well");
             processUnitHugeWMilitarySuper("Oil_Well");
-            */
-            /*
-            Directory.CreateDirectory(altFolder + "standing_frames/color2");
-            Directory.CreateDirectory(altFolder + "animation_frames/color2");
-            Directory.CreateDirectory(altFolder + "standing_frames/color78");
-            Directory.CreateDirectory(altFolder + "animation_frames/color78");
-            foreach(string u in new string[] { "Infantry_P", "Tank_T", "Plane_T" })
-            {
-                for(int dir = 0; dir < 4; dir++)
-                {
-                    for(int f = 0; f < 4; f++)
-                    {
-                        AlterPNGPalette("CU_Ortho_S/palette" + 99 + "_" + u + "_Large_face" + dir + "_" + f + ".png",
-                            altFolder + "standing_frames/color{0}/" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
-                    }
-                }
-                for(int dir = 0; dir < 4; dir++)
-                {
-                    for(int f = 0; f < 16; f++)
-                    {
-                        AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + u + "_Large_face" + dir + "_attack_" + 0 + "_" + f + ".png",
-                            altFolder + "animation_frames/color{0}/" + u + "_Large_face" + dir + "_attack_" + 0 + "_" + f + ".png", simplepalettes);
-                    }
-                }
-                if(u != "Plane_T")
-                {
-                    for(int dir = 0; dir < 4; dir++)
-                    {
-                        for(int f = 0; f < 16; f++)
-                        {
-                            AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + u + "_Large_face" + dir + "_attack_" + 1 + "_" + f + ".png",
-                                altFolder + "animation_frames/color{0}/" + u + "_Large_face" + dir + "_attack_" + 1 + "_" + f + ".png", simplepalettes);
-                        }
-                    }
-                }
-                for(int dir = 0; dir < 4; dir++)
-                {
-                    for(int f = 0; f < 12; f++)
-                    {
-                        AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + u + "_Large_face" + dir + "_death_" + f + ".png",
-                            altFolder + "animation_frames/color{0}/" + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
-                    }
-                }
-                for(int strength = 0; strength < 4; strength++)
-                {
-                    for(int d = 0; d < 4; d++)
-                    {
-                        for(int frame = 0; frame < 16; frame++)
-                        {
-                            AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + VoxelLogic.WeaponTypes[0] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                altFolder + "animation_frames/color{0}/" + VoxelLogic.WeaponTypes[0] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                            AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + VoxelLogic.WeaponTypes[1] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                altFolder + "animation_frames/color{0}/" + VoxelLogic.WeaponTypes[1] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                            AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + VoxelLogic.WeaponTypes[3] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                altFolder + "animation_frames/color{0}/" + VoxelLogic.WeaponTypes[3] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                            AlterPNGPalette("frames/CU_Ortho_S/palette" + 99 + "_" + VoxelLogic.WeaponTypes[5] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                altFolder + "animation_frames/color{0}/" + VoxelLogic.WeaponTypes[5] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                        }
-                    }
-                }
-            }
-            */
 
-            //WriteAllGIFs();
+            WriteAllGIFs();
             /*
             processReceivingMilitaryW();
 
