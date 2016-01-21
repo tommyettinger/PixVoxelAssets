@@ -12,7 +12,7 @@ namespace AssetsPV
         public static Random r = new Random(0x1337BEEF);
 
         public static string[] normal_units = new string[]
-        {/*
+        {
             "Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T",
             "Infantry", "Infantry_P", "Infantry_S", "Infantry_T", "Infantry_PS", "Infantry_PT", "Infantry_ST",
             "Tank", "Tank_P", "Tank_S", "Tank_T",
@@ -21,13 +21,13 @@ namespace AssetsPV
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate",*/ "Hospital", "Oil_Well"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well"
         }, super_units = new string[]
-        {/*
+        {
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", */"Hospital", "Oil_Well"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well"
         };
 
         public const float flat_alpha = VoxelLogic.flat_alpha;
@@ -58,13 +58,13 @@ namespace AssetsPV
             //1 tires, treads
             new float[] {0.37F,0.35F,0.34F,1F},
             //2 doors paint (dark) contrast
-            new float[] {0.45F,-0.02F,-0.05F,1F},
+            new float[] {0.45F,-0.02F,-0.08F,1F},
             //3 doors paint (dark)
-            new float[] {0.6F,0.05F,0.05F,1F},
+            new float[] {0.6F,0.05F,0.02F,1F},
             //4 main paint (mid) contrast
-            new float[] {0.15F,0.15F,0.15F,1F},
+            new float[] {0.12F,0.12F,0.12F,1F},
             //5 main paint (mid)
-            new float[] {0.3F,0.3F,0.3F,1F},
+            new float[] {0.25F,0.25F,0.25F,1F},
             //6 hair contrast
             new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
@@ -110,17 +110,17 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 cockpit paint (gray) contrast
-            new float[] {0.27F,0.27F,0.2F,1F},
+            new float[] {0.25F,0.25F,0.15F,1F},
             //29 cockpit paint (gray)
-            new float[] {0.42F,0.42F,0.35F,1F},
+            new float[] {0.4F,0.4F,0.3F,1F},
             //30 helmet paint (bold) contrast
-            new float[] {0.2F,0.15F,0.1F,1F},
+            new float[] {0.16F,0.1F,0.05F,1F},
             //31 helmet paint (bold)
-            new float[] {0.3F,0.25F,0.2F,1F},
+            new float[] {0.27F,0.2F,0.15F,1F},
             //32 alternate paint contrast
-            new float[] {0.65F,0.0F,0.05F,1F},
+            new float[] {0.65F,0.0F,0.0F,1F},
             //33 alternate paint
-            new float[] {0.8F,0.1F,0.18F,1F},
+            new float[] {0.8F,0.1F,0.1F,1F},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -189,9 +189,9 @@ namespace AssetsPV
             //3 doors paint (dark)
             new float[] {0.6F,0.7F,0.83F,1F},
             //4 main paint (mid) contrast
-            new float[] {0.79F,0.76F,0.7F,1F},
+            new float[] {0.7F,0.72F,0.75F,1F},
             //5 main paint (mid)
-            new float[] {0.89F,0.86F,0.8F,1F},
+            new float[] {0.8F,0.82F,0.85F,1F},
             //6 hair contrast
             new float[] {0.7F,0.9F,0.4F,1F},
             //7 hair
@@ -312,13 +312,13 @@ namespace AssetsPV
             //1 tires, treads
             new float[] {0.37F,0.35F,0.34F,1F},
             //2 doors paint (dark) contrast
-            new float[] {0.37F,-0.1F,-0.1F,1F},
+            new float[] {0.24F,-0.1F,-0.1F,1F},
             //3 doors paint (dark)
-            new float[] {0.55F,-0.05F,-0.1F,1F},
+            new float[] {0.4F,-0.1F,-0.05F,1F},
             //4 main paint (mid) contrast
-            new float[] {0.73F,0.07F,0.0F,1F},
+            new float[] {0.5F,-0.05F,0.02F,1F},
             //5 main paint (mid)
-            new float[] {0.86F,0.19F,0.1F,1F},
+            new float[] {0.63F,0.05F,0.14F,1F},
             //6 hair contrast
             new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
@@ -364,17 +364,17 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 cockpit paint (gray) contrast
-            new float[] {0.4F,0.23F,0.08F,1F},
+            new float[] {0.35F,0.1F,0.11F,1F},
             //29 cockpit paint (gray)
-            new float[] {0.55F,0.36F,0.2F,1F},
+            new float[] {0.5F,0.2F,0.21F,1F},
             //30 helmet paint (bold) contrast
-            new float[] {0.83F,0.03F,-0.05F,1F},
+            new float[] {0.73F,-0.05F,0.03F,1F},
             //31 helmet paint (bold)
-            new float[] {1.0F,0.15F,0.05F,1F},
+            new float[] {0.9F,0.05F,0.15F,1F},
             //32 alternate paint contrast
-            new float[] {0.95F,0.8F,0.5F,1F},
+            new float[] {0.9F,0.8F,0.55F,1F},
             //33 alternate paint
-            new float[] {1.05F,0.95F,0.6F,1F},
+            new float[] {1.05F,0.95F,0.7F,1F},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -439,13 +439,13 @@ namespace AssetsPV
             //1 tires, treads
             new float[] {0.37F,0.35F,0.34F,1F},
             //2 doors paint (dark) contrast
-            new float[] {0.42F,0.09F,-0.1F,1F},
+            new float[] {0.43F,0.05F,0.0F,1F},
             //3 doors paint (dark)
-            new float[] {0.6F,0.2F,0.0F,1F},
+            new float[] {0.6F,0.2F,0.07F,1F},
             //4 main paint (mid) contrast
-            new float[] {0.85F,0.28F,-0.1F,1F},
+            new float[] {0.9F,0.27F,-0.02F,1F},
             //5 main paint (mid)
-            new float[] {1.0F,0.4F,-0.02F,1F},
+            new float[] {1.05F,0.42F,0.06F,1F},
             //6 hair contrast
             new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
@@ -491,17 +491,17 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 cockpit paint (gray) contrast
-            new float[] {0.62F,0.33F,0.05F,1F},
+            new float[] {0.55F,0.28F,0.08F,1F},
             //29 cockpit paint (gray)
-            new float[] {0.77F,0.45F,0.15F,1F},
+            new float[] {0.7F,0.39F,0.18F,1F},
             //30 helmet paint (bold) contrast
-            new float[] {0.82F,0.21F,-0.08F,1F},
+            new float[] {0.86F,0.2F,-0.01F,1F},
             //31 helmet paint (bold)
-            new float[] {0.95F,0.3F,0.05F,1F},
+            new float[] {1.0F,0.3F,0.12F,1F},
             //32 alternate paint contrast
-            new float[] {0.95F,0.9F,0.28F,1F},
+            new float[] {0.25F,0.25F,0.2F,1F},
             //33 alternate paint
-            new float[] {1.05F,1.0F,0.4F,1F},
+            new float[] {0.4F,0.4F,0.35F,1F},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -1601,6 +1601,10 @@ namespace AssetsPV
             new float[] {1.3F,1.2F,0.85F,1F},
             },
             //22 dark-brown skin, dark hair
+            //8 skin contrast
+            //new float[] {0.4F,0.15F,0.0F,1F},
+            //9 skin
+            //new float[] {0.65F,0.3F,0.15F,1F},
             new float[][]
             {
             //6 hair contrast
@@ -1608,9 +1612,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.05F,0.0F,-0.05F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.35F,0.12F,0.0F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.55F,0.22F,0.1F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1632,9 +1636,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.78F,0.68F,0.32F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.35F,0.12F,0.0F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.55F,0.22F,0.1F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1656,9 +1660,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.54F,0.54F,0.5F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.35F,0.12F,0.0F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.55F,0.22F,0.1F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1676,13 +1680,13 @@ namespace AssetsPV
             new float[][]
             {
             //6 hair contrast
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.55F,0.22F,0.1F,1F},
             //7 hair
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.55F,0.22F,0.1F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.35F,0.12F,0.0F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.55F,0.22F,0.1F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -2619,7 +2623,7 @@ namespace AssetsPV
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
             };
             Explosions = new byte[10][][,,];
-
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2629,9 +2633,9 @@ namespace AssetsPV
                 {
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
-            }
+            }*/
             SuperExplosions = new byte[10][][,,];
-            for(int e = 0; e < 10; e++)
+            /*for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
                     new int[] { orange_fire, orange_fire, smoke, yellow_fire }).ToArray(), 0, maxExplosionFrames, 3, 160, 160, 120);
@@ -2640,7 +2644,7 @@ namespace AssetsPV
                 {
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
-            }
+            }*/
         }
 
         public static void InitializeAlt()

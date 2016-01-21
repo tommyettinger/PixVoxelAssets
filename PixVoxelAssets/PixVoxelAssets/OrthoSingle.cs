@@ -15,6 +15,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
+        public const bool RENDER = false;
         public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
@@ -137,9 +138,9 @@ namespace AssetsPV
                                 v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
                             }
                             Color c2 = Color.Transparent;
-                            double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
+                            double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
                                     v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-                            v_alter *= Math.Pow(v_alter, 0.3);
+                            v_alter *= Math.Pow(v_alter, 0.38);
                             if(j == height - 1)
                             {
                                 c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
@@ -399,17 +400,18 @@ namespace AssetsPV
                     byte[][] palette = palettes[p];
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
 
-                //pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                int[] alphas = new int[256];
+                pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                /*int[] alphas = new int[256];
                 alphas.Fill(255);
                 alphas[0] = 0;
-                /*
-                alphas[150] = 127;
-                alphas[151] = 127;
-                alphas[152] = 127;
-                alphas[153] = 127;
-                */
+                
+                //alphas[150] = 127;
+                //alphas[151] = 127;
+                //alphas[152] = 127;
+                //alphas[153] = 127;
+                
                 pngw.GetMetadata().CreateTRNSChunk().SetPalletteAlpha(alphas);
+                */
                 PngChunkPLTE pal = pngw.GetMetadata().CreatePLTEChunk();
 
                 pal.SetNentries(256);
@@ -1059,7 +1061,6 @@ namespace AssetsPV
             string folder = (altFolder);//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
             Console.WriteLine("Processing: " + u + ", palette " + 99);
-            
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); //VoxelLogic.PlaceShadowsW(
@@ -1074,17 +1075,20 @@ namespace AssetsPV
                     parsed[i].color--;
             }
 
-            for(int dir = 0; dir < 4; dir++)
+            if(RENDER)
             {
-                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60)), 1 + bonus * multiplier / 2);
-
-                for(int f = 0; f < framelimit; f++)
+                for(int dir = 0; dir < 4; dir++)
                 {
-                    byte[][] b = processFrameLargeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60)), 1 + bonus * multiplier / 2);
 
-                    ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
-                    WritePNG(png, b, basepalette);
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        byte[][] b = processFrameLargeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+
+                        ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, b, basepalette);
+                    }
                 }
             }
             for(int dir = 0; dir < 4; dir++)
@@ -1115,7 +1119,7 @@ namespace AssetsPV
             Console.WriteLine("Running GIF conversion ...");
             WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
             */
-            processExplosionLargeW(u, -1, explode_parsed, false);            
+            processExplosionLargeW(u, -1, explode_parsed, false);
             processUnitLargeWFiring(u);
         }
 
@@ -1135,54 +1139,56 @@ namespace AssetsPV
                 }
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
-                    
-                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
-                    MagicaVoxelData[][] flying = CURedux.Flyover(parsed);
-                    MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
-                    //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
-                    for(int i = 0; i < 16; i++)
-                    {
-                        voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
-                        flying[i].CopyTo(voxelFrames[i], 0);
-                    }
 
-                    voxelFrames = CURedux.weaponAnimationsLarge[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
-
-                    for(int f = 0; f < 16; f++)
+                    if(RENDER)
                     {
-                        List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
-                        int[,] taken = new int[120, 120];
-                        taken.Fill(-1);
-                        for(int i = 0; i < voxelFrames[f].Length; i++)
+                        bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                        parsed = VoxelLogic.FromMagicaRaw(bin).ToArray();
+                        MagicaVoxelData[][] flying = CURedux.Flyover(parsed);
+                        MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
+                        //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+                        for(int i = 0; i < 16; i++)
                         {
-                            // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
-                            if(voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                            voxelFrames[i] = new MagicaVoxelData[flying[i].Length];
+                            flying[i].CopyTo(voxelFrames[i], 0);
+                        }
+
+                        voxelFrames = CURedux.weaponAnimationsLarge[VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w]](voxelFrames, VoxelLogic.UnitLookup[u], w);
+
+                        for(int f = 0; f < 16; f++)
+                        {
+                            List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f].Length);
+                            int[,] taken = new int[120, 120];
+                            taken.Fill(-1);
+                            for(int i = 0; i < voxelFrames[f].Length; i++)
                             {
-                                //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
-                                continue;
+                                // do not store this voxel if it lies out of range of the voxel chunk (30x30x30)
+                                if(voxelFrames[f][i].x >= 120 || voxelFrames[f][i].y >= 120 || voxelFrames[f][i].z >= 120)
+                                {
+                                    //Console.Write("Voxel out of bounds: " + voxelFrames[f][i].x + ", " + voxelFrames[f][i].y + ", " + voxelFrames[f][i].z);
+                                    continue;
+                                }
+                                altered.Add(voxelFrames[f][i]);
                             }
-                            altered.Add(voxelFrames[f][i]);
+                            flying[f] = altered.ToArray();
                         }
-                        flying[f] = altered.ToArray();
-                    }
-                    Directory.CreateDirectory(folder); //("color" + i);
-                    for(int d = 0; d < 4; d++)
-                    {
-                        for(int frame = 0; frame < 16; frame++)
+                        Directory.CreateDirectory(folder); //("color" + i);
+                        for(int d = 0; d < 4; d++)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(flying[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(flying[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
 
-                            byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
+                                byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
-                            ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                            PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
-                            WritePNG(png, b, basepalette);
+                                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
+                                WritePNG(png, b, basepalette);
 
+                            }
                         }
                     }
-                    
                     for(int dir = 0; dir < 4; dir++)
                     {
                         for(int f = 0; f < 16; f++)
@@ -1195,28 +1201,30 @@ namespace AssetsPV
                 }
                 else if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
-                    
-                    Directory.CreateDirectory(folder);
-                    
-                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
-                    MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
 
-                    for(int d = 0; d < 4; d++)
+                    if(RENDER)
                     {
+                        Directory.CreateDirectory(folder);
 
-                        for(int frame = 0; frame < 16; frame++)
+                        bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                        parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
+                        MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
+
+                        for(int d = 0; d < 4; d++)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(firing[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
-                            byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(firing[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
-                            ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                            PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
-                            WritePNG(png, b, basepalette);
+                                byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
+
+                                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
+                                WritePNG(png, b, basepalette);
+                            }
                         }
                     }
-                    
                     for(int dir = 0; dir < 4; dir++)
                     {
                         for(int f = 0; f < 16; f++)
@@ -1252,31 +1260,33 @@ namespace AssetsPV
 
         public static void processReceivingMilitaryW()
         {
-            string folder = ("frames/" + altFolder + "receiving/");
+            string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             for(int i = 0; i < 8; i++)
             {
                 Console.WriteLine("Processing receive animation: " + VoxelLogic.WeaponTypes[i]);
-                for(int s = 0; s < 4; s++)
+                if(RENDER)
                 {
-                    MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationLarge(i, s + 1);
-                    for(int d = 0; d < 4; d++)
+                    for(int s = 0; s < 4; s++)
                     {
-                        Directory.CreateDirectory(folder); //("color" + i);
-
-                        for(int frame = 0; frame < 16; frame++)
+                        MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationLarge(i, s + 1);
+                        for(int d = 0; d < 4; d++)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(receive[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
-                            byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(receive[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
 
-                            ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                            PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
-                            WritePNG(png, b, basepalette);
+                                byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
+
+                                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
+                                WritePNG(png, b, basepalette);
+                            }
                         }
                     }
                 }
-
                 /*
                 System.IO.Directory.CreateDirectory("strips_iso");
 //                System.IO.Directory.CreateDirectory("strips_ortho");
@@ -1379,33 +1389,34 @@ namespace AssetsPV
                 if((254 - parsed[i].color) % 4 == 0)
                     parsed[i].color--;
             }
-
-            for(int dir = 0; dir < 4; dir++)
+            if(RENDER)
             {
-
-                byte[,,] colors = TransformLogic.RunCA(
-                    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2),
-                    1 + bonus * multiplier * 2);
-                
-           //     byte[,,] colors = TransformLogic.RunCA(
-           //         TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
-           //         1 + bonus * multiplier * 2);
-                    
-                //                byte[,,] colors = TransformLogic.RunCA(
-                //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
-                //                    1 + bonus * multiplier * 2);
-
-                for(int f = 0; f < framelimit; f++)
+                for(int dir = 0; dir < 4; dir++)
                 {
 
-                    byte[][] b = processFrameHugeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+                    byte[,,] colors = TransformLogic.RunCA(
+                        TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2),
+                        1 + bonus * multiplier * 2);
 
-                    ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
-                    WritePNG(png, b, basepalette);
+                    //     byte[,,] colors = TransformLogic.RunCA(
+                    //         TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
+                    //         1 + bonus * multiplier * 2);
+
+                    //                byte[,,] colors = TransformLogic.RunCA(
+                    //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 60, 60, 60)),
+                    //                    1 + bonus * multiplier * 2);
+
+                    for(int f = 0; f < framelimit; f++)
+                    {
+
+                        byte[][] b = processFrameHugeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+
+                        ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, b, basepalette);
+                    }
                 }
             }
-            
             for(int dir = 0; dir < 4; dir++)
             {
                 for(int f = 0; f < framelimit; f++)
@@ -1469,34 +1480,37 @@ namespace AssetsPV
                 }
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
-                    Directory.CreateDirectory(folder);
-                    
-                    bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                    parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
-                    List<MagicaVoxelData>[] firing;
-                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
+                    if(RENDER)
                     {
-                        firing = CURedux.makeFiringAnimationSuper(CURedux.FlyoverSuper(parsed), VoxelLogic.UnitLookup[u], w);
-                    }
-                    else
-                    {
-                        firing = CURedux.makeFiringAnimationSuper(parsed, VoxelLogic.UnitLookup[u], w);
+                        Directory.CreateDirectory(folder);
 
-                    }
-
-                    for(int d = 0; d < 4; d++)
-                    {
-
-                        for(int frame = 0; frame < 16; frame++)
+                        bin = new BinaryReader(File.Open(filename, FileMode.Open));
+                        parsed = VoxelLogic.AssembleHeadToModelW(bin).ToArray();
+                        List<MagicaVoxelData>[] firing;
+                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                         {
-                            byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2),
-                                1 + bonus * multiplier * 2);
-                            byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+                            firing = CURedux.makeFiringAnimationSuper(CURedux.FlyoverSuper(parsed), VoxelLogic.UnitLookup[u], w);
+                        }
+                        else
+                        {
+                            firing = CURedux.makeFiringAnimationSuper(parsed, VoxelLogic.UnitLookup[u], w);
 
-                            ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                            PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
-                            WritePNG(png, b, basepalette);
+                        }
+
+                        for(int d = 0; d < 4; d++)
+                        {
+
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                byte[,,] colors = TransformLogic.RunCA(
+                                    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2),
+                                    1 + bonus * multiplier * 2);
+                                byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+
+                                ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
+                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
+                                WritePNG(png, b, basepalette);
+                            }
                         }
                     }
                     //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
@@ -1550,35 +1564,37 @@ namespace AssetsPV
             for(int i = 0; i < 8; i++)
             {
                 Console.WriteLine("Processing receive animation: " + VoxelLogic.WeaponTypes[i]);
-                for(int s = 0; s < 4; s++)
+                if(RENDER)
                 {
-                    List<MagicaVoxelData>[] receive = CURedux.makeReceiveAnimationSuper(i, s + 1);
-                    for(int d = 0; d < 4; d++)
+                    for(int s = 0; s < 4; s++)
                     {
-                        Directory.CreateDirectory(folder); //("color" + i);
-
-                        for(int frame = 0; frame < 16; frame++)
+                        List<MagicaVoxelData>[] receive = CURedux.makeReceiveAnimationSuper(i, s + 1);
+                        for(int d = 0; d < 4; d++)
                         {
-                            //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
-                            //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
-                            //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
+                            Directory.CreateDirectory(folder); //("color" + i);
 
-                            byte[,,] colors = TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2),
-                                1 + bonus * multiplier * 2);
-//                            byte[,,] colors = TransformLogic.RunCA(
-//                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
-//                                1 + bonus * multiplier * 2);
+                            for(int frame = 0; frame < 16; frame++)
+                            {
+                                //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
+                                //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
+                                //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
-                            byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+                                byte[,,] colors = TransformLogic.RunCA(
+                                    TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2),
+                                    1 + bonus * multiplier * 2);
+                                //                            byte[,,] colors = TransformLogic.RunCA(
+                                //                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+                                //                                1 + bonus * multiplier * 2);
 
-                            ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                            PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
-                            WritePNG(png, b, basepalette);
+                                byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+
+                                ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
+                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
+                                WritePNG(png, b, basepalette);
+                            }
                         }
                     }
                 }
-
                 /*
                 System.IO.Directory.CreateDirectory("strips_iso");
 //                System.IO.Directory.CreateDirectory("strips_ortho");
@@ -2017,37 +2033,40 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + u);
             //            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
             //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
-            if(palette >= 0)
-            {
-                VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-                wditheredcurrent = wdithered[palette];
-            }
-            else
-            {
-                VoxelLogic.wcolors = VoxelLogic.wpalettes[0];
-                wditheredcurrent = wdithered[0];
-            }
-            //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames/" + altFolder);
-            Directory.CreateDirectory(folder); //("color" + i);
-            byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, multiplier, 40, 40, 120, 120, 80);
+            Directory.CreateDirectory(folder);
 
-            Model m = Model.FromModelCU(colors);
-
-            byte[][,,] explode = CURedux.FieryDeathW(u, m);
-
-            for(int d = 0; d < 4; d++)
+            if(RENDER)
             {
-                for(int frame = 0; frame < 12; frame++)
+                if(palette >= 0)
                 {
-                    byte[][] b = processFrameHugeW(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame], d * 90)), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+                    VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+                    wditheredcurrent = wdithered[palette];
+                }
+                else
+                {
+                    VoxelLogic.wcolors = VoxelLogic.wpalettes[0];
+                    wditheredcurrent = wdithered[0];
+                }
+                //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
+                byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, multiplier, 40, 40, 120, 120, 80);
 
-                    ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_death_" + frame + ".png", imi, true);
-                    WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
+                Model m = Model.FromModelCU(colors);
+
+                byte[][,,] explode = CURedux.FieryDeathW(u, m);
+
+                for(int d = 0; d < 4; d++)
+                {
+                    for(int frame = 0; frame < 12; frame++)
+                    {
+                        byte[][] b = processFrameHugeW(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame], d * 90)), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+
+                        ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Large_face" + d + "_death_" + frame + ".png", imi, true);
+                        WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
+                    }
                 }
             }
-
             if(palette >= 0)
             {
                 //Directory.CreateDirectory("gifs/" + altFolder);
@@ -2238,40 +2257,42 @@ namespace AssetsPV
             string folder = ("frames/" + altFolder);
 
             Directory.CreateDirectory(folder); //("color" + i);
-
-            byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, 2, 40, 40, 80, 80, 60);
-
-            Model m = Model.FromModelCU(colors);
-
-            byte[][,,] explode = CURedux.FieryDeathW(u, m);
-
-            for(int d = 0; d < 4; d++)
+            if(RENDER)
             {
-                //byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60), 1 + bonus * multiplier);
+                byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, 2, 40, 40, 80, 80, 60);
 
-                // byte[,,] colors = TransformLogic.RunCA(
-                //     TransformLogic.ExpandBounds(
-                //             TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 40, 40, 40), 2, 2, 2), 160, 160, 120),
-                //     1 + bonus * multiplier * 2);
+                Model m = Model.FromModelCU(colors);
 
+                byte[][,,] explode = CURedux.FieryDeathW(u, m);
 
-//                byte[,,] colors = TransformLogic.RunCA(
-//                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60)),
-//                    1 + bonus * multiplier * 2);
-                //byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
-
-                for(int frame = 0; frame < 12; frame++)
+                for(int d = 0; d < 4; d++)
                 {
-                    byte[][] b = processFrameMassiveW(TransformLogic.SealGaps(
-                           TransformLogic.RotateYaw(explode[frame], d * 90)
-                        ), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+                    //byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60), 1 + bonus * multiplier);
 
-                    ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true);
-                    WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
+                    // byte[,,] colors = TransformLogic.RunCA(
+                    //     TransformLogic.ExpandBounds(
+                    //             TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), 40, 40, 40), 2, 2, 2), 160, 160, 120),
+                    //     1 + bonus * multiplier * 2);
+
+
+                    //                byte[,,] colors = TransformLogic.RunCA(
+                    //                    TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateAlmostLarge(voxels, d), multiplier * 2, 40, 40, 80, 80, 60)),
+                    //                    1 + bonus * multiplier * 2);
+                    //byte[][,,] explode = TransformLogic.FieryExplosionW(colors, false, false);
+
+                    for(int frame = 0; frame < 12; frame++)
+                    {
+                        byte[][] b = processFrameMassiveW(TransformLogic.SealGaps(
+                               TransformLogic.RotateYaw(explode[frame], d * 90)
+                            ), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
+
+                        ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true);
+                        WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
+                    }
                 }
             }
-            
+
             if(palette >= 0)
             {
                 Directory.CreateDirectory("gifs/" + altFolder);
@@ -4159,27 +4180,28 @@ namespace AssetsPV
 
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80);
-            Directory.CreateDirectory(altFolder + "Terrains2");
-            Directory.CreateDirectory(altFolder + "TerrainsBlank2");
+            string folder = altFolder + "Terrains/", blankFolder = altFolder + "TerrainsBlank/";
+            Directory.CreateDirectory(folder);
+            Directory.CreateDirectory(blankFolder);
 
             for(int dir = 0; dir < 4; dir++)
             {
                 byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
 
                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[296]);
-                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
 
-                png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[300]);
-                png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
 
-                png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[301]);
-                png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
             }
             
@@ -4198,9 +4220,9 @@ namespace AssetsPV
                 byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
 
                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[297]);
-                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
             }
 
@@ -4217,9 +4239,9 @@ namespace AssetsPV
                 byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
 
                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[298]);
-                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
             }
 
@@ -4237,9 +4259,9 @@ namespace AssetsPV
                 byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
 
                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[299]);
-                PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
             }
             
@@ -4276,7 +4298,7 @@ namespace AssetsPV
             //            FaceLogic.VisualMode = "Mecha";
 
             VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_Ortho_S/";
+            altFolder = "CU_Ortho_S2/";
             CURedux.Initialize(true);
             
             //VoxelLogic.VisualMode = "W";
@@ -4294,9 +4316,9 @@ namespace AssetsPV
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
             //altFolder = "CU3/";
-            System.IO.Directory.CreateDirectory("CU_Ortho_S");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S/Terrains2");
-            System.IO.Directory.CreateDirectory("CU_Ortho_S/TerrainsBlank2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S2");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S2/Terrains");
+            System.IO.Directory.CreateDirectory("CU_Ortho_S2/TerrainsBlank");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -4600,7 +4622,7 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
 
-            /*
+            
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4612,9 +4634,14 @@ namespace AssetsPV
             renderTerrainDetailed("Ruins");
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
-            */
+
             //makeFlatTiling();
-            /*
+
+            processUnitLargeWMilitary("Copter_P");
+            processUnitLargeWMilitary("Copter");
+            processUnitLargeWMilitary("Copter_S");
+            processUnitLargeWMilitary("Copter_T");
+
             processUnitLargeWMilitary("Infantry_PS");
             processUnitLargeWMilitary("Infantry_PT");
             processUnitLargeWMilitary("Infantry_ST");
@@ -4645,11 +4672,6 @@ namespace AssetsPV
             processUnitLargeWMilitary("Artillery_P");
             processUnitLargeWMilitary("Artillery_S");
             processUnitLargeWMilitary("Artillery_T");
-
-            processUnitLargeWMilitary("Copter");
-            processUnitLargeWMilitary("Copter_P");
-            processUnitLargeWMilitary("Copter_S");
-            processUnitLargeWMilitary("Copter_T");
             
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
@@ -4691,19 +4713,19 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            */
+            
             processUnitLargeWMilitary("Hospital");
             processUnitHugeWMilitarySuper("Hospital");
 
             processUnitLargeWMilitary("Oil_Well");
             processUnitHugeWMilitarySuper("Oil_Well");
-
-            WriteAllGIFs();
-            /*
+            
+            
             processReceivingMilitaryW();
 
             processReceivingMilitaryWSuper();
-            */
+            WriteAllGIFs();
+
 
             /*
             Pose walk0 = (model => model
