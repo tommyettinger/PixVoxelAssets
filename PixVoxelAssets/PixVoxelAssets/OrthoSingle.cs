@@ -15,7 +15,7 @@ namespace AssetsPV
 {
     class OrthoSingle
     {
-        public const bool RENDER = false;
+        public const bool RENDER = true;
         public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
@@ -4622,7 +4622,7 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
 
-            
+            /*
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4636,7 +4636,7 @@ namespace AssetsPV
             renderTerrainDetailed("Ocean");
 
             //makeFlatTiling();
-
+            
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_S");
@@ -4719,11 +4719,14 @@ namespace AssetsPV
 
             processUnitLargeWMilitary("Oil_Well");
             processUnitHugeWMilitarySuper("Oil_Well");
-            
-            
-            processReceivingMilitaryW();
+            */
 
-            processReceivingMilitaryWSuper();
+            processUnitLargeWMilitary("Farm");
+            processUnitHugeWMilitarySuper("Farm");
+
+            //processReceivingMilitaryW();
+
+            //processReceivingMilitaryWSuper();
             WriteAllGIFs();
 
 
