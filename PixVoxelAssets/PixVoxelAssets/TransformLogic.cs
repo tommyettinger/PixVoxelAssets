@@ -1533,7 +1533,7 @@ namespace AssetsPV
                                             {
                                                 emptyCount++;
                                             }
-                                            else                                            {
+                                            else {
                                                 colorCount[smallColor]++;
                                             }
                                         }
@@ -1562,6 +1562,111 @@ namespace AssetsPV
             }
             return vs[smoothLevel - 1];
         }
+
+        public static byte[,,] fillInterior(byte[,,] voxelData)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+
+            byte[,,] voxels = new byte[xSize, ySize, zSize];
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+
+                        if(
+                            x == 0 || x == xSize - 1 ||
+                            y == 0 || y == ySize - 1 ||
+                            z == 0 || z == zSize - 1 ||
+                            voxelData[x, y, z] == 0 ||
+                            voxelData[x - 1, y, z] == 0 ||
+                            voxelData[x + 1, y, z] == 0 ||
+                            voxelData[x, y - 1, z] == 0 ||
+                            voxelData[x, y + 1, z] == 0 ||
+                            voxelData[x, y, z - 1] == 0 ||
+                            voxelData[x, y, z + 1] == 0)
+                            voxels[x, y, z] = voxelData[x, y, z];
+                        else
+                            voxels[x, y, z] = 255;
+                            
+                    }
+                }
+            }
+            return voxels;
+        }
+
+        public static byte[,,] RunSurfaceCA(byte[,,] voxelData, int smoothLevel)
+        {
+            if(smoothLevel <= 1)
+                return voxelData;
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            //Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
+            int[] colorCount = new int[256];
+            byte[][,,] vs = new byte[smoothLevel][,,];
+            vs[0] = fillInterior(voxelData);
+            for(int v = 1; v < smoothLevel; v++)
+            {
+                vs[v] = new byte[xSize, ySize, zSize];
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        for(int z = 0; z < zSize; z++)
+                        {
+                            Array.Clear(colorCount, 0, 256);
+                            int emptyCount = 0;
+                            if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
+                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || ColorValue(vs[v - 1][x, y, z]) > 50 || vs[v - 1][x, y, z] == 255)
+                            {
+                                colorCount[vs[v - 1][x, y, z]] = 10000;
+                            }
+                            else
+                            {
+                                for(int xx = -1; xx < 2; xx++)
+                                {
+                                    for(int yy = -1; yy < 2; yy++)
+                                    {
+                                        for(int zz = -1; zz < 2; zz++)
+                                        {
+                                            byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
+                                            if(smallColor == 255)
+                                            {
+                                            }
+                                            else if(smallColor == 0 || ColorValue(smallColor) < 16)
+                                            {
+                                                emptyCount++;
+                                            }
+                                            else {
+                                                colorCount[smallColor]++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(emptyCount >= 18)
+                                vs[v][x, y, z] = 0;
+                            else
+                            {
+                                int max = 0, cc = colorCount[0], tmp;
+                                for(int idx = 1; idx < 256; idx++)
+                                {
+                                    tmp = colorCount[idx];
+                                    if(tmp > cc)
+                                    {
+                                        cc = tmp;
+                                        max = idx;
+                                    }
+                                }
+                                vs[v][x, y, z] = (byte)max;
+                            }
+                        }
+                    }
+                }
+            }
+            return vs[smoothLevel - 1];
+        }
+
         public static List<MagicaVoxelData> VoxArrayToListSmoothed(byte[,,] voxelData)
         {
             return VoxArrayToList(RunCA(voxelData, 3));

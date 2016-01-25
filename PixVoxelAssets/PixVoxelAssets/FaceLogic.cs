@@ -34,6 +34,11 @@ namespace AssetsPV
             vox = v;
             slope = slp;
         }
+        public FaceVoxel(int x, int y, int z, int color, Slope slp)
+        {
+            vox = new MagicaVoxelData(x, y, z, color);
+            slope = slp;
+        }
     }
     public delegate FaceVoxel[,,] FaceModifier(FaceVoxel[,,] faces);
 
@@ -1904,5 +1909,190 @@ namespace AssetsPV
             }
             return data;
         }
+
+
+        public static FaceVoxel[,,] DoubleSize(FaceVoxel[,,] faces)
+        {
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+            FaceVoxel[,,] result = new FaceVoxel[xSize * 2, ySize * 2, zSize * 2];
+
+
+            for(int z = zSize - 1; z >= 0; z--)
+            {
+                for(int x = 0; x < xSize - 1; x++)
+                {
+                    for(int y = ySize - 1; y >= 0; y--)
+                    {
+                        if(faces[x, y, z] != null)
+                        {
+                            FaceVoxel fv = faces[x, y, z];
+
+                            switch(fv.slope)
+                            {
+                                case Slope.Cube:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.BrightTop:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightTop);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.BrightTop);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    //result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightTop);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightTop);
+                                    break;
+                                case Slope.DimTop:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.DimTop);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.DimTop);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.DimTop);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.DimTop);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.BrightDim:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightDim);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightDim);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    break;
+                                case Slope.BrightDimTop:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightDimTop);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightDimTop);
+                                    //result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightDimTop);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    break;
+                                case Slope.BrightBottom:
+                                    //result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightTop);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.BrightTop);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightBottom);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightBottom);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightBottom);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightBottom);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.DimBottom:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.DimBottom);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.DimTop);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.DimBottom);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.DimTop);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.DimBottom);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.DimBottom);
+                                    break;
+                                case Slope.BrightDimBottom:
+                                    //result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightDimTop);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightDimBottom);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightDimTop);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDimBottom);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDimBottom);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightDimBottom);
+                                    break;
+                                case Slope.BrightBack:
+                                    //result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    //result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.DimBack:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.DimBack);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.DimBack);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.DimBack);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.DimBack);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.BrightTopBack:
+                                    //result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.BrightTopBack);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightTopBack);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    //result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightBack);
+                                    //result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightTopBack);
+                                    break;
+                                case Slope.DimTopBack:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.DimTopBack);
+                                    result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.DimTopBack);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.DimTopBack);
+                                    //result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.DimBack);
+                                    //result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.DimBack);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.BrightBottomBack:
+                                    //result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightBack);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.BrightBack);
+                                    //result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightBack);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.BrightBottomBack);
+                                    //result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightDim);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightBottomBack);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightBottomBack);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.DimBottomBack:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BrightBottomBack);
+                                    //result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.DimBack);
+                                    //result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.DimBack);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.BrightBottomBack);
+                                    result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BrightBottomBack);
+                                    //result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    break;
+                                case Slope.BackBack:
+                                    result[x * 2, y * 2, z * 2] = new FaceVoxel(x * 2, y * 2, z * 2, fv.vox.color, Slope.BackBack);
+                                    result[x * 2 + 1, y * 2, z * 2] = new FaceVoxel(x * 2 + 1, y * 2, z * 2, fv.vox.color, Slope.Cube);
+                                    //result[x * 2, y * 2 + 1, z * 2] = new FaceVoxel(x * 2, y * 2 + 1, z * 2, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2, fv.vox.color, Slope.BackBack);
+                                    result[x * 2, y * 2, z * 2 + 1] = new FaceVoxel(x * 2, y * 2, z * 2 + 1, fv.vox.color, Slope.BackBack);
+                                    result[x * 2 + 1, y * 2, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    //result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
+                                    result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BackBack);
+                                    break;
+
+                                    /*
+        BrightTopBack = 0x1000,
+        DimTopBack = 0x2000,
+        BrightBottomBack = 0x4000,
+        DimBottomBack = 0x8000,
+        BackBack = 0x10000
+                                */
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }               
     }
 }

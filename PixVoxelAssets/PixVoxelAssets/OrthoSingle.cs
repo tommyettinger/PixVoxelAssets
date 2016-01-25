@@ -1396,7 +1396,8 @@ namespace AssetsPV
 
                     byte[,,] colors = TransformLogic.RunCA(
                         TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2),
-                        1 + bonus * multiplier * 2);
+                            2 + bonus * multiplier * 2);
+                    //                        1 + bonus * multiplier * 2);
 
                     //     byte[,,] colors = TransformLogic.RunCA(
                     //         TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)), 2),
@@ -1504,7 +1505,8 @@ namespace AssetsPV
                             {
                                 byte[,,] colors = TransformLogic.RunCA(
                                     TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2),
-                                    1 + bonus * multiplier * 2);
+                                    2 + bonus * multiplier * 2);
+                                //                                    1 + bonus * multiplier * 2);
                                 byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
@@ -1581,12 +1583,13 @@ namespace AssetsPV
 
                                 byte[,,] colors = TransformLogic.RunCA(
                                     TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2),
-                                    1 + bonus * multiplier * 2);
-                                //                            byte[,,] colors = TransformLogic.RunCA(
-                                //                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
-                                //                                1 + bonus * multiplier * 2);
+                                    2 + bonus * multiplier * 2);
+//                                1 + bonus * multiplier * 2);
+            //                            byte[,,] colors = TransformLogic.RunCA(
+            //                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+            //                                1 + bonus * multiplier * 2);
 
-                                byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+            byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                                 PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
@@ -4727,7 +4730,7 @@ namespace AssetsPV
             //processReceivingMilitaryW();
 
             //processReceivingMilitaryWSuper();
-            WriteAllGIFs();
+            //WriteAllGIFs();
 
 
             /*

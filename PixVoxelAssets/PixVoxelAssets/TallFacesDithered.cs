@@ -154,9 +154,9 @@ namespace AssetsPV
                             for(int slp = 0; slp < 17; slp++)
                             {
                                 Color c2 = Color.Transparent;
-                                double s_alter = (s * 0.7 + s * s * s * Math.Sqrt(s)),
+                                double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
                                         v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-                                v_alter *= Math.Pow(v_alter, 0.6);
+                                v_alter *= Math.Pow(v_alter, 0.38);
                                 if(j == height - 1)
                                 {
                                     c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
@@ -1640,9 +1640,10 @@ namespace AssetsPV
             {
 
                 //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), 2, 60, 60, 60)), 120, 120, 80);
-                FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunCA(
-                        TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2, 2, 2),
-                        3)), 120, 120, 80);
+                //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunSurfaceCA(
+                //        TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2, 2, 2),
+                //        3)), 120, 120, 80);
+                FaceVoxel[,,] faces = FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)));
                 for(int f = 0; f < framelimit; f++)
                 {
 
@@ -1734,9 +1735,11 @@ namespace AssetsPV
                         for(int frame = 0; frame < 16; frame++)
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 2, 80, 80, 60)), 160, 160, 120);
-                            FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2, 2, 2),
-                                3)), 160, 160, 120);
+                            //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunSurfaceCA(
+                            //    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2, 2, 2),
+                            //    3)), 160, 160, 120);
+                            FaceVoxel[,,] faces = FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60)));
+
                             byte[][] b = processFrameMassiveW(faces, 0, d, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
@@ -1815,9 +1818,10 @@ namespace AssetsPV
                         {
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
                             //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToListSmoothed(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60)), 160, 160, 120);
-                            FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunCA(
-                                TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60), 2, 2, 2),
-                                3)), 160, 160, 120);
+                            //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunSurfaceCA(
+                            //    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60), 2, 2, 2),
+                            //    3)), 160, 160, 120);
+                            FaceVoxel[,,] faces = FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)));
                             byte[][] b = processFrameMassiveW(faces, 0, d, frame, 16, true, false);
 
                             ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
@@ -5162,8 +5166,17 @@ namespace AssetsPV
                 WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[296]);
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
-            }
 
+                png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[300]);
+                png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+
+                png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[301]);
+                png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+            }
 
             //RAINY WEATHER
             wcurrent = wrendered[297];
@@ -5239,7 +5252,7 @@ namespace AssetsPV
 
             VoxelLogic.Initialize();
             VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_S/";
+            altFolder = "CU_S2/";
             System.IO.Directory.CreateDirectory(altFolder);
             CURedux.Initialize(true);
 
@@ -5552,11 +5565,11 @@ namespace AssetsPV
             /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
-            processUnitHugeWMilitarySuper("Airport");
             processUnitHugeWMilitarySuper("City");
             processUnitHugeWMilitarySuper("Factory");
             processUnitHugeWMilitarySuper("Castle");
-            processUnitHugeWMilitarySuper("Estate");
+            processUnitHugeWMilitarySuper("Estate");*/
+            processUnitHugeWMilitarySuper("Airport");
 
             processUnitHugeWMilitarySuper("Copter");
             processUnitHugeWMilitarySuper("Copter_P");
@@ -5627,14 +5640,17 @@ namespace AssetsPV
             processUnitLargeWMilitary("Factory");
             processUnitLargeWMilitary("Castle");
             processUnitLargeWMilitary("Estate");
-            */
-
-            //processReceivingMilitaryW();
-
-
-            //processReceivingMilitaryWSuper();
-            //renderTerrain();
             
+
+            processUnitLargeWMilitary("Farm");
+            processUnitHugeWMilitarySuper("Farm");
+
+            processReceivingMilitaryW();
+
+
+            processReceivingMilitaryWSuper();
+            //renderTerrain();
+
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -5647,7 +5663,7 @@ namespace AssetsPV
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
             
-            //WriteAllGIFs();
+            WriteAllGIFs();
 
             //processUnitLargeW("Charlie", 1, true, false);
 

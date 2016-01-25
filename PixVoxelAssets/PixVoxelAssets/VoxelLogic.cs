@@ -17831,10 +17831,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 case 6:
                 case 7:
                 case 9:
-                case 36:
+                /*case 36:
                 case 37:
                 case 38:
-                case 39:
+                case 39:*/
                     {
                         return 50;
                     }
