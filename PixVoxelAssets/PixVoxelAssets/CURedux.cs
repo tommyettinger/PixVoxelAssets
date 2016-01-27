@@ -2623,6 +2623,7 @@ namespace AssetsPV
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
             };
             Explosions = new byte[10][][,,];
+            SuperExplosions = new byte[10][][,,];
             
             for(int e = 0; e < 10; e++)
             {
@@ -2634,7 +2635,6 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
-            SuperExplosions = new byte[10][][,,];
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
@@ -2645,6 +2645,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
+
         }
 
         public static void InitializeAlt()
