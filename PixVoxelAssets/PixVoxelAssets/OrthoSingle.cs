@@ -4276,7 +4276,7 @@ namespace AssetsPV
             Bitmap[] tilings = new Bitmap[15];
             for(int i = 0; i < 15; i++)
             {
-                tilings[i] = new Bitmap("CU_Ortho/Terrains2/" + CURedux.Terrains[i] + ".png");
+                tilings[i] = new Bitmap(altFolder + "Terrains2/" + CURedux.Terrains[i] + ".png");
             }
             Bitmap b = new Bitmap(64 * 20 + 1, 32 * 20 + 1);
             Graphics tiling = Graphics.FromImage(b);
@@ -4289,8 +4289,7 @@ namespace AssetsPV
                     tiling.DrawImageUnscaled(tilings[lm.Land[i, j]], (64 * i) + 2 - 30, (32 * j) - 20 - 64 + 2);
                 }
             }
-            b.Save("CU_Ortho/tiling_flat.png", ImageFormat.Png);
-
+            b.Save(altFolder + "tiling_flat.png", ImageFormat.Png);
         }
 
         static void Main(string[] args)

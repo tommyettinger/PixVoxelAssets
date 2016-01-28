@@ -319,6 +319,141 @@ namespace AssetsPV
             }
         }
 
+        public LocalMap(int MapWidth, int MapHeight, int dominantTerrain, int edgeTerrain)
+        {
+
+            Width = MapWidth;
+            Height = MapHeight;
+            Land = new int[Width, Height];
+            takenLocations = new int[Width, Height];
+            for(int i = 0; i < Width; i++)
+            {
+                for(int j = 0; j < Height; j++)
+                {
+                    takenLocations[i, j] = 0;
+                    Land[i, j] = 0;
+                }
+            }
+            List<Position> edges = new List<Position>(2 * (MapHeight + MapWidth - 1));
+            for(int i = 0; i < Width; i++)
+            {
+                Land[i, 0] = edgeTerrain;
+                takenLocations[i, 0] = 1;
+                edges.Add(new Position(i, 0));
+                Land[i, Height - 1] = edgeTerrain;
+                takenLocations[i, Height - 1] = 1;
+                edges.Add(new Position(i, Height - 1));
+
+                List<Position> edge = Position.Nearby(i, Math.Abs(Height / 2 - i), Width, Height, 1+((i == 0 || i == Width - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                foreach(Position pos in edge)
+                {
+                    for(int n = pos.y; n >= 0; n--)
+                    {
+                        Land[pos.x, n] = edgeTerrain;
+                        takenLocations[pos.x, n] = 1;
+                    }
+                }
+                edge = Position.Nearby(i, Height - 1 - Math.Abs(Height / 2 - i), Width, Height, 1+((i == 0 || i == Width - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                foreach(Position pos in edge)
+                {
+                    for(int n = pos.y; n < Height; n++)
+                    {
+                        Land[pos.x, n] = edgeTerrain;
+                        takenLocations[pos.x, n] = 1;
+                    }
+                }
+            }
+
+            for(int j = 0; j < Height; j++)
+            {
+                Land[0, j] = edgeTerrain;
+                takenLocations[0, j] = 1;
+                edges.Add(new Position(0, j));
+                Land[Width - 1, j] = edgeTerrain;
+                takenLocations[Width - 1, j] = 1;
+                edges.Add(new Position(Width - 1, j));
+
+                List<Position> edge = Position.Nearby(Math.Abs(Width / 2 - j), j, Width, Height, 1+((j == 0 || j == Height - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                foreach(Position pos in edge)
+                {
+                    for(int n = pos.x; n >= 0; n--)
+                    {
+                        Land[n, pos.y] = edgeTerrain;
+                        takenLocations[n, pos.y] = 1;
+                    }
+                }
+                edge = Position.Nearby(Width - 1 - Math.Abs(Width / 2 - j), j, Width, Height, 1 + ((j == 0 || j == Height - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                foreach(Position pos in edge)
+                {
+                    for(int n = pos.x; n < Width; n++)
+                    {
+                        Land[n, pos.y] = edgeTerrain;
+                        takenLocations[n, pos.y] = 1;
+                    }
+                }
+            }
+            List<Position> rivers = new List<Position>();
+            
+
+            rivers.AddRange(MakeSoftPath(new Position(10, 4), new Position(26, 19)));
+            foreach(Position t in rivers)
+            {
+                Land[t.x, t.y] = 9;
+                takenLocations[t.x, t.y] = 2;
+            }
+            int numMountains = r.Next(Width / 4, Width);
+            MakeMountains(numMountains);
+            /*
+            List<Position> roads = MakeHardPath(RandomSpot(), RandomSpot());
+            foreach(Position t in roads)
+            {
+                Land[t.x, t.y] = 8;
+                takenLocations[t.x, t.y] = 4;
+            }
+            roads = MakeHardPath(RandomSpot(), RandomSpot());
+            foreach(Position t in roads)
+            {
+                Land[t.x, t.y] = 8;
+                takenLocations[t.x, t.y] = 4;
+            }
+            */
+            int extreme = dominantTerrain;
+
+            for(int v = 0; v < 3; v++)
+            {
+                for(int i = 1; i < Width - 1; i++)
+                {
+                    for(int j = 2; j < Height - 2; j++)
+                    {
+
+                        List<Position> near = new Position(i, j).Nearby(Width, Height, 2);
+                        List<int> adj = new List<int>(12);
+                        foreach(Position p in near)
+                        {
+                            adj.Add(Land[p.x, p.y]);
+                        }
+                        int likeliest = 0;
+                        if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+                            likeliest = extreme;
+                        if((adj.Contains(2) && r.Next(4) == 0))
+                            likeliest = extreme;
+                        if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+                            likeliest = extreme;
+                        if((adj.Contains(1) && r.Next(5) > 2) || r.Next(7) == 0)
+                            likeliest = r.Next(2) * 2 + 1;
+                        if(adj.Contains(5) && r.Next(3) == 0)
+                            likeliest = r.Next(4, 6);
+                        if(r.Next(45) == 0)
+                            likeliest = 6;
+                        if(takenLocations[i, j] == 0)
+                        {
+                            Land[i, j] = likeliest;
+                        }
+                    }
+                }
+            }
+        }
+
         public LocalMap(int MapWidth, int MapHeight, int dominantTerrain)
         {
 
@@ -336,42 +471,42 @@ namespace AssetsPV
             }
             for(int i = 0; i < Width; i++)
             {
-                Land[i, 0] = 11;
+                Land[i, 0] = 10;
                 takenLocations[i, 0] = 1;
-                Land[i, Height - 1] = 11;
+                Land[i, Height - 1] = 10;
                 takenLocations[i, Height - 1] = 1;
 
                 List<Position> edge = Position.Nearby(i, 0, Width, Height, (i == 0 || i == Width - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
                 foreach(Position pos in edge)
                 {
-                    Land[pos.x, pos.y] = 11;
+                    Land[pos.x, pos.y] = 10;
                     takenLocations[pos.x, pos.y] = 1;
                 }
                 edge = Position.Nearby(i, Height - 1, Width, Height, (i == 0 || i == Width - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
                 foreach(Position pos in edge)
                 {
-                    Land[pos.x, pos.y] = 11;
+                    Land[pos.x, pos.y] = 10;
                     takenLocations[pos.x, pos.y] = 1;
                 }
             }
 
             for(int j = 0; j < Height; j++)
             {
-                Land[0, j] = 11;
+                Land[0, j] = 10;
                 takenLocations[0, j] = 1;
-                Land[Width - 1, j] = 11;
+                Land[Width - 1, j] = 10;
                 takenLocations[Width - 1, j] = 1;
 
                 List<Position> edge = Position.Nearby(0, j, Width, Height, (j == 0 || j == Height - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
                 foreach(Position pos in edge)
                 {
-                    Land[pos.x, pos.y] = 11;
+                    Land[pos.x, pos.y] = 10;
                     takenLocations[pos.x, pos.y] = 1;
                 }
                 edge = Position.Nearby(Width - 1, j, Width, Height, (j == 0 || j == Height - 1) ? 5 : Math.Min(r.Next(4), r.Next(4)));
                 foreach(Position pos in edge)
                 {
-                    Land[pos.x, pos.y] = 11;
+                    Land[pos.x, pos.y] = 10;
                     takenLocations[pos.x, pos.y] = 1;
                 }
             }
@@ -380,11 +515,11 @@ namespace AssetsPV
             {
                 for(int j = 0; j < Height; j++)
                 {
-                    if(Land[i,j] == 0)
+                    if(Land[i, j] == 0)
                     {
                         foreach(Position pos in Position.Adjacent(i, j, Width, Height))
                         {
-                            if(Land[pos.x, pos.y] == 11)
+                            if(Land[pos.x, pos.y] == 10)
                             {
                                 Land[i, j] = 2;
                                 takenLocations[i, j] = 1;
@@ -545,12 +680,13 @@ namespace AssetsPV
 
             late.x += r.Next(Width / 3) - Width / 6;
             late = CorrectPosition(late);
+            path2.Add(start);
             path2.AddRange(Bresenham(start, early));
-            path2.RemoveAt(path2.Count - 1);
+            //path2.RemoveAt(path2.Count - 1);
             path2.AddRange(Bresenham(early, midpoint));
-            path2.RemoveAt(path2.Count - 1);
+            //path2.RemoveAt(path2.Count - 1);
             path2.AddRange(Bresenham(midpoint, late));
-            path2.RemoveAt(path2.Count - 1);
+            //path2.RemoveAt(path2.Count - 1);
             path2.AddRange(Bresenham(late, end));
 
 

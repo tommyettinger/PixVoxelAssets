@@ -5289,6 +5289,31 @@ namespace AssetsPV
             VoxelLogic.VisualMode = tmpVisual;
         }
 
+        static void makeDetailedTiling()
+        {
+            Bitmap[][] tilings = new Bitmap[11][];
+            for(int i = 0; i < 11; i++)
+            {
+                tilings[i] = new Bitmap[4];
+                for(int j = 0; j < 4; j++)
+                {
+                    tilings[i][j] = new Bitmap(altFolder + "Terrains2/" + CURedux.Terrains[i] + "_Huge_face" + j + "_Normal_0" + ".png");
+                }
+            }
+            Bitmap b = new Bitmap(128 * 14 + 1, 64 * 15 + 1);
+            Graphics tiling = Graphics.FromImage(b);
+
+            LocalMap lm = new LocalMap(32, 32, 1, 0);
+            for(int j = 31; j >= 0; j--)
+            {
+                for(int i = 0; i < 32; i++)
+                {
+                    tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (64 * (i + j - 18)) - 62, (32 * (i - j + 15)) - 182);
+                }
+            }
+            b.Save(altFolder + "tiling_detailed.png", ImageFormat.Png);
+        }
+
         static void Main(string[] args)
         {
             //altFolder = "botl6/";
@@ -5611,10 +5636,7 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             writePaletteImages();
-            processUnitLargeWMilitary("Plane_T");
-
-            processUnitHugeWMilitarySuper("Plane_T");
-
+            /*
             
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
@@ -5632,7 +5654,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");
-            //processUnitHugeWMilitarySuper("Plane_T");
+            processUnitHugeWMilitarySuper("Plane_T");
             
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
@@ -5683,7 +5705,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
             processUnitLargeWMilitary("Plane_S");
-            //processUnitLargeWMilitary("Plane_T");
+            processUnitLargeWMilitary("Plane_T");
             
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
@@ -5700,13 +5722,13 @@ namespace AssetsPV
             processUnitLargeWMilitary("Farm");
             processUnitLargeWMilitary("Hospital");
             processUnitLargeWMilitary("Oil_Well");
-            
+            */
 
             //processReceivingMilitaryW();
 
             //processReceivingMilitaryWSuper();
             //renderTerrain();
-
+            /*
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -5718,9 +5740,9 @@ namespace AssetsPV
             renderTerrainDetailed("Ruins");
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
-            
-            WriteAllGIFs();
-
+            */
+            //WriteAllGIFs();
+            makeDetailedTiling();
             //processUnitLargeW("Charlie", 1, true, false);
 
             /*
