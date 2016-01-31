@@ -2097,6 +2097,69 @@ namespace AssetsPV
                 }
             }
             return result;
-        }               
+        }
+
+        public static FaceVoxel[,,] recolorCA(FaceVoxel[,,] voxelData, int smoothLevel)
+        {
+            if(smoothLevel <= 1)
+                return voxelData;
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            //Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
+            int[] colorCount = new int[256];
+            FaceVoxel[][,,] vs = new FaceVoxel[smoothLevel][,,];
+            vs[0] = voxelData;
+            for(int v = 1; v < smoothLevel; v++)
+            {
+                vs[v] = vs[v - 1].Replicate();
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        for(int z = 0; z < zSize; z++)
+                        {
+                            if(vs[v - 1][x, y, z] == null)
+                                continue;
+                            Array.Clear(colorCount, 0, 256);
+                            if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
+                                || (254 - vs[v - 1][x, y, z].vox.color) % 4 == 0 || TransformLogic.ColorValue(vs[v - 1][x, y, z].vox.color) > 50)
+                            {
+                                colorCount[vs[v - 1][x, y, z].vox.color] = 10000;
+                            }
+                            else
+                            {
+                                for(int xx = -1; xx < 2; xx++)
+                                {
+                                    for(int yy = -1; yy < 2; yy++)
+                                    {
+                                        for(int zz = -1; zz < 2; zz++)
+                                        {
+
+                                            if(vs[v - 1][x + xx, y + yy, z + zz] != null && TransformLogic.ColorValue(vs[v - 1][x + xx, y + yy, z + zz].vox.color) >= 16)
+                                            {
+                                                colorCount[vs[v - 1][x + xx, y + yy, z + zz].vox.color]++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            int max = 0, cc = colorCount[0], tmp;
+                            for(int idx = 1; idx < 256; idx++)
+                            {
+                                tmp = colorCount[idx];
+                                if(tmp > cc)
+                                {
+                                    cc = tmp;
+                                    max = idx;
+                                }
+                            }
+                            vs[v][x, y, z].vox.color = (byte)max;
+                        }
+                    }
+
+                }
+            }
+            return vs[smoothLevel - 1];
+        }
+
     }
 }

@@ -738,10 +738,13 @@ namespace AssetsPV
 
         public static void InitializeWPalette()
         {
-            for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
+            if(VoxelLogic.VisualMode == "CU")
             {
-                Directory.CreateDirectory(altFolder + "color" + p);
-                Directory.CreateDirectory("frames/" + altFolder + "color" + p);
+                for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
+                {
+                    Directory.CreateDirectory(altFolder + "color" + p);
+                    Directory.CreateDirectory("frames/" + altFolder + "color" + p);
+                }
             }
             wrendered = storeColorCubesWBold();
             simplepalettes = new byte[wrendered.Length][][];
@@ -855,11 +858,11 @@ namespace AssetsPV
 
         public static void writePaletteImages()
         {
-            Directory.CreateDirectory("palettes");
+            Directory.CreateDirectory(altFolder + "palettes");
             for(int c = 0; c < simplepalettes.Length; c++)
             {
                 ImageInfo imi = new ImageInfo(256, 1, 8, false, false, true);
-                PngWriter png = FileHelper.CreatePngWriter("palettes" + "/color" + c + ".png", imi, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "palettes" + "/color" + c + ".png", imi, true);
                 byte[][] b = new byte[1][];
                 b[0] = new byte[256];
                 for(int i = 0; i < 256; i++)
@@ -1135,6 +1138,22 @@ namespace AssetsPV
             }
 
 
+            List<string> imageNames = new List<string>(4 * framelimit);
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png");
+                }
+            }
+            
+
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated");
+
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -1143,7 +1162,7 @@ namespace AssetsPV
             s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
             //bin.Close();
 
             //            processFiringLarge(u);
@@ -1183,7 +1202,7 @@ namespace AssetsPV
             }
             FaceVoxel[][,,] faces = new FaceVoxel[4][,,];
 
-            int framelimit = 8;
+            int framelimit = 4;
 
 
             string folder = (altFolder);//"color" + i;
@@ -1196,7 +1215,7 @@ namespace AssetsPV
                 }
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameLargeW(faces[f % 4], palette, dir, f, framelimit, true, false);
+                    byte[][] b = processFrameLargeW(faces[f], palette, dir, f, framelimit, true, false);
 
                     ImageInfo imi = new ImageInfo(88, 108, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png", imi, true);
@@ -1206,7 +1225,25 @@ namespace AssetsPV
                 }
             }
 
+            List<string> imageNames = new List<string>(4 * framelimit * 2);
 
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png");
+                }
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Walk_Large_face" + dir + "_" + f + ".png");
+                }
+            }
+
+
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Large_animated");
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -1220,7 +1257,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Large_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
 
             //            processFiringDouble(u);
 
@@ -1296,6 +1333,22 @@ namespace AssetsPV
             }
 
 
+            List<string> imageNames = new List<string>(4 * framelimit);
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Huge_face" + dir + "_" + f + ".png");
+                }
+            }
+
+
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated");
+
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -1304,12 +1357,12 @@ namespace AssetsPV
             s = folder + "/palette" + palette + "_" + u + "_Huge_face* ";
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
             //bin.Close();
 
             //            processFiringHuge(u);
 
-            processExplosionHugeW(u, palette);
+            processExplosionHugeW(u, palette, false);
 
         }
 
@@ -1359,6 +1412,7 @@ namespace AssetsPV
                         folder + "/color{0}/" + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
+            /*
             List<string> imageNames = new List<string>(4 * 8 * 2 * framelimit);
             for(int p = 0; p < 8; p++)
             {
@@ -1374,7 +1428,7 @@ namespace AssetsPV
                     }
                 }
             }
-            /*
+            
             Directory.CreateDirectory("gifs/" + altFolder);
             Console.WriteLine("Running GIF conversion ...");
             WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
@@ -2027,7 +2081,7 @@ namespace AssetsPV
 
                 }
             }
-            int framelimit = 8;
+            int framelimit = 4;
 
             FaceVoxel[][,,] faces = new FaceVoxel[4][,,];
 
@@ -2042,7 +2096,7 @@ namespace AssetsPV
                 }
                 for(int f = 0; f < framelimit; f++)
                 {
-                    byte[][] b = processFrameHugeW(faces[f % 4], palette, dir, f, framelimit, true, false);
+                    byte[][] b = processFrameHugeW(faces[f], palette, dir, f, framelimit, true, false);
 
                     ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png", imi, true);
@@ -2050,7 +2104,24 @@ namespace AssetsPV
                 }
             }
 
+            List<string> imageNames = new List<string>(4 * framelimit * 2);
 
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png");
+                }
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Walk_Huge_face" + dir + "_" + f + ".png");
+                }
+            }
+            
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Huge_animated");
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -2064,7 +2135,7 @@ namespace AssetsPV
             }
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Walk_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
 
             //            processFiringDouble(u);
 
@@ -2358,13 +2429,27 @@ namespace AssetsPV
                     byte[][] b = processFrameHugeW(explode[frame], palette, d, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Large_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "palette" + palette + "_" + u + "_Large_face" + d + "_death_" + frame + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);
                 }
             }
 
 
             Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            List<string> imageNames = new List<string>(4 * 12);
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < 12; f++)
+                {
+                    imageNames.Add(folder + "palette" + palette + "_" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                }
+            }
+            
+            WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_animated");
+
+            /*
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
             string s = "";
@@ -2380,7 +2465,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-
+            */
             //bin.Close();
         }
         public static void processExplosionLargeW(string u, int palette, MagicaVoxelData[] voxels, bool shadowless)
@@ -2865,12 +2950,25 @@ namespace AssetsPV
                     byte[][] b = processFrameMassiveW(explode[frame], palette, d, frame, 8, true, shadowless);
 
                     ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_fiery_explode_" + frame + ".png", imi, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);
                 }
             }
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            List<string> imageNames = new List<string>(4 * 12);
 
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < 12; f++)
+                {
+                    imageNames.Add(folder + "palette" + palette + "_" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+                }
+            }
 
+            WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_animated");
+
+            /*
             Directory.CreateDirectory("gifs/" + altFolder);
             ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
             startInfo.UseShellExecute = false;
@@ -2887,7 +2985,7 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 11 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_explosion_animated.gif";
             Console.WriteLine("Running convert.exe ...");
             Process.Start(startInfo).WaitForExit();
-
+            */
             //bin.Close();
         }
 
@@ -4108,15 +4206,12 @@ namespace AssetsPV
 
                                         if(wditheredcurrent[mod_color][sp][i * 4 + j * 16] != 0)
                                         {
-                                            // FIGURE THIS OUT LATER
-                                            /*
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
-                                                argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] + 160, 255);
-                                                argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] + 160, 255);
-                                                argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] + 160, 255);
-                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                                //10 is eye shine
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
                                             }
+                                            /*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
                                             {
                                                 float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
@@ -4140,23 +4235,20 @@ namespace AssetsPV
                                                 argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
                                                 argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
                                                 argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
-                                            }
+                                            }*/
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha)
                                             {
-                                                float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) + 0.3f;
-                                                argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                                int n = (int)Math.Round((Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) - 0.5f) * 4f);
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
                                             }
                                             else
-                                            {*/
-                                            if(mod_color == 27) //water
-                                                argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
-                                            else
-                                                argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            {
+                                                if(mod_color == 27) //water
+                                                    argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+                                                else
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
 
-                                            //}
+                                            }
                                             if(argbValues[p] != 0)
                                             {
                                                 zbuffer[p] = vx.z * 2 + vx.x * 2 - vx.y * 2;
@@ -4453,14 +4545,12 @@ namespace AssetsPV
                                         if(wditheredcurrent[mod_color][sp][i * 4 + j * 16] != 0)
                                         {
                                             // FIGURE THIS OUT LATER
-                                            /*
+
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
-                                                argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] + 160, 255);
-                                                argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] + 160, 255);
-                                                argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] + 160, 255);
-                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
                                             }
+                                            /*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
                                             {
                                                 float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
@@ -4484,22 +4574,19 @@ namespace AssetsPV
                                                 argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
                                                 argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
                                                 argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
-                                            }
+                                            }*/
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha)
                                             {
-                                                float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) + 0.3f;
-                                                argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                                int n = (int)Math.Round((Simplex.FindNoiseTight(frame % 4, facing, vx.x + 20, vx.y + 20, vx.z) - 0.5f) * 4f);
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
                                             }
                                             else
-                                            {*/
-                                            if(useColorIndices && mod_color == 27) //water
-                                                argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
-                                            else
-                                                argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
-                                            //}
+                                            {
+                                                if(useColorIndices && mod_color == 27) //water
+                                                    argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+                                                else
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            }
                                             if(argbValues[p] != 0)
                                             {
                                                 zbuffer[p] = vx.z * 2 + vx.x * 2 - vx.y * 2;
@@ -4791,15 +4878,11 @@ namespace AssetsPV
 
                                         if(wditheredcurrent[mod_color][sp][i * 4 + j * 16] != 0)
                                         {
-                                            // FIGURE THIS OUT LATER
-                                            /*
+
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
-                                                argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] + 160, 255);
-                                                argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] + 160, 255);
-                                                argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] + 160, 255);
-                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
-                                            }
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
+                                            }/*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
                                             {
                                                 float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
@@ -4823,22 +4906,19 @@ namespace AssetsPV
                                                 argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
                                                 argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
                                                 argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
-                                            }
+                                            }*/
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha)
                                             {
-                                                float n = Simplex.FindNoiseTight(frame % 4, facing, vx.x + 50, vx.y + 50, vx.z) + 0.3f;
-                                                argbValues[p - 3] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 2] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 1] = (byte)VoxelLogic.Clamp(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 24 * (n - 0.8), 1, 255);
-                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                                int n = (int)Math.Round((Simplex.FindNoiseTight(frame % 4, facing, vx.x + 0, vx.y + 0, vx.z) - 0.5f) * 4f);
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
                                             }
                                             else
-                                            {*/
-                                            if(mod_color == 27) //water
-                                                argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
-                                            else
-                                                argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
-                                            //}
+                                            {
+                                                if(mod_color == 27) //water
+                                                    argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+                                                else
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            }
 
                                             if(argbValues[p] != 0)
                                             {
@@ -5326,10 +5406,9 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
-            VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_S2/";
-            System.IO.Directory.CreateDirectory(altFolder);
-            CURedux.Initialize(true);
+            //VoxelLogic.VisualMode = "CU";
+            //altFolder = "CU_S2/";
+            //CURedux.Initialize(true);
 
             //VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
@@ -5339,18 +5418,16 @@ namespace AssetsPV
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
             //MonPalettes.Initialize();
-            //            SaPalettes.Initialize();
+            
+            altFolder = "sau11/";
+            VoxelLogic.VisualMode = "W";
+            SaPalettes.Initialize();
+            System.IO.Directory.CreateDirectory(altFolder);
             InitializeWPalette();
 
             //            altFolder = "sau10/";
             //            makeFlatTiling().Save("tiling_flat_gray.png");
-
             /*
-            processUnitHugeW("Grass", 35, true, false);
-            processUnitHugeW("Tree", 35, true, false);
-            processUnitHugeW("Boulder", 36, true, false);
-            processUnitHugeW("Rubble", 36, true, false);
-
             processUnitLargeW("Rakgar", 18, true, false);
 
             processUnitLargeW("Lomuk", 13, false, false);
@@ -5429,6 +5506,10 @@ namespace AssetsPV
             processUnitHugeW("Desk", 41, true, false);
             processUnitHugeW("Computer_Desk", 41, true, false);
             processUnitHugeW("Computer_Desk", 42, true, false);
+            processUnitHugeW("Grass", 35, true, false);
+            processUnitHugeW("Tree", 35, true, false);
+            processUnitHugeW("Boulder", 36, true, false);
+            processUnitHugeW("Rubble", 36, true, false);
             */
             /*
             processHatLargeW("Generic_Male", 0, "Berserker");
@@ -5742,7 +5823,7 @@ namespace AssetsPV
             renderTerrainDetailed("Ocean");
             */
             //WriteAllGIFs();
-            makeDetailedTiling();
+            //makeDetailedTiling();
             //processUnitLargeW("Charlie", 1, true, false);
 
             /*
