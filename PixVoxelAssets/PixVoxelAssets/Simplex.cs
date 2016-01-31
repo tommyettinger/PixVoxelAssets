@@ -22,7 +22,7 @@ namespace AssetsPV
         private const double NORM_3D = 1.0 / 103.0;
         private const double NORM_4D = 1.0 / 30.0;
         private const float NORM_3DF = 1.0F / 103.0F;
-        private const double NORM_4DF = 1.0F / 30.0F;
+        private const float NORM_4DF = 1.0F / 30.0F;
 
         private byte[] perm;
         private byte[] perm2D;
@@ -461,7 +461,7 @@ namespace AssetsPV
             return value * NORM_4D;
         }
 
-        public double EvaluateFloat(double x, double y, double z, double w)
+        public float EvaluateFloat(double x, double y, double z, double w)
         {
             var stretchOffset = (x + y + z + w) * STRETCH_4D;
             var xs = x + stretchOffset;
@@ -526,7 +526,7 @@ namespace AssetsPV
 
                 c = c.Next;
             }
-            return value * NORM_4D;
+            return (float)value * NORM_4DF;
         }
 
         private class Contribution2
@@ -712,12 +712,26 @@ namespace AssetsPV
             }
         }
 
-
-        static Simplex()
+        public static float RotatedNoise4D(int facing, int x, int y, int z, int w)
         {
+            switch(facing)
+            {
+                case 1:
+                    return major.EvaluateFloat(y / 3.0, (159f - x) / 3.0, z / 3.0, w / 7.0);
+                case 2:
+                    return major.EvaluateFloat((159 - x) / 3.0, (159 - y) / 3.0, z / 3.0, w / 7.0);
+                case 3:
+                    return major.EvaluateFloat((159 - y) / 3.0, x / 3.0, z / 3.0, w / 7.0);
+                default:
+                    return major.EvaluateFloat(x / 3.0, y / 3.0, z / 3.0, w / 7.0);
+            }
+        }
 
-            OpenSimplexNoise major = new OpenSimplexNoise(1234567890L);
-            OpenSimplexNoise minor = new OpenSimplexNoise(2143658709L);
+        public static OpenSimplexNoise major = new OpenSimplexNoise(1234567890L);
+        public static OpenSimplexNoise minor = new OpenSimplexNoise(2143658709L);
+        
+        public static void InitSimplex()
+        {
             for (int x = 0; x < 160; x++)
             {
                 for (int y = 0; y < 160; y++)
@@ -778,7 +792,7 @@ namespace AssetsPV
                     }
                 }
             }
-
+            /*
             float[,] blue = new float[0x10, 0x10], orange = new float[0x10, 0x10];
             {
                 //blue block
@@ -846,30 +860,15 @@ namespace AssetsPV
                 {
                     for(int y = 0; y < 0x10; y++)
                     {
-                        /* From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
-                        for x=0,bufferwidth-1,1 do
-        for y=0,bufferheight-1,1 do
-            local s=x/bufferwidth
-            local t=y/bufferheight
-            local dx=x2-x1
-            local dy=y2-y1
-
-            local nx=x1+cos(s*2*pi)*dx/(2*pi)
-            local ny=y1+cos(t*2*pi)*dy/(2*pi)
-            local nz=x1+sin(s*2*pi)*dx/(2*pi)
-            local nw=y1+sin(t*2*pi)*dy/(2*pi)
-
-            buffer:set(x,y,Noise4D(nx,ny,nz,nw))
-        end
-    end
-    */
+                        // From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
+    
                         //always between 0.0F and 3.0F, tends strongly toward 3.0 anywhere close to center, 0.0 always at edges
                         float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(7.5F - x), Math.Abs(7.5F - y)) / 6.5F))), 0.5F) * 6F;
                         NoiseGridFlatWater[v, x, y] = (float)((major.EvaluateFloat(x / 4.0, y / 4.0, v * 2.5) * 3.0F + minor.EvaluateFloat(x / 0.9, y / 0.9, v * 3.5)) / 4.0F) * contrib;
-                        /*if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
-                        {
-                            NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
-                        }*/
+                        //if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
+                        //{
+                        //    NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
+                        //}
                         if(7.5 - Math.Abs(7.5 - x) >= y)
                         {
                             if(north)
@@ -924,7 +923,7 @@ namespace AssetsPV
                 }
             }
 
-
+            
             blue = new float[120, 120];
             orange = new float[120, 120];
             {
@@ -995,30 +994,15 @@ namespace AssetsPV
                 {
                     for(int y = 0; y < 120; y++)
                     {
-                        /* From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
-                        for x=0,bufferwidth-1,1 do
-        for y=0,bufferheight-1,1 do
-            local s=x/bufferwidth
-            local t=y/bufferheight
-            local dx=x2-x1
-            local dy=y2-y1
-
-            local nx=x1+cos(s*2*pi)*dx/(2*pi)
-            local ny=y1+cos(t*2*pi)*dy/(2*pi)
-            local nz=x1+sin(s*2*pi)*dx/(2*pi)
-            local nw=y1+sin(t*2*pi)*dy/(2*pi)
-
-            buffer:set(x,y,Noise4D(nx,ny,nz,nw))
-        end
-    end
-    */
+                        // From http://www.gamedev.net/blog/33/entry-2138456-seamless-noise/
+    
                         //always between 0.0F and 3.0F, tends strongly toward 3.0 anywhere close to center, 0.0 always at edges
                         float contrib = Math.Min(Math.Max(0.0F, (1F - (Math.Max(Math.Abs(59.5F - x), Math.Abs(59.5F - y)) / 50F))), 0.5F) * 6F;
                         NoiseGridFlatWaterHuge[v, x, y] = (float)((major.EvaluateFloat(x / 5.5, y / 5.5, v * 0.25) * 3.0F + minor.EvaluateFloat(x / 2.2, y / 2.2, v * 0.35)) / 4.0F) * contrib;
-                        /*if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
-                        {
-                            NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
-                        }*/
+                        //if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
+                        //{
+                        //    NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
+                        //}
                         if(59.5 - Math.Abs(59.5 - x) >= y)
                         {
                             if(north)
@@ -1072,6 +1056,7 @@ namespace AssetsPV
                     }
                 }
             }
+            */
         }
 
     }

@@ -16999,14 +16999,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2 + rowWidthBytes * 2];
                         colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + rowWidthBytes * 2];
                         colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 3] = wrendered[palette][(253 - i) / 4][3 + rowWidthBytes * 2];
+                        colors[(i - 1) * 4 + 3] = 255;// wrendered[palette][(253 - i) / 4][3 + rowWidthBytes * 2];
                     }
                     else if((255 - i) % 4 == 0 && wcolorcount + (255 - i) / 4 < wrendered[palette].Length)
                     {
                         colors[(i - 1) * 4] = wrendered[palette][(255 - i) / 4 + wcolorcount][2 + rowWidthBytes * 2];
                         colors[(i - 1) * 4 + 1] = wrendered[palette][(255 - i) / 4 + wcolorcount][1 + rowWidthBytes * 2];
                         colors[(i - 1) * 4 + 2] = wrendered[palette][(255 - i) / 4 + wcolorcount][0 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 3] = wrendered[palette][(255 - i) / 4 + wcolorcount][3 + rowWidthBytes * 2];
+                        colors[(i - 1) * 4 + 3] = 255;// wrendered[palette][(255 - i) / 4 + wcolorcount][3 + rowWidthBytes * 2];
                     }
                     else
                     {
