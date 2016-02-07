@@ -29,12 +29,20 @@ namespace AssetsPV
         DimTopBack = 11,
         BrightBottomBack = 12,
         DimBottomBack = 13,
-        BackBack = 14;
+        BackBack = 14,
+        BackBackTop = 15,
+        BackBackBottom = 16,
+        RearBrightTop = 17,
+        RearDimTop = 18,
+        RearBrightBottom = 19,
+        RearDimBottom = 20;
 
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             {  Slope.BrightTop, BrightTop }, {  Slope.DimTop, DimTop }, {  Slope.BrightDim, BrightDim }, {  Slope.BrightDimTop, BrightDimTop }, {  Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
             {  Slope.BrightDimBottom, BrightDimBottom }, {  Slope.BrightBack, BrightBack }, {  Slope.DimBack, DimBack },
-            {  Slope.BrightTopBack, BrightTopBack }, {  Slope.DimTopBack, DimTopBack }, {  Slope.BrightBottomBack, BrightBottomBack }, {  Slope.DimBottomBack, DimBottomBack }, {  Slope.BackBack, BackBack } };
+            {  Slope.BrightTopBack, BrightTopBack }, {  Slope.DimTopBack, DimTopBack }, {  Slope.BrightBottomBack, BrightBottomBack }, {  Slope.DimBottomBack, DimBottomBack }, {  Slope.BackBack, BackBack },
+            {  Slope.BackBackTop, BackBackTop }, {  Slope.BackBackBottom, BackBackBottom },
+            {  Slope.RearBrightTop, RearBrightTop }, {  Slope.RearDimTop, RearDimTop }, {  Slope.RearBrightBottom, RearBrightBottom }, {  Slope.RearDimBottom, RearDimBottom }};
         public static Random r = new Random(0x1337BEEF);
         public static string altFolder = "", blankFolder = "";
 
@@ -52,8 +60,8 @@ namespace AssetsPV
         {
             VoxelLogic.wpalettecount = VoxelLogic.wpalettes.Length;
             //            wcolorcount = VoxelLogic.wpalettes[0].Length;
-            // 15 is the number of Slope enum types.
-            byte[,,,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wpalettes[0].Length, 15, 80];
+            // 21 is the number of Slope enum types.
+            byte[,,,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wpalettes[0].Length, 21, 80];
 
             Image image = new Bitmap("white.png");
             ImageAttributes imageAttributes = new ImageAttributes();
@@ -152,7 +160,7 @@ namespace AssetsPV
                                 s = VoxelLogic.Clamp((s * 0.5), 0.0, 0.5);
                                 v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
                             }
-                            for(int slp = 0; slp < 15; slp++)
+                            for(int slp = 0; slp < 21; slp++)
                             {
                                 Color c2 = Color.Transparent;
                                 double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
@@ -192,7 +200,8 @@ namespace AssetsPV
                                                     {
                                                         //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
                                                     }*/
-                                                    if(i + j >= 5 && j > 0)
+                                                    //if(i + j >= 5 && j > 0)
+                                                    if(i + j / 2 >= 4)
                                                     {
                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
                                                     }
@@ -213,7 +222,8 @@ namespace AssetsPV
                                                         //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
                                                     }*/
 
-                                                    if(i < j - 1 && j > 0)
+                                                    //if(i < j - 1 && j > 0)
+                                                    if(i < j / 2)
                                                     {
                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
 
@@ -323,15 +333,39 @@ namespace AssetsPV
                                                     }
                                                 }
                                                 break;
-                                            case DimBottomBack:
+                                            case BrightBottomBack:
                                                 {
-                                                    if(i + j <= 2)
+                                                    if(i >= j)
                                                     {
                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
                                                     }
                                                 }
                                                 break;
-                                            case BrightBottomBack:
+                                            case DimBottomBack:
+                                                {
+                                                    if(i + j <= 3)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearBrightTop:
+                                                {
+                                                    if(i + (j + 3) / 4 >= 3 && j > 0)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearDimTop:
+                                                {
+                                                    if(i - (j + 3) / 4 <= 0 && j > 0)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearBrightBottom:
                                                 {
                                                     if(i > j)
                                                     {
@@ -339,6 +373,15 @@ namespace AssetsPV
                                                     }
                                                 }
                                                 break;
+                                            case RearDimBottom:
+                                                {
+                                                    if(i + j <= 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BackBackTop:
                                             case BackBack:
                                                 {
                                                     if(j > 0)
@@ -347,6 +390,7 @@ namespace AssetsPV
                                                     }
                                                 }
                                                 break;
+                                            case BackBackBottom:
                                             default:
                                                 {
 
@@ -425,9 +469,9 @@ namespace AssetsPV
                 VoxelLogic.wrendered[i] = new byte[VoxelLogic.wpalettes[0].Length][];
                 for(int c = 0; c < VoxelLogic.wpalettes[0].Length; c++)
                 {
-                    cubes2[i][c] = new byte[15][];
+                    cubes2[i][c] = new byte[21][];
                     VoxelLogic.wrendered[i][c] = new byte[80];
-                    for(int sp = 0; sp < 15; sp++)
+                    for(int sp = 0; sp < 21; sp++)
                     {
                         cubes2[i][c][sp] = new byte[80];
                         for(int j = 0; j < 80; j++)
@@ -449,8 +493,8 @@ namespace AssetsPV
         {
             VoxelLogic.wpalettecount = VoxelLogic.wpalettes.Length;
             //            wcolorcount = VoxelLogic.wpalettes[0].Length;
-            // 15 is the number of Slope enum types.
-            byte[,,,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wpalettes[0].Length, 15, 80];
+            // 21 is the number of Slope enum types.
+            byte[,,,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wpalettes[0].Length, 21, 80];
 
             int width = 4;
             int height = 5;
@@ -474,7 +518,7 @@ namespace AssetsPV
                     {
                         for(int j = 0; j < height; j++)
                         {
-                            for(int slp = 0; slp < 15; slp++)
+                            for(int slp = 0; slp < 21; slp++)
                             {
                                 byte[] c2 = new byte[] { 0, 0, 0, 0 };
 
@@ -512,7 +556,7 @@ namespace AssetsPV
                                                     break;
                                                 case BrightTop:
                                                     {
-                                                        if(i + j >= 5 && j > 0)
+                                                        if(i + j / 2 >= 4)
                                                         {
                                                             c2 = new byte[] { dimi, dimi, dimi, dimi };
                                                             // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
@@ -526,7 +570,7 @@ namespace AssetsPV
                                                     break;
                                                 case DimTop:
                                                     {
-                                                        if(i < j - 1 && j > 0)
+                                                        if(i < j / 2)
                                                         {
                                                             c2 = new byte[] { brighti, brighti, brighti, brighti };
                                                             // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
@@ -623,15 +667,40 @@ namespace AssetsPV
                                                         }
                                                     }
                                                     break;
+                                                case BrightBottomBack:
+                                                    {
+                                                        if(i >= j)
+                                                        {
+                                                            c2 = new byte[] { dimi, darki, dimi, darki };
+                                                        }
+                                                    }
+                                                    break;
                                                 case DimBottomBack:
                                                     {
-                                                        if(i + j <= 2)
+                                                        if(i + j <= 3)
                                                         {
                                                             c2 = new byte[] { darki, dimi, dimi, darki };
                                                         }
                                                     }
                                                     break;
-                                                case BrightBottomBack:
+
+                                                case RearBrightTop:
+                                                    {
+                                                        if(i + (j + 3) / 4 >= 3 && j > 0)
+                                                        {
+                                                            c2 = new byte[] { topi, brighti, topi, topi };
+                                                        }
+                                                    }
+                                                    break;
+                                                case RearDimTop:
+                                                    {
+                                                        if(i - (j + 3) / 4 <= 0 && j > 0)
+                                                        {
+                                                            c2 = new byte[] { brighti, brighti, brighti, brighti };
+                                                        }
+                                                    }
+                                                    break;
+                                                case RearBrightBottom:
                                                     {
                                                         if(i > j)
                                                         {
@@ -639,6 +708,16 @@ namespace AssetsPV
                                                         }
                                                     }
                                                     break;
+                                                case RearDimBottom:
+                                                    {
+                                                        if(i + j <= 2)
+                                                        {
+                                                            c2 = new byte[] { darki, dimi, dimi, darki };
+                                                        }
+                                                    }
+                                                    break;
+
+                                                case BackBackTop:
                                                 case BackBack:
                                                     {
                                                         if(j > 0)
@@ -647,6 +726,7 @@ namespace AssetsPV
                                                         }
                                                     }
                                                     break;
+                                                case BackBackBottom:
                                                 default:
                                                     {
                                                     }
@@ -719,8 +799,8 @@ namespace AssetsPV
                 cubes2[i] = new byte[VoxelLogic.wpalettes[0].Length][][];
                 for(int c = 0; c < VoxelLogic.wpalettes[0].Length; c++)
                 {
-                    cubes2[i][c] = new byte[15][];
-                    for(int sp = 0; sp < 15; sp++)
+                    cubes2[i][c] = new byte[21][];
+                    for(int sp = 0; sp < 21; sp++)
                     {
                         cubes2[i][c][sp] = new byte[80];
                         for(int j = 0; j < 80; j++)
@@ -4019,6 +4099,34 @@ namespace AssetsPV
                                     || current_color == VoxelLogic.wcolorcount + 10 || current_color == VoxelLogic.wcolorcount + 20)
                                     ? -2 : (still) ? 0 : jitter) + innerY);
         }
+        private static byte DitherRough(byte[] sprite, int innerX, int innerY, int x, int y, int z)
+        {
+            if(sprite[innerY * 16 + innerX * 4] == 0)
+                return 0;
+            int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
+            i ^= (x + 2) * (y + 3);
+            i ^= (x + 3) * (z + 2);
+            i ^= (y + 2) * (z + 3);
+            i %= 10;
+            switch(i)
+            {
+                case 0:
+                case 3:
+                case 6:
+                case 9:
+                    return sprite[innerY * 16 + innerX * 4];
+                case 1:
+                case 5:
+                case 8:
+                    return sprite[innerY * 16 + innerX * 4 + 1];
+                case 2:
+                case 7:
+                    return sprite[innerY * 16 + innerX * 4 + 2];
+                case 4:
+                default:
+                    return sprite[innerY * 16 + innerX * 4 + 3];
+            }
+        }
         private static byte Dither(byte[] sprite, int innerX, int innerY, int x, int y, int z)
         {
             //            switch((((7 * innerX) * (3 * innerY) + x + y + z) ^ ((11 * innerX) * (5 * innerY) + x + y + z) ^ (7 - innerX - innerY)) % 16)
@@ -4028,7 +4136,7 @@ namespace AssetsPV
             int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
             i ^= ((i + 103) << 10) / 1009;
             i %= 16;
-            switch(i ^ i >> 1)
+            switch(i ^ (i >> 1))
             {
                 case 0:
                 case 2:
@@ -5836,7 +5944,7 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             writePaletteImages();
-            
+
             /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
@@ -5853,9 +5961,9 @@ namespace AssetsPV
             
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
-            processUnitHugeWMilitarySuper("Plane_S");
+            processUnitHugeWMilitarySuper("Plane_S");*/
             processUnitHugeWMilitarySuper("Plane_T");
-            
+            /*
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
@@ -5902,11 +6010,12 @@ namespace AssetsPV
             processUnitLargeWMilitary("Copter_S");
             processUnitLargeWMilitary("Copter_T");
             
-            processUnitLargeWMilitary("Plane");*/
+            processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
-            processUnitLargeWMilitary("Plane_S");
+            processUnitLargeWMilitary("Plane_S");*/
             processUnitLargeWMilitary("Plane_T");
-            
+
+            /*
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
@@ -5942,6 +6051,7 @@ namespace AssetsPV
             renderTerrainDetailed("Ocean");
             
             WriteAllGIFs();
+            */
             //makeDetailedTiling();
             //processUnitLargeW("Charlie", 1, true, false);
 
