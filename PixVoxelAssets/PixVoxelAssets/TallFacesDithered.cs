@@ -5953,7 +5953,10 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Castle");
             processUnitHugeWMilitarySuper("Estate");
             processUnitHugeWMilitarySuper("Airport");
-
+            processUnitHugeWMilitarySuper("Farm");
+            processUnitHugeWMilitarySuper("Hospital");
+            processUnitHugeWMilitarySuper("Oil_Well");
+            
             processUnitHugeWMilitarySuper("Copter");
             processUnitHugeWMilitarySuper("Copter_P");
             processUnitHugeWMilitarySuper("Copter_S");
@@ -5961,17 +5964,14 @@ namespace AssetsPV
             
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
-            processUnitHugeWMilitarySuper("Plane_S");*/
+            processUnitHugeWMilitarySuper("Plane_S");
             processUnitHugeWMilitarySuper("Plane_T");
-            /*
+            
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
-            processUnitHugeWMilitarySuper("Farm");
-            processUnitHugeWMilitarySuper("Hospital");
-            processUnitHugeWMilitarySuper("Oil_Well");
-            
+
             
             
             processUnitLargeWMilitary("Infantry");
@@ -6012,10 +6012,9 @@ namespace AssetsPV
             
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
-            processUnitLargeWMilitary("Plane_S");*/
+            processUnitLargeWMilitary("Plane_S");
             processUnitLargeWMilitary("Plane_T");
-
-            /*
+            
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
             processUnitLargeWMilitary("Boat_S");
@@ -6052,6 +6051,7 @@ namespace AssetsPV
             
             WriteAllGIFs();
             */
+
             //makeDetailedTiling();
             //processUnitLargeW("Charlie", 1, true, false);
 

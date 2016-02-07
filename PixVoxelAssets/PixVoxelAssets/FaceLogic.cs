@@ -46,6 +46,49 @@ namespace AssetsPV
             slope = slp;
         }
     }
+
+    public struct Point3D : IComparable<Point3D>, IEquatable<Point3D>
+    {
+        int X, Y, Z;
+        public Point3D(int x, int y, int z)
+        {
+            X = x; Y = y; Z = z;
+        }
+
+        public int CompareTo(Point3D other)
+        {
+            if(Z > other.Z)
+                return 3;
+            if(Z < other.Z)
+                return -3;
+            if(X > other.X)
+                return 2;
+            if(X < other.X)
+                return -2;
+            if(Y > other.Y)
+                return -1;
+            if(Y < other.Y)
+                return 1;
+            return 0;
+        }
+
+        public bool Equals(Point3D other)
+        {
+            return X == other.X && Y == other.Y && Z == other.Z;
+        }
+    }
+
+    public struct Face3D
+    {
+        public Point3D[] Points;
+        public int Color;
+        public Face3D(int color, params Point3D[] points)
+        {
+            Color = color;
+            Points = points;
+        }
+    }
+
     public delegate FaceVoxel[,,] FaceModifier(FaceVoxel[,,] faces);
 
     class FaceLogic
@@ -2244,6 +2287,67 @@ namespace AssetsPV
                 }
             }
             return vs[smoothLevel - 1];
+        }
+
+        public static string ToOFF(FaceVoxel[,,] faces, int palette)
+        {
+            OrderedDictionary<Point3D, int> pts = new OrderedDictionary<Point3D, int>();
+            List<Face3D> fs = new List<Face3D>(1000);
+            int ord = 0;
+            StringBuilder sb = new StringBuilder(10000);
+            sb.AppendLine("OFF");
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+            FaceVoxel fv;
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        fv = faces[x, y, z];
+                        if(fv == null)
+                            continue;
+                        switch(fv.slope)
+                        {
+                            case Slope.Cube:
+                                Point3D p000 = new Point3D(x, y, z);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                Point3D p100 = new Point3D(x + 1, y, z);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                Point3D p010 = new Point3D(x, y + 1, z);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                Point3D p110 = new Point3D(x + 1, y + 1, z);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                Point3D p001 = new Point3D(x, y, z + 1);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                Point3D p101 = new Point3D(x + 1, y, z + 1);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                Point3D p011 = new Point3D(x, y + 1, z + 1);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                Point3D p111 = new Point3D(x + 1, y + 1, z + 1);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
+
+
+                        }
+
+                    }
+                }
+            }
+            return sb.ToString();
         }
 
     }
