@@ -2340,7 +2340,7 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
-
+                                break;
 
                         }
 
