@@ -16936,7 +16936,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         if((255 - mvd.color) % 4 != 0 && current_color >= wcolorcount)
                             continue;
 
-                        if(wcolors[current_color][3] == 0F)
+                        if(wpalettes[palette][current_color][3] == 0F)
                             continue;
 
                         if(current_color == 17 && r.Next(7) < 2) //smoke
