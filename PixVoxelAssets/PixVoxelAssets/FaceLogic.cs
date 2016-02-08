@@ -76,9 +76,18 @@ namespace AssetsPV
         {
             return X == other.X && Y == other.Y && Z == other.Z;
         }
+
+        public override int GetHashCode()
+        {
+            return Z * 0x10000 + X * 0x100 + Y;
+        }
+        public override string ToString()
+        {
+            return X + " " + Y + " " + Z;
+        }
     }
 
-    public struct Face3D
+    public struct Face3D : IEquatable<Face3D>
     {
         public Point3D[] Points;
         public int Color;
@@ -87,6 +96,34 @@ namespace AssetsPV
             Color = color;
             Points = points;
         }
+
+        public bool Equals(Face3D other)
+        {
+            if(other.Points.Length != Points.Length)
+                return false;
+            for(int p = 0; p < Points.Length; p++)
+            {
+                if(!other.Points.Contains(Points[p]))
+                    return false;
+            }
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            unchecked
+            {
+                for(int p = 0; p < Points.Length; p++)
+                {
+                    hash = hash * 31 + Points[p].GetHashCode();
+                }
+            }
+            
+            return hash;
+        }
+
+
     }
 
     public delegate FaceVoxel[,,] FaceModifier(FaceVoxel[,,] faces);
@@ -94,7 +131,7 @@ namespace AssetsPV
     class FaceLogic
     {
 
-        public static byte[,,] VoxListToArrayPure(List<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
+        public static byte[,,] VoxListToArrayPure(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
         {
             byte[,,] data = new byte[xSize, ySize, zSize];
             foreach(MagicaVoxelData mvd in voxelData)
@@ -105,7 +142,7 @@ namespace AssetsPV
             }
             return data;
         }
-        public static byte[,,] VoxListToArray(List<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize, byte shadowColor)
+        public static byte[,,] VoxListToArray(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize, byte shadowColor)
         {
             byte[,,] data = new byte[xSize, ySize, zSize];
             foreach(MagicaVoxelData mvd in voxelData)
@@ -2289,10 +2326,10 @@ namespace AssetsPV
             return vs[smoothLevel - 1];
         }
 
-        public static string ToOFF(FaceVoxel[,,] faces, int palette)
+        public static string WriteOFF(FaceVoxel[,,] faces, int palette)
         {
             OrderedDictionary<Point3D, int> pts = new OrderedDictionary<Point3D, int>();
-            List<Face3D> fs = new List<Face3D>(1000);
+            HashSet<Face3D> fs = new HashSet<Face3D>();
             int ord = 0;
             StringBuilder sb = new StringBuilder(10000);
             sb.AppendLine("OFF");
@@ -2307,31 +2344,25 @@ namespace AssetsPV
                         fv = faces[x, y, z];
                         if(fv == null)
                             continue;
+                        Point3D p000 = new Point3D(x, y, z), p100 = new Point3D(x + 1, y, z), p010 = new Point3D(x, y + 1, z), p110 = new Point3D(x + 1, y + 1, z),
+                            p001 = new Point3D(x, y, z + 1), p101 = new Point3D(x + 1, y, z + 1), p011 = new Point3D(x, y + 1, z + 1), p111 = new Point3D(x + 1, y + 1, z + 1);
                         switch(fv.slope)
                         {
                             case Slope.Cube:
-                                Point3D p000 = new Point3D(x, y, z);
                                 if(!pts.ContainsKey(p000))
                                     pts.Add(p000, ord++);
-                                Point3D p100 = new Point3D(x + 1, y, z);
                                 if(!pts.ContainsKey(p100))
                                     pts.Add(p100, ord++);
-                                Point3D p010 = new Point3D(x, y + 1, z);
                                 if(!pts.ContainsKey(p010))
                                     pts.Add(p010, ord++);
-                                Point3D p110 = new Point3D(x + 1, y + 1, z);
                                 if(!pts.ContainsKey(p110))
                                     pts.Add(p110, ord++);
-                                Point3D p001 = new Point3D(x, y, z + 1);
                                 if(!pts.ContainsKey(p001))
                                     pts.Add(p001, ord++);
-                                Point3D p101 = new Point3D(x + 1, y, z + 1);
                                 if(!pts.ContainsKey(p101))
                                     pts.Add(p101, ord++);
-                                Point3D p011 = new Point3D(x, y + 1, z + 1);
                                 if(!pts.ContainsKey(p011))
                                     pts.Add(p011, ord++);
-                                Point3D p111 = new Point3D(x + 1, y + 1, z + 1);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
@@ -2341,11 +2372,388 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
                                 break;
+                            case Slope.BackBack:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p111, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                break;
+                            case Slope.BrightBack:
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p010, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p100, p101, p011));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                break;
+                            case Slope.BrightDim:
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p001, p011));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p001, p000, p110));
+                                break;
 
+                            case Slope.DimBack:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p011, p101, p100, p010));
+                                break;
+
+                            case Slope.BrightTop:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p111));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p000, p100));
+                                break;
+
+                            case Slope.BrightBottom:
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p001, p010, p011));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p001, p101, p110));
+                                fs.Add(new Face3D(fv.vox.color, p101, p110, p111));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                break;
+
+                            case Slope.RearDimBottom:
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p001, p000, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p011, p111, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p101, p100, p111));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                break;
+
+                            case Slope.RearDimTop:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p010, p001, p101, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p110, p100, p000));
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p101));
+                                fs.Add(new Face3D(fv.vox.color, p101, p001, p000, p100));
+                                break;
+
+
+                            case Slope.DimTop:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p001));
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p010, p000));
+                                fs.Add(new Face3D(fv.vox.color, p010, p110, p011));
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p000, p010));
+                                break;
+
+                            case Slope.DimBottom:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p101, p001, p011, p111));
+                                fs.Add(new Face3D(fv.vox.color, p010, p111, p101, p000));
+                                fs.Add(new Face3D(fv.vox.color, p010, p111, p011));
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p000, p010));
+                                break;
+
+                            case Slope.RearBrightBottom:
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p101, p001, p011, p111));
+                                fs.Add(new Face3D(fv.vox.color, p101, p111, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p110, p111, p011));
+                                fs.Add(new Face3D(fv.vox.color, p100, p001, p011, p110));
+                                break;
+
+                            case Slope.RearBrightTop:
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p100, p101, p000));
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p101, p111));
+                                fs.Add(new Face3D(fv.vox.color, p101, p111, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p110, p111, p010));
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p100, p110));
+                                break;
+                                
+                            case Slope.BrightDimTop:
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p000, p011));
+                                fs.Add(new Face3D(fv.vox.color, p110, p011, p000));
+                                break;
+
+                            case Slope.BrightDimBottom:
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p111));
+                                fs.Add(new Face3D(fv.vox.color, p011, p010, p111));
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p010));
+                                fs.Add(new Face3D(fv.vox.color, p111, p010, p001));
+                                break;
+
+
+                            case Slope.BrightTopBack:
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p110, p100, p010));
+                                fs.Add(new Face3D(fv.vox.color, p110, p111, p010));
+                                fs.Add(new Face3D(fv.vox.color, p110, p100, p111));
+                                fs.Add(new Face3D(fv.vox.color, p010, p111, p100));
+                                break;
+
+                            case Slope.BrightBottomBack:
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p011));
+                                fs.Add(new Face3D(fv.vox.color, p111, p110, p011));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p110));
+                                fs.Add(new Face3D(fv.vox.color, p011, p110, p101));
+                                break;
+
+                            case Slope.BackBackTop:
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p000));
+                                fs.Add(new Face3D(fv.vox.color, p100, p101, p000));
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p101));
+                                fs.Add(new Face3D(fv.vox.color, p000, p101, p110));
+                                break;
+
+                            case Slope.BackBackBottom:
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p101, p111, p001));
+                                fs.Add(new Face3D(fv.vox.color, p101, p100, p001));
+                                fs.Add(new Face3D(fv.vox.color, p101, p111, p100));
+                                fs.Add(new Face3D(fv.vox.color, p001, p100, p111));
+                                break;
+
+                            case Slope.DimTopBack:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p100, p001, p010));
+                                break;
+
+                            case Slope.DimBottomBack:
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                fs.Add(new Face3D(fv.vox.color, p001, p011, p101));
+                                fs.Add(new Face3D(fv.vox.color, p001, p000, p101));
+                                fs.Add(new Face3D(fv.vox.color, p001, p011, p000));
+                                fs.Add(new Face3D(fv.vox.color, p101, p000, p011));
+                                break;
+                                
                         }
 
                     }
                 }
+            }
+            sb.AppendLine(ord + " " + fs.Count + " 0");
+            foreach(var kv in pts)
+            {
+                sb.AppendLine(kv.Key.ToString());
+            }
+            foreach(Face3D f in fs)
+            {
+                sb.Append(f.Points.Length);
+                sb.Append(" ");
+                for(int i = 0; i < f.Points.Length; i++)
+                {
+                    sb.Append(pts[f.Points[i]]);
+                    sb.Append(" ");
+                }
+                int c = (253 - f.Color) / 4;
+                sb.AppendLine(((VoxelLogic.wrendered[palette][c][18] + 1) / 256.0) + " " + ((VoxelLogic.wrendered[palette][c][17] + 1) / 256.0) +
+                    " " + ((VoxelLogic.wrendered[palette][c][16] + 1) / 256.0) + " 1.0");
             }
             return sb.ToString();
         }

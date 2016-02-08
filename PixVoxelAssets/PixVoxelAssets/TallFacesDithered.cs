@@ -5623,6 +5623,31 @@ namespace AssetsPV
             b.Save(altFolder + "tiling_detailed.png", ImageFormat.Png);
         }
 
+
+        public static void processUnitHollowMilitary(string u, int palette)
+        {
+            string folder = "OFF";//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+
+            BinaryReader bin = new BinaryReader(File.Open("CU_Hollow/" + u + "_Hollow_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin); //VoxelLogic.PlaceShadowsW(
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+
+            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
+
+            File.WriteAllText(folder + "/" + u + "_" + palette + ".off", FaceLogic.WriteOFF(faces, palette));            
+        }
+
+
         static void Main(string[] args)
         {
             //altFolder = "botl6/";
@@ -6053,6 +6078,14 @@ namespace AssetsPV
             */
 
             //makeDetailedTiling();
+
+            processUnitHollowMilitary("Tank", 0);
+
+            processUnitHollowMilitary("Tank", 1 + 32 * 8);
+
+            processUnitHollowMilitary("Tank", 3 + 4 * 8);
+
+
             //processUnitLargeW("Charlie", 1, true, false);
 
             /*
