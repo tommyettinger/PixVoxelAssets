@@ -351,7 +351,7 @@ namespace AssetsPV
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             FaceVoxel[,,] data = new FaceVoxel[xSize, ySize, zSize];
-
+            bool[] nearby = new bool[27];
             for(int z = 0; z < zSize; z++)
             {
                 for(int x = 0; x < xSize; x++)
@@ -361,7 +361,31 @@ namespace AssetsPV
                         byte mvd = voxelData[x, y, z];
                         if(mvd > 0 && (VoxelLogic.VisualMode != "CU" || mvd > CURedux.emitter0))
                         {
-                            data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = mvd }, Slope.Cube);
+                            nearby.Fill(false);
+                            for(int i = 0; i < 3; i++)
+                            {
+                                if(x - 1 + i >= 0 && x - 1 + i < xSize)
+                                {
+                                    for(int j = 0; j < 3; j++)
+                                    {
+                                        if(y - 1 + j >= 0 && y - 1 + j < ySize)
+                                        {
+                                            for(int k = 0; k < 3; k++)
+                                            {
+                                                if(z - 1 + k >= 0 && z - 1 + k < zSize)
+                                                {
+                                                    if(voxelData[(x - 1 + i), (y - 1 + j), (z - 1 + k)] == 0)
+                                                    {
+                                                        nearby[i * 9 + j * 3 + k] = voxelData[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(!AllArray(nearby))
+                                data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = mvd }, Slope.Cube);
                         }
                     }
                 }
@@ -436,19 +460,19 @@ namespace AssetsPV
                                 }
                                 else if(xdown && yup && !xup && !ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightDimTop);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightDimTopThick);
                                 }
                                 else if(xup && yup && !xdown && !ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightTopBack);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightTopBackThick);
                                 }
                                 else if(!xup && !yup && xdown && ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.DimTopBack);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.DimTopBackThick);
                                 }
                                 else if(!xdown && !yup && xup && ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BackBackTop);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BackBackTopThick);
                                 }
                             }
                             else if(zup)
@@ -472,19 +496,19 @@ namespace AssetsPV
                                 }
                                 else if(xdown && yup && !xup && !ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightDimBottom);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightDimBottomThick);
                                 }
                                 else if(xup && yup && !xdown && !ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightBottomBack);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightBottomBackThick);
                                 }
                                 else if(!xup && !yup && xdown && ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.DimBottomBack);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.DimBottomBackThick);
                                 }
                                 else if(!xdown && !yup && xup && ydown)
                                 {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BackBackBottom);
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BackBackBottomThick);
                                 }
                             }
                             else
@@ -520,6 +544,7 @@ namespace AssetsPV
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             FaceVoxel[,,] faces = new FaceVoxel[xSize, ySize, zSize];
             bool[] nearby = new bool[27];
+            FaceVoxel[] nearFaces = new FaceVoxel[27];
             for(int z = 0; z < zSize; z++)
             {
                 for(int x = 0; x < xSize; x++)
@@ -606,42 +631,42 @@ namespace AssetsPV
                                 }
                                 else if(!xup && !ydown && nearby[0 + 3 + 2] && nearby[9 + 6 + 2] && !nearby[18 + 3 + 2] && !nearby[9 + 0 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimTopThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimTop);
                                 }
                                 //else if(xup && yup && !xdown && !ydown)
                                 else if(!xdown && !ydown && !nearby[0 + 3 + 2] && nearby[9 + 6 + 2] && nearby[18 + 3 + 2] && !nearby[9 + 0 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightTopBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightTopBack);
                                 }
                                 //else if(!xup && !yup && xdown && ydown)
                                 else if(!xup && !yup && nearby[0 + 3 + 2] && !nearby[9 + 6 + 2] && !nearby[18 + 3 + 2] && nearby[9 + 0 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimTopBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimTopBack);
                                 }
                                 //else if(!xdown && !yup && xup && ydown)
                                 else if(!xdown && !yup && !nearby[0 + 3 + 2] && !nearby[9 + 6 + 2] && nearby[18 + 3 + 2] && nearby[9 + 0 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackTopThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackTop);
                                 }
 
                                 else if(!xup && !ydown && nearby[18 + 3 + 0] && nearby[9 + 0 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimTopThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimTop);
                                 }
                                 //else if(xup && yup && !xdown && !ydown)
                                 else if(!xdown && !ydown && nearby[9 + 0 + 0] && nearby[0 + 3 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightTopBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightTopBack);
                                 }
                                 //else if(!xup && !yup && xdown && ydown)
                                 else if(!xup && !yup && nearby[18 + 3 + 0] && nearby[9 + 6 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimTopBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimTopBack);
                                 }
                                 //else if(!xdown && !yup && xup && ydown)
                                 else if(!xdown && !yup && nearby[0 + 3 + 0] && nearby[9 + 6 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackTopThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackTop);
                                 }
 
                                 else if(!ydown && ((nearby[9 + 6 + 2] && !nearby[9 + 0 + 2])))
@@ -664,21 +689,21 @@ namespace AssetsPV
                                 }
 
 
-                                else if(!ydown && ((nearby[9 + 0 + 0] && yup)))
+                                else if(!ydown && yup) // && ((nearby[9 + 0 + 0]))
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightTop);
                                 }
-                                else if(!xup && ((nearby[18 + 3 + 0] && xdown)))
+                                else if(!xup && xdown) // && ((nearby[18 + 3 + 0]))
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.DimTop);
                                 }
                                 //else if(!xdown && !yup && xup && !ydown)
-                                else if(!xdown && ((nearby[0 + 3 + 0] && xup)))
+                                else if(!xdown && xup) // && ((nearby[0 + 3 + 0]))
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.RearBrightTop);
                                 }
                                 //else if(!xdown && !yup && !xup && ydown)
-                                else if(!yup && ((nearby[9 + 6 + 0] && ydown)))
+                                else if(!yup && ydown) // && ((nearby[9 + 6 + 0]))
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.RearDimTop);
                                 }
@@ -718,43 +743,43 @@ namespace AssetsPV
                                 //else if(xdown && yup && !xup && !ydown)
                                 else if(!xup && !ydown && nearby[0 + 3 + 0] && nearby[9 + 6 + 0] && !nearby[18 + 3 + 0] && !nearby[9 + 0 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimBottomThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimBottom);
                                 }
                                 //else if(xup && yup && !xdown && !ydown)
                                 else if(!xdown && !ydown && !nearby[0 + 3 + 0] && nearby[9 + 6 + 0] && nearby[18 + 3 + 0] && !nearby[9 + 0 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightBottomBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightBottomBack);
                                 }
                                 //else if(!xup && !yup && xdown && ydown)
                                 else if(!xup && !yup && nearby[0 + 3 + 0] && !nearby[9 + 6 + 0] && !nearby[18 + 3 + 0] && nearby[9 + 0 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimBottomBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimBottomBack);
                                 }
                                 //else if(!xdown && !yup && xup && ydown)
                                 else if(!xdown && !yup && !nearby[0 + 3 + 0] && !nearby[9 + 6 + 0] && nearby[18 + 3 + 0] && nearby[9 + 0 + 0])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackBottomThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackBottom);
                                 }
 
                                 //else if(xdown && yup && !xup && !ydown)
                                 else if(!xup && !ydown && nearby[18 + 3 + 2] && nearby[9 + 0 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimBottomThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightDimBottom);
                                 }
                                 //else if(xup && yup && !xdown && !ydown)
                                 else if(!xdown && !ydown && nearby[9 + 0 + 2] && nearby[0 + 3 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightBottomBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightBottomBack);
                                 }
                                 //else if(!xup && !yup && xdown && ydown)
                                 else if(!xup && !yup && nearby[18 + 3 + 2] && nearby[9 + 6 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimBottomBackThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimBottomBack);
                                 }
                                 //else if(!xdown && !yup && xup && ydown)
                                 else if(!xdown && !yup && nearby[0 + 3 + 2] && nearby[9 + 6 + 2])
                                 {
-                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackBottomThick);
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BackBackBottom);
                                 }
 
                                 //else if(!xdown && yup && !xup && !ydown)
@@ -777,7 +802,27 @@ namespace AssetsPV
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.RearDimBottom);
                                 }
-                                
+
+                                else if(!ydown && yup) // && ((nearby[9 + 0 + 0]))
+                                {
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightBottom);
+                                }
+                                else if(!xup && xdown) // && ((nearby[18 + 3 + 0]))
+                                {
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.DimBottom);
+                                }
+                                //else if(!xdown && !yup && xup && !ydown)
+                                else if(!xdown && xup) // && ((nearby[0 + 3 + 0]))
+                                {
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.RearBrightBottom);
+                                }
+                                //else if(!xdown && !yup && !xup && ydown)
+                                else if(!yup && ydown) // && ((nearby[9 + 6 + 0]))
+                                {
+                                    faces[x, y, z] = new FaceVoxel(mvd, Slope.RearDimBottom);
+                                }
+
+                                /*
                                 else if(!ydown && ((nearby[9 + 0 + 2] && yup)))
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.BrightBottom);
@@ -797,6 +842,7 @@ namespace AssetsPV
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.RearDimBottom);
                                 }
+                                */
                                 else
                                 {
                                     faces[x, y, z] = new FaceVoxel(mvd, Slope.Cube);
@@ -857,7 +903,7 @@ namespace AssetsPV
                     }
                 }
             }
-            FaceVoxel[,,] faces2 = faces.Replicate();
+            FaceVoxel[,,] faces2 = new FaceVoxel[xSize,ySize,zSize];
             
             for(int z = 0; z < zSize; z++)
             {
@@ -865,113 +911,231 @@ namespace AssetsPV
                 {
                     for(int y = 0; y < ySize; y++)
                     {
-                        if(faces[x, y, z] == null)
+
+                        if(ImportantNeighborhood(faces, x, y, z))
                         {
-                            if(ImportantNeighborhood(faces, x, y, z))
-                            {
-                                continue;
-                            }
-                            bool xup = x < xSize - 1 && faces[x + 1, y, z] != null,// && faces[x + 1, y, z].slope != Slope.Cube,
-                                 xdown = x > 0 && faces[x - 1, y, z] != null,// && faces[x - 1, y, z].slope != Slope.Cube,
-                                 yup = y < ySize - 1 && faces[x, y + 1, z] != null,// && faces[x, y + 1, z].slope != Slope.Cube,
-                                 ydown = y > 0 && faces[x, y - 1, z] != null,// && faces[x, y - 1, z].slope != Slope.Cube,
-                                 zup = z < zSize - 1 && faces[x, y, z + 1] != null,// && faces[x, y, z + 1].slope != Slope.Cube,
-                                 zdown = z > 0 && faces[x, y, z - 1] != null;// && faces[x, y, z - 1].slope != Slope.Cube;
+                            faces2[x, y, z] = faces[x, y, z];
 
-                            if(zdown && !zup)
-                            {
-
-                                if(xdown && yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightDimTop);
-                                }
-                                else if(xup && yup && !xdown && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightTopBack);
-                                }
-                                else if(!xup && !yup && xdown && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.DimTopBack);
-                                }
-                                else if(!xdown && !yup && xup && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BackBackTop);
-                                }
-                                /*
-                                else if(!xdown && yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightTop);
-                                }
-                                else if(xdown && !yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.DimTop);
-                                }
-                                else if(!xdown && !yup && xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.RearBrightTop);
-                                }
-                                else if(!xdown && !yup && !xup && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.RearDimTop);
-                                }*/
-                            }
-                            else if(zup)
-                            {
-
-                                if(xdown && yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightDimBottom);
-                                }
-                                else if(xup && yup && !xdown && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightBottomBack);
-                                }
-                                else if(!xup && !yup && xdown && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.DimBottomBack);
-                                }
-                                else if(!xdown && !yup && xup && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BackBackBottom);
-                                }/*
-                                else if(!xdown && yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightBottom);
-                                }
-                                else if(xdown && !yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.DimBottom);
-                                }
-                                else if(!xdown && !yup && xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.RearBrightBottom);
-                                }
-                                else if(!xdown && !yup && !xup && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.RearDimBottom);
-                                }*/
-                            }
-                            /*
-                            else
-                            {
-                                if(xdown && yup && !xup && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x - 1, y, z].vox.color }, Slope.BrightDim);
-                                }
-                                else if(!xdown && !yup && xup && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x + 1, y, z].vox.color }, Slope.BackBack);
-                                }
-                                else if(xup && yup && !xdown && !ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x + 1, y, z].vox.color }, Slope.BrightBack);
-                                }
-                                else if(!xup && !yup && xdown && ydown)
-                                {
-                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x - 1, y, z].vox.color }, Slope.DimBack);
-                                }
-                            }*/
+                            continue;
                         }
+                        /*
+                        case Slope.BackBackBottom:
+                        case Slope.BackBackTop:
+                                                        case Slope.BrightBottomBack:
+                                                        case Slope.BrightDimBottom:
+                                                        case Slope.BrightDimTop:
+                                                        case Slope.BrightTopBack:
+                                                        case Slope.DimBottomBack:
+                                                        case Slope.DimTopBack:
+
+                        */
+
+                        nearFaces.Fill(null);
+                        nearby.Fill(false);
+                        for(int i = 0; i < 3; i++)
+                        {
+                            if(x - 1 + i >= 0 && x - 1 + i < xSize)
+                            {
+                                for(int j = 0; j < 3; j++)
+                                {
+                                    if(y - 1 + j >= 0 && y - 1 + j < ySize)
+                                    {
+                                        for(int k = 0; k < 3; k++)
+                                        {
+                                            if(z - 1 + k >= 0 && z - 1 + k < zSize)
+                                            {
+                                                if(faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null)
+                                                {
+                                                    nearby[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null;
+                                                    nearFaces[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        faces2[x, y, z] = faces[x, y, z];
+                        FaceVoxel f = null;
+                        if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 0, 2, Slope.BrightDimTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 0, 2, Slope.BrightTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 6, 2, Slope.BackBackTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 6, 2, Slope.DimTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 0, 0, Slope.BrightDimBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 0, 0, Slope.BrightBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BackBackBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 6, 0, Slope.DimBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 0, 2, Slope.BrightDimTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 0, 2, Slope.BrightTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 6, 2, Slope.BackBackTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 6, 2, Slope.DimTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 0, 0, Slope.BrightDimBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 0, 0, Slope.BrightBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BackBackBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 6, 0, Slope.DimBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if(AllArray(nearby))
+                        {
+                            faces2[x, y, z] = null;
+                        }
+
+                        /*
+
+                    if((xup && ydown && zup && !nearby[18 + 0 + 2]) && (xupv.slope != Slope.Cube && ydownv.slope != Slope.Cube && zupv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.BrightDimTopThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xupv.vox.color, ydownv.vox.color, zupv.vox.color)), Slope.BrightDimTopThick);
+                        }
+                        else if((xdown && ydown && zup && !nearby[0 + 0 + 2]) && (xdownv.slope != Slope.Cube && ydownv.slope != Slope.Cube && zupv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.BrightTopBackThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xdownv.vox.color, ydownv.vox.color, zupv.vox.color)), Slope.BrightTopBackThick);
+                        }
+                        else if((xdown && yup && zup && !nearby[0 + 6 + 2]) && (xdownv.slope != Slope.Cube && yupv.slope != Slope.Cube && zupv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.BackBackTopThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xdownv.vox.color, yupv.vox.color, zupv.vox.color)), Slope.BackBackTopThick);
+                        }
+                        else if((xup && yup && zup && !nearby[18 + 6 + 2]) && (xupv.slope != Slope.Cube && yupv.slope != Slope.Cube && zupv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.DimTopBackThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xupv.vox.color, yupv.vox.color, zupv.vox.color)), Slope.DimTopBackThick);
+                        }
+
+                        else if((xup && ydown && zdown && !nearby[18 + 0 + 0]) && (xupv.slope != Slope.Cube && ydownv.slope != Slope.Cube && zdownv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.BrightDimBottomThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xupv.vox.color, ydownv.vox.color, zdownv.vox.color)), Slope.BrightDimBottomThick);
+                        }
+                        else if((xdown && ydown && zdown && !nearby[0 + 0 + 0]) && (xdownv.slope != Slope.Cube && ydownv.slope != Slope.Cube && zdownv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.BrightBottomBackThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xdownv.vox.color, ydownv.vox.color, zdownv.vox.color)), Slope.BrightBottomBackThick);
+                        }
+                        else if((xdown && yup && zdown && !nearby[0 + 6 + 0]) && (xdownv.slope != Slope.Cube && yupv.slope != Slope.Cube && zdownv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.BackBackBottomThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xdownv.vox.color, yupv.vox.color, zdownv.vox.color)), Slope.BackBackBottomThick);
+                        }
+                        else if((xup && yup && zdown && !nearby[18 + 6 + 0]) && (xupv.slope != Slope.Cube && yupv.slope != Slope.Cube && zdownv.slope != Slope.Cube))
+                        {
+                            if(faces[x, y, z] != null)
+                                faces2[x, y, z].slope = Slope.DimBottomBackThick;
+                            else
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(xupv.vox.color, yupv.vox.color, zdownv.vox.color)), Slope.DimBottomBackThick);
+                        }
+                        else if(AllArray(nearby))
+                        {
+                            faces2[x, y, z] = null;
+                        }
+
+                        */
+
+                        /*
+                        if(zdown && !zup)
+                        {
+
+                            if(xdown && yup && !xup && !ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightDimTop);
+                            }
+                            else if(xup && yup && !xdown && !ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightTopBack);
+                            }
+                            else if(!xup && !yup && xdown && ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.DimTopBack);
+                            }
+                            else if(!xdown && !yup && xup && ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BackBackTop);
+                            }
+                        }
+                        else if(zup)
+                        {
+
+                            if(xdown && yup && !xup && !ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightDimBottom);
+                            }
+                            else if(xup && yup && !xdown && !ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightBottomBack);
+                            }
+                            else if(!xup && !yup && xdown && ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.DimBottomBack);
+                            }
+                            else if(!xdown && !yup && xup && ydown)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BackBackBottom);
+                            }
+                        }
+                        */
                     }
                 }
             }
@@ -979,6 +1143,414 @@ namespace AssetsPV
 
             return faces2;
         }
+
+
+        public static FaceVoxel[,,] SmoothAll(FaceVoxel[,,] faces)
+
+        {
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+
+            FaceVoxel[,,] faces2 = new FaceVoxel[xSize, ySize, zSize];
+            bool[] nearby = new bool[27];
+            FaceVoxel[] nearFaces = new FaceVoxel[27];
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+
+                        if(ImportantNeighborhood(faces, x, y, z))
+                        {
+                            faces2[x, y, z] = faces[x, y, z];
+
+                            continue;
+                        }
+                        /*
+                        case Slope.BackBackBottom:
+                        case Slope.BackBackTop:
+                                                        case Slope.BrightBottomBack:
+                                                        case Slope.BrightDimBottom:
+                                                        case Slope.BrightDimTop:
+                                                        case Slope.BrightTopBack:
+                                                        case Slope.DimBottomBack:
+                                                        case Slope.DimTopBack:
+
+                        */
+
+                        nearFaces.Fill(null);
+                        nearby.Fill(false);
+                        for(int i = 0; i < 3; i++)
+                        {
+                            if(x - 1 + i >= 0 && x - 1 + i < xSize)
+                            {
+                                for(int j = 0; j < 3; j++)
+                                {
+                                    if(y - 1 + j >= 0 && y - 1 + j < ySize)
+                                    {
+                                        for(int k = 0; k < 3; k++)
+                                        {
+                                            if(z - 1 + k >= 0 && z - 1 + k < zSize)
+                                            {
+                                                if(faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null)
+                                                {
+                                                    nearby[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null;
+                                                    nearFaces[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        faces2[x, y, z] = faces[x, y, z];
+                        FaceVoxel f = null;
+                        if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 0, 2, Slope.BrightDimTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 0, 2, Slope.BrightTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 6, 2, Slope.BackBackTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 6, 2, Slope.DimTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 0, 0, Slope.BrightDimBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 0, 0, Slope.BrightBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BackBackBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeak(faces, x, y, z, nearFaces, 18, 6, 0, Slope.DimBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 0, 2, Slope.BrightDimTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 0, 2, Slope.BrightTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 6, 2, Slope.BackBackTopThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 6, 2, Slope.DimTopBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 0, 0, Slope.BrightDimBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 0, 0, Slope.BrightBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BackBackBottomThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = SmoothPeakBackup(faces, x, y, z, nearFaces, 18, 6, 0, Slope.DimBottomBackThick)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }/*
+                        else if(AllArray(nearby))
+                        {
+                            faces2[x, y, z] = null;
+                        }*/
+
+                    }
+                }
+            }
+
+
+            return faces2;
+
+        }
+
+        public static FaceVoxel[,,] FillAllGaps(FaceVoxel[,,] faces)
+
+        {
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+
+            FaceVoxel[,,] faces2 = new FaceVoxel[xSize, ySize, zSize];
+            bool[] nearby = new bool[27];
+            FaceVoxel[] nearFaces = new FaceVoxel[27];
+
+            for(int z = 0; z < zSize; z++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+
+                        if(ImportantNeighborhood(faces, x, y, z))
+                        {
+                            faces2[x, y, z] = faces[x, y, z];
+
+                            continue;
+                        }
+                        /*
+                        case Slope.BackBackBottom:
+                        case Slope.BackBackTop:
+                                                        case Slope.BrightBottomBack:
+                                                        case Slope.BrightDimBottom:
+                                                        case Slope.BrightDimTop:
+                                                        case Slope.BrightTopBack:
+                                                        case Slope.DimBottomBack:
+                                                        case Slope.DimTopBack:
+
+                        */
+
+                        nearFaces.Fill(null);
+                        nearby.Fill(false);
+                        for(int i = 0; i < 3; i++)
+                        {
+                            if(x - 1 + i >= 0 && x - 1 + i < xSize)
+                            {
+                                for(int j = 0; j < 3; j++)
+                                {
+                                    if(y - 1 + j >= 0 && y - 1 + j < ySize)
+                                    {
+                                        for(int k = 0; k < 3; k++)
+                                        {
+                                            if(z - 1 + k >= 0 && z - 1 + k < zSize)
+                                            {
+                                                if(faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null)
+                                                {
+                                                    nearby[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null;
+                                                    nearFaces[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        faces2[x, y, z] = faces[x, y, z];
+                        FaceVoxel f = null;
+                        if((f = FillGap(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BrightDimTop)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 18, 6, 0, Slope.BrightTopBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 18, 0, 0, Slope.BackBackTop)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 0, 0, 0, Slope.DimTopBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 0, 6, 2, Slope.BrightDimBottom)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 18, 6, 2, Slope.BrightBottomBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 18, 0, 2, Slope.BackBackBottom)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGap(faces, x, y, z, nearFaces, 0, 0, 2, Slope.DimBottomBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        /*
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BrightDimTop)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 18, 6, 0, Slope.BrightTopBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 18, 0, 0, Slope.BackBackTop)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 0, 0, 0, Slope.DimTopBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 0, 6, 2, Slope.BrightDimBottom)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 18, 6, 2, Slope.BrightBottomBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 18, 0, 2, Slope.BackBackBottom)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        else if((f = FillGapBackup(faces, x, y, z, nearFaces, 0, 0, 2, Slope.DimBottomBack)) != null)
+                        {
+                            faces2[x, y, z] = f;
+                        }
+                        */
+                        /*
+                        else if(AllArray(nearby))
+                        {
+                            faces2[x, y, z] = null;
+                        }*/
+
+                    }
+                }
+            }
+
+
+            return faces2;
+
+        }
+
+        public static FaceVoxel SmoothPeak(FaceVoxel[,,] faces, int x, int y, int z, FaceVoxel[] nearby, int a, int b, int c, Slope targetSlope)
+        {
+            FaceVoxel aa = nearby[a + 3 + 1], bb = nearby[9 + b + 1], cc = nearby[9 + 3 + c], grr = nearby[a + b + c], o = faces[x, y, z];
+            if(o == null)
+                return null;
+
+            o = new FaceVoxel(o.vox, o.slope);
+
+            if((aa != null && bb != null && cc != null && grr == null) && (aa.slope != Slope.Cube && bb.slope != Slope.Cube && cc.slope != Slope.Cube))
+            {
+                if(o != null)
+                {
+                    o.slope = targetSlope;
+                    o.vox.color = (byte)Choose(aa.vox.color, bb.vox.color, cc.vox.color);
+                }
+                else
+                    o = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(aa.vox.color, bb.vox.color, cc.vox.color)), targetSlope);
+                return o;
+            }
+            return null;
+        }
+        public static FaceVoxel SmoothPeakBackup(FaceVoxel[,,] faces, int x, int y, int z, FaceVoxel[] nearby, int a, int b, int c, Slope targetSlope)
+        {
+            FaceVoxel aa = nearby[a + 3 + 1], bb = nearby[9 + b + 1], cc = nearby[9 + 3 + c], grr = nearby[a + b + c], o = faces[x, y, z];
+            if(o == null)
+                return null;
+
+            o = new FaceVoxel(o.vox, o.slope);
+            
+            if((aa != null && bb != null && grr == null) && (aa.slope != Slope.Cube && bb.slope != Slope.Cube))
+            {
+                if(o != null)
+                {
+                    o.slope = targetSlope;
+                    o.vox.color = aa.vox.color;
+                }
+                else
+                    o = new FaceVoxel(new MagicaVoxelData(x, y, z, aa.vox.color), targetSlope);
+                return o;
+            }
+            else if((aa != null && cc != null && grr == null) && (aa.slope != Slope.Cube && cc.slope != Slope.Cube))
+            {
+                if(o != null)
+                {
+                    o.slope = targetSlope;
+                    o.vox.color = cc.vox.color;
+                }
+                else
+                    o = new FaceVoxel(new MagicaVoxelData(x, y, z, cc.vox.color), targetSlope);
+                return o;
+            }
+            else if((bb != null && cc != null && grr == null) && (bb.slope != Slope.Cube && cc.slope != Slope.Cube))
+            {
+                if(o != null)
+                {
+                    o.slope = targetSlope;
+                    o.vox.color = bb.vox.color;
+                }
+                else
+                    o = new FaceVoxel(new MagicaVoxelData(x, y, z, bb.vox.color), targetSlope);
+                return o;
+            }
+            return null;
+        }
+        public static int Choose(int a, int b, int c)
+        {
+            if(a == b)
+                return a;
+            if(a == c)
+                return a;
+            if(b == c)
+                return b;
+            return a;
+        }
+        public static bool AllArray(bool[] checks)
+        {
+            for(int i = 0; i < checks.Length; i++)
+            {
+                if(!checks[i])
+                    return false;
+            }
+            return true;
+        }
+
+
+        public static FaceVoxel FillGap(FaceVoxel[,,] faces, int x, int y, int z, FaceVoxel[] nearby, int a, int b, int c, Slope targetSlope)
+        {
+            FaceVoxel aa = nearby[a + 3 + 1], bb = nearby[9 + b + 1], cc = nearby[9 + 3 + c], grr = nearby[18 - a + 6 - b + 2 - c], need = nearby[a + b + c], o = faces[x, y, z];
+            if(o != null)
+                return null;
+            
+            if((aa != null && bb != null && cc != null && grr == null && need != null))// && (aa.slope != Slope.Cube && bb.slope != Slope.Cube && cc.slope != Slope.Cube))
+            {
+                o = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(aa.vox.color, bb.vox.color, cc.vox.color)), targetSlope);
+                return o;
+            }
+            return null;
+        }
+        public static FaceVoxel FillGapBackup(FaceVoxel[,,] faces, int x, int y, int z, FaceVoxel[] nearby, int a, int b, int c, Slope targetSlope)
+        {
+            FaceVoxel aa = nearby[a + 3 + 1], bb = nearby[9 + b + 1], cc = nearby[9 + 3 + c], grr = nearby[18 - a + 6 - b + 2 - c], need = nearby[a + b + c], o = faces[x, y, z];
+            if(o != null)
+                return null;
+            
+            if((aa != null && bb != null && grr == null))// && (aa.slope != Slope.Cube && bb.slope != Slope.Cube))
+            {
+                o = new FaceVoxel(new MagicaVoxelData(x, y, z, aa.vox.color), targetSlope);
+                return o;
+            }
+            else if((aa != null && cc != null && grr == null))// && (aa.slope != Slope.Cube && cc.slope != Slope.Cube))
+            {
+                o = new FaceVoxel(new MagicaVoxelData(x, y, z, cc.vox.color), targetSlope);
+                return o;
+            }
+            else if((bb != null && cc != null && grr == null))// && (bb.slope != Slope.Cube && cc.slope != Slope.Cube))
+            {
+                o = new FaceVoxel(new MagicaVoxelData(x, y, z, bb.vox.color), targetSlope);
+                return o;
+            }
+            return null;
+        }
+
 
         public static FaceVoxel[,,] AddBrightTop(FaceVoxel[,,] faces)
         {
@@ -3192,7 +3764,7 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p110, p111, p010));
                                 fs.Add(new Face3D(fv.vox.color, p010, p000, p100, p110));
                                 break;
-                                
+
                             case Slope.BrightDimTop:
                                 if(!pts.ContainsKey(p010))
                                     pts.Add(p010, ord++);
@@ -3220,7 +3792,7 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p011, p001, p111));
                                 fs.Add(new Face3D(fv.vox.color, p011, p010, p111));
                                 fs.Add(new Face3D(fv.vox.color, p011, p001, p010));
-                                fs.Add(new Face3D(fv.vox.color, p111, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p010, p111, p001));
                                 break;
 
 
@@ -3313,7 +3885,250 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p001, p011, p000));
                                 fs.Add(new Face3D(fv.vox.color, p101, p000, p011));
                                 break;
+
+                            case Slope.BrightDimTopThick:
+
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010)) // base
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                //if(!pts.ContainsKey(p101)) // remove
+                                  //  pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
+
+                                fs.Add(new Face3D(fv.vox.color, p100, p111, p001));
+                                break;
+
+                            case Slope.BrightDimBottomThick:
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                //if(!pts.ContainsKey(p100)) // remove
+                                  //  pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011)) // base
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p110, p101));
+                                break;
+
+
+                            case Slope.BrightTopBackThick:
+
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110)) //base
+                                    pts.Add(p110, ord++);
+                                //if(!pts.ContainsKey(p001)) //remove
+                                  //  pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
                                 
+                                fs.Add(new Face3D(fv.vox.color, p000, p011, p101));
+                                break;
+
+                            case Slope.BrightBottomBackThick:
+
+
+                                //if(!pts.ContainsKey(p000)) //remove
+                                  //  pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111)) //base
+                                    pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
+                                
+                                fs.Add(new Face3D(fv.vox.color, p001, p010, p100));
+                                break;
+
+                            case Slope.BackBackTopThick:
+
+
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100)) //base
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                //if(!pts.ContainsKey(p011)) //remove
+                                  //  pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p010, p110));
+                                
+                                fs.Add(new Face3D(fv.vox.color, p010, p001, p111));
+                                break;
+
+                            case Slope.BackBackBottomThick:
+
+
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                //if(!pts.ContainsKey(p010)) //remove
+                                  //  pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101)) //base
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p110));
+                                
+                                fs.Add(new Face3D(fv.vox.color, p000, p110, p011));
+                                break;
+
+                            case Slope.DimTopBackThick:
+
+
+                                if(!pts.ContainsKey(p000)) //base
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                if(!pts.ContainsKey(p110))
+                                    pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001))
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                //if(!pts.ContainsKey(p111)) //remove
+                                  //  pts.Add(p111, ord++);
+
+
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p101, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p011, p010, p110));
+                                
+                                fs.Add(new Face3D(fv.vox.color, p101, p011, p110));
+                                break;
+
+                            case Slope.DimBottomBackThick:
+
+
+                                if(!pts.ContainsKey(p000))
+                                    pts.Add(p000, ord++);
+                                if(!pts.ContainsKey(p100))
+                                    pts.Add(p100, ord++);
+                                if(!pts.ContainsKey(p010))
+                                    pts.Add(p010, ord++);
+                                //if(!pts.ContainsKey(p110)) //remove
+                                  //  pts.Add(p110, ord++);
+                                if(!pts.ContainsKey(p001)) //base
+                                    pts.Add(p001, ord++);
+                                if(!pts.ContainsKey(p101))
+                                    pts.Add(p101, ord++);
+                                if(!pts.ContainsKey(p011))
+                                    pts.Add(p011, ord++);
+                                if(!pts.ContainsKey(p111))
+                                    pts.Add(p111, ord++);
+                                
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100));
+                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010));
+                                
+                                fs.Add(new Face3D(fv.vox.color, p100, p010, p111));
+                                break;
                         }
 
                     }

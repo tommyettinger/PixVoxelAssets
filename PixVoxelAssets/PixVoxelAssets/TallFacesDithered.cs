@@ -5706,15 +5706,15 @@ namespace AssetsPV
         }
 
 
-        public static void processUnitHollowMilitary(string u, int palette)
+        public static void WriteOFFMilitary(string u, int palette)
         {
             string folder = "OFF";//"color" + i;
             Directory.CreateDirectory(folder); //("color" + i);
             Console.WriteLine("Processing: " + u + ", palette " + palette);
 
 
-            BinaryReader bin = new BinaryReader(File.Open("CU_Hollow/" + u + "_Hollow_Large_W.vox", FileMode.Open));
-            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin); //VoxelLogic.PlaceShadowsW(
+            BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
             MagicaVoxelData[] parsed = voxes.ToArray();
             for(int i = 0; i < parsed.Length; i++)
             {
@@ -5724,7 +5724,8 @@ namespace AssetsPV
                     parsed[i].color--;
             }
 
-            FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
+            FaceVoxel[,,] faces = FaceLogic.FillAllGaps(FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153)));
+            //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
 
             File.WriteAllText(folder + "/" + u + "_" + palette + ".off", FaceLogic.WriteOFF(faces, palette));            
         }
@@ -6073,7 +6074,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");*/
-            processUnitHugeWMilitarySuper("Plane_T");
+        //    processUnitHugeWMilitarySuper("Plane_T");
             /*
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
@@ -6121,7 +6122,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
             processUnitLargeWMilitary("Plane_S");*/
-            processUnitLargeWMilitary("Plane_T");
+        //    processUnitLargeWMilitary("Plane_T");
             /*
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
@@ -6161,13 +6162,17 @@ namespace AssetsPV
             */
 
             //makeDetailedTiling();
-            /*
-            processUnitHollowMilitary("Tank", 0);
+            
+            WriteOFFMilitary("Tank", 0);
 
-            processUnitHollowMilitary("Tank", 1 + 32 * 8);
+            WriteOFFMilitary("Tank", 1 + 32 * 8);
 
-            processUnitHollowMilitary("Tank", 3 + 4 * 8);
-            */
+            WriteOFFMilitary("Tank", 3 + 4 * 8);
+
+
+            WriteOFFMilitary("Plane_T", 2 + 4 * 8);
+
+            WriteOFFMilitary("Plane_T", 5 + 4 * 8);
 
             //processUnitLargeW("Charlie", 1, true, false);
 
