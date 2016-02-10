@@ -10,7 +10,7 @@ namespace AssetsPV
 {
     public class Bone
     {
-        public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
+        public static int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
 
         public byte[,,] Colors;
