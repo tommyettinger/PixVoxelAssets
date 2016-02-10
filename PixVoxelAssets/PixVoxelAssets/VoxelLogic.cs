@@ -9832,17 +9832,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     else stream.ReadBytes(chunkSize);   // read any excess bytes
                 }
-
-                if (voxelData.Count == 0) return voxelData; // failed to read any valid voxel data
-
-                // now push the voxel data into our voxel chunk structure
-                for (int i = 0; i < voxelData.Count; i++)
-                {
-                    // do not store this voxel if it lies out of range of the voxel chunk (32x128x32)
-                    //if (voxelData[i].x > 31 || voxelData[i].y > 31 || voxelData[i].z > 127) continue;
-                    voxelsAltered.Add(voxelData[i]);
-
-                }
+                
             }
             /*            taken.Fill(-1);
                         foreach (MagicaVoxelData mvd in voxelsAltered.FindAll(v => v.z == 0))
@@ -9862,7 +9852,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             }
                         }*/
             stream.Close();
-            return voxelsAltered;
+            return voxelData;
         }
 
         public static MagicaVoxelData[] AssembleHeadToBody(BinaryReader body, bool raw)
@@ -17202,16 +17192,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             bin.Write(ySize);
             bin.Write(zSize);
 
+            bin.Write("RGBA".ToCharArray());
+            bin.Write((int)1024);
+            bin.Write((int)0);
+            bin.Write(colors);
+
             bin.Write("XYZI".ToCharArray());
             bin.Write((int)(4 + voxelsRaw.Count));
             bin.Write((int)0);
             bin.Write((int)(voxelsRaw.Count / 4));
             bin.Write(voxelsRaw.ToArray());
-
-            bin.Write("RGBA".ToCharArray());
-            bin.Write((int)1024);
-            bin.Write((int)0);
-            bin.Write(colors);
 
             bin.Flush();
             bin.Close();
@@ -17249,8 +17239,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         for(int z = 0; z < zSize; z++)
                         {
                             cc = voxelData[x, y, z];
-                            if(x >= 50 && y >= 70 && z >= 40 &&
-                                !taken[x, y, z] && cc != 253 - 100 && cc > 253 - wcolorcount * 4
+                            if(!taken[x, y, z] && cc != 253 - 100 && cc > 253 - wcolorcount * 4
                                 && wpalettes[palette][(253 - cc) / 4][3] != spin_alpha_1)
                             {
                                 int current_color = ((255 - cc) % 4 == 0) ? (255 - cc) / 4 + wcolorcount : ((254 - cc) % 4 == 0) ? (254 - cc) / 4 : (253 - cc) / 4;
@@ -17267,9 +17256,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
                                     continue;
 
-                                voxelsRaw.Add((byte)(x - 50));
-                                voxelsRaw.Add((byte)(y - 70));
-                                voxelsRaw.Add((byte)(z - 40));
+                                voxelsRaw.Add((byte)(x));
+                                voxelsRaw.Add((byte)(y));
+                                voxelsRaw.Add((byte)(z));
                                 if(current_color == 18) //yellow fire
                                 {
                                     if(r.Next(3) > 0)
@@ -17415,16 +17404,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             bin.Write(ySize);
             bin.Write(zSize);
 
+            bin.Write("RGBA".ToCharArray());
+            bin.Write((int)1024);
+            bin.Write((int)0);
+            bin.Write(colors);
+
             bin.Write("XYZI".ToCharArray());
             bin.Write((int)(4 + voxelsRaw.Count));
             bin.Write((int)0);
             bin.Write((int)(voxelsRaw.Count / 4));
             bin.Write(voxelsRaw.ToArray());
-
-            bin.Write("RGBA".ToCharArray());
-            bin.Write((int)1024);
-            bin.Write((int)0);
-            bin.Write(colors);
 
             bin.Flush();
             bin.Close();
@@ -17630,16 +17619,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             bin.Write(ySize);
             bin.Write(zSize);
 
+            bin.Write("RGBA".ToCharArray());
+            bin.Write((int)1024);
+            bin.Write((int)0);
+            bin.Write(colors);
+
             bin.Write("XYZI".ToCharArray());
             bin.Write((int)(4 + voxelsRaw.Count));
             bin.Write((int)0);
             bin.Write((int)(voxelsRaw.Count / 4));
             bin.Write(voxelsRaw.ToArray());
-
-            bin.Write("RGBA".ToCharArray());
-            bin.Write((int)1024);
-            bin.Write((int)0);
-            bin.Write(colors);
 
             bin.Flush();
             bin.Close();
