@@ -47,7 +47,7 @@ namespace AssetsPV
     }
     public class PatternLogic
     {
-        public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
+        public const int Multiplier = 1, Bonus = OrthoSingle.bonus;
         public static bool HasAdjacentEmpty(byte[,,] voxelData, int x, int y, int z, int xSize, int ySize, int zSize)
         {
             if(x <= 0 || y <= 0 || z <= 0 || x >= xSize - 1 || y >= ySize - 1 || z >= zSize - 1)
@@ -59,6 +59,8 @@ namespace AssetsPV
         }
         public static byte[,,] ApplyPattern(byte[,,] voxelData, Dictionary<byte, Pattern> patterns)
         {
+            if(patterns == null)
+                return voxelData;
             Random rng = new Random(0x1337);
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             byte[,,] neo = voxelData.Replicate();
@@ -69,7 +71,7 @@ namespace AssetsPV
             int seed = 1337;
             for(int z = 0; z < zSize; z++)
             {
-                colorCount = patterns.ToDictionary(kv => kv.Key, kv => z % 2 * Multiplier);
+                colorCount = patterns.ToDictionary(kv => kv.Key, kv => z % (2 * Multiplier));
 
                 for(int x = 0; x < xSize; x++)
                 {

@@ -12,10 +12,10 @@ namespace AssetsPV
     {
         public static int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
-
+        private Random r = new Random(0x1337BEEF);
         public byte[,,] Colors;
         public string Name;
-        public static Dictionary<byte, Pattern> Patterns = null;
+
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
             MoveX = 0f, MoveY = 0f, MoveZ = 0f, ZeroOutX = 0f, ZeroOutY = 0f, ZeroOutZ = 0f, 
             StretchX = 1f, StretchY = 1f, StretchZ = 1f, SpreadChance = 1f;
@@ -218,14 +218,29 @@ namespace AssetsPV
                             c2[x, y, z] = c2[x - 1, y, z];
                             continue;
                         }
-                        if(c2[x, y-1, z] != 0 && c2[x, y-1, z] == c2[x, y+1, z])
+                        if(c2[x, y - 1, z] != 0 && c2[x, y - 1, z] == c2[x, y + 1, z])
                         {
-                            c2[x, y, z] = c2[x, y-1, z];
+                            c2[x, y, z] = c2[x, y - 1, z];
                             continue;
                         }
-                        if(c2[x, y, z-1] != 0 && c2[x, y, z-1] == c2[x, y, z+1])
+                        if(c2[x, y, z - 1] != 0 && c2[x, y, z - 1] == c2[x, y, z + 1])
                         {
-                            c2[x, y, z] = c2[x, y, z+1];
+                            c2[x, y, z] = c2[x, y, z + 1];
+                            continue;
+                        }
+                        if(c2[x - 1, y, z] != 0 && 0 != c2[x + 1, y, z])
+                        {
+                            c2[x, y, z] = c2[x - 1 + r.Next(2) * 2, y, z];
+                            continue;
+                        }
+                        if(c2[x, y - 1, z] != 0 && 0 != c2[x, y + 1, z])
+                        {
+                            c2[x, y, z] = c2[x, y - 1 + r.Next(2) * 2, z];
+                            continue;
+                        }
+                        if(c2[x, y, z - 1] != 0 && 0 != c2[x, y, z + 1])
+                        {
+                            c2[x, y, z] = c2[x, y, z + 1];
                             continue;
                         }
                     }
@@ -414,6 +429,21 @@ namespace AssetsPV
                             c2[x, y, z] = c2[x, y, z + 1];
                             continue;
                         }
+                        if(c2[x - 1, y, z] != 0 && 0 != c2[x + 1, y, z])
+                        {
+                            c2[x, y, z] = c2[x - 1 + r.Next(2) * 2, y, z];
+                            continue;
+                        }
+                        if(c2[x, y - 1, z] != 0 && 0 != c2[x, y + 1, z])
+                        {
+                            c2[x, y, z] = c2[x, y - 1 + r.Next(2) * 2, z];
+                            continue;
+                        }
+                        if(c2[x, y, z - 1] != 0 && 0 != c2[x, y, z + 1])
+                        {
+                            c2[x, y, z] = c2[x, y, z + 1];
+                            continue;
+                        }
                     }
                 }
             }
@@ -496,7 +526,7 @@ namespace AssetsPV
                                     y2 += (int)Math.Round(yMove);
 
                                     z2 = TransformLogic.rng.Next(3);
-                                    if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                                    if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                     {
                                         c2[x2, y2, z2] = Colors[x, y, z];
                                     }
@@ -601,7 +631,7 @@ namespace AssetsPV
                                                     y2 += (int)Math.Round(yMove);
 
                                                     z2 = TransformLogic.rng.Next(3);
-                                                    if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize)
+                                                    if(x2 >= 0 && y2 >= 0 && x2 < xSize && y2 < ySize && (254 - c2[x2, y2, z2]) % 4 != 0)
                                                     {
                                                         c2[x2, y2, z2] = Colors[x, y, z];
                                                     }
@@ -634,6 +664,21 @@ namespace AssetsPV
                             continue;
                         }
                         if(c2[x, y, z - 1] != 0 && c2[x, y, z - 1] == c2[x, y, z + 1])
+                        {
+                            c2[x, y, z] = c2[x, y, z + 1];
+                            continue;
+                        }
+                        if(c2[x - 1, y, z] != 0 && 0 != c2[x + 1, y, z])
+                        {
+                            c2[x, y, z] = c2[x - 1 + r.Next(2) * 2, y, z];
+                            continue;
+                        }
+                        if(c2[x, y - 1, z] != 0 && 0 != c2[x, y + 1, z])
+                        {
+                            c2[x, y, z] = c2[x, y - 1 + r.Next(2) * 2, z];
+                            continue;
+                        }
+                        if(c2[x, y, z - 1] != 0 && 0 != c2[x, y, z + 1])
                         {
                             c2[x, y, z] = c2[x, y, z + 1];
                             continue;
@@ -738,10 +783,10 @@ namespace AssetsPV
                 return new Bone(file, new byte[60 * Multiplier, 60 * Multiplier, 60 * Multiplier]);
             BinaryReader bin = new BinaryReader(File.Open(VoxelLogic.voxFolder + file + "_W.vox", FileMode.Open));
             List<MagicaVoxelData> raw = VoxelLogic.FromMagicaRaw(bin);
-            if(Bone.Patterns == null)
-                return new Bone(file, TransformLogic.TransformStartLarge(raw, Multiplier));
-            else
-                return new Bone(file, PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier), Bone.Patterns));
+            //if(Bone.Patterns == null)
+            return new Bone(file, TransformLogic.TransformStartLarge(raw, Multiplier));
+            //else
+            //    return new Bone(file, PatternLogic.ApplyPattern(TransformLogic.TransformStartLarge(raw, Multiplier), Bone.Patterns));
         }
     }
     public struct Connector
@@ -760,6 +805,7 @@ namespace AssetsPV
     {
         public Dictionary<string, Bone> Bones = new Dictionary<string, Bone>(16);
         public Connector[] Anatomy = new Connector[0];
+        public Dictionary<byte, Pattern> Patterns = null;
         public Model()
         {
 
@@ -768,7 +814,17 @@ namespace AssetsPV
         {
             Bones = bones;
         }
-        
+
+        public Model(Dictionary<byte, Pattern> patterns)
+        {
+            Patterns = patterns;
+        }
+        public Model(Dictionary<string, Bone> bones, Dictionary<byte, Pattern> patterns)
+        {
+            Bones = bones;
+            Patterns = patterns;
+        }
+
         public Model AddBone(string boneName, Bone bone)
         {
             Bones[boneName] = bone;
@@ -929,6 +985,7 @@ namespace AssetsPV
         {
             Model m = new Model();
             m.Anatomy = Anatomy;
+            m.Patterns = Patterns;
             Dictionary<string, Bone> finals = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Interpolate(target.Bones[kv.Key], alpha));
             foreach(var kv in finals)
             {
@@ -942,13 +999,13 @@ namespace AssetsPV
             Dictionary<string, Bone> bones = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Replicate());
             Model m = new Model(bones);
             m.Anatomy = Anatomy.Replicate();
+            m.Patterns = Patterns;
             return m;
         }
 
         public static Model Humanoid(string body = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Dictionary<byte, Pattern> patterns = null)
         {
-            Bone.Patterns = patterns;
-            Model model = new Model();
+            Model model = new Model(patterns);
             model.AddBone("Left_Leg", Bone.readBone(body + "/LLeg"));
             model.AddBone("Right_Leg", Bone.readBone(body + "/RLeg"));
             model.AddBone("Torso", Bone.readBone(body + "/Torso"));
@@ -969,8 +1026,7 @@ namespace AssetsPV
         }
         public static Model HumanoidAlt(string body = "Human_Male", string face = "Neutral", string left_weapon = null, string right_weapon = null, Dictionary<byte, Pattern> patterns = null)
         {
-            Bone.Patterns = patterns;
-            Model model = new Model();
+            Model model = new Model(patterns);
             model.AddBone("Left_Lower_Leg", Bone.readBone(body + "/LLowerLeg"));
             model.AddBone("Right_Lower_Leg", Bone.readBone(body + "/RLowerLeg"));
             model.AddBone("Left_Upper_Leg", Bone.readBone(body + "/LUpperLeg"));
@@ -1043,7 +1099,6 @@ namespace AssetsPV
         public static Model FromModelCU(byte[,,] data)
         {
             byte[,,] data2 = data.Replicate();
-            Bone.Patterns = null;
             Model model = new Model();
             int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
 
@@ -1495,7 +1550,7 @@ namespace AssetsPV
             return vs;
 
         }
-        public static byte[,,] RunCA(byte[,,] voxelData, int smoothLevel)
+        public static byte[,,] RunCA(byte[,,] voxelData, int smoothLevel, bool regardless = false)
         {
             if(smoothLevel <= 1)
                 return voxelData;
@@ -1516,7 +1571,7 @@ namespace AssetsPV
                             Array.Clear(colorCount, 0, 256);
                             int emptyCount = 0;
                             if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
-                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || ColorValue(vs[v - 1][x, y, z]) > 50)
+                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || (!regardless && ColorValue(vs[v - 1][x, y, z]) > 50))
                             {
                                 colorCount[vs[v - 1][x, y, z]] = 10000;
                             }
@@ -1585,10 +1640,37 @@ namespace AssetsPV
                             voxelData[x, y - 1, z] == 0 ||
                             voxelData[x, y + 1, z] == 0 ||
                             voxelData[x, y, z - 1] == 0 ||
-                            voxelData[x, y, z + 1] == 0)
+                            voxelData[x, y, z + 1] == 0 ||
+
+                            voxelData[x - 1, y, z + 1] == 0 ||
+                            voxelData[x + 1, y, z + 1] == 0 ||
+                            voxelData[x, y - 1, z + 1] == 0 ||
+                            voxelData[x, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y, z - 1] == 0 ||
+                            voxelData[x + 1, y, z - 1] == 0 ||
+                            voxelData[x, y - 1, z - 1] == 0 ||
+                            voxelData[x, y + 1, z - 1] == 0 ||
+
+                            voxelData[x - 1, y - 1, z] == 0 ||
+                            voxelData[x + 1, y - 1, z] == 0 ||
+
+                            voxelData[x - 1, y + 1, z] == 0 ||
+                            voxelData[x + 1, y + 1, z] == 0 ||
+
+                            voxelData[x - 1, y + 1, z + 1] == 0 ||
+                            voxelData[x + 1, y - 1, z + 1] == 0 ||
+                            voxelData[x - 1, y - 1, z + 1] == 0 ||
+                            voxelData[x + 1, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y + 1, z - 1] == 0 ||
+                            voxelData[x + 1, y - 1, z - 1] == 0 ||
+                            voxelData[x - 1, y - 1, z - 1] == 0 ||
+                            voxelData[x + 1, y + 1, z - 1] == 0 )
+
                             voxels[x, y, z] = voxelData[x, y, z];
                         else
-                            voxels[x, y, z] = 255;
+                            voxels[x, y, z] = 2;
                             
                     }
                 }
@@ -1596,7 +1678,27 @@ namespace AssetsPV
             return voxels;
         }
 
-        public static byte[,,] RunSurfaceCA(byte[,,] voxelData, int smoothLevel)
+        public static byte[,,] clearInterior(byte[,,] voxelData)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+
+            byte[,,] voxels = new byte[xSize, ySize, zSize];
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(voxels[x, y, z] == 2)
+                            voxels[x, y, z] = 0;
+                        else
+                            voxels[x, y, z] = voxelData[x, y, z];
+                    }
+                }
+            }
+            return voxels;
+        }
+        public static byte[,,] RunSurfaceCA(byte[,,] voxelData, int smoothLevel, bool regardless = false)
         {
             if(smoothLevel <= 1)
                 return voxelData;
@@ -1617,7 +1719,7 @@ namespace AssetsPV
                             Array.Clear(colorCount, 0, 256);
                             int emptyCount = 0;
                             if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
-                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || ColorValue(vs[v - 1][x, y, z]) > 50 || vs[v - 1][x, y, z] == 255)
+                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || (!regardless && ColorValue(vs[v - 1][x, y, z]) > 50) || vs[v - 1][x, y, z] == 2)
                             {
                                 colorCount[vs[v - 1][x, y, z]] = 10000;
                             }
@@ -1630,7 +1732,7 @@ namespace AssetsPV
                                         for(int zz = -1; zz < 2; zz++)
                                         {
                                             byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
-                                            if(smallColor == 255)
+                                            if(smallColor == 2)
                                             {
                                             }
                                             else if(smallColor == 0 || ColorValue(smallColor) < 16)
@@ -1664,7 +1766,7 @@ namespace AssetsPV
                     }
                 }
             }
-            return vs[smoothLevel - 1];
+            return clearInterior(vs[smoothLevel - 1]);
         }
 
         public static List<MagicaVoxelData> VoxArrayToListSmoothed(byte[,,] voxelData)

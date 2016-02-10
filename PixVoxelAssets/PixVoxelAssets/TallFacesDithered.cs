@@ -5706,6 +5706,35 @@ namespace AssetsPV
         }
 
 
+        public static void processVoxGiantWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = false)
+        {
+            Console.WriteLine("Processing: " + moniker + ", palette " + palette);
+            string folder = (altFolder + "vox/");
+            Directory.CreateDirectory(folder);
+            Model[] modelFrames = (frames != null && frames.Length > 0) ? new Model[frames.Length] : new Model[] { model };
+
+            int framelimit = modelFrames.Length;
+
+            if(poses != null && poses.Length > 0 && frames != null && frames.Length > 0 && frames[0] != null && frames[0].Length == 3)
+            {
+                Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
+                for(int i = 0; i < modelFrames.Length; i++)
+                {
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * 1, 10 * 1, 0, "Left_Leg");
+
+                    VoxelLogic.WriteVOX(folder + moniker + "_palette" + palette + "_" + i + ".vox",
+                        PatternLogic.ApplyPattern(TransformLogic.RunSurfaceCA(FaceLogic.FaceArrayToByteArray(FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.RunCA(
+                        posed[(int)(frames[i][0])]
+                        .Interpolate(posed[(int)(frames[i][1])], frames[i][2])
+                        .Translate(10 * OrthoSingle.multiplier, 10 * OrthoSingle.multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg")
+                        .Finalize(),
+                        1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)))), 2, true), posed[(int)(frames[i][0])].Patterns),
+                        "W", palette);
+                }
+            }
+        }
+
+
         public static void WriteOFFMilitary(string u, int palette)
         {
             string folder = "OFF";//"color" + i;
@@ -5743,15 +5772,15 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
-            VoxelLogic.VisualMode = "CU";
-            altFolder = "Diverse_PixVoxel_Wargame_Iso3/";
+            //VoxelLogic.VisualMode = "CU";
+            //altFolder = "Diverse_PixVoxel_Wargame_Iso3/";
             blankFolder = "Blank_PixVoxel_Wargame_Iso3/";
-            CURedux.Initialize(true);
+            //CURedux.Initialize(true);
 
-            //VoxelLogic.VisualMode = "W";
-            //altFolder = "Forays2/";
-            //VoxelLogic.voxFolder = "ForaysBones/";
-            //ForaysPalettes.Initialize();
+            VoxelLogic.VisualMode = "W";
+            altFolder = "Forays2/";
+            VoxelLogic.voxFolder = "ForaysBones/";
+            ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -6074,7 +6103,7 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
             processUnitHugeWMilitarySuper("Plane_S");*/
-        //    processUnitHugeWMilitarySuper("Plane_T");
+            //    processUnitHugeWMilitarySuper("Plane_T");
             /*
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
@@ -6122,7 +6151,7 @@ namespace AssetsPV
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
             processUnitLargeWMilitary("Plane_S");*/
-        //    processUnitLargeWMilitary("Plane_T");
+            //    processUnitLargeWMilitary("Plane_T");
             /*
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
@@ -6162,7 +6191,7 @@ namespace AssetsPV
             */
 
             //makeDetailedTiling();
-            
+            /*
             WriteOFFMilitary("Tank", 0);
 
             WriteOFFMilitary("Tank", 1 + 32 * 8);
@@ -6173,6 +6202,8 @@ namespace AssetsPV
             WriteOFFMilitary("Plane_T", 2 + 4 * 8);
 
             WriteOFFMilitary("Plane_T", 5 + 4 * 8);
+            */
+
 
             //processUnitLargeW("Charlie", 1, true, false);
 
@@ -6286,6 +6317,419 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
                 */
+
+
+            Pose bow0 = (model => model
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(30, "Right_Upper_Arm")
+            .AddYaw(-15, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            .Translate(0, -10, 0, "Left_Leg")
+            ),
+                bow1 = (model => model
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(50, "Right_Upper_Arm")
+            .AddYaw(-35, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
+            .Translate(0, -10, 0, "Left_Leg")
+            ),
+
+                bow2 = (model => model
+            .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
+            .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
+            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(60, "Right_Upper_Arm")
+            .AddYaw(-15, "Right_Lower_Arm")
+            .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+            .Translate(0, -10, 0, "Left_Leg")
+            );
+            Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f, true),
+                brownLeatherPattern = new Pattern(253 - 44 * 4, 0, 253 - 43 * 4, 0, 3, 2, 2, 1, 0.6f, true),
+                tanLeatherPattern = new Pattern(253 - 46 * 4, 0, 253 - 45 * 4, 0, 3, 2, 2, 1, 0.6f, true),
+                mailPattern = new Pattern(253 - 56 * 4, 0, 253 - 57 * 4, 0, 2, 1, 1, 1, 1f);
+            Dictionary<byte, Pattern> leather = new Dictionary<byte, Pattern>() {
+                { 253 - 29 * 4, brownLeatherPattern },
+                { 253 - 5 * 4, brownLeatherPattern },
+                { 253 - 4 * 4, brownLeatherPattern },
+                { 253 - 3 * 4, brownLeatherPattern },
+                { 253 - 2 * 4, brownLeatherPattern },
+            }, chain = new Dictionary<byte, Pattern>() {
+                { 253 - 29 * 4, mailPattern },
+                { 253 - 5 * 4, mailPattern },
+                { 253 - 4 * 4, mailPattern },
+                { 253 - 3 * 4, brownLeatherPattern },
+                { 253 - 2 * 4, brownLeatherPattern },
+            };
+
+
+            Pose swing0l = (model => model),
+                swing1l = (model => model
+            .AddPitch(10, "Left_Weapon")
+            .AddPitch(70, "Left_Lower_Arm", "Left_Weapon")
+            //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(75, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
+                swing2l = (model => model
+            .AddPitch(-30, "Left_Weapon")
+            .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
+            .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
+
+            Pose swing0r = (model => model),
+                swing1r = (model => model
+            .AddPitch(10, "Right_Weapon")
+            .AddPitch(70, "Right_Lower_Arm", "Right_Weapon")
+            //.AddYaw(-10, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")),
+                swing2r = (model => model
+            .AddPitch(-30, "Right_Weapon")
+            .AddPitch(40, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddYaw(330, "Right_Lower_Arm", "Right_Weapon")
+            .AddSpread("Right_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
+
+            Pose stab0l = (model => model),
+                stab1l = (model => model
+            .AddPitch(10, "Left_Weapon")
+            .AddPitch(60, "Left_Lower_Arm")
+            //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(360 - 35, "Left_Upper_Arm")
+            .AddYaw(340, "Right_Lower_Arm", "Right_Upper_Arm", "Right_Weapon", "Torso")),
+                stab1l_alt = (model => model
+            .AddPitch(10, "Left_Weapon")
+            .AddPitch(65, "Left_Lower_Arm")
+            //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddPitch(360 - 45, "Left_Upper_Arm")
+            .AddYaw(20, "Right_Lower_Arm", "Right_Upper_Arm", "Right_Weapon", "Torso")),
+                stab2l = (model => model
+            .AddPitch(80, "Left_Lower_Arm")
+            .AddPitch(65, "Left_Upper_Arm")
+            .AddYaw(20, "Right_Lower_Arm", "Right_Upper_Arm", "Right_Weapon", "Torso"));
+
+            Pose stab0r = (model => model),
+                stab1r = (model => model
+            .AddPitch(10, "Right_Weapon")
+            .AddPitch(60, "Right_Lower_Arm")
+            //.AddYaw(-10, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(360 - 35, "Right_Upper_Arm")
+            .AddYaw(20, "Left_Lower_Arm", "Left_Upper_Arm", "Left_Weapon", "Torso")),
+                stab1r_alt = (model => model
+            .AddPitch(10, "Right_Weapon")
+            .AddPitch(65, "Right_Lower_Arm")
+            //.AddYaw(-10, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(360 - 45, "Right_Upper_Arm")
+            .AddYaw(340, "Left_Lower_Arm", "Left_Upper_Arm", "Left_Weapon", "Torso")),
+                stab2r = (model => model
+            .AddPitch(80, "Right_Lower_Arm")
+            .AddPitch(65, "Right_Upper_Arm")
+            .AddYaw(340, "Left_Lower_Arm", "Left_Upper_Arm", "Left_Weapon", "Torso"));
+
+            Pose spin0r = (model => model
+            .AddPitch(90, "Right_Lower_Arm", "Right_Weapon")),
+                spin1r_a = (model => model
+            .Translate(10, 0, 0, "Right_Weapon")
+            .AddYaw(20, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(90, "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(70, "Right_Upper_Arm")
+            .AddPitch(-60, "Right_Weapon")
+            .AddSpread("Right_Weapon", 25f, 0f, -5f, 253 - 44 * 4)),
+                spin1r_b = (model => model
+            .Translate(10, 0, 0, "Right_Weapon")
+            .AddYaw(20, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(90, "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(70, "Right_Upper_Arm")
+            .AddPitch(180, "Right_Weapon")
+            .AddSpread("Right_Weapon", 25f, 0f, -5f, 253 - 44 * 4)),
+                spin1r_c = (model => model
+            .Translate(10, 0, 0, "Right_Weapon")
+            .AddYaw(20, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(90, "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(70, "Right_Upper_Arm")
+            .AddPitch(60, "Right_Weapon")
+            .AddSpread("Right_Weapon", 25f, 0f, -5f, 253 - 44 * 4)),
+                spin2r = (model => model
+            .Translate(10, 0, 0, "Right_Weapon")
+            .AddYaw(350, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddPitch(10, "Right_Weapon")
+            .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm")
+            .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
+
+
+            Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+
+            processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+
+            processVoxGiantWModel("Hero_Chain_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
+
+            processVoxGiantWModel("Hero_Plate_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            Model hero_mace = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+
+            processVoxGiantWModel("Hero_Leather_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_mace = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
+
+            processVoxGiantWModel("Hero_Chain_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_mace = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Mace");
+
+            processVoxGiantWModel("Hero_Plate_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+
+            processVoxGiantWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_dagger = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
+
+            processVoxGiantWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
+
+            processVoxGiantWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+
+            Model hero_staff = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+
+            processVoxGiantWModel("Hero_Leather_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+            hero_staff = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
+
+            processVoxGiantWModel("Hero_Chain_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+            hero_staff = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Staff");
+
+            processVoxGiantWModel("Hero_Plate_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+
+            Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+
+            processVoxGiantWModel("Hero_Leather_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_bow = Model.Humanoid(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
+
+            processVoxGiantWModel("Hero_Chain_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
+
+
+            processVoxGiantWModel("Hero_Plate_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
 
 
         }

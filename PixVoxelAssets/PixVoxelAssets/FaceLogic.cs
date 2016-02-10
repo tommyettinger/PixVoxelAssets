@@ -441,8 +441,9 @@ namespace AssetsPV
 
                             if(zdown && !zup)
                             {
-
-                                if(!xdown && yup && !xup && !ydown)
+                                if(ImportantVisual(faces[x, y, z - 1].vox.color))
+                                    faces2[x, y, z] = null;
+                                else if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z - 1].vox.color }, Slope.BrightTop);
                                 }
@@ -478,7 +479,9 @@ namespace AssetsPV
                             else if(zup)
                             {
 
-                                if(!xdown && yup && !xup && !ydown)
+                                if(ImportantVisual(faces[x, y, z + 1].vox.color))
+                                    faces2[x, y, z] = null;
+                                else if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x, y, z + 1].vox.color }, Slope.BrightBottom);
                                 }
@@ -513,19 +516,19 @@ namespace AssetsPV
                             }
                             else
                             {
-                                if(xdown && yup && !xup && !ydown)
+                                if(xdown && yup && !xup && !ydown && !ImportantVisual(faces[x - 1, y, z].vox.color))
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x - 1, y, z].vox.color }, Slope.BrightDim);
                                 }
-                                else if(!xdown && !yup && xup && ydown)
+                                else if(!xdown && !yup && xup && ydown && !ImportantVisual(faces[x + 1, y, z].vox.color))
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x + 1, y, z].vox.color }, Slope.BackBack);
                                 }
-                                else if(xup && yup && !xdown && !ydown)
+                                else if(xup && yup && !xdown && !ydown && !ImportantVisual(faces[x + 1, y, z].vox.color))
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x + 1, y, z].vox.color }, Slope.BrightBack);
                                 }
-                                else if(!xup && !yup && xdown && ydown)
+                                else if(!xup && !yup && xdown && ydown && !ImportantVisual(faces[x - 1, y, z].vox.color))
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = faces[x - 1, y, z].vox.color }, Slope.DimBack);
                                 }
@@ -1938,7 +1941,7 @@ namespace AssetsPV
             if(e != null) { ec = e.vox.color; if(tgt == 512) tgt = ec; else if(tgt != ec) tgt = 1024; }
             if(f != null) { fc = f.vox.color; if(tgt == 512) tgt = fc; else if(tgt != fc) tgt = 1024; }
 
-            if((ac & bc & cc & dc & ec & fc) == tgt)
+            if((ac & bc & cc & dc & ec & fc) == tgt && (ac | bc | cc | dc | ec | fc) == tgt)
             {
                 //if(tgt == (253 - 9 * 4) && faces[x,y,z] == null)
                 //    Console.WriteLine("Homogeneous area: " + ((253 - tgt) / 4));
@@ -1964,7 +1967,7 @@ namespace AssetsPV
             if(e != 0) { ec = e; if(tgt == 512) tgt = ec; else if(tgt != ec) tgt = 1024; }
             if(f != 0) { fc = f; if(tgt == 512) tgt = fc; else if(tgt != fc) tgt = 1024; }
 
-            if((ac & bc & cc & dc & ec & fc) == tgt)
+            if((ac & bc & cc & dc & ec & fc) == tgt && (ac | bc | cc | dc | ec | fc) == tgt)
             {
                 //if(tgt == (253 - 9 * 4) && faces[x,y,z] == null)
                 //    Console.WriteLine("Homogeneous area: " + ((253 - tgt) / 4));
@@ -3091,6 +3094,26 @@ namespace AssetsPV
                     data[mvd.vox.x, mvd.vox.y, mvd.vox.z] = mvd;
             }
             return data;
+        }
+
+        public static byte[,,] FaceArrayToByteArray(FaceVoxel[,,] faces)
+        {
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+
+            byte[,,] b = new byte[xSize, ySize, zSize];
+
+            for(byte x = 0; x < xSize; x++)
+            {
+                for(byte y = 0; y < ySize; y++)
+                {
+                    for(byte z = 0; z < zSize; z++)
+                    {
+                        if(faces[x, y, z] != null)
+                            b[x,y,z] = faces[x, y, z].vox.color;
+                    }
+                }
+            }
+            return b;
         }
 
 

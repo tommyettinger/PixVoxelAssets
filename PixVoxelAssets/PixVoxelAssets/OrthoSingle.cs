@@ -4858,8 +4858,8 @@ namespace AssetsPV
                 { 253 - 29 * 4, mailPattern },
                 { 253 - 5 * 4, mailPattern },
                 { 253 - 4 * 4, mailPattern },
-                { 253 - 3 * 4, tanLeatherPattern },
-                { 253 - 2 * 4, tanLeatherPattern },
+                { 253 - 3 * 4, brownLeatherPattern },
+                { 253 - 2 * 4, brownLeatherPattern },
             };
             
             
@@ -4954,320 +4954,6 @@ namespace AssetsPV
             .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
 
 
-            //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1l);
-            /*
-            Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
-
-            processUnitLargeWModel("Hero_Leather_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
-
-            processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-            
-            Model hero_mace = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
-
-            processUnitLargeWModel("Hero_Leather_Mace", true, 0, hero_mace,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.65f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.5f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_mace = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Mace", true, 0, hero_mace,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.65f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.5f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_mace = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Mace");
-
-            processUnitLargeWModel("Hero_Plate_Mace", true, 0, hero_mace,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.65f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.5f },
-                new float[] { 2, 0, 1.0f },});
-
-            Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
-            
-            processUnitLargeWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
-                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.5f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.5f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 3, 2, 0.35f },
-                new float[] { 3, 2, 0.1f },
-                new float[] { 3, 2, 0.45f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.35f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_dagger = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
-                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.5f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.5f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 3, 2, 0.35f },
-                new float[] { 3, 2, 0.1f },
-                new float[] { 3, 2, 0.45f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.35f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
-
-            processUnitLargeWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
-                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.5f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.5f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 3, 2, 0.35f },
-                new float[] { 3, 2, 0.1f },
-                new float[] { 3, 2, 0.45f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.35f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-            
-
-            Model hero_staff = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
-
-            processUnitLargeWModel("Hero_Leather_Staff", true, 0, hero_staff,
-                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.7f },
-                new float[] { 1, 2, 0.1f },
-                new float[] { 1, 2, 0.6f },
-                new float[] { 2, 3, 0.2f },
-                new float[] { 2, 3, 0.9f },
-                new float[] { 3, 1, 0.7f },
-                new float[] { 1, 4, 0.6f },
-                new float[] { 1, 4, 0.9f },
-                new float[] { 4, 0, 0.2f },
-                new float[] { 4, 0, 0.6f },
-                new float[] { 4, 0, 1.0f },});
-
-            hero_staff = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Staff", true, 0, hero_staff,
-                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.7f },
-                new float[] { 1, 2, 0.1f },
-                new float[] { 1, 2, 0.6f },
-                new float[] { 2, 3, 0.2f },
-                new float[] { 2, 3, 0.9f },
-                new float[] { 3, 1, 0.7f },
-                new float[] { 1, 4, 0.6f },
-                new float[] { 1, 4, 0.9f },
-                new float[] { 4, 0, 0.2f },
-                new float[] { 4, 0, 0.6f },
-                new float[] { 4, 0, 1.0f },});
-
-            hero_staff = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Staff");
-
-            processUnitLargeWModel("Hero_Plate_Staff", true, 0, hero_staff,
-                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.7f },
-                new float[] { 1, 2, 0.1f },
-                new float[] { 1, 2, 0.6f },
-                new float[] { 2, 3, 0.2f },
-                new float[] { 2, 3, 0.9f },
-                new float[] { 3, 1, 0.7f },
-                new float[] { 1, 4, 0.6f },
-                new float[] { 1, 4, 0.9f },
-                new float[] { 4, 0, 0.2f },
-                new float[] { 4, 0, 0.6f },
-                new float[] { 4, 0, 1.0f },});
-            
-
-            Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
-
-            processUnitLargeWModel("Hero_Leather_Bow", true, 0, hero_bow,
-                new Pose[] { bow0, bow1, bow2 },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.4f },
-                new float[] { 2, 0, 0.8f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_bow = Model.Humanoid(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Bow", true, 0, hero_bow,
-                new Pose[] { bow0, bow1, bow2 },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.4f },
-                new float[] { 2, 0, 0.8f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
-
-
-            processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
-                new Pose[] { bow0, bow1, bow2 },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.4f },
-                new float[] { 2, 0, 0.8f },
-                new float[] { 2, 0, 1.0f },});
-            */
-
-            /*
-            Model dude = Model.Humanoid(left_weapon: "Bow"),
-                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: leather);
-            
-            processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
-                new Pose[] { bow0, bow1, bow2 },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.4f },
-                new float[] { 2, 0, 0.8f },
-                new float[] { 2, 0, 1.0f },});
-
-
-
-            processUnitLargeWModel("Dude_Bow", true, 0, dude,
-                new Pose[] { bow0, bow1, bow2 },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.4f },
-                new float[] { 2, 0, 0.8f },
-                new float[] { 2, 0, 1.0f },});
-            */
             Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
@@ -5540,6 +5226,322 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
+
+
+            /*
+Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+
+processUnitLargeWModel("Hero_Leather_Sword", true, 0, hero_sword,
+    new Pose[] { swing0r, swing1r, swing2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.3f },
+    new float[] { 0, 1, 0.55f },
+    new float[] { 0, 1, 0.75f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.35f },
+    new float[] { 1, 2, 0.7f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.3f },
+    new float[] { 2, 0, 0.65f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+
+processUnitLargeWModel("Hero_Chain_Sword", true, 0, hero_sword,
+    new Pose[] { swing0r, swing1r, swing2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.3f },
+    new float[] { 0, 1, 0.55f },
+    new float[] { 0, 1, 0.75f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.35f },
+    new float[] { 1, 2, 0.7f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.3f },
+    new float[] { 2, 0, 0.65f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
+
+processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
+    new Pose[] { swing0r, swing1r, swing2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.3f },
+    new float[] { 0, 1, 0.55f },
+    new float[] { 0, 1, 0.75f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.35f },
+    new float[] { 1, 2, 0.7f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.3f },
+    new float[] { 2, 0, 0.65f },
+    new float[] { 2, 0, 1.0f },});
+
+Model hero_mace = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+
+processUnitLargeWModel("Hero_Leather_Mace", true, 0, hero_mace,
+    new Pose[] { swing0r, swing1r, swing2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.2f },
+    new float[] { 0, 1, 0.4f },
+    new float[] { 0, 1, 0.6f },
+    new float[] { 0, 1, 0.8f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.35f },
+    new float[] { 1, 2, 0.65f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.5f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_mace = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
+
+processUnitLargeWModel("Hero_Chain_Mace", true, 0, hero_mace,
+    new Pose[] { swing0r, swing1r, swing2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.2f },
+    new float[] { 0, 1, 0.4f },
+    new float[] { 0, 1, 0.6f },
+    new float[] { 0, 1, 0.8f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.35f },
+    new float[] { 1, 2, 0.65f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.5f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_mace = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Mace");
+
+processUnitLargeWModel("Hero_Plate_Mace", true, 0, hero_mace,
+    new Pose[] { swing0r, swing1r, swing2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.2f },
+    new float[] { 0, 1, 0.4f },
+    new float[] { 0, 1, 0.6f },
+    new float[] { 0, 1, 0.8f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.35f },
+    new float[] { 1, 2, 0.65f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.5f },
+    new float[] { 2, 0, 1.0f },});
+
+Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+
+processUnitLargeWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
+    new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.5f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.5f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 3, 2, 0.35f },
+    new float[] { 3, 2, 0.1f },
+    new float[] { 3, 2, 0.45f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.35f },
+    new float[] { 2, 0, 0.65f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_dagger = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
+
+processUnitLargeWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
+    new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.5f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.5f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 3, 2, 0.35f },
+    new float[] { 3, 2, 0.1f },
+    new float[] { 3, 2, 0.45f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.35f },
+    new float[] { 2, 0, 0.65f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
+
+processUnitLargeWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
+    new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.5f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 0.5f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 3, 2, 0.35f },
+    new float[] { 3, 2, 0.1f },
+    new float[] { 3, 2, 0.45f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.35f },
+    new float[] { 2, 0, 0.65f },
+    new float[] { 2, 0, 1.0f },});
+
+
+Model hero_staff = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+
+processUnitLargeWModel("Hero_Leather_Staff", true, 0, hero_staff,
+    new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.7f },
+    new float[] { 1, 2, 0.1f },
+    new float[] { 1, 2, 0.6f },
+    new float[] { 2, 3, 0.2f },
+    new float[] { 2, 3, 0.9f },
+    new float[] { 3, 1, 0.7f },
+    new float[] { 1, 4, 0.6f },
+    new float[] { 1, 4, 0.9f },
+    new float[] { 4, 0, 0.2f },
+    new float[] { 4, 0, 0.6f },
+    new float[] { 4, 0, 1.0f },});
+
+hero_staff = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
+
+processUnitLargeWModel("Hero_Chain_Staff", true, 0, hero_staff,
+    new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.7f },
+    new float[] { 1, 2, 0.1f },
+    new float[] { 1, 2, 0.6f },
+    new float[] { 2, 3, 0.2f },
+    new float[] { 2, 3, 0.9f },
+    new float[] { 3, 1, 0.7f },
+    new float[] { 1, 4, 0.6f },
+    new float[] { 1, 4, 0.9f },
+    new float[] { 4, 0, 0.2f },
+    new float[] { 4, 0, 0.6f },
+    new float[] { 4, 0, 1.0f },});
+
+hero_staff = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Staff");
+
+processUnitLargeWModel("Hero_Plate_Staff", true, 0, hero_staff,
+    new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.7f },
+    new float[] { 1, 2, 0.1f },
+    new float[] { 1, 2, 0.6f },
+    new float[] { 2, 3, 0.2f },
+    new float[] { 2, 3, 0.9f },
+    new float[] { 3, 1, 0.7f },
+    new float[] { 1, 4, 0.6f },
+    new float[] { 1, 4, 0.9f },
+    new float[] { 4, 0, 0.2f },
+    new float[] { 4, 0, 0.6f },
+    new float[] { 4, 0, 1.0f },});
+
+
+Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+
+processUnitLargeWModel("Hero_Leather_Bow", true, 0, hero_bow,
+    new Pose[] { bow0, bow1, bow2 },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.2f },
+    new float[] { 0, 1, 0.4f },
+    new float[] { 0, 1, 0.6f },
+    new float[] { 0, 1, 0.8f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.4f },
+    new float[] { 2, 0, 0.8f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_bow = Model.Humanoid(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
+
+processUnitLargeWModel("Hero_Chain_Bow", true, 0, hero_bow,
+    new Pose[] { bow0, bow1, bow2 },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.2f },
+    new float[] { 0, 1, 0.4f },
+    new float[] { 0, 1, 0.6f },
+    new float[] { 0, 1, 0.8f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.4f },
+    new float[] { 2, 0, 0.8f },
+    new float[] { 2, 0, 1.0f },});
+
+hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
+
+
+processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
+    new Pose[] { bow0, bow1, bow2 },
+    new float[][] {
+    new float[] { 0, 1, 0.0f },
+    new float[] { 0, 1, 0.2f },
+    new float[] { 0, 1, 0.4f },
+    new float[] { 0, 1, 0.6f },
+    new float[] { 0, 1, 0.8f },
+    new float[] { 0, 1, 0.9f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 0, 1, 1.0f },
+    new float[] { 1, 2, 1.0f },
+    new float[] { 2, 0, 0.4f },
+    new float[] { 2, 0, 0.8f },
+    new float[] { 2, 0, 1.0f },});
+*/
+
+            /*
+            Model dude = Model.Humanoid(left_weapon: "Bow"),
+                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: leather);
+            
+            processUnitLargeWModel("Orc_Assassin", true, 10, orc_assassin,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+
+
+            processUnitLargeWModel("Dude_Bow", true, 0, dude,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+            */
+
 
             /*
             Model m = new Model(new Dictionary<string, Bone> { { "Left_Weapon", Bone.readBone("Longsword") } });
