@@ -568,15 +568,15 @@ namespace AssetsPV
                                 continue;
                             }
                             nearby.Fill(false);
-                            for(int i = 0; i < 3; i++)
+                            for(int i = 0; i < 3 && x - 1 + i < xSize; i++)
                             {
                                 if(x > 0 || i > 0)
                                 {
-                                    for(int j = 0; j < 3; j++)
+                                    for(int j = 0; j < 3 && y - 1 + j < ySize; j++)
                                     {
                                         if(y > 0 || j > 0)
                                         {
-                                            for(int k = 0; k < 3; k++)
+                                            for(int k = 0; k < 3 && z - 1 + k < zSize; k++)
                                             {
                                                 if(z > 0 || k > 0)
                                                 {
@@ -3096,6 +3096,12 @@ namespace AssetsPV
             return data;
         }
 
+        public static bool IsSlopeThick(Slope s)
+        {
+            return s == Slope.Cube || s == Slope.BackBackBottomThick || s == Slope.BackBackTopThick || s == Slope.BrightBottomBackThick || s == Slope.BrightDimBottomThick || s == Slope.BrightDimTopThick
+                 || s == Slope.BrightTopBackThick || s == Slope.DimBottomBackThick || s == Slope.DimTopBackThick;
+        }
+
         public static byte[,,] FaceArrayToByteArray(FaceVoxel[,,] faces)
         {
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
@@ -3108,7 +3114,7 @@ namespace AssetsPV
                 {
                     for(byte z = 0; z < zSize; z++)
                     {
-                        if(faces[x, y, z] != null)
+                        if(faces[x, y, z] != null && IsSlopeThick(faces[x, y, z].slope))
                             b[x,y,z] = faces[x, y, z].vox.color;
                     }
                 }

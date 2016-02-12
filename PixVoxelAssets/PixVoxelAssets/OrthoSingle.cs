@@ -4308,23 +4308,57 @@ namespace AssetsPV
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
                     byte[,,] colors = PatternLogic.ApplyPattern(
-                        TransformLogic.RunSurfaceCA(
+                            //TransformLogic.RunSurfaceCA(
+                            TransformLogic.RunCA(
+                                                FaceLogic.FaceArrayToByteArray(
+                                                        //FaceLogic.DoubleSize(
+                                                        FaceLogic.GetFaces(
+                                                            TransformLogic.RunThinningCA(
+                                                                    posed[(int)(frames[i][0])]
+                                                                    .Interpolate(posed[(int)(frames[i][1])], frames[i][2])
+                                                                    .Translate(10 * OrthoSingle.multiplier, 10 * OrthoSingle.multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg")
+                                                                    .Finalize(),
+                                                                2)//1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)
+                                                            )
+                                                   //)
+                                                   ),
+                            2, true),
+                            model.Patterns);
+                    /*
+                    byte[,,] colors = PatternLogic.ApplyPattern(
+                        TransformLogic.RunCA(
                             FaceLogic.FaceArrayToByteArray(
                                 FaceLogic.DoubleSize(
                                     FaceLogic.GetFaces(
-                                        TransformLogic.RunCA(
-                                            TransformLogic.Translate(
                                                 posed[(int)(frames[i][0])]
                                                 .Interpolate(posed[(int)(frames[i][1])], frames[i][2])
                                                 .Translate(10 * multiplier, 10 * multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg")
-                                                .Finalize(),
-                                                10, 10, 0),
-                                            1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)
+                                                .Finalize()
                                         )
-                                   )
-                               ), 2, true),
+                                    )
+                                ),
+                            1 + OrthoSingle.multiplier * OrthoSingle.bonus), 
                         model.Patterns);
-
+                    */
+                    /*
+                    byte[,,] colors = PatternLogic.ApplyPattern(
+                                            TransformLogic.RunSurfaceCA(
+                                                FaceLogic.FaceArrayToByteArray(
+                                                    FaceLogic.DoubleSize(
+                                                        FaceLogic.GetFaces(
+                                                            TransformLogic.RunCA(
+                                                                TransformLogic.Translate(
+                                                                    posed[(int)(frames[i][0])]
+                                                                    .Interpolate(posed[(int)(frames[i][1])], frames[i][2])
+                                                                    .Translate(10 * multiplier, 10 * multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg")
+                                                                    .Finalize(),
+                                                                    10, 10, 0),
+                                                                1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)
+                                                            )
+                                                       )
+                                                   ), 2, true),
+                                            model.Patterns);
+                    */
                     /*
                     TransformLogic.RunCA(
                         posed[(int)(frames[i][0])]
@@ -4370,14 +4404,43 @@ namespace AssetsPV
                 for(int dir = 0; dir < 4; dir++)
                 {
 
-                    FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(modelFrames[f].Finalize(), dir * 90));
+                    //FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(modelFrames[f].Finalize(), dir * 90));
 
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
                     byte[][] b = renderGenericW(
-                        PatternLogic.ApplyPattern(TransformLogic.RunSurfaceCA(FaceLogic.FaceArrayToByteArray(FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.RotateYaw(TransformLogic.RunCA(
-                        TransformLogic.Translate(modelFrames[f].Finalize(), 10, 10, 0),
-                        1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2), dir * 90)))), 2, true), modelFrames[f].Patterns), palette, f, framelimit, still, false, 120, 120, 120);
+                        PatternLogic.ApplyPattern(
+                            //TransformLogic.RunSurfaceCA(
+                            TransformLogic.RunCA(
+                                                FaceLogic.FaceArrayToByteArray(
+                                                        //FaceLogic.DoubleSize(
+                                                        FaceLogic.GetFaces(
+                                                            TransformLogic.RunThinningCA(
+                                                                    modelFrames[f]
+                                                                    .Finalize(),
+                                                                2)//1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)
+                                                            )
+                                                   //)
+                                                   ),
+                            2, true),
+                            model.Patterns)
+                    , palette, f, framelimit, still, false, 120, 120, 120);
 
+                    /*
+                                        byte[][] b = renderGenericW(
+                        PatternLogic.ApplyPattern(
+                        TransformLogic.RunCA(
+                            FaceLogic.FaceArrayToByteArray(
+                                FaceLogic.DoubleSize(
+                                    FaceLogic.GetFaces(
+                                            modelFrames[f]
+                                            .Finalize())
+                                    )
+                                ),
+                            1 + OrthoSingle.multiplier * OrthoSingle.bonus),
+                        model.Patterns)
+                    , palette, f, framelimit, still, false, 120, 120, 120);
+
+                    */
                     ImageInfo imi = new ImageInfo(b[0].Length, b.Length, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Ortho_face" + dir + "_" + f + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);

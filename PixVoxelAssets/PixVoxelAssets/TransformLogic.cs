@@ -1213,7 +1213,7 @@ namespace AssetsPV
                         {
                             working[x - plugX + socketX + 10,
                                     y - plugY + socketY + 10,
-                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x, y, z] - 1) : plug[x, y, z];
+                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? NearbyColor(plug, x, y, z) : plug[x, y, z];
                         }
                     }
                 }
@@ -1294,7 +1294,7 @@ namespace AssetsPV
                         {
                             working[x - plugX + socketX,
                                     y - plugY + socketY,
-                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x, y, z] - 1) : plug[x, y, z];
+                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? NearbyColor(plug, x, y, z) : plug[x, y, z];
                         }
                     }
                 }
@@ -1371,7 +1371,7 @@ namespace AssetsPV
                         {
                             working[x - plugX + socketX + 10,
                                     y - plugY + socketY + 10,
-                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? (byte)(plug[x,y,z] - 1) : plug[x, y, z];
+                                    z - plugZ + socketZ] = (plug[x, y, z] > 257 - VoxelLogic.wcolorcount * 4 && (254 - plug[x, y, z]) == matchColor * 4) ? NearbyColor(plug, x, y, z) : plug[x, y, z];
                         }
                     }
                 }
@@ -1410,6 +1410,47 @@ namespace AssetsPV
                 }
             }
             return next;
+        }
+
+        public static byte NearbyColor(byte[,,] voxelData, int x, int y, int z)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte[] nearby = new byte[27], counts = new byte[27];
+            int running = 0;
+            for(int i = Math.Max(0, x - 1); i <= x + 1 && i < xSize; i++)
+            {
+                for(int j = Math.Max(0, y - 1); j <= y + 1 && j < ySize; j++)
+                {
+                    for(int k = Math.Max(0, z - 1); k <= z + 1 && k < zSize; k++)
+                    {
+                        for(int c = 0; c <= running; c++)
+                        {
+                            if(nearby[c] == voxelData[i, j, k] && voxelData[i, j, k] != 0)
+                            {
+                                counts[c]++;
+                                break;
+                            }
+                            if(c == running && (253 - voxelData[i, j, k]) % 4 == 0)
+                            {
+                                nearby[c] = voxelData[i, j, k];
+                                counts[c]++;
+                                running++;
+                                break;
+                            }
+                        }                        
+                    }
+                }
+            }
+            byte best = 0, bestCount = 0;
+            for(int c = 0; c < running; c++)
+            {
+                if(counts[c] > bestCount)
+                {
+                    best = nearby[c];
+                    bestCount = counts[c];
+                }
+            }
+            return best;
         }
 
         public static byte[,,] VoxListToArray(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
@@ -1617,8 +1658,59 @@ namespace AssetsPV
             }
             return vs[smoothLevel - 1];
         }
+        public static byte[,,] RunThinningCA(byte[,,] voxelData, int smoothLevel, bool regardless = false)
+        {
+            if(smoothLevel <= 1)
+                return voxelData;
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            //Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
+            byte[][,,] vs = new byte[smoothLevel][,,];
+            vs[0] = voxelData.Replicate();
+            for(int v = 1; v < smoothLevel; v++)
+            {
+                vs[v] = new byte[xSize, ySize, zSize];
+                for(int x = 0; x < xSize; x++)
+                {
+                    for(int y = 0; y < ySize; y++)
+                    {
+                        for(int z = 0; z < zSize; z++)
+                        {
+                            int emptyCount = 0;
+                            if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
+                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || (!regardless && ColorValue(vs[v - 1][x, y, z]) > 50))
+                            {
+                            }
+                            else
+                            {
+                                for(int xx = -1; xx < 2; xx++)
+                                {
+                                    for(int yy = -1; yy < 2; yy++)
+                                    {
+                                        for(int zz = -1; zz < 2; zz++)
+                                        {
+                                            byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
+                                            if(smallColor == 0 || ColorValue(smallColor) < 16)
+                                            {
+                                                emptyCount++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(emptyCount >= 18)
+                                vs[v][x, y, z] = 0;
+                            else
+                            {
+                                vs[v][x, y, z] = vs[v - 1][x, y, z];
+                            }
+                        }
+                    }
+                }
+            }
+            return vs[smoothLevel - 1];
+        }
 
-        public static byte[,,] fillInterior(byte[,,] voxelData)
+        public static byte[,,] EmptyInterior(byte[,,] voxelData)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
 
@@ -1666,19 +1758,79 @@ namespace AssetsPV
                             voxelData[x - 1, y + 1, z - 1] == 0 ||
                             voxelData[x + 1, y - 1, z - 1] == 0 ||
                             voxelData[x - 1, y - 1, z - 1] == 0 ||
-                            voxelData[x + 1, y + 1, z - 1] == 0 )
+                            voxelData[x + 1, y + 1, z - 1] == 0)
 
                             voxels[x, y, z] = voxelData[x, y, z];
                         else
-                            voxels[x, y, z] = 2;
-                            
+                            voxels[x, y, z] = 0;
+
                     }
                 }
             }
             return voxels;
         }
 
-        public static byte[,,] clearInterior(byte[,,] voxelData)
+        public static byte[,,] FillInterior(byte[,,] voxelData)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+
+            byte[,,] voxels = new byte[xSize, ySize, zSize];
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+
+                        if(
+                            x == 0 || x == xSize - 1 ||
+                            y == 0 || y == ySize - 1 ||
+                            z == 0 || z == zSize - 1 ||
+                            voxelData[x, y, z] == 0 ||
+                            voxelData[x - 1, y, z] == 0 ||
+                            voxelData[x + 1, y, z] == 0 ||
+                            voxelData[x, y - 1, z] == 0 ||
+                            voxelData[x, y + 1, z] == 0 ||
+                            voxelData[x, y, z - 1] == 0 ||
+                            voxelData[x, y, z + 1] == 0 ||
+
+                            voxelData[x - 1, y, z + 1] == 0 ||
+                            voxelData[x + 1, y, z + 1] == 0 ||
+                            voxelData[x, y - 1, z + 1] == 0 ||
+                            voxelData[x, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y, z - 1] == 0 ||
+                            voxelData[x + 1, y, z - 1] == 0 ||
+                            voxelData[x, y - 1, z - 1] == 0 ||
+                            voxelData[x, y + 1, z - 1] == 0 ||
+
+                            voxelData[x - 1, y - 1, z] == 0 ||
+                            voxelData[x + 1, y - 1, z] == 0 ||
+
+                            voxelData[x - 1, y + 1, z] == 0 ||
+                            voxelData[x + 1, y + 1, z] == 0 ||
+
+                            voxelData[x - 1, y + 1, z + 1] == 0 ||
+                            voxelData[x + 1, y - 1, z + 1] == 0 ||
+                            voxelData[x - 1, y - 1, z + 1] == 0 ||
+                            voxelData[x + 1, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y + 1, z - 1] == 0 ||
+                            voxelData[x + 1, y - 1, z - 1] == 0 ||
+                            voxelData[x - 1, y - 1, z - 1] == 0 ||
+                            voxelData[x + 1, y + 1, z - 1] == 0)
+
+                            voxels[x, y, z] = voxelData[x, y, z];
+                        else
+                            voxels[x, y, z] = 2;
+
+                    }
+                }
+            }
+            return voxels;
+        }
+
+        public static byte[,,] ClearInterior(byte[,,] voxelData)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
 
@@ -1706,7 +1858,7 @@ namespace AssetsPV
             //Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
             int[] colorCount = new int[256];
             byte[][,,] vs = new byte[smoothLevel][,,];
-            vs[0] = fillInterior(voxelData);
+            vs[0] = FillInterior(voxelData);
             for(int v = 1; v < smoothLevel; v++)
             {
                 vs[v] = new byte[xSize, ySize, zSize];
@@ -1766,7 +1918,7 @@ namespace AssetsPV
                     }
                 }
             }
-            return clearInterior(vs[smoothLevel - 1]);
+            return ClearInterior(vs[smoothLevel - 1]);
         }
 
         public static List<MagicaVoxelData> VoxArrayToListSmoothed(byte[,,] voxelData)

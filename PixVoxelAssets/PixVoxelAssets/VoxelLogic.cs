@@ -17297,35 +17297,84 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 }
                                 else
                                 {
-                                    voxelsRaw.Add((byte)(((254 - cc) % 4 == 0) ? cc - 1 : cc));
+                                    cc = (byte)(((254 - cc) % 4 == 0) ? cc - 1 : cc);
+                                    cc = (byte)(((254 - cc) % 4 == 0) ? cc - 1 : cc);
+
+                                    if(z == zSize - 1 || voxelData[x, y, z + 1] == 0)
+                                    {
+                                        voxelsRaw.Add(cc);
+                                    }
+                                    else if(z == 0 || voxelData[x, y, z - 1] == 0)
+                                    {
+                                        voxelsRaw.Add((byte)(cc + 2));
+                                    }
+                                    else
+                                    {
+                                        voxelsRaw.Add((byte)(cc + 1));
+                                    }
                                 }
                                 taken[x, y, z] = true;
                             }
                         }
                     }
                 }
-                for(int i = 1; i < 256; i++)
+                if(rowWidthBytes  <= 4)
                 {
-                    if((253 - i) % 4 == 0 && (253 - i) / 4 < wcolorcount)
+
+                    for(int i = 1; i < 256; i++)
                     {
-                        colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 3] = 255;// wrendered[palette][(253 - i) / 4][3 + rowWidthBytes * 2];
+                        if((253 - i) % 4 == 0 && (253 - i) / 4 < wcolorcount)
+                        {
+                            colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2 + rowWidthBytes * 2];
+                            colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + rowWidthBytes * 2];
+                            colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + rowWidthBytes * 2];
+                            colors[(i - 1) * 4 + 3] = 255;// wrendered[palette][(253 - i) / 4][3 + rowWidthBytes * 2];
+                        }
+                        else if((255 - i) % 4 == 0 && wcolorcount + (255 - i) / 4 < wrendered[palette].Length)
+                        {
+                            colors[(i - 1) * 4] = wrendered[palette][(255 - i) / 4 + wcolorcount][2 + rowWidthBytes * 2];
+                            colors[(i - 1) * 4 + 1] = wrendered[palette][(255 - i) / 4 + wcolorcount][1 + rowWidthBytes * 2];
+                            colors[(i - 1) * 4 + 2] = wrendered[palette][(255 - i) / 4 + wcolorcount][0 + rowWidthBytes * 2];
+                            colors[(i - 1) * 4 + 3] = 255;// wrendered[palette][(255 - i) / 4 + wcolorcount][3 + rowWidthBytes * 2];
+                        }
+                        else
+                        {
+                            colors[(i - 1) * 4] = (byte)(mv_default_palette[i] & 0xff);
+                            colors[(i - 1) * 4 + 1] = (byte)((mv_default_palette[i] >> 8) & 0xff);
+                            colors[(i - 1) * 4 + 2] = (byte)((mv_default_palette[i] >> 16) & 0xff);
+                            colors[(i - 1) * 4 + 3] = (byte)((mv_default_palette[i] >> 24) & 0xff);
+                        }
                     }
-                    else if((255 - i) % 4 == 0 && wcolorcount + (255 - i) / 4 < wrendered[palette].Length)
+                }
+                else
+                {
+
+                    for(int i = 1; i < 256; i++)
                     {
-                        colors[(i - 1) * 4] = wrendered[palette][(255 - i) / 4 + wcolorcount][2 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 1] = wrendered[palette][(255 - i) / 4 + wcolorcount][1 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 2] = wrendered[palette][(255 - i) / 4 + wcolorcount][0 + rowWidthBytes * 2];
-                        colors[(i - 1) * 4 + 3] = 255;// wrendered[palette][(255 - i) / 4 + wcolorcount][3 + rowWidthBytes * 2];
-                    }
-                    else
-                    {
-                        colors[(i - 1) * 4] = (byte)(mv_default_palette[i] & 0xff);
-                        colors[(i - 1) * 4 + 1] = (byte)((mv_default_palette[i] >> 8) & 0xff);
-                        colors[(i - 1) * 4 + 2] = (byte)((mv_default_palette[i] >> 16) & 0xff);
-                        colors[(i - 1) * 4 + 3] = (byte)((mv_default_palette[i] >> 24) & 0xff);
+                        if((253 - i) % 4 == 0 && (253 - i) / 4 < wcolorcount)
+                        {
+                            colors[(i - 1) * 4] = wrendered[palette][(253 - i) / 4][2];
+                            colors[(i - 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1];
+                            colors[(i - 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0];
+                            colors[(i - 1) * 4 + 3] = 255;
+
+                            colors[(i - 0) * 4] = wrendered[palette][(253 - i) / 4][2 + rowWidthBytes * 2];
+                            colors[(i - 0) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + rowWidthBytes * 2];
+                            colors[(i - 0) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + rowWidthBytes * 2];
+                            colors[(i - 0) * 4 + 3] = 255;
+                            
+                            colors[(i + 1) * 4] = wrendered[palette][(253 - i) / 4][2 + rowWidthBytes * 2 + rowWidthBytes / 2];
+                            colors[(i + 1) * 4 + 1] = wrendered[palette][(253 - i) / 4][1 + rowWidthBytes * 2 + rowWidthBytes / 2];
+                            colors[(i + 1) * 4 + 2] = wrendered[palette][(253 - i) / 4][0 + rowWidthBytes * 2 + rowWidthBytes / 2];
+                            colors[(i + 1) * 4 + 3] = 255;
+                        }
+                        else if(colors[(i - 1) * 4 + 3] == 0) // we may have written to values sooner than normal, but alpha will be zero if nothing has been written
+                        {
+                            colors[(i - 1) * 4] = (byte)(mv_default_palette[i] & 0xff);
+                            colors[(i - 1) * 4 + 1] = (byte)((mv_default_palette[i] >> 8) & 0xff);
+                            colors[(i - 1) * 4 + 2] = (byte)((mv_default_palette[i] >> 16) & 0xff);
+                            colors[(i - 1) * 4 + 3] = (byte)((mv_default_palette[i] >> 24) & 0xff);
+                        }
                     }
                 }
             }
