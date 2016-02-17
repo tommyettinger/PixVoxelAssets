@@ -5721,24 +5721,26 @@ namespace AssetsPV
                 {
                     //modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * OrthoSingle.multiplier, 10 * OrthoSingle.multiplier, 0, "Left_Leg");
 
-                    VoxelLogic.WriteVOX(folder + moniker + "_palette" + palette + "_" + i + ".vox", 
-                        PatternLogic.ApplyPattern(
-                            //TransformLogic.RunSurfaceCA(
-                            TransformLogic.RunCA(
-                                                FaceLogic.FaceArrayToByteArray(
-                                                    //FaceLogic.DoubleSize(
-                                                        FaceLogic.GetFaces(
-                                                            TransformLogic.RunThinningCA(
-                                                                    posed[(int)(frames[i][0])]
-                                                                    .Interpolate(posed[(int)(frames[i][1])], frames[i][2])
-                                                                    .Translate(10 * OrthoSingle.multiplier, 10 * OrthoSingle.multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg")
-                                                                    .Finalize(),
-                                                                2)//1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)
-                                                            )
-                                                       //)
-                                                   ),
-                            2, true),
-                            model.Patterns),
+                    VoxelLogic.WriteVOX(folder + moniker + "_palette" + palette + "_" + i + ".vox",
+                        TransformLogic.FillInterior(
+                            PatternLogic.ApplyPattern(
+                                //TransformLogic.RunSurfaceCA(
+                                TransformLogic.RunCA(
+                                    FaceLogic.FaceArrayToByteArray(
+                                        //FaceLogic.DoubleSize(
+                                        FaceLogic.GetFaces(
+                                                TransformLogic.RunThinningCA(
+                                                    posed[(int)(frames[i][0])]
+                                                    .Interpolate(posed[(int)(frames[i][1])], frames[i][2])
+                                                    .Translate(10 * OrthoSingle.multiplier, 10 * OrthoSingle.multiplier, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg")
+                                                    .Finalize(),
+                                                2, true)//1 + OrthoSingle.multiplier * OrthoSingle.bonus / 2)
+                                            )
+                                        
+                                    ),
+                                2, true),
+                            model.Patterns)
+                        ),
                         "W", palette);
                     /*
                     VoxelLogic.WriteVOX(folder + moniker + "_palette" + palette + "_" + i + ".vox",
@@ -6380,7 +6382,9 @@ namespace AssetsPV
             Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f, true),
                 brownLeatherPattern = new Pattern(253 - 44 * 4, 0, 253 - 43 * 4, 0, 3, 2, 2, 1, 0.6f, true),
                 tanLeatherPattern = new Pattern(253 - 46 * 4, 0, 253 - 45 * 4, 0, 3, 2, 2, 1, 0.6f, true),
-                mailPattern = new Pattern(253 - 56 * 4, 0, 253 - 57 * 4, 0, 2, 1, 1, 1, 1f);
+                mailPattern = new Pattern(253 - 56 * 4, 0, 253 - 57 * 4, 0, 2, 1, 1, 1, 1f),
+                plaidPattern = new Pattern(253 - 4 * 4, 0, 253 - 2 * 4, 0, 2, 2, 1, 1, 1f),
+                fleshPattern = new Pattern(253 - 9 * 4, 0, 253 - 9 * 4, 0, 1, 1, 1, 1, 1f);
             Dictionary<byte, Pattern> leather = new Dictionary<byte, Pattern>() {
                 { 253 - 29 * 4, brownLeatherPattern },
                 { 253 - 5 * 4, brownLeatherPattern },
@@ -6391,6 +6395,11 @@ namespace AssetsPV
                 { 253 - 29 * 4, mailPattern },
                 { 253 - 5 * 4, mailPattern },
                 { 253 - 4 * 4, mailPattern },
+                { 253 - 3 * 4, brownLeatherPattern },
+                { 253 - 2 * 4, brownLeatherPattern },
+            }, plaid = new Dictionary<byte, Pattern>() {
+                { 253 - 5 * 4, fleshPattern },
+                { 253 - 4 * 4, brownLeatherPattern },
                 { 253 - 3 * 4, brownLeatherPattern },
                 { 253 - 2 * 4, brownLeatherPattern },
             };
@@ -6590,6 +6599,24 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
             */
 
+            Model goblin = Model.Humanoid(body: "Goblin", right_weapon: "Longsword", patterns: plaid);
+            processVoxGiantWModel("Goblin_Sword", true, 12, goblin,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            /*
             Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
@@ -6862,7 +6889,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-                
+                */
 
         }
     }

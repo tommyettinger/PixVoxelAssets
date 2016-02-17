@@ -1658,7 +1658,7 @@ namespace AssetsPV
             }
             return vs[smoothLevel - 1];
         }
-        public static byte[,,] RunThinningCA(byte[,,] voxelData, int smoothLevel, bool regardless = false)
+        public static byte[,,] RunThinningCA(byte[,,] voxelData, int smoothLevel, bool removePlaceholders = false)
         {
             if(smoothLevel <= 1)
                 return voxelData;
@@ -1677,8 +1677,13 @@ namespace AssetsPV
                         {
                             int emptyCount = 0;
                             if(x == 0 || y == 0 || z == 0 || x == xSize - 1 || y == ySize - 1 || z == zSize - 1
-                                || (254 - vs[v - 1][x, y, z]) % 4 == 0 || (!regardless && ColorValue(vs[v - 1][x, y, z]) > 50))
+                                || (!removePlaceholders && ColorValue(vs[v - 1][x, y, z]) > 50))
                             {
+
+                            }
+                            else if(removePlaceholders && 254 - vs[v - 1][x, y, z] % 4 == 0)
+                            {
+                                emptyCount = 9999;
                             }
                             else
                             {
@@ -1689,7 +1694,7 @@ namespace AssetsPV
                                         for(int zz = -1; zz < 2; zz++)
                                         {
                                             byte smallColor = vs[v - 1][x + xx, y + yy, z + zz];
-                                            if(smallColor == 0 || ColorValue(smallColor) < 16)
+                                            if(smallColor == 0 || ColorValue(smallColor) < 16 || (removePlaceholders && 254 - smallColor % 4 == 0))
                                             {
                                                 emptyCount++;
                                             }

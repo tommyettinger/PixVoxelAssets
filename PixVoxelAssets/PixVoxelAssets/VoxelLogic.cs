@@ -17242,9 +17242,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                             if(!taken[x, y, z] && cc != 253 - 100 && cc > 253 - wcolorcount * 4
                                 && wpalettes[palette][(253 - cc) / 4][3] != spin_alpha_1)
                             {
-                                int current_color = ((255 - cc) % 4 == 0) ? (255 - cc) / 4 + wcolorcount : ((254 - cc) % 4 == 0) ? (254 - cc) / 4 : (253 - cc) / 4;
-                                if((255 - cc) % 4 != 0 && current_color >= wcolorcount)
+                                if(cc == 2)
                                     continue;
+
+                                if((257 - cc) % 4 != 0)
+                                {
+                                    cc = TransformLogic.NearbyColor(voxelData, x, y, z);
+                                }
+                                int current_color = (253 - cc) / 4; //((255 - cc) % 4 == 0) ? (255 - cc) / 4 + wcolorcount : ((254 - cc) % 4 == 0) ? (254 - cc) / 4 : 
 
                                 if(wpalettes[palette][current_color][3] == 0F)
                                     continue;
@@ -17255,7 +17260,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     continue;
                                 if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
                                     continue;
-
+                                
                                 voxelsRaw.Add((byte)(x));
                                 voxelsRaw.Add((byte)(y));
                                 voxelsRaw.Add((byte)(z));
@@ -17297,8 +17302,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 }
                                 else
                                 {
-                                    cc = (byte)(((254 - cc) % 4 == 0) ? cc - 1 : cc);
-                                    cc = (byte)(((254 - cc) % 4 == 0) ? cc - 1 : cc);
+                                    //if((257 - cc) % 4 != 0) Console.WriteLine("cc bad! value is " + cc + ", problem is " + ((257 - cc) % 4));
+                                    //cc = (byte)(((257 - cc) % 4 != 0) ? cc - 1 : cc);
+                                    //if((257 - cc) % 4 != 0) Console.WriteLine("cc STILL bad! value is " + cc + ", problem is " + ((257 - cc) % 4));
+                                    //cc = (byte)(((257 - cc) % 4 != 0) ? cc - 1 : cc);
 
                                     if(z == zSize - 1 || voxelData[x, y, z + 1] == 0)
                                     {

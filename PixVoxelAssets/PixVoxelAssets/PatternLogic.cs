@@ -47,6 +47,38 @@ namespace AssetsPV
     }
     public class PatternLogic
     {
+        public static ushort MortonEncode(byte x, byte y)
+        {
+            return (ushort)(((x * 0x0101010101010101UL & 0x8040201008040201UL) *
+                 0x0102040810204081UL >> 49) & 0x5555 |
+                ((y * 0x0101010101010101UL & 0x8040201008040201UL) *
+                 0x0102040810204081UL >> 48) & 0xAAAA);
+        }
+        public static int MortonDecodeX(ushort morton)
+        {
+            int value1 = morton;
+            value1 &= 0x5555;
+            value1 |= (value1 >> 1);
+            value1 &= 0x3333;
+            value1 |= (value1 >> 2);
+            value1 &= 0x0f0f;
+            value1 |= (value1 >> 4);
+            value1 &= 0x00ff;
+            return value1;
+        }
+
+        public static int MortonDecodeY(ushort morton)
+        {
+            int value2 = (morton >> 1);
+            value2 &= 0x5555;
+            value2 |= (value2 >> 1);
+            value2 &= 0x3333;
+            value2 |= (value2 >> 2);
+            value2 &= 0x0f0f;
+            value2 |= (value2 >> 4);
+            value2 &= 0x00ff;
+            return value2;
+        }
         public const int Multiplier = 1, Bonus = OrthoSingle.bonus;
         public static bool HasAdjacentEmpty(byte[,,] voxelData, int x, int y, int z, int xSize, int ySize, int zSize)
         {
@@ -68,73 +100,74 @@ namespace AssetsPV
             Dictionary<byte, int> colorCount;
             byte c = 0;
             byte CenterChangeOn=0, CenterChangeOff=0, EmptyChangeOn=0, EmptyChangeOff=0;
-            int seed = 1337;
+            int seed = 1337, tweak = 0;
             for(int z = 0; z < zSize; z++)
             {
                 colorCount = patterns.ToDictionary(kv => kv.Key, kv => z % (2 * Multiplier));
 
-                for(int x = 0; x < xSize; x++)
+                for(ushort m = 0; m < xSize * ySize; m++)
                 {
-                    for(int y = 0; y < ySize; y++)
+                    int x = MortonDecodeX(m), y = MortonDecodeY(m);
+                    if(x >= xSize || y >= ySize)
+                        continue;
+                    c = voxelData[x, y, z];
+                    if(patterns.ContainsKey(c))
                     {
-                        c = voxelData[x, y, z];
-                        if(patterns.ContainsKey(c))
+                        bool adjEmpty = HasAdjacentEmpty(voxelData, x, y, z, xSize, ySize, zSize);
+                        pat = patterns[c];
+                        int randHigh = ((pat.RandomShape) ? rng.Next(4) - 1 : 0),
+                            randWide = ((pat.RandomShape) ? rng.Next(4) - 1 : 0);
+                        if(adjEmpty)
                         {
-                            bool adjEmpty = HasAdjacentEmpty(voxelData, x, y, z, xSize, ySize, zSize);
-                            pat = patterns[c];
-                            int randHigh = ((pat.RandomShape) ? rng.Next(4) - 1 : 0),
-                                randWide = ((pat.RandomShape) ? rng.Next(4) - 1 : 0);
+                            colorCount[c]++;
+                            Extensions.r = new Random(seed);
+                            CenterChangeOn = pat.CenterChangeOn.RandomElement();
+                            CenterChangeOff = pat.CenterChangeOff.RandomElement();
+                            EmptyChangeOn = pat.EmptyChangeOn.RandomElement();
+                            EmptyChangeOff = pat.EmptyChangeOff.RandomElement();
+                            Extensions.r = new Random(seed);
+                        }
+                        if(adjEmpty && z % (pat.FrequencyHigh * Multiplier) < (pat.SpanHigh * Multiplier + randHigh) &&
+                            colorCount[c] % (pat.FrequencyWide * Multiplier) < (pat.SpanWide * Multiplier + randWide) &&
+                            rng.NextDouble() < pat.Probability)
+                        {
+                            neo[x, y, z] = CenterChangeOn;
+                            if(x > 0 && voxelData[x - 1, y, z] == 0)
+                                neo[x - 1, y, z] = EmptyChangeOn;
+                            if(y > 0 && voxelData[x, y - 1, z] == 0)
+                                neo[x, y - 1, z] = EmptyChangeOn;
+                            if(z > 0 && voxelData[x, y, z - 1] == 0)
+                                neo[x, y, z - 1] = EmptyChangeOn;
+                            if(x < xSize - 1 && voxelData[x + 1, y, z] == 0)
+                                neo[x + 1, y, z] = EmptyChangeOn;
+                            if(y < ySize - 1 && voxelData[x, y + 1, z] == 0)
+                                neo[x, y + 1, z] = EmptyChangeOn;
+                            if(z < zSize - 1 && voxelData[x, y, z + 1] == 0)
+                                neo[x, y, z + 1] = EmptyChangeOn;
+                        }
+                        else
+                        {
+                            neo[x, y, z] = CenterChangeOff;
                             if(adjEmpty)
                             {
-                                colorCount[c]++;
-                                Extensions.r = new Random(seed);
-                                CenterChangeOn = pat.CenterChangeOn.RandomElement();
-                                CenterChangeOff = pat.CenterChangeOff.RandomElement();
-                                EmptyChangeOn = pat.EmptyChangeOn.RandomElement();
-                                EmptyChangeOff = pat.EmptyChangeOff.RandomElement();
-                                Extensions.r = new Random(seed);
-                            }
-                            if(adjEmpty && z % (pat.FrequencyHigh * Multiplier) < (pat.SpanHigh * Multiplier + randHigh) &&
-                                colorCount[c] % (pat.FrequencyWide * Multiplier) < (pat.SpanWide * Multiplier + randWide) &&
-                                rng.NextDouble() < pat.Probability)
-                            {
-                                neo[x, y, z] = CenterChangeOn;
                                 if(x > 0 && voxelData[x - 1, y, z] == 0)
-                                    neo[x - 1, y, z] = EmptyChangeOn;
+                                    neo[x - 1, y, z] = EmptyChangeOff;
                                 if(y > 0 && voxelData[x, y - 1, z] == 0)
-                                    neo[x, y - 1, z] = EmptyChangeOn;
+                                    neo[x, y - 1, z] = EmptyChangeOff;
                                 if(z > 0 && voxelData[x, y, z - 1] == 0)
-                                    neo[x, y, z - 1] = EmptyChangeOn;
+                                    neo[x, y, z - 1] = EmptyChangeOff;
                                 if(x < xSize - 1 && voxelData[x + 1, y, z] == 0)
-                                    neo[x + 1, y, z] = EmptyChangeOn;
+                                    neo[x + 1, y, z] = EmptyChangeOff;
                                 if(y < ySize - 1 && voxelData[x, y + 1, z] == 0)
-                                    neo[x, y + 1, z] = EmptyChangeOn;
+                                    neo[x, y + 1, z] = EmptyChangeOff;
                                 if(z < zSize - 1 && voxelData[x, y, z + 1] == 0)
-                                    neo[x, y, z + 1] = EmptyChangeOn;
-                            }
-                            else
-                            {
-                                neo[x, y, z] = CenterChangeOff;
-                                if(adjEmpty)
-                                {
-                                    if(x > 0 && voxelData[x - 1, y, z] == 0)
-                                        neo[x - 1, y, z] = EmptyChangeOff;
-                                    if(y > 0 && voxelData[x, y - 1, z] == 0)
-                                        neo[x, y - 1, z] = EmptyChangeOff;
-                                    if(z > 0 && voxelData[x, y, z - 1] == 0)
-                                        neo[x, y, z - 1] = EmptyChangeOff;
-                                    if(x < xSize - 1 && voxelData[x + 1, y, z] == 0)
-                                        neo[x + 1, y, z] = EmptyChangeOff;
-                                    if(y < ySize - 1 && voxelData[x, y + 1, z] == 0)
-                                        neo[x, y + 1, z] = EmptyChangeOff;
-                                    if(z < zSize - 1 && voxelData[x, y, z + 1] == 0)
-                                        neo[x, y, z + 1] = EmptyChangeOff;
-                                    seed++;
-                                }
+                                    neo[x, y, z + 1] = EmptyChangeOff;
+                                seed++;
                             }
                         }
                     }
                 }
+
             }
             return neo;
         }
