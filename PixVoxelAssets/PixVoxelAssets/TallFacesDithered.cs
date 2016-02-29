@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Hjg.Pngcs;
 using Hjg.Pngcs.Chunks;
+using Assimp;
 
 namespace AssetsPV
 {
@@ -5780,19 +5781,37 @@ namespace AssetsPV
             {
                 parsed[i].x += 10;
                 parsed[i].y += 10;
+                parsed[i].z += 5;
                 if((254 - parsed[i].color) % 4 == 0)
                     parsed[i].color--;
             }
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153);
+            Model m = Model.FromModelCU(colors);
 
-            FaceVoxel[,,] faces = FaceLogic.FillAllGaps(FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153)));
+
+            FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
             //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
+            string offText = FaceLogic.WriteOFF(faces, palette), filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + ".dae";
+            File.WriteAllText(filename, offText);
+            
+            //using(FileStream SourceStream = File.Open(filename, FileMode.Open))
+            //{
+            Scene sc = ac.ImportFile(filename,
+                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.FindInvalidData);
+            //ac.ExportFile(sc, outfile, "dae");
+            bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
+                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.FindInvalidData);
+            Console.WriteLine(outfile + " " + check);
 
-            File.WriteAllText(folder + "/" + u + "_" + palette + ".off", FaceLogic.WriteOFF(faces, palette));
         }
-
+        public static AssimpContext ac = new AssimpContext();
+        public static ConsoleLogStream log = new ConsoleLogStream();
 
         static void Main(string[] args)
         {
+            LogStream.IsVerboseLoggingEnabled = true;
+            log.Attach();
+
             //altFolder = "botl6/";
             //altFolder = "other/";
             //  altFolder = "mecha3/";
@@ -5803,15 +5822,15 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
-            //VoxelLogic.VisualMode = "CU";
-            //altFolder = "Diverse_PixVoxel_Wargame_Iso3/";
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "Diverse_PixVoxel_Wargame_Iso3/";
             blankFolder = "Blank_PixVoxel_Wargame_Iso3/";
-            //CURedux.Initialize(true);
+            CURedux.Initialize(true);
 
-            VoxelLogic.VisualMode = "W";
-            altFolder = "Forays2/";
-            VoxelLogic.voxFolder = "ForaysBones/";
-            ForaysPalettes.Initialize();
+            //VoxelLogic.VisualMode = "W";
+            //altFolder = "Forays2/";
+            //VoxelLogic.voxFolder = "ForaysBones/";
+            //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -6222,7 +6241,7 @@ namespace AssetsPV
             */
 
             //makeDetailedTiling();
-            /*
+            
             WriteOFFMilitary("Tank", 0);
 
             WriteOFFMilitary("Tank", 1 + 32 * 8);
@@ -6233,7 +6252,7 @@ namespace AssetsPV
             WriteOFFMilitary("Plane_T", 2 + 4 * 8);
 
             WriteOFFMilitary("Plane_T", 5 + 4 * 8);
-            */
+
 
 
             //processUnitLargeW("Charlie", 1, true, false);
@@ -6349,7 +6368,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
 
-
+            /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -6494,6 +6513,7 @@ namespace AssetsPV
             .AddPitch(10, "Right_Weapon")
             .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm")
             .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
+            */
 
             /*
             Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
@@ -6598,7 +6618,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
             */
-
+            /*
             Model goblin = Model.Humanoid(body: "Goblin", right_weapon: "Longsword", patterns: plaid);
             processVoxGiantWModel("Goblin_Sword", true, 12, goblin,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -6615,7 +6635,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-
+                */
             /*
             Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
@@ -6891,6 +6911,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
 
+            Console.ReadLine();
         }
     }
 }

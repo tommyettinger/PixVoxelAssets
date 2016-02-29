@@ -47,7 +47,7 @@ namespace AssetsPV
         public const float grain_mild_alpha = VoxelLogic.grain_mild_alpha;
 
         public const byte shadow = 253 - 25 * 4, smoke = 253 - 17 * 4, yellow_fire = 253 - 18 * 4, orange_fire = 253 - 19 * 4,
-            sparks = 253 - 20 * 4, bold_paint = 253 - 31 * 4, metal = 253 - 13 * 4,
+            sparks = 253 - 20 * 4, bold_paint = 253 - 31 * 4, metal = 253 - 13 * 4, inner_shadow = 253 - 16 * 4,
             emitter0 = 253 - 57 * 4, trail0 = 253 - 58 * 4, emitter1 = 253 - 59 * 4, trail1 = 253 - 60 * 4;
 
         public static float[][][] wpalettes = new float[][][]
@@ -2624,7 +2624,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2645,6 +2645,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
+            */
             
         }
 

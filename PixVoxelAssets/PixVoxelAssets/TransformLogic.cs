@@ -837,6 +837,36 @@ namespace AssetsPV
             return this;
         }
 
+        public byte[][,,] AllBones()
+        {
+            if(VoxelLogic.VisualMode != "CU")
+                return Bones.Values.Select(b => b.Colors).ToArray();
+            byte[][,,] colors = new byte[Bones.Count][,,];
+            string check = "Gun";
+            int n = 0, i = 0;
+            while(Bones.ContainsKey(check + n))
+            {
+                colors[i++] = Bones[check + n++].Colors;
+            }
+            check = "Wheel";
+            n = 0;
+            while(Bones.ContainsKey(check + n))
+            {
+                colors[i++] = Bones[check + n++].Colors;
+            }
+            check = "Bone";
+            n = 0;
+            while(Bones.ContainsKey(check + n))
+            {
+                colors[i++] = Bones[check + n++].Colors;
+            }
+            if(Bones.ContainsKey("Extra"))
+            {
+                colors[i++] = Bones["Extra"].Colors;
+            }
+            return colors;
+        }
+
         public Model AddSpread(string boneName, float pitchy, float rolly, float yawy, params byte[] spreadColors)
         {
             Bones[boneName].InitSpread(spreadColors, rolly, pitchy, yawy);
@@ -1102,14 +1132,23 @@ namespace AssetsPV
             Model model = new Model();
             int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
 
-            int regular_ctr = 0, gun_ctr = 0;
+            int regular_ctr = 0, gun_ctr = 0, wheel_ctr = 0;
             for(int x = 0; x < xSize; x++)
             {
                 for(int y = 0; y < ySize; y++)
                 {
                     for(int z = 0; z < zSize; z++)
                     {
-                        if(data2[x, y, z] <= 253 - 12 * 4 && data2[x, y, z] >= 253 - 16 * 4)
+                        if(data2[x, y, z] >= 253 - 1 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt >= 253 - 1 * 4);
+                            if(bn.Count > 0)
+                                model.AddBone("Wheel" + wheel_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
+                        }
+                        else if(data2[x, y, z] <= 253 - 12 * 4 && data2[x, y, z] >= 253 - 16 * 4)
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
@@ -1118,7 +1157,7 @@ namespace AssetsPV
                             if(bn.Count > 0)
                                 model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
-                        else if(data2[x,y,z] > 0 && data2[x,y,z] != 253 - 27 * 4)
+                        else if(data2[x,y,z] > 0 && data2[x,y,z] != 253 - 27 * 4) // quick hack to force water splashes into "Extra"
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));

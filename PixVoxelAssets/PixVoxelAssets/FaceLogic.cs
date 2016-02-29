@@ -158,7 +158,7 @@ namespace AssetsPV
             {
                 if(mvd.x >= xSize || mvd.y >= ySize || mvd.z >= zSize)
                     continue;
-                if(!(mvd.color == VoxelLogic.clear || (VoxelLogic.VisualMode == "CU" && (mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
+                if(!(mvd.color == VoxelLogic.clear || (VoxelLogic.VisualMode == "CU" && (mvd.color == CURedux.inner_shadow || mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
                      || mvd.color == CURedux.emitter1 || mvd.color == CURedux.trail1)))
                      && (data[mvd.x, mvd.y, mvd.z] == 0 || data[mvd.x, mvd.y, mvd.z] == shadowColor))
                     data[mvd.x, mvd.y, mvd.z] = mvd.color;
@@ -441,17 +441,14 @@ namespace AssetsPV
 
                             if(zdown && !zup)
                             {
-                                mvd = faces[x, y, z - 1].vox.color;
+                                // faces[x, y, z - 1].vox.color;
+                                mvd = NearbyFilled(faces, x, y, z);
                                 if(ImportantVisual(mvd))
                                 {
                                     faces2[x, y, z] = null;
                                     continue;
                                 }
-                                else if(ImportantVisualOrPlaceholder(mvd))
-                                {
-                                    mvd = NearbyColor(faces, x, y, z);
-                                }
-                                    
+                                
                                 if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightTop);
@@ -488,17 +485,13 @@ namespace AssetsPV
                             else if(zup)
                             {
 
-                                mvd = faces[x, y, z + 1].vox.color;
+                                mvd = NearbyFilled(faces, x, y, z);
                                 if(ImportantVisual(mvd))
                                 {
                                     faces2[x, y, z] = null;
                                     continue;
                                 }
-                                else if(ImportantVisualOrPlaceholder(mvd))
-                                {
-                                    mvd = NearbyColor(faces, x, y, z);
-                                }
-                                
+
                                 if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightBottom);
@@ -535,16 +528,13 @@ namespace AssetsPV
                             else if(xdown)
                             {
 
-                                mvd = faces[x - 1, y, z].vox.color;
+                                mvd = NearbyFilled(faces, x, y, z);
                                 if(ImportantVisual(mvd))
                                 {
                                     faces2[x, y, z] = null;
                                     continue;
                                 }
-                                else if(ImportantVisualOrPlaceholder(mvd))
-                                {
-                                    mvd = NearbyColor(faces, x, y, z);
-                                }
+
 
                                 if(yup && !xup && !ydown) // && xdown
                                 {
@@ -559,17 +549,14 @@ namespace AssetsPV
                             else if(xup)
                             {
 
-                                mvd = faces[x + 1, y, z].vox.color;
+                                mvd = NearbyFilled(faces, x, y, z);
                                 if(ImportantVisual(mvd))
                                 {
                                     faces2[x, y, z] = null;
                                     continue;
                                 }
-                                else if(ImportantVisualOrPlaceholder(mvd))
-                                {
-                                    mvd = NearbyColor(faces, x, y, z);
-                                }
-                                
+
+
                                 if(!xdown && !yup && ydown) // && xup
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BackBack);
@@ -586,6 +573,78 @@ namespace AssetsPV
             return faces2;
         }
 
+        public static FaceVoxel[,,] Overlap(FaceVoxel[,,] start, FaceVoxel[,,] adding)
+        {
+            FaceVoxel[,,] next = start.Replicate();
+            int xSize = start.GetLength(0), ySize = start.GetLength(1), zSize = start.GetLength(2);
+            int xSize2 = adding.GetLength(0), ySize2 = adding.GetLength(1), zSize2 = adding.GetLength(2);
+
+            for(int z = 0; z < zSize && z < zSize2; z++)
+            {
+                for(int y = 0; y < ySize && y < ySize2; y++)
+                {
+                    for(int x = 0; x < xSize && x < xSize2; x++)
+                    {
+                        if(adding[x, y, z] != null && next[x, y, z] == null)
+                            next[x, y, z] = adding[x, y, z];
+                    }
+                }
+            }
+            return next;
+        }
+        public static FaceVoxel[,,] OverlapAll(params FaceVoxel[][,,] adding)
+        {
+            return adding.Aggregate(Overlap);
+        }
+        public static FaceVoxel[,,] OverlapAll(IEnumerable<FaceVoxel[,,]> adding)
+        {
+            return adding.Aggregate(Overlap);
+        }
+        public static byte NearbyFilled(FaceVoxel[,,] voxelData, int x, int y, int z)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte[] nearby = new byte[27], counts = new byte[27];
+            int running = 0, empty = 0;
+            for(int i = Math.Max(0, x - 1); i <= x + 1 && i < xSize; i++)
+            {
+                for(int j = Math.Max(0, y - 1); j <= y + 1 && j < ySize; j++)
+                {
+                    for(int k = Math.Max(0, z - 1); k <= z + 1 && k < zSize; k++)
+                    {
+                        for(int c = 0; c <= running; c++)
+                        {
+                            if(voxelData[i, j, k] == null)
+                            {
+                                empty++;
+                                break;
+                            }
+                            if(nearby[c] == voxelData[i, j, k].vox.color)
+                            {
+                                counts[c]++;
+                                break;
+                            }
+                            if(c == running && (253 - voxelData[i, j, k].vox.color) % 4 == 0)
+                            {
+                                nearby[c] = voxelData[i, j, k].vox.color;
+                                counts[c]++;
+                                running++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            byte best = 0, bestCount = 0;
+            for(int c = 0; c < running; c++)
+            {
+                if(counts[c] > bestCount)
+                {
+                    best = nearby[c];
+                    bestCount = counts[c];
+                }
+            }
+            return best;
+        }
         public static byte NearbyColor(FaceVoxel[,,] voxelData, int x, int y, int z)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
@@ -633,6 +692,33 @@ namespace AssetsPV
                 return 0;
             return best;
         }
+        public static bool MixedMechanical(FaceVoxel[,,] voxelData, int x, int y, int z)
+        {
+            if(VoxelLogic.VisualMode != "CU")
+                return false;
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte mvd;
+            bool foundMech = false, foundOther = false;
+            for(int i = Math.Max(0, x - 1); i <= x + 1 && i < xSize; i++)
+            {
+                for(int j = Math.Max(0, y - 1); j <= y + 1 && j < ySize; j++)
+                {
+                    for(int k = Math.Max(0, z - 1); k <= z + 1 && k < zSize; k++)
+                    {
+                        if(voxelData[i, j, k] != null)
+                        {
+                            mvd = voxelData[i, j, k].vox.color;
+                            if(mvd == 253 - 0 * 4 || mvd == 253 - 1 * 4 || mvd == 253 - 14 * 4 || mvd == 253 - 15 * 4)
+                                foundMech = true;
+                            else if(mvd != 0 && mvd != CURedux.shadow && mvd != CURedux.inner_shadow && mvd > CURedux.emitter0)
+                                foundOther = true;
+                        }
+                    }
+                }
+            }
+            return foundMech && foundOther;
+        }
+        
 
         public static FaceVoxel[,,] GetAlteredFaces(byte[,,] voxelData)
         {
@@ -1615,8 +1701,78 @@ namespace AssetsPV
             if(o != null)
                 return null;
             
-            if((aa != null && bb != null && cc != null && grr == null && need != null))// && (aa.slope != Slope.Cube && bb.slope != Slope.Cube && cc.slope != Slope.Cube))
+            if(aa != null && bb != null && cc != null && grr == null && need != null)// && aa.slope != Slope.Cube && bb.slope != Slope.Cube && cc.slope != Slope.Cube))
             {
+                switch(targetSlope)
+                {
+                    case Slope.BrightDimTop:
+                        if(aa.slope != Slope.BrightDimTopThick && aa.slope != Slope.Cube && aa.slope != Slope.BrightTop && aa.slope != Slope.BrightTopBack && aa.slope != Slope.BrightTopBackThick)
+                            return null;
+                        if(bb.slope != Slope.BrightDimTopThick && bb.slope != Slope.Cube && bb.slope != Slope.DimTop && bb.slope != Slope.DimTopBack && bb.slope != Slope.DimTopBackThick)
+                            return null;
+                        if(cc.slope != Slope.BrightDimTopThick && cc.slope != Slope.Cube && cc.slope != Slope.BrightDim && cc.slope != Slope.BrightDimBottom && cc.slope != Slope.BrightDimBottomThick)
+                            return null;
+                        break;
+                    case Slope.BackBackTop:
+                        if(aa.slope != Slope.BackBackTopThick && aa.slope != Slope.Cube && aa.slope != Slope.RearDimTop && aa.slope != Slope.DimTopBack && aa.slope != Slope.DimTopBackThick)
+                            return null;
+                        if(bb.slope != Slope.BackBackTopThick && bb.slope != Slope.Cube && bb.slope != Slope.RearBrightTop && bb.slope != Slope.BrightTopBack && bb.slope != Slope.BrightTopBackThick)
+                            return null;
+                        if(cc.slope != Slope.BackBackTopThick && cc.slope != Slope.Cube && cc.slope != Slope.BackBack && cc.slope != Slope.BackBackBottom && cc.slope != Slope.BackBackBottomThick)
+                            return null;
+                        break;
+                    case Slope.BrightTopBack:
+                        if(aa.slope != Slope.BrightTopBackThick && aa.slope != Slope.Cube && aa.slope != Slope.BrightTop && aa.slope != Slope.BrightDimTop && aa.slope != Slope.BrightDimTopThick)
+                            return null;
+                        if(bb.slope != Slope.BrightTopBackThick && bb.slope != Slope.Cube && bb.slope != Slope.RearBrightTop && bb.slope != Slope.BackBackTop && bb.slope != Slope.BackBackTopThick)
+                            return null;
+                        if(cc.slope != Slope.BrightTopBackThick && cc.slope != Slope.Cube && cc.slope != Slope.BrightBack && cc.slope != Slope.BrightBottomBack && cc.slope != Slope.BrightBottomBackThick)
+                            return null;
+                        break;
+                    case Slope.DimTopBack:
+                        if(aa.slope != Slope.DimTopBackThick && aa.slope != Slope.Cube && aa.slope != Slope.RearDimTop && aa.slope != Slope.BackBackTop && aa.slope != Slope.BackBackTopThick)
+                            return null;
+                        if(bb.slope != Slope.DimTopBackThick && bb.slope != Slope.Cube && bb.slope != Slope.DimTop && bb.slope != Slope.BrightDimTop && bb.slope != Slope.BrightDimTopThick)
+                            return null;
+                        if(cc.slope != Slope.DimTopBackThick && cc.slope != Slope.Cube && cc.slope != Slope.DimBack && cc.slope != Slope.DimBottomBack && cc.slope != Slope.DimBottomBackThick)
+                            return null;
+                        break;
+
+
+                    case Slope.BrightDimBottom:
+                        if(aa.slope != Slope.BrightDimBottomThick && aa.slope != Slope.Cube && aa.slope != Slope.BrightBottom && aa.slope != Slope.BrightBottomBack && aa.slope != Slope.BrightBottomBackThick)
+                            return null;
+                        if(bb.slope != Slope.BrightDimBottomThick && bb.slope != Slope.Cube && bb.slope != Slope.DimBottom && bb.slope != Slope.DimBottomBack && bb.slope != Slope.DimBottomBackThick)
+                            return null;
+                        if(cc.slope != Slope.BrightDimBottomThick && cc.slope != Slope.Cube && cc.slope != Slope.BrightDim && cc.slope != Slope.BrightDimTop && cc.slope != Slope.BrightDimTopThick)
+                            return null;
+                        break;
+                    case Slope.BackBackBottom:
+                        if(aa.slope != Slope.BackBackBottomThick && aa.slope != Slope.Cube && aa.slope != Slope.RearDimBottom && aa.slope != Slope.DimBottomBack && aa.slope != Slope.DimBottomBackThick)
+                            return null;
+                        if(bb.slope != Slope.BackBackBottomThick && bb.slope != Slope.Cube && bb.slope != Slope.RearBrightBottom && bb.slope != Slope.BrightBottomBack && bb.slope != Slope.BrightBottomBackThick)
+                            return null;
+                        if(cc.slope != Slope.BackBackBottomThick && cc.slope != Slope.Cube && cc.slope != Slope.BackBack && cc.slope != Slope.BackBackTop && cc.slope != Slope.BackBackTopThick)
+                            return null;
+                        break;
+                    case Slope.BrightBottomBack:
+                        if(aa.slope != Slope.BrightBottomBackThick && aa.slope != Slope.Cube && aa.slope != Slope.BrightBottom && aa.slope != Slope.BrightDimBottom && aa.slope != Slope.BrightDimBottomThick)
+                            return null;
+                        if(bb.slope != Slope.BrightBottomBackThick && bb.slope != Slope.Cube && bb.slope != Slope.RearBrightBottom && bb.slope != Slope.BackBackBottom && bb.slope != Slope.BackBackBottomThick)
+                            return null;
+                        if(cc.slope != Slope.BrightBottomBackThick && cc.slope != Slope.Cube && cc.slope != Slope.BrightBack && cc.slope != Slope.BrightTopBack && cc.slope != Slope.BrightTopBackThick)
+                            return null;
+                        break;
+                    case Slope.DimBottomBack:
+                        if(aa.slope != Slope.DimBottomBackThick && aa.slope != Slope.Cube && aa.slope != Slope.RearDimBottom && aa.slope != Slope.BackBackBottom && aa.slope != Slope.BackBackBottomThick)
+                            return null;
+                        if(bb.slope != Slope.DimBottomBackThick && bb.slope != Slope.Cube && bb.slope != Slope.DimBottom && bb.slope != Slope.BrightDimBottom && bb.slope != Slope.BrightDimBottomThick)
+                            return null;
+                        if(cc.slope != Slope.DimBottomBackThick && cc.slope != Slope.Cube && cc.slope != Slope.DimBack && cc.slope != Slope.DimTopBack && cc.slope != Slope.DimTopBackThick)
+                            return null;
+                        break;
+                    default: return null;
+                }
                 o = new FaceVoxel(new MagicaVoxelData(x, y, z, Choose(aa.vox.color, bb.vox.color, cc.vox.color)), targetSlope);
                 return o;
             }
@@ -3529,14 +3685,6 @@ namespace AssetsPV
                                     result[x * 2, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.BackBackBottomThick);
                                     result[x * 2 + 1, y * 2 + 1, z * 2 + 1] = new FaceVoxel(x * 2 + 1, y * 2 + 1, z * 2 + 1, fv.vox.color, Slope.Cube);
                                     break;
-
-                                    /*
-        BrightTopBack = 0x1000,
-        DimTopBack = 0x2000,
-        BrightBottomBack = 0x4000,
-        DimBottomBack = 0x8000,
-        BackBack = 0x10000
-                                */
                             }
                         }
                     }
@@ -3646,12 +3794,12 @@ namespace AssetsPV
                                     pts.Add(p011, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p110, p010, p011));
                                 break;
                             case Slope.BackBack:
                                 if(!pts.ContainsKey(p000))
@@ -3666,7 +3814,7 @@ namespace AssetsPV
                                     pts.Add(p101, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p100, p000, p110));
                                 fs.Add(new Face3D(fv.vox.color, p000, p001, p111, p110));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p001, p101));
@@ -3685,7 +3833,7 @@ namespace AssetsPV
                                     pts.Add(p101, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p010, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p100, p010, p110));
                                 fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
                                 fs.Add(new Face3D(fv.vox.color, p010, p100, p101, p011));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p101));
@@ -3704,9 +3852,9 @@ namespace AssetsPV
                                     pts.Add(p001, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110));
                                 fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p001, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p001, p000, p110));
                                 break;
@@ -3724,7 +3872,7 @@ namespace AssetsPV
                                     pts.Add(p101, ord++);
                                 if(!pts.ContainsKey(p011))
                                     pts.Add(p011, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p011, p001, p101));
@@ -3744,9 +3892,9 @@ namespace AssetsPV
                                     pts.Add(p011, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p011, p010));
                                 fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
                                 fs.Add(new Face3D(fv.vox.color, p100, p110, p111));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p000, p100));
                                 break;
@@ -3764,9 +3912,9 @@ namespace AssetsPV
                                     pts.Add(p011, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p001, p010, p011));
+                                fs.Add(new Face3D(fv.vox.color, p001, p011, p010));
                                 fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p001, p101, p110));
+                                fs.Add(new Face3D(fv.vox.color, p001, p010, p110, p101));
                                 fs.Add(new Face3D(fv.vox.color, p101, p110, p111));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 break;
@@ -3784,10 +3932,10 @@ namespace AssetsPV
                                     pts.Add(p011, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p001, p000, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011));
                                 fs.Add(new Face3D(fv.vox.color, p000, p011, p111, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p101, p100, p111));
+                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 break;
 
@@ -3804,10 +3952,10 @@ namespace AssetsPV
                                     pts.Add(p001, ord++);
                                 if(!pts.ContainsKey(p101))
                                     pts.Add(p101, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p010));
                                 fs.Add(new Face3D(fv.vox.color, p010, p001, p101, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p110, p100, p000));
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p101));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p110, p101, p100));
                                 fs.Add(new Face3D(fv.vox.color, p101, p001, p000, p100));
                                 break;
 
@@ -3827,9 +3975,9 @@ namespace AssetsPV
                                     pts.Add(p011, ord++);
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p001));
                                 fs.Add(new Face3D(fv.vox.color, p011, p001, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p010, p000));
-                                fs.Add(new Face3D(fv.vox.color, p010, p110, p011));
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p000, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
                                 break;
 
                             case Slope.DimBottom:
@@ -3848,8 +3996,8 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p000, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p101, p001, p011, p111));
                                 fs.Add(new Face3D(fv.vox.color, p010, p111, p101, p000));
-                                fs.Add(new Face3D(fv.vox.color, p010, p111, p011));
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p000, p010));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
                                 break;
 
                             case Slope.RearBrightBottom:
@@ -3868,7 +4016,7 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p101, p001, p011, p111));
                                 fs.Add(new Face3D(fv.vox.color, p101, p111, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p110, p111, p011));
+                                fs.Add(new Face3D(fv.vox.color, p111, p110, p011));
                                 fs.Add(new Face3D(fv.vox.color, p100, p001, p011, p110));
                                 break;
 
@@ -3888,8 +4036,8 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p100, p101, p000));
                                 fs.Add(new Face3D(fv.vox.color, p010, p000, p101, p111));
                                 fs.Add(new Face3D(fv.vox.color, p101, p111, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p110, p111, p010));
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
                                 break;
 
                             case Slope.BrightDimTop:
@@ -3932,10 +4080,10 @@ namespace AssetsPV
                                     pts.Add(p010, ord++);
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p110, p100, p010));
-                                fs.Add(new Face3D(fv.vox.color, p110, p111, p010));
-                                fs.Add(new Face3D(fv.vox.color, p110, p100, p111));
-                                fs.Add(new Face3D(fv.vox.color, p010, p111, p100));
+                                fs.Add(new Face3D(fv.vox.color, p010, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p110, p111));
+                                fs.Add(new Face3D(fv.vox.color, p100, p110, p111));
+                                fs.Add(new Face3D(fv.vox.color, p010, p100, p111));
                                 break;
 
                             case Slope.BrightBottomBack:
@@ -3947,10 +4095,10 @@ namespace AssetsPV
                                     pts.Add(p011, ord++);
                                 if(!pts.ContainsKey(p110))
                                     pts.Add(p110, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p011));
-                                fs.Add(new Face3D(fv.vox.color, p111, p110, p011));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p110));
-                                fs.Add(new Face3D(fv.vox.color, p011, p110, p101));
+                                fs.Add(new Face3D(fv.vox.color, p011, p101, p111));
+                                fs.Add(new Face3D(fv.vox.color, p011, p110, p111));
+                                fs.Add(new Face3D(fv.vox.color, p101, p110, p111));
+                                fs.Add(new Face3D(fv.vox.color, p101, p011, p110));
                                 break;
 
                             case Slope.BackBackTop:
@@ -3962,9 +4110,9 @@ namespace AssetsPV
                                     pts.Add(p000, ord++);
                                 if(!pts.ContainsKey(p101))
                                     pts.Add(p101, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p000));
-                                fs.Add(new Face3D(fv.vox.color, p100, p101, p000));
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p101));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110));
+                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101));
+                                fs.Add(new Face3D(fv.vox.color, p100, p101, p110));
                                 fs.Add(new Face3D(fv.vox.color, p000, p101, p110));
                                 break;
 
@@ -3977,10 +4125,10 @@ namespace AssetsPV
                                     pts.Add(p001, ord++);
                                 if(!pts.ContainsKey(p100))
                                     pts.Add(p100, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p101, p111, p001));
-                                fs.Add(new Face3D(fv.vox.color, p101, p100, p001));
-                                fs.Add(new Face3D(fv.vox.color, p101, p111, p100));
-                                fs.Add(new Face3D(fv.vox.color, p001, p100, p111));
+                                fs.Add(new Face3D(fv.vox.color, p001, p101, p111));
+                                fs.Add(new Face3D(fv.vox.color, p001, p100, p101));
+                                fs.Add(new Face3D(fv.vox.color, p100, p101, p111));
+                                fs.Add(new Face3D(fv.vox.color, p100, p001, p111));
                                 break;
 
                             case Slope.DimTopBack:
@@ -3995,7 +4143,7 @@ namespace AssetsPV
                                 fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p001, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
-                                fs.Add(new Face3D(fv.vox.color, p100, p001, p010));
+                                fs.Add(new Face3D(fv.vox.color, p100, p010, p001));
                                 break;
 
                             case Slope.DimBottomBack:
@@ -4033,7 +4181,7 @@ namespace AssetsPV
                                     pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001));
@@ -4062,7 +4210,7 @@ namespace AssetsPV
                                     pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p000, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110));
                                 fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
                                 fs.Add(new Face3D(fv.vox.color, p000, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
@@ -4093,14 +4241,14 @@ namespace AssetsPV
                                     pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p011, p010));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
                                 
-                                fs.Add(new Face3D(fv.vox.color, p000, p011, p101));
+                                fs.Add(new Face3D(fv.vox.color, p000, p101, p011));
                                 break;
 
                             case Slope.BrightBottomBackThick:
@@ -4124,9 +4272,9 @@ namespace AssetsPV
                                     pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p010));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p100, p101, p001));
+                                fs.Add(new Face3D(fv.vox.color, p010, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p011, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p001, p100, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
@@ -4155,12 +4303,12 @@ namespace AssetsPV
                                     pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p010));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p010, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p110, p010));
                                 
                                 fs.Add(new Face3D(fv.vox.color, p010, p001, p111));
                                 break;
@@ -4186,14 +4334,14 @@ namespace AssetsPV
                                     pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p011, p001));
+                                fs.Add(new Face3D(fv.vox.color, p000, p110, p100));
+                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p110));
+                                fs.Add(new Face3D(fv.vox.color, p111, p110, p011));
                                 
-                                fs.Add(new Face3D(fv.vox.color, p000, p110, p011));
+                                fs.Add(new Face3D(fv.vox.color, p000, p011, p110));
                                 break;
 
                             case Slope.DimTopBackThick:
@@ -4217,14 +4365,14 @@ namespace AssetsPV
                                   //  pts.Add(p111, ord++);
 
 
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p011, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p011, p010, p110));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p110));
                                 
-                                fs.Add(new Face3D(fv.vox.color, p101, p011, p110));
+                                fs.Add(new Face3D(fv.vox.color, p011, p101, p110));
                                 break;
 
                             case Slope.DimBottomBackThick:
@@ -4247,12 +4395,12 @@ namespace AssetsPV
                                 if(!pts.ContainsKey(p111))
                                     pts.Add(p111, ord++);
                                 
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p010));
+                                fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
                                 fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
                                 fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
                                 fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
                                 fs.Add(new Face3D(fv.vox.color, p111, p101, p100));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010));
+                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111));
                                 
                                 fs.Add(new Face3D(fv.vox.color, p100, p010, p111));
                                 break;
