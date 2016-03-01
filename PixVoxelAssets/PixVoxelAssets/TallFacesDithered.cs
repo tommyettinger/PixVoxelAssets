@@ -1503,7 +1503,7 @@ namespace AssetsPV
 
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still, shadowless);
             //return b;
-
+            /*
             b2 = new byte[108 * 2][];
             for(int y = 46 + 32, i = 0; y < 46 + 32 + 108 * 2; y++, i++)
             {
@@ -1515,8 +1515,8 @@ namespace AssetsPV
             }
 
             return b2;
-
-            /*
+            */
+            
             b2 = new byte[108][];
             for(int y = 46 + 32, i = 0; y < 46 + 32 + 108 * 2; y += 2, i++)
             {
@@ -1528,7 +1528,7 @@ namespace AssetsPV
             }
             
             return b2;
-            */
+            
 
             // g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
 
@@ -1637,14 +1637,14 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                FaceVoxel[,,] faces = FaceLogic.GetAlteredFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
 
                 for(int f = 0; f < framelimit; f++)
                 {
 
                     byte[][] b = processFrameLargeW(faces, 0, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
 
-                    ImageInfo imi = new ImageInfo(88 * 2, 108 * 2, 8, false, false, true);
+                    ImageInfo imi = new ImageInfo(88, 108, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(blankFolder + "standing_frames/" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
                     WritePNG(png, b, basepalette);
                 }
@@ -1692,9 +1692,9 @@ namespace AssetsPV
             Process.Start(startInfo).WaitForExit();
             */
 
-            //processExplosionLargeW(u, -1, explode_parsed, false);
+            processExplosionLargeW(u, -1, explode_parsed, false);
 
-            //processUnitLargeWFiring(u);
+            processUnitLargeWFiring(u);
         }
         public static void processUnitLargeWFiring(string u)
         {
@@ -2395,8 +2395,8 @@ namespace AssetsPV
             wditheredcurrent = wdithered[palette];
 
             b = renderWSmartHuge(faces, dir, palette, frame, maxFrames, still, shadowless);
-            return b;
-            /*
+            //return b;
+            
             b2 = new byte[308][];
             for(int i = 0; i < 308; i++)
             {
@@ -2415,7 +2415,7 @@ namespace AssetsPV
 
             }
             return b2;
-            */
+            
             /*string folder = "palette" + palette + "_big";
             System.IO.Directory.CreateDirectory(folder);
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
@@ -5791,17 +5791,24 @@ namespace AssetsPV
 
             FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
             //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
-            string offText = FaceLogic.WriteOFF(faces, palette), filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + ".dae";
+            string offText = FaceLogic.WriteOFF(faces, palette), filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + "_tmp.dae", finfile = filebase + ".dae";
             File.WriteAllText(filename, offText);
             
             //using(FileStream SourceStream = File.Open(filename, FileMode.Open))
             //{
             Scene sc = ac.ImportFile(filename,
-                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.FindInvalidData);
+                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords // | PostProcessSteps.OptimizeGraph
+                | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
             //ac.ExportFile(sc, outfile, "dae");
-            bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
-                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.FindInvalidData);
-            Console.WriteLine(outfile + " " + check);
+            Console.WriteLine(".off file has " + sc.TextureCount + " embedded textures");
+            Console.WriteLine(".off file has " + sc.MeshCount + " meshes");
+            Console.WriteLine(".off file has " + sc.MaterialCount + " materials");
+
+            //bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
+            //    PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
+            //    | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
+            //File.WriteAllText(finfile, File.ReadAllText(outfile).Replace("<OFFRoot>", "OFFRoot"));
+            //Console.WriteLine(finfile);
 
         }
         public static AssimpContext ac = new AssimpContext();
@@ -5809,8 +5816,8 @@ namespace AssetsPV
 
         static void Main(string[] args)
         {
-            LogStream.IsVerboseLoggingEnabled = true;
-            log.Attach();
+            //LogStream.IsVerboseLoggingEnabled = true;
+            //log.Attach();
 
             //altFolder = "botl6/";
             //altFolder = "other/";
@@ -6133,6 +6140,8 @@ namespace AssetsPV
             */
             writePaletteImages();
 
+            //processUnitLargeWMilitary("Recon");
+            processUnitLargeWMilitary("Flamethrower");
             /*
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
@@ -6200,11 +6209,13 @@ namespace AssetsPV
             
             processUnitLargeWMilitary("Plane");
             processUnitLargeWMilitary("Plane_P");
-            processUnitLargeWMilitary("Plane_S");*/
-            //    processUnitLargeWMilitary("Plane_T");
-            /*
+            
+            processUnitLargeWMilitary("Plane_S");
+            processUnitLargeWMilitary("Plane_T");
+            
             processUnitLargeWMilitary("Boat");
             processUnitLargeWMilitary("Boat_P");
+            
             processUnitLargeWMilitary("Boat_S");
             processUnitLargeWMilitary("Boat_T");
             
@@ -6240,8 +6251,10 @@ namespace AssetsPV
             WriteAllGIFs();
             */
 
+
             //makeDetailedTiling();
-            
+
+            /*
             WriteOFFMilitary("Tank", 0);
 
             WriteOFFMilitary("Tank", 1 + 32 * 8);
@@ -6252,7 +6265,7 @@ namespace AssetsPV
             WriteOFFMilitary("Plane_T", 2 + 4 * 8);
 
             WriteOFFMilitary("Plane_T", 5 + 4 * 8);
-
+            */
 
 
             //processUnitLargeW("Charlie", 1, true, false);
@@ -6910,8 +6923,6 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
                 */
-
-            Console.ReadLine();
         }
     }
 }
