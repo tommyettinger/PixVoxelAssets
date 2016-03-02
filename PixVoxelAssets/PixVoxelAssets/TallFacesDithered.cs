@@ -5791,24 +5791,24 @@ namespace AssetsPV
 
             FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
             //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
-            string offText = FaceLogic.WriteOFF(faces, palette), filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + "_tmp.dae", finfile = filebase + ".dae";
+            string offText = FaceLogic.WriteVertexColorOFF(faces, palette), filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + "_tmp.dae", finfile = filebase + ".dae";
             File.WriteAllText(filename, offText);
             
             //using(FileStream SourceStream = File.Open(filename, FileMode.Open))
             //{
-            Scene sc = ac.ImportFile(filename,
-                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords // | PostProcessSteps.OptimizeGraph
-                | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
-            //ac.ExportFile(sc, outfile, "dae");
-            Console.WriteLine(".off file has " + sc.TextureCount + " embedded textures");
-            Console.WriteLine(".off file has " + sc.MeshCount + " meshes");
-            Console.WriteLine(".off file has " + sc.MaterialCount + " materials");
-
-            //bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
-            //    PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
+            //Scene sc = ac.ImportFile(filename,
+            //    PostProcessSteps.Triangulate | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords // | PostProcessSteps.OptimizeGraph
             //    | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
-            //File.WriteAllText(finfile, File.ReadAllText(outfile).Replace("<OFFRoot>", "OFFRoot"));
-            //Console.WriteLine(finfile);
+            //ac.ExportFile(sc, outfile, "dae");
+            //Console.WriteLine(".off file has " + sc.TextureCount + " embedded textures");
+            //Console.WriteLine(".off file has " + sc.MeshCount + " meshes");
+            //Console.WriteLine(".off file has " + sc.MaterialCount + " materials");
+
+            bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
+                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
+                | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
+            File.WriteAllText(finfile, File.ReadAllText(outfile).Replace("<OFFRoot>", "OFFRoot"));
+            Console.WriteLine(finfile);
 
         }
         public static AssimpContext ac = new AssimpContext();
@@ -5816,8 +5816,8 @@ namespace AssetsPV
 
         static void Main(string[] args)
         {
-            //LogStream.IsVerboseLoggingEnabled = true;
-            //log.Attach();
+            LogStream.IsVerboseLoggingEnabled = true;
+            log.Attach();
 
             //altFolder = "botl6/";
             //altFolder = "other/";
@@ -6139,10 +6139,10 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
             writePaletteImages();
-
-            //processUnitLargeWMilitary("Recon");
-            processUnitLargeWMilitary("Flamethrower");
             /*
+            processUnitLargeWMilitary("Recon");
+            processUnitLargeWMilitary("Flamethrower");
+            
             processUnitHugeWMilitarySuper("Laboratory");
             processUnitHugeWMilitarySuper("Dock");
             processUnitHugeWMilitarySuper("City");
@@ -6161,9 +6161,9 @@ namespace AssetsPV
             
             processUnitHugeWMilitarySuper("Plane");
             processUnitHugeWMilitarySuper("Plane_P");
-            processUnitHugeWMilitarySuper("Plane_S");*/
-            //    processUnitHugeWMilitarySuper("Plane_T");
-            /*
+            processUnitHugeWMilitarySuper("Plane_S");
+            processUnitHugeWMilitarySuper("Plane_T");
+            
             processUnitHugeWMilitarySuper("Boat");
             processUnitHugeWMilitarySuper("Boat_P");
             processUnitHugeWMilitarySuper("Boat_S");
@@ -6254,7 +6254,7 @@ namespace AssetsPV
 
             //makeDetailedTiling();
 
-            /*
+            
             WriteOFFMilitary("Tank", 0);
 
             WriteOFFMilitary("Tank", 1 + 32 * 8);
@@ -6265,7 +6265,7 @@ namespace AssetsPV
             WriteOFFMilitary("Plane_T", 2 + 4 * 8);
 
             WriteOFFMilitary("Plane_T", 5 + 4 * 8);
-            */
+            
 
 
             //processUnitLargeW("Charlie", 1, true, false);

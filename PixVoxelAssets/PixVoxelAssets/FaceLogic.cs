@@ -98,8 +98,9 @@ namespace AssetsPV
 
     public struct Vertex3D : IComparable<Vertex3D>, IEquatable<Vertex3D>
     {
-        int X, Y, Z, Color;
-        public Vertex3D(int color, int x, int y, int z)
+        public int Color;
+        public float X, Y, Z;
+        public Vertex3D(int color, float x, float y, float z)
         {
             X = x; Y = y; Z = z; Color = color;
         }
@@ -128,7 +129,15 @@ namespace AssetsPV
 
         public override int GetHashCode()
         {
-            return Color * 0x1000000 + Z * 0x10000 + X * 0x100 + Y;
+            int hash = 17;
+            unchecked
+            {
+                hash = hash * 31 + X.GetHashCode();
+                hash = hash * 31 + Y.GetHashCode();
+                hash = hash * 31 + Z.GetHashCode();
+                hash = hash * 31 + Color;
+            }
+            return hash;
         }
         public override string ToString()
         {
@@ -137,8 +146,8 @@ namespace AssetsPV
         public string Show(int palette)
         {
             int c = (253 - Color) / 4;
-            return ToString() + " " +  ((VoxelLogic.wrendered[palette][c][18] * 256) / 65280.0) + " " + ((VoxelLogic.wrendered[palette][c][17] * 256) / 65280.0) +
-                " " + ((VoxelLogic.wrendered[palette][c][16] * 256) / 65280.0) + " 1.0";
+            return ToString() + " " +  ((VoxelLogic.wrendered[palette][c][18] * 256 / 255) / 256.0) + " " + ((VoxelLogic.wrendered[palette][c][17] * 256 / 255) / 256.0) +
+                " " + ((VoxelLogic.wrendered[palette][c][16] * 256 / 255) / 256.0) + " 1.0";
         }
     }
 
@@ -174,11 +183,58 @@ namespace AssetsPV
                     hash = hash * 31 + Points[p].GetHashCode();
                 }
             }
-            
+
             return hash;
         }
+    }
 
+    public class OrientedFace3D : IEquatable<OrientedFace3D>
+    {
+        public Vertex3D[] Points;
+        public int Orient;
+        public OrientedFace3D(Vertex3D center, params int[] points)
+        {
+            Points = new Vertex3D[points.Length / 3];
+            Orient = 0;
+            for(int p = 0, o = 0; p < Points.Length; p++)
+            {
+                Points[p] = new Vertex3D(center.Color, center.X + (points[p * 3 + 0] > 0 ? 0.48f : -0.48f), center.Y + (points[p * 3 + 1] > 0 ? 0.48f : -0.48f), center.Z + (points[p * 3 + 2] > 0 ? 0.48f : -0.48f));
+                Orient |= points[p * 3 + 0] << o++;
+                Orient |= points[p * 3 + 1] << o++;
+                Orient |= points[p * 3 + 2] << o++;
+            }
+        }
+        public OrientedFace3D(params Vertex3D[] points)
+        {
+            Points = points;
+            Orient = -1;
+        }
 
+        public bool Equals(OrientedFace3D other)
+        {
+            if(other.Points.Length != Points.Length || other.Orient != Orient)
+                return false;
+            for(int p = 0; p < Points.Length; p++)
+            {
+                if(!other.Points.Contains(Points[p]))
+                    return false;
+            }
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            unchecked
+            {
+                for(int p = 0; p < Points.Length; p++)
+                {
+                    hash = hash * 31 + Points[p].GetHashCode();
+                }
+            }
+
+            return hash;
+        }
     }
 
     public delegate FaceVoxel[,,] FaceModifier(FaceVoxel[,,] faces);
@@ -4475,33 +4531,501 @@ namespace AssetsPV
             }
             return sb.ToString();
         }
-
-        public static void ProcessFV(FaceVoxel fv, FaceVoxel[,,] faces, OrderedDictionary<Vertex3D, int> pts, HashSet<Face3D> fs)
+        /*
+if(zdown || faces[x, y, z - 1].slope != fv.slope)
+    fs.Add(new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+if(xdown || faces[x - 1, y, z].slope != fv.slope)
+    fs.Add(new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+if(ydown || faces[x, y - 1, z].slope != fv.slope)
+    fs.Add(new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+if(zup || faces[x, y, z + 1].slope != fv.slope)
+    fs.Add(new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+if(xup || faces[x + 1, y, z].slope != fv.slope)
+    fs.Add(new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+if(yup || faces[x, y + 1, z].slope != fv.slope)
+    fs.Add(new OrientedFace3D(center, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1));
+break;*/
+        public static void ProcessFV(FaceVoxel fv, FaceVoxel[,,] faces, OrientedFace3D[] fs)
         {
             MagicaVoxelData mvd = fv.vox;
             int x = mvd.x, y = mvd.y, z = mvd.z, color = mvd.color;
+            Vertex3D center = new Vertex3D(color, x + 0.5f, y + 0.5f, z + 0.5f);
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
-
-            bool xdown = (x == 0 || faces[x - 1, y, z] == null), xup = (x == xSize - 1 || faces[x + 1, y, z] == null),
-                 ydown = (y == 0 || faces[x, y - 1, z] == null), yup = (y == ySize - 1 || faces[x, y + 1, z] == null),
-                 zdown = (z == 0 || faces[x, y, z - 1] == null), zup = (z == zSize - 1 || faces[x, y, z + 1] == null);
+            int i = x * ySize * zSize * 7 + y * zSize * 7 + z * 7;
+            //bool xdown = (x == 0 || faces[x - 1, y, z] == null), xup = (x == xSize - 1 || faces[x + 1, y, z] == null),
+            //     ydown = (y == 0 || faces[x, y - 1, z] == null), yup = (y == ySize - 1 || faces[x, y + 1, z] == null),
+            //     zdown = (z == 0 || faces[x, y, z - 1] == null), zup = (z == zSize - 1 || faces[x, y, z + 1] == null);
             switch(fv.slope)
             {
                 case Slope.Cube:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1));
+                    break;
+                case Slope.BackBack:
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 0, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    break;
+                case Slope.BrightBack:
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 0, 1, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    break;
+                case Slope.BrightDim:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0));
+                    break;
+                case Slope.DimBack:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0));
+                    break;
+                case Slope.BrightTop:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0));
+                    break;
+                case Slope.BrightBottom:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 1, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    break;
+                case Slope.RearDimBottom:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    break;
+                case Slope.RearDimTop:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 0, 1, 0, 1, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0));
+                    break;
+                case Slope.DimTop:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+                    break;
+                case Slope.DimBottom:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0));
+                    break;
+                case Slope.RearBrightBottom:
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 1, 0, 0, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0));
+                    break;
+                case Slope.RearBrightTop:
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 0, 1, 0, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 1, 0, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    break;
+                case Slope.BrightDimTop:
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 0, 0, 0, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 0, 0, 1, 1, 0, 0, 0));
+                    break;
+                case Slope.BrightDimBottom:
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 0, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 0, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 1, 1, 0, 0, 1));
+                    break;
+                case Slope.BrightTopBack:
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 0, 0, 1, 1, 1));
+                    break;
+                case Slope.BrightBottomBack:
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 1, 0, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 1, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 1, 1, 0, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 0, 1, 1, 1, 1, 0));
+                    break;
+                case Slope.BackBackTop:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 0, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 1, 1, 1, 0));
+                    break;
+                case Slope.BackBackBottom:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 1, 0, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 1, 0, 0, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 0, 1, 1, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 0, 0, 1, 1, 1, 1));
+                    break;
+                case Slope.DimTopBack:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 0, 1, 0, 0, 0, 1));
+                    break;
+                case Slope.DimBottomBack:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 0, 1, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 0, 0, 0, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 0, 1, 1, 0, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 0, 0, 0, 0, 1, 1));
+                    break;
+                case Slope.BrightDimTopThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0));
 
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 1, 1, 1, 0, 0, 1));
+                    break;
+                case Slope.BrightDimBottomThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0));
+
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 1, 0, 1, 0, 1));
+                    break;
+                case Slope.BrightTopBackThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0));
+
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 1, 0, 1, 1));
+                    break;
+                case Slope.BrightBottomBackThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 1, 0, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 1, 0, 0, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0));
+
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 1, 0, 1, 0, 1, 0, 0));
+                    break;
+                case Slope.BackBackTopThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 1, 0, 0, 1, 0));
+
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 0, 1, 1, 1, 1));
+                    break;
+                case Slope.BackBackBottomThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 0, 1, 0, 1, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 1, 0, 0, 1, 1));
+
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 1, 1, 1, 0));
+                    break;
+                case Slope.DimTopBackThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 1, 1, 0, 0, 1, 1, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 0));
+
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 1, 1, 0, 1, 1, 1, 0));
+                    break;
+                case Slope.DimBottomBackThick:
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1));
+                    fs[i++] = (new OrientedFace3D(center, 1, 1, 1, 1, 0, 1, 1, 0, 0));
+                    fs[i++] = (new OrientedFace3D(center, 0, 1, 0, 0, 1, 1, 1, 1, 1));
+
+                    fs[i++] = (new OrientedFace3D(center, 1, 0, 0, 0, 1, 0, 1, 1, 1));
                     break;
             }
+        }
+
+        public static Vertex3D[] MatchOrientations(Vertex3D[] p1, Vertex3D[] p2)
+        {
+            List<Vertex3D> vs = new List<Vertex3D>(4);
+            for(int i = 0; i < p1.Length; i++)
+            {
+                for(int j = 0; j < p2.Length; j++)
+                {
+                    if(Math.Abs(p1[i].X - p2[j].X) < 0.1 && Math.Abs(p1[i].Y - p2[j].Y) < 0.1 && Math.Abs(p1[i].Z - p2[j].Z) < 0.1)
+                    {
+                        vs.Add(p1[i]);
+                        vs.Add(p2[j]);
+                    }
+                }
+            }
+            //if(vs.Count >= 1 && vs.Count < 3)
+            //    Console.Write("!");
+            if(vs.Count >= 3)
+                return vs.ToArray();
+            else
+                return null;
+        }
+        public static Vertex3D[] Nearby(Vertex3D p, params OrientedFace3D[] fs)
+        {
+            List<Vertex3D> vs = new List<Vertex3D>(4);
+            for(int f = 0; f < fs.Length; f++)
+            {
+                if(fs[f] == null)
+                    continue;
+                for(int j = 0; j < fs[f].Points.Length; j++)
+                {
+                    if(Math.Abs(p.X - fs[f].Points[j].X) < 0.1 && Math.Abs(p.Y - fs[f].Points[j].Y) < 0.1 && Math.Abs(p.Z - fs[f].Points[j].Z) < 0.1)
+                    {
+                        vs.Add(fs[f].Points[j]);
+                    }
+                }
+            }
+
+            if(vs.Count >= 3)
+                return vs.ToArray();
+            else
+                return null;
+        }
+        public static OrientedFace3D[] CleanupFaces(FaceVoxel[,,] faces, OrientedFace3D[] fs)
+        {
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+            OrientedFace3D[] oriented = new OrientedFace3D[xSize * ySize * zSize * 8 * 7];
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        for(int i = 0; i < 7; i++)
+                        {
+                            oriented[(x * ySize * zSize * 8 + y * zSize * 4 + z * 2) * 7 + i] = fs[x * ySize * zSize * 7 + y * zSize * 7 + z * 7 + i];
+                        }
+                    }
+                }
+            }
+            FaceVoxel fv, nfv;
+            int pos = 0, npos = 0;
+            OrientedFace3D ori, nori;
+            Vertex3D[] matching;
+            Vertex3D center;
+            for(int x = 1; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        fv = faces[x, y, z];
+                        if(fv == null)
+                            continue;
+                        nfv = faces[x - 1, y, z];
+                        if(nfv == null)
+                            continue;
+                        pos = x * ySize * zSize * 7 + y * zSize * 7 + z * 7;
+                        npos = (x - 1) * ySize * zSize * 7 + y * zSize * 7 + z * 7;
+                        for(int a = 0; a < 7; a++)
+                        {
+                            if(fs[pos + a] == null)
+                                break;
+                            ori = fs[pos + a];
+                            for(int b = 0; b < 7; b++)
+                            {
+                                if(fs[npos + b] == null)
+                                    break;
+                                nori = fs[npos + b];
+                                if(ori.Points.Length == 4 && nori.Points.Length == 4 && (ori.Orient & nori.Orient) == 0 && (ori.Orient & 585) == 0 && (nori.Orient & 585) == 585)
+                                {
+                                    oriented[pos * 2 + a] = null;
+                                    oriented[npos * 2 + b] = null;
+                                    continue;
+                                }
+                                if(ori.Points.Length == 3 && nori.Points.Length == 3 && (ori.Orient & nori.Orient) == 0 && (ori.Orient & 73) == 0 && (nori.Orient & 73) == 73)
+                                {
+                                    oriented[pos * 2 + a] = null;
+                                    oriented[npos * 2 + b] = null;
+                                    continue;
+                                }
+                                if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
+                                {
+                                    oriented[((x * 2 - 1) * ySize * zSize * 4 + y * zSize * 4 + z * 2) * 7 + b] = new OrientedFace3D(matching);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 1; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        fv = faces[x, y, z];
+                        if(fv == null)
+                            continue;
+                        nfv = faces[x, y - 1, z];
+                        if(nfv == null)
+                            continue;
+                        pos = x * ySize * zSize * 7 + y * zSize * 7 + z * 7;
+                        npos = x * ySize * zSize * 7 + (y - 1) * zSize * 7 + z * 7;
+                        for(int a = 0; a < 7; a++)
+                        {
+                            if(fs[pos + a] == null)
+                                break;
+                            ori = fs[pos + a];
+                            for(int b = 0; b < 7; b++)
+                            {
+                                if(fs[npos + b] == null)
+                                    break;
+                                nori = fs[npos + b];
+                                if(ori.Points.Length == 4 && nori.Points.Length == 4 && (ori.Orient & nori.Orient) == 0 && (ori.Orient & 1170) == 0 && (nori.Orient & 1170) == 1170)
+                                {
+                                    oriented[pos * 2 + a] = null;
+                                    oriented[npos * 2 + b] = null;
+                                    continue;
+                                }
+                                if(ori.Points.Length == 3 && nori.Points.Length == 3 && (ori.Orient & nori.Orient) == 0 && (ori.Orient & 146) == 0 && (nori.Orient & 146) == 146)
+                                {
+                                    oriented[pos * 2 + a] = null;
+                                    oriented[npos * 2 + b] = null;
+                                    continue;
+                                }
+                                if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
+                                {
+                                    oriented[(x * ySize * zSize * 8 + (y * 2 - 1) * zSize * 2 + z * 2) * 7 + b] = new OrientedFace3D(matching);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 1; z < zSize; z++)
+                    {
+                        fv = faces[x, y, z];
+                        if(fv == null)
+                            continue;
+                        nfv = faces[x, y, z - 1];
+                        if(nfv == null)
+                            continue;
+                        pos = x * ySize * zSize * 7 + y * zSize * 7 + z * 7;
+                        npos = x * ySize * zSize * 7 + y * zSize * 7 + (z - 1) * 7;
+                        for(int a = 0; a < 7; a++)
+                        {
+                            if(fs[pos + a] == null)
+                                break;
+                            ori = fs[pos + a];
+                            for(int b = 0; b < 7; b++)
+                            {
+                                if(fs[npos + b] == null)
+                                    break;
+                                nori = fs[npos + b];
+                                if(ori.Points.Length == 4 && nori.Points.Length == 4 && (ori.Orient & nori.Orient) == 0 && (ori.Orient & 2340) == 0 && (nori.Orient & 2340) == 2340)
+                                {
+                                    oriented[pos * 2 + a] = null;
+                                    oriented[npos * 2 + b] = null;
+                                    continue;
+                                }
+                                if(ori.Points.Length == 3 && nori.Points.Length == 3 && (ori.Orient & nori.Orient) == 0 && (ori.Orient & 292) == 0 && (nori.Orient & 292) == 292)
+                                {
+                                    oriented[pos * 2 + a] = null;
+                                    oriented[npos * 2 + b] = null;
+                                    continue;
+                                }
+                                if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
+                                {
+                                    oriented[(x * ySize * zSize * 8 + y * zSize * 4 + (z * 2 - 1)) * 7 + b] = new OrientedFace3D(matching);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //int[] offsets = new int[] { 7, zSize * 12, ySize * zSize * 24, zSize * -12, ySize * zSize * -24, -7 };
+            int[] offsets = new int[] { 7, zSize * 7, ySize * zSize * 7, zSize * -7, ySize * zSize * -7, -7 };
+            List<OrientedFace3D> oris = new List<OrientedFace3D>(7);
+            for(int x = 1; x < xSize * 2; x += 2)
+            {
+                for(int y = 1; y < ySize * 2; y += 2)
+                {
+                    for(int z = 1; z < zSize * 2; z += 2)
+                    {
+                        pos = (x * ySize * zSize + y * zSize + z) * 7;
+                        for(int o = 0; o < 6; o++)
+                        {
+                            npos = pos + offsets[o];
+                            for(int a = 0; a < 7; a++)
+                            {
+                                if(oriented[npos + a] == null)
+                                    break;
+                                oris.Add(oriented[npos + a]);
+                            }
+                        }
+                        center = new Vertex3D(1, x / 2 + 1, y / 2 + 1, z / 2 + 1);
+                        if((matching = Nearby(center, oris.ToArray())) != null)
+                        {
+                            oriented[(x * ySize * zSize + y * zSize + z) * 7] = new OrientedFace3D(matching);
+                            continue;
+                        }
+                    }
+                }
+            }
+
+
+            return oriented;
         }
 
         public static string WriteVertexColorOFF(FaceVoxel[,,] faces, int palette)
         {
             OrderedDictionary<Vertex3D, int> pts = new OrderedDictionary<Vertex3D, int>();
-            HashSet<Face3D> fs = new HashSet<Face3D>();
             int ord = 0;
-            StringBuilder sb = new StringBuilder(10000);
+            StringBuilder sb = new StringBuilder(100000);
             sb.AppendLine("OFF");
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
-            /*
+            OrientedFace3D[] fs = new OrientedFace3D[xSize * ySize * zSize * 7];
+
+
             FaceVoxel fv;
             
             for(int x = 0; x < xSize; x++)
@@ -4513,661 +5037,42 @@ namespace AssetsPV
                         fv = faces[x, y, z];
                         if(fv == null)
                             continue;
-                        Point3D p000 = new Point3D(x, y, z), p100 = new Point3D(x + 1, y, z), p010 = new Point3D(x, y + 1, z), p110 = new Point3D(x + 1, y + 1, z),
-                            p001 = new Point3D(x, y, z + 1), p101 = new Point3D(x + 1, y, z + 1), p011 = new Point3D(x, y + 1, z + 1), p111 = new Point3D(x + 1, y + 1, z + 1);
-                        switch(fv.slope)
-                        {
-                            case Slope.Cube:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p110, p010, p011));
-                                break;
-                            case Slope.BackBack:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p100, p000, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                break;
-                            case Slope.BrightBack:
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p100, p010, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p100, p101, p011));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                break;
-                            case Slope.BrightDim:
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p001, p000, p110));
-                                break;
-
-                            case Slope.DimBack:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p011, p101, p100, p010));
-                                break;
-
-                            case Slope.BrightTop:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p011, p010));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p111));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p000, p100));
-                                break;
-
-                            case Slope.BrightBottom:
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p001, p011, p010));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111, p110));
-                                fs.Add(new Face3D(fv.vox.color, p001, p010, p110, p101));
-                                fs.Add(new Face3D(fv.vox.color, p101, p110, p111));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                break;
-
-                            case Slope.RearDimBottom:
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011));
-                                fs.Add(new Face3D(fv.vox.color, p000, p011, p111, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                break;
-
-                            case Slope.RearDimTop:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p010));
-                                fs.Add(new Face3D(fv.vox.color, p010, p001, p101, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p110, p101, p100));
-                                fs.Add(new Face3D(fv.vox.color, p101, p001, p000, p100));
-                                break;
-
-
-                            case Slope.DimTop:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p001));
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
-                                break;
-
-                            case Slope.DimBottom:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p101, p001, p011, p111));
-                                fs.Add(new Face3D(fv.vox.color, p010, p111, p101, p000));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011, p010));
-                                break;
-
-                            case Slope.RearBrightBottom:
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p101, p001, p011, p111));
-                                fs.Add(new Face3D(fv.vox.color, p101, p111, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p111, p110, p011));
-                                fs.Add(new Face3D(fv.vox.color, p100, p001, p011, p110));
-                                break;
-
-                            case Slope.RearBrightTop:
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p100, p101, p000));
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p101, p111));
-                                fs.Add(new Face3D(fv.vox.color, p101, p111, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p111, p110, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                break;
-
-                            case Slope.BrightDimTop:
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p000, p011));
-                                fs.Add(new Face3D(fv.vox.color, p110, p011, p000));
-                                break;
-
-                            case Slope.BrightDimBottom:
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p111));
-                                fs.Add(new Face3D(fv.vox.color, p011, p010, p111));
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p010));
-                                fs.Add(new Face3D(fv.vox.color, p010, p111, p001));
-                                break;
-
-
-                            case Slope.BrightTopBack:
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p010, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p110, p111));
-                                fs.Add(new Face3D(fv.vox.color, p100, p110, p111));
-                                fs.Add(new Face3D(fv.vox.color, p010, p100, p111));
-                                break;
-
-                            case Slope.BrightBottomBack:
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p011, p101, p111));
-                                fs.Add(new Face3D(fv.vox.color, p011, p110, p111));
-                                fs.Add(new Face3D(fv.vox.color, p101, p110, p111));
-                                fs.Add(new Face3D(fv.vox.color, p101, p011, p110));
-                                break;
-
-                            case Slope.BackBackTop:
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101));
-                                fs.Add(new Face3D(fv.vox.color, p100, p101, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p101, p110));
-                                break;
-
-                            case Slope.BackBackBottom:
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p001, p101, p111));
-                                fs.Add(new Face3D(fv.vox.color, p001, p100, p101));
-                                fs.Add(new Face3D(fv.vox.color, p100, p101, p111));
-                                fs.Add(new Face3D(fv.vox.color, p100, p001, p111));
-                                break;
-
-                            case Slope.DimTopBack:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p001));
-                                fs.Add(new Face3D(fv.vox.color, p100, p010, p001));
-                                break;
-
-                            case Slope.DimBottomBack:
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                fs.Add(new Face3D(fv.vox.color, p001, p011, p101));
-                                fs.Add(new Face3D(fv.vox.color, p001, p000, p101));
-                                fs.Add(new Face3D(fv.vox.color, p001, p011, p000));
-                                fs.Add(new Face3D(fv.vox.color, p101, p000, p011));
-                                break;
-
-                            case Slope.BrightDimTopThick:
-
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010)) // base
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                //if(!pts.ContainsKey(p101)) // remove
-                                //  pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
-
-                                fs.Add(new Face3D(fv.vox.color, p100, p111, p001));
-                                break;
-
-                            case Slope.BrightDimBottomThick:
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                //if(!pts.ContainsKey(p100)) // remove
-                                //  pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011)) // base
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p000, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p110, p101));
-                                break;
-
-
-                            case Slope.BrightTopBackThick:
-
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110)) //base
-                                    pts.Add(p110, ord++);
-                                //if(!pts.ContainsKey(p001)) //remove
-                                //  pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p011, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p101, p011));
-                                break;
-
-                            case Slope.BrightBottomBackThick:
-
-
-                                //if(!pts.ContainsKey(p000)) //remove
-                                //  pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111)) //base
-                                    pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p011, p010, p001));
-                                fs.Add(new Face3D(fv.vox.color, p001, p100, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p010, p110));
-
-                                fs.Add(new Face3D(fv.vox.color, p001, p010, p100));
-                                break;
-
-                            case Slope.BackBackTopThick:
-
-
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100)) //base
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                //if(!pts.ContainsKey(p011)) //remove
-                                //  pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p010));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p110, p010));
-
-                                fs.Add(new Face3D(fv.vox.color, p010, p001, p111));
-                                break;
-
-                            case Slope.BackBackBottomThick:
-
-
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                //if(!pts.ContainsKey(p010)) //remove
-                                //  pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101)) //base
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p001, p011));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p111, p110, p011));
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p011, p110));
-                                break;
-
-                            case Slope.DimTopBackThick:
-
-
-                                if(!pts.ContainsKey(p000)) //base
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                if(!pts.ContainsKey(p110))
-                                    pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001))
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                //if(!pts.ContainsKey(p111)) //remove
-                                //  pts.Add(p111, ord++);
-
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p110, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p101, p100, p110));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p110));
-
-                                fs.Add(new Face3D(fv.vox.color, p011, p101, p110));
-                                break;
-
-                            case Slope.DimBottomBackThick:
-
-
-                                if(!pts.ContainsKey(p000))
-                                    pts.Add(p000, ord++);
-                                if(!pts.ContainsKey(p100))
-                                    pts.Add(p100, ord++);
-                                if(!pts.ContainsKey(p010))
-                                    pts.Add(p010, ord++);
-                                //if(!pts.ContainsKey(p110)) //remove
-                                //  pts.Add(p110, ord++);
-                                if(!pts.ContainsKey(p001)) //base
-                                    pts.Add(p001, ord++);
-                                if(!pts.ContainsKey(p101))
-                                    pts.Add(p101, ord++);
-                                if(!pts.ContainsKey(p011))
-                                    pts.Add(p011, ord++);
-                                if(!pts.ContainsKey(p111))
-                                    pts.Add(p111, ord++);
-
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p100));
-                                fs.Add(new Face3D(fv.vox.color, p000, p010, p011, p001));
-                                fs.Add(new Face3D(fv.vox.color, p000, p100, p101, p001));
-                                fs.Add(new Face3D(fv.vox.color, p111, p011, p001, p101));
-                                fs.Add(new Face3D(fv.vox.color, p111, p101, p100));
-                                fs.Add(new Face3D(fv.vox.color, p010, p011, p111));
-
-                                fs.Add(new Face3D(fv.vox.color, p100, p010, p111));
-                                break;
-                        }
-
+                        ProcessFV(fv, faces, fs);
                     }
                 }
             }
-            sb.AppendLine(ord + " " + fs.Count + " 0");
+            fs = CleanupFaces(faces, fs);
+            for(int i = 0; i < fs.Length; i++)
+            {
+                if(fs[i] == null)
+                    continue;
+                for(int v = 0; v < fs[i].Points.Length; v++)
+                {
+                    if(!pts.ContainsKey(fs[i].Points[v]))
+                        pts.Add(fs[i].Points[v], ord++);
+                }
+            }
+
+            sb.AppendLine(ord + " " + fs.Count(o => o != null) + " 0");
             foreach(var kv in pts)
             {
-                sb.AppendLine(kv.Key.ToString());
+                sb.AppendLine(kv.Key.Show(palette));
             }
-            foreach(Face3D f in fs)
+            foreach(OrientedFace3D f in fs)
             {
+                if(f == null)
+                    continue;
                 sb.Append(f.Points.Length);
                 sb.Append(" ");
-                for(int i = 0; i < f.Points.Length; i++)
+                for(int i = 0; i < f.Points.Length - 1; i++)
                 {
                     sb.Append(pts[f.Points[i]]);
                     sb.Append(" ");
                 }
-                int c = (253 - f.Color) / 4;
-                sb.AppendLine(((VoxelLogic.wrendered[palette][c][18] + 1) / 256.0) + " " + ((VoxelLogic.wrendered[palette][c][17] + 1) / 256.0) +
-                    " " + ((VoxelLogic.wrendered[palette][c][16] + 1) / 256.0) + " 1.0");
+                sb.Append(pts[f.Points[f.Points.Length - 1]]);
+                sb.AppendLine();
             }
-            */
+            
             return sb.ToString();
         }
 
