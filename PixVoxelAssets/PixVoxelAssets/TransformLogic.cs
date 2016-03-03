@@ -854,6 +854,18 @@ namespace AssetsPV
             {
                 colors[i++] = Bones[check + n++].Colors;
             }
+            check = "Flesh";
+            n = 0;
+            while(Bones.ContainsKey(check + n))
+            {
+                colors[i++] = Bones[check + n++].Colors;
+            }
+            check = "Glass";
+            n = 0;
+            while(Bones.ContainsKey(check + n))
+            {
+                colors[i++] = Bones[check + n++].Colors;
+            }
             check = "Bone";
             n = 0;
             while(Bones.ContainsKey(check + n))
@@ -862,7 +874,9 @@ namespace AssetsPV
             }
             if(Bones.ContainsKey("Extra"))
             {
-                colors[i++] = Bones["Extra"].Colors;
+                //colors[i++] = Bones["Extra"].Colors;
+                int xsize = colors[i - 1].GetLength(0), ysize = colors[i - 1].GetLength(1), zsize = colors[i - 1].GetLength(2);
+                colors[i++] = new byte[xsize,ysize,zsize];
             }
             return colors;
         }
@@ -1157,12 +1171,80 @@ namespace AssetsPV
                             if(bn.Count > 0)
                                 model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
-                        else if(data2[x,y,z] > 0 && data2[x,y,z] != 253 - 27 * 4) // quick hack to force water splashes into "Extra"
+                        else if(data2[x, y, z] > 0 && data2[x, y, z] != 253 - 27 * 4) // quick hack to force water splashes into "Extra"
                         {
                             var l = new List<MagicaVoxelData>();
                             l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
                             List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
                                 bt => bt > 0 && bt != 253 - 27 * 4 && (bt > 253 - 12 * 4 || bt < 253 - 16 * 4));
+                            if(bn.Count > 0)
+                                model.AddBone("Bone" + regular_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
+                        }
+                    }
+                }
+            }
+            model.AddBone("Extra", data2);
+            model.SetAnatomy();
+            return model;
+        }
+        public static Model FromModelCUPrint(byte[,,] data)
+        {
+            byte[,,] data2 = data.Replicate();
+            Model model = new Model();
+            int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
+
+            int regular_ctr = 0, gun_ctr = 0, wheel_ctr = 0, flesh_counter = 0, glass_counter = 0;
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        
+                        if(data2[x, y, z] >= 253 - 1 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt >= 253 - 1 * 4);
+                            if(bn.Count > 0)
+                                model.AddBone("Wheel" + wheel_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
+                        }
+                        else if(data2[x, y, z] <= 253 - 6 * 4 && data2[x, y, z] >= 253 - 11 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt <= 253 - 6 * 4 && bt >= 253 - 11 * 4);
+                            if(bn.Count > 0)
+                                model.AddBone("Flesh" + flesh_counter++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
+                        }
+                        else if(data2[x, y, z] == 253 - 35 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt <= 253 - 35 * 4);
+                            if(bn.Count > 0)
+                                model.AddBone("Glass" + glass_counter++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
+                        }
+                        /*
+                        else if(data2[x, y, z] <= 253 - 12 * 4 && data2[x, y, z] >= 253 - 16 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt <= 253 - 12 * 4 && bt >= 253 - 16 * 4);
+                            if(bn.Count > 0)
+                                model.AddBone("Gun" + gun_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
+                        }
+                        */
+                        else if(data2[x, y, z] > 0) //  && data2[x, y, z] != 253 - 27 * 4 // quick hack to force water splashes into "Extra"
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt > 0); // && bt != 253 - 27 * 4 && (bt > 253 - 12 * 4 || bt < 253 - 16 * 4)
                             if(bn.Count > 0)
                                 model.AddBone("Bone" + regular_ctr++, TransformLogic.VoxListToArray(bn, xSize, ySize, zSize));
                         }
@@ -1874,6 +1956,89 @@ namespace AssetsPV
             return voxels;
         }
 
+        public static byte[,,] FillInteriorAndOpen(byte[,,] voxelData)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+
+            byte[,,] voxels = new byte[xSize, ySize, zSize];
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(z == 2)
+                        {
+                            if(
+                            voxelData[x, y, z] == 0 ||
+                            voxelData[x - 1, y, z] == 0 ||
+                            voxelData[x + 1, y, z] == 0 ||
+                            voxelData[x, y - 1, z] == 0 ||
+                            voxelData[x, y + 1, z] == 0 ||
+
+                            voxelData[x - 1, y - 1, z] == 0 ||
+                            voxelData[x + 1, y - 1, z] == 0 ||
+                            voxelData[x - 1, y + 1, z] == 0 ||
+                            voxelData[x + 1, y + 1, z] == 0)
+                                voxels[x, y, z] = voxelData[x, y, z];
+                            else
+                            {
+                                voxels[x, y, 0] = 2;
+                                voxels[x, y, 1] = 2;
+                                voxels[x, y, 2] = 2;
+                            }
+                        }
+                        else if(
+                            x == 0 || x == xSize - 1 ||
+                            y == 0 || y == ySize - 1 ||
+                            z == 0 || z == zSize - 1 ||
+                            voxelData[x, y, z] == 253 - 17 * 4 ||
+                            voxelData[x, y, z] == 0 ||
+                            voxelData[x - 1, y, z] == 0 ||
+                            voxelData[x + 1, y, z] == 0 ||
+                            voxelData[x, y - 1, z] == 0 ||
+                            voxelData[x, y + 1, z] == 0 ||
+                            voxelData[x, y, z - 1] == 0 ||
+                            voxelData[x, y, z + 1] == 0 ||
+
+                            voxelData[x - 1, y, z + 1] == 0 ||
+                            voxelData[x + 1, y, z + 1] == 0 ||
+                            voxelData[x, y - 1, z + 1] == 0 ||
+                            voxelData[x, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y, z - 1] == 0 ||
+                            voxelData[x + 1, y, z - 1] == 0 ||
+                            voxelData[x, y - 1, z - 1] == 0 ||
+                            voxelData[x, y + 1, z - 1] == 0 ||
+
+                            voxelData[x - 1, y - 1, z] == 0 ||
+                            voxelData[x + 1, y - 1, z] == 0 ||
+
+                            voxelData[x - 1, y + 1, z] == 0 ||
+                            voxelData[x + 1, y + 1, z] == 0 ||
+
+                            voxelData[x - 1, y + 1, z + 1] == 0 ||
+                            voxelData[x + 1, y - 1, z + 1] == 0 ||
+                            voxelData[x - 1, y - 1, z + 1] == 0 ||
+                            voxelData[x + 1, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y + 1, z - 1] == 0 ||
+                            voxelData[x + 1, y - 1, z - 1] == 0 ||
+                            voxelData[x - 1, y - 1, z - 1] == 0 ||
+                            voxelData[x + 1, y + 1, z - 1] == 0)
+                        {
+                            voxels[x, y, z] = voxelData[x, y, z];
+                        }
+                        else
+                        {
+                            voxels[x, y, z] = 2;
+                        }
+                    }
+                }
+            }
+            return voxels;
+        }
+
         public static byte[,,] ClearInterior(byte[,,] voxelData)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
@@ -1894,6 +2059,7 @@ namespace AssetsPV
             }
             return voxels;
         }
+
         public static byte[,,] RunSurfaceCA(byte[,,] voxelData, int smoothLevel, bool regardless = false)
         {
             if(smoothLevel <= 1)
@@ -1963,6 +2129,80 @@ namespace AssetsPV
                 }
             }
             return ClearInterior(vs[smoothLevel - 1]);
+        }
+        public static bool HasAdjacentColor(byte[,,] voxelData, int xsize, int ysize, int zsize, int x, int y, int z, int color)
+        {
+            int near = 0;
+            if(x > 0 && voxelData[x - 1, y, z] == color)
+                near++;
+            if(y > 0 && voxelData[x, y - 1, z] == color)
+                near++;
+            if(z > 0 && voxelData[x, y, z - 1] == color)
+                near++;
+
+            if(x < xsize - 1 && voxelData[x + 1, y, z] == color)
+                near++;
+            if(y < ysize - 1 && voxelData[x, y + 1, z] == color)
+                near++;
+            if(z < zsize - 1 && voxelData[x, y, z + 1] == color)
+                near++;
+
+            return near > 2;
+        }
+        public static byte[,,] RandomChanges(byte[,,] voxelData)
+        {
+            Random r = new Random(1337);
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte[,,] cpy = voxelData.Replicate();
+            int current_color;
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        current_color = (253 - voxelData[x, y, z]) / 4;
+                        if(current_color == 17 && r.Next(9) < 2 && HasAdjacentColor(cpy, xSize, ySize, zSize, x, y, z, 253 - 17 * 4)) //smoke
+                        {
+                            cpy[x, y, z] = 0;
+                            continue;
+                        }
+                        if((current_color == 27 || current_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                        {
+                            cpy[x, y, z] = 0;
+                            continue;
+                        }
+                        if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
+                        {
+                            cpy[x, y, z] = 0;
+                            continue;
+                        }
+
+                        if(current_color == 18) //yellow fire
+                        {
+                            if(r.Next(3) > 0)
+                            {
+                                cpy[x, y, z] -= (byte)(4 * r.Next(3));
+                            }
+                        }
+                        else if(current_color == 19) // orange fire
+                        {
+                            if(r.Next(5) < 4)
+                            {
+                                cpy[x, y, z] += (byte)(4 * r.Next(3));
+                            }
+                        }
+                        else if(current_color == 20) // sparks
+                        {
+                            if(r.Next(5) > 0)
+                            {
+                                cpy[x, y, z] += (byte)(4 * r.Next(3));
+                            }
+                        }
+                    }
+                }
+            }
+            return cpy;
         }
 
         public static List<MagicaVoxelData> VoxArrayToListSmoothed(byte[,,] voxelData)

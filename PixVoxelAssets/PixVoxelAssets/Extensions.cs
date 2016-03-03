@@ -206,6 +206,28 @@ namespace AssetsPV
 
             return a;
         }
+        public static FaceVoxel[,,] Replicate(this FaceVoxel[,,] mat)
+        {
+            if(mat == null)
+                return null;
+            if(mat.Length == 0)
+                return new FaceVoxel[0, 0, 0];
+            int xs = mat.GetLength(0), ys = mat.GetLength(1), zs = mat.GetLength(2);
+            FaceVoxel[,,] dupe = new FaceVoxel[xs, ys, zs];
+
+            for(int i = 0; i < xs; i++)
+            {
+                for(int j = 0; j < ys; j++)
+                {
+                    for(int k = 0; k < zs; k++)
+                    {
+                        if(mat[i,j,k] != null)
+                            dupe[i, j, k] = mat[i, j, k].Replicate();
+                    }
+                }
+            }
+            return dupe;
+        }
         public static T[,,] Replicate<T>(this T[,,] mat)
         {
             if(mat == null)

@@ -5766,7 +5766,148 @@ namespace AssetsPV
             }
         }
 
+        public static void WriteVOXMilitary(string u)
+        {
+            BinaryReader bin;
+            if(File.Exists("CU_print/" + u + "_Firing_Large_W.vox"))
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Firing_Large_W.vox", FileMode.Open));
+            else
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                //parsed[i].x += 10;
+                //parsed[i].y += 10;
+                parsed[i].z += 1;
+                //if((254 - parsed[i].color) % 4 == 0)
+                //    parsed[i].color--;
+            }
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 40, 40, 41, 153);
+            Model m = Model.FromModelCUPrint(colors);
+            byte[,,] modelBase = new byte[80, 80, 82];
+            for(int x = 0; x < 80; x++)
+            {
+                for(int y = 0; y < 80; y++)
+                {
+                    if(x + y == 0 || x + y == 79 + 79 || (x == 0 && y == 79) || (x == 79 && y == 0) ||
+                        ((39.5 - x) * (39.5 - x) + (39.5 - y) * (39.5 - y) <= 25.0))
+                        continue;
+                    if(x == 0 || y == 0 || x == 79 || y == 79)
+                    {
+                        modelBase[x, y, 0] = 253 - 4 * 4;
+                        modelBase[x, y, 1] = 253 - 4 * 4;
+                    }
+                    else
+                    {
+                        modelBase[x, y, 0] = 253 - 5 * 4;
+                        modelBase[x, y, 1] = 253 - 5 * 4;
+                    }
+                }
+            }
+            byte[,,] result = TransformLogic.Overlap(modelBase, TransformLogic.FillInteriorAndOpen(
+                                //TransformLogic.RunSurfaceCA(
+                                //TransformLogic.RunCA(
+                                TransformLogic.RandomChanges(
+                                    FaceLogic.FaceArrayToByteArray(
+                                    FaceLogic.RecolorCA(
+                                        FaceLogic.OverlapAll(m.AllBones().Select(b =>
 
+                                            FaceLogic.DoubleSizePrint(
+                                            FaceLogic.FillAllGaps(
+                                            FaceLogic.GetFaces(
+                                                //TransformLogic.RunThinningCA(
+                                                b
+                                            //, 2, true)
+                                            )))
+                                        ))
+                                    , 2))
+                                )
+                        //, 2, true)
+                        )
+                    );
+            foreach(int palette in CURedux.humanHighlights)
+            {
+                string folder = "vox_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(folder);
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+                //FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
+
+                VoxelLogic.WriteVOX(folder + u + "_palette" + palette + ".vox",
+                    result,
+                    "W", palette);
+            }
+        }
+        public static void WriteVOXMilitaryFlying(string u)
+        {
+            BinaryReader bin = new BinaryReader(File.Open("CU_print/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                //parsed[i].x += 10;
+                //parsed[i].y += 10;
+                parsed[i].z += 1;
+                //if((254 - parsed[i].color) % 4 == 0)
+                //    parsed[i].color--;
+            }
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 40, 40, 41, 153);
+            Model m = Model.FromModelCUPrint(colors);
+            byte[,,] modelBase = new byte[80, 80, 82];
+            for(int x = 0; x < 80; x++)
+            {
+                for(int y = 0; y < 80; y++)
+                {
+                    if(x + y == 0 || x + y == 79 + 79 || (x == 0 && y == 79) || (x == 79 && y == 0) ||
+                        ((39.5 - x) * (39.5 - x) + (39.5 - y) * (39.5 - y) <= 25.0))
+                        continue;
+                    if(x == 0 || y == 0 || x == 79 || y == 79)
+                    {
+                        modelBase[x, y, 0] = 253 - 4 * 4;
+                        modelBase[x, y, 1] = 253 - 4 * 4;
+                    }
+                    else
+                    {
+                        modelBase[x, y, 0] = 253 - 5 * 4;
+                        modelBase[x, y, 1] = 253 - 5 * 4;
+                    }
+                }
+            }
+            byte[,,] result = TransformLogic.Overlap(modelBase, TransformLogic.FillInteriorAndOpen(
+                                //TransformLogic.RunSurfaceCA(
+                                //TransformLogic.RunCA(
+                                TransformLogic.RandomChanges(
+                                    FaceLogic.FaceArrayToByteArray(
+                                    FaceLogic.RecolorCA(
+                                        FaceLogic.OverlapAll(m.AllBones().Select(b =>
+
+                                            FaceLogic.DoubleSizePrint(
+                                            FaceLogic.FillAllGaps(
+                                            FaceLogic.GetFaces(
+                                                //TransformLogic.RunThinningCA(
+                                                b
+                                            //, 2, true)
+                                            )))
+                                        ))
+                                    , 2))
+                                )
+                        //, 2, true)
+                        )
+                    );
+            foreach(int palette in CURedux.humanHighlights)
+            {
+                string folder = "vox_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(folder);
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+                //FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
+
+                VoxelLogic.WriteVOX(folder + u + "_palette" + palette + ".vox",
+                    result,
+                    "W", palette);
+            }
+        }
         public static void WriteOFFMilitary(string u, int palette)
         {
             string folder = "OFF";//"color" + i;
@@ -5791,9 +5932,12 @@ namespace AssetsPV
 
             FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
             //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
-            string offText = FaceLogic.WriteVertexColorOFF(faces, palette), filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + "_tmp.dae", finfile = filebase + ".dae";
+            string offText = FaceLogic.WriteVertexColorOFF(faces, palette),
+                faceOffText = FaceLogic.WriteOFF(faces, palette),
+                filebase = folder + "/" + u + "_" + palette, filename = filebase + ".off", outfile = filebase + "_tmp.dae", finfile = filebase + ".dae";
             File.WriteAllText(filename, offText);
-            
+            File.WriteAllText(filebase + "_original.off", faceOffText);
+
             //using(FileStream SourceStream = File.Open(filename, FileMode.Open))
             //{
             //Scene sc = ac.ImportFile(filename,
@@ -6254,7 +6398,35 @@ namespace AssetsPV
 
             //makeDetailedTiling();
 
-            
+            //WriteVOXMilitary("Plane_T");
+
+            WriteVOXMilitary("Tank");
+            WriteVOXMilitary("Tank_P");
+            WriteVOXMilitary("Tank_S");
+            WriteVOXMilitary("Tank_T");
+
+            WriteVOXMilitary("Truck");
+            WriteVOXMilitary("Truck_P");
+            WriteVOXMilitary("Truck_S");
+            WriteVOXMilitary("Truck_T");
+
+            WriteVOXMilitary("Artillery");
+            WriteVOXMilitary("Artillery_P");
+            WriteVOXMilitary("Artillery_S");
+            WriteVOXMilitary("Artillery_T");
+
+            WriteVOXMilitary("Infantry");
+            WriteVOXMilitary("Infantry_P");
+            WriteVOXMilitary("Infantry_S");
+            WriteVOXMilitary("Infantry_T");
+            WriteVOXMilitary("Infantry_PS");
+            WriteVOXMilitary("Infantry_ST");
+            WriteVOXMilitary("Infantry_PT");
+
+            WriteVOXMilitary("Recon");
+            WriteVOXMilitary("Flamethrower");
+
+            /*
             WriteOFFMilitary("Tank", 0);
 
             WriteOFFMilitary("Tank", 1 + 32 * 8);
@@ -6265,7 +6437,7 @@ namespace AssetsPV
             WriteOFFMilitary("Plane_T", 2 + 4 * 8);
 
             WriteOFFMilitary("Plane_T", 5 + 4 * 8);
-            
+            */
 
 
             //processUnitLargeW("Charlie", 1, true, false);

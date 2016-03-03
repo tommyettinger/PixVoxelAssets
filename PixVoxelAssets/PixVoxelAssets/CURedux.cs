@@ -160,10 +160,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -287,10 +287,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -414,10 +414,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -541,10 +541,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -668,10 +668,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -795,10 +795,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -922,10 +922,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
@@ -1049,10 +1049,10 @@ namespace AssetsPV
             new float[] {0.85F,0.0F,-0.05F,1F},
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
-            //53 always violet contrast
-            new float[] {0.4F,0.1F,0.3F,1F},
-            //54 always violet
-            new float[] {0.3F,0.15F,0.5F,1F},
+            //53 always dark gray
+            new float[] {0.19F,0.19F,0.19F,1F},
+            //54 always light gray
+            new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
             new float[] {0.92F,0.85F,0.4F,1F},
             //56 always silver
