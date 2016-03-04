@@ -499,12 +499,12 @@ namespace AssetsPV
             
             return data;
         }
-        public static FaceVoxel[,,] GetFaces(byte[,,] voxelData)
+        public static FaceVoxel[,,] GetFaces(byte[,,] voxelData, bool regardless = false)
         {
-            return AddAll(GetCubes(voxelData));
+            return AddAll(GetCubes(voxelData), regardless);
         }
 
-        public static FaceVoxel[,,] GetFaces(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize)
+        public static FaceVoxel[,,] GetFaces(IEnumerable<MagicaVoxelData> voxelData, int xSize, int ySize, int zSize, bool regardless = false)
         {
             FaceVoxel[,,] data = new FaceVoxel[xSize, ySize, zSize];
 
@@ -512,16 +512,16 @@ namespace AssetsPV
             {
                 data[mvd.x, mvd.y, mvd.z] = new FaceVoxel(mvd, Slope.Cube);
             }
-            data = AddAll(data);
+            data = AddAll(data, regardless);
 
             return data;
         }
 
-        public static FaceVoxel[,,] AddAll(FaceVoxel[,,] faces)
+        public static FaceVoxel[,,] AddAll(FaceVoxel[,,] faces, bool regardless = false)
         {
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
             FaceVoxel[,,] faces2 = new FaceVoxel[xSize, ySize, zSize];
-            byte mvd;
+            byte water = 253 - 27 * 4, mvd;
             for(int z = zSize - 1; z >= 0; z--)
             {
                 for(int x = 0; x < xSize - 1; x++)
@@ -530,30 +530,39 @@ namespace AssetsPV
                     {
                         if(z == 0 || x == 0 || y == 0 || z == zSize - 1 || x == xSize - 1 || y == ySize - 1 || faces[x, y, z] != null)
                         {
-                            faces2[x, y, z] = faces[x, y, z];
+                            if(faces[x, y, z] != null && (z == zSize - 1 || faces[x, y, z + 1] == null) && faces[x, y, z].vox.color == water)
+                            {
+                                faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = water }, RandomTopSlope());
+                                continue;
+                            }
+                            else
+                                faces2[x, y, z] = faces[x, y, z];
                         }
                         else
                         {
-                            if(ImportantNeighborhood(faces, x, y, z))
+                            if(!regardless && ImportantNeighborhood(faces, x, y, z))
                             {
                                 continue;
                             }
-                            bool xup = faces[x + 1, y, z] != null,
-                                 xdown = faces[x - 1, y, z] != null,
-                                 yup = faces[x, y + 1, z] != null,
-                                 ydown = faces[x, y - 1, z] != null,
-                                 zup = faces[x, y, z + 1] != null,
-                                 zdown = faces[x, y, z - 1] != null;
+                            bool xup = faces[x + 1, y, z] != null && faces[x + 1, y, z].vox.color != water,
+                                 xdown = faces[x - 1, y, z] != null && faces[x - 1, y, z].vox.color != water,
+                                 yup = faces[x, y + 1, z] != null && faces[x, y + 1, z].vox.color != water,
+                                 ydown = faces[x, y - 1, z] != null && faces[x, y - 1, z].vox.color != water,
+                                 zup = faces[x, y, z + 1] != null && faces[x, y, z + 1].vox.color != water,
+                                 zdown = faces[x, y, z - 1] != null && faces[x, y, z - 1].vox.color != water;
+                            if(!(xup || xdown || yup || ydown || zup || zdown))
+                                continue;
 
+                            mvd = NearbyFilled(faces, x, y, z);
+                            if(!regardless && ImportantVisual(mvd))
+                            {
+                                faces2[x, y, z] = null;
+                                continue;
+                            }
+                            
                             if(zdown && !zup)
                             {
                                 // faces[x, y, z - 1].vox.color;
-                                mvd = NearbyFilled(faces, x, y, z);
-                                if(ImportantVisual(mvd))
-                                {
-                                    faces2[x, y, z] = null;
-                                    continue;
-                                }
                                 
                                 if(!xdown && yup && !xup && !ydown)
                                 {
@@ -592,12 +601,7 @@ namespace AssetsPV
                             {
 
                                 mvd = NearbyFilled(faces, x, y, z);
-                                if(ImportantVisual(mvd))
-                                {
-                                    faces2[x, y, z] = null;
-                                    continue;
-                                }
-
+                                
                                 if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightBottom);
@@ -635,12 +639,7 @@ namespace AssetsPV
                             {
 
                                 mvd = NearbyFilled(faces, x, y, z);
-                                if(ImportantVisual(mvd))
-                                {
-                                    faces2[x, y, z] = null;
-                                    continue;
-                                }
-
+                                
 
                                 if(yup && !xup && !ydown) // && xdown
                                 {
@@ -653,16 +652,7 @@ namespace AssetsPV
 
                             }
                             else if(xup)
-                            {
-
-                                mvd = NearbyFilled(faces, x, y, z);
-                                if(ImportantVisual(mvd))
-                                {
-                                    faces2[x, y, z] = null;
-                                    continue;
-                                }
-
-
+                            {   
                                 if(!xdown && !yup && ydown) // && xup
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BackBack);
@@ -2569,7 +2559,7 @@ namespace AssetsPV
                     {
                         mvd.z = v.vox.z;
                     }
-                    working[iter] = new FaceVoxel(mvd, randomSlope());
+                    working[iter] = new FaceVoxel(mvd, RandomSlope());
                     iter++;
                 }
                 voxelFrames[f] = working.ToList();
@@ -3099,7 +3089,7 @@ namespace AssetsPV
                     {
                         mvd.z = v.vox.z;
                     }
-                    working[iter] = new FaceVoxel(mvd, randomSlope());
+                    working[iter] = new FaceVoxel(mvd, RandomSlope());
                     iter++;
                 }
                 voxelFrames[f] = working.ToList();
@@ -3417,12 +3407,83 @@ namespace AssetsPV
         Slope.DimTopBack,
         Slope.BrightBottomBack,
         Slope.DimBottomBack,
-        Slope.BackBack
+        Slope.BackBack,
+        Slope.BackBackTop,
+        Slope.BackBackBottom,
+        Slope.RearBrightTop,
+        Slope.RearDimTop,
+        Slope.RearBrightBottom,
+        Slope.RearDimBottom,
+        Slope.BrightDimTopThick,
+        Slope.BrightDimBottomThick,
+        Slope.BrightTopBackThick,
+        Slope.BrightBottomBackThick,
+        Slope.DimTopBackThick,
+        Slope.DimBottomBackThick,
+        Slope.BackBackTopThick,
+        Slope.BackBackBottomThick
+        },
+        TopSlopes = new Slope[] {
+        Slope.Cube,
+        Slope.BrightTop,
+        Slope.DimTop,
+        Slope.BrightDim,
+        Slope.BrightDimTop,
+        Slope.BrightBack,
+        Slope.DimBack,
+        Slope.BrightTopBack,
+        Slope.DimTopBack,
+        Slope.BackBack,
+        Slope.BackBackTop,
+        Slope.RearBrightTop,
+        Slope.RearDimTop,
+        Slope.BrightDimTopThick,
+        Slope.BrightTopBackThick,
+        Slope.DimTopBackThick,
+        Slope.BackBackTopThick
         };
 
-        private static Slope randomSlope()
+        /*
+        
+        Cube = 0x1,
+        BrightTop = 0x8,
+        DimTop = 0x10,
+        BrightDim = 0x20,
+        BrightDimTop = 0x40,
+        BrightBottom = 0x80,
+        DimBottom = 0x100,
+        BrightDimBottom = 0x200,
+        BrightBack = 0x400,
+        DimBack = 0x800,
+        BrightTopBack = 0x1000,
+        DimTopBack = 0x2000,
+        BrightBottomBack = 0x4000,
+        DimBottomBack = 0x8000,
+        BackBack = 0x10000,
+        BackBackTop = 0x20000,
+        BackBackBottom = 0x40000,
+        RearBrightTop = 0x80000,
+        RearDimTop = 0x100000,
+        RearBrightBottom = 0x200000,
+        RearDimBottom = 0x400000,
+
+        BrightDimTopThick = 0x42,
+        BrightDimBottomThick = 0x202,
+        BrightTopBackThick = 0x1002,
+        BrightBottomBackThick = 0x4002,
+        DimTopBackThick = 0x2002,
+        DimBottomBackThick = 0x8002,
+        BackBackTopThick = 0x20002,
+        BackBackBottomThick = 0x40002,
+            */
+        private static Slope RandomSlope()
         {
-            return Slopes[TallFaces.r.Next(Slopes.Length)];
+            return Slopes[Extensions.r.Next(Slopes.Length)];
+        }
+
+        private static Slope RandomTopSlope()
+        {
+            return TopSlopes[Extensions.r.Next(TopSlopes.Length)];
         }
 
         public static List<FaceVoxel> FaceArrayToList(FaceVoxel[,,] faces)
@@ -4119,7 +4180,7 @@ namespace AssetsPV
             return result;
         }
 
-        public static FaceVoxel[,,] RecolorCA(FaceVoxel[,,] voxelData, int smoothLevel)
+        public static FaceVoxel[,,] RecolorCA(FaceVoxel[,,] voxelData, int smoothLevel, bool regardless = false)
         {
             if(smoothLevel <= 1)
                 return voxelData;
@@ -4177,7 +4238,7 @@ namespace AssetsPV
                             */
                             byte m = NearbyFilled(vs[v - 1], x, y, z), old = vs[v - 1][x, y, z].vox.color;
                             int cv = TransformLogic.ColorValue(m), oldv = TransformLogic.ColorValue(old);
-                            if((cv >= 16 && cv < 50 && oldv < 50) || (cv >= 50 && oldv >= 50))
+                            if((cv >= 16 && cv < 50 && oldv < 50) || (regardless && cv >= 50 && oldv >= 50))
                                 vs[v][x, y, z].vox.color = m;
                         }
                     }

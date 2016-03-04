@@ -5777,23 +5777,24 @@ namespace AssetsPV
             MagicaVoxelData[] parsed = voxes.ToArray();
             for(int i = 0; i < parsed.Length; i++)
             {
-                //parsed[i].x += 10;
-                //parsed[i].y += 10;
+                parsed[i].x += 2;
+                parsed[i].y += 2;
                 parsed[i].z += 1;
-                //if((254 - parsed[i].color) % 4 == 0)
-                //    parsed[i].color--;
+
+                if((253 - parsed[i].color) % 4 != 0)
+                    parsed[i].color = 0;
             }
-            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 40, 40, 41, 153);
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 44, 44, 41, 153);
             Model m = Model.FromModelCUPrint(colors);
-            byte[,,] modelBase = new byte[80, 80, 82];
-            for(int x = 0; x < 80; x++)
+            byte[,,] modelBase = new byte[88, 88, 82];
+            for(int x = 0; x < 88; x++)
             {
-                for(int y = 0; y < 80; y++)
+                for(int y = 0; y < 88; y++)
                 {
-                    if(x + y == 0 || x + y == 79 + 79 || (x == 0 && y == 79) || (x == 79 && y == 0) ||
-                        ((39.5 - x) * (39.5 - x) + (39.5 - y) * (39.5 - y) <= 25.0))
+                    if(x + y == 0 || x + y == 87 + 87 || (x == 0 && y == 87) || (x == 87 && y == 0) ||
+                        ((43.5 - x) * (43.5 - x) + (43.5 - y) * (43.5 - y) <= 36.0))
                         continue;
-                    if(x == 0 || y == 0 || x == 79 || y == 79)
+                    if(x == 0 || y == 0 || x == 87 || y == 87)
                     {
                         modelBase[x, y, 0] = 253 - 4 * 4;
                         modelBase[x, y, 1] = 253 - 4 * 4;
@@ -5805,7 +5806,7 @@ namespace AssetsPV
                     }
                 }
             }
-            byte[,,] result = TransformLogic.Overlap(modelBase, TransformLogic.FillInteriorAndOpen(
+            byte[,,] result = TransformLogic.Overlap(modelBase, //TransformLogic.FillInteriorAndOpen(
                                 //TransformLogic.RunSurfaceCA(
                                 //TransformLogic.RunCA(
                                 TransformLogic.RandomChanges(
@@ -5817,14 +5818,14 @@ namespace AssetsPV
                                             FaceLogic.FillAllGaps(
                                             FaceLogic.GetFaces(
                                                 //TransformLogic.RunThinningCA(
-                                                b
+                                                TransformLogic.RandomRemoval(b)
                                             //, 2, true)
-                                            )))
+                                            , true)))
                                         ))
                                     , 2))
                                 )
                         //, 2, true)
-                        )
+                        //)
                     );
             foreach(int palette in CURedux.humanHighlights)
             {
@@ -5841,40 +5842,49 @@ namespace AssetsPV
         }
         public static void WriteVOXMilitaryFlying(string u)
         {
-            BinaryReader bin = new BinaryReader(File.Open("CU_print/" + u + "_Large_W.vox", FileMode.Open));
+            BinaryReader bin;
+            if(File.Exists("CU_print/" + u + "_Supported_Large_W.vox"))
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Supported_Large_W.vox", FileMode.Open));
+            else
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
             MagicaVoxelData[] parsed = voxes.ToArray();
             for(int i = 0; i < parsed.Length; i++)
             {
-                //parsed[i].x += 10;
-                //parsed[i].y += 10;
-                parsed[i].z += 1;
-                //if((254 - parsed[i].color) % 4 == 0)
-                //    parsed[i].color--;
+                parsed[i].x += 2;
+                parsed[i].y += 2;
+                parsed[i].z += 2;
+
+                if((253 - parsed[i].color) % 4 != 0)
+                    parsed[i].color = 0;
             }
-            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 40, 40, 41, 153);
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 44, 44, 42, 153);
             Model m = Model.FromModelCUPrint(colors);
-            byte[,,] modelBase = new byte[80, 80, 82];
-            for(int x = 0; x < 80; x++)
+            byte[,,] modelBase = new byte[88, 88, 84];
+            for(int x = 0; x < 88; x++)
             {
-                for(int y = 0; y < 80; y++)
+                for(int y = 0; y < 88; y++)
                 {
-                    if(x + y == 0 || x + y == 79 + 79 || (x == 0 && y == 79) || (x == 79 && y == 0) ||
-                        ((39.5 - x) * (39.5 - x) + (39.5 - y) * (39.5 - y) <= 25.0))
+                    if(x + y == 0 || x + y == 87 + 87 || (x == 0 && y == 87) || (x == 87 && y == 0) ||
+                        ((43.5 - x) * (43.5 - x) + (43.5 - y) * (43.5 - y) <= 36.0))
                         continue;
-                    if(x == 0 || y == 0 || x == 79 || y == 79)
+                    if(x == 0 || y == 0 || x == 87 || y == 87)
                     {
                         modelBase[x, y, 0] = 253 - 4 * 4;
                         modelBase[x, y, 1] = 253 - 4 * 4;
+                        modelBase[x, y, 2] = 253 - 4 * 4;
+                        modelBase[x, y, 3] = 253 - 4 * 4;
                     }
                     else
                     {
                         modelBase[x, y, 0] = 253 - 5 * 4;
                         modelBase[x, y, 1] = 253 - 5 * 4;
+                        modelBase[x, y, 2] = 253 - 5 * 4;
+                        modelBase[x, y, 3] = 253 - 5 * 4;
                     }
                 }
             }
-            byte[,,] result = TransformLogic.Overlap(modelBase, TransformLogic.FillInteriorAndOpen(
+            byte[,,] result = TransformLogic.Overlap(modelBase, //TransformLogic.FillInteriorAndOpen(
                                 //TransformLogic.RunSurfaceCA(
                                 //TransformLogic.RunCA(
                                 TransformLogic.RandomChanges(
@@ -5886,14 +5896,14 @@ namespace AssetsPV
                                             FaceLogic.FillAllGaps(
                                             FaceLogic.GetFaces(
                                                 //TransformLogic.RunThinningCA(
-                                                b
+                                                TransformLogic.RandomRemoval(b)
                                             //, 2, true)
-                                            )))
+                                            , true)))
                                         ))
                                     , 2))
                                 )
                         //, 2, true)
-                        )
+                        //)
                     );
             foreach(int palette in CURedux.humanHighlights)
             {
@@ -6420,11 +6430,20 @@ namespace AssetsPV
             WriteVOXMilitary("Infantry_S");
             WriteVOXMilitary("Infantry_T");
             WriteVOXMilitary("Infantry_PS");
-            WriteVOXMilitary("Infantry_ST");
+            WriteVOXMilitaryFlying("Infantry_ST");
             WriteVOXMilitary("Infantry_PT");
 
             WriteVOXMilitary("Recon");
             WriteVOXMilitary("Flamethrower");
+
+            WriteVOXMilitaryFlying("Plane");
+            WriteVOXMilitaryFlying("Plane_P");
+            WriteVOXMilitaryFlying("Plane_S");
+            WriteVOXMilitaryFlying("Plane_T");
+            WriteVOXMilitaryFlying("Copter");
+            WriteVOXMilitaryFlying("Copter_P");
+            WriteVOXMilitaryFlying("Copter_S");
+            WriteVOXMilitaryFlying("Copter_T");
 
             /*
             WriteOFFMilitary("Tank", 0);

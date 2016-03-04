@@ -17245,7 +17245,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         {
                             cc = voxelData[x, y, z];
                             if(!taken[x, y, z] && cc != 253 - 100 && cc > 253 - wcolorcount * 4
-                                && wpalettes[palette][(253 - cc) / 4][3] != spin_alpha_1)
+                                && wpalettes[palette][(253 - cc) / 4][3] != spin_alpha_0)
                             {
                                 if(cc == 2)
                                     continue;

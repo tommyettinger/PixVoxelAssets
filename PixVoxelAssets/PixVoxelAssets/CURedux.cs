@@ -136,10 +136,10 @@ namespace AssetsPV
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -263,10 +263,10 @@ namespace AssetsPV
             new float[] {0.75F,0.8F,0.8F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -390,10 +390,10 @@ namespace AssetsPV
             new float[] {0.8F,0.25F,0.25F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -517,10 +517,10 @@ namespace AssetsPV
             new float[] {0.8F,0.5F,0.1F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -644,10 +644,10 @@ namespace AssetsPV
             new float[] {0.85F,0.85F,0.35F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -771,10 +771,10 @@ namespace AssetsPV
             new float[] {0.4F,0.6F,0.35F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -898,10 +898,10 @@ namespace AssetsPV
             new float[] {0.55F,0.5F,0.95F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown
@@ -1025,10 +1025,10 @@ namespace AssetsPV
             new float[] {0.65F,0.35F,0.65F,spin_alpha_1},
             //40 placeholder
             new float[] {0F,0F,0F,0F},
-            //41 always green contrast
-            new float[] {0.12F,0.35F,0.0F,1F},
-            //42 always green
-            new float[] {0.25F,0.55F,0.1F,1F},
+            //41 always darker dust
+            new float[] {0.7F,0.65F,0.33F,1F},
+            //42 always dust
+            new float[] {0.9F,0.8F,0.45F,1F,1F},
             //43 always brown contrast
             new float[] {0.4F,0.25F,0.1F,1F},
             //44 always brown

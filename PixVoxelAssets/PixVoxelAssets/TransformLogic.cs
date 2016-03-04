@@ -17,7 +17,7 @@ namespace AssetsPV
         public string Name;
 
         public float Roll = 0f, Pitch = 0f, Yaw = 0f, StartRoll = 0f, StartPitch = 0f, StartYaw = 0f,
-            MoveX = 0f, MoveY = 0f, MoveZ = 0f, ZeroOutX = 0f, ZeroOutY = 0f, ZeroOutZ = 0f, 
+            MoveX = 0f, MoveY = 0f, MoveZ = 0f, ZeroOutX = 0f, ZeroOutY = 0f, ZeroOutZ = 0f,
             StretchX = 1f, StretchY = 1f, StretchZ = 1f, SpreadChance = 1f;
         public bool SpreadAll = false;
 
@@ -132,12 +132,12 @@ namespace AssetsPV
             //            q = q.idt().slerp(new Quaternion[] { new Quaternion(YawAxis, (360 - Pitch) % 360f), new Quaternion(PitchAxis, (360 - Roll) % 360f), new Quaternion(RollAxis, (360 - Yaw) % 360f) });
             //QuaternionGDX q = new QuaternionGDX().mulLeft(new QuaternionGDX(YawAxis, (360 - Pitch) % 360f)).mulLeft(new QuaternionGDX(PitchAxis, (360 - Roll) % 360f)).mulLeft(new QuaternionGDX(RollAxis, (360 - Yaw) % 360f));
             Quaternion q = Extensions.Euler(Yaw, Pitch, Roll);
-            
+
             //dir = dir.fromAngles(360 - Yaw, 360 - Pitch, 360 - Roll);
             int xSize = Colors.GetLength(0), ySize = Colors.GetLength(1), zSize = Colors.GetLength(2),
                 hxs = xSize / 2, hys = ySize / 2, hzs = zSize / 2;
             Vector3 v = new Vector3(0f, 0f, 0f);
-            
+
             byte[,,] c2 = new byte[xSize, ySize, zSize];
 
             float zx = 0, zy = 0, zz = 0;
@@ -876,7 +876,7 @@ namespace AssetsPV
             {
                 //colors[i++] = Bones["Extra"].Colors;
                 int xsize = colors[i - 1].GetLength(0), ysize = colors[i - 1].GetLength(1), zsize = colors[i - 1].GetLength(2);
-                colors[i++] = new byte[xsize,ysize,zsize];
+                colors[i++] = new byte[xsize, ysize, zsize];
             }
             return colors;
         }
@@ -1200,7 +1200,7 @@ namespace AssetsPV
                 {
                     for(int z = 0; z < zSize; z++)
                     {
-                        
+
                         if(data2[x, y, z] >= 253 - 1 * 4)
                         {
                             var l = new List<MagicaVoxelData>();
@@ -1258,7 +1258,7 @@ namespace AssetsPV
     }
 
     public delegate Model Pose(Model m);
-    
+
 
     public class TransformLogic
     {
@@ -1448,7 +1448,7 @@ namespace AssetsPV
                     }
                 }
             }
-            
+
             if(plugCount <= 0)
                 return socket;
             plugX /= plugCount;
@@ -1558,7 +1558,7 @@ namespace AssetsPV
                                 running++;
                                 break;
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -1638,7 +1638,7 @@ namespace AssetsPV
                         {
                             if((VoxelLogic.VisualMode != "CU" || (mvd.color != CURedux.emitter0 && mvd.color != CURedux.trail0 && mvd.color != CURedux.emitter1 && mvd.color != CURedux.trail1))
                                 && mvd.color != VoxelLogic.clear &&
-                                (mvd.x + (xSize - originalX) / 2) * multiplier + x < xSize * multiplier && (mvd.y + (ySize - originalY) / 2) * multiplier + y < ySize * multiplier && 
+                                (mvd.x + (xSize - originalX) / 2) * multiplier + x < xSize * multiplier && (mvd.y + (ySize - originalY) / 2) * multiplier + y < ySize * multiplier &&
                                 mvd.z * multiplier + z < zSize * multiplier)
                                 data[(mvd.x + (xSize - originalX) / 2) * multiplier + x, (mvd.y + (ySize - originalY) / 2) * multiplier + y, mvd.z * multiplier + z] = mvd.color;
                         }
@@ -1967,65 +1967,372 @@ namespace AssetsPV
                 {
                     for(int z = 0; z < zSize; z++)
                     {
-                        if(z == 2)
+                        if(z <= 8)
                         {
                             if(
-                            voxelData[x, y, z] == 0 ||
+                            x <= 1 || x >= xSize - 2 ||
+                            y <= 1 || y >= ySize - 2 ||
+                            z >= zSize - 2 ||
+                            voxelData[x, y, z] == 253 - 17 * 4 ||
                             voxelData[x - 1, y, z] == 0 ||
                             voxelData[x + 1, y, z] == 0 ||
                             voxelData[x, y - 1, z] == 0 ||
                             voxelData[x, y + 1, z] == 0 ||
 
+                            voxelData[x, y, z + 1] == 0 ||
+                            voxelData[x - 1, y, z + 1] == 0 ||
+                            voxelData[x + 1, y, z + 1] == 0 ||
+                            voxelData[x, y - 1, z + 1] == 0 ||
+                            voxelData[x, y + 1, z + 1] == 0 ||
+                            voxelData[x - 1, y + 1, z + 1] == 0 ||
+                            voxelData[x + 1, y - 1, z + 1] == 0 ||
+                            voxelData[x - 1, y - 1, z + 1] == 0 ||
+                            voxelData[x + 1, y + 1, z + 1] == 0 ||
+
                             voxelData[x - 1, y - 1, z] == 0 ||
                             voxelData[x + 1, y - 1, z] == 0 ||
                             voxelData[x - 1, y + 1, z] == 0 ||
-                            voxelData[x + 1, y + 1, z] == 0)
+                            voxelData[x + 1, y + 1, z] == 0 ||
+
+                            voxelData[x - 2, y, z] == 0 ||
+                            voxelData[x + 2, y, z] == 0 ||
+                            voxelData[x, y - 2, z] == 0 ||
+                            voxelData[x, y + 2, z] == 0 ||
+
+                            voxelData[x - 2, y - 1, z] == 0 ||
+                            voxelData[x + 2, y - 1, z] == 0 ||
+                            voxelData[x - 2, y + 1, z] == 0 ||
+                            voxelData[x + 2, y + 1, z] == 0 ||
+
+                            voxelData[x - 1, y - 2, z] == 0 ||
+                            voxelData[x + 1, y - 2, z] == 0 ||
+                            voxelData[x - 1, y + 2, z] == 0 ||
+                            voxelData[x + 1, y + 2, z] == 0 ||
+
+                            voxelData[x - 2, y - 2, z] == 0 ||
+                            voxelData[x + 2, y - 2, z] == 0 ||
+                            voxelData[x - 2, y + 2, z] == 0 ||
+                            voxelData[x + 2, y + 2, z] == 0 ||
+
+                            voxelData[x - 2, y, z + 1] == 0 ||
+                            voxelData[x + 2, y, z + 1] == 0 ||
+                            voxelData[x, y - 2, z + 1] == 0 ||
+                            voxelData[x, y + 2, z + 1] == 0 ||
+
+                            voxelData[x - 2, y - 1, z + 1] == 0 ||
+                            voxelData[x + 2, y - 1, z + 1] == 0 ||
+                            voxelData[x - 2, y + 1, z + 1] == 0 ||
+                            voxelData[x + 2, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y - 2, z + 1] == 0 ||
+                            voxelData[x + 1, y - 2, z + 1] == 0 ||
+                            voxelData[x - 1, y + 2, z + 1] == 0 ||
+                            voxelData[x + 1, y + 2, z + 1] == 0 ||
+
+                            voxelData[x - 2, y - 2, z + 1] == 0 ||
+                            voxelData[x + 2, y - 2, z + 1] == 0 ||
+                            voxelData[x - 2, y + 2, z + 1] == 0 ||
+                            voxelData[x + 2, y + 2, z + 1] == 0 ||
+
+
+                            voxelData[x, y, z + 2] == 0 ||
+                            voxelData[x - 1, y, z + 2] == 0 ||
+                            voxelData[x + 1, y, z + 2] == 0 ||
+                            voxelData[x, y - 1, z + 2] == 0 ||
+                            voxelData[x, y + 1, z + 2] == 0 ||
+                            voxelData[x - 1, y + 1, z + 2] == 0 ||
+                            voxelData[x + 1, y - 1, z + 2] == 0 ||
+                            voxelData[x - 1, y - 1, z + 2] == 0 ||
+                            voxelData[x + 1, y + 1, z + 2] == 0 ||
+
+                            voxelData[x - 2, y, z + 2] == 0 ||
+                            voxelData[x + 2, y, z + 2] == 0 ||
+                            voxelData[x, y - 2, z + 2] == 0 ||
+                            voxelData[x, y + 2, z + 2] == 0 ||
+
+                            voxelData[x - 2, y - 1, z + 2] == 0 ||
+                            voxelData[x + 2, y - 1, z + 2] == 0 ||
+                            voxelData[x - 2, y + 1, z + 2] == 0 ||
+                            voxelData[x + 2, y + 1, z + 2] == 0 ||
+
+                            voxelData[x - 1, y - 2, z + 2] == 0 ||
+                            voxelData[x + 1, y - 2, z + 2] == 0 ||
+                            voxelData[x - 1, y + 2, z + 2] == 0 ||
+                            voxelData[x + 1, y + 2, z + 2] == 0 ||
+
+                            voxelData[x - 2, y - 2, z + 2] == 0 ||
+                            voxelData[x + 2, y - 2, z + 2] == 0 ||
+                            voxelData[x - 2, y + 2, z + 2] == 0 ||
+                            voxelData[x + 2, y + 2, z + 2] == 0
+                            )
                                 voxels[x, y, z] = voxelData[x, y, z];
                             else
                             {
-                                voxels[x, y, 0] = 2;
-                                voxels[x, y, 1] = 2;
-                                voxels[x, y, 2] = 2;
+                                for(int h = 0; h <= z; h++)
+                                {
+
+                                    if(
+                                    x > 1 && x < xSize - 2 &&
+                                    y > 1 && y < ySize - 2 &&
+                                    h < zSize - 2 &&
+                                    voxelData[x, y, h] != 253 - 17 * 4 &&
+
+                                    voxelData[x, y, h] != 0 && (
+                            voxelData[x - 1, y, h] == 0 ||
+                            voxelData[x + 1, y, h] == 0 ||
+                            voxelData[x, y - 1, h] == 0 ||
+                            voxelData[x, y + 1, h] == 0 ||
+
+                            voxelData[x, y, h + 1] == 0 ||
+                            voxelData[x - 1, y, h + 1] == 0 ||
+                            voxelData[x + 1, y, h + 1] == 0 ||
+                            voxelData[x, y - 1, h + 1] == 0 ||
+                            voxelData[x, y + 1, h + 1] == 0 ||
+                            voxelData[x - 1, y + 1, h + 1] == 0 ||
+                            voxelData[x + 1, y - 1, h + 1] == 0 ||
+                            voxelData[x - 1, y - 1, h + 1] == 0 ||
+                            voxelData[x + 1, y + 1, h + 1] == 0 ||
+
+                            voxelData[x - 1, y - 1, h] == 0 ||
+                            voxelData[x + 1, y - 1, h] == 0 ||
+                            voxelData[x - 1, y + 1, h] == 0 ||
+                            voxelData[x + 1, y + 1, h] == 0 
+                            /* ||
+                            
+                            voxelData[x - 2, y, h] == 0 ||
+                            voxelData[x + 2, y, h] == 0 ||
+                            voxelData[x, y - 2, h] == 0 ||
+                            voxelData[x, y + 2, h] == 0 ||
+
+                            voxelData[x - 2, y - 1, h] == 0 ||
+                            voxelData[x + 2, y - 1, h] == 0 ||
+                            voxelData[x - 2, y + 1, h] == 0 ||
+                            voxelData[x + 2, y + 1, h] == 0 ||
+
+                            voxelData[x - 1, y - 2, h] == 0 ||
+                            voxelData[x + 1, y - 2, h] == 0 ||
+                            voxelData[x - 1, y + 2, h] == 0 ||
+                            voxelData[x + 1, y + 2, h] == 0 ||
+
+                            voxelData[x - 2, y - 2, h] == 0 ||
+                            voxelData[x + 2, y - 2, h] == 0 ||
+                            voxelData[x - 2, y + 2, h] == 0 ||
+                            voxelData[x + 2, y + 2, h] == 0 ||
+
+                            voxelData[x - 2, y, h + 1] == 0 ||
+                            voxelData[x + 2, y, h + 1] == 0 ||
+                            voxelData[x, y - 2, h + 1] == 0 ||
+                            voxelData[x, y + 2, h + 1] == 0 ||
+
+                            voxelData[x - 2, y - 1, h + 1] == 0 ||
+                            voxelData[x + 2, y - 1, h + 1] == 0 ||
+                            voxelData[x - 2, y + 1, h + 1] == 0 ||
+                            voxelData[x + 2, y + 1, h + 1] == 0 ||
+
+                            voxelData[x - 1, y - 2, h + 1] == 0 ||
+                            voxelData[x + 1, y - 2, h + 1] == 0 ||
+                            voxelData[x - 1, y + 2, h + 1] == 0 ||
+                            voxelData[x + 1, y + 2, h + 1] == 0 ||
+
+                            voxelData[x - 2, y - 2, h + 1] == 0 ||
+                            voxelData[x + 2, y - 2, h + 1] == 0 ||
+                            voxelData[x - 2, y + 2, h + 1] == 0 ||
+                            voxelData[x + 2, y + 2, h + 1] == 0 ||
+
+
+                            voxelData[x, y, h + 2] == 0 ||
+                            voxelData[x - 1, y, h + 2] == 0 ||
+                            voxelData[x + 1, y, h + 2] == 0 ||
+                            voxelData[x, y - 1, h + 2] == 0 ||
+                            voxelData[x, y + 1, h + 2] == 0 ||
+                            voxelData[x - 1, y + 1, h + 2] == 0 ||
+                            voxelData[x + 1, y - 1, h + 2] == 0 ||
+                            voxelData[x - 1, y - 1, h + 2] == 0 ||
+                            voxelData[x + 1, y + 1, h + 2] == 0 ||
+
+                            voxelData[x - 2, y, h + 2] == 0 ||
+                            voxelData[x + 2, y, h + 2] == 0 ||
+                            voxelData[x, y - 2, h + 2] == 0 ||
+                            voxelData[x, y + 2, h + 2] == 0 ||
+
+                            voxelData[x - 2, y - 1, h + 2] == 0 ||
+                            voxelData[x + 2, y - 1, h + 2] == 0 ||
+                            voxelData[x - 2, y + 1, h + 2] == 0 ||
+                            voxelData[x + 2, y + 1, h + 2] == 0 ||
+
+                            voxelData[x - 1, y - 2, h + 2] == 0 ||
+                            voxelData[x + 1, y - 2, h + 2] == 0 ||
+                            voxelData[x - 1, y + 2, h + 2] == 0 ||
+                            voxelData[x + 1, y + 2, h + 2] == 0 ||
+
+                            voxelData[x - 2, y - 2, h + 2] == 0 ||
+                            voxelData[x + 2, y - 2, h + 2] == 0 ||
+                            voxelData[x - 2, y + 2, h + 2] == 0 ||
+                            voxelData[x + 2, y + 2, h + 2] == 0 */))
+                                        voxels[x, y, h] = voxelData[x, y, h];
+                                    else
+                                        voxels[x, y, h] = 2;
+                                }
                             }
                         }
                         else if(
-                            x == 0 || x == xSize - 1 ||
-                            y == 0 || y == ySize - 1 ||
-                            z == 0 || z == zSize - 1 ||
+                            x <= 1 || x >= xSize - 2 ||
+                            y <= 1 || y >= ySize - 2 ||
+                            z <= 1 || z >= zSize - 2 ||
                             voxelData[x, y, z] == 253 - 17 * 4 ||
                             voxelData[x, y, z] == 0 ||
                             voxelData[x - 1, y, z] == 0 ||
                             voxelData[x + 1, y, z] == 0 ||
                             voxelData[x, y - 1, z] == 0 ||
                             voxelData[x, y + 1, z] == 0 ||
-                            voxelData[x, y, z - 1] == 0 ||
-                            voxelData[x, y, z + 1] == 0 ||
 
+                            voxelData[x - 1, y - 1, z] == 0 ||
+                            voxelData[x + 1, y - 1, z] == 0 ||
+                            voxelData[x - 1, y + 1, z] == 0 ||
+                            voxelData[x + 1, y + 1, z] == 0 ||
+
+                            voxelData[x - 2, y, z] == 0 ||
+                            voxelData[x + 2, y, z] == 0 ||
+                            voxelData[x, y - 2, z] == 0 ||
+                            voxelData[x, y + 2, z] == 0 ||
+
+                            voxelData[x - 2, y - 1, z] == 0 ||
+                            voxelData[x + 2, y - 1, z] == 0 ||
+                            voxelData[x - 2, y + 1, z] == 0 ||
+                            voxelData[x + 2, y + 1, z] == 0 ||
+
+                            voxelData[x - 1, y - 2, z] == 0 ||
+                            voxelData[x + 1, y - 2, z] == 0 ||
+                            voxelData[x - 1, y + 2, z] == 0 ||
+                            voxelData[x + 1, y + 2, z] == 0 ||
+
+                            voxelData[x - 2, y - 2, z] == 0 ||
+                            voxelData[x + 2, y - 2, z] == 0 ||
+                            voxelData[x - 2, y + 2, z] == 0 ||
+                            voxelData[x + 2, y + 2, z] == 0 ||
+
+                            voxelData[x, y, z + 1] == 0 ||
                             voxelData[x - 1, y, z + 1] == 0 ||
                             voxelData[x + 1, y, z + 1] == 0 ||
                             voxelData[x, y - 1, z + 1] == 0 ||
                             voxelData[x, y + 1, z + 1] == 0 ||
-
-                            voxelData[x - 1, y, z - 1] == 0 ||
-                            voxelData[x + 1, y, z - 1] == 0 ||
-                            voxelData[x, y - 1, z - 1] == 0 ||
-                            voxelData[x, y + 1, z - 1] == 0 ||
-
-                            voxelData[x - 1, y - 1, z] == 0 ||
-                            voxelData[x + 1, y - 1, z] == 0 ||
-
-                            voxelData[x - 1, y + 1, z] == 0 ||
-                            voxelData[x + 1, y + 1, z] == 0 ||
-
                             voxelData[x - 1, y + 1, z + 1] == 0 ||
                             voxelData[x + 1, y - 1, z + 1] == 0 ||
                             voxelData[x - 1, y - 1, z + 1] == 0 ||
                             voxelData[x + 1, y + 1, z + 1] == 0 ||
 
+                            voxelData[x - 2, y, z + 1] == 0 ||
+                            voxelData[x + 2, y, z + 1] == 0 ||
+                            voxelData[x, y - 2, z + 1] == 0 ||
+                            voxelData[x, y + 2, z + 1] == 0 ||
+
+                            voxelData[x - 2, y - 1, z + 1] == 0 ||
+                            voxelData[x + 2, y - 1, z + 1] == 0 ||
+                            voxelData[x - 2, y + 1, z + 1] == 0 ||
+                            voxelData[x + 2, y + 1, z + 1] == 0 ||
+
+                            voxelData[x - 1, y - 2, z + 1] == 0 ||
+                            voxelData[x + 1, y - 2, z + 1] == 0 ||
+                            voxelData[x - 1, y + 2, z + 1] == 0 ||
+                            voxelData[x + 1, y + 2, z + 1] == 0 ||
+
+                            voxelData[x - 2, y - 2, z + 1] == 0 ||
+                            voxelData[x + 2, y - 2, z + 1] == 0 ||
+                            voxelData[x - 2, y + 2, z + 1] == 0 ||
+                            voxelData[x + 2, y + 2, z + 1] == 0 ||
+
+
+                            voxelData[x, y, z + 2] == 0 ||
+                            voxelData[x - 1, y, z + 2] == 0 ||
+                            voxelData[x + 1, y, z + 2] == 0 ||
+                            voxelData[x, y - 1, z + 2] == 0 ||
+                            voxelData[x, y + 1, z + 2] == 0 ||
+                            voxelData[x - 1, y + 1, z + 2] == 0 ||
+                            voxelData[x + 1, y - 1, z + 2] == 0 ||
+                            voxelData[x - 1, y - 1, z + 2] == 0 ||
+                            voxelData[x + 1, y + 1, z + 2] == 0 ||
+
+                            voxelData[x - 2, y, z + 2] == 0 ||
+                            voxelData[x + 2, y, z + 2] == 0 ||
+                            voxelData[x, y - 2, z + 2] == 0 ||
+                            voxelData[x, y + 2, z + 2] == 0 ||
+
+                            voxelData[x - 2, y - 1, z + 2] == 0 ||
+                            voxelData[x + 2, y - 1, z + 2] == 0 ||
+                            voxelData[x - 2, y + 1, z + 2] == 0 ||
+                            voxelData[x + 2, y + 1, z + 2] == 0 ||
+
+                            voxelData[x - 1, y - 2, z + 2] == 0 ||
+                            voxelData[x + 1, y - 2, z + 2] == 0 ||
+                            voxelData[x - 1, y + 2, z + 2] == 0 ||
+                            voxelData[x + 1, y + 2, z + 2] == 0 ||
+
+                            voxelData[x - 2, y - 2, z + 2] == 0 ||
+                            voxelData[x + 2, y - 2, z + 2] == 0 ||
+                            voxelData[x - 2, y + 2, z + 2] == 0 ||
+                            voxelData[x + 2, y + 2, z + 2] == 0 ||
+
+
+                            voxelData[x, y, z - 1] == 0 ||
+                            voxelData[x - 1, y, z - 1] == 0 ||
+                            voxelData[x + 1, y, z - 1] == 0 ||
+                            voxelData[x, y - 1, z - 1] == 0 ||
+                            voxelData[x, y + 1, z - 1] == 0 ||
                             voxelData[x - 1, y + 1, z - 1] == 0 ||
                             voxelData[x + 1, y - 1, z - 1] == 0 ||
                             voxelData[x - 1, y - 1, z - 1] == 0 ||
-                            voxelData[x + 1, y + 1, z - 1] == 0)
+                            voxelData[x + 1, y + 1, z - 1] == 0 ||
+
+                            voxelData[x - 2, y, z - 1] == 0 ||
+                            voxelData[x + 2, y, z - 1] == 0 ||
+                            voxelData[x, y - 2, z - 1] == 0 ||
+                            voxelData[x, y + 2, z - 1] == 0 ||
+
+                            voxelData[x - 2, y - 1, z - 1] == 0 ||
+                            voxelData[x + 2, y - 1, z - 1] == 0 ||
+                            voxelData[x - 2, y + 1, z - 1] == 0 ||
+                            voxelData[x + 2, y + 1, z - 1] == 0 ||
+
+                            voxelData[x - 1, y - 2, z - 1] == 0 ||
+                            voxelData[x + 1, y - 2, z - 1] == 0 ||
+                            voxelData[x - 1, y + 2, z - 1] == 0 ||
+                            voxelData[x + 1, y + 2, z - 1] == 0 ||
+
+                            voxelData[x - 2, y - 2, z - 1] == 0 ||
+                            voxelData[x + 2, y - 2, z - 1] == 0 ||
+                            voxelData[x - 2, y + 2, z - 1] == 0 ||
+                            voxelData[x + 2, y + 2, z - 1] == 0 ||
+
+
+                            voxelData[x, y, z - 2] == 0 ||
+                            voxelData[x - 1, y, z - 2] == 0 ||
+                            voxelData[x + 1, y, z - 2] == 0 ||
+                            voxelData[x, y - 1, z - 2] == 0 ||
+                            voxelData[x, y + 1, z - 2] == 0 ||
+                            voxelData[x - 1, y + 1, z - 2] == 0 ||
+                            voxelData[x + 1, y - 1, z - 2] == 0 ||
+                            voxelData[x - 1, y - 1, z - 2] == 0 ||
+                            voxelData[x + 1, y + 1, z - 2] == 0 ||
+
+                            voxelData[x - 2, y, z - 2] == 0 ||
+                            voxelData[x + 2, y, z - 2] == 0 ||
+                            voxelData[x, y - 2, z - 2] == 0 ||
+                            voxelData[x, y + 2, z - 2] == 0 ||
+
+                            voxelData[x - 2, y - 1, z - 2] == 0 ||
+                            voxelData[x + 2, y - 1, z - 2] == 0 ||
+                            voxelData[x - 2, y + 1, z - 2] == 0 ||
+                            voxelData[x + 2, y + 1, z - 2] == 0 ||
+
+                            voxelData[x - 1, y - 2, z - 2] == 0 ||
+                            voxelData[x + 1, y - 2, z - 2] == 0 ||
+                            voxelData[x - 1, y + 2, z - 2] == 0 ||
+                            voxelData[x + 1, y + 2, z - 2] == 0 ||
+
+                            voxelData[x - 2, y - 2, z - 2] == 0 ||
+                            voxelData[x + 2, y - 2, z - 2] == 0 ||
+                            voxelData[x - 2, y + 2, z - 2] == 0 ||
+                            voxelData[x + 2, y + 2, z - 2] == 0)
                         {
                             voxels[x, y, z] = voxelData[x, y, z];
                         }
@@ -2132,24 +2439,24 @@ namespace AssetsPV
         }
         public static bool HasAdjacentColor(byte[,,] voxelData, int xsize, int ysize, int zsize, int x, int y, int z, int color)
         {
-            int near = 0;
+            bool gotX = false, gotY = false, gotZ = false;
             if(x > 0 && voxelData[x - 1, y, z] == color)
-                near++;
+                gotX = true;
             if(y > 0 && voxelData[x, y - 1, z] == color)
-                near++;
+                gotY = true;
             if(z > 0 && voxelData[x, y, z - 1] == color)
-                near++;
+                gotZ = true;
 
             if(x < xsize - 1 && voxelData[x + 1, y, z] == color)
-                near++;
+                gotX = true;
             if(y < ysize - 1 && voxelData[x, y + 1, z] == color)
-                near++;
+                gotY = true;
             if(z < zsize - 1 && voxelData[x, y, z + 1] == color)
-                near++;
+                gotZ = true;
 
-            return near > 2;
+            return gotX && gotY && gotZ;
         }
-        public static byte[,,] RandomChanges(byte[,,] voxelData)
+        public static byte[,,] RandomRemoval(byte[,,] voxelData)
         {
             Random r = new Random(1337);
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
@@ -2162,23 +2469,48 @@ namespace AssetsPV
                     for(int z = 0; z < zSize; z++)
                     {
                         current_color = (253 - voxelData[x, y, z]) / 4;
-                        if(current_color == 17 && r.Next(9) < 2 && HasAdjacentColor(cpy, xSize, ySize, zSize, x, y, z, 253 - 17 * 4)) //smoke
-                        {
-                            cpy[x, y, z] = 0;
-                            continue;
-                        }
-                        if((current_color == 27 || current_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
-                        {
-                            cpy[x, y, z] = 0;
-                            continue;
-                        }
-                        if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
-                        {
-                            cpy[x, y, z] = 0;
-                            continue;
-                        }
 
-                        if(current_color == 18) //yellow fire
+                        if(current_color == 36 || current_color == 37) //rotors
+                        {
+                            cpy[x, y, z] = 0;
+                        }
+                        else if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
+                        {
+                            cpy[x, y, z] = 0;
+                        }
+                        else if((current_color == 27 || current_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                        {
+                            cpy[x, y, z] = 2;
+                        }
+                        else if(current_color == 42 && r.Next(13) < 2 && HasAdjacentColor(voxelData, xSize, ySize, zSize, x, y, z, 0)) //dust
+                        {
+                            cpy[x, y, z] = 0;
+                        }
+                    }
+                }
+            }
+            return cpy;
+        }
+
+        public static byte[,,] RandomChanges(byte[,,] voxelData)
+        {
+            Random r = new Random(1337);
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte[,,] cpy = voxelData.Replicate();
+            int current_color;
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        current_color = (253 - cpy[x, y, z]) / 4;
+
+                        if(current_color == 17 && r.Next(9) < 2 && HasAdjacentColor(voxelData, xSize, ySize, zSize, x, y, z, 0)) //smoke //253 - 17 * 4
+                        {
+                            cpy[x, y, z] = 0;
+                        }
+                        else if(current_color == 18) //yellow fire
                         {
                             if(r.Next(3) > 0)
                             {
@@ -2189,7 +2521,7 @@ namespace AssetsPV
                         {
                             if(r.Next(5) < 4)
                             {
-                                cpy[x, y, z] += (byte)(4 * r.Next(3));
+                                cpy[x, y, z] += (byte)(4 * r.Next(2));
                             }
                         }
                         else if(current_color == 20) // sparks
@@ -2197,6 +2529,13 @@ namespace AssetsPV
                             if(r.Next(5) > 0)
                             {
                                 cpy[x, y, z] += (byte)(4 * r.Next(3));
+                            }
+                        }
+                        else if(current_color == 42) // dust
+                        {
+                            if(r.Next(4) == 0)
+                            {
+                                cpy[x, y, z] = 253 - 4 * 41;
                             }
                         }
                     }
@@ -2226,7 +2565,7 @@ namespace AssetsPV
                         {
                             vls[x, y, z] = voxelData[x, y, z];
                             if(voxelData[x, y, z] > VoxelLogic.clear || voxelData[x, y, z] == 0)
-                                currentFill = voxelData[x-1, y, z];
+                                currentFill = voxelData[x - 1, y, z];
                         }
                         else
                         {
@@ -2234,7 +2573,7 @@ namespace AssetsPV
                                 && (voxelData[x, y, z] > VoxelLogic.clear || voxelData[x, y, z] == 0))
                             {
                                 //if(voxelData[x, y, z] > 253 - 57 * 4 || voxelData[x, y, z] == 0)
-                                    currentFill = voxelData[x, y, z];
+                                currentFill = voxelData[x, y, z];
                             }
                             vls[x, y, z] = currentFill;
                         }
@@ -2251,19 +2590,19 @@ namespace AssetsPV
                             vls[x, y, z] = voxelData[x, y + 1, z];
                         else if(voxelData[x, y - 2, z] == 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z] > 0)
                             vls[x, y, z] = voxelData[x, y - 1, z];*/
-                            /*
-                        else if(voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
-                            vls[x, y, z] = voxelData[x, y, z+1];
-                        else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
-                            vls[x, y, z] = voxelData[x, y - 1, z];
-                        else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
-                            vls[x, y, z] = voxelData[x, y + 1, z];
+                        /*
+                    else if(voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
+                        vls[x, y, z] = voxelData[x, y, z+1];
+                    else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
+                        vls[x, y, z] = voxelData[x, y - 1, z];
+                    else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z] == 0 && voxelData[x, y, z + 1] > 0)
+                        vls[x, y, z] = voxelData[x, y + 1, z];
 
-                        else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z + 1] == 0)
-                            vls[x, y, z] = voxelData[x, y-1, z];
-                        else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z + 1] == 0)
-                            vls[x, y, z] = voxelData[x, y+1, z];
-                            */
+                    else if(voxelData[x, y - 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y - 1, z + 1] == 0)
+                        vls[x, y, z] = voxelData[x, y-1, z];
+                    else if(voxelData[x, y + 1, z] > 0 && voxelData[x, y, z + 1] > 0 && voxelData[x, y + 1, z + 1] == 0)
+                        vls[x, y, z] = voxelData[x, y+1, z];
+                        */
                     }
                 }
             }
@@ -2317,9 +2656,9 @@ namespace AssetsPV
                         {
                             for(int yy = 0; yy < ymultiplier; yy++)
                             {
-                                for(int zz =  0; zz < zmultiplier; zz++)
+                                for(int zz = 0; zz < zmultiplier; zz++)
                                 {
-                                    if(x * xmultiplier + xx >= xSize || y* ymultiplier +yy < 0 || z* zmultiplier +zz >= zSize)
+                                    if(x * xmultiplier + xx >= xSize || y * ymultiplier + yy < 0 || z * zmultiplier + zz >= zSize)
                                         continue;
                                     byte smallColor = voxelData[x * xmultiplier + xx, y * ymultiplier + yy, z * zmultiplier + zz];
                                     if((254 - smallColor) % 4 == 0)
@@ -2415,7 +2754,7 @@ namespace AssetsPV
                         {
                             for(int z = 0; z < zSize; z++)
                             {
-                                vls[y, xSize - x - 1, z] = colors[x,y,z];
+                                vls[y, xSize - x - 1, z] = colors[x, y, z];
                             }
                         }
                     }
@@ -2427,7 +2766,7 @@ namespace AssetsPV
                         {
                             for(int z = 0; z < zSize; z++)
                             {
-                                vls[xSize - x - 1,  ySize - y - 1, z] = colors[x, y, z];
+                                vls[xSize - x - 1, ySize - y - 1, z] = colors[x, y, z];
                             }
                         }
                     }
@@ -2651,7 +2990,7 @@ namespace AssetsPV
                 {
                     for(int vz = 0; vz < zSize; vz++)
                     {
-                        if(!dismiss.IsPresent(colors[vx,vy,vz]) && rng.NextDouble() < chance)
+                        if(!dismiss.IsPresent(colors[vx, vy, vz]) && rng.NextDouble() < chance)
                         {
                             colors[vx, vy, vz] = changing.RandomElement();
                         }
@@ -3147,6 +3486,6 @@ namespace AssetsPV
             }
             return frames;
         }
-        
+
     }
 }
