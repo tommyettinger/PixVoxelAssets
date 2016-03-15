@@ -62,7 +62,7 @@ namespace AssetsPV
 
     public struct Point3D : IComparable<Point3D>, IEquatable<Point3D>
     {
-        int X, Y, Z;
+        public int X, Y, Z;
         public Point3D(int x, int y, int z)
         {
             X = x; Y = y; Z = z;
@@ -123,12 +123,16 @@ namespace AssetsPV
                 return -1;
             if(Y < other.Y)
                 return 1;
+            if(Color > other.Color)
+                return 10;
+            if(Color < other.Color)
+                return -10;
             return 0;
         }
 
         public bool Equals(Vertex3D other)
         {
-            return X == other.X && Y == other.Y && Z == other.Z;
+            return X == other.X && Y == other.Y && Z == other.Z && Color == other.Color;
         }
 
         public override int GetHashCode()
@@ -150,8 +154,14 @@ namespace AssetsPV
         public string Show(int palette)
         {
             int c = (253 - Color) / 4;
-            return ToString() + " " +  ((VoxelLogic.wrendered[palette][c][18] * 256 / 255) / 256.0) + " " + ((VoxelLogic.wrendered[palette][c][17] * 256 / 255) / 256.0) +
+            return ToString() + " " + ((VoxelLogic.wrendered[palette][c][18] * 256 / 255) / 256.0) + " " + ((VoxelLogic.wrendered[palette][c][17] * 256 / 255) / 256.0) +
                 " " + ((VoxelLogic.wrendered[palette][c][16] * 256 / 255) / 256.0) + " 1.0";
+        }
+        public string ShowPLY(int palette)
+        {
+            int c = (253 - Color) / 4;
+            return ToString() + " " + VoxelLogic.wrendered[palette][c][18] + " " + VoxelLogic.wrendered[palette][c][17] +
+                " " + VoxelLogic.wrendered[palette][c][16];
         }
     }
 
@@ -196,13 +206,25 @@ namespace AssetsPV
     {
         public Vertex3D[] Points;
         public int Orient;
+        public OrientedFace3D(Point3D center, int color, params int[] points)
+        {
+            Points = new Vertex3D[points.Length / 3];
+            Orient = 0;
+            for(int p = 0, o = 0; p < Points.Length; p++)
+            {
+                Points[p] = new Vertex3D(color, center.X + (points[p * 3 + 0] > 0 ? 0.48f : -0.48f), center.Y + (points[p * 3 + 1] > 0 ? 0.48f : -0.48f), center.Z + (points[p * 3 + 2] > 0 ? 0.48f : -0.48f));
+                Orient |= points[p * 3 + 0] << o++;
+                Orient |= points[p * 3 + 1] << o++;
+                Orient |= points[p * 3 + 2] << o++;
+            }
+        }
         public OrientedFace3D(Vertex3D center, params int[] points)
         {
             Points = new Vertex3D[points.Length / 3];
             Orient = 0;
             for(int p = 0, o = 0; p < Points.Length; p++)
             {
-                Points[p] = new Vertex3D(center.Color, center.X + (points[p * 3 + 0] > 0 ? 0.48f : -0.48f), center.Y + (points[p * 3 + 1] > 0 ? 0.48f : -0.48f), center.Z + (points[p * 3 + 2] > 0 ? 0.48f : -0.48f));
+                Points[p] = new Vertex3D(center.Color, center.X + (points[p * 3 + 0] > 0 ? 0.5f : -0.5f), center.Y + (points[p * 3 + 1] > 0 ? 0.5f : -0.5f), center.Z + (points[p * 3 + 2] > 0 ? 0.5f : -0.5f));
                 Orient |= points[p * 3 + 0] << o++;
                 Orient |= points[p * 3 + 1] << o++;
                 Orient |= points[p * 3 + 2] << o++;
@@ -5271,11 +5293,11 @@ break;*/
                                     oriented[npos * 2 + b] = null;
                                     continue;
                                 }
-                                if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
+                                /*if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
                                 {
                                     oriented[((x * 2 - 1) * ySize * zSize * 4 + y * zSize * 4 + z * 2) * 7 + b] = new OrientedFace3D(matching);
                                     continue;
-                                }
+                                }*/
                             }
                         }
                     }
@@ -5317,11 +5339,12 @@ break;*/
                                     oriented[npos * 2 + b] = null;
                                     continue;
                                 }
+                                /*
                                 if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
                                 {
                                     oriented[(x * ySize * zSize * 8 + (y * 2 - 1) * zSize * 2 + z * 2) * 7 + b] = new OrientedFace3D(matching);
                                     continue;
-                                }
+                                }*/
                             }
                         }
                     }
@@ -5362,12 +5385,12 @@ break;*/
                                     oriented[pos * 2 + a] = null;
                                     oriented[npos * 2 + b] = null;
                                     continue;
-                                }
+                                }/*
                                 if((matching = MatchOrientations(ori.Points, nori.Points)) != null)
                                 {
                                     oriented[(x * ySize * zSize * 8 + y * zSize * 4 + (z * 2 - 1)) * 7 + b] = new OrientedFace3D(matching);
                                     continue;
-                                }
+                                }*/
                             }
                         }
                     }
@@ -5375,7 +5398,7 @@ break;*/
             }
             //int[] offsets = new int[] { 7, zSize * 12, ySize * zSize * 24, zSize * -12, ySize * zSize * -24, -7 };
             int[] offsets = new int[] { 7, zSize * 7, ySize * zSize * 7, zSize * -7, ySize * zSize * -7, -7 };
-            List<OrientedFace3D> oris = new List<OrientedFace3D>(7);
+            /*List<OrientedFace3D> oris = new List<OrientedFace3D>(7);
             for(int x = 1; x < xSize * 2; x += 2)
             {
                 for(int y = 1; y < ySize * 2; y += 2)
@@ -5393,6 +5416,7 @@ break;*/
                                 oris.Add(oriented[npos + a]);
                             }
                         }
+                        
                         center = new Vertex3D(1, x / 2 + 1, y / 2 + 1, z / 2 + 1);
                         if((matching = Nearby(center, oris.ToArray())) != null)
                         {
@@ -5402,6 +5426,7 @@ break;*/
                     }
                 }
             }
+            */
 
 
             return oriented;
@@ -5464,6 +5489,88 @@ break;*/
                 sb.AppendLine();
             }
             
+            return sb.ToString();
+        }
+        public static string writePLY(FaceVoxel[,,] faces, int palette)
+        {
+            string[] headers = new string[]
+                {
+//0
+@"ply
+format ascii 1.0",
+//1
+"element vertex ",
+//2
+@"property float x
+property float y
+property float z
+property uchar red
+property uchar green
+property uchar blue",
+//3
+"element face ",
+//4
+@"property list uchar int vertex_index
+end_header" };
+
+
+            OrderedDictionary<Vertex3D, int> pts = new OrderedDictionary<Vertex3D, int>();
+            int ord = 0;
+            StringBuilder sb = new StringBuilder(100000);
+            sb.AppendLine(headers[0]);
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+            OrientedFace3D[] fs = new OrientedFace3D[xSize * ySize * zSize * 7];
+            
+            FaceVoxel fv;
+
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        fv = faces[x, y, z];
+                        if(fv == null)
+                            continue;
+                        ProcessFV(fv, faces, fs);
+                    }
+                }
+            }
+            fs = CleanupFaces(faces, fs);
+            for(int i = 0; i < fs.Length; i++)
+            {
+                if(fs[i] == null)
+                    continue;
+                for(int v = 0; v < fs[i].Points.Length; v++)
+                {
+                    if(!pts.ContainsKey(fs[i].Points[v]))
+                        pts.Add(fs[i].Points[v], ord++);
+                }
+            }
+            sb.AppendLine(headers[1] + ord);
+            sb.AppendLine(headers[2]);
+            sb.AppendLine(headers[3] + fs.Count(o => o != null));
+            sb.AppendLine(headers[4]);
+
+            foreach(var k in pts.Keys)
+            {
+                sb.AppendLine(k.ShowPLY(palette));
+            }
+            foreach(OrientedFace3D f in fs)
+            {
+                if(f == null || f.Points.Length < 1)
+                    continue;
+                sb.Append(f.Points.Length);
+                sb.Append(" ");
+                for(int i = 0; i < f.Points.Length - 1; i++)
+                {
+                    sb.Append(pts[f.Points[i]]);
+                    sb.Append(" ");
+                }
+                sb.Append(pts[f.Points[f.Points.Length - 1]]);
+                sb.AppendLine();
+            }
+
             return sb.ToString();
         }
 

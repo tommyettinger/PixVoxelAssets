@@ -5965,6 +5965,51 @@ namespace AssetsPV
             Console.WriteLine(finfile);
 
         }
+        public static void WritePLYMilitary(string u, int palette)
+        {
+            string folder = "PLY";//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+
+            BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 10;
+                parsed[i].y += 10;
+                parsed[i].z += 5;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color = 0;
+            }
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153);
+            Model m = Model.FromModelCU(colors);
+
+
+            FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
+            //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
+            string offText = FaceLogic.writePLY(faces, palette),
+                filebase = folder + "/" + u + "_" + palette, filename = filebase + ".ply", outfile = filebase + ".dae";//, finfile = filebase + ".dae";
+            File.WriteAllText(filename, offText);
+
+            //using(FileStream SourceStream = File.Open(filename, FileMode.Open))
+            //{
+            //Scene sc = ac.ImportFile(filename,
+            //    PostProcessSteps.Triangulate | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords // | PostProcessSteps.OptimizeGraph
+            //    | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
+            //ac.ExportFile(sc, outfile, "dae");
+            //Console.WriteLine(".off file has " + sc.TextureCount + " embedded textures");
+            //Console.WriteLine(".off file has " + sc.MeshCount + " meshes");
+            //Console.WriteLine(".off file has " + sc.MaterialCount + " materials");
+
+            bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
+                PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
+                | PostProcessSteps.GenerateNormals | PostProcessSteps.FindInvalidData);
+            //File.WriteAllText(finfile, File.ReadAllText(outfile).Replace("<OFFRoot>", "OFFRoot"));
+            //Console.WriteLine(finfile);
+
+        }
         public static AssimpContext ac = new AssimpContext();
         public static ConsoleLogStream log = new ConsoleLogStream();
 
@@ -6409,7 +6454,7 @@ namespace AssetsPV
             //makeDetailedTiling();
 
             //WriteVOXMilitary("Plane_T");
-
+            /*
             WriteVOXMilitary("Tank");
             WriteVOXMilitary("Tank_P");
             WriteVOXMilitary("Tank_S");
@@ -6444,6 +6489,19 @@ namespace AssetsPV
             WriteVOXMilitaryFlying("Copter_P");
             WriteVOXMilitaryFlying("Copter_S");
             WriteVOXMilitaryFlying("Copter_T");
+            */
+
+            WritePLYMilitary("Tank", 0);
+
+            WritePLYMilitary("Tank", 1 + 32 * 8);
+
+            WritePLYMilitary("Tank", 3 + 4 * 8);
+
+
+            WritePLYMilitary("Plane_T", 2 + 4 * 8);
+
+            WritePLYMilitary("Plane_T", 5 + 4 * 8);
+
 
             /*
             WriteOFFMilitary("Tank", 0);
@@ -6456,8 +6514,8 @@ namespace AssetsPV
             WriteOFFMilitary("Plane_T", 2 + 4 * 8);
 
             WriteOFFMilitary("Plane_T", 5 + 4 * 8);
+            
             */
-
 
             //processUnitLargeW("Charlie", 1, true, false);
 
