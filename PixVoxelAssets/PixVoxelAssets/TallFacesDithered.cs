@@ -5989,9 +5989,6 @@ namespace AssetsPV
 
             FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
             //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(parsed, 60, 60, 60, 153));
-            string offText = FaceLogic.writePLY(faces, palette),
-                filebase = folder + "/" + u + "_" + palette, filename = filebase + ".ply", outfile = filebase + ".dae";//, finfile = filebase + ".dae";
-            File.WriteAllText(filename, offText);
 
             //using(FileStream SourceStream = File.Open(filename, FileMode.Open))
             //{
@@ -6002,6 +5999,9 @@ namespace AssetsPV
             //Console.WriteLine(".off file has " + sc.TextureCount + " embedded textures");
             //Console.WriteLine(".off file has " + sc.MeshCount + " meshes");
             //Console.WriteLine(".off file has " + sc.MaterialCount + " materials");
+            string offText = FaceLogic.WritePLY(faces, palette),
+                filebase = folder + "/" + u + "_" + palette, filename = filebase + ".ply", outfile = filebase + ".dae";//, finfile = filebase + ".dae";
+            File.WriteAllText(filename, offText);
 
             bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
                 PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
@@ -6010,12 +6010,185 @@ namespace AssetsPV
             //Console.WriteLine(finfile);
 
         }
+        public static void WritePrintableMilitary(string u)
+        {
+            BinaryReader bin;
+            if(File.Exists("CU_print/" + u + "_Firing_Large_W.vox"))
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Firing_Large_W.vox", FileMode.Open));
+            else if(File.Exists("CU_print/" + u + "_Supported_Large_W.vox"))
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Supported_Large_W.vox", FileMode.Open));
+            else
+                bin = new BinaryReader(File.Open("CU_print/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 4;
+                parsed[i].y += 4;
+                parsed[i].z += 3;
+
+                if((253 - parsed[i].color) % 4 != 0)
+                    parsed[i].color = 0;
+            }
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 48, 48, 45, 153);
+            Model m = Model.FromModelCUPrint(colors);
+            byte[,,] modelBase = new byte[48, 48, 45];
+            for(int x = 0; x < 44; x++)
+            {
+                for(int y = 0; y < 44; y++)
+                {
+                    if(x + y == 0 || (x == 43 && y == 43) || (x == 0 && y == 43) || (x == 43 && y == 0) ||
+                        ((21.5 - x) * (21.5 - x) + (21.5 - y) * (21.5 - y) <= 25.0))
+                        continue;
+                    if(x < 1 || y < 1 || x > 42 || y > 42)
+                    {
+                        //modelBase[x + 2, y + 2, 0] = 253 - 4 * 4;
+                        modelBase[x + 2, y + 2, 1 + 1] = 253 - 4 * 4;
+                        //modelBase[x + 2, y + 2, 2] = 253 - 4 * 4;
+                        //modelBase[x, y, 3] = 253 - 4 * 4;
+                    }
+                    else if(x == 1 || y == 1 || x == 42 || y == 42)
+                    {
+                        modelBase[x + 2, y + 2, 0 + 1] = 253 - 4 * 4;
+                        modelBase[x + 2, y + 2, 1 + 1] = 253 - 4 * 4;
+                        modelBase[x + 2, y + 2, 2 + 1] = 253 - 4 * 4;
+                        //modelBase[x, y, 3] = 253 - 4 * 4;
+                    }
+                    else
+                    {
+                        modelBase[x + 2, y + 2, 0 + 1] = 253 - 5 * 4;
+                        modelBase[x + 2, y + 2, 1 + 1] = 253 - 5 * 4;
+                        //modelBase[x, y, 2] = 253 - 5 * 4;
+                        //modelBase[x, y, 3] = 253 - 5 * 4;
+                    }
+                }
+            }
+            FaceVoxel[,,] baseModel = FaceLogic.Translate(FaceLogic.FillAllGaps(FaceLogic.GetFaces(modelBase)), 0, 0, -1),
+                result = FaceLogic.Overlap(baseModel,
+               FaceLogic.FillInteriorAndOpen(
+                        m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(TransformLogic.RandomChanges(TransformLogic.RandomRemoval(b))))).Aggregate(FaceLogic.Overlap)));
+
+            //VoxelLogic.WriteVOX("base.vox", baseModel, "W", 0);
+            //VoxelLogic.WriteVOX("tmp.vox", result, "W", 0);
+            /*
+            FaceVoxel[,,] result = FaceLogic.Overlap(FaceLogic.GetFaces(modelBase),
+                                                                //TransformLogic.RunSurfaceCA(
+                                                                //TransformLogic.RunCA(
+                                    //FaceLogic.RecolorCA(
+                                        FaceLogic.OverlapAll(m.AllBones().Select(b =>
+
+                                            //FaceLogic.DoubleSizePrint(
+                                            FaceLogic.FillAllGaps(
+                                            FaceLogic.GetFaces(
+                                                //TransformLogic.RunThinningCA(
+                                                TransformLogic.FillInteriorAndOpen(TransformLogic.RandomChanges(TransformLogic.RandomRemoval(b)))
+                                            //, 2, true)
+                                            , true))
+                                        ))
+                                    //, 2)                                
+                    //, 2, true)
+                    );*/
+            foreach(int palette in CURedux.humanHighlights)
+            {
+                string folder = "dae_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(folder);
+                string gamefolder = "fbx_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(gamefolder);
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+                //FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
+                string offText = FaceLogic.WritePLY(result, palette),
+                filebase = folder + u + "_" + palette, filename = filebase + ".ply", outfile = filebase + ".dae", gamefile = gamefolder + u + "_" + palette + ".g3db";//, finfile = filebase + ".dae";
+                File.WriteAllText(filename, offText);
+
+                bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
+                    PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
+                    | PostProcessSteps.GenerateNormals); // | PostProcessSteps.FindInvalidData
+
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"fbx-conv-win32.exe");
+                startInfo.UseShellExecute = false;
+
+                startInfo.Arguments = "-p " + outfile + " " + gamefile;
+                Process.Start(startInfo).WaitForExit();
+            }
+            //VoxelLogic.WriteVOX(folder + u + "_palette" + palette + ".vox", result, "W", palette);
+        }
+        public static void Write3DGameMilitary(string u)
+        {
+            BinaryReader bin;
+            if(File.Exists("CU2/" + u + "_Firing_Large_W.vox"))
+                bin = new BinaryReader(File.Open("CU2/" + u + "_Firing_Large_W.vox", FileMode.Open));
+            else
+                bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.AssembleHeadToModelW(bin); ; //VoxelLogic.PlaceShadowsW(
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 4;
+                parsed[i].y += 4;
+                parsed[i].z += 2;
+
+                if((253 - parsed[i].color) % 4 != 0)
+                    parsed[i].color = 0;
+            }
+            byte[,,] colors = FaceLogic.VoxListToArray(parsed, 48, 48, 44, 153);
+            Model m = Model.FromModelCUPrint(colors);
+            
+            FaceVoxel[,,] result = FaceLogic.FillInteriorAndOpen(
+                        m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(TransformLogic.RandomChanges(TransformLogic.RandomRemoval(b))))).Aggregate(FaceLogic.Overlap));
+
+            //VoxelLogic.WriteVOX("base.vox", baseModel, "W", 0);
+            //VoxelLogic.WriteVOX("tmp.vox", result, "W", 0);
+            /*
+            FaceVoxel[,,] result = FaceLogic.Overlap(FaceLogic.GetFaces(modelBase),
+                                                                //TransformLogic.RunSurfaceCA(
+                                                                //TransformLogic.RunCA(
+                                    //FaceLogic.RecolorCA(
+                                        FaceLogic.OverlapAll(m.AllBones().Select(b =>
+
+                                            //FaceLogic.DoubleSizePrint(
+                                            FaceLogic.FillAllGaps(
+                                            FaceLogic.GetFaces(
+                                                //TransformLogic.RunThinningCA(
+                                                TransformLogic.FillInteriorAndOpen(TransformLogic.RandomChanges(TransformLogic.RandomRemoval(b)))
+                                            //, 2, true)
+                                            , true))
+                                        ))
+                                    //, 2)                                
+                    //, 2, true)
+                    );*/
+            foreach(int palette in CURedux.humanHighlights)
+            {
+                string folder = "dae_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(folder);
+                string gamefolder = "fbx_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(gamefolder);
+                Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+                //FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
+                string offText = FaceLogic.WritePLY(result, palette),
+                filebase = folder + u + "_" + palette, filename = filebase + ".ply", outfile = filebase + ".dae", gamefile = gamefolder + u + "_" + palette + ".g3db";//, finfile = filebase + ".dae";
+                File.WriteAllText(filename, offText);
+
+                bool check = ac.ConvertFromFileToFile(filename, outfile, "collada",
+                    PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.GenerateUVCoords | PostProcessSteps.TransformUVCoords
+                    | PostProcessSteps.GenerateNormals); // | PostProcessSteps.FindInvalidData
+
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"fbx-conv-win32.exe");
+                startInfo.UseShellExecute = false;
+
+                startInfo.Arguments = "-p " + outfile + " " + gamefile;
+                Process.Start(startInfo).WaitForExit();
+            }
+            //VoxelLogic.WriteVOX(folder + u + "_palette" + palette + ".vox", result, "W", palette);
+        }
+
         public static AssimpContext ac = new AssimpContext();
         public static ConsoleLogStream log = new ConsoleLogStream();
 
         static void Main(string[] args)
         {
-            LogStream.IsVerboseLoggingEnabled = true;
+            LogStream.IsVerboseLoggingEnabled = false;
             log.Attach();
 
             //altFolder = "botl6/";
@@ -6490,7 +6663,7 @@ namespace AssetsPV
             WriteVOXMilitaryFlying("Copter_S");
             WriteVOXMilitaryFlying("Copter_T");
             */
-
+            /*
             WritePLYMilitary("Tank", 0);
 
             WritePLYMilitary("Tank", 1 + 32 * 8);
@@ -6501,6 +6674,80 @@ namespace AssetsPV
             WritePLYMilitary("Plane_T", 2 + 4 * 8);
 
             WritePLYMilitary("Plane_T", 5 + 4 * 8);
+            */
+
+            Write3DGameMilitary("Tank");
+            Write3DGameMilitary("Tank_P");
+            Write3DGameMilitary("Tank_S");
+            Write3DGameMilitary("Tank_T");
+
+            Write3DGameMilitary("Truck");
+            Write3DGameMilitary("Truck_P");
+            Write3DGameMilitary("Truck_S");
+            Write3DGameMilitary("Truck_T");
+
+            Write3DGameMilitary("Artillery");
+            Write3DGameMilitary("Artillery_P");
+            Write3DGameMilitary("Artillery_S");
+            Write3DGameMilitary("Artillery_T");
+
+            Write3DGameMilitary("Infantry");
+            Write3DGameMilitary("Infantry_P");
+            Write3DGameMilitary("Infantry_S");
+            Write3DGameMilitary("Infantry_T");
+            Write3DGameMilitary("Infantry_PS");
+            Write3DGameMilitary("Infantry_ST");
+            Write3DGameMilitary("Infantry_PT");
+
+            Write3DGameMilitary("Recon");
+            Write3DGameMilitary("Flamethrower");
+
+            Write3DGameMilitary("Plane");
+            Write3DGameMilitary("Plane_P");
+            Write3DGameMilitary("Plane_S");
+            Write3DGameMilitary("Plane_T");
+            Write3DGameMilitary("Copter");
+            Write3DGameMilitary("Copter_P");
+            Write3DGameMilitary("Copter_S");
+            Write3DGameMilitary("Copter_T");
+
+            /*
+            WritePrintableMilitary("Tank");
+            
+            WritePrintableMilitary("Tank_P");
+            WritePrintableMilitary("Tank_S");
+            WritePrintableMilitary("Tank_T");
+
+            WritePrintableMilitary("Truck");
+            WritePrintableMilitary("Truck_P");
+            WritePrintableMilitary("Truck_S");
+            WritePrintableMilitary("Truck_T");
+
+            WritePrintableMilitary("Artillery");
+            WritePrintableMilitary("Artillery_P");
+            WritePrintableMilitary("Artillery_S");
+            WritePrintableMilitary("Artillery_T");
+
+            WritePrintableMilitary("Infantry");
+            WritePrintableMilitary("Infantry_P");
+            WritePrintableMilitary("Infantry_S");
+            WritePrintableMilitary("Infantry_T");
+            WritePrintableMilitary("Infantry_PS");
+            WritePrintableMilitary("Infantry_ST");
+            WritePrintableMilitary("Infantry_PT");
+
+            WritePrintableMilitary("Recon");
+            WritePrintableMilitary("Flamethrower");
+
+            WritePrintableMilitary("Plane");
+            WritePrintableMilitary("Plane_P");
+            WritePrintableMilitary("Plane_S");
+            WritePrintableMilitary("Plane_T");
+            WritePrintableMilitary("Copter");
+            WritePrintableMilitary("Copter_P");
+            WritePrintableMilitary("Copter_S");
+            WritePrintableMilitary("Copter_T");
+            */
 
 
             /*

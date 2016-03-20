@@ -112,21 +112,21 @@ namespace AssetsPV
         public int CompareTo(Vertex3D other)
         {
             if(Z > other.Z)
-                return 3;
+                return 8;
             if(Z < other.Z)
-                return -3;
+                return -8;
             if(X > other.X)
-                return 2;
+                return 4;
             if(X < other.X)
-                return -2;
+                return -4;
             if(Y > other.Y)
-                return -1;
+                return -2;
             if(Y < other.Y)
-                return 1;
+                return 2;
             if(Color > other.Color)
-                return 10;
+                return 1;
             if(Color < other.Color)
-                return -10;
+                return -1;
             return 0;
         }
 
@@ -134,7 +134,11 @@ namespace AssetsPV
         {
             return X == other.X && Y == other.Y && Z == other.Z && Color == other.Color;
         }
-
+        public bool EqualsColorless(Vertex3D other)
+        {
+            return X == other.X && Y == other.Y && Z == other.Z;
+        }
+        /*
         public override int GetHashCode()
         {
             int hash = 17;
@@ -146,7 +150,7 @@ namespace AssetsPV
                 hash = hash * 31 + Color;
             }
             return hash;
-        }
+        }*/
         public override string ToString()
         {
             return X + " " + Y + " " + Z;
@@ -225,6 +229,10 @@ namespace AssetsPV
             for(int p = 0, o = 0; p < Points.Length; p++)
             {
                 Points[p] = new Vertex3D(center.Color, center.X + (points[p * 3 + 0] > 0 ? 0.5f : -0.5f), center.Y + (points[p * 3 + 1] > 0 ? 0.5f : -0.5f), center.Z + (points[p * 3 + 2] > 0 ? 0.5f : -0.5f));
+            }
+            Points.OrderBy(v => v);
+            for(int p = 0, o = 0; p < Points.Length; p++)
+            {
                 Orient |= points[p * 3 + 0] << o++;
                 Orient |= points[p * 3 + 1] << o++;
                 Orient |= points[p * 3 + 2] << o++;
@@ -247,7 +255,19 @@ namespace AssetsPV
             }
             return true;
         }
-
+        public bool EqualsColorless(OrientedFace3D other)
+        {
+            if(other.Points.Length != Points.Length || other.Orient != Orient)
+                return false;
+            for(int p = 0; p < Points.Length; p++)
+            {
+                
+                if(!other.Points.Any(v => v.EqualsColorless(Points[p])))
+                    return false;
+            }
+            return true;
+        }
+        /*
         public override int GetHashCode()
         {
             int hash = 17;
@@ -260,7 +280,7 @@ namespace AssetsPV
             }
 
             return hash;
-        }
+        }*/
     }
 
     public delegate FaceVoxel[,,] FaceModifier(FaceVoxel[,,] faces);
@@ -512,7 +532,7 @@ namespace AssetsPV
                                     }
                                 }
                             }
-                            if(!AllArray(nearby))
+                            //if(!AllArray(nearby))
                                 data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = mvd }, Slope.Cube);
                         }
                     }
@@ -538,7 +558,40 @@ namespace AssetsPV
 
             return data;
         }
+        public static FaceVoxel[,,] Translate(FaceVoxel[,,] voxelData, int xMove, int yMove, int zMove)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
 
+            FaceVoxel[,,] vs = new FaceVoxel[xSize, ySize, zSize];
+
+            int xmin = 0, ymin = 0, zmin = 0,
+                xmax = xSize, ymax = ySize, zmax = zSize;
+            if(xMove < 0)
+                xmin -= xMove;
+            else if(xMove > 0)
+                xmax -= xMove;
+            if(yMove < 0)
+                ymin -= yMove;
+            else if(yMove > 0)
+                ymax -= yMove;
+            if(zMove < 0)
+                zmin -= zMove;
+            else if(zMove > 0)
+                zmax -= zMove;
+
+            for(int x = xmin; x < xmax; x++)
+            {
+                for(int y = ymin; y < ymax; y++)
+                {
+                    for(int z = zmin; z < zmax; z++)
+                    {
+                        vs[x + xMove, y + yMove, z + zMove] = voxelData[x, y, z];
+                    }
+                }
+            }
+
+            return vs;
+        }
         public static FaceVoxel[,,] AddAll(FaceVoxel[,,] faces, bool regardless = false)
         {
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
@@ -581,11 +634,11 @@ namespace AssetsPV
                                 faces2[x, y, z] = null;
                                 continue;
                             }
-                            
+
                             if(zdown && !zup)
                             {
                                 // faces[x, y, z - 1].vox.color;
-                                
+
                                 if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightTop);
@@ -623,7 +676,7 @@ namespace AssetsPV
                             {
 
                                 mvd = NearbyFilled(faces, x, y, z);
-                                
+
                                 if(!xdown && yup && !xup && !ydown)
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightBottom);
@@ -661,7 +714,7 @@ namespace AssetsPV
                             {
 
                                 mvd = NearbyFilled(faces, x, y, z);
-                                
+
 
                                 if(yup && !xup && !ydown) // && xdown
                                 {
@@ -674,7 +727,7 @@ namespace AssetsPV
 
                             }
                             else if(xup)
-                            {   
+                            {
                                 if(!xdown && !yup && ydown) // && xup
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BackBack);
@@ -689,6 +742,163 @@ namespace AssetsPV
                 }
             }
             return faces2;
+        }
+
+        public static FaceVoxel[,,] AddAllSpecial(FaceVoxel[,,] faces, bool regardless = true)
+        {
+            int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
+            FaceVoxel[,,] faces2 = new FaceVoxel[xSize, ySize, zSize];
+            byte water = 253 - 27 * 4, mvd;
+            for(int z = zSize - 1; z >= 0; z--)
+            {
+                for(int x = 0; x < xSize - 1; x++)
+                {
+                    for(int y = ySize - 1; y >= 0; y--)
+                    {
+                        if(z == 0 || x == 0 || y == 0 || z == zSize - 1 || x == xSize - 1 || y == ySize - 1)
+                        {
+                            if(faces[x, y, z] == null)
+                                faces2[x, y, z] = null;
+                            else if(faces[x,y,z].vox.color > 2)
+                                faces2[x, y, z] = faces[x, y, z];
+                        }
+                        else if(faces[x, y, z] != null && faces[x, y, z].vox.color == 2)
+                        {
+                            if(!regardless && ImportantNeighborhood(faces, x, y, z))
+                            {
+                                continue;
+                            }
+                            bool xup = faces[x + 1, y, z] != null && faces[x + 1, y, z].vox.color != water && faces[x + 1, y, z].slope == Slope.Cube,
+                                 xdown = faces[x - 1, y, z] != null && faces[x - 1, y, z].vox.color != water && faces[x - 1, y, z].slope == Slope.Cube,
+                                 yup = faces[x, y + 1, z] != null && faces[x, y + 1, z].vox.color != water && faces[x, y + 1, z].slope == Slope.Cube,
+                                 ydown = faces[x, y - 1, z] != null && faces[x, y - 1, z].vox.color != water && faces[x, y - 1, z].slope == Slope.Cube,
+                                 zup = faces[x, y, z + 1] != null && faces[x, y, z + 1].vox.color != water && faces[x, y, z + 1].slope == Slope.Cube,
+                                 zdown = faces[x, y, z - 1] != null && faces[x, y, z - 1].vox.color != water && faces[x, y, z - 1].slope == Slope.Cube;
+                            if(!(xup || xdown || yup || ydown || zup || zdown))
+                                continue;
+
+                            mvd = NearbyFilled(faces, x, y, z);
+                            if(!regardless && ImportantVisual(mvd))
+                            {
+                                faces2[x, y, z] = null;
+                                continue;
+                            }
+
+                            if(zdown && !zup)
+                            {
+                                // faces[x, y, z - 1].vox.color;
+
+                                if(!xdown && yup && !xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightTop);
+                                }
+                                else if(xdown && !yup && !xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.DimTop);
+                                }
+                                else if(!xdown && !yup && xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.RearBrightTop);
+                                }
+                                else if(!xdown && !yup && !xup && ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.RearDimTop);
+                                }
+                                else if(xdown && yup && !xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightDimTopThick);
+                                }
+                                else if(xup && yup && !xdown && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightTopBackThick);
+                                }
+                                else if(!xup && !yup && xdown && ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.DimTopBackThick);
+                                }
+                                else if(!xdown && !yup && xup && ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BackBackTopThick);
+                                }
+                            }
+                            else if(zup)
+                            {
+
+                                mvd = NearbyFilled(faces, x, y, z);
+
+                                if(!xdown && yup && !xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightBottom);
+                                }
+                                else if(xdown && !yup && !xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.DimBottom);
+                                }
+                                else if(!xdown && !yup && xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.RearBrightBottom);
+                                }
+                                else if(!xdown && !yup && !xup && ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.RearDimBottom);
+                                }
+                                else if(xdown && yup && !xup && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightDimBottomThick);
+                                }
+                                else if(xup && yup && !xdown && !ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightBottomBackThick);
+                                }
+                                else if(!xup && !yup && xdown && ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.DimBottomBackThick);
+                                }
+                                else if(!xdown && !yup && xup && ydown)
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BackBackBottomThick);
+                                }
+                            }
+                            else if(xdown)
+                            {
+
+                                mvd = NearbyFilled(faces, x, y, z);
+
+
+                                if(yup && !xup && !ydown) // && xdown
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightDim);
+                                }
+                                else if(!xup && !yup && ydown) // && xdown
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.DimBack);
+                                }
+
+                            }
+                            else if(xup)
+                            {
+                                if(!xdown && !yup && ydown) // && xup
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BackBack);
+                                }
+                                else if(yup && !xdown && !ydown) // && xup
+                                {
+                                    faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightBack);
+                                }
+                            }
+                            else
+                            {
+                                faces2[x, y, z] = null;
+                            }
+                        }
+                        else
+                        {
+                            faces2[x, y, z] = faces[x, y, z];
+                        }
+                    }
+                }
+            }
+            return FillAllGaps(faces2);
         }
 
         public static FaceVoxel[,,] Overlap(FaceVoxel[,,] start, FaceVoxel[,,] adding)
@@ -731,7 +941,7 @@ namespace AssetsPV
                     {
                         for(int c = 0; c <= running; c++)
                         {
-                            if(voxelData[i, j, k] == null)
+                            if(voxelData[i, j, k] == null || voxelData[i,j,k].vox.color == 2)
                             {
                                 empty++;
                                 break;
@@ -4201,7 +4411,325 @@ namespace AssetsPV
             }
             return result;
         }
+        
+        public static FaceVoxel[,,] FillInteriorAndOpen(FaceVoxel[,,] voxelData)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
 
+            FaceVoxel[,,] voxels = new FaceVoxel[xSize, ySize, zSize];
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(z <= 8)
+                        {
+                            if(
+                            x <= 1 || x >= xSize - 2 ||
+                            y <= 1 || y >= ySize - 2 ||
+                            z >= zSize - 2 ||
+                            (voxelData[x, y, z] != null && voxelData[x, y, z].vox.color == 253 - 17 * 4) ||
+                            voxelData[x - 1, y, z] == null ||
+                            voxelData[x + 1, y, z] == null ||
+                            voxelData[x, y - 1, z] == null ||
+                            voxelData[x, y + 1, z] == null ||
+
+                            voxelData[x, y, z + 1] == null ||
+                            voxelData[x - 1, y, z + 1] == null ||
+                            voxelData[x + 1, y, z + 1] == null ||
+                            voxelData[x, y - 1, z + 1] == null ||
+                            voxelData[x, y + 1, z + 1] == null ||
+                            voxelData[x - 1, y + 1, z + 1] == null ||
+                            voxelData[x + 1, y - 1, z + 1] == null ||
+                            voxelData[x - 1, y - 1, z + 1] == null ||
+                            voxelData[x + 1, y + 1, z + 1] == null ||
+
+                            voxelData[x - 1, y - 1, z] == null ||
+                            voxelData[x + 1, y - 1, z] == null ||
+                            voxelData[x - 1, y + 1, z] == null ||
+                            voxelData[x + 1, y + 1, z] == null ||
+
+                            voxelData[x - 2, y, z] == null ||
+                            voxelData[x + 2, y, z] == null ||
+                            voxelData[x, y - 2, z] == null ||
+                            voxelData[x, y + 2, z] == null ||
+
+                            voxelData[x - 2, y - 1, z] == null ||
+                            voxelData[x + 2, y - 1, z] == null ||
+                            voxelData[x - 2, y + 1, z] == null ||
+                            voxelData[x + 2, y + 1, z] == null ||
+
+                            voxelData[x - 1, y - 2, z] == null ||
+                            voxelData[x + 1, y - 2, z] == null ||
+                            voxelData[x - 1, y + 2, z] == null ||
+                            voxelData[x + 1, y + 2, z] == null ||
+
+                            voxelData[x - 2, y - 2, z] == null ||
+                            voxelData[x + 2, y - 2, z] == null ||
+                            voxelData[x - 2, y + 2, z] == null ||
+                            voxelData[x + 2, y + 2, z] == null ||
+
+                            voxelData[x - 2, y, z + 1] == null ||
+                            voxelData[x + 2, y, z + 1] == null ||
+                            voxelData[x, y - 2, z + 1] == null ||
+                            voxelData[x, y + 2, z + 1] == null ||
+
+                            voxelData[x - 2, y - 1, z + 1] == null ||
+                            voxelData[x + 2, y - 1, z + 1] == null ||
+                            voxelData[x - 2, y + 1, z + 1] == null ||
+                            voxelData[x + 2, y + 1, z + 1] == null ||
+
+                            voxelData[x - 1, y - 2, z + 1] == null ||
+                            voxelData[x + 1, y - 2, z + 1] == null ||
+                            voxelData[x - 1, y + 2, z + 1] == null ||
+                            voxelData[x + 1, y + 2, z + 1] == null ||
+
+                            voxelData[x - 2, y - 2, z + 1] == null ||
+                            voxelData[x + 2, y - 2, z + 1] == null ||
+                            voxelData[x - 2, y + 2, z + 1] == null ||
+                            voxelData[x + 2, y + 2, z + 1] == null ||
+
+
+                            voxelData[x, y, z + 2] == null ||
+                            voxelData[x - 1, y, z + 2] == null ||
+                            voxelData[x + 1, y, z + 2] == null ||
+                            voxelData[x, y - 1, z + 2] == null ||
+                            voxelData[x, y + 1, z + 2] == null ||
+                            voxelData[x - 1, y + 1, z + 2] == null ||
+                            voxelData[x + 1, y - 1, z + 2] == null ||
+                            voxelData[x - 1, y - 1, z + 2] == null ||
+                            voxelData[x + 1, y + 1, z + 2] == null ||
+
+                            voxelData[x - 2, y, z + 2] == null ||
+                            voxelData[x + 2, y, z + 2] == null ||
+                            voxelData[x, y - 2, z + 2] == null ||
+                            voxelData[x, y + 2, z + 2] == null ||
+
+                            voxelData[x - 2, y - 1, z + 2] == null ||
+                            voxelData[x + 2, y - 1, z + 2] == null ||
+                            voxelData[x - 2, y + 1, z + 2] == null ||
+                            voxelData[x + 2, y + 1, z + 2] == null ||
+
+                            voxelData[x - 1, y - 2, z + 2] == null ||
+                            voxelData[x + 1, y - 2, z + 2] == null ||
+                            voxelData[x - 1, y + 2, z + 2] == null ||
+                            voxelData[x + 1, y + 2, z + 2] == null ||
+
+                            voxelData[x - 2, y - 2, z + 2] == null ||
+                            voxelData[x + 2, y - 2, z + 2] == null ||
+                            voxelData[x - 2, y + 2, z + 2] == null ||
+                            voxelData[x + 2, y + 2, z + 2] == null
+                            )
+                                voxels[x, y, z] = voxelData[x, y, z];
+                            else
+                            {
+                                for(int h = 0; h <= z; h++)
+                                {
+
+                                    if(
+                                    x > 1 && x < xSize - 2 &&
+                                    y > 1 && y < ySize - 2 &&
+                                    h < zSize - 2 &&
+                                    voxelData[x, y, h] != null && 
+                                    voxelData[x, y, h].vox.color != 253 - 17 * 4 &&
+                                     (
+                            voxelData[x - 1, y, h] == null ||
+                            voxelData[x + 1, y, h] == null ||
+                            voxelData[x, y - 1, h] == null ||
+                            voxelData[x, y + 1, h] == null ||
+
+                            voxelData[x, y, h + 1] == null ||
+                            voxelData[x - 1, y, h + 1] == null ||
+                            voxelData[x + 1, y, h + 1] == null ||
+                            voxelData[x, y - 1, h + 1] == null ||
+                            voxelData[x, y + 1, h + 1] == null ||
+                            voxelData[x - 1, y + 1, h + 1] == null ||
+                            voxelData[x + 1, y - 1, h + 1] == null ||
+                            voxelData[x - 1, y - 1, h + 1] == null ||
+                            voxelData[x + 1, y + 1, h + 1] == null ||
+
+                            voxelData[x - 1, y - 1, h] == null ||
+                            voxelData[x + 1, y - 1, h] == null ||
+                            voxelData[x - 1, y + 1, h] == null ||
+                            voxelData[x + 1, y + 1, h] == null))
+                                        voxels[x, y, h] = voxelData[x, y, h];
+                                    else
+                                        voxels[x, y, h] = new FaceVoxel(x, y, h, 2, Slope.BackBackBottom);
+                                }
+                            }
+                        }
+                        else if(
+                            x <= 1 || x >= xSize - 2 ||
+                            y <= 1 || y >= ySize - 2 ||
+                            z <= 1 || z >= zSize - 2 ||
+                            voxelData[x, y, z] == null ||
+                            voxelData[x, y, z].vox.color == 253 - 17 * 4 ||
+                            voxelData[x - 1, y, z] == null ||
+                            voxelData[x + 1, y, z] == null ||
+                            voxelData[x, y - 1, z] == null ||
+                            voxelData[x, y + 1, z] == null ||
+
+                            voxelData[x - 1, y - 1, z] == null ||
+                            voxelData[x + 1, y - 1, z] == null ||
+                            voxelData[x - 1, y + 1, z] == null ||
+                            voxelData[x + 1, y + 1, z] == null ||
+
+                            voxelData[x - 2, y, z] == null ||
+                            voxelData[x + 2, y, z] == null ||
+                            voxelData[x, y - 2, z] == null ||
+                            voxelData[x, y + 2, z] == null ||
+
+                            voxelData[x - 2, y - 1, z] == null ||
+                            voxelData[x + 2, y - 1, z] == null ||
+                            voxelData[x - 2, y + 1, z] == null ||
+                            voxelData[x + 2, y + 1, z] == null ||
+
+                            voxelData[x - 1, y - 2, z] == null ||
+                            voxelData[x + 1, y - 2, z] == null ||
+                            voxelData[x - 1, y + 2, z] == null ||
+                            voxelData[x + 1, y + 2, z] == null ||
+
+                            voxelData[x - 2, y - 2, z] == null ||
+                            voxelData[x + 2, y - 2, z] == null ||
+                            voxelData[x - 2, y + 2, z] == null ||
+                            voxelData[x + 2, y + 2, z] == null ||
+
+                            voxelData[x, y, z + 1] == null ||
+                            voxelData[x - 1, y, z + 1] == null ||
+                            voxelData[x + 1, y, z + 1] == null ||
+                            voxelData[x, y - 1, z + 1] == null ||
+                            voxelData[x, y + 1, z + 1] == null ||
+                            voxelData[x - 1, y + 1, z + 1] == null ||
+                            voxelData[x + 1, y - 1, z + 1] == null ||
+                            voxelData[x - 1, y - 1, z + 1] == null ||
+                            voxelData[x + 1, y + 1, z + 1] == null ||
+
+                            voxelData[x - 2, y, z + 1] == null ||
+                            voxelData[x + 2, y, z + 1] == null ||
+                            voxelData[x, y - 2, z + 1] == null ||
+                            voxelData[x, y + 2, z + 1] == null ||
+
+                            voxelData[x - 2, y - 1, z + 1] == null ||
+                            voxelData[x + 2, y - 1, z + 1] == null ||
+                            voxelData[x - 2, y + 1, z + 1] == null ||
+                            voxelData[x + 2, y + 1, z + 1] == null ||
+
+                            voxelData[x - 1, y - 2, z + 1] == null ||
+                            voxelData[x + 1, y - 2, z + 1] == null ||
+                            voxelData[x - 1, y + 2, z + 1] == null ||
+                            voxelData[x + 1, y + 2, z + 1] == null ||
+
+                            voxelData[x - 2, y - 2, z + 1] == null ||
+                            voxelData[x + 2, y - 2, z + 1] == null ||
+                            voxelData[x - 2, y + 2, z + 1] == null ||
+                            voxelData[x + 2, y + 2, z + 1] == null ||
+
+
+                            voxelData[x, y, z + 2] == null ||
+                            voxelData[x - 1, y, z + 2] == null ||
+                            voxelData[x + 1, y, z + 2] == null ||
+                            voxelData[x, y - 1, z + 2] == null ||
+                            voxelData[x, y + 1, z + 2] == null ||
+                            voxelData[x - 1, y + 1, z + 2] == null ||
+                            voxelData[x + 1, y - 1, z + 2] == null ||
+                            voxelData[x - 1, y - 1, z + 2] == null ||
+                            voxelData[x + 1, y + 1, z + 2] == null ||
+
+                            voxelData[x - 2, y, z + 2] == null ||
+                            voxelData[x + 2, y, z + 2] == null ||
+                            voxelData[x, y - 2, z + 2] == null ||
+                            voxelData[x, y + 2, z + 2] == null ||
+
+                            voxelData[x - 2, y - 1, z + 2] == null ||
+                            voxelData[x + 2, y - 1, z + 2] == null ||
+                            voxelData[x - 2, y + 1, z + 2] == null ||
+                            voxelData[x + 2, y + 1, z + 2] == null ||
+
+                            voxelData[x - 1, y - 2, z + 2] == null ||
+                            voxelData[x + 1, y - 2, z + 2] == null ||
+                            voxelData[x - 1, y + 2, z + 2] == null ||
+                            voxelData[x + 1, y + 2, z + 2] == null ||
+
+                            voxelData[x - 2, y - 2, z + 2] == null ||
+                            voxelData[x + 2, y - 2, z + 2] == null ||
+                            voxelData[x - 2, y + 2, z + 2] == null ||
+                            voxelData[x + 2, y + 2, z + 2] == null ||
+
+
+                            voxelData[x, y, z - 1] == null ||
+                            voxelData[x - 1, y, z - 1] == null ||
+                            voxelData[x + 1, y, z - 1] == null ||
+                            voxelData[x, y - 1, z - 1] == null ||
+                            voxelData[x, y + 1, z - 1] == null ||
+                            voxelData[x - 1, y + 1, z - 1] == null ||
+                            voxelData[x + 1, y - 1, z - 1] == null ||
+                            voxelData[x - 1, y - 1, z - 1] == null ||
+                            voxelData[x + 1, y + 1, z - 1] == null ||
+
+                            voxelData[x - 2, y, z - 1] == null ||
+                            voxelData[x + 2, y, z - 1] == null ||
+                            voxelData[x, y - 2, z - 1] == null ||
+                            voxelData[x, y + 2, z - 1] == null ||
+
+                            voxelData[x - 2, y - 1, z - 1] == null ||
+                            voxelData[x + 2, y - 1, z - 1] == null ||
+                            voxelData[x - 2, y + 1, z - 1] == null ||
+                            voxelData[x + 2, y + 1, z - 1] == null ||
+
+                            voxelData[x - 1, y - 2, z - 1] == null ||
+                            voxelData[x + 1, y - 2, z - 1] == null ||
+                            voxelData[x - 1, y + 2, z - 1] == null ||
+                            voxelData[x + 1, y + 2, z - 1] == null ||
+
+                            voxelData[x - 2, y - 2, z - 1] == null ||
+                            voxelData[x + 2, y - 2, z - 1] == null ||
+                            voxelData[x - 2, y + 2, z - 1] == null ||
+                            voxelData[x + 2, y + 2, z - 1] == null ||
+
+
+                            voxelData[x, y, z - 2] == null ||
+                            voxelData[x - 1, y, z - 2] == null ||
+                            voxelData[x + 1, y, z - 2] == null ||
+                            voxelData[x, y - 1, z - 2] == null ||
+                            voxelData[x, y + 1, z - 2] == null ||
+                            voxelData[x - 1, y + 1, z - 2] == null ||
+                            voxelData[x + 1, y - 1, z - 2] == null ||
+                            voxelData[x - 1, y - 1, z - 2] == null ||
+                            voxelData[x + 1, y + 1, z - 2] == null ||
+
+                            voxelData[x - 2, y, z - 2] == null ||
+                            voxelData[x + 2, y, z - 2] == null ||
+                            voxelData[x, y - 2, z - 2] == null ||
+                            voxelData[x, y + 2, z - 2] == null ||
+
+                            voxelData[x - 2, y - 1, z - 2] == null ||
+                            voxelData[x + 2, y - 1, z - 2] == null ||
+                            voxelData[x - 2, y + 1, z - 2] == null ||
+                            voxelData[x + 2, y + 1, z - 2] == null ||
+
+                            voxelData[x - 1, y - 2, z - 2] == null ||
+                            voxelData[x + 1, y - 2, z - 2] == null ||
+                            voxelData[x - 1, y + 2, z - 2] == null ||
+                            voxelData[x + 1, y + 2, z - 2] == null ||
+
+                            voxelData[x - 2, y - 2, z - 2] == null ||
+                            voxelData[x + 2, y - 2, z - 2] == null ||
+                            voxelData[x - 2, y + 2, z - 2] == null ||
+                            voxelData[x + 2, y + 2, z - 2] == null)
+                        {
+                            voxels[x, y, z] = voxelData[x, y, z];
+                        }
+                        else
+                        {
+                            voxels[x, y, z] = new FaceVoxel(x, y, z, 2, Slope.BackBackBottom);
+                        }
+                    }
+                }
+            }
+            return AddAllSpecial(voxels);
+        }
+        
         public static FaceVoxel[,,] RecolorCA(FaceVoxel[,,] voxelData, int smoothLevel, bool regardless = false)
         {
             if(smoothLevel <= 1)
@@ -4962,6 +5490,8 @@ break;*/
         {
             MagicaVoxelData mvd = fv.vox;
             int x = mvd.x, y = mvd.y, z = mvd.z, color = mvd.color;
+            if(color <= 2)
+                return;
             Vertex3D center = new Vertex3D(color, x + 0.5f, y + 0.5f, z + 0.5f);
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
             int i = x * ySize * zSize * 7 + y * zSize * 7 + z * 7;
@@ -5255,8 +5785,6 @@ break;*/
             FaceVoxel fv, nfv;
             int pos = 0, npos = 0;
             OrientedFace3D ori, nori;
-            Vertex3D[] matching;
-            Vertex3D center;
             for(int x = 1; x < xSize; x++)
             {
                 for(int y = 0; y < ySize; y++)
@@ -5397,7 +5925,7 @@ break;*/
                 }
             }
             //int[] offsets = new int[] { 7, zSize * 12, ySize * zSize * 24, zSize * -12, ySize * zSize * -24, -7 };
-            int[] offsets = new int[] { 7, zSize * 7, ySize * zSize * 7, zSize * -7, ySize * zSize * -7, -7 };
+            //int[] offsets = new int[] { 7, zSize * 7, ySize * zSize * 7, zSize * -7, ySize * zSize * -7, -7 };
             /*List<OrientedFace3D> oris = new List<OrientedFace3D>(7);
             for(int x = 1; x < xSize * 2; x += 2)
             {
@@ -5491,7 +6019,9 @@ break;*/
             
             return sb.ToString();
         }
-        public static string writePLY(FaceVoxel[,,] faces, int palette)
+
+
+        public static string WritePLY(FaceVoxel[,,] faces, int palette)
         {
             string[] headers = new string[]
                 {
@@ -5549,7 +6079,7 @@ end_header" };
             }
             sb.AppendLine(headers[1] + ord);
             sb.AppendLine(headers[2]);
-            sb.AppendLine(headers[3] + fs.Count(o => o != null));
+            sb.AppendLine(headers[3] + fs.Count(o => o != null && o.Points.Length > 0));
             sb.AppendLine(headers[4]);
 
             foreach(var k in pts.Keys)

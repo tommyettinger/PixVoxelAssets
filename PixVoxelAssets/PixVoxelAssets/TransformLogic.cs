@@ -1680,7 +1680,6 @@ namespace AssetsPV
             }
 
             return vs;
-
         }
         public static byte[,,] ExpandBounds(byte[,,] voxelData, int newXSize, int newYSize, int newZSize)
         {

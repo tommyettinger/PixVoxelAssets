@@ -121,6 +121,9 @@
     <Compile Include="VoxelLogic.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fbx-conv-win32.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="LivingTemplateGif.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
