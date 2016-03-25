@@ -18279,8 +18279,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             if((253 - fv) % 4 != 0) return 16;
             switch((253 - fv) / 4)
             {
-                case 6:
-                case 7:
+                //case 6:
+                //case 7:
                 case 9:
                     {
                         return 50;

@@ -172,8 +172,8 @@ namespace AssetsPV
                             //                                Console.WriteLine("palette: " + p + ", current_color: " + current_color + ", s before: " + s + ", s after: " + (VoxelLogic.Clamp(s - 0.3, 0.0, 0.6)));
                             if(VoxelLogic.subtlePalettes.Contains(p))
                             {
-                                s = VoxelLogic.Clamp((s * 0.5), 0.0, 0.5);
-                                v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
+                                s = VoxelLogic.Clamp((s * 0.75), 0.0, 0.75);
+                                v = VoxelLogic.Clamp(v * 0.94, 0.01, 0.94);
                             }
                             for(int slp = 0; slp < 29; slp++)
                             {
@@ -689,7 +689,7 @@ namespace AssetsPV
                                                     break;
                                                 case BrightBack:
                                                     {
-                                                        //if(i >= 1)
+                                                        if(i >= 1)
                                                         {
                                                             c2 = new byte[] { dimi, brighti, brighti, dimi };
                                                             // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
@@ -698,7 +698,7 @@ namespace AssetsPV
                                                     break;
                                                 case DimBack:
                                                     {
-                                                        //if(i < 3)
+                                                        if(i < 3)
                                                         {
                                                             c2 = new byte[] { dimi, brighti, dimi, dimi };
                                                             // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
@@ -4323,7 +4323,7 @@ namespace AssetsPV
             {
                 for(int dir = 0; dir < 4; dir++)
                 {
-                    FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(modelFrames[f].Finalize(), dir * 90));
+                    FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(PatternLogic.ApplyPattern(modelFrames[f].Finalize(), model.Patterns), dir * 90));
 
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
                     byte[][] b = processFrameLargeW(work, palette, dir, f, framelimit, still, false);
@@ -5705,7 +5705,432 @@ namespace AssetsPV
             b.Save(altFolder + "tiling_detailed.png", ImageFormat.Png);
         }
 
+        public static void processTerrainHugeW(string u, int palette, bool shadowless, bool addFloor)
+        {
 
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
+            int framelimit = 1;
+            wcurrent = wrendered[palette];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            wditheredcurrent = wdithered[palette];
+
+
+            string folder = (altFolder);//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+            ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
+
+            if(addFloor)
+            {
+                BinaryReader bin = new BinaryReader(File.Open("Terrain/" + u + "_Huge_W.vox", FileMode.Open));
+                BinaryReader binFloor = new BinaryReader(File.Open("Terrain/Floor_Huge_W.vox", FileMode.Open));
+                byte[,,] structure = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.FromMagicaRaw(bin), 120, 120, 80), 20, 20, 1),
+                    floor = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.FromMagicaRaw(binFloor), 120, 120, 80), 20, 20, 0);
+
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.Overlap(FaceLogic.GetFaces(TransformLogic.RotateYaw(floor, dir * 90)), FaceLogic.GetFaces(
+                        TransformLogic.RunThinningCA(TransformLogic.RotateYaw(structure, dir * 90), 2)));
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + (61 - palette) + "_" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, processFrameHugeW(faces, palette, dir, f, framelimit, true, shadowless), simplepalettes[palette]);
+                    }
+                }
+
+                /*
+                IEnumerable<MagicaVoxelData> structure = VoxelLogic.FromMagicaRaw(bin)
+                    .Select(v => VoxelLogic.AlterVoxel(v, 0, 0, 1, v.color));
+                voxes = structure.Concat(VoxelLogic.FromMagicaRaw(binFloor)).ToList();
+                */
+            }
+            else
+            {
+                byte[,,] voxes;
+                BinaryReader bin = new BinaryReader(File.Open("Terrain/" + u + "_Huge_W.vox", FileMode.Open));
+                if(shadowless)
+                    voxes = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.FromMagicaRaw(bin), 120, 120, 80), 20, 20, 0);
+                else
+                    voxes = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)), 120, 120, 80), 20, 20, 1);
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.RotateYaw(voxes, dir * 90));
+
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + (61 - palette) + "_" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, processFrameHugeW(faces, palette, dir, f, framelimit, true, shadowless), simplepalettes[palette]);
+                    }
+                }
+            }
+            //VoxelLogic.WriteVOX("vox/" + altFolder + u + ".vox", voxes, "W", palette, 80, 80, 80);
+            /*
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 20;
+                parsed[i].y += 20;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+            */
+            
+        }
+        private static byte[][] generateWaterMask(int facing, int variant)
+        {
+            rng = new Random(0xb335);
+            int rows = 308 * 2, cols = 248 * 2;
+            byte[][] data = new byte[rows][];
+            for(int i = 0; i < rows; i++)
+                data[i] = new byte[cols];
+
+            // Declare an array to hold the bytes of the bitmap. 
+            // int numBytes = bmp.Width * bmp.Height * 3; 
+            int numBytes = rows * cols;
+            byte[] argbValues = new byte[numBytes];
+            byte[] shadowValues = new byte[numBytes];
+            byte[] outlineValues = new byte[numBytes];
+
+            byte[] editValues = new byte[numBytes];
+
+            bool[] barePositions = new bool[numBytes];
+            int xSize = 120, ySize = 120, zSize = 80;
+            FaceVoxel[,,] faces = new FaceVoxel[xSize, ySize, zSize];
+            Array slopage = Enum.GetValues(typeof(Slope));
+            for(int mvdx = 83; mvdx >= 36; mvdx--)
+            {
+                for(int mvdy = 36; mvdy <= 83; mvdy++)
+                {
+                    MagicaVoxelData vx = new MagicaVoxelData { x = (byte)mvdx, y = (byte)mvdy, z = 1, color = 253 - 28 * 4 },
+                        vx0 = new MagicaVoxelData { x = (byte)mvdx, y = (byte)mvdy, z = 0, color = 253 - 28 * 4 };
+                    int current_color = 28;
+                    //int unshaded = VoxelLogic.WithoutShadingK(vx.color);
+                    //int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + kcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - clear) / 4 : (253 - vx.color) / 4;
+                    int p = 0;
+                    int mod_color = current_color;
+                    double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant);
+                    /*
+                    if(wave > 0.73)
+                    {
+                        wave = 0.95 * wave;
+                    }
+                    else if(wave > 0.64)
+                    {
+                        wave = 0.8 * wave;
+                    }
+                    else if(wave > 0.55)
+                    {
+                        wave = 0.65 * wave;
+                    }
+                    else if(wave < 0.45)
+                    {
+
+                        wave += 0.2;
+                        if(wave < 0.5)
+                        {
+                            wave = 0.45 + -0.5 / wave;
+                        }
+                        else if(wave < 0.55)
+                        {
+                            wave = 0.5 + -0.5 / wave;
+                        }
+                        else if(wave < 0.6)
+                        {
+                            wave = 0.55 + -0.5 / wave;
+                        }
+                        else
+                        {
+                            wave = 0.6 * (wave - 0.25);
+                        }
+                    }
+                    else
+                    {
+                        wave = 0.32 * wave;
+                    }
+                    */
+//                    vx.color = (byte)(253 - 4 * (28 + Math.Floor(VoxelLogic.Clamp(wave * 5, 0.0, 4.9))));
+                    vx0.color = (byte)(253 - 4 * (28 + Math.Floor(VoxelLogic.Clamp(wave * 5, 0.0, 4.9))));
+                    //faces[mvdx, mvdy, 1] = new FaceVoxel(vx, Slope.Cube); //(Slope)slopage.GetValue(r.Next(17))
+                    faces[mvdx, mvdy, 0] = new FaceVoxel(vx0, Slope.Cube);
+
+                }
+            }
+            int[] zbuffer = new int[numBytes];
+            zbuffer.Fill<int>(-999);
+
+            int jitter = 0;
+            //FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(vls.ToList(), xSize, ySize, zSize, 153), frame, shadowless);
+            bool[,] taken = new bool[xSize, ySize];
+            //            foreach(MagicaVoxelData vx in vls.OrderByDescending(v => v.x * 64 - v.y + v.z * 64 * 128))
+            for(int fz = 2; fz >= 0; fz--)
+            {
+                for(int fx = xSize - 1; fx >= 0; fx--)
+                {
+                    for(int fy = 0; fy < ySize; fy++)
+                    {
+                        if(faces[fx, fy, fz] == null) continue;
+                        MagicaVoxelData vx = faces[fx, fy, fz].vox;
+                        Slope slope = faces[fx, fy, fz].slope;
+                        int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + VoxelLogic.wcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - VoxelLogic.clear) / 4 : (253 - vx.color) / 4;
+                        int p = 0;
+                        if((255 - vx.color) % 4 != 0 && current_color >= VoxelLogic.wcolorcount)
+                            continue;
+
+                        if(VoxelLogic.wcolors[current_color][3] == 0F)
+                            continue;
+                        else if(current_color == 25)
+                        {
+                            taken[vx.x, vx.y] = true;
+                            for(int j = 0; j < 4; j++)
+                            {
+                                for(int i = 0; i < 4; i++)
+                                {
+                                    p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, current_color, cols, jitter, true);
+
+                                    if(shadowValues[p] == 0)
+                                    {
+                                        shadowValues[p] = wditheredcurrent[current_color][1][i * 4 + j * 16];
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int mod_color = current_color;
+                            //                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                            //                              continue;
+                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            {
+                                if(r.Next(11) < 8) continue;
+                            }
+                            else
+                                taken[vx.x, vx.y] = true;
+                            int sp = slopes[slope];
+                            if(mod_color == 27) //water
+                                sp = 1;
+                            for(int j = 0; j < 4; j++)
+                            {
+                                for(int i = 0; i < 4; i++)
+                                {
+                                    p = voxelToPixelHugeW(i, j, vx.x, vx.y, vx.z, mod_color, cols, jitter, true);
+
+                                    if(argbValues[p] == 0)
+                                    {
+
+                                        if(wditheredcurrent[mod_color][sp][i * 4 + j * 16] != 0)
+                                        {
+                                            if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
+                                            {
+                                                //10 is eye shine
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
+                                            }
+                                            /*
+                                            else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
+                                            {
+                                                float n = Simplex.FindNoiseBold(facing, vx.x + 50, vx.y + 50, vx.z);
+                                                argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                            }
+                                            else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_some_alpha)
+                                            {
+                                                float n = Simplex.FindNoise(facing, vx.x + 50, vx.y + 50, vx.z);
+                                                argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                            }
+                                            else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_mild_alpha)
+                                            {
+                                                float n = Simplex.FindNoiseLight(facing, vx.x + 50, vx.y + 50, vx.z);
+                                                argbValues[p - 3] = (byte)Math.Min(wcurrent[mod_color][sp][i - 3 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 2] = (byte)Math.Min(wcurrent[mod_color][sp][i - 2 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 1] = (byte)Math.Min(wcurrent[mod_color][sp][i - 1 + j * 16] * n + 16 * (n - 0.8), 255);
+                                                argbValues[p - 0] = wcurrent[mod_color][sp][i + j * 16];
+                                            /
+                                            else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.fuzz_alpha)
+                                            {
+                                                float sim = Simplex.RotatedNoise4D(facing, vx.x + 50, vx.y + 50, vx.z, 16 + jitter);
+                                                //int n = (int)Math.Round(Math.Pow(sim, 2.0 - 2.0 * sim) * 4f);
+                                                int n = (int)VoxelLogic.Clamp(Math.Round(sim * 3f), -2, 2) + 2;
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
+                                            }
+                                            */
+                                            else
+                                            {
+                                                if(mod_color == 27) //water
+                                                    argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
+
+                                                else
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][0], i, j, vx.x, vx.y, vx.z);
+
+                                            }
+                                            if(argbValues[p] != 0)
+                                            {
+                                                zbuffer[p] = vx.z * 2 + vx.x * 2 - vx.y * 2;
+                                                barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 ||
+                                                    VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_1 || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.borderless_alpha ||
+                                                    VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flat_alpha);
+
+                                                if(!barePositions[p]) // && outlineValues[p] == 0
+                                                    outlineValues[p] = wditheredcurrent[mod_color][sp][64];      //(argbValues[p] * 1.2 + 2 < 255) ? (byte)(argbValues[p] * 1.2 + 2) : (byte)255;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            int[] xmods = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 }, ymods = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+            bool[,] nextTaken = new bool[xSize, ySize];
+            for(int iter = 0; iter < 4; iter++)
+            {
+                for(int x = 1; x < xSize - 1; x++)
+                {
+                    for(int y = 1; y < ySize - 1; y++)
+                    {
+                        int ctr = 0;
+                        for(int m = 0; m < 9; m++)
+                        {
+                            if(taken[x + xmods[m], y + ymods[m]])
+                                ctr++;
+                        }
+                        if(ctr >= 5)
+                            nextTaken[x, y] = true;
+
+                    }
+                }
+                taken = nextTaken.Replicate();
+            }
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    if(taken[x, y])
+                    {
+                        int p = 0;
+
+                        for(int j = 0; j < 4; j++)
+                        {
+                            for(int i = 0; i < 4; i++)
+                            {
+                                p = voxelToPixelHugeW(i, j, x, y, 0, 25, cols, jitter, true);
+
+                                if(shadowValues[p] == 0)
+                                {
+                                    shadowValues[p] = wditheredcurrent[25][1][i * 4 + j * 16];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            bool lightOutline = false;//!VoxelLogic.subtlePalettes.Contains(palette);
+
+            for(int i = 0; i < numBytes && false; i++)
+            {
+                if(argbValues[i] > 0 && barePositions[i] == false)
+                {
+                    bool shade = false, blacken = false;
+                    /*
+                    if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && lightOutline) { editValues[i - 4] = 255; editValues[i - 4 - 1] = 0; editValues[i - 4 - 2] = 0; editValues[i - 4 - 3] = 0; blacken = true; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && zbuffer[i] - 5 > zbuffer[i - 4]) { editValues[i - 4] = 255; editValues[i - 4 - 1] = outlineValues[i - 1]; editValues[i - 4 - 2] = outlineValues[i - 2]; editValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { editValues[i + 4] = 255; editValues[i + 4 - 1] = 0; editValues[i + 4 - 2] = 0; editValues[i + 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 5 > zbuffer[i + 4]) { editValues[i + 4] = 255; editValues[i + 4 - 1] = outlineValues[i - 1]; editValues[i + 4 - 2] = outlineValues[i - 2]; editValues[i + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && argbValues[i - bmpData.Stride] == 0 && lightOutline) { editValues[i - bmpData.Stride] = 255; editValues[i - bmpData.Stride - 1] = 0; editValues[i - bmpData.Stride - 2] = 0; editValues[i - bmpData.Stride - 3] = 0; blacken = true; } else if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && barePositions[i - bmpData.Stride] == false && zbuffer[i] - 5 > zbuffer[i - bmpData.Stride]) { editValues[i - bmpData.Stride] = 255; editValues[i - bmpData.Stride - 1] = outlineValues[i - 1]; editValues[i - bmpData.Stride - 2] = outlineValues[i - 2]; editValues[i - bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && lightOutline) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = 0; editValues[i + bmpData.Stride - 2] = 0; editValues[i + bmpData.Stride - 3] = 0; blacken = true; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && zbuffer[i] - 5 > zbuffer[i + bmpData.Stride]) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = outlineValues[i - 1]; editValues[i + bmpData.Stride - 2] = outlineValues[i - 2]; editValues[i + bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    */
+
+
+                    if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - 12 > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - 12 > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - 12 > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - 12 > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; if(!blacken) shade = true; }
+
+
+
+                    /*
+                    if (argbValues[i] > 0 && i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = 0; argbValues[i - 4 - 2] = 0; argbValues[i - 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 2 > zbuffer[i + 4]) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = outlineValues[i - 1]; argbValues[i - 4 - 2] = outlineValues[i - 2]; argbValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (argbValues[i] > 0 && i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && lightOutline) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = 0; argbValues[i + 4 - 2] = 0; argbValues[i + 4 - 3] = 0; blacken = true; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && zbuffer[i] - 2 > zbuffer[i - 4]) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = outlineValues[i - 1]; argbValues[i + 4 - 2] = outlineValues[i - 2]; argbValues[i + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (argbValues[i] > 0 && i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && lightOutline) { argbValues[i - bmpData.Stride] = 255; argbValues[i - bmpData.Stride - 1] = 0; argbValues[i - bmpData.Stride - 2] = 0; argbValues[i - bmpData.Stride - 3] = 0; blacken = true; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride]) { argbValues[i - bmpData.Stride] = 255; argbValues[i - bmpData.Stride - 1] = outlineValues[i - 1]; argbValues[i - bmpData.Stride - 2] = outlineValues[i - 2]; argbValues[i - bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (argbValues[i] > 0 && i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && argbValues[i - bmpData.Stride] == 0 && lightOutline) { argbValues[i + bmpData.Stride] = 255; argbValues[i + bmpData.Stride - 1] = 0; argbValues[i + bmpData.Stride - 2] = 0; argbValues[i + bmpData.Stride - 3] = 0; blacken = true; } else if (i - bmpData.Stride >= 0 && i - bmpData.Stride < argbValues.Length && barePositions[i - bmpData.Stride] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride]) { argbValues[i + bmpData.Stride] = 255; argbValues[i + bmpData.Stride - 1] = outlineValues[i - 1]; argbValues[i + bmpData.Stride - 2] = outlineValues[i - 2]; argbValues[i + bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    */
+                    /*
+                    if (argbValues[i] > 0 && i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && argbValues[i + bmpData.Stride + 4] == 0 && lightOutline) { argbValues[i - bmpData.Stride - 4] = 255; argbValues[i - bmpData.Stride - 4 - 1] = 0; argbValues[i - bmpData.Stride - 4 - 2] = 0; argbValues[i - bmpData.Stride - 4 - 3] = 0; blacken = true; } else if (i + bmpData.Stride + 4 >= 0 && i + bmpData.Stride + 4 < argbValues.Length && barePositions[i + bmpData.Stride + 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride + 4]) { argbValues[i - bmpData.Stride - 4] = 255; argbValues[i - bmpData.Stride - 4 - 1] = outlineValues[i - 1]; argbValues[i - bmpData.Stride - 4 - 2] = outlineValues[i - 2]; argbValues[i - bmpData.Stride - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (argbValues[i] > 0 && i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && argbValues[i - bmpData.Stride - 4] == 0 && lightOutline) { argbValues[i + bmpData.Stride + 4] = 255; argbValues[i + bmpData.Stride + 4 - 1] = 0; argbValues[i + bmpData.Stride + 4 - 2] = 0; argbValues[i + bmpData.Stride + 4 - 3] = 0; blacken = true; } else if (i - bmpData.Stride - 4 >= 0 && i - bmpData.Stride - 4 < argbValues.Length && barePositions[i - bmpData.Stride - 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride - 4]) { argbValues[i + bmpData.Stride + 4] = 255; argbValues[i + bmpData.Stride + 4 - 1] = outlineValues[i - 1]; argbValues[i + bmpData.Stride + 4 - 2] = outlineValues[i - 2]; argbValues[i + bmpData.Stride + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (argbValues[i] > 0 && i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && lightOutline) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = 0; argbValues[i - bmpData.Stride + 4 - 2] = 0; argbValues[i - bmpData.Stride + 4 - 3] = 0; blacken = true; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = outlineValues[i - 1]; argbValues[i - bmpData.Stride + 4 - 2] = outlineValues[i - 2]; argbValues[i - bmpData.Stride + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    if (argbValues[i] > 0 && i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && lightOutline) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = 0; argbValues[i + bmpData.Stride - 4 - 2] = 0; argbValues[i + bmpData.Stride - 4 - 3] = 0; blacken = true; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = outlineValues[i - 1]; argbValues[i + bmpData.Stride - 4 - 2] = outlineValues[i - 2]; argbValues[i + bmpData.Stride - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
+                    */
+                    if(blacken)
+                    {
+                        editValues[i] = 255;
+                    }
+                    else if(shade) { editValues[i] = outlineValues[i]; }
+                }
+            }
+
+            for(int i = 0; i < numBytes; i++)
+            {
+                if(editValues[i] > 0)
+                {
+                    argbValues[i] = editValues[i];
+                }
+            }
+            
+            for(int i = 0; i < numBytes; i++)
+            {
+                data[i / cols][i % cols] = argbValues[i];
+            }
+            //return data;
+            
+            byte[][] b2 = new byte[308][];
+            for(int i = 0; i < 308; i++)
+            {
+                b2[i] = new byte[248];
+            }
+
+            for(int y = 0, i = 0; y < 308 * 2; y += 2, i++)
+            {
+                for(int x = 0, j = 0; x < 248 * 2; x += 2, j++)
+                {
+                    if(i < 308 && j < 248)
+                    {
+                        b2[i][j] = data[y][x];
+                    }
+                }
+
+            }
+            return b2;
+        }
+
+
+        public static void processWater()
+        {
+            Console.WriteLine("Processing: Water Tiles, palette " + 0);
+            // int framelimit = 4;
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[15];
+            wcurrent = wrendered[15];
+            wditheredcurrent = wdithered[15];
+
+            string folder = altFolder;
+            Directory.CreateDirectory(folder);
+            ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
+
+            for(int v = 0; v < 16; v++)
+            { //
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 0 + "_Water_Huge_face" + dir + "_" + string.Format("{0:x}", v) + ".png", imi, true);
+                    WritePNG(png, generateWaterMask(dir, v), simplepalettes[15]);
+                }
+            }
+        }
         public static void processVoxGiantWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = false)
         {
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
@@ -6190,7 +6615,6 @@ namespace AssetsPV
         {
             LogStream.IsVerboseLoggingEnabled = false;
             log.Attach();
-
             //altFolder = "botl6/";
             //altFolder = "other/";
             //  altFolder = "mecha3/";
@@ -6201,15 +6625,16 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
-            VoxelLogic.VisualMode = "CU";
-            altFolder = "Diverse_PixVoxel_Wargame_Iso3/";
-            blankFolder = "Blank_PixVoxel_Wargame_Iso3/";
-            CURedux.Initialize(true);
+            //VoxelLogic.VisualMode = "CU";
+            //altFolder = "Diverse_PixVoxel_Wargame_Iso3/";
+            //blankFolder = "Blank_PixVoxel_Wargame_Iso3/";
+            //CURedux.Initialize(true);
 
-            //VoxelLogic.VisualMode = "W";
-            //altFolder = "Forays2/";
-            //VoxelLogic.voxFolder = "ForaysBones/";
-            //ForaysPalettes.Initialize();
+            VoxelLogic.VisualMode = "W";
+            altFolder = "Forays2/";
+            blankFolder = altFolder;
+            VoxelLogic.voxFolder = "ForaysBones/";
+            ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -6675,7 +7100,7 @@ namespace AssetsPV
 
             WritePLYMilitary("Plane_T", 5 + 4 * 8);
             */
-
+            /*
             Write3DGameMilitary("Tank");
             Write3DGameMilitary("Tank_P");
             Write3DGameMilitary("Tank_S");
@@ -6710,7 +7135,7 @@ namespace AssetsPV
             Write3DGameMilitary("Copter_P");
             Write3DGameMilitary("Copter_S");
             Write3DGameMilitary("Copter_T");
-
+            */
             /*
             WritePrintableMilitary("Tank");
             
@@ -6877,7 +7302,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
 
-            /*
+            
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -7022,27 +7447,12 @@ namespace AssetsPV
             .AddPitch(10, "Right_Weapon")
             .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm")
             .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
-            */
+            
+            ///START
 
-            /*
+            
             Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
-            processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-            
             processUnitLargeWModel("Hero_Leather_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
@@ -7061,22 +7471,6 @@ namespace AssetsPV
 
             hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
 
-            processVoxGiantWModel("Hero_Chain_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
             processUnitLargeWModel("Hero_Chain_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
@@ -7094,8 +7488,8 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
 
             hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
-
-            processVoxGiantWModel("Hero_Plate_Sword", true, 0, hero_sword,
+            
+            processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
@@ -7111,7 +7505,268 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
+
+            ///END
+
+            Model hero_mace = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+
+            processUnitLargeWModel("Hero_Leather_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_mace = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_mace = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Mace");
+
+            processUnitLargeWModel("Hero_Plate_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+
+            processUnitLargeWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_dagger = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
+
+            processUnitLargeWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+
+            Model hero_staff = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+
+            processUnitLargeWModel("Hero_Leather_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+            hero_staff = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+            hero_staff = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Staff");
+
+            processUnitLargeWModel("Hero_Plate_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+
+            Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+
+            processUnitLargeWModel("Hero_Leather_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_bow = Model.Humanoid(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
+
+
+            processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            /*
+            hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+            
+            processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+            
+            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+            
+            processVoxGiantWModel("Hero_Chain_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+            
+            hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
+
+            processVoxGiantWModel("Hero_Plate_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
@@ -7419,6 +8074,20 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
                 */
+            /*
+        processTerrainHugeW("Floor", 13, true, false);
+        processTerrainHugeW("Wall_Straight", 13, true, true);
+        processTerrainHugeW("Wall_Corner", 13, true, true);
+        processTerrainHugeW("Wall_Tee", 13, true, true);
+        processTerrainHugeW("Wall_Cross", 13, true, true);
+        processTerrainHugeW("Door_Closed", 13, true, true);
+        processTerrainHugeW("Door_Open", 13, true, true);
+        processTerrainHugeW("Boulder", 13, true, true);
+        processTerrainHugeW("Grass", 14, true, false);
+        */
+            //Simplex.InitSimplex();
+            //processWater();
+
         }
     }
 }

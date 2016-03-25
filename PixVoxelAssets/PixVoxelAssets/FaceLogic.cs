@@ -8,36 +8,36 @@ namespace AssetsPV
 {
     public enum Slope
     {
-        Cube = 0x1,
-        BrightTop = 0x8,
-        DimTop = 0x10,
-        BrightDim = 0x20,
-        BrightDimTop = 0x40,
-        BrightBottom = 0x80,
-        DimBottom = 0x100,
-        BrightDimBottom = 0x200,
-        BrightBack = 0x400,
-        DimBack = 0x800,
-        BrightTopBack = 0x1000,
-        DimTopBack = 0x2000,
-        BrightBottomBack = 0x4000,
-        DimBottomBack = 0x8000,
-        BackBack = 0x10000,
-        BackBackTop = 0x20000,
-        BackBackBottom = 0x40000,
-        RearBrightTop = 0x80000,
-        RearDimTop = 0x100000,
-        RearBrightBottom = 0x200000,
-        RearDimBottom = 0x400000,
+        Cube,
+        BrightTop,
+        DimTop,
+        BrightDim,
+        BrightDimTop,
+        BrightDimTopThick,
+        BrightTopBackThick,
+        DimTopBackThick,
+        BackBackTopThick,
+        BrightBack,
+        DimBack,
+        BrightTopBack,
+        DimTopBack,
+        BackBack,
+        BackBackTop,
+        RearBrightTop,
+        RearDimTop, //16
+        BrightBottom,
+        DimBottom,
+        BrightDimBottom,
+        BrightBottomBack,
+        DimBottomBack,
+        RearBrightBottom,
+        RearDimBottom,
+        BackBackBottom,
 
-        BrightDimTopThick = 0x42,
-        BrightDimBottomThick = 0x202,
-        BrightTopBackThick = 0x1002,
-        BrightBottomBackThick = 0x4002,
-        DimTopBackThick = 0x2002,
-        DimBottomBackThick = 0x8002,
-        BackBackTopThick = 0x20002,
-        BackBackBottomThick = 0x40002,
+        BrightDimBottomThick,
+        BrightBottomBackThick,
+        DimBottomBackThick,
+        BackBackBottomThick,
     }
     public class FaceVoxel
     {
@@ -615,10 +615,6 @@ namespace AssetsPV
                         }
                         else
                         {
-                            if(!regardless && ImportantNeighborhood(faces, x, y, z))
-                            {
-                                continue;
-                            }
                             bool xup = faces[x + 1, y, z] != null && faces[x + 1, y, z].vox.color != water,
                                  xdown = faces[x - 1, y, z] != null && faces[x - 1, y, z].vox.color != water,
                                  yup = faces[x, y + 1, z] != null && faces[x, y + 1, z].vox.color != water,
@@ -629,7 +625,12 @@ namespace AssetsPV
                                 continue;
 
                             mvd = NearbyFilled(faces, x, y, z);
-                            if(!regardless && ImportantVisual(mvd))
+                            bool similar = allSameNearby(faces, x, y, z);
+                            if(!regardless && !similar && ImportantNeighborhood(faces, x, y, z))
+                            {
+                                continue;
+                            }
+                            if(!regardless && !similar && ImportantVisual(mvd))
                             {
                                 faces2[x, y, z] = null;
                                 continue;
@@ -941,7 +942,7 @@ namespace AssetsPV
                     {
                         for(int c = 0; c <= running; c++)
                         {
-                            if(voxelData[i, j, k] == null || voxelData[i,j,k].vox.color == 2)
+                            if(voxelData[i, j, k] == null || voxelData[i, j, k].vox.color == 2)
                             {
                                 empty++;
                                 break;
@@ -976,6 +977,49 @@ namespace AssetsPV
                 }
             }
             return best;
+        }
+        public static bool allSameNearby(FaceVoxel[,,] voxelData, int x, int y, int z)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            int x0 = 0xffff, y0 = 0xffff, z0 = 0xffff, x1 = 0xffff, y1 = 0xffff, z1 = 0xffff, ctr = 0xffff;
+            if(x > 0 && voxelData[x - 1, y, z] != null && voxelData[x - 1, y, z].vox.color > 2)
+            {
+                x0 = voxelData[x - 1, y, z].vox.color;
+                if((ctr &= x0) != x0)
+                    return false;
+            }
+            if(y > 0 && voxelData[x, y - 1, z] != null && voxelData[x, y - 1, z].vox.color > 2)
+            {
+                y0 = voxelData[x, y - 1, z].vox.color;
+                if((ctr &= y0) != y0)
+                    return false;
+            }
+            if(z > 0 && voxelData[x, y, z - 1] != null && voxelData[x, y, z - 1].vox.color > 2)
+            {
+                z0 = voxelData[x, y, z - 1].vox.color;
+                if((ctr &= z0) != z0)
+                    return false;
+            }
+
+            if(x < xSize - 1 && voxelData[x + 1, y, z] != null && voxelData[x + 1, y, z].vox.color > 2)
+            {
+                x0 = voxelData[x + 1, y, z].vox.color;
+                if((ctr &= x0) != x0)
+                    return false;
+            }
+            if(y < ySize - 1 && voxelData[x, y + 1, z] != null && voxelData[x, y + 1, z].vox.color > 2)
+            {
+                y0 = voxelData[x, y + 1, z].vox.color;
+                if((ctr &= y0) != y0)
+                    return false;
+            }
+            if(z < zSize - 1 && voxelData[x, y, z + 1] != null && voxelData[x, y, z + 1].vox.color > 2)
+            {
+                z0 = voxelData[x, y, z +1].vox.color;
+                if((ctr &= z0) != z0)
+                    return false;
+            }
+            return true;
         }
         public static byte NearbyColor(FaceVoxel[,,] voxelData, int x, int y, int z)
         {

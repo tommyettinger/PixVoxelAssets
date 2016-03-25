@@ -16,7 +16,7 @@ namespace AssetsPV
     class OrthoSingle
     {
         public const bool RENDER = true;
-        public const int multiplier = 2, bonus = 1, vwidth = 1, vheight = 1, top = 0,
+        public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,

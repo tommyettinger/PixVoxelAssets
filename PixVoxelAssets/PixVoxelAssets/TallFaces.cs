@@ -4175,7 +4175,7 @@ namespace AssetsPV
             processTerrainHugeW("Door_Open", 48, true, true);
             processTerrainHugeW("Boulder", 48, true, true);
             
-            //processWater();
+            processWater();
 
             /*
             processUnitHugeW("Grass", 35, true, false);
