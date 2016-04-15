@@ -1385,6 +1385,39 @@
     <None Include="ForaysBones\Human_Male_RLowerArm_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ForaysBones\Human_Male_Robe\Happy_Face_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\Head_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\Hurt_Face_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\LLeg_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\LLowerArm_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\LUpperArm_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\Neutral_Face_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\RLeg_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\RLowerArm_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\RUpperArm_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ForaysBones\Human_Male_Robe\Torso_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="ForaysBones\Human_Male_RUpperArm_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

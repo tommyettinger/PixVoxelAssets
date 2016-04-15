@@ -15,6 +15,7 @@ namespace AssetsPV
 {
     class TallFacesDithered
     {
+        public static bool BW = false;
         public const int
         Cube = 0,
         BrightTop = 1,
@@ -913,12 +914,470 @@ namespace AssetsPV
             }
             return cubes2;
         }
+        private static byte[][][][] storeColorCubesGWBold()
+        {
+            VoxelLogic.wpalettecount = VoxelLogic.wpalettes.Length;
+            //            wcolorcount = VoxelLogic.wpalettes[0].Length;
+            // 29 is the number of Slope enum types.
+            byte[,,,] cubes = new byte[VoxelLogic.wpalettecount, VoxelLogic.wpalettes[0].Length, 29, 80];
+
+            Image image = new Bitmap("white.png");
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = 4;
+            int height = 5;
+            float[][] colorMatrixElements = {
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+            for(int p = 0; p < VoxelLogic.wpalettes.Length; p++)
+            {
+                for(int current_color = 0; current_color < VoxelLogic.wpalettes[0].Length; current_color++)
+                {
+                    if(current_color >= VoxelLogic.wpalettes[p].Length)
+                        continue;
+
+                    Bitmap b =
+                    new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+                    Graphics g = Graphics.FromImage((Image)b);
+
+                    if(!VoxelLogic.terrainPalettes.Contains(p) && current_color == 25)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    else if(VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.eraser_alpha)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                    }
+                    else if(VoxelLogic.wpalettes[p][current_color][3] == 0F)
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                    }
+                    else
+                    {
+                        colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.235F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.26F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.30F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                    }
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 40)) || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                        || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
+                        || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
+                       (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
+                    g.DrawImage(image,
+                       new Rectangle(0, 0,
+                           width, height),  // destination rectangle 
+                                            //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                       0, 0,        // upper-left corner of source rectangle 
+                       width,       // width of source rectangle
+                       height,      // height of source rectangle
+                       GraphicsUnit.Pixel,
+                       imageAttributes);
+                    for(int i = 0; i < width; i++)
+                    {
+                        for(int j = 0; j < height; j++)
+                        {
+                            Color c = b.GetPixel(i, j);
+                            double h = 0.0, s = 1.0, v = 1.0;
+                            VoxelLogic.ColorToHSV(c, out h, out s, out v);
+                            //                            if(VoxelLogic.subtlePalettes.Contains(p) && i == 0 && j == 0)
+                            //                                Console.WriteLine("palette: " + p + ", current_color: " + current_color + ", s before: " + s + ", s after: " + (VoxelLogic.Clamp(s - 0.3, 0.0, 0.6)));
+                            if(VoxelLogic.subtlePalettes.Contains(p))
+                            {
+                                s = VoxelLogic.Clamp((s * 0.75), 0.0, 0.75);
+                                v = VoxelLogic.Clamp(v * 0.94, 0.01, 0.94);
+                            }
+                            for(int slp = 0; slp < 29; slp++)
+                            {
+                                Color c2 = Color.Transparent;
+                                double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
+                                        v_alter = Math.Pow(v, 2.5 - 2.5 * v);
+                                //v_alter *= Math.Pow(v_alter, 0.38);
+                                if(j == height - 1)
+                                {
+                                    //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
+                                    c2 = Color.Black;
+                                }
+                                else
+                                {
+                                    
+                                    if(which_image.Equals("image"))
+                                    {
+
+                                        switch(slp)
+                                        {
+                                            case Cube:
+                                                {
+                                                    if(j == 0)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                    }
+                                                    else if(i < width / 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
+                                                    }
+                                                    else if(i >= width / 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BrightTop:
+                                                {
+                                                    //if(i + j >= 5 && j > 0)
+                                                    if(i + j / 2 >= 4)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
+                                                    }
+                                                    else if(i + (j + 1) / 2 >= 2)
+                                                    //if(j >= 2 &&  i >=  2 - (j / 3) * 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.0, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.10, 1.0));
+
+                                                        //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0, 1.0), VoxelLogic.Clamp(v * 0.8, 0.03, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimTop:
+                                                {
+                                                    
+                                                    //if(i < j - 1 && j > 0)
+                                                    if(i < j / 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
+
+                                                    }
+                                                    //else if(i + (j + 1) / 2 >= 2)
+                                                    else if(i - 1 <= (j + 1) / 2)
+                                                    //                                                    if(j >= 2 && i < (j / 3) * 2 + 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.25, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.9, 0.05, 1.0));
+
+                                                        //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v * 0.95, 0.06, 1.0));
+                                                    }
+                                                    //else //if(i <= j / 2 + 2)
+                                                    //{
+                                                    //                                                      c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.25, 0.0, 1.0), VoxelLogic.Clamp(v * 0.9, 0.05, 1.0));
+                                                    //}
+                                                }
+                                                break;
+                                            case BrightDim:
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.275, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.875, 0.05, 1.0));
+
+                                                }
+                                                break;
+                                            case BrightDimTop:
+                                            case BrightDimTopThick:
+                                                {
+                                                    //     if((i + j) / 2 >= 1 && i <= j / 2 && j > 0)
+
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.05, 0.08, 1.0));
+
+                                                    //   else // else if (j > 0)
+                                                    //   {
+                                                    //       c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v * 0.95, 0.08, 1.0));
+                                                    //   }
+                                                }
+                                                break;
+
+                                            case BrightBottom:
+                                                {
+                                                    if(i > (j + 1) / 2 + 1)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
+                                                    }
+                                                    else if(i + 1 > (j + 1) / 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.4, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.7, 0.02, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimBottom:
+                                                {
+                                                    if(i + (j + 1) / 2 < 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
+                                                    }
+                                                    else if(i + (j + 1) / 2 < 4)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BrightDimBottom:
+                                            case BrightDimBottomThick:
+                                                {
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.45, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.015, 1.0));
+                                                    }
+                                                }
+                                                break;
+
+                                            case BrightBack:
+                                                {
+                                                    //if(i >= 1)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimBack:
+                                                {
+                                                    //if(i < 3)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BrightTopBack:
+                                                {
+                                                    if(i + (j + 3) / 4 >= 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimTopBack:
+                                                {
+                                                    if(i - (j + 3) / 4 <= 1)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BrightBottomBack:
+                                                {
+                                                    if(i >= j)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimBottomBack:
+                                                {
+                                                    if(i + j <= 3)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BrightTopBackThick:
+                                                {
+                                                    //if(i + (j + 3) / 4 >= 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimTopBackThick:
+                                                {
+                                                    //if(i - (j + 3) / 4 <= 1)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BrightBottomBackThick:
+                                                {
+                                                    //if(i >= j)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case DimBottomBackThick:
+                                                {
+                                                    if(i + j <= 3)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearBrightTop:
+                                                {
+                                                    if(i + (j + 3) / 4 >= 3 && j > 0)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearDimTop:
+                                                {
+                                                    if(i - (j + 3) / 4 <= 0 && j > 0)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearBrightBottom:
+                                                {
+                                                    if(i > j)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case RearDimBottom:
+                                                {
+                                                    if(i + j <= 2)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BackBackTop:
+                                            case BackBack:
+                                                {
+                                                    if(j > 0)
+                                                    {
+                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                    }
+                                                }
+                                                break;
+                                            case BackBackTopThick:
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                }
+                                                break;
+                                            case BackBackBottom:
+                                            case BackBackBottomThick:
+                                            default:
+                                                {
+
+                                                }
+                                                break;
+                                        }
+                                    }
+
+                                    else if(which_image == "shine")
+                                    {
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
+                                    }
+                                    else if(which_image == "flat")
+                                    {
+
+                                        if(current_color == 27)
+                                        {
+                                            if(slp == 0)
+                                            {
+                                                if(j == 0)
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                }
+                                                else if(i < width / 2)
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
+                                                }
+                                                else if(i >= width / 2)
+                                                {
+                                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
+                                                }
+                                            }
+                                            else if(j >= 2 && j < height - 1)
+                                            {
+                                                double h2 = h, s2 = 1.0, v2 = v;
+                                                VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
+                                                c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(j >= 2 && j < height - 1)
+                                            {
+                                                double h2 = h, s2 = 1.0, v2 = v;
+                                                VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
+                                                c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
+                                            }
+                                        }
+                                    }
+                                }
+                                if(c2.A != 0)
+                                {
+                                    byte m = Math.Max(c2.B, Math.Max(c2.G, c2.R));
+                                    cubes[p, current_color, slp, i * 4 + j * width * 4 + 0] = m;// Math.Max((byte)1, c2.B); //B
+                                    cubes[p, current_color, slp, i * 4 + j * width * 4 + 1] = m;// Math.Max((byte)1, c2.G); //G
+                                    cubes[p, current_color, slp, i * 4 + j * width * 4 + 2] = m;// Math.Max((byte)1, c2.R); //R
+                                    cubes[p, current_color, slp, i * 4 + j * width * 4 + 3] = 255;
+                                }
+                                else
+                                {
+                                    cubes[p, current_color, slp, i * 4 + j * 4 * width + 0] = 0;
+                                    cubes[p, current_color, slp, i * 4 + j * 4 * width + 1] = 0;
+                                    cubes[p, current_color, slp, i * 4 + j * 4 * width + 2] = 0;
+                                    cubes[p, current_color, slp, i * 4 + j * 4 * width + 3] = 0;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            byte[][][][] cubes2 = new byte[VoxelLogic.wpalettes.Length][][][];
+            VoxelLogic.wrendered = new byte[VoxelLogic.wpalettes.Length][][];
+            for(int i = 0; i < VoxelLogic.wpalettes.Length; i++)
+            {
+                cubes2[i] = new byte[VoxelLogic.wpalettes[0].Length][][];
+                VoxelLogic.wrendered[i] = new byte[VoxelLogic.wpalettes[0].Length][];
+                for(int c = 0; c < VoxelLogic.wpalettes[0].Length; c++)
+                {
+                    cubes2[i][c] = new byte[29][];
+                    VoxelLogic.wrendered[i][c] = new byte[80];
+                    for(int sp = 0; sp < 29; sp++)
+                    {
+                        cubes2[i][c][sp] = new byte[80];
+                        for(int j = 0; j < 80; j++)
+                        {
+                            cubes2[i][c][sp][j] = cubes[i, c, sp, j];
+                            if(sp == 0)
+                            {
+                                VoxelLogic.wrendered[i][c][j] = cubes[i, c, sp, j];
+                            }
+                        }
+                    }
+                }
+            }
+            return cubes2;
+        }
+
+
         public static byte[][][][] wrendered, wdithered;
         public static byte[][][] wcurrent, wditheredcurrent;
 
         public static byte[][][] simplepalettes;
         public static byte[][] basepalette;
-
+        //public static int[] hilbertX, hilbertY, hilbertDist;
         public static void InitializeWPalette()
         {
             if(VoxelLogic.VisualMode == "CU")
@@ -966,6 +1425,65 @@ namespace AssetsPV
             wditheredcurrent = wdithered[0];
         }
 
+        public static void InitializeGWPalette()
+        {
+            if(VoxelLogic.VisualMode == "CU")
+            {
+                Directory.CreateDirectory(blankFolder + "/animation_frames/");
+                Directory.CreateDirectory(blankFolder + "/standing_frames/");
+                Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/");
+
+                for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
+                {
+                    Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + colorNames[p % 8] + "/animation_frames/color" + p);
+                    Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + colorNames[p % 8] + "/standing_frames/color" + p);
+                    if(p < 8 || p >= 208)
+                        Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + colorNames[p % 8] + "/animation_frames/receiving/color" + p);
+
+                    //Directory.CreateDirectory("frames/" + altFolder + "color" + p);
+                }
+            }
+            wrendered = storeColorCubesGWBold();
+            simplepalettes = new byte[wrendered.Length][][];
+            int colorcount = Math.Min(VoxelLogic.wpalettes[0].Length, 63);
+            for(int i = 0; i < simplepalettes.Length; i++)
+            {
+                simplepalettes[i] = new byte[256][];
+                for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
+                {
+                    simplepalettes[i][j] = new byte[] { wrendered[i][c][0][2], wrendered[i][c][0][1], wrendered[i][c][0][0] };
+                    simplepalettes[i][j - 1] = new byte[] { wrendered[i][c][0][2 + 16 + 16], wrendered[i][c][0][1 + 16 + 16], wrendered[i][c][0][0 + 16 + 16] };
+                    simplepalettes[i][j - 2] = new byte[] { wrendered[i][c][0][2 + 24 + 16], wrendered[i][c][0][1 + 24 + 16], wrendered[i][c][0][0 + 24 + 16] };
+                    simplepalettes[i][j - 3] = new byte[] { wrendered[i][c][0][2 + 64], wrendered[i][c][0][1 + 64], wrendered[i][c][0][0 + 64] };
+                }
+                simplepalettes[i][0] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][1] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][254] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][255] = new byte[] { 255, 255, 255 };
+            }
+            basepalette = new byte[256][];
+            for(byte i = 1; i < 255; i++)
+            {
+                basepalette[i] = new byte[] { i, i, i };
+            }
+
+            wdithered = storeIndexCubesW();
+            wcurrent = wrendered[0];
+            wditheredcurrent = wdithered[0];
+            /*int hx, hy;
+            hilbertX = new int[512 * 512];
+            hilbertY = new int[512 * 512];
+            hilbertDist = new int[512 * 512];
+
+            for(int i = 0; i < 512 * 512; i++)
+            {
+                HilbertDecode(i, out hx, out hy);
+                hilbertX[i] = hx;
+                hilbertY[i] = hy;
+                hilbertDist[(hx << 9) | hy] = i;
+            }*/
+        }
+
         public static void WritePNG(PngWriter png, byte[][] b, byte[][] palette)
         {
             png.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
@@ -977,7 +1495,8 @@ namespace AssetsPV
                 pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
             }
             pal.SetEntry(0, 0, 0, 0);
-            pal.SetEntry(255, 0, 0, 0);
+            pal.SetEntry(254, 0, 0, 0);
+            pal.SetEntry(255, 255, 255, 255);
             png.WriteRowsByte(b);
             png.End();
         }
@@ -1093,7 +1612,7 @@ namespace AssetsPV
                 //QuantizeSettings settings = new QuantizeSettings();
                 //settings.Colors = 256;
                 //collection.Quantize(settings);
-                collection.Optimize();
+                //collection.Optimize();
                 // Save gif
                 collection.Write(output + ".gif");
             }
@@ -1495,54 +2014,6 @@ namespace AssetsPV
 
         }
 
-        private static byte[][] processFrameLargeW(FaceVoxel[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
-        {
-            byte[][] b, b2;
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
-            wditheredcurrent = wdithered[palette];
-
-            b = renderWSmart(parsed, dir, palette, frame, maxFrames, still, shadowless);
-            //return b;
-            /*
-            b2 = new byte[108 * 2][];
-            for(int y = 46 + 32, i = 0; y < 46 + 32 + 108 * 2; y++, i++)
-            {
-                b2[i] = new byte[88 * 2];
-                for(int x = 32, j = 0; x < 32 + 88 * 2; x++, j++)
-                {
-                    b2[i][j] = b[y][x];
-                }
-            }
-
-            return b2;
-            */
-            
-            b2 = new byte[108][];
-            for(int y = 46 + 32, i = 0; y < 46 + 32 + 108 * 2; y += 2, i++)
-            {
-                b2[i] = new byte[88];
-                for(int x = 32, j = 0; x < 32 + 88 * 2; x += 2, j++)
-                {
-                    b2[i][j] = b[y][x];
-                }
-            }
-            
-            return b2;
-            
-
-            // g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
-
-            /*
-            ImageInfo imi = new ImageInfo(248, 308, 8, true, true, true); // 8 bits per channel, no alpha 
-            PngWriter png = FileHelper.CreatePngWriter("test.png", imi, true);
-
-            */
-
-            /*string folder = "palette" + palette + "_big";
-            System.IO.Directory.CreateDirectory(folder);
-            b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
-            */
-        }
         public static void processUnitHugeW(string u, int palette, bool still, bool shadowless)
         {
 
@@ -2388,6 +2859,55 @@ namespace AssetsPV
 
         }
 
+        private static byte[][] processFrameLargeW(FaceVoxel[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        {
+            byte[][] b, b2;
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            wditheredcurrent = wdithered[palette];
+
+            b = renderWSmart(parsed, dir, palette, frame, maxFrames, still, shadowless);
+            //return b;
+            /*
+            b2 = new byte[108 * 2][];
+            for(int y = 46 + 32, i = 0; y < 46 + 32 + 108 * 2; y++, i++)
+            {
+                b2[i] = new byte[88 * 2];
+                for(int x = 32, j = 0; x < 32 + 88 * 2; x++, j++)
+                {
+                    b2[i][j] = b[y][x];
+                }
+            }
+
+            return b2;
+            */
+
+            b2 = new byte[108][];
+            for(int y = 46 + 32, i = 0; y < 46 + 32 + 108 * 2; y += 2, i++)
+            {
+                b2[i] = new byte[88];
+                for(int x = 32, j = 0; x < 32 + 88 * 2; x += 2, j++)
+                {
+                    b2[i][j] = b[y][x];
+                }
+            }
+            if(BW)
+                return Lump(b2, palette);
+            return b2;
+
+
+            // g2.DrawImage(b.Clone(new Rectangle(32, 46 + 32, 88 * 2, 108 * 2), b.PixelFormat), 0, 0, 88, 108);
+
+            /*
+            ImageInfo imi = new ImageInfo(248, 308, 8, true, true, true); // 8 bits per channel, no alpha 
+            PngWriter png = FileHelper.CreatePngWriter("test.png", imi, true);
+
+            */
+
+            /*string folder = "palette" + palette + "_big";
+            System.IO.Directory.CreateDirectory(folder);
+            b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
+            */
+        }
         private static byte[][] processFrameHugeW(FaceVoxel[,,] faces, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
         {
             byte[][] b, b2;
@@ -2396,7 +2916,7 @@ namespace AssetsPV
 
             b = renderWSmartHuge(faces, dir, palette, frame, maxFrames, still, shadowless);
             //return b;
-            
+
             b2 = new byte[308][];
             for(int i = 0; i < 308; i++)
             {
@@ -2414,8 +2934,10 @@ namespace AssetsPV
                 }
 
             }
+            if(BW)
+                return Lump(b2, palette);
             return b2;
-            
+
             /*string folder = "palette" + palette + "_big";
             System.IO.Directory.CreateDirectory(folder);
             b.Save(folder + "/" + (System.IO.Directory.GetFiles(folder).Length) + "_Gigantic_face" + dir + "_" + frame + ".png", ImageFormat.Png); g = Graphics.FromImage(b);
@@ -2441,8 +2963,438 @@ namespace AssetsPV
                     }
                 }
             }
+            if(BW)
+                return Lump(b2, palette);
             return b2;
         }
+
+        public static int MortonEncode(int index1, int index2)
+        { // pack 2 16-bit indices into a 32-bit Morton code
+            index1 &= 0x0000ffff;
+            index2 &= 0x0000ffff;
+            index1 |= (index1 << 8);
+            index2 |= (index2 << 8);
+            index1 &= 0x00ff00ff;
+            index2 &= 0x00ff00ff;
+            index1 |= (index1 << 4);
+            index2 |= (index2 << 4);
+            index1 &= 0x0f0f0f0f;
+            index2 &= 0x0f0f0f0f;
+            index1 |= (index1 << 2);
+            index2 |= (index2 << 2);
+            index1 &= 0x33333333;
+            index2 &= 0x33333333;
+            index1 |= (index1 << 1);
+            index2 |= (index2 << 1);
+            index1 &= 0x55555555;
+            index2 &= 0x55555555;
+            return (index1 | (index2 << 1));
+        }
+        public static void MortonDecode(int morton, out int index1, out int index2)
+        { // unpack 2 16-bit indices from a 32-bit Morton code
+            int value1 = morton;
+            int value2 = (value1 >> 1);
+            value1 &= 0x55555555;
+            value2 &= 0x55555555;
+            value1 |= (value1 >> 1);
+            value2 |= (value2 >> 1);
+            value1 &= 0x33333333;
+            value2 &= 0x33333333;
+            value1 |= (value1 >> 2);
+            value2 |= (value2 >> 2);
+            value1 &= 0x0f0f0f0f;
+            value2 &= 0x0f0f0f0f;
+            value1 |= (value1 >> 4);
+            value2 |= (value2 >> 4);
+            value1 &= 0x00ff00ff;
+            value2 &= 0x00ff00ff;
+            value1 |= (value1 >> 8);
+            value2 |= (value2 >> 8);
+            value1 &= 0x0000ffff;
+            value2 &= 0x0000ffff;
+            index1 = value1;
+            index2 = value2;
+        }
+        public static int MortonToHilbert2D(int morton)
+        {
+            int hilbert = 0;
+            uint remap = 0xb4;
+            int block = 32;
+            while(block != 0)
+            {
+                block -= 2;
+                int mcode = ((morton >> block) & 3);
+                int hcode = (int)((remap >> (mcode << 1)) & 3);
+                remap ^= (0x82000028 >> (hcode << 3));
+                hilbert = ((hilbert << 2) + hcode);
+            }
+            return (hilbert);
+        }
+        public static int HilbertToMorton2D(int hilbert)
+        {
+            int morton = 0;
+            uint remap = 0xb4;
+            int block = 32;
+            while(block != 0)
+            {
+                block -= 2;
+                int hcode = ((hilbert >> block) & 3);
+                int mcode = (int)((remap >> (hcode << 1)) & 3);
+                remap ^= (0x330000ccU >> (hcode << 3));
+                morton = ((morton << 2) + mcode);
+            }
+            return (morton);
+        }
+
+        public static int HilbertEncode(int x, int y)
+        {
+            return MortonToHilbert2D(MortonEncode(x, y));
+        }
+        public static void HilbertDecode(int hilbert, out int x, out int y)
+        {
+            MortonDecode(HilbertToMorton2D(hilbert), out x, out y);
+        }
+
+        public static byte[][] Lump(byte[][] original, int palette)
+        {
+            r = new Random(0x1337);
+            int height = original.Length, width = original[0].Length, sy, sx, tmp;
+            byte[][] next = new byte[height][];
+            for(int i = 0; i < height; i++)
+            {
+                next[i] = new byte[width];
+            }
+            
+            int[] thresholds = new int[7];
+            thresholds[0] = 6;
+            thresholds[1] = 5;
+            thresholds[2] = 4;
+
+            thresholds[3] = 2;
+            thresholds[4] = 1;
+            for(sy = height - 1; sy >= 0; sy--)
+            {
+                for(int cx = 0, cy = sy; cx < width && cy < height; cx++, cy++)
+                {
+                    if(original[cy][cx] == 0)
+                        continue;
+                    if(original[cy][cx] < 254 && (253 - original[cy][cx]) % 4 == 3)
+                    {
+                        next[cy][cx] = 254;
+                        continue;
+                    }
+                    if((height - sy) % 4 != 1)// || cx % 2 != 0 || (cy - sy) % 2 != 0)
+                        continue;
+
+                    double ctr = 0, total = 0;
+                    for(int xx = Math.Max(0, cx - 1); xx <= Math.Min(width - 1, cx + 1); xx++)
+                    {
+                        for(int yy = Math.Max(0, cy - 1); yy <= Math.Min(height - 1, cy + 1); yy++)
+                        {
+
+                            if(original[yy][xx] == 0 || (xx == cx + 1 && yy == cy - 1) || (xx == cx - 1 && yy == cy + 1)) // || (xx == cx + 1 && yy == cy + 1) || (xx == cx - 1 && yy == cy - 1) 
+                                continue;
+                            ctr++;
+                            total += simplepalettes[palette][original[yy][xx]][1];
+                        }
+                    }
+                    if(ctr <= 0 || total <= 0)
+                        continue;
+                    total /= ctr;
+                    /*tmp = r.Next(0x10000);
+                    for(int t = 3; t < 7; t++)
+                    {
+                        thresholds[t] = (((tmp + t) >> 1) ^ (tmp + t)) & 7;
+                    }*/
+                    if(original[cy][cx] < 254 && next[cy][cx] < 254)
+                    {
+                        if(total < 32 * thresholds[0])
+                        {
+                            next[cy][cx] = 254;
+                        }
+                        else
+                        {
+                            next[cy][cx] = 255;
+                        }
+                    }
+                    if(cy < height - 1 && original[cy + 1][cx] > 0 && original[cy + 1][cx] < 254 && next[cy + 1][cx] < 254)
+                    {
+                        if(total < 32 * thresholds[1])
+                        {
+                            next[cy + 1][cx] = 254;
+                        }
+                        else
+                        {
+                            next[cy + 1][cx] = 255;
+                        }
+                    }
+                    if(cx < width - 1 && original[cy][cx + 1] > 0 && original[cy][cx + 1] < 254 && next[cy][cx + 1] < 254)
+                    {
+                        if(total < 32 * thresholds[2])
+                        {
+                            next[cy][cx + 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy][cx + 1] = 255;
+                        }
+                    }
+                    if(cy > 0 && original[cy - 1][cx] > 0 && original[cy - 1][cx] < 254 && next[cy - 1][cx] < 254)
+                    {
+                        if(total < 32 * thresholds[3])
+                        {
+                            next[cy - 1][cx] = 254;
+                        }
+                        else
+                        {
+                            next[cy - 1][cx] = 255;
+                        }
+                    }
+                    if(cx > 0 && original[cy][cx - 1] > 0 && original[cy][cx - 1] < 254 && next[cy][cx - 1] < 254)
+                    {
+                        if(total < 32 * thresholds[4])
+                        {
+                            next[cy][cx - 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy][cx - 1] = 255;
+                        }
+                    }
+                    /*
+                    if(cx > 0 && cy < height - 1 && original[cy + 1][cx - 1] > 0 && original[cy + 1][cx - 1] < 254 && next[cy + 1][cx - 1] < 254)
+                    {
+                        if(total < 32 * thresholds[5])
+                        {
+                            next[cy + 1][cx - 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy + 1][cx - 1] = 255;
+                        }
+                    }
+                    if(cy > 0 && cx < width - 1 && original[cy - 1][cx + 1] > 0 && original[cy - 1][cx + 1] < 254 && next[cy - 1][cx + 1] < 254)
+                    {
+                        if(total < 32 * thresholds[6])
+                        {
+                            next[cy - 1][cx + 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy - 1][cx + 1] = 255;
+                        }
+                    }*/
+                }
+            }
+            for(sx = 1 - sy; sx < width; sx++)
+            {
+                for(int cx = sx, cy = 0; cx < width && cy < height; cx++, cy++)
+                {
+                    if(original[cy][cx] == 0)
+                        continue;
+                    if(original[cy][cx] < 254 && (253 - original[cy][cx]) % 4 == 3)
+                    {
+                        next[cy][cx] = 254;
+                        continue;
+                    }
+                    if((sx - (1 - sy)) % 4 != 0)// || (cx - sx) % 2 != 0 || cy % 2 != 0)
+                        continue;
+                    double ctr = 0, total = 0;
+                    for(int xx = Math.Max(0, cx - 1); xx <= Math.Min(width - 1, cx + 1); xx++)
+                    {
+                        for(int yy = Math.Max(0, cy - 1); yy <= Math.Min(height - 1, cy + 1); yy++)
+                        {
+
+                            if(original[yy][xx] == 0 || (xx == cx + 1 && yy == cy - 1) || (xx == cx - 1 && yy == cy + 1)) // || (xx == cx + 1 && yy == cy + 1) || (xx == cx - 1 && yy == cy - 1) 
+                                continue;
+                            ctr++;
+                            total += simplepalettes[palette][original[yy][xx]][1];
+                        }
+                    }
+                    if(ctr <= 0 || total <= 0)
+                        continue;
+                    total /= ctr;
+                    //tmp = (cy + 3 >> 1) * (cx + 3 >> 1);
+                    /*tmp = r.Next(0x10000);
+                    for(int t = 3; t < 7; t++)
+                    {
+                        thresholds[t] = (((tmp + t) >> 1) ^ (tmp + t)) & 7;
+                    }*/
+                    if(original[cy][cx] < 254 && next[cy][cx] < 254)
+                    {
+                        if(total < 32 * thresholds[0])
+                        {
+                            next[cy][cx] = 254;
+                        }
+                        else
+                        {
+                            next[cy][cx] = 255;
+                        }
+                    }
+                    if(cy < height - 1 && original[cy + 1][cx] > 0 && original[cy + 1][cx] < 254 && next[cy + 1][cx] < 254)
+                    {
+                        if(total < 32 * thresholds[1])
+                        {
+                            next[cy + 1][cx] = 254;
+                        }
+                        else
+                        {
+                            next[cy + 1][cx] = 255;
+                        }
+                    }
+                    if(cx < width - 1 && original[cy][cx + 1] > 0 && original[cy][cx + 1] < 254 && next[cy][cx + 1] < 254)
+                    {
+                        if(total < 32 * thresholds[2])
+                        {
+                            next[cy][cx + 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy][cx + 1] = 255;
+                        }
+                    }
+                    if(cy > 0 && original[cy - 1][cx] > 0 && original[cy - 1][cx] < 254 && next[cy - 1][cx] < 254)
+                    {
+                        if(total < 32 * thresholds[3])
+                        {
+                            next[cy - 1][cx] = 254;
+                        }
+                        else
+                        {
+                            next[cy - 1][cx] = 255;
+                        }
+                    }
+                    if(cx > 0 && original[cy][cx - 1] > 0 && original[cy][cx - 1] < 254 && next[cy][cx - 1] < 254)
+                    {
+                        if(total < 32 * thresholds[4])
+                        {
+                            next[cy][cx - 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy][cx - 1] = 255;
+                        }
+                    }
+                    /*
+                    if(cx > 0 && cy < height - 1 && original[cy + 1][cx - 1] > 0 && original[cy + 1][cx - 1] < 254 && next[cy + 1][cx - 1] < 254)
+                    {
+                        if(total < 32 * thresholds[5])
+                        {
+                            next[cy + 1][cx - 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy + 1][cx - 1] = 255;
+                        }
+                    }
+                    if(cy > 0 && cx < width - 1 && original[cy - 1][cx + 1] > 0 && original[cy - 1][cx + 1] < 254 && next[cy - 1][cx + 1] < 254)
+                    {
+                        if(total < 32 * thresholds[6])
+                        {
+                            next[cy - 1][cx + 1] = 254;
+                        }
+                        else
+                        {
+                            next[cy - 1][cx + 1] = 255;
+                        }
+                    }*/
+                }
+            }
+            return next;
+        }
+        /*
+        public static byte[][] Lump(byte[][] original, int palette)
+        {
+            int height = original.Length, width = original[0].Length, dist, hx, hy;
+            byte[][] next = new byte[height][];
+            for(int i = 0; i < height; i++)
+            {
+                next[i] = new byte[width];
+            }
+
+            for(int y = 0; y < height; y++)
+            {
+                for(int x = 0; x < width; x++)
+                {
+
+                    NEWRUN:
+                    if(x >= width)
+                        break;
+                    byte color = original[y][x];
+                    if(color == 0)
+                    {
+                        x++;
+                        goto NEWRUN;
+                    }
+                    int bright = Math.Max(next[y][x], simplepalettes[palette][color][1]);
+                    if(bright <= 1)
+                        next[y][x] = 254;
+                    else
+                    {
+                        dist = hilbertDist[(x << 9) | y];
+                        for(int o = 1; o <= 3; o++)
+                        {
+                            if(dist - o >= 0 && hilbertX[dist - o] < width && hilbertY[dist - o] < height)
+                            {
+                                hx = hilbertX[dist - o];
+                                hy = hilbertY[dist - o];
+                                if((bright + simplepalettes[palette][original[hy][hx]][1] - 255) * o <= 1)
+                                {
+                                    for(int o2 = 1; o2 <= 3; o2++)
+                                    {
+                                        if(dist - o2 >= 0 && hilbertX[dist - o2] < width && hilbertY[dist - o2] < height)
+                                        {
+                                            next[hilbertY[dist - o2]][hilbertX[dist - o2]] = 254;
+                                        }
+                                        if(dist + o2 < 512 * 512 && hilbertX[dist + o2] < width && hilbertY[dist + o2] < height)
+                                        {
+                                            next[hilbertY[dist + o2]][hilbertX[dist + o2]] = 254;
+                                        }
+                                    }
+
+                                    x++;
+                                    goto NEWRUN;
+
+                                }
+                                else if(Math.Max(next[hy][hx], simplepalettes[palette][original[hy][hx]][1]) > 1)
+                                {
+                                    bright = (bright + simplepalettes[palette][original[hy][hx]][1] - 255) * o;
+                                }
+                            }
+                            if(dist + o < 512 * 512 && hilbertX[dist + o] < width && hilbertY[dist + o] < height)
+                            {
+                                hx = hilbertX[dist + o];
+                                hy = hilbertY[dist + o];
+                                if((bright + simplepalettes[palette][original[hy][hx]][1] - 255) / o <= 1)
+                                {
+                                    for(int o2 = 1; o2 <= 3; o2++)
+                                    {
+                                        if(dist - o2 >= 0 && hilbertX[dist - o2] < width && hilbertY[dist - o2] < height)
+                                        {
+                                            next[hilbertY[dist - o2]][hilbertX[dist - o2]] = 254;
+                                        }
+                                        if(dist + o2 < 512 * 512 && hilbertX[dist + o2] < width && hilbertY[dist + o2] < height)
+                                        {
+                                            next[hilbertY[dist + o2]][hilbertX[dist + o2]] = 254;
+                                        }
+                                    }
+                                    x++;
+                                    goto NEWRUN;
+                                }
+                                else if(Math.Max(next[hy][hx], simplepalettes[palette][original[hy][hx]][1]) > 1)
+                                {
+                                    bright = (bright + simplepalettes[palette][original[hy][hx]][1] - 255) * o;
+                                }
+                            }
+                        }
+                    }
+                    next[y][x] = 255;
+                }
+            }
+
+            return next;
+        }
+        */
         public static void processUnitLargeWHat(string u, int palette, bool still, string hat)
         {
             /*          if (render_hat_gifs)
@@ -6608,13 +7560,14 @@ namespace AssetsPV
             //VoxelLogic.WriteVOX(folder + u + "_palette" + palette + ".vox", result, "W", palette);
         }
 
-        public static AssimpContext ac = new AssimpContext();
-        public static ConsoleLogStream log = new ConsoleLogStream();
+        public static AssimpContext ac;// = new AssimpContext();
+        public static ConsoleLogStream log;// = new ConsoleLogStream();
 
         static void Main(string[] args)
         {
+            /*
             LogStream.IsVerboseLoggingEnabled = false;
-            log.Attach();
+            log.Attach();*/
             //altFolder = "botl6/";
             //altFolder = "other/";
             //  altFolder = "mecha3/";
@@ -6631,7 +7584,7 @@ namespace AssetsPV
             //CURedux.Initialize(true);
 
             VoxelLogic.VisualMode = "W";
-            altFolder = "Forays2/";
+            altFolder = "Forays3/";
             blankFolder = altFolder;
             VoxelLogic.voxFolder = "ForaysBones/";
             ForaysPalettes.Initialize();
@@ -6647,6 +7600,7 @@ namespace AssetsPV
             System.IO.Directory.CreateDirectory(altFolder);
             System.IO.Directory.CreateDirectory(blankFolder);
             InitializeWPalette();
+            //InitializeGWPalette();
 
             //            makeFlatTiling().Save("tiling_flat_gray.png");
             /*
@@ -7337,7 +8291,9 @@ namespace AssetsPV
                 tanLeatherPattern = new Pattern(253 - 46 * 4, 0, 253 - 45 * 4, 0, 3, 2, 2, 1, 0.6f, true),
                 mailPattern = new Pattern(253 - 56 * 4, 0, 253 - 57 * 4, 0, 2, 1, 1, 1, 1f),
                 plaidPattern = new Pattern(253 - 4 * 4, 0, 253 - 2 * 4, 0, 2, 2, 1, 1, 1f),
-                fleshPattern = new Pattern(253 - 9 * 4, 0, 253 - 9 * 4, 0, 1, 1, 1, 1, 1f);
+                fleshPattern = new Pattern(253 - 9 * 4, 0, 253 - 9 * 4, 0, 1, 1, 1, 1, 1f),
+                velvetPatternDark = new Pattern(253 - 53 * 4, 0, 253 - 54 * 4, 0, 1, 1, 1, 1, 0.05f),
+                velvetPattern = new Pattern(253 - 54 * 4, 0, 253 - 53 * 4, 0, 1, 1, 1, 1, 0.1f);
             Dictionary<byte, Pattern> leather = new Dictionary<byte, Pattern>() {
                 { 253 - 29 * 4, brownLeatherPattern },
                 { 253 - 5 * 4, brownLeatherPattern },
@@ -7355,6 +8311,11 @@ namespace AssetsPV
                 { 253 - 4 * 4, brownLeatherPattern },
                 { 253 - 3 * 4, brownLeatherPattern },
                 { 253 - 2 * 4, brownLeatherPattern },
+            }, velvet = new Dictionary<byte, Pattern>() {
+                { 253 - 5 * 4, velvetPattern },
+                { 253 - 4 * 4, velvetPatternDark },
+                { 253 - 3 * 4, velvetPattern },
+                { 253 - 2 * 4, velvetPatternDark }
             };
 
 
@@ -7488,8 +8449,26 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
 
             hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
-            
+
             processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_sword = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Longsword", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
@@ -7562,6 +8541,24 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
+            hero_mace = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Mace", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Plate_Robe", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
             Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
@@ -7601,6 +8598,24 @@ namespace AssetsPV
             hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
 
             processUnitLargeWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_dagger = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Dagger", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Dagger", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
@@ -7671,6 +8686,24 @@ namespace AssetsPV
                 new float[] { 4, 0, 0.6f },
                 new float[] { 4, 0, 1.0f },});
 
+            hero_staff = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Staff", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
 
             Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
 
@@ -7709,9 +8742,26 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
 
             hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
-
-
+            
             processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_bow = Model.Humanoid(body: "Human_Male_Robe", left_weapon: "Bow", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Bow", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
                 new float[][] {
                 new float[] { 0, 1, 0.0f },
