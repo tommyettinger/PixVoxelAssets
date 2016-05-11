@@ -16,6 +16,7 @@ namespace AssetsPV
     class TallFacesDithered
     {
         public static bool BW = false;
+        public static bool USE_PALETTE = false;
         public const int
         Cube = 0,
         BrightTop = 1,
@@ -1534,6 +1535,9 @@ namespace AssetsPV
                 pal.SetEntry(255, 0, 0, 0);
                 pngw.WriteRowsByte(lines.ScanlinesB);
                 pngw.End();
+
+                if(!USE_PALETTE)
+                    return;
             }
         }
         public static void AlterPNGPaletteLimited(string input, string output, byte[][][] palettes)
@@ -1569,6 +1573,8 @@ namespace AssetsPV
                 pal.SetEntry(255, 0, 0, 0);
                 pngw.WriteRowsByte(lines.ScanlinesB);
                 pngw.End();
+                if(!USE_PALETTE)
+                    return;
             }
             for(int p = 208; p < 8 * CURedux.wspecies.Length; p++)
             {
@@ -1595,6 +1601,9 @@ namespace AssetsPV
                 pal.SetEntry(255, 0, 0, 0);
                 pngw.WriteRowsByte(lines.ScanlinesB);
                 pngw.End();
+
+                if(!USE_PALETTE)
+                    return;
             }
         }
 
@@ -2951,13 +2960,13 @@ namespace AssetsPV
                 //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxArrayToList(TransformLogic.RunSurfaceCA(
                 //        TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2, 2, 2),
                 //        3)), 120, 120, 80);
-                FaceVoxel[,,] faces = FaceLogic.DoubleSize(FaceLogic.GetAlteredFaces(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)));
+                FaceVoxel[,,] faces = FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40)));
                 for(int f = 0; f < framelimit; f++)
                 {
 
                     byte[][] b = processFrameHugeW(faces, 0, dir, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
 
-                    ImageInfo imi = new ImageInfo(248 * 2, 308 * 2, 8, false, false, true);
+                    ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(blankFolder + "standing_frames/" + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
                     WritePNG(png, b, basepalette);
                 }
@@ -3004,9 +3013,9 @@ namespace AssetsPV
             startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + u + "_Huge_animated.gif";
             Process.Start(startInfo).WaitForExit();
             */
-            //processExplosionHugeWSuper(u, -1, explode_parsed, false);
+            processExplosionHugeWSuper(u, -1, explode_parsed, false);
 
-            //processUnitHugeWFiringSuper(u);
+            processUnitHugeWFiringSuper(u);
         }
         public static void processUnitHugeWFiringSuper(string u)
         {
@@ -8384,21 +8393,10 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            writePaletteImages();
-            /*
-            processUnitLargeWMilitary("Recon");
-            processUnitLargeWMilitary("Flamethrower");
+            //writePaletteImages();
             
-            processUnitHugeWMilitarySuper("Laboratory");
-            processUnitHugeWMilitarySuper("Dock");
-            processUnitHugeWMilitarySuper("City");
-            processUnitHugeWMilitarySuper("Factory");
-            processUnitHugeWMilitarySuper("Castle");
-            processUnitHugeWMilitarySuper("Estate");
-            processUnitHugeWMilitarySuper("Airport");
-            processUnitHugeWMilitarySuper("Farm");
-            processUnitHugeWMilitarySuper("Hospital");
-            processUnitHugeWMilitarySuper("Oil_Well");
+            //processUnitLargeWMilitary("Recon");
+            //processUnitLargeWMilitary("Flamethrower");
             
             processUnitHugeWMilitarySuper("Copter");
             processUnitHugeWMilitarySuper("Copter_P");
@@ -8415,8 +8413,18 @@ namespace AssetsPV
             processUnitHugeWMilitarySuper("Boat_S");
             processUnitHugeWMilitarySuper("Boat_T");
 
-            
-            
+            processUnitHugeWMilitarySuper("Laboratory");
+            processUnitHugeWMilitarySuper("Dock");
+            processUnitHugeWMilitarySuper("City");
+            processUnitHugeWMilitarySuper("Factory");
+            processUnitHugeWMilitarySuper("Castle");
+            processUnitHugeWMilitarySuper("Estate");
+            processUnitHugeWMilitarySuper("Airport");
+            processUnitHugeWMilitarySuper("Farm");
+            processUnitHugeWMilitarySuper("Hospital");
+            processUnitHugeWMilitarySuper("Oil_Well");
+
+
             processUnitLargeWMilitary("Infantry");
             processUnitLargeWMilitary("Infantry_P");
             processUnitLargeWMilitary("Infantry_S");
@@ -8494,8 +8502,8 @@ namespace AssetsPV
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
             
-            WriteAllGIFs();
-            */
+            //WriteAllGIFs();
+            
 
 
             //makeDetailedTiling();
@@ -8751,7 +8759,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
 
-            
+            /*
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
@@ -8903,7 +8911,7 @@ namespace AssetsPV
             .AddPitch(10, "Right_Weapon")
             .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm")
             .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
-            
+            */
             ///START
 
             /*
