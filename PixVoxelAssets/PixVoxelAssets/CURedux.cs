@@ -2405,6 +2405,13 @@ namespace AssetsPV
             new float[] {0F,0F,0F,0F},
             },
         };
+        public static float[][][] 
+            wpalettes_tw_gray, //35
+            wpalettes_tw_white, //26
+            wpalettes_tw_green, //36
+            wpalettes_tw_red, //28
+            wpalettes_tw_purple; //33
+        //gray 35, white 26, green 36, red 28, purple 33
         public static string[] Terrains = new string[]
         {"Plains","Forest","Desert","Jungle","Hill"
         ,"Mountain","Ruins","Tundra","Road","River", "Ocean", "Basement"
@@ -2485,6 +2492,7 @@ namespace AssetsPV
                     wpalettes[p][34] = wpalettes[p][9].Replicate();
                 }
             }
+
             VoxelLogic.terrainPalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
             VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
@@ -2618,7 +2626,47 @@ namespace AssetsPV
                 zap[3] = spin_alpha_1;
                 wpalettes[p] = wpalettes[p].Concat(new float[][] { drip, transp, transp, transp, drip, zap }).ToArray();
             }
+            wpalettes_tw_gray = new float[208][][];
+            wpalettes_tw_green = new float[208][][];
+            wpalettes_tw_red = new float[208][][];
+            wpalettes_tw_white = new float[208][][];
+            wpalettes_tw_purple = new float[208][][];
+            int wcc = wpalettes[0].Length;
+            for(int i = 0; i < 208; i++)
+            {
 
+                wpalettes_tw_gray[i] = new float[wcc][];
+                wpalettes_tw_green[i] = new float[wcc][];
+                wpalettes_tw_red[i] = new float[wcc][];
+                wpalettes_tw_white[i] = new float[wcc][];
+                wpalettes_tw_purple[i] = new float[wcc][];
+                for(int j = 0; j < 17; j++)
+                {
+                    wpalettes_tw_gray[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_green[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_red[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_white[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_purple[i][j] = wpalettes[i][j].Replicate();
+                }
+
+                //gray 35, white 26, green 36, red 28, purple 33
+                for(int j = 17; j < 21; j++)
+                {
+                    wpalettes_tw_gray[i][j] = wspecies[35][j - 11].Replicate();
+                    wpalettes_tw_green[i][j] = wspecies[36][j - 11].Replicate();
+                    wpalettes_tw_red[i][j] = wspecies[28][j - 11].Replicate();
+                    wpalettes_tw_white[i][j] = wspecies[26][j - 11].Replicate();
+                    wpalettes_tw_purple[i][j] = wspecies[33][j - 11].Replicate();
+                }
+                for(int j = 21; j < wcc; j++)
+                {
+                    wpalettes_tw_gray[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_green[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_red[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_white[i][j] = wpalettes[i][j].Replicate();
+                    wpalettes_tw_purple[i][j] = wpalettes[i][j].Replicate();
+                }
+            }
             VoxelLogic.wpalettes = wpalettes;
             TransformLogic.dismiss = new byte[] {
                 0, VoxelLogic.clear, 253 - 17 * 4, 253 - 18 * 4, 253 - 19 * 4, 253 - 20 * 4, 253 - 25 * 4, CURedux.emitter0, CURedux.trail0, CURedux.emitter1, CURedux.trail1
