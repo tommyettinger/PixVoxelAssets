@@ -17,7 +17,8 @@ namespace AssetsPV
     {
         public const bool RENDER = true;
         public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
-            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60/2) * multiplier * (vheight - top) + 2,
+            widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60 / 2) * multiplier * (vheight - top) + 2,
+            widthTiny = 22 * multiplier * vwidth + 2, heightTiny = (20 + 22 / 2) * multiplier * (vheight - top) + 1,
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
             widthMassive = 160 * multiplier * vwidth + 2, heightMassive = (120 + 160/2) * multiplier * (vheight - top) + 2;
@@ -736,6 +737,129 @@ namespace AssetsPV
             }
         }
 
+        public static void processUnitTinyW(string u, int palette, bool still, bool shadowless)
+        {
+
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
+
+            BinaryReader bin = new BinaryReader(File.Open(altFolder + u + "_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin); //VoxelLogic.PlaceShadowsW(
+            Directory.CreateDirectory("vox/" + altFolder);
+            //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_" + palette + ".vox", voxes, "W", palette, 40, 40, 40);
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 3;
+                parsed[i].y += 3;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+            int framelimit = 4;
+
+
+            string folder = (altFolder + "ortho/palette" + palette + "/");//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] colors = TransformLogic.SealGaps(TransformLogic.RotateYaw(TransformLogic.VoxListToArray(parsed, 22, 22, 20), dir * 90));
+                for(int f = 0; f < framelimit; f++)
+                {
+                    byte[][] b = processFrameTinyW(colors, palette, f, framelimit, still, shadowless);
+                    ImageInfo imi = new ImageInfo(widthTiny, heightTiny, 8, false, false, true);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + u + "_p" + palette + "_d" + dir + "_" + f + ".png", imi, true);
+                    WritePNG(png, b, simplepalettes[palette]);
+                    // b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                }
+            }
+            /*
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png");
+                }
+            }
+            
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Large_animated");
+            */
+
+            /*
+            Directory.CreateDirectory("gifs/" + altFolder);
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"convert.exe");
+            startInfo.UseShellExecute = false;
+            string s = "";
+
+            s = folder + "/palette" + palette + "_" + u + "_Large_face* ";
+            startInfo.Arguments = "-dispose background -delay 25 -loop 0 " + s + " gifs/" + altFolder + "palette" + palette + "_" + u + "_Large_animated.gif";
+            Process.Start(startInfo).WaitForExit();
+            */
+            //bin.Close();
+
+            //            processFiringLarge(u);
+
+            //processExplosionLargeW(u, palette, shadowless);
+
+        }
+
+        public static void processUnitManyTinyW(string u, bool still, bool shadowless)
+        {
+
+            Console.WriteLine("Processing Many: " + u);
+
+            BinaryReader bin = new BinaryReader(File.Open(altFolder + u + "_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaRaw(bin); //VoxelLogic.PlaceShadowsW(
+            Directory.CreateDirectory("vox/" + altFolder);
+            //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_" + palette + ".vox", voxes, "W", palette, 40, 40, 40);
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 3;
+                parsed[i].y += 3;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+            int framelimit = 4;
+            byte[][,,] facings = new byte[4][,,];
+            for(int dir = 0; dir < 4; dir++)
+            {
+                facings[dir] = TransformLogic.SealGaps(TransformLogic.RotateYaw(TransformLogic.VoxListToArray(parsed, 22, 22, 20), dir * 90));
+            }
+            for(int palette = 0; palette < 208; palette++)
+            {
+                string folder = (altFolder + "ortho/palette" + palette + "/");//"color" + i;
+                Directory.CreateDirectory(folder); //("color" + i);
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        byte[][] b = processFrameTinyW(facings[dir], palette, f, framelimit, still, shadowless);
+                        ImageInfo imi = new ImageInfo(widthTiny, heightTiny, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(folder + u + "_p" + palette + "_d" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, b, simplepalettes[palette]);
+                        // b.Save(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png", ImageFormat.Png);
+                    }
+                }
+            }
+            /*
+            List<string> imageNames = new List<string>(4 * 8 * framelimit);
+            for(int dir = 0; dir < 4; dir++)
+            {
+                for(int f = 0; f < framelimit; f++)
+                {
+                    imageNames.Add(folder + "/palette" + palette + "_" + u + "_Large_face" + dir + "_" + f + ".png");
+                }
+            }
+            
+            Directory.CreateDirectory("gifs/" + altFolder);
+            Console.WriteLine("Running GIF conversion ...");
+            WriteGIF(imageNames, 25, "gifs/" + altFolder + u + "_Large_animated");
+            */
+            //processExplosionLargeW(u, palette, shadowless);
+
+        }
         public static void processUnitLargeW(string u, int palette, bool still, bool shadowless)
         {
 
@@ -878,8 +1002,14 @@ namespace AssetsPV
             //            processExplosionDouble(u);
 
         }
+        private static byte[][] processFrameTinyW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        {
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            wditheredcurrent = wdithered[palette];
+            return renderGenericW(parsed, palette, frame, maxFrames, still, shadowless, 22, 22, 20);
+        }
 
-        private static byte[][] processFrameLargeW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
+    private static byte[][] processFrameLargeW(byte[,,] parsed, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
@@ -4477,14 +4607,20 @@ namespace AssetsPV
             //altFolder = "CU_Ortho_S2/";
             //CURedux.Initialize(true);
             
-            VoxelLogic.VisualMode = "W";
-            altFolder = "Forays2/";
-            VoxelLogic.voxFolder = "ForaysBones/";
-            ForaysPalettes.Initialize();
+            //VoxelLogic.VisualMode = "W";
+            //altFolder = "Forays2/";
+            //VoxelLogic.voxFolder = "ForaysBones/";
+            //ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
             //MonPalettes.Initialize();
+
+            Directory.CreateDirectory("SDW_Ortho");
+            altFolder = "sdw/";
+            CURedux.Initialize(true);
+            VoxelLogic.VisualMode = "W";
+            VoxelLogic.voxFolder = "sdw/";
 
             System.IO.Directory.CreateDirectory("Mon");
             System.IO.Directory.CreateDirectory("Forays2");
@@ -5371,9 +5507,9 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-            */    
+            */
 
-
+            /*
             Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
             
             processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
@@ -5391,7 +5527,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-            /*
+            
             processUnitMassiveWModel("Hero_Leather_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
@@ -5407,7 +5543,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-                */
+            
             hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
             
             processVoxGiantWModel("Hero_Chain_Sword", true, 0, hero_sword,
@@ -5425,7 +5561,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-            /*
+            
             processUnitMassiveWModel("Hero_Chain_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
@@ -5441,7 +5577,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.3f },
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
-                */
+                
             hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
             
             processVoxGiantWModel("Hero_Plate_Sword", true, 0, hero_sword,
@@ -5822,6 +5958,17 @@ processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
             startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Ortho_animated.gif";
             Process.Start(startInfo).WaitForExit();
             */
+
+            processUnitManyTinyW("Human_Male", true, false);
+            processUnitManyTinyW("Human_Female", true, false);
+            processUnitManyTinyW("Mage_Male", true, false);
+            processUnitManyTinyW("Mage_Female", true, false);
+            processUnitManyTinyW("Rogue_Male", true, false);
+            processUnitManyTinyW("Rogue_Female", true, false);
+            processUnitManyTinyW("Priest_Male", true, false);
+            processUnitManyTinyW("Priest_Female", true, false);
+            processUnitManyTinyW("Warrior_Male", true, false);
+            processUnitManyTinyW("Warrior_Female", true, false);
         }
     }
 }

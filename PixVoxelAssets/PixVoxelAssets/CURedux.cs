@@ -161,7 +161,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -288,7 +288,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -415,7 +415,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -542,7 +542,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -669,7 +669,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -796,7 +796,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -923,7 +923,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -1050,7 +1050,7 @@ namespace AssetsPV
             //52 always red
             new float[] {0.9F,0.05F,0.0F,1F},
             //53 always dark gray
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.39F,0.39F,0.39F,1F},
             //54 always light gray
             new float[] {0.65F,0.65F,0.65F,1F},
             //55 always gold
@@ -2312,7 +2312,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.27F,0.3F,0.33F,1F},
             //16 inner shadow
-            new float[] {0.19F,0.19F,0.19F,1F},
+            new float[] {0.18F,0.18F,0.18F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -2673,7 +2673,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2694,7 +2694,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
-            
+            */
 
         }
 

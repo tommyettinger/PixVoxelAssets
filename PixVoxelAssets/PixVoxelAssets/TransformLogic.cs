@@ -2736,12 +2736,12 @@ namespace AssetsPV
             return VoxArrayToListSmoothed(Shrink(colors, 4));
         }
 
-        public static byte[,,] RotateYaw(byte[,,] colors, int amount)
+        public static byte[,,] RotateYaw(byte[,,] colors, int degrees)
         {
             int xSize = colors.GetLength(0), ySize = colors.GetLength(1), zSize = colors.GetLength(2);
 
             byte[,,] vls = new byte[xSize, ySize, zSize];
-            switch(amount / 90)
+            switch(degrees / 90)
             {
                 case 0:
                     vls = colors.Replicate();
