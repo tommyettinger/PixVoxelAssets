@@ -4304,7 +4304,7 @@ namespace AssetsPV
             string tmpVisual = VoxelLogic.VisualMode;
             VoxelLogic.VisualMode = "None";
 
-            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain/" + name + "_Huge_W.vox", FileMode.Open));
+            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain2/" + name + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
 
             //NORMAL WEATHER
@@ -4315,7 +4315,7 @@ namespace AssetsPV
 
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80);
-            string folder = altFolder + "Terrains/", blankFolder = altFolder + "TerrainsBlank/";
+            string folder = altFolder + "Terrains2/", blankFolder = altFolder + "TerrainsBlank2/";
             Directory.CreateDirectory(folder);
             Directory.CreateDirectory(blankFolder);
 
@@ -4422,6 +4422,30 @@ namespace AssetsPV
                 }
             }
             b.Save(altFolder + "tiling_flat.png", ImageFormat.Png);
+        }
+
+        static void makedDetailedTiling()
+        {
+            Bitmap[] tilings = new Bitmap[15];
+            for(int i = 0; i < 11; i++)
+            {
+                tilings[i] = new Bitmap(altFolder + "Terrains2/" + CURedux.Terrains[i] + "_Huge_face0_Normal_0.png");
+            }
+            Bitmap b = new Bitmap(64 * 20 + 1, 32 * 20 + 1);
+            Graphics tiling = Graphics.FromImage(b);
+
+            LocalMap lm = new LocalMap(20, 20, 1);
+            for(int j = 0; j < 20; j++)
+            {
+                for(int i = 0; i < 20; i++)
+                {
+                    if(lm.Land[i, j] < 11)
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]], (64 * i) + 2 - 30, (32 * j) - 20 - 64 + 2);
+                    else
+                        tiling.DrawImageUnscaled(tilings[0], (64 * i) + 2 - 30, (32 * j) - 20 - 64 + 2);
+                }
+            }
+            b.Save(altFolder + "tiling_detailed.png", ImageFormat.Png);
         }
 
         public static void processVoxGiantWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = false)
@@ -4603,9 +4627,9 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
-            //VoxelLogic.VisualMode = "CU";
-            //altFolder = "CU_Ortho_S2/";
-            //CURedux.Initialize(true);
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "CU_Ortho_S2/";
+            CURedux.Initialize(true);
             
             //VoxelLogic.VisualMode = "W";
             //altFolder = "Forays2/";
@@ -4615,13 +4639,13 @@ namespace AssetsPV
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
             //MonPalettes.Initialize();
-
+            /*
             Directory.CreateDirectory("SDW_Ortho");
             altFolder = "sdw/";
             CURedux.Initialize(true);
             VoxelLogic.VisualMode = "W";
             VoxelLogic.voxFolder = "sdw/";
-
+            */
             System.IO.Directory.CreateDirectory("Mon");
             System.IO.Directory.CreateDirectory("Forays2");
 
@@ -4934,7 +4958,7 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
 
-            /*
+            
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4947,8 +4971,8 @@ namespace AssetsPV
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
 
-            //makeFlatTiling();
-            
+            makedDetailedTiling();
+            /*
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter");
             processUnitLargeWMilitary("Copter_S");
@@ -5958,7 +5982,7 @@ processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
             startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Ortho_animated.gif";
             Process.Start(startInfo).WaitForExit();
             */
-
+            /*
             processUnitManyTinyW("Human_Male", true, false);
             processUnitManyTinyW("Human_Female", true, false);
             processUnitManyTinyW("Mage_Male", true, false);
@@ -5969,6 +5993,7 @@ processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
             processUnitManyTinyW("Priest_Female", true, false);
             processUnitManyTinyW("Warrior_Male", true, false);
             processUnitManyTinyW("Warrior_Female", true, false);
+            */
         }
     }
 }
