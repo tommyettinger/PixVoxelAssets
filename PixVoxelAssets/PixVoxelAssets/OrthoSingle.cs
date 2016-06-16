@@ -4403,6 +4403,53 @@ namespace AssetsPV
             VoxelLogic.VisualMode = tmpVisual;
         }
 
+
+        public static void renderTerrainSimple(string name, string kind, byte[] changers, byte standard, byte dark, byte highlight)
+        {
+
+            string tmpVisual = VoxelLogic.VisualMode;
+            VoxelLogic.VisualMode = "None";
+
+            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain3/" + kind + "_Huge_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
+
+            //NORMAL WEATHER
+            wcurrent = wrendered[296];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[296];
+            wditheredcurrent = wdithered[296];
+
+            Console.WriteLine("Terrain: " + name);
+            byte[,,] colors = PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight);
+            string folder = altFolder + "Terrains3/", blankFolder = altFolder + "TerrainsBlank3/";
+            Directory.CreateDirectory(folder);
+            Directory.CreateDirectory(blankFolder);
+
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 1 + bonus * multiplier / 2);
+
+                ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[296]);
+                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+
+                png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[300]);
+                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+
+                png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, 296, 0, 1, true, true), simplepalettes[301]);
+                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png2, processFrameHugeW(c2, 296, 0, 1, true, true), basepalette);
+            }
+
+            VoxelLogic.VisualMode = tmpVisual;
+        }
+
+
         static void makeFlatTiling()
         {
             Bitmap[] tilings = new Bitmap[15];
@@ -4424,7 +4471,7 @@ namespace AssetsPV
             b.Save(altFolder + "tiling_flat.png", ImageFormat.Png);
         }
 
-        static void makedDetailedTiling()
+        static void makeDetailedTiling()
         {
             Bitmap[] tilings = new Bitmap[15];
             for(int i = 0; i < 11; i++)
@@ -4446,6 +4493,33 @@ namespace AssetsPV
                 }
             }
             b.Save(altFolder + "tiling_detailed.png", ImageFormat.Png);
+        }
+
+        static void makeSimpleTiling()
+        {
+            for(int n = 0; n < 40; n++)
+            {
+                Bitmap[] tilings = new Bitmap[44];
+                for(int i = 0; i < 44; i++)
+                {
+                    tilings[i] = new Bitmap(altFolder + "Terrains3/" + CURedux.Terrains[i % 11] + "_Huge_face" + (i / 11) + "_Normal_0.png");
+                }
+                Bitmap b = new Bitmap(64 * 20, 32 * 20);
+                Graphics tiling = Graphics.FromImage(b);
+
+                LocalMap lm = new LocalMap(20, 20, 1);
+                for(int j = 0; j < 20; j++)
+                {
+                    for(int i = 0; i < 20; i++)
+                    {
+                        if(lm.Land[i, j] < 11)
+                            tiling.DrawImageUnscaled(tilings[lm.Land[i, j] + r.Next(4) * 11], (64 * i) + 2 - 30, (32 * j) - 30 - 64 + 2);
+                        else
+                            tiling.DrawImageUnscaled(tilings[r.Next(4) * 11], (64 * i) + 2 - 30, (32 * j) - 30 - 64 + 2);
+                    }
+                }
+                b.Save(altFolder + "tiling"+ n + ".png", ImageFormat.Png);
+            }
         }
 
         public static void processVoxGiantWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = false)
@@ -4958,7 +5032,7 @@ namespace AssetsPV
             writePaletteImages();
             //renderTerrain();
 
-            
+            /*
             renderTerrainDetailed("Plains");
             renderTerrainDetailed("Forest");
             renderTerrainDetailed("Desert");
@@ -4971,7 +5045,46 @@ namespace AssetsPV
             renderTerrainDetailed("River");
             renderTerrainDetailed("Ocean");
 
-            makedDetailedTiling();
+            makeDetailedTiling();
+            */
+
+            renderTerrainSimple("Plains", "Normal", new byte[] {
+                1, 28, 1,
+                58, 29, 3,
+                0, 13, 2,
+                7, 25, 6 }, 1, 0, 2);
+            renderTerrainSimple("Forest", "Rough", new byte[] {
+                16, 29, 8,
+                4, 23, 11 }, 5, 4, 13);
+            renderTerrainSimple("Desert", "Normal", new byte[] {
+                11, 29, 3 }, 9, 8, 10);
+            renderTerrainSimple("Jungle", "Rough", new byte[] {
+                8, 48, 12,
+                53, 35, 2,
+                56, 29, 2,
+                37, 207, 28 }, 13, 12, 14);
+            renderTerrainSimple("Hill", "High", new byte[] {
+                16, 27, 6 }, 17, 16, 18);
+            renderTerrainSimple("Mountain", "High", new byte[] {
+                20, 71, 10,
+                30, 29, 7, }, 21, 20, 22);
+            renderTerrainSimple("Road", "Ordered", new byte[] {}, 32, 32, 56);
+            renderTerrainSimple("Tundra", "Rough", new byte[] {
+                29, 15, 7,
+                28, 21, 5 }, 30, 29, 31);
+            renderTerrainSimple("Ruins", "Rough", new byte[] {
+                26, 27, 11,
+                50, 39, 5,
+                52, 223, 18 }, 25, 24, 48);
+            renderTerrainSimple("River", "Water", new byte[] {
+                45, 39, 6 }, 37, 36, 38);
+            renderTerrainSimple("Ocean", "Water", new byte[] {
+                47, 43, 3,
+                44, 49, 9, }, 45, 44, 46);
+
+            makeSimpleTiling();
+
+
             /*
             processUnitLargeWMilitary("Copter_P");
             processUnitLargeWMilitary("Copter");
@@ -5118,7 +5231,7 @@ namespace AssetsPV
                 new float[] { 3, 0, 0.33f },
                 new float[] { 3, 0, 0.66f },}, true);
             */
-            
+
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")

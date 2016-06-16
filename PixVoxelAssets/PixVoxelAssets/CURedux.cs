@@ -2012,153 +2012,153 @@ namespace AssetsPV
         {
             new float[][] { //0 (50) plains
             //terrain dark
-            new float[] {0.67F,0.96F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F}, //0
             //terrain mid
-            new float[] {0.67F,0.96F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F}, //1
             //terrain light
-            new float[] {0.67F,0.96F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F}, //2
             //terrain highlight
-            new float[] {0.67F,0.96F,0.3F,1F},
+            new float[] {0.67F,0.96F,0.3F,1F}, //3
             },
             new float[][] { //1 (51) forest
             //terrain dark
-            new float[] {0.25F,0.8F,0.1F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F}, //4
             //terrain mid
-            new float[] {0.25F,0.8F,0.1F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F}, //5
             //terrain light
-            new float[] {0.25F,0.8F,0.1F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F}, //6
             //terrain highlight
-            new float[] {0.25F,0.8F,0.1F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F}, //7
             },
             new float[][] { //2 (52) desert
             //terrain dark
-            new float[] {1.05F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F}, //8
             //terrain mid
-            new float[] {1.05F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F}, //9
             //terrain light
-            new float[] {1.05F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F}, //10
             //terrain highlight
-            new float[] {1.05F,0.9F,0.4F,1F},
+            new float[] {1.05F,0.9F,0.4F,1F}, //11
             },
             new float[][] { //3 (53) jungle
             //terrain dark
-            new float[] {0.0F,0.65F,0.4F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F}, //12
             //terrain mid
-            new float[] {0.0F,0.65F,0.4F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F}, //13
             //terrain light
-            new float[] {0.0F,0.65F,0.4F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F}, //14
             //terrain highlight
-            new float[] {0.0F,0.65F,0.4F,1F},
+            new float[] {0.0F,0.65F,0.4F,1F}, //15
             },
             new float[][] { //4 (54) hills
             //terrain dark
-            new float[] {0.95F,0.7F,0.35F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F}, //16
             //terrain mid
-            new float[] {0.95F,0.7F,0.35F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F}, //17
             //terrain light
-            new float[] {0.95F,0.7F,0.35F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F}, //18
             //terrain highlight
-            new float[] {0.95F,0.7F,0.35F,1F},
+            new float[] {0.95F,0.7F,0.35F,1F}, //19
             },
             new float[][] { //5 (55) mountains
             //terrain dark
-            new float[] {0.7F,0.8F,0.83F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F}, //20
             //terrain mid
-            new float[] {0.7F,0.8F,0.83F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F}, //21
             //terrain light
-            new float[] {0.7F,0.8F,0.83F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F}, //22
             //terrain highlight
-            new float[] {0.7F,0.8F,0.83F,1F},
+            new float[] {0.7F,0.8F,0.83F,1F}, //23
             },
             new float[][] { //6 (56) ruins
             //terrain dark
-            new float[] {0.7F,0.3F,0.65F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F}, //24
             //terrain mid
-            new float[] {0.7F,0.3F,0.65F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F}, //25
             //terrain light
-            new float[] {0.7F,0.3F,0.65F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F}, //26
             //terrain highlight
-            new float[] {0.7F,0.3F,0.65F,1F},
+            new float[] {0.7F,0.3F,0.65F,1F}, //27
             },
             new float[][] { //7 (57) tundra
             //terrain dark
-            new float[] {0.8F,1.2F,1.2F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F}, //28
             //terrain mid
-            new float[] {0.8F,1.2F,1.2F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F}, //29
             //terrain light
-            new float[] {0.8F,1.2F,1.2F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F}, //30
             //terrain highlight
-            new float[] {0.8F,1.2F,1.2F,1F},
+            new float[] {0.8F,1.2F,1.2F,1F}, //31
             },
             new float[][] { //8 (58) road
             //terrain dark
-            new float[] {0.65F,0.65F,0.65F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F}, //32
             //terrain mid
-            new float[] {0.65F,0.65F,0.65F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F}, //33
             //terrain light
-            new float[] {0.65F,0.65F,0.65F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F}, //34
             //terrain highlight
-            new float[] {0.65F,0.65F,0.65F,1F},
+            new float[] {0.65F,0.65F,0.65F,1F}, //35
             },
             new float[][] { //9 (59) river
             //terrain dark
-            new float[] {0.2F,0.35F,1.0F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F}, //36
             //terrain mid
-            new float[] {0.2F,0.35F,1.0F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F}, //37
             //terrain light
-            new float[] {0.2F,0.35F,1.0F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F}, //38
             //terrain highlight
-            new float[] {0.2F,0.35F,1.0F,1F},
+            new float[] {0.2F,0.35F,1.0F,1F}, //39
             },
             new float[][] { //10 (60) basement
             //terrain dark
-            new float[] {0.35F,0.35F,0.35F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F}, //40
             //terrain mid
-            new float[] {0.35F,0.35F,0.35F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F}, //41
             //terrain light
-            new float[] {0.35F,0.35F,0.35F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F}, //42
             //terrain highlight
-            new float[] {0.35F,0.35F,0.35F,1F},
+            new float[] {0.35F,0.35F,0.35F,1F}, //43
             },
             new float[][] { //11 (61) sea
             //terrain dark
-            new float[] {0.05F,0.45F,0.8F,1F},
+            new float[] {0.05F,0.45F,0.8F,1F}, //44
             //terrain mid
-            new float[] {0.05F,0.45F,0.8F,1F},
+            new float[] {0.05F,0.45F,0.8F,1F}, //45
             //terrain light
-            new float[] {0.05F,0.45F,0.8F,1F},
+            new float[] {0.05F,0.45F,0.8F,1F}, //46
             //terrain highlight
-            new float[] {0.05F,0.45F,0.8F,1F},
+            new float[] {0.05F,0.45F,0.8F,1F}, //47
             },
-            new float[][] { //12 (62) custom 0
+            new float[][] { //12 (62) custom 0 (brick red)
             //terrain dark
-            new float[] {1.0F,0.2F,-0.1F,1F},
+            new float[] {1.0F,0.2F,-0.1F,1F}, //48
             //terrain mid
-            new float[] {1.0F,0.2F,-0.1F,1F},
+            new float[] {1.0F,0.2F,-0.1F,1F}, //49
             //terrain light
-            new float[] {1.0F,0.2F,-0.1F,1F},
+            new float[] {1.0F,0.2F,-0.1F,1F}, //50
             //terrain highlight
-            new float[] {1.0F,0.2F,-0.1F,1F},
+            new float[] {1.0F,0.2F,-0.1F,1F}, //51
             },
-            new float[][] { //13 (63) custom 1
+            new float[][] { //13 (63) custom 1 (bright purple)
             //terrain dark
-            new float[] {1.05F,0.15F,0.95F,1F},
+            new float[] {1.05F,0.15F,0.95F,1F}, //52
             //terrain mid
-            new float[] {1.05F,0.15F,0.95F,1F},
+            new float[] {1.05F,0.15F,0.95F,1F}, //53
             //terrain light
-            new float[] {1.05F,0.15F,0.95F,1F},
+            new float[] {1.05F,0.15F,0.95F,1F}, //54
             //terrain highlight
-            new float[] {1.05F,0.15F,0.95F,1F},
+            new float[] {1.05F,0.15F,0.95F,1F}, //55
             },
-            new float[][] { //14 (64) custom 2
+            new float[][] { //14 (64) custom 2 (bright yellow)
             //terrain dark
-            new float[] {1.15F,1.1F,-0.1F,1F},
+            new float[] {1.15F,1.1F,-0.1F,1F}, //56
             //terrain mid
-            new float[] {1.15F,1.1F,-0.1F,1F},
+            new float[] {1.15F,1.1F,-0.1F,1F}, //57
             //terrain light
-            new float[] {1.15F,1.1F,-0.1F,1F},
+            new float[] {1.15F,1.1F,-0.1F,1F}, //58
             //terrain highlight
-            new float[] {1.15F,1.1F,-0.1F,1F},
+            new float[] {1.15F,1.1F,-0.1F,1F}, //59
             },
 
         };
