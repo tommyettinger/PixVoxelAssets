@@ -314,7 +314,7 @@ namespace AssetsPV
                         hilbert = HilbertCode2D(x, y);
                         for(int h = 0; h < changers.Length - 2; h += 3)
                         {
-                            if(hilbert % changers[h + 1] >= changers[h + 1] - changers[h + 2])
+                            if(hilbert % (changers[h + 1] * 5) >= (changers[h + 1] - changers[h + 2]) * 5)
                             {
 
                                 neo[x, y, 0] = (byte)(253 - changers[h] * 4);

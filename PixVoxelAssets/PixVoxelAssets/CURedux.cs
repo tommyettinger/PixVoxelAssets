@@ -1967,6 +1967,30 @@ namespace AssetsPV
             //20 sparks
             new float[] {0.65F,1.2F,0.5F,1F},
             },
+            //37 zombie
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.1F,0.25F,0.05F,1F},
+            //7 hair
+            new float[] {0.0F,0.2F,0.0F,1F},
+            //8 skin contrast
+            new float[] {0.4F,0.05F,-0.1F,1F},
+            //9 skin
+            new float[] {0.45F,0.57F,0.35F,1F},
+            //10 eyes shine
+            new float[] {1.4F,0.6F,0.4F,1F},
+            //11 eyes
+            new float[] {0.8F,0.15F,0.0F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {1.3F,1.2F,0.85F,1F},
+            },
         };
         public static int[]
             humanHighlights = new int[]
@@ -2673,7 +2697,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            /*
+            
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2694,7 +2718,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
-            */
+            
 
         }
 
@@ -2881,7 +2905,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            /*
+            
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2902,7 +2926,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
-            */
+            
         }
 
 

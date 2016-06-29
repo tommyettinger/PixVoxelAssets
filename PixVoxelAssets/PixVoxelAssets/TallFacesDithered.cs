@@ -6828,11 +6828,11 @@ namespace AssetsPV
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
+            int terrainPalette = CURedux.wspecies.Length * 8;
+            wcurrent = wrendered[terrainPalette];
 
-            wcurrent = wrendered[296];
-
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[296];
-            wditheredcurrent = wdithered[296];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[terrainPalette];
+            wditheredcurrent = wdithered[terrainPalette];
 
             for(int i = 0; i < 15; i++)
             {
@@ -6907,9 +6907,9 @@ namespace AssetsPV
                     Directory.CreateDirectory(altFolder + "Terrains");
                     Directory.CreateDirectory(altFolder + "TerrainsBlank");
                     PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains/" + nm + ".png", imi, true);
-                    WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[296]);
+                    WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette]);
                     PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank/" + nm + ".png", imi, true);
-                    WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                    WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
                 }
             }
             VoxelLogic.VisualMode = tmpVisual;
@@ -7042,12 +7042,12 @@ namespace AssetsPV
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain/" + name + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
-
+            int terrainPalette = CURedux.wspecies.Length * 8;
             //NORMAL WEATHER
-            wcurrent = wrendered[296];
+            wcurrent = wrendered[terrainPalette];
 
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[296];
-            wditheredcurrent = wdithered[296];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[terrainPalette];
+            wditheredcurrent = wdithered[terrainPalette];
 
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)).ToList(), 120, 120, 80);
@@ -7060,26 +7060,26 @@ namespace AssetsPV
 
                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[296]);
+                WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette]);
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[300]);
+                WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette+4]);
                 png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[301]);
+                WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette+5]);
                 png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
             }
 
             //RAINY WEATHER
-            wcurrent = wrendered[297];
+            wcurrent = wrendered[terrainPalette+1];
 
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[297];
-            wditheredcurrent = wdithered[297];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[terrainPalette+1];
+            wditheredcurrent = wdithered[terrainPalette+1];
 
             colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, (m.color != 0 && r.Next(15) == 0) ? 253 - 37 * 4 : m.color)).ToList(), 120, 120, 80);
 
@@ -7089,16 +7089,16 @@ namespace AssetsPV
 
                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[297]);
+                WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette+1]);
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Rain_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
             }
 
             //SNOWY WEATHER
-            wcurrent = wrendered[298];
+            wcurrent = wrendered[terrainPalette+2];
 
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[298];
-            wditheredcurrent = wdithered[298];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[terrainPalette+2];
+            wditheredcurrent = wdithered[terrainPalette+2];
 
             colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, (m.color != 0 && r.Next(5) != 0) ? 253 - 31 * 4 : m.color)).ToList(), 120, 120, 80);
 
@@ -7108,16 +7108,16 @@ namespace AssetsPV
 
                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[298]);
+                WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette+2]);
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Snow_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
             }
 
             //TOXIC WEATHER
-            wcurrent = wrendered[299];
+            wcurrent = wrendered[terrainPalette+3];
 
-            VoxelLogic.wcolors = VoxelLogic.wpalettes[299];
-            wditheredcurrent = wdithered[299];
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[terrainPalette+3];
+            wditheredcurrent = wdithered[terrainPalette+3];
 
             colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, (m.color != 0 && r.Next(20) == 0) ? 253 - 52 * 4 : (r.Next(10) == 0) ? 0 : m.color)).ToList(), 120, 120, 80);
 
@@ -7127,9 +7127,9 @@ namespace AssetsPV
 
                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(faces, 296, 0, 0, 1, true, true), simplepalettes[299]);
+                WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette+3]);
                 PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank2/" + name + "_Huge_face" + dir + "_Poison_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(faces, 296, 0, 0, 1, true, true), basepalette);
+                WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
             }
 
 
