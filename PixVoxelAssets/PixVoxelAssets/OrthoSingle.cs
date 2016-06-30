@@ -52,7 +52,7 @@ namespace AssetsPV
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0,  0,  0,  0, 1F}};
 
-            System.Drawing.Imaging.ColorMatrix colorMatrix = new System.Drawing.Imaging.ColorMatrix(colorMatrixElements);
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
 
             imageAttributes.SetColorMatrix(
                colorMatrix,
@@ -72,7 +72,7 @@ namespace AssetsPV
 
                     if(VoxelLogic.wpalettes[p][current_color][3] == 0F)
                     {
-                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
+                        colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
@@ -81,7 +81,7 @@ namespace AssetsPV
                     }
                     else if(!VoxelLogic.terrainPalettes.Contains(p) && current_color == 25)
                     {
-                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
+                        colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0.22F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.251F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.31F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
@@ -90,7 +90,7 @@ namespace AssetsPV
                     }
                     else if(VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.eraser_alpha)
                     {
-                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
+                        colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
    new float[] {0,  0,  0,  0, 0},
@@ -99,7 +99,7 @@ namespace AssetsPV
                     }
                     else
                     {
-                        colorMatrix = new System.Drawing.Imaging.ColorMatrix(new float[][]{
+                        colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0.235F+VoxelLogic.wpalettes[p][current_color][0],  0,  0,  0, 0},
    new float[] {0,  0.26F+VoxelLogic.wpalettes[p][current_color][1],  0,  0, 0},
    new float[] {0,  0,  0.30F+VoxelLogic.wpalettes[p][current_color][2],  0, 0},
@@ -4501,7 +4501,7 @@ namespace AssetsPV
             string tmpVisual = VoxelLogic.VisualMode;
             VoxelLogic.VisualMode = "None";
 
-            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain3/" + kind + "_Huge_W.vox", FileMode.Open));
+            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain3/" + (kind == "Ordered" ? kind : "Normal") + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
             int terrainPalette = CURedux.wspecies.Length * 8;
 
@@ -5141,41 +5141,55 @@ namespace AssetsPV
             */
 
             renderTerrainSimple("Plains", "Normal", new byte[] {
-                1, 28, 1,
+                1, 30, 1,
                 58, 29, 3,
-                0, 13, 2,
-                7, 25, 6 }, 1, 0, 2);
+                0, 13, 1,
+                7, 25, 3 }, 1, 0, 2);
             renderTerrainSimple("Forest", "Rough", new byte[] {
-                16, 29, 8,
-                4, 23, 11 }, 5, 4, 13);
+                4, 19, 11,
+                13, 29, 5,
+                16, 23, 7 }, 5, 4, 13);
             renderTerrainSimple("Desert", "Normal", new byte[] {
+                10, 19, 1,
+                8, 37, 2,
                 11, 29, 3 }, 9, 8, 10);
             renderTerrainSimple("Jungle", "Rough", new byte[] {
-                8, 48, 12,
-                53, 35, 2,
-                56, 29, 2,
-                37, 207, 28 }, 13, 12, 14);
+                12, 23, 12,
+                16, 43, 8,
+                52, 31, 2,
+                56, 27, 2,
+                36, 69, 13 }, 13, 12, 14);
             renderTerrainSimple("Hill", "High", new byte[] {
-                16, 27, 6 }, 17, 16, 18);
+                16, 27, 7,
+                18, 34, 2, }, 17, 16, 18);
             renderTerrainSimple("Mountain", "High", new byte[] {
-                20, 71, 10,
-                30, 29, 7, }, 21, 20, 22);
-            renderTerrainSimple("Road", "Ordered", new byte[] {}, 32, 32, 56);
+                20, 27, 9,
+                22, 31, 3,
+                30, 41, 4, }, 21, 20, 22);
+            renderTerrainSimple("Road", "Ordered", new byte[] {
+                32, 5, 2}, 33, 32, 56);
             renderTerrainSimple("Tundra", "Rough", new byte[] {
-                29, 15, 7,
-                28, 21, 5 }, 30, 29, 31);
+                30, 13, 5,
+                29, 17, 7,
+                28, 21, 5 }, 31, 29, 30);
             renderTerrainSimple("Ruins", "Rough", new byte[] {
-                26, 27, 11,
+                24, 15, 4,
+                48, 12, 2,
+                26, 26, 9,
                 50, 39, 5,
-                52, 223, 18 }, 25, 24, 48);
+                52, 133, 13 }, 25, 24, 48);
             renderTerrainSimple("River", "Water", new byte[] {
-                45, 39, 6 }, 37, 36, 38);
+                36, 7, 2,
+                38, 13, 2,
+                45, 39, 7,
+                4, 51, 2 }, 37, 36, 38);
             renderTerrainSimple("Ocean", "Water", new byte[] {
-                47, 43, 3,
-                44, 49, 9, }, 45, 44, 46);
+                46, 23, 5,
+                47, 21, 4,
+                44, 29, 7, }, 45, 44, 46);
 
             makeSimpleTiling();
-
+            
             processUnitLargeWMilitary("Zombie_Infantry");
             processUnitLargeWMilitary("Zombie_Infantry_P");
             processUnitLargeWMilitary("Zombie_Infantry_S");
@@ -5190,6 +5204,16 @@ namespace AssetsPV
             processUnitLargeWMilitary("Zombie_Tank_S");
             processUnitLargeWMilitary("Zombie_Tank_T");
 
+            processUnitLargeWMilitary("Zombie_Truck");
+            processUnitLargeWMilitary("Zombie_Truck_P");
+            processUnitLargeWMilitary("Zombie_Truck_S");
+            processUnitLargeWMilitary("Zombie_Truck_T");
+
+            processUnitLargeWMilitary("Zombie_Artillery");
+            processUnitLargeWMilitary("Zombie_Artillery_P");
+            processUnitLargeWMilitary("Zombie_Artillery_S");
+            processUnitLargeWMilitary("Zombie_Artillery_T");
+            
             /*
             
             processUnitLargeWMilitary("Infantry");

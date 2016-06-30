@@ -2513,12 +2513,13 @@ namespace AssetsPV
             {
                 for(int p = 0; p < wpc; p++)
                 {
-                    wpalettes[p][34] = wpalettes[p][9].Replicate();
+                    if(p / 8 != 37)
+                        wpalettes[p][34] = wpalettes[p][9].Replicate();
                 }
             }
 
-            VoxelLogic.terrainPalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
-            VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
+            VoxelLogic.terrainPalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5 };
+            VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3, wpc + 4, wpc + 5 };
             VoxelLogic.wcolorcount = wpalettes[0].Length;
             VoxelLogic.wcolors = wpalettes[0].Replicate();
             wpalettes = wpalettes.Concat(new float[][][] {
@@ -2527,9 +2528,9 @@ namespace AssetsPV
             for(int p = 0; p < wterrains.Length; p++)
             {
                 wpalettes[wpc][0 + p * 4] = wterrains[p][0].Replicate();
-                wpalettes[wpc][0 + p * 4][0] -= 0.4f;
-                wpalettes[wpc][0 + p * 4][1] -= 0.4f;
-                wpalettes[wpc][0 + p * 4][2] -= 0.4f;
+                wpalettes[wpc][0 + p * 4][0] -= 0.3f;
+                wpalettes[wpc][0 + p * 4][1] -= 0.3f;
+                wpalettes[wpc][0 + p * 4][2] -= 0.3f;
                 wpalettes[wpc][0 + p * 4][3] = 1F;
 
                 wpalettes[wpc][1 + p * 4] = wterrains[p][1].Replicate();
@@ -2539,15 +2540,15 @@ namespace AssetsPV
                 wpalettes[wpc][1 + p * 4][3] = 1F;
 
                 wpalettes[wpc][2 + p * 4] = wterrains[p][2].Replicate();
-                wpalettes[wpc][2 + p * 4][0] -= 0.1f;
-                wpalettes[wpc][2 + p * 4][1] -= 0.1f;
-                wpalettes[wpc][2 + p * 4][2] -= 0.1f;
+                wpalettes[wpc][2 + p * 4][0] -= 0.2f;
+                wpalettes[wpc][2 + p * 4][1] -= 0.2f;
+                wpalettes[wpc][2 + p * 4][2] -= 0.2f;
                 wpalettes[wpc][2 + p * 4][3] = 1F;
 
                 wpalettes[wpc][3 + p * 4] = wterrains[p][3].Replicate();
-                wpalettes[wpc][3 + p * 4][0] += 0.15f;
-                wpalettes[wpc][3 + p * 4][1] += 0.15f;
-                wpalettes[wpc][3 + p * 4][2] += 0.15f;
+                wpalettes[wpc][3 + p * 4][0] -= 0.1f;
+                wpalettes[wpc][3 + p * 4][1] -= 0.1f;
+                wpalettes[wpc][3 + p * 4][2] -= 0.1f;
                 wpalettes[wpc][3 + p * 4][3] = 1F;
 
 
@@ -2625,15 +2626,15 @@ namespace AssetsPV
                 wpalettes[wpc + 3][3 + p * 4][2] *= 1.25f;
                 wpalettes[wpc + 3][3 + p * 4][3] = 1F;
 
-                wpalettes[wpc + 4][0 + p * 4] = multiplyColor(wpalettes[wpc][0 + p * 4].Replicate(), -1, 1.1f, 0.6f);
-                wpalettes[wpc + 4][1 + p * 4] = multiplyColor(wpalettes[wpc][1 + p * 4].Replicate(), -1, 1.1f, 0.6f);
-                wpalettes[wpc + 4][2 + p * 4] = multiplyColor(wpalettes[wpc][2 + p * 4].Replicate(), -1, 1.1f, 0.6f);
-                wpalettes[wpc + 4][3 + p * 4] = multiplyColor(wpalettes[wpc][3 + p * 4].Replicate(), -1, 1.1f, 0.6f);
+                wpalettes[wpc + 4][0 + p * 4] = multiplyColor(wpalettes[wpc][0 + p * 4].Replicate(), -1, 1.1f, 0.65f);
+                wpalettes[wpc + 4][1 + p * 4] = multiplyColor(wpalettes[wpc][1 + p * 4].Replicate(), -1, 1.1f, 0.65f);
+                wpalettes[wpc + 4][2 + p * 4] = multiplyColor(wpalettes[wpc][2 + p * 4].Replicate(), -1, 1.1f, 0.65f);
+                wpalettes[wpc + 4][3 + p * 4] = multiplyColor(wpalettes[wpc][3 + p * 4].Replicate(), -1, 1.1f, 0.65f);
                 
-                wpalettes[wpc + 5][0 + p * 4] = multiplyColor(wpalettes[wpc][0 + p * 4].Replicate(), -1, 0.7f, 1.3f);
-                wpalettes[wpc + 5][1 + p * 4] = multiplyColor(wpalettes[wpc][1 + p * 4].Replicate(), -1, 0.7f, 1.3f);
-                wpalettes[wpc + 5][2 + p * 4] = multiplyColor(wpalettes[wpc][2 + p * 4].Replicate(), -1, 0.7f, 1.3f);
-                wpalettes[wpc + 5][3 + p * 4] = multiplyColor(wpalettes[wpc][3 + p * 4].Replicate(), -1, 0.7f, 1.3f);
+                wpalettes[wpc + 5][0 + p * 4] = multiplyColor(wpalettes[wpc][0 + p * 4].Replicate(), -1, 0.75f, 1.25f);
+                wpalettes[wpc + 5][1 + p * 4] = multiplyColor(wpalettes[wpc][1 + p * 4].Replicate(), -1, 0.75f, 1.25f);
+                wpalettes[wpc + 5][2 + p * 4] = multiplyColor(wpalettes[wpc][2 + p * 4].Replicate(), -1, 0.75f, 1.25f);
+                wpalettes[wpc + 5][3 + p * 4] = multiplyColor(wpalettes[wpc][3 + p * 4].Replicate(), -1, 0.75f, 1.25f);
 
             }
             
