@@ -10026,6 +10026,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static List<MagicaVoxelData> AssembleZombieHeadToModelW(BinaryReader body)
         {
+            r = new Random(0xFEEDABE);
             BinaryReader hbin = new BinaryReader(File.Open("CU2/Zombie_Head_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
@@ -10055,7 +10056,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             if(bodyPlug.color == 0)
             {
-                bod.RemoveAll(mvd => mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
+                bod.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
                 return bod;
             }
             foreach(MagicaVoxelData mvd in head)
@@ -10082,7 +10083,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
             bod.AddRange(working);
-            bod.RemoveAll(mvd => mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
+            bod.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
             return bod;
 
         }

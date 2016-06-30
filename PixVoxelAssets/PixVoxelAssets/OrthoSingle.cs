@@ -1687,7 +1687,7 @@ namespace AssetsPV
                         Directory.CreateDirectory(folder);
 
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin).ToArray() : VoxelLogic.AssembleHeadToModelW(bin).ToArray();
+                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin).ToArray() : VoxelLogic.FromMagicaRaw(bin).ToArray();
                         List<MagicaVoxelData>[] firing;
                         if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                         {
