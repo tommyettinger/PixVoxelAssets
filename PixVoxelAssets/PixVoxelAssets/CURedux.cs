@@ -1991,6 +1991,54 @@ namespace AssetsPV
             //20 sparks
             new float[] {1.3F,1.2F,0.85F,1F},
             },
+            //38 divine light
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {0.75F,0.75F,0.75F,1F},
+            //7 hair
+            new float[] {0.75F,0.75F,0.75F,1F},
+            //8 skin contrast
+            new float[] {0.55F,0.55F,0.55F,1F},
+            //9 skin
+            new float[] {0.75F,0.75F,0.75F,1F},
+            //10 eyes shine
+            new float[] {0.85F,0.95F,1.4F,1F},
+            //11 eyes
+            new float[] {0.2F,0.24F,0.28F,1F},
+            //17 smoke
+            new float[] {0.65F,0.65F,0.65F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.05F,1.05F,1.05F,1F},
+            //19 orange fire
+            new float[] {0.9F,0.9F,0.9F,1F},
+            //20 sparks
+            new float[] {1.2F,1.2F,1.2F,1F},
+            },
+            //39 divine shadow
+            new float[][]
+            {
+            //6 hair contrast
+            new float[] {-0.05F,-0.05F,-0.05F,1F},
+            //7 hair
+            new float[] {-0.05F,-0.05F,-0.05F,1F},
+            //8 skin contrast
+            new float[] {0.05F,0.05F,0.05F,1F},
+            //9 skin
+            new float[] {-0.05F,-0.05F,-0.05F,1F},
+            //10 eyes shine
+            new float[] {0.7F,0.1F,0.02F,1F},
+            //11 eyes
+            new float[] {0.6F,0.06F,-0.02F,1F},
+            //17 smoke
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
+            //18 yellow fire
+            new float[] {1.25F,1.1F,0.45F,1F},
+            //19 orange fire
+            new float[] {1.25F,0.7F,0.3F,1F},
+            //20 sparks
+            new float[] {0.8F,0.16F,0.1F,1F},
+            },
         };
         public static int[]
             humanHighlights = new int[]
