@@ -89,7 +89,7 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
-            new float[] {0.27F,0.17F,0.07F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
             new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
@@ -216,13 +216,13 @@ namespace AssetsPV
             //16 inner shadow
             new float[] {0.3F,0.3F,0.29F,1F},
             //17 smoke
-            new float[] {0.15F,0.27F,0.33F,waver_alpha},
+            new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
-            new float[] {0.55F,1.3F,0.6F,1F},
+            new float[] {1.25F,1.1F,0.45F,1F},
             //19 orange fire
-            new float[] {0.52F,1.1F,0.4F,1F},
+            new float[] {1.25F,0.7F,0.3F,1F},
             //20 sparks
-            new float[] {0.8F,1.3F,1.15F,1F},
+            new float[] {1.3F,1.2F,0.85F,1F},
             //21 glow frame 0
             new float[] {0.3F,1.1F,0.55F,1F},
             //22 glow frame 1

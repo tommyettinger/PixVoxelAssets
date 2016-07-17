@@ -18406,7 +18406,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         return 1;
                     }
-                case 16: return 24;
+                //case 16: return 24;
                 default: return 16;
             }
         }

@@ -306,7 +306,7 @@ namespace AssetsPV
             {
                 if(mvd.x >= xSize || mvd.y >= ySize || mvd.z >= zSize)
                     continue;
-                if(!(mvd.color == VoxelLogic.clear || (VoxelLogic.VisualMode == "CU" && (mvd.color == CURedux.inner_shadow || mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
+                if(!(mvd.color == VoxelLogic.clear || (VoxelLogic.VisualMode == "CU" && (/* mvd.color == CURedux.inner_shadow || */mvd.color == CURedux.emitter0 || mvd.color == CURedux.trail0
                      || mvd.color == CURedux.emitter1 || mvd.color == CURedux.trail1)))
                      && (data[mvd.x, mvd.y, mvd.z] == 0 || data[mvd.x, mvd.y, mvd.z] == shadowColor))
                     data[mvd.x, mvd.y, mvd.z] = mvd.color;
@@ -597,6 +597,7 @@ namespace AssetsPV
             int xSize = faces.GetLength(0), ySize = faces.GetLength(1), zSize = faces.GetLength(2);
             FaceVoxel[,,] faces2 = new FaceVoxel[xSize, ySize, zSize];
             byte water = 253 - 27 * 4, mvd;
+            bool xup, xdown, yup, ydown, zup, zdown, similar;
             for(int z = zSize - 1; z >= 0; z--)
             {
                 for(int x = 0; x < xSize - 1; x++)
@@ -615,17 +616,17 @@ namespace AssetsPV
                         }
                         else
                         {
-                            bool xup = faces[x + 1, y, z] != null && faces[x + 1, y, z].vox.color != water,
-                                 xdown = faces[x - 1, y, z] != null && faces[x - 1, y, z].vox.color != water,
-                                 yup = faces[x, y + 1, z] != null && faces[x, y + 1, z].vox.color != water,
-                                 ydown = faces[x, y - 1, z] != null && faces[x, y - 1, z].vox.color != water,
-                                 zup = faces[x, y, z + 1] != null && faces[x, y, z + 1].vox.color != water,
-                                 zdown = faces[x, y, z - 1] != null && faces[x, y, z - 1].vox.color != water;
+                            xup = faces[x + 1, y, z] != null && faces[x + 1, y, z].vox.color != water;
+                            xdown = faces[x - 1, y, z] != null && faces[x - 1, y, z].vox.color != water;
+                            yup = faces[x, y + 1, z] != null && faces[x, y + 1, z].vox.color != water;
+                            ydown = faces[x, y - 1, z] != null && faces[x, y - 1, z].vox.color != water;
+                            zup = faces[x, y, z + 1] != null && faces[x, y, z + 1].vox.color != water;
+                            zdown = faces[x, y, z - 1] != null && faces[x, y, z - 1].vox.color != water;
                             if(!(xup || xdown || yup || ydown || zup || zdown))
                                 continue;
 
                             mvd = NearbyFilled(faces, x, y, z);
-                            bool similar = allSameNearby(faces, x, y, z);
+                            similar = allSameNearby(faces, x, y, z);
                             if(!regardless && !similar && ImportantNeighborhood(faces, x, y, z))
                             {
                                 continue;
@@ -676,7 +677,7 @@ namespace AssetsPV
                             else if(zup)
                             {
 
-                                mvd = NearbyFilled(faces, x, y, z);
+                                // mvd = NearbyFilled(faces, x, y, z);
 
                                 if(!xdown && yup && !xup && !ydown)
                                 {
@@ -714,9 +715,8 @@ namespace AssetsPV
                             else if(xdown)
                             {
 
-                                mvd = NearbyFilled(faces, x, y, z);
-
-
+                                // mvd = NearbyFilled(faces, x, y, z);
+                                
                                 if(yup && !xup && !ydown) // && xdown
                                 {
                                     faces2[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)(z), color = mvd }, Slope.BrightDim);
