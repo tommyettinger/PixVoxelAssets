@@ -250,7 +250,7 @@ namespace AssetsPV
             //33 alternate paint
             new float[] {0.3F,0.9F,0.75F,1F},
             //34 gore
-            new float[] {0.5F,0.8F,-0.2F,1F},
+            new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
             new float[] {0.3F,1F,0.9F,1F},
             //36 rotor frame 0 contrast
@@ -2563,6 +2563,8 @@ namespace AssetsPV
                 {
                     if(p / 8 != 37)
                         wpalettes[p][34] = wpalettes[p][9].Replicate();
+                    else
+                        wpalettes[p][34] = new float[] { 0.3F, 0.55F, 0.05F, 1F };
                 }
             }
 
@@ -2746,7 +2748,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2767,6 +2769,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
+            */
             
 
         }

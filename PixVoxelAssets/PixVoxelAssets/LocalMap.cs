@@ -344,7 +344,7 @@ namespace AssetsPV
                 takenLocations[i, Height - 1] = 1;
                 edges.Add(new Position(i, Height - 1));
 
-                List<Position> edge = Position.Nearby(i, Math.Abs(Height / 2 - i), Width, Height, 1+((i == 0 || i == Width - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                List<Position> edge = Position.Nearby(i, Math.Abs(Height / 2 - i), Width, Height, 1+((i == 0 || i == Width - 1) ? 4 : Math.Min(r.Next(3), r.Next(3)) + 1));
                 foreach(Position pos in edge)
                 {
                     for(int n = pos.y; n >= 0; n--)
@@ -353,7 +353,7 @@ namespace AssetsPV
                         takenLocations[pos.x, n] = 1;
                     }
                 }
-                edge = Position.Nearby(i, Height - 1 - Math.Abs(Height / 2 - i), Width, Height, 1+((i == 0 || i == Width - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                edge = Position.Nearby(i, Height - 1 - Math.Abs(Height / 2 - i), Width, Height, 1+((i == 0 || i == Width - 1) ? 4 : Math.Min(r.Next(3), r.Next(3)) + 1));
                 foreach(Position pos in edge)
                 {
                     for(int n = pos.y; n < Height; n++)
@@ -373,7 +373,7 @@ namespace AssetsPV
                 takenLocations[Width - 1, j] = 1;
                 edges.Add(new Position(Width - 1, j));
 
-                List<Position> edge = Position.Nearby(Math.Abs(Width / 2 - j), j, Width, Height, 1+((j == 0 || j == Height - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                List<Position> edge = Position.Nearby(Math.Abs(Width / 2 - j), j, Width, Height, 1+((j == 0 || j == Height - 1) ? 4 : Math.Min(r.Next(3), r.Next(3)) + 1));
                 foreach(Position pos in edge)
                 {
                     for(int n = pos.x; n >= 0; n--)
@@ -382,7 +382,7 @@ namespace AssetsPV
                         takenLocations[n, pos.y] = 1;
                     }
                 }
-                edge = Position.Nearby(Width - 1 - Math.Abs(Width / 2 - j), j, Width, Height, 1 + ((j == 0 || j == Height - 1) ? 4 : Math.Min(r.Next(3), r.Next(3))));
+                edge = Position.Nearby(Width - 1 - Math.Abs(Width / 2 - j), j, Width, Height, 1 + ((j == 0 || j == Height - 1) ? 4 : Math.Min(r.Next(3), r.Next(3)) + 1));
                 foreach(Position pos in edge)
                 {
                     for(int n = pos.x; n < Width; n++)
@@ -395,15 +395,15 @@ namespace AssetsPV
             List<Position> rivers = new List<Position>();
             
 
-            rivers.AddRange(MakeSoftPath(new Position(10, 4), new Position(26, 19)));
+            rivers.AddRange(MakeSoftPath(new Position(11, 6), new Position(25, 20)));
             foreach(Position t in rivers)
             {
                 Land[t.x, t.y] = 9;
                 takenLocations[t.x, t.y] = 2;
             }
-            int numMountains = r.Next(Width / 4, Width);
+            int numMountains = r.Next(Width / 4, Width + Width / 2);
             MakeMountains(numMountains);
-            /*
+            
             List<Position> roads = MakeHardPath(RandomSpot(), RandomSpot());
             foreach(Position t in roads)
             {
@@ -416,15 +416,40 @@ namespace AssetsPV
                 Land[t.x, t.y] = 8;
                 takenLocations[t.x, t.y] = 4;
             }
-            */
+            
             int extreme = dominantTerrain;
-
+            
             for(int v = 0; v < 3; v++)
             {
                 for(int i = 1; i < Width - 1; i++)
                 {
                     for(int j = 2; j < Height - 2; j++)
                     {
+                        if(i % 6 == 0 && j % 6 == 0)
+                        {
+                            switch(r.Next(7))
+                            {
+                                case 0:
+                                    extreme = 3;
+                                    break;
+                                case 1:
+                                    extreme = 2;
+                                    break;
+                                case 2:
+                                    extreme = 2;
+                                    break;
+                                case 3:
+                                    extreme = 1;
+                                    break;
+                                case 4:
+                                    extreme = 1;
+                                    break;
+                                default:
+                                    extreme = dominantTerrain;
+                                    break;
+                            }
+                        }
+
 
                         List<Position> near = new Position(i, j).Nearby(Width, Height, 2);
                         List<int> adj = new List<int>(12);
