@@ -94,6 +94,19 @@ namespace AssetsPV
 7, 6,
 1, 3, 3, 4, 3,
 0,0,0,0,0,0,0,
+            0,0,0,},
+            AltVersions = {
+2, 2, 2, 2,
+2, 2, 2,
+1, 1, 1, 1,
+1, 1, 1, 1,
+0, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+1, 1,
+2, 2, 2, 2, 2,
+0,0,0,0,0,0,0,
             0,0,0,};
         public static int[][] CurrentWeapons = {
 new int[] {1, -1}, new int[] {0, 5}, new int[] {1, -1}, new int[] {0, 0},
@@ -9964,9 +9977,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         }
 
-        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body)
+        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body, bool alternate = false)
         {
-            BinaryReader hbin = new BinaryReader(File.Open("CU2/" + TallFacesDithered.addon + "Head_Large_W.vox", FileMode.Open));
+            BinaryReader hbin = new BinaryReader(File.Open("CU2/" + TallFacesDithered.addon + "Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
             hbin.Close();
@@ -10023,10 +10036,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             return bod;
         }
 
-        public static List<MagicaVoxelData> AssembleZombieHeadToModelW(BinaryReader body)
+        public static List<MagicaVoxelData> AssembleZombieHeadToModelW(BinaryReader body, bool alternate = false)
         {
             r = new Random(0xFEEDABE);
-            BinaryReader hbin = new BinaryReader(File.Open("CU2/Zombie_Head_Large_W.vox", FileMode.Open));
+            BinaryReader hbin = new BinaryReader(File.Open("CU2/Zombie_Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
             hbin.Close();
@@ -10081,8 +10094,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if((254 - working[i].color) % 4 == 0)
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
-            bod.AddRange(working);
             bod.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
+            bod.AddRange(working);
             return bod;
 
         }
