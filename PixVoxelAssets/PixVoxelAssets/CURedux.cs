@@ -4642,7 +4642,7 @@ namespace AssetsPV
                 extra[f] = new List<MagicaVoxelData>(160);
                 missile[f] = new List<MagicaVoxelData>(160);
 
-                if(f > 0)
+                if(f > 0 && !isExploding)
                 {
                     for(int i = 0; i < missile[f - 1].Count; i++)
                     {
