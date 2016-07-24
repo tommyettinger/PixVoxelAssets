@@ -10101,6 +10101,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static List<MagicaVoxelData> Zombify(BinaryReader bin)
         {
+            r = new Random(0xFEEDABE);
             List<MagicaVoxelData> voxels = FromMagicaRaw(bin);
             voxels.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
             return voxels;
