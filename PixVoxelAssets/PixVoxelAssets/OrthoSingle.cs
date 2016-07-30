@@ -16,6 +16,9 @@ namespace AssetsPV
     class OrthoSingle
     {
         public const bool RENDER = true;
+        public static bool USE_PALETTE = true;
+        public static bool EFFECTS = false;
+
         public static string addon = TallFacesDithered.addon; // "" // "Zombie_" // "Divine_"
         public const int multiplier = 1, bonus = 1, vwidth = 1, vheight = 1, top = 0,
             widthLarge = 60 * multiplier * vwidth + 2, heightLarge = (60 + 60 / 2) * multiplier * (vheight - top) + 2,
@@ -24,7 +27,7 @@ namespace AssetsPV
             widthHuge = 120 * multiplier * vwidth + 2, heightHuge = (80 + 120/2) * multiplier * (vheight - top) + 2,
             widthMassive = 160 * multiplier * vwidth + 2, heightMassive = (120 + 160/2) * multiplier * (vheight - top) + 2;
         public static Random r = new Random(0x1337BEEF);
-        public static string altFolder = "";
+        public static string altFolder = "", blankFolder = "";
 
         private static FileStream offbin = new FileStream("offsets3dither.bin", FileMode.OpenOrCreate);
         private static BinaryWriter offsets = new BinaryWriter(offbin);
@@ -333,6 +336,73 @@ namespace AssetsPV
         {
             if(VoxelLogic.VisualMode == "CU")
             {
+                Directory.CreateDirectory(blankFolder + "/animation_frames/");
+                Directory.CreateDirectory(blankFolder + "/standing_frames/");
+                Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/");
+                foreach(string u in VoxelLogic.CurrentUnits)
+                {
+                    Directory.CreateDirectory(blankFolder + "/animation_frames/" + u);
+                    Directory.CreateDirectory(blankFolder + "/standing_frames/" + u);
+                }
+                foreach(string u in VoxelLogic.WeaponTypes)
+                {
+                    Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/" + u);
+                }
+                Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/Explosion");
+                for(int p = 0; p < 8 * (CURedux.wspecies.Length - 2); p++)
+                {
+                    foreach(string u in VoxelLogic.CurrentUnits)
+                    {
+                        Directory.CreateDirectory(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/color" + p + "/" + u);
+                        Directory.CreateDirectory(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/color" + p + "/" + u);
+                    }
+                    foreach(string u in VoxelLogic.WeaponTypes)
+                    {
+                        if(p < 8 || (p >= 208 && p < 37 * 8))
+                            Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/" + u);
+                        if(p >= 38 * 8)
+                            Directory.CreateDirectory(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/" + u);
+                    }
+                    if(p < 8 || (p >= 208 && p < 37 * 8))
+                        Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
+                    if(p >= 38 * 8)
+                        Directory.CreateDirectory(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
+                    //Directory.CreateDirectory("frames/" + altFolder + "color" + p);
+                }
+            }
+            wrendered = storeColorCubesWBold();
+            simplepalettes = new byte[wrendered.Length][][];
+            int colorcount = Math.Min(VoxelLogic.wpalettes[0].Length, 63);
+            for(int i = 0; i < simplepalettes.Length; i++)
+            {
+                simplepalettes[i] = new byte[256][];
+                for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
+                {
+                    simplepalettes[i][j] = new byte[] { wrendered[i][c][2], wrendered[i][c][1], wrendered[i][c][0] };
+                    simplepalettes[i][j - 1] = new byte[] { wrendered[i][c][2 + 4 * vwidth], wrendered[i][c][1 + 4 * vwidth], wrendered[i][c][0 + 4 * vwidth] };
+                    simplepalettes[i][j - 2] = new byte[] { wrendered[i][c][2 + 8 * vwidth], wrendered[i][c][1 + 8 * vwidth], wrendered[i][c][0 + 8 * vwidth] };
+                    simplepalettes[i][j - 3] = new byte[] { wrendered[i][c][2 + 12 * vwidth], wrendered[i][c][1 + 12 * vwidth], wrendered[i][c][0 + 12 * vwidth] };
+                }
+                simplepalettes[i][0] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][1] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][254] = new byte[] { 0, 0, 0 };
+                simplepalettes[i][255] = new byte[] { 0, 0, 0 };
+            }
+            basepalette = new byte[256][];
+            for(byte i = 1; i < 255; i++)
+            {
+                basepalette[i] = new byte[] { i, i, i };
+            }
+
+            wdithered = storeIndexCubesW();
+            wcurrent = wrendered[0];
+            wditheredcurrent = wdithered[0];
+        }
+        /*
+        public static void InitializeWPalette()
+        {
+            if(VoxelLogic.VisualMode == "CU")
+            {
                 for(int p = 0; p < 8 * CURedux.wspecies.Length; p++)
                 {
                     Directory.CreateDirectory(altFolder + "color" + p);
@@ -352,11 +422,6 @@ namespace AssetsPV
                     simplepalettes[i][j - 1] = new byte[] { wrendered[i][c][2 + 4 * vwidth], wrendered[i][c][1 + 4 * vwidth], wrendered[i][c][0 + 4 * vwidth] };
                     simplepalettes[i][j - 2] = new byte[] { wrendered[i][c][2 + 8 * vwidth], wrendered[i][c][1 + 8 * vwidth], wrendered[i][c][0 + 8 * vwidth] };
                     simplepalettes[i][j - 3] = new byte[] { wrendered[i][c][2 + 12 * vwidth], wrendered[i][c][1 + 12 * vwidth], wrendered[i][c][0 + 12 * vwidth] };
-                    /*
-                    simplepalettes[i][j - 1] = new byte[] { wrendered[i][c][2 + 8 * vwidth], wrendered[i][c][1 + 8 * vwidth], wrendered[i][c][0 + 8 * vwidth] };
-                    simplepalettes[i][j - 2] = new byte[] { wrendered[i][c][2 + 12 * vwidth], wrendered[i][c][1 + 12 * vwidth], wrendered[i][c][0 + 12 * vwidth] };
-                    simplepalettes[i][j - 3] = new byte[] { wrendered[i][c][2 + 20 * vwidth], wrendered[i][c][1 + 20 * vwidth], wrendered[i][c][0 + 20 * vwidth] };
-                    */
                 }
                 simplepalettes[i][0] = new byte[] { 0, 0, 0 };
                 simplepalettes[i][1] = new byte[] { 0, 0, 0 };
@@ -373,7 +438,7 @@ namespace AssetsPV
             wcurrent = wrendered[0];
             wditheredcurrent = wdithered[0];
         }
-
+        */
         public static void WritePNG(PngWriter png, byte[][] b, byte[][] palette)
         {
             png.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
@@ -389,7 +454,191 @@ namespace AssetsPV
             png.WriteRowsByte(b);
             png.End();
         }
+        public static void AlterPNGPalette(string input, string output, byte[][][] palettes)
+        {
+            PngReader pngr = FileHelper.CreatePngReader(input);
+            ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
+            ImageInfo imi = pngr.ImgInfo;
 
+            pngr.End();
+            int p = (addon == "Divine_") ? 38 * 8 : 0;
+            for(; p < 8 * (CURedux.wspecies.Length - 2); p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
+
+                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
+                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                else
+                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
+
+                PngChunkPLTE pal;
+                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
+                    pal = pngw.GetMetadata().CreatePLTEChunk();
+                else
+                    pal = pngw.GetMetadata().GetPLTE();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+
+                if(!USE_PALETTE)
+                    return;
+            }
+        }
+        public static void AlterPNGPaletteZombie(string input, string output, byte[][][] palettes)
+        {
+            PngReader pngr = FileHelper.CreatePngReader(input);
+            ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
+            ImageInfo imi = pngr.ImgInfo;
+
+            pngr.End();
+
+            //foreach(int p in new int[] { 2,78})
+            for(int p = 8 * 37; p < 8 * 38; p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + "Zombie/" + TallFacesDithered.colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
+
+                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
+                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                else
+                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
+
+                /*int[] alphas = new int[256];
+                alphas.Fill(255);
+                alphas[0] = 0;
+                
+                //alphas[150] = 127;
+                //alphas[151] = 127;
+                //alphas[152] = 127;
+                //alphas[153] = 127;
+                
+                pngw.GetMetadata().CreateTRNSChunk().SetPalletteAlpha(alphas);
+                */
+
+                PngChunkPLTE pal;
+                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
+                    pal = pngw.GetMetadata().CreatePLTEChunk();
+                else
+                    pal = pngw.GetMetadata().GetPLTE();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+            }
+        }
+
+        public static void AlterPNGPaletteLimited(string input, string output, byte[][][] palettes)
+        {
+            PngReader pngr = FileHelper.CreatePngReader(input);
+            ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
+            ImageInfo imi = pngr.ImgInfo;
+
+            pngr.End();
+
+            for(int p = 0; p < 8; p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + TallFacesDithered.colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
+
+                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
+                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                else
+                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
+
+                PngChunkPLTE pal;
+                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
+                    pal = pngw.GetMetadata().CreatePLTEChunk();
+                else
+                    pal = pngw.GetMetadata().GetPLTE();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+                if(!USE_PALETTE)
+                    return;
+            }
+            for(int p = 208; p < 8 * 37; p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + "Alien/" + TallFacesDithered.colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
+
+                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
+                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                else
+                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
+
+                PngChunkPLTE pal;
+                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
+                    pal = pngw.GetMetadata().CreatePLTEChunk();
+                else
+                    pal = pngw.GetMetadata().GetPLTE();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+
+                if(!USE_PALETTE)
+                    return;
+            }
+            /*
+            for(int p = 38 * 8; p < (CURedux.wspecies.Length - 2); p++)
+            {
+                byte[][] palette = palettes[p];
+                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
+
+                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
+                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
+                else
+                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
+
+                PngChunkPLTE pal;
+                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
+                    pal = pngw.GetMetadata().CreatePLTEChunk();
+                else
+                    pal = pngw.GetMetadata().GetPLTE();
+
+                pal.SetNentries(256);
+                for(int i = 1; i < 255; i++)
+                {
+                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
+                }
+                pal.SetEntry(0, 0, 0, 0);
+                pal.SetEntry(255, 0, 0, 0);
+                pngw.WriteRowsByte(lines.ScanlinesB);
+                pngw.End();
+
+                if(!USE_PALETTE)
+                    return;
+            }
+            */
+        }
+        /*
         public static void AlterPNGPalette(string input, string output, byte[][][] palettes)
         {
             PngReader pngr = FileHelper.CreatePngReader(input);
@@ -406,17 +655,6 @@ namespace AssetsPV
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
 
                 pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                /*int[] alphas = new int[256];
-                alphas.Fill(255);
-                alphas[0] = 0;
-                
-                //alphas[150] = 127;
-                //alphas[151] = 127;
-                //alphas[152] = 127;
-                //alphas[153] = 127;
-                
-                pngw.GetMetadata().CreateTRNSChunk().SetPalletteAlpha(alphas);
-                */
                 PngChunkPLTE pal = pngw.GetMetadata().CreatePLTEChunk();
 
                 pal.SetNentries(256);
@@ -446,17 +684,7 @@ namespace AssetsPV
                 PngWriter pngw = FileHelper.CreatePngWriter(string.Format(output, p), imi, true);
 
                 pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                /*int[] alphas = new int[256];
-                alphas.Fill(255);
-                alphas[0] = 0;
                 
-                //alphas[150] = 127;
-                //alphas[151] = 127;
-                //alphas[152] = 127;
-                //alphas[153] = 127;
-                
-                pngw.GetMetadata().CreateTRNSChunk().SetPalletteAlpha(alphas);
-                */
                 PngChunkPLTE pal = pngw.GetMetadata().CreatePLTEChunk();
 
                 pal.SetNentries(256);
@@ -470,6 +698,7 @@ namespace AssetsPV
                 pngw.End();
             }
         }
+        
         public static void AlterPNGPaletteLimited(string input, string output, byte[][][] palettes)
         {
             PngReader pngr = FileHelper.CreatePngReader(input);
@@ -515,6 +744,9 @@ namespace AssetsPV
                 pngw.End();
             }
         }
+        */
+
+        /*
         public static void writePaletteImages()
         {
             Directory.CreateDirectory("palettes");
@@ -531,6 +763,221 @@ namespace AssetsPV
                 WritePNG(png, b, simplepalettes[c]);
             }
         }
+        */
+        public static void writePaletteImages()
+        {
+            Directory.CreateDirectory(altFolder + "palettes");
+            for(int c = 0; c < simplepalettes.Length; c++)
+            {
+                ImageInfo imi = new ImageInfo(256, 1, 8, false, false, true);
+                PngWriter png = FileHelper.CreatePngWriter(altFolder + "palettes" + "/color" + c + ".png", imi, true);
+                byte[][] b = new byte[1][];
+                b[0] = new byte[256];
+                for(int i = 0; i < 256; i++)
+                {
+                    b[0][i] = (byte)i;
+                }
+                WritePNG(png, b, simplepalettes[c]);
+            }
+            Image image = new Bitmap("white.png");
+            if(EFFECTS && VoxelLogic.VisualMode == "CU")
+            {
+
+                int pIndex = 0;
+                float[][][][] pals = new float[][][][] { CURedux.wpalettes_tw_gray, CURedux.wpalettes_tw_green, CURedux.wpalettes_tw_purple, CURedux.wpalettes_tw_red, CURedux.wpalettes_tw_white };
+                string[] names = new string[] { "gray", "green", "purple", "red", "white" };
+                foreach(float[][][] cpal in pals)
+                {
+                    // 29 is the number of Slope enum types.
+                    byte[,,] cubes = new byte[208, cpal[0].Length, 80];
+                    ImageAttributes imageAttributes = new ImageAttributes();
+                    int width = 4;
+                    int height = 5;
+                    float[][] colorMatrixElements = {
+   new float[] {1F, 0,  0,  0,  0},
+   new float[] {0, 1F,  0,  0,  0},
+   new float[] {0,  0,  1F, 0,  0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}};
+
+                    ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+                    imageAttributes.SetColorMatrix(
+                       colorMatrix,
+                       ColorMatrixFlag.Default,
+                       ColorAdjustType.Bitmap);
+                    for(int p = 0; p < cpal.Length; p++)
+                    {
+                        for(int current_color = 0; current_color < cpal[0].Length; current_color++)
+                        {
+                            if(current_color >= cpal[p].Length)
+                                continue;
+
+                            Bitmap b =
+                            new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+                            Graphics g = Graphics.FromImage((Image)b);
+
+                            if(!VoxelLogic.terrainPalettes.Contains(p) && current_color == 25)
+                            {
+                                colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.22F+cpal[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.251F+cpal[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.31F+cpal[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                            }
+                            else if(cpal[p][current_color][3] == VoxelLogic.eraser_alpha)
+                            {
+                                colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                            }
+                            else if(cpal[p][current_color][3] == 0F)
+                            {
+                                colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 0},
+   new float[] {0,  0,  0,  0, 1F}});
+                            }
+                            else
+                            {
+                                colorMatrix = new ColorMatrix(new float[][]{
+   new float[] {0.235F+cpal[p][current_color][0],  0,  0,  0, 0},
+   new float[] {0,  0.26F+cpal[p][current_color][1],  0,  0, 0},
+   new float[] {0,  0,  0.30F+cpal[p][current_color][2],  0, 0},
+   new float[] {0,  0,  0,  1F, 0},
+   new float[] {0, 0, 0, 0, 1F}});
+                            }
+                            imageAttributes.SetColorMatrix(
+                               colorMatrix,
+                               ColorMatrixFlag.Default,
+                               ColorAdjustType.Bitmap);
+
+                            string which_image = (((current_color >= 18 && current_color <= 20) || current_color == 40) || cpal[p][current_color][3] == 0F
+                                || cpal[p][current_color][3] == VoxelLogic.flash_alpha
+                                || cpal[p][current_color][3] == VoxelLogic.flash_alpha_0 || cpal[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
+                               (cpal[p][current_color][3] == VoxelLogic.flat_alpha || cpal[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
+                            g.DrawImage(image,
+                               new Rectangle(0, 0,
+                                   width, height),  // destination rectangle 
+                                                    //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
+                               0, 0,        // upper-left corner of source rectangle 
+                               width,       // width of source rectangle
+                               height,      // height of source rectangle
+                               GraphicsUnit.Pixel,
+                               imageAttributes);
+                            for(int i = 0; i < width; i++)
+                            {
+                                for(int j = 0; j < height; j++)
+                                {
+                                    Color c = b.GetPixel(i, j);
+                                    double h = 0.0, s = 1.0, v = 1.0;
+                                    VoxelLogic.ColorToHSV(c, out h, out s, out v);
+                                    //if(VoxelLogic.subtlePalettes.Contains(p))
+                                    //{
+                                    //    s = VoxelLogic.Clamp((s * 0.75), 0.0, 0.75);
+                                    //    v = VoxelLogic.Clamp(v * 0.94, 0.01, 0.94);
+                                    //}
+                                    Color c2 = Color.Transparent;
+                                    double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
+                                            v_alter = Math.Pow(v, 2.0 - 2.0 * v);
+                                    v_alter *= Math.Pow(v_alter, 0.38);
+                                    if(j == height - 1)
+                                    {
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
+                                    }
+                                    else
+                                    {
+                                        switch(j)
+                                        {
+                                            case 0:
+                                                c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
+                                                break;
+                                            case 1:
+                                                c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
+                                                break;
+                                            case 2:
+                                                c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
+                                                break;
+                                        }
+                                    }
+                                    if(c2.A != 0)
+                                    {
+                                        cubes[p, current_color, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c2.B);
+                                        cubes[p, current_color, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c2.G);
+                                        cubes[p, current_color, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c2.R);
+                                        cubes[p, current_color, i * 4 + j * width * 4 + 3] = 255;
+                                    }
+                                    else
+                                    {
+                                        cubes[p, current_color, i * 4 + j * 4 * width + 0] = 0;
+                                        cubes[p, current_color, i * 4 + j * 4 * width + 1] = 0;
+                                        cubes[p, current_color, i * 4 + j * 4 * width + 2] = 0;
+                                        cubes[p, current_color, i * 4 + j * 4 * width + 3] = 0;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    
+                    byte[][][][] cubes2 = new byte[cpal.Length][][][];
+                    for(int i = 0; i < cpal.Length; i++)
+                    {
+                        cubes2[i] = new byte[cpal[0].Length][][];
+                        for(int c = 0; c < cpal[0].Length; c++)
+                        {
+                            cubes2[i][c] = new byte[29][];
+                            for(int slp = 0; slp < 29; slp++)
+                            {
+                                cubes2[i][c][slp] = new byte[80];
+                                for(int j = 0; j < 80; j++)
+                                {
+                                    cubes2[i][c][slp][j] = cubes[i, c, j];
+                                }
+                            }
+                        }
+                    }
+                    byte[][][] sp = new byte[cubes2.Length][][];
+                    int colorcount = Math.Min(cpal[0].Length, 63);
+                    for(int i = 0; i < sp.Length; i++)
+                    {
+                        sp[i] = new byte[256][];
+                        for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
+                        {
+                            sp[i][j] = new byte[] { cubes2[i][c][0][2], cubes2[i][c][0][1], cubes2[i][c][0][0] };
+                            sp[i][j - 1] = new byte[] { cubes2[i][c][0][2 + 16 + 16], cubes2[i][c][0][1 + 16 + 16], cubes2[i][c][0][0 + 16 + 16] };
+                            sp[i][j - 2] = new byte[] { cubes2[i][c][0][2 + 24 + 16], cubes2[i][c][0][1 + 24 + 16], cubes2[i][c][0][0 + 24 + 16] };
+                            sp[i][j - 3] = new byte[] { cubes2[i][c][0][2 + 64], cubes2[i][c][0][1 + 64], cubes2[i][c][0][0 + 64] };
+                        }
+                        sp[i][0] = new byte[] { 0, 0, 0 };
+                        sp[i][1] = new byte[] { 0, 0, 0 };
+                        sp[i][254] = new byte[] { 0, 0, 0 };
+                        sp[i][255] = new byte[] { 0, 0, 0 };
+                    }
+                    for(int c = 0; c < sp.Length; c++)
+                    {
+                        ImageInfo imi = new ImageInfo(256, 1, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(altFolder + "palettes" + "/color" + c + "_" + names[pIndex] + "_effects.png", imi, true);
+                        byte[][] b = new byte[1][];
+                        b[0] = new byte[256];
+                        for(int i = 0; i < 256; i++)
+                        {
+                            b[0][i] = (byte)i;
+                        }
+                        WritePNG(png, b, sp[c]);
+                    }
+                    pIndex++;
+                }
+            }
+        }
+
 
         public static void WriteGIF(List<string> images, int delay, string output)
         {
@@ -546,12 +993,368 @@ namespace AssetsPV
                 //QuantizeSettings settings = new QuantizeSettings();
                 //settings.Colors = 256;
                 //collection.Quantize(settings);
-                collection.Optimize();
+                //collection.Optimize();
                 // Save gif
                 collection.Write(output + ".gif");
             }
         }
 
+
+        public static void WriteAllGIFs()
+        {
+            Directory.CreateDirectory("gifs/" + altFolder);
+            CURedux.normal_units.AsParallel().ForAll(u =>
+            //foreach(string u in CURedux.normal_units)
+            {
+                string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
+                List<string> imageNames = new List<string>(4 * 16 * 8);
+                foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running death GIF conversion for " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_Large_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[stripped]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Large_animated");
+                }
+                if(!u.Contains("_Alt"))
+                {
+                    imageNames = new List<string>(4 * 16 * 8);
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                            }
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running alien standing GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Large_animated");
+
+                    imageNames = new List<string>(4 * 16 * 12);
+
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 12; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running alien death GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_alien_Large_animated");
+
+                    for(int w = 0; w < 2; w++)
+                    {
+                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                            continue;
+
+                        imageNames = new List<string>(4 * 16 * 16);
+
+                        foreach(int p in CURedux.alienHighlights)
+                        {
+                            for(int dir = 0; dir < 4; dir++)
+                            {
+                                for(int f = 0; f < 16; f++)
+                                {
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                }
+                            }
+                        }
+                        Console.WriteLine("Running alien weapon " + w + " GIF conversion for " + u + "...");
+                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Large_animated");
+                    }
+                }
+            });
+            CURedux.super_units.AsParallel().ForAll(u =>
+            //foreach(string u in CURedux.super_units)
+            {
+                List<string> imageNames = new List<string>(4 * 16 * 4);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Huge_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+
+                        }
+                    }
+                }
+                Console.WriteLine("Running death GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_Huge_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Huge_animated");
+                }
+
+                imageNames = new List<string>(4 * 16 * 4);
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running alien standing GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Huge_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running alien death GIF conversion for Super " + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_alien_Huge_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "/color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running alien weapon " + w + " GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Huge_animated");
+                }
+            });
+        }
+
+        public static void WriteZombieGIFs()
+        {
+            Directory.CreateDirectory("gifs/" + altFolder);
+            CURedux.normal_units.AsParallel().ForAll(u =>
+            //foreach(string u in CURedux.normal_units)
+            {
+                string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
+                List<string> imageNames = new List<string>(4 * 8 * 4);
+                for(int p = 37 * 8; p < 38 * 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + addon + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + addon + u + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for Zombie_" + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_zombie_Large_animated");
+
+                imageNames = new List<string>(4 * 8 * 12);
+
+                for(int p = 37 * 8; p < 38 * 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + addon + u + "_Large_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running death GIF conversion for Zombie_" + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_zombie_Large_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[stripped]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 8 * 16);
+
+                    for(int p = 37 * 8; p < 38 * 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for Zombie_" + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_zombie_Large_animated");
+                }
+            });
+
+            CURedux.super_units.AsParallel().ForAll(u =>
+            //foreach(string u in CURedux.super_units)
+            {
+                List<string> imageNames = new List<string>(4 * 8 * 8);
+                for(int p = 37 * 8; p < 38 * 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for Super Zombie_" + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_zombie_Huge_animated");
+
+                imageNames = new List<string>(4 * 8 * 12);
+
+                for(int p = 37 * 8; p < 38 * 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png");
+
+                        }
+                    }
+                }
+                Console.WriteLine("Running death GIF conversion for Super Zombie_" + u + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_zombie_Huge_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 8 * 16);
+
+                    for(int p = 37 * 8; p < 38 * 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + TallFacesDithered.colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for Super Zombie_" + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_zombie_Huge_animated");
+                }
+            });
+        }
+
+
+        /*
         public static void WriteAllGIFs()
         {
             Directory.CreateDirectory("gifs/" + altFolder + "skin/");
@@ -778,7 +1581,7 @@ namespace AssetsPV
                 }
             }
         }
-
+        */
         public static void processUnitTinyW(string u, int palette, bool still, bool shadowless)
         {
 
@@ -1239,82 +2042,64 @@ namespace AssetsPV
             bool zombie = u.StartsWith("Zombie_");
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
-
-            BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
-            List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin) : VoxelLogic.AssembleHeadToModelW(bin);
-
-            Directory.CreateDirectory("vox/" + altFolder);
-            //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
-            MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
-            for(int i = 0; i < parsed.Length; i++)
+            int alt = VoxelLogic.AltVersions[VoxelLogic.UnitLookup[u]];
+            for(int a = 0; a <= alt && a < 2; a++)
             {
-                parsed[i].x += 10;
-                parsed[i].y += 10;
-                if((254 - parsed[i].color) % 4 == 0)
-                    parsed[i].color--;
-            }
+                BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
+                List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0);
 
-            if(RENDER)
-            {
-                for(int dir = 0; dir < 4; dir++)
+                Directory.CreateDirectory("vox/" + altFolder);
+                //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
+                MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
+                for(int i = 0; i < parsed.Length; i++)
                 {
-                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60)), 1 + bonus * multiplier / 2);
+                    parsed[i].x += 10;
+                    parsed[i].y += 10;
+                    if((254 - parsed[i].color) % 4 == 0)
+                        parsed[i].color--;
+                }
 
-                    for(int f = 0; f < framelimit; f++)
+                if(RENDER)
+                {
+                    for(int dir = 0; dir < 4; dir++)
                     {
-                        byte[][] b = processFrameLargeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+                        byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier, 60, 60, 60)), 1 + bonus * multiplier / 2);
 
-                        ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
-                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
-                        WritePNG(png, b, basepalette);
+                        for(int f = 0; f < framelimit; f++)
+                        {
+                            byte[][] b = processFrameLargeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
+
+                            ImageInfo imi = new ImageInfo(widthLarge, heightLarge, 8, false, false, true);
+                            PngWriter png = FileHelper.CreatePngWriter(blankFolder + "standing_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", imi, true);
+                            WritePNG(png, b, basepalette);
+                        }
                     }
                 }
-            }
-            for(int dir = 0; dir < 4; dir++)
-            {
-                for(int f = 0; f < framelimit; f++)
-                {
-                    if(zombie)
-                        AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_" + f + ".png",
-                            folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
-                    else
-                        AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_" + f + ".png",
-                            folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
-                }
-            }
-            /*
-            List<string> imageNames = new List<string>(4 * 8 * 2 * framelimit);
-            for(int p = 0; p < 8; p++)
-            {
                 for(int dir = 0; dir < 4; dir++)
                 {
                     for(int f = 0; f < framelimit; f++)
                     {
-                        imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
-                    }
-                    for(int f = 0; f < framelimit; f++)
-                    {
-                        imageNames.Add(folder + "/color" + p + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                        if(zombie)
+                            AlterPNGPaletteZombie(blankFolder + "/standing_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png",
+                                "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
+                        else
+                            AlterPNGPalette(blankFolder + "/standing_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png",
+                                "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                     }
                 }
+                processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
+                processUnitLargeWFiring(addon + u, a);
             }
-            Directory.CreateDirectory("gifs/" + altFolder);
-            Console.WriteLine("Running GIF conversion ...");
-            WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
-            */
-
-            processExplosionLargeW(addon + u, -1, explode_parsed, false);
-            processUnitLargeWFiring(addon + u);
         }
 
-        public static void processUnitLargeWFiring(string u)
+        public static void processUnitLargeWFiring(string u, int a)
         {
             Console.WriteLine("Processing: " + u);
             bool zombie = u.StartsWith("Zombie_");
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
-
-            string filename = "CU2/" + u + "_Large_W.vox";
+            int alt = VoxelLogic.AltVersions[VoxelLogic.UnitLookup[u]];
+            string filename = "CU2/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox";
             BinaryReader bin;
             MagicaVoxelData[] parsed;
             string folder = ("frames/" + altFolder);
@@ -1323,7 +2108,7 @@ namespace AssetsPV
             {
                 if((w == 0 && u == "Infantry" || u == "Tank_S") || (w == 1 && (u == "Infantry_P" || u == "Infantry_T" || u == "Infantry_PT")))
                 {
-                    filename = "CU2/" + u + "_Firing_Large_W.vox";
+                    filename = "CU2/" + u + "_Firing" + (alt > 1 && a > 0 && u != "Infantry" ? "_Alt" : "") + "_Large_W.vox";
                 }
                 if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                 {
@@ -1331,7 +2116,7 @@ namespace AssetsPV
                     if(RENDER)
                     {
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin).ToArray() : VoxelLogic.FromMagicaRaw(bin).ToArray();
+                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0).ToArray() : VoxelLogic.FromMagicaRaw(bin).ToArray();
                         MagicaVoxelData[][] flying = CURedux.Flyover(parsed);
                         MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
                         //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
@@ -1371,7 +2156,7 @@ namespace AssetsPV
                                 byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
+                                PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
 
                             }
@@ -1382,11 +2167,11 @@ namespace AssetsPV
                         for(int f = 0; f < 16; f++)
                         {
                             if(zombie)
-                                AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
+                                    "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                             else
-                                AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
+                                    "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
                     }
                     //bin.Close();
@@ -1399,7 +2184,7 @@ namespace AssetsPV
                         Directory.CreateDirectory(folder);
 
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin).ToArray() : VoxelLogic.AssembleHeadToModelW(bin).ToArray();
+                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0).ToArray() : VoxelLogic.AssembleHeadToModelW(bin, a > 0).ToArray();
                         
                         MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
 
@@ -1413,7 +2198,7 @@ namespace AssetsPV
                                 byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
+                                PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
                             }
                         }
@@ -1423,11 +2208,11 @@ namespace AssetsPV
                         for(int f = 0; f < 16; f++)
                         {
                             if(zombie)
-                                AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
+                                    "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                             else
-                                AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                                AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
+                                    "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
                     }
                     //bin.Close();
@@ -1459,8 +2244,7 @@ namespace AssetsPV
         {
             string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            for(int i = 0; i < 8; i++)
-            {
+            new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 }.AsParallel().ForAll(i => {
                 Console.WriteLine("Processing receive animation: " + VoxelLogic.WeaponTypes[i]);
                 if(RENDER)
                 {
@@ -1469,8 +2253,6 @@ namespace AssetsPV
                         MagicaVoxelData[][] receive = CURedux.makeReceiveAnimationLarge(i, s + 1);
                         for(int d = 0; d < 4; d++)
                         {
-                            Directory.CreateDirectory(folder); //("color" + i);
-
                             for(int frame = 0; frame < 16; frame++)
                             {
                                 byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateHuge(receive[frame], d), multiplier, 120, 120, 80)), 1 + bonus * multiplier / 2);
@@ -1478,7 +2260,7 @@ namespace AssetsPV
                                 byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
+                                PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + VoxelLogic.WeaponTypes[i] + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
                             }
                         }
@@ -1512,8 +2294,8 @@ namespace AssetsPV
                     {
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            AlterPNGPaletteLimited(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                folder + "/color{0}/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
+                            AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + VoxelLogic.WeaponTypes[i] + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
+                                "animation_frames/receiving/color{0}" + "/" + VoxelLogic.WeaponTypes[i] + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
                         }
                     }
                 }
@@ -1560,7 +2342,39 @@ namespace AssetsPV
                 Console.WriteLine("Running GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_animated.gif");
                 */
+            });
+            for(int s = 0; s < 10; s++)
+            {
+                byte[][,,] explode = CURedux.Explosions[s];
+                for(int d = 0; d < 4; d++)
+                {
+                    for(int frame = 0; frame < 16; frame++)
+                    {
+                        byte[,,] colors = new byte[120, 120, 80];
+                        if(frame >= 1 && frame <= CURedux.maxExplosionFrames)
+                            colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame - 1], d * 90)), 1 + bonus * multiplier / 2);
+
+                        byte[][] b = processFrameHugeW(colors, 0, frame, 16, true, false);
+
+                        ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/Explosion/Explosion_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
+                        WritePNG(png, b, basepalette);
+                    }
+                }
             }
+
+            for(int strength = 0; strength < 10; strength++)
+            {
+                for(int d = 0; d < 4; d++)
+                {
+                    for(int frame = 0; frame < 16; frame++)
+                    {
+                        AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/Explosion/Explosion_face" + d + "_strength_" + strength + "_" + frame + ".png",
+                            "animation_frames/receiving/color{0}/Explosion/Explosion_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
+                    }
+                }
+            }
+
         }
 
         public static void processUnitHugeWMilitarySuper(string u)
@@ -1568,15 +2382,13 @@ namespace AssetsPV
             u = addon + u;
             int framelimit = 4;
 
-            string folder = (altFolder);
-            Directory.CreateDirectory(folder);
             Console.WriteLine("Processing: " + u + ", palette " + 99 + " Super");
             bool zombie = u.StartsWith("Zombie_");
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + "_Large_W.vox", FileMode.Open));
-            List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin) : VoxelLogic.AssembleHeadToModelW(bin);
+            List<MagicaVoxelData> voxes = zombie ? VoxelLogic.Zombify(bin) : VoxelLogic.FromMagicaRaw(bin);
             Directory.CreateDirectory("vox/" + altFolder);
             //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
             MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
@@ -1613,7 +2425,7 @@ namespace AssetsPV
                         byte[][] b = processFrameHugeW(colors, 0, f, framelimit, (VoxelLogic.CurrentMobilities[VoxelLogic.UnitLookup[u]] != MovementType.Flight), false);
 
                         ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
+                        PngWriter png = FileHelper.CreatePngWriter(blankFolder + "standing_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", imi, true);
                         WritePNG(png, b, basepalette);
                     }
                 }
@@ -1623,11 +2435,11 @@ namespace AssetsPV
                 for(int f = 0; f < framelimit; f++)
                 {
                     if(zombie)
-                        AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
-                            folder + "/color{0}/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
+                        AlterPNGPaletteZombie(blankFolder + "standing_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
+                            "standing_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                     else
-                        AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
-                            folder + "/color{0}/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
+                        AlterPNGPalette(blankFolder + "standing_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
+                            "standing_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
             /*
@@ -1694,7 +2506,7 @@ namespace AssetsPV
                         Directory.CreateDirectory(folder);
 
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin).ToArray() : VoxelLogic.FromMagicaRaw(bin).ToArray();
+                        parsed = zombie ? VoxelLogic.Zombify(bin).ToArray() : VoxelLogic.FromMagicaRaw(bin).ToArray();
                         List<MagicaVoxelData>[] firing;
                         if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] == 7)
                         {
@@ -1703,7 +2515,6 @@ namespace AssetsPV
                         else
                         {
                             firing = CURedux.makeFiringAnimationSuper(parsed, VoxelLogic.UnitLookup[u], w);
-
                         }
 
                         for(int d = 0; d < 4; d++)
@@ -1720,7 +2531,7 @@ namespace AssetsPV
                                 byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
+                                PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
                             }
                         }
@@ -1739,11 +2550,15 @@ namespace AssetsPV
                         for(int f = 0; f < 16; f++)
                         {
                             if(zombie)
-                                AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    folder + "/color{0}/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            {
+                                AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
+                                   "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            }
                             else
-                                AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    folder + "/color{0}/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            {
+                                AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
+                                   "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            }
                         }
                     }
                     //bin.Close();
@@ -1777,8 +2592,7 @@ namespace AssetsPV
         {
             string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            for(int i = 0; i < 8; i++)
-            {
+            new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }.AsParallel().ForAll(i => {
                 Console.WriteLine("Processing receive animation: " + VoxelLogic.WeaponTypes[i]);
                 if(RENDER)
                 {
@@ -1787,26 +2601,24 @@ namespace AssetsPV
                         List<MagicaVoxelData>[] receive = CURedux.makeReceiveAnimationSuper(i, s + 1);
                         for(int d = 0; d < 4; d++)
                         {
-                            Directory.CreateDirectory(folder); //("color" + i);
-
                             for(int frame = 0; frame < 16; frame++)
                             {
                                 //FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.TransformStartHuge(VoxelLogic.BasicRotateHuge(receive[frame], d)), 2), 160, 160, 120);
                                 //         FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.VoxLargerArrayToList(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 2, 80, 80, 60), 1), 160, 160, 120);
                                 //byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 1 + bonus * multiplier);
 
+                                //                                1 + bonus * multiplier * 2);
+                                //                            byte[,,] colors = TransformLogic.RunCA(
+                                //                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
+                                //                                1 + bonus * multiplier * 2);
                                 byte[,,] colors = TransformLogic.RunCA(
                                     TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), 80, 80, 60)), 2),
                                     2 + bonus * multiplier * 2);
-//                                1 + bonus * multiplier * 2);
-            //                            byte[,,] colors = TransformLogic.RunCA(
-            //                                TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(receive[frame], d, 80, 80), multiplier * 2, 80, 80, 60)),
-            //                                1 + bonus * multiplier * 2);
 
-            byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+                                byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
 
                                 ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                                PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
+                                PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + VoxelLogic.WeaponTypes[i] + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
                             }
                         }
@@ -1840,8 +2652,8 @@ namespace AssetsPV
                     {
                         for(int frame = 0; frame < 16; frame++)
                         {
-                            AlterPNGPaletteLimited(folder + "/palette" + 99 + "_" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
-                                folder + "/color{0}/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
+                            AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + VoxelLogic.WeaponTypes[i] + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
+                                "animation_frames/receiving/color{0}/" + "/" + VoxelLogic.WeaponTypes[i] + "/" + VoxelLogic.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
                         }
                     }
                 }
@@ -1866,7 +2678,42 @@ namespace AssetsPV
                 Console.WriteLine("Running GIF conversion ...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + VoxelLogic.WeaponTypes[i] + "_Huge_animated.gif");
                 */
+            });
+            for(int s = 0; s < 10; s++)
+            {
+                byte[][,,] explode = CURedux.SuperExplosions[s];
+
+                for(int d = 0; d < 4; d++)
+                {
+                    Directory.CreateDirectory(folder); //("color" + i);
+
+                    for(int frame = 0; frame < 16; frame++)
+                    {
+                        byte[,,] colors = new byte[160, 160, 120];
+                        
+                        if(frame >= 1 && frame <= CURedux.maxExplosionFrames)
+                            colors = TransformLogic.RunCA(TransformLogic.ScalePartial(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame - 1], d * 90)), 2), 2 + bonus * multiplier * 2);
+                        byte[][] b = processFrameMassiveW(colors, 0, frame, 16, true, false);
+
+                        ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
+                        PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/Explosion/Explosion_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
+                        WritePNG(png, b, basepalette);
+                    }
+                }
             }
+
+            for(int strength = 0; strength < 10; strength++)
+            {
+                for(int d = 0; d < 4; d++)
+                {
+                    for(int frame = 0; frame < 16; frame++)
+                    {
+                        AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/Explosion/Explosion_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
+                            "animation_frames/receiving/color{0}/Explosion/Explosion_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
+                    }
+                }
+            }
+
         }
 
         public static void processHatLargeW(string u, int palette, string hat)
@@ -2245,15 +3092,24 @@ namespace AssetsPV
 
             //bin.Close();
         }
-        public static void processExplosionLargeW(string u, int palette, MagicaVoxelData[] voxels, bool shadowless)
+
+        public static void processExplosionLargeW(string u, int palette, MagicaVoxelData[] voxels, bool shadowless, string extra_name = "")
         {
             Console.WriteLine("Processing: " + u);
             bool zombie = u.StartsWith("Zombie_");
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
+            if(palette >= 0)
+            {
+                VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+                wditheredcurrent = wdithered[palette];
+            }
+            else
+            {
+                VoxelLogic.wcolors = VoxelLogic.wpalettes[0];
+                wditheredcurrent = wdithered[0];
+            }
 
-            //            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
-            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             string folder = ("frames/" + altFolder);
             Directory.CreateDirectory(folder);
 
@@ -2283,7 +3139,9 @@ namespace AssetsPV
                         byte[][] b = processFrameHugeW(TransformLogic.SealGaps(TransformLogic.RotateYaw(explode[frame], d * 90)), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                         ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
-                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + addon + u + "_Large_face" + d + "_death_" + frame + ".png", imi, true);
+                        PngWriter png = (palette >= 0)
+                            ? (FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + addon + u + extra_name + "_Large_face" + d + "_death_" + frame + ".png", imi, true))
+                            : (FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + d + "_death_" + frame + ".png", imi, true));
                         WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                     }
                 }
@@ -2343,11 +3201,11 @@ namespace AssetsPV
                     for(int f = 0; f < 12; f++)
                     {
                         if(zombie)
-                            AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_death_" + f + ".png",
-                                folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
+                            AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png",
+                                "animation_frames/color{0}/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
                         else
-                            AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Large_face" + dir + "_death_" + f + ".png",
-                                folder + "/color{0}/" + addon + u + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
+                            AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png",
+                                "animation_frames/color{0}/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
                 /*
@@ -2470,8 +3328,6 @@ namespace AssetsPV
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
 
-            //            BinaryReader bin = new BinaryReader(File.Open(u + "_Large_W.vox", FileMode.Open));
-            //renderLarge(parsed, 0, 0, 0)[0].Save("junk_" + u + ".png");
             if(palette >= 0)
             {
                 VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
@@ -2482,10 +3338,9 @@ namespace AssetsPV
                 VoxelLogic.wcolors = VoxelLogic.wpalettes[0];
                 wditheredcurrent = wdithered[0];
             }
-            //MagicaVoxelData[][] explode = VoxelLogic.FieryExplosionDoubleW(parsed, false, true); //((CurrentMobilities[UnitLookup[u]] == MovementType.Immobile) ? false : true)
             string folder = ("frames/" + altFolder);
 
-            Directory.CreateDirectory(folder); //("color" + i);
+
             if(RENDER)
             {
                 byte[,,] colors = TransformLogic.VoxListToLargerArray(voxels, 2, 40, 40, 80, 80, 60);
@@ -2516,7 +3371,10 @@ namespace AssetsPV
                             ), (palette >= 0) ? palette : 0, frame, 8, true, shadowless);
 
                         ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
-                        PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + ((palette >= 0) ? palette : 99) + "_" + addon + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true);
+
+                        PngWriter png = (palette >= 0)
+                            ? (FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + addon + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true))
+                            : (FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + d + "_death_" + frame + ".png", imi, true));
                         WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
                     }
                 }
@@ -2550,32 +3408,13 @@ namespace AssetsPV
                     for(int f = 0; f < 12; f++)
                     {
                         if(zombie)
-                            AlterPNGPaletteZombie(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
-                                folder + "/color{0}/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
+                            AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
+                                "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
                         else
-                            AlterPNGPalette(folder + "/palette" + 99 + "_" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
-                                folder + "/color{0}/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
+                            AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
+                                "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
                 }
-                /*
-                Directory.CreateDirectory("gifs/" + altFolder);
-
-                List<string> imageNames = new List<string>(4 * 8 * 12);
-
-                for(int p = 0; p < 8; p++)
-                {
-                    for(int dir = 0; dir < 4; dir++)
-                    {
-                        for(int f = 0; f < 12; f++)
-                        {
-                            imageNames.Add(folder + "/color" + p + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
-                        }
-                    }
-                }
-                Directory.CreateDirectory("gifs/" + altFolder);
-                Console.WriteLine("Running GIF conversion ...");
-                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_super_animated");
-                */
             }
         }
         /*
@@ -4510,7 +5349,7 @@ namespace AssetsPV
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain3/" + (kind == "Ordered" ? kind : "Normal") + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
-            int terrainPalette = CURedux.wspecies.Length * 8;
+            int terrainPalette = CURedux.wspecies.Length * 8 - 16;
 
             //NORMAL WEATHER
             wcurrent = wrendered[terrainPalette];
@@ -4520,9 +5359,9 @@ namespace AssetsPV
 
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight);
-            string folder = altFolder + "Terrains3/", blankFolder = altFolder + "TerrainsBlank3/";
+            string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
             Directory.CreateDirectory(folder);
-            Directory.CreateDirectory(blankFolder);
+            Directory.CreateDirectory(bFolder);
 
             for(int dir = 0; dir < 4; dir++)
             {
@@ -4531,17 +5370,17 @@ namespace AssetsPV
                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), simplepalettes[terrainPalette]);
-                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), simplepalettes[terrainPalette+4]);
-                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), simplepalettes[terrainPalette + 4]);
+                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
-                WritePNG(png, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), simplepalettes[terrainPalette+5]);
-                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                WritePNG(png, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), simplepalettes[terrainPalette + 5]);
+                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, 0, 1, true, true), basepalette);
             }
 
@@ -4601,7 +5440,7 @@ namespace AssetsPV
                 Bitmap[] tilings = new Bitmap[44];
                 for(int i = 0; i < 44; i++)
                 {
-                    tilings[i] = new Bitmap(altFolder + "Terrains3/" + CURedux.Terrains[i % 11] + "_Huge_face" + (i / 11) + "_Normal_0.png");
+                    tilings[i] = new Bitmap(altFolder + "Terrains/" + CURedux.Terrains[i % 11] + "_Huge_face" + (i / 11) + "_Normal_0.png");
                 }
                 Bitmap b = new Bitmap(64 * 20, 32 * 20);
                 Graphics tiling = Graphics.FromImage(b);
@@ -4800,8 +5639,10 @@ namespace AssetsPV
             //            altFolder = "botl6/";
             //            FaceLogic.VisualMode = "Mecha";
 
+            VoxelLogic.Initialize();
             VoxelLogic.VisualMode = "CU";
-            altFolder = "CU_Ortho_S2/";
+            altFolder = "Diverse_PixVoxel_Wargame_Ortho_A/";
+            blankFolder = "Blank_PixVoxel_Wargame_Ortho_A/";
             CURedux.Initialize(true);
             
             //VoxelLogic.VisualMode = "W";
@@ -5197,8 +6038,15 @@ namespace AssetsPV
 
             makeSimpleTiling();
 
-            for(int a = 1; a < 2; a++)
+            for(int a = 0; a < 2; a++)
             {
+                for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
+                {
+                    //if(VoxelLogic.AltVersions[u] == 0)
+                    //    continue;
+                    processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
+                }
+                /*
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
@@ -5208,10 +6056,13 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Infantry_PT");
                 processUnitLargeWMilitary("Infantry_ST");
 
-                processUnitLargeWMilitary("Copter_P");
-                processUnitLargeWMilitary("Copter");
-                processUnitLargeWMilitary("Copter_S");
-                processUnitLargeWMilitary("Copter_T");
+                processUnitLargeWMilitary("Tank");
+                processUnitLargeWMilitary("Tank_P");
+                processUnitLargeWMilitary("Tank_S");
+                processUnitLargeWMilitary("Tank_T");
+
+                processUnitLargeWMilitary("Recon");
+                processUnitLargeWMilitary("Flamethrower");
 
                 processUnitLargeWMilitary("Civilian");
 
@@ -5219,11 +6070,6 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Volunteer_P");
                 processUnitLargeWMilitary("Volunteer_S");
                 processUnitLargeWMilitary("Volunteer_T");
-
-                processUnitLargeWMilitary("Tank");
-                processUnitLargeWMilitary("Tank_P");
-                processUnitLargeWMilitary("Tank_S");
-                processUnitLargeWMilitary("Tank_T");
 
                 processUnitLargeWMilitary("Truck");
                 processUnitLargeWMilitary("Truck_P");
@@ -5234,6 +6080,11 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Artillery_P");
                 processUnitLargeWMilitary("Artillery_S");
                 processUnitLargeWMilitary("Artillery_T");
+
+                processUnitLargeWMilitary("Copter");
+                processUnitLargeWMilitary("Copter_P");
+                processUnitLargeWMilitary("Copter_S");
+                processUnitLargeWMilitary("Copter_T");
 
                 processUnitLargeWMilitary("Plane");
                 processUnitLargeWMilitary("Plane_P");
@@ -5252,15 +6103,12 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Factory");
                 processUnitLargeWMilitary("Castle");
                 processUnitLargeWMilitary("Estate");
-
-                processUnitHugeWMilitarySuper("Laboratory");
-                processUnitHugeWMilitarySuper("Dock");
-                processUnitHugeWMilitarySuper("Airport");
-                processUnitHugeWMilitarySuper("City");
-                processUnitHugeWMilitarySuper("Factory");
-                processUnitHugeWMilitarySuper("Castle");
-                processUnitHugeWMilitarySuper("Estate");
-
+                processUnitLargeWMilitary("Farm");
+                processUnitLargeWMilitary("Hospital");
+                processUnitLargeWMilitary("Oil_Well");
+                */
+                CURedux.super_units.AsParallel().ForAll(u => processUnitHugeWMilitarySuper(u));
+                /*
                 processUnitHugeWMilitarySuper("Copter");
                 processUnitHugeWMilitarySuper("Copter_P");
                 processUnitHugeWMilitarySuper("Copter_S");
@@ -5276,23 +6124,27 @@ namespace AssetsPV
                 processUnitHugeWMilitarySuper("Boat_S");
                 processUnitHugeWMilitarySuper("Boat_T");
 
-                processUnitLargeWMilitary("Hospital");
-                processUnitHugeWMilitarySuper("Hospital");
-
-                processUnitLargeWMilitary("Oil_Well");
-                processUnitHugeWMilitarySuper("Oil_Well");
-                
-                processUnitLargeWMilitary("Farm");
+                processUnitHugeWMilitarySuper("Laboratory");
+                processUnitHugeWMilitarySuper("Dock");
+                processUnitHugeWMilitarySuper("City");
+                processUnitHugeWMilitarySuper("Factory");
+                processUnitHugeWMilitarySuper("Castle");
+                processUnitHugeWMilitarySuper("Estate");
+                processUnitHugeWMilitarySuper("Airport");
                 processUnitHugeWMilitarySuper("Farm");
-
+                processUnitHugeWMilitarySuper("Hospital");
+                processUnitHugeWMilitarySuper("Oil_Well");
+                */
                 addon = TallFacesDithered.addon = "";
             }
 
-            //processReceivingMilitaryW();
+            processReceivingMilitaryW();
 
-            //processReceivingMilitaryWSuper();
-            //WriteAllGIFs();
+            processReceivingMilitaryWSuper();
+            WriteAllGIFs();
 
+            addon = "Zombie_";
+            WriteZombieGIFs();
 
             /*
             Pose walk0 = (model => model

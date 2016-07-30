@@ -2960,9 +2960,9 @@ namespace AssetsPV
                 List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0);
 
                 Directory.CreateDirectory("vox/" + altFolder);
-                VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
+                //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
                 MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
-                /*
+                
                 if(RENDER)
                 {
                     for(int i = 0; i < parsed.Length; i++)
@@ -3001,7 +3001,7 @@ namespace AssetsPV
                     }
                 }
                 processUnitLargeWFiring(addon + u, a);
-                */
+                
                 processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
 
             }
@@ -3371,7 +3371,7 @@ namespace AssetsPV
                             "standing_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
             }
-            //processExplosionHugeWSuper(addon + u, -1, explode_parsed, false);
+            processExplosionHugeWSuper(addon + u, -1, explode_parsed, false);
             
             processUnitHugeWFiringSuper(addon + u);
         }
@@ -3387,7 +3387,6 @@ namespace AssetsPV
             BinaryReader bin;
             MagicaVoxelData[] parsed;
             string folder = ("frames/" + altFolder);
-                    Directory.CreateDirectory(folder);
 
             for(int w = 0; w < 2; w++)
             {
@@ -3423,10 +3422,7 @@ namespace AssetsPV
                                 FaceVoxel[,,] faces = FaceLogic.SmoothAll(FaceLogic.DoubleSize(FaceLogic.GetFaces(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60))));
 
                                 byte[][] b = processFrameMassiveW(faces, 0, d, frame, 16, true, false);
-
-                                //DELETEME
-                                //File.Delete(blankFolder + "animation_frames/" + addon + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png");
-
+                                
                                 WritePNG(FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + d + "_attack_" + w + "_" + frame + ".png", imi, true), b, basepalette);
                             }
                         }
@@ -3439,22 +3435,11 @@ namespace AssetsPV
                             {
                                 AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
                                    "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
-                                //DELETEME
-                                //for(int i = 37 * 8; i < 38 * 8; i++)
-                                //{
-                                //    File.Delete(altFolder + "Zombie/" + colorNames[i % 8] + "/animation_frames/color" + i + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
-                                //}
                             }
                             else
                             {
                                 AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
                                    "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
-                                //DELETEME
-                                //for(int i = 0 * 8; i < 38 * 8; i++)
-                                //{
-                                //    File.Delete(altFolder + ((i >= 38 * 8) ? "Divine/" : ((i >= 37 * 8) ? "Zombie/" : ((i >= 208) ? "Alien/" : ""))) +
-                                //        colorNames[i % 8] + "/animation_frames/color" + i + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
-                                //}
                             }
                         }
                     }
@@ -7492,9 +7477,9 @@ namespace AssetsPV
 
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight);
-            string folder = altFolder + "Terrains3/", blankFolder = altFolder + "TerrainsBlank3/";
+            string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
             Directory.CreateDirectory(folder);
-            Directory.CreateDirectory(blankFolder);
+            Directory.CreateDirectory(bFolder);
 
             for(int dir = 0; dir < 4; dir++)
             {
@@ -7503,17 +7488,17 @@ namespace AssetsPV
                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette]);
-                PngWriter png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette + 4]);
-                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette + 5]);
-                png2 = FileHelper.CreatePngWriter(blankFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
             }
 
@@ -7654,7 +7639,7 @@ namespace AssetsPV
                 tilings[i] = new Bitmap[4];
                 for(int j = 0; j < 4; j++)
                 {
-                    tilings[i][j] = new Bitmap(altFolder + "Terrains3/" + CURedux.Terrains[i] + "_Huge_face" + j + "_Normal_0" + ".png");
+                    tilings[i][j] = new Bitmap(altFolder + "Terrains/" + CURedux.Terrains[i] + "_Huge_face" + j + "_Normal_0" + ".png");
                 }
             }
             Bitmap b = new Bitmap(128 * 14, 64 * 14);
@@ -8908,7 +8893,7 @@ namespace AssetsPV
             */
             writePaletteImages();
 
-            /*
+            
             renderTerrainSimple("Plains", "Normal", new byte[] {
                 1, 30, 1,
                 58, 29, 3,
@@ -8956,20 +8941,18 @@ namespace AssetsPV
                 46, 23, 5,
                 47, 21, 4,
                 44, 29, 7, }, 45, 44, 46);
-            */
-            /*
+                        
             for(int i = 0; i < 40; i++)
             {
                 makeSimpleTiling("tiling_simple" + i);
             }
-            */
-            addon = "";
+            
             for(int a = 2; a < 2; a++)
             {
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
                 {
-                    if(VoxelLogic.AltVersions[u] == 0)
-                        continue;
+                    //if(VoxelLogic.AltVersions[u] == 0)
+                    //    continue;
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
                 /*
