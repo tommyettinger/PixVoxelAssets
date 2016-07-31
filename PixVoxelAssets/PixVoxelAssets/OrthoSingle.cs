@@ -2244,7 +2244,7 @@ namespace AssetsPV
         {
             string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 }.AsParallel().ForAll(i => {
+            new int[] { 0, 1, 2, 3, 4, 5, 6, 7}.AsParallel().ForAll(i => {
                 Console.WriteLine("Processing receive animation: " + VoxelLogic.WeaponTypes[i]);
                 if(RENDER)
                 {
@@ -5358,14 +5358,14 @@ namespace AssetsPV
             wditheredcurrent = wdithered[terrainPalette];
 
             Console.WriteLine("Terrain: " + name);
-            byte[,,] colors = PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight);
+            byte[,,] colors = TransformLogic.RunCA(PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight),2);
             string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
             Directory.CreateDirectory(folder);
             Directory.CreateDirectory(bFolder);
 
             for(int dir = 0; dir < 4; dir++)
             {
-                byte[,,] c2 = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir)), 2);
+                byte[,,] c2 = TransformLogic.SealGaps(TransformLogic.RotateYaw(colors, 90 * dir));
 
                 ImageInfo imi = new ImageInfo(widthHuge, heightHuge, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
@@ -6038,7 +6038,7 @@ namespace AssetsPV
 
             makeSimpleTiling();
 
-            for(int a = 0; a < 2; a++)
+            for(int a = 2; a < 2; a++)
             {
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
                 {
@@ -6137,6 +6137,7 @@ namespace AssetsPV
                 */
                 addon = TallFacesDithered.addon = "";
             }
+            addon = TallFacesDithered.addon = "";
 
             processReceivingMilitaryW();
 

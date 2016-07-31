@@ -3175,7 +3175,7 @@ namespace AssetsPV
         public static void processReceivingMilitaryW()
         {
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
-            new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 }.AsParallel().ForAll(i =>
+            new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }.AsParallel().ForAll(i =>
             {
                 //for(int i = 0; i < 8; i++)
                 {
@@ -7476,14 +7476,14 @@ namespace AssetsPV
             wditheredcurrent = wdithered[terrainPalette];
 
             Console.WriteLine("Terrain: " + name);
-            byte[,,] colors = PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight);
+            byte[,,] colors = TransformLogic.RunCA(PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight), 2);
             string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
             Directory.CreateDirectory(folder);
             Directory.CreateDirectory(bFolder);
 
             for(int dir = 0; dir < 4; dir++)
             {
-                FaceVoxel[,,] c2 = FaceLogic.GetFaces(TransformLogic.RunCA(colors, 2), true);
+                FaceVoxel[,,] c2 = FaceLogic.GetFaces(colors, true);
 
                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
@@ -9046,10 +9046,10 @@ namespace AssetsPV
                 */
                 addon = "";
             }
-            /*
+            
             processReceivingMilitaryW();
             processReceivingMilitaryWSuper();
-            */
+            
             
             WriteAllGIFs();
             addon = "Zombie_";
