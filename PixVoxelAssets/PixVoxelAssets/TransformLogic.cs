@@ -1579,7 +1579,8 @@ namespace AssetsPV
             byte[,,] data = new byte[xSize, ySize, zSize];
             foreach(MagicaVoxelData mvd in voxelData)
             {
-                data[mvd.x, mvd.y, mvd.z] = mvd.color;
+                if(mvd.x < xSize && mvd.y < ySize && mvd.z < zSize)
+                    data[mvd.x, mvd.y, mvd.z] = mvd.color;
             }
             return data;
         }

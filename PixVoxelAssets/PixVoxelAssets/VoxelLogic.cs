@@ -18297,7 +18297,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             switch(facing)
             {
                 case 0:
-                    vls = voxels;
+                    vls = voxels.Replicate();
                     break;
                 case 1:
                     for(int i = 0; i < voxels.Length; i++)

@@ -5002,7 +5002,7 @@ namespace AssetsPV
             MagicaVoxelData[][][] explosions = new MagicaVoxelData[strength][][];
             for(int s = 0; s < strength; s++)
             {
-                explosions[s] = FireballLarge(randomFill(84, 55 + r.Next(11), r.Next(5), 9, 12, 7, new int[] { orange_fire, yellow_fire, smoke }).ToArray(), -3, 9, 0);
+                explosions[s] = FireballLarge(randomFill(84, 54, r.Next(5), 9, 12, 7, new int[] { orange_fire, yellow_fire, smoke }).ToArray(), -3, 9, 0);
             }
             for(int f = 0; f < voxelFrames.Length; f++)
             {
@@ -5113,7 +5113,8 @@ namespace AssetsPV
             }
             for(int i = 0; i < 7; i++)
             {
-                extra[3 + distance + i].AddRange(explosion[i].Select(mvd => { mvd.z = (byte)((i * i <= mvd.z) ? mvd.z - i * i : 0); mvd.color = (byte)((mvd.color == smoke) ? VoxelLogic.clear : 253 - 27 * 4); return mvd; }));
+                extra[3 + distance + i].AddRange(explosion[i].Select(mvd => { mvd.z = (byte)((i * i <= mvd.z) ? mvd.z - i * i : 0);
+                    mvd.color = (byte)((mvd.color == smoke || mvd.color == VoxelLogic.clear) ? VoxelLogic.clear : 253 - 27 * 4); return mvd; }));
             }
 
             for(int f = 0; f < voxelFrames.Length; f++)
@@ -5337,7 +5338,7 @@ namespace AssetsPV
         //174 AA Gun
         //175 Machine Gun
         //176 Handgun
-        public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "AA_Gun", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb" };
+        public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "Torpedo", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb", "Flame" };
 
         public static AnimationGenerator[] weaponAnimationsLarge = { HandgunAnimationLarge, MachineGunAnimationLarge, TorpedoAnimationLarge, CannonAnimationLarge,
                                                                        LongCannonAnimationLarge, RocketAnimationLarge, ArcMissileAnimationLarge, BombAnimationLarge, FlameAnimationLarge };
@@ -5487,6 +5488,9 @@ namespace AssetsPV
         {
             MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[16][];
             //voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+
+            VoxelLogic.sizex = 120;
+            VoxelLogic.sizey = 120;
 
             voxelFrames = receiveAnimations[weaponType](voxelFrames, strength);
 
