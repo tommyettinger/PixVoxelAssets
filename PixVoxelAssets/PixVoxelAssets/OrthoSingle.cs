@@ -6014,7 +6014,7 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            writePaletteImages();
+            //writePaletteImages();
             //renderTerrain();
 
             /*
@@ -6080,9 +6080,9 @@ namespace AssetsPV
                 46, 23, 5,
                 47, 21, 4,
                 44, 29, 7, }, 45, 44, 46);
-
+                */
             makeSimpleTiling();
-            */
+            
             for(int a = 2; a < 2; a++)
             {
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -6182,11 +6182,11 @@ namespace AssetsPV
                 */
                 addon = TallFacesDithered.addon = "";
             }
-            addon = TallFacesDithered.addon = "";
+            //addon = TallFacesDithered.addon = "";
 
-            processReceivingMilitaryW();
+            //processReceivingMilitaryW();
 
-            processReceivingMilitaryWSuper();
+            //processReceivingMilitaryWSuper();
             //WriteAllGIFs();
 
             //addon = "Zombie_";

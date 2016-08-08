@@ -2947,7 +2947,6 @@ namespace AssetsPV
             int framelimit = 4;
             
             string folder = altFolder;
-            Directory.CreateDirectory(folder);
             Console.WriteLine("Processing: " + u + ", palette " + 99);
 
             bool zombie = u.StartsWith("Zombie_");
@@ -2959,7 +2958,7 @@ namespace AssetsPV
                 BinaryReader bin = new BinaryReader(File.Open("CU2/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
                 List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0);
 
-                Directory.CreateDirectory("vox/" + altFolder);
+                //Directory.CreateDirectory("vox/" + altFolder);
                 //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
                 MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
                 
@@ -3058,7 +3057,7 @@ namespace AssetsPV
                             }
                             flying[f] = altered.ToArray();
                         }
-                        Directory.CreateDirectory(folder); //("color" + i);
+                        //Directory.CreateDirectory(folder); //("color" + i);
                         ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
 
                         for(int d = 0; d < 4; d++)
@@ -3093,7 +3092,7 @@ namespace AssetsPV
                 else if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] != -1)
                 {
 
-                    Directory.CreateDirectory(folder);
+                    //Directory.CreateDirectory(folder);
                     if(RENDER)
                     {
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
@@ -3454,7 +3453,7 @@ namespace AssetsPV
                     List<MagicaVoxelData>[] receive = CURedux.makeReceiveAnimationSuper(i, s + 1);
                     for(int d = 0; d < 4; d++)
                     {
-                        Directory.CreateDirectory(folder); //("color" + i);
+                        //Directory.CreateDirectory(folder); //("color" + i);
 
                         for(int frame = 0; frame < 16; frame++)
                         {
@@ -3942,7 +3941,7 @@ namespace AssetsPV
         public static byte[][] Lump(byte[][] original, int palette)
         {
             r = new Random(0x1337);
-            int height = original.Length, width = original[0].Length, sy, sx, tmp;
+            int height = original.Length, width = original[0].Length, sy, sx;
             byte[][] next = new byte[height][];
             for(int i = 0; i < height; i++)
             {
@@ -7301,8 +7300,6 @@ namespace AssetsPV
 
                     ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                     FaceVoxel[,,] faces = FaceLogic.GetFaces(c2);
-                    Directory.CreateDirectory(altFolder + "Terrains");
-                    Directory.CreateDirectory(altFolder + "TerrainsBlank");
                     PngWriter png = FileHelper.CreatePngWriter(altFolder + "Terrains/" + nm + ".png", imi, true);
                     WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette]);
                     PngWriter png2 = FileHelper.CreatePngWriter(altFolder + "TerrainsBlank/" + nm + ".png", imi, true);
@@ -7439,7 +7436,7 @@ namespace AssetsPV
 
             BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain3/" + (kind == "Ordered" ? kind : "Normal") + "_Huge_W.vox", FileMode.Open));
             List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
-            int terrainPalette = CURedux.wspecies.Length * 8;
+            int terrainPalette = CURedux.wspecies.Length * 8 - 16;
 
             //NORMAL WEATHER
             wcurrent = wrendered[terrainPalette];
@@ -7450,8 +7447,6 @@ namespace AssetsPV
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = TransformLogic.RunCA(PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight), 2);
             string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
-            Directory.CreateDirectory(folder);
-            Directory.CreateDirectory(bFolder);
 
             for(int dir = 0; dir < 4; dir++)
             {
@@ -7494,8 +7489,8 @@ namespace AssetsPV
 
             Console.WriteLine("Terrain: " + name);
             byte[,,] colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)).ToList(), 120, 120, 80);
-            Directory.CreateDirectory(altFolder + "Terrains2");
-            Directory.CreateDirectory(altFolder + "TerrainsBlank2");
+            Directory.CreateDirectory(altFolder + "Terrains");
+            Directory.CreateDirectory(altFolder + "TerrainsBlank");
 
             for(int dir = 0; dir < 4; dir++)
             {
@@ -7628,7 +7623,7 @@ namespace AssetsPV
                         tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (64 * (i + j - 18)) - 62, (32 * (i - j + 12)) - 175);
                 }
             }
-            b.Save(altFolder + name + ".png", ImageFormat.Png);
+            b.Save(altFolder + "Tilings/" + name + ".png", ImageFormat.Png);
         }
 
         public static void processTerrainHugeW(string u, int palette, bool shadowless, bool addFloor)
@@ -8546,8 +8541,8 @@ namespace AssetsPV
             //altFolder = "other/";
             //  altFolder = "mecha3/";
             //VoxelLogic.wpalettes = AlternatePalettes.mecha_palettes;
-            System.IO.Directory.CreateDirectory("Terrains2");
-            System.IO.Directory.CreateDirectory("TerrainsBlank2");
+            //System.IO.Directory.CreateDirectory("Terrains2");
+            //System.IO.Directory.CreateDirectory("TerrainsBlank2");
             //System.IO.Directory.CreateDirectory("mecha3");
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
@@ -8863,7 +8858,7 @@ namespace AssetsPV
             processUnitLargeWMechaFiring(moniker: "Banzai_Flying", left_weapon: "Pistol", right_weapon: "Pistol", left_projectile: "Autofire", right_projectile: "Autofire",
                 legs: "Armored_Jet", still: false);
             */
-            /*
+            
             writePaletteImages();
 
             
@@ -8914,13 +8909,13 @@ namespace AssetsPV
                 46, 23, 5,
                 47, 21, 4,
                 44, 29, 7, }, 45, 44, 46);
-                        
+            Directory.CreateDirectory(altFolder + "Tilings");
             for(int i = 0; i < 40; i++)
             {
-                makeSimpleTiling("tiling_simple" + i);
+                makeSimpleTiling("tiling" + i);
             }
-            */
-            for(int a = 2; a < 2; a++)
+            
+            for(int a = 0; a < 2; a++)
             {
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
                 {
@@ -8989,7 +8984,11 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Hospital");
                 processUnitLargeWMilitary("Oil_Well");
                 */
-                CURedux.super_units.AsParallel().ForAll(u => processUnitHugeWMilitarySuper(u));
+                for(int v = 0; v < CURedux.super_units.Length; v++)
+                {
+                    processUnitHugeWMilitarySuper(CURedux.super_units[v]);
+                }
+                //CURedux.super_units.AsParallel().ForAll(u => processUnitHugeWMilitarySuper(u));
                 /*
                 processUnitHugeWMilitarySuper("Copter");
                 processUnitHugeWMilitarySuper("Copter_P");
@@ -9020,13 +9019,13 @@ namespace AssetsPV
                 addon = "";
             }
             
-            processReceivingMilitaryW();
-            processReceivingMilitaryWSuper();
+            //processReceivingMilitaryW();
+            //processReceivingMilitaryWSuper();
             
             
-            //WriteAllGIFs();
-            //addon = "Zombie_";
-            //WriteZombieGIFs();
+            WriteAllGIFs();
+            addon = "Zombie_";
+            WriteZombieGIFs();
             
             //WriteDivineGIFs();
 
