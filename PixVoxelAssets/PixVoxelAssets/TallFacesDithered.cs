@@ -77,6 +77,7 @@ namespace AssetsPV
         public static string[] colorNames = new string[] { "Dark", "White", "Red", "Orange", "Yellow", "Green", "Blue", "Purple" };
         private static byte[][][][] storeColorCubesWBold()
         {
+            r = new Random(0x1337BEEF);
             VoxelLogic.wpalettecount = VoxelLogic.wpalettes.Length;
             //            wcolorcount = VoxelLogic.wpalettes[0].Length;
             // 29 is the number of Slope enum types.
@@ -152,7 +153,7 @@ namespace AssetsPV
                        ColorMatrixFlag.Default,
                        ColorAdjustType.Bitmap);
 
-                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 40)) || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || (VoxelLogic.VisualMode != "CU" && current_color == 40))) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -179,12 +180,18 @@ namespace AssetsPV
                                 s = VoxelLogic.Clamp((s * 0.5), 0.0, 0.5);
                                 v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
                             }
+                            else if(current_color == 40 && VoxelLogic.VisualMode == "CU" && !VoxelLogic.terrainPalettes.Contains(p))
+                            {
+                                h += (v + s) * 0.075 - 0.11;
+                                v *= 0.8 + r.NextDouble() * 0.18;
+                            }
                             for(int slp = 0; slp < 29; slp++)
                             {
                                 Color c2 = Color.Transparent;
                                 double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
                                         v_alter = Math.Pow(v, 2.0 - 2.0 * v);
                                 v_alter *= Math.Pow(v_alter, 0.38);
+
                                 if(j == height - 1)
                                 {
                                     c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
@@ -518,7 +525,39 @@ namespace AssetsPV
                             }
                         }
                     }
+                    /*
+                    if(current_color == 40 && VoxelLogic.VisualMode == "CU" && !VoxelLogic.terrainPalettes.Contains(p))
+                    {
+                        int avgR = 0, avgG = 0, avgB = 0;
+                        for(int i = 0; i < width; i+=2)
+                        {
+                            for(int j = 0; j < height; j++)
+                            {
+                                avgR += cubes[p, current_color, 0, i * 4 + j * width * 4 + 2];
+                                avgG += cubes[p, current_color, 0, i * 4 + j * width * 4 + 1];
+                                avgB += cubes[p, current_color, 0, i * 4 + j * width * 4 + 0];
+                            }
+                        }
+                        avgR /= (width * height / 2);
+                        avgG /= (width * height / 2);
+                        avgB /= (width * height / 2);
 
+                        for(int slp = 0; slp < 29; slp++)
+                        {
+                            for(int i = 0; i < width; i++)
+                            {
+                                for(int j = 0; j < height; j++)
+                                {
+                                    if(cubes[p, current_color, slp, i * 4 + j * width * 4 + 3] != 0)
+                                    {
+                                        cubes[p, current_color, slp, i * 4 + j * width * 4 + 2] = (byte)((cubes[p, current_color, slp, i * 4 + j * width * 4 + 2] + avgR) / 2);
+                                        cubes[p, current_color, slp, i * 4 + j * width * 4 + 1] = (byte)((cubes[p, current_color, slp, i * 4 + j * width * 4 + 1] + avgG) / 2);
+                                        cubes[p, current_color, slp, i * 4 + j * width * 4 + 0] = (byte)((cubes[p, current_color, slp, i * 4 + j * width * 4 + 0] + avgB) / 2);
+                                    }
+                                }
+                            }
+                        }
+                    }*/
                 }
             }
             byte[][][][] cubes2 = new byte[VoxelLogic.wpalettecount][][][];
@@ -570,7 +609,7 @@ namespace AssetsPV
                     byte brighti = (byte)(topi - 1);
                     byte dimi = (byte)(topi - 2);
                     byte darki = (byte)(topi - 3);
-                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 40)) || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || (VoxelLogic.VisualMode != "CU" && current_color == 40))) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -1824,7 +1863,7 @@ namespace AssetsPV
                                ColorMatrixFlag.Default,
                                ColorAdjustType.Bitmap);
 
-                            string which_image = (((current_color >= 18 && current_color <= 20) || current_color == 40) || cpal[p][current_color][3] == 0F
+                            string which_image = (((current_color >= 18 && current_color <= 20) || (VoxelLogic.VisualMode != "CU" && current_color == 40)) || cpal[p][current_color][3] == 0F
                                 || cpal[p][current_color][3] == VoxelLogic.flash_alpha
                                 || cpal[p][current_color][3] == VoxelLogic.flash_alpha_0 || cpal[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                                (cpal[p][current_color][3] == VoxelLogic.flat_alpha || cpal[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -6208,6 +6247,7 @@ namespace AssetsPV
         private static byte[][] renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             rng = new Random(0xb335 + frame / 2);
+            bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int rows = 308, cols = 248;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
@@ -6263,7 +6303,7 @@ namespace AssetsPV
                             continue;
                         else if(VoxelLogic.wcolors[current_color][3] == 0F)
                             continue;
-                        else if(current_color >= 17 && current_color <= 20)
+                        else if(useColorIndices && current_color >= 17 && current_color <= 20)
                         {
                             int mod_color = current_color;
                             if(mod_color == 17 && r.Next(7) < 3) //smoke
@@ -6321,7 +6361,7 @@ namespace AssetsPV
                                 }
                             }
                         }
-                        else if(current_color == 25)
+                        else if(useColorIndices && current_color == 25)
                         {
                             taken[vx.x, vx.y] = true;
                             for(int j = 0; j < 4; j++)
@@ -6342,14 +6382,14 @@ namespace AssetsPV
                             int mod_color = current_color;
                             //                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                             //                              continue;
-                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            if(useColorIndices && ((VoxelLogic.VisualMode != "CU" && mod_color == 40) || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
                             }
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
-                            if(mod_color == 27) //water
+                            if(useColorIndices && (mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40))) //water or grass
                                 sp = 1;
                             for(int j = 0; j < 4; j++)
                             {
@@ -6401,7 +6441,7 @@ namespace AssetsPV
                                             }
                                             else
                                             {
-                                                if(mod_color == 27) //water
+                                                if(useColorIndices && (mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40))) //water or grass
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                                 else
                                                     argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
@@ -6680,14 +6720,14 @@ namespace AssetsPV
                             int mod_color = current_color;
                             //if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                             //  continue;
-                            if(useColorIndices && (mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            if(useColorIndices && ((VoxelLogic.VisualMode != "CU" && mod_color == 40) || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
                             }
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
-                            if(useColorIndices && mod_color == 27) //water
+                            if(mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40)) //water or grass
                                 sp = 1;
 
 
@@ -6742,7 +6782,7 @@ namespace AssetsPV
                                             }
                                             else
                                             {
-                                                if(useColorIndices && mod_color == 27) //water
+                                                if(mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40)) //water or grass
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                                 else
                                                     argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
@@ -7016,16 +7056,15 @@ namespace AssetsPV
                             int mod_color = current_color;
                             //  if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                             //     continue;
-                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            if(((VoxelLogic.VisualMode != "CU" && mod_color == 40) || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
                             }
                             else
                                 taken[vx.x, vx.y] = true;
                             int sp = slopes[slope];
-                            if(mod_color == 27) //water
+                            if(mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40)) //water or grass
                                 sp = 1;
-
 
                             for(int j = 0; j < 4; j++)
                             {
@@ -7077,7 +7116,7 @@ namespace AssetsPV
                                             }
                                             else
                                             {
-                                                if(mod_color == 27) //water
+                                                if(mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40)) //water or grass
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                                 else
                                                     argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
@@ -7822,7 +7861,7 @@ namespace AssetsPV
                             int mod_color = current_color;
                             //                            if((mod_color == 27 || mod_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
                             //                              continue;
-                            if((mod_color == 40 || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
+                            if(((VoxelLogic.VisualMode != "CU" && mod_color == 40) || mod_color == VoxelLogic.wcolorcount + 5 || mod_color == VoxelLogic.wcolorcount + 20)) //rare sparks
                             {
                                 if(r.Next(11) < 8) continue;
                             }
@@ -8861,7 +8900,7 @@ namespace AssetsPV
             
             writePaletteImages();
 
-            
+            /*
             renderTerrainSimple("Plains", "Normal", new byte[] {
                 1, 30, 1,
                 58, 29, 3,
@@ -8914,15 +8953,17 @@ namespace AssetsPV
             {
                 makeSimpleTiling("tiling" + i);
             }
-            
+            */
             for(int a = 0; a < 2; a++)
             {
+                /*
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
                 {
                     //if(VoxelLogic.AltVersions[u] == 0)
                     //    continue;
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
+                */
                 /*
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
@@ -8980,14 +9021,16 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Factory");
                 processUnitLargeWMilitary("Castle");
                 processUnitLargeWMilitary("Estate");
-                processUnitLargeWMilitary("Farm");
                 processUnitLargeWMilitary("Hospital");
-                processUnitLargeWMilitary("Oil_Well");
                 */
+                processUnitLargeWMilitary("Farm");
+                processUnitLargeWMilitary("Oil_Well");
+                /*
                 for(int v = 0; v < CURedux.super_units.Length; v++)
                 {
                     processUnitHugeWMilitarySuper(CURedux.super_units[v]);
                 }
+                */
                 //CURedux.super_units.AsParallel().ForAll(u => processUnitHugeWMilitarySuper(u));
                 /*
                 processUnitHugeWMilitarySuper("Copter");
@@ -9012,10 +9055,11 @@ namespace AssetsPV
                 processUnitHugeWMilitarySuper("Castle");
                 processUnitHugeWMilitarySuper("Estate");
                 processUnitHugeWMilitarySuper("Airport");
-                processUnitHugeWMilitarySuper("Farm");
                 processUnitHugeWMilitarySuper("Hospital");
-                processUnitHugeWMilitarySuper("Oil_Well");
                 */
+                processUnitHugeWMilitarySuper("Farm");
+                processUnitHugeWMilitarySuper("Oil_Well");
+                
                 addon = "";
             }
             

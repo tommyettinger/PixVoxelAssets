@@ -13,6 +13,7 @@ namespace AssetsPV
 
         public static string[] normal_units = new string[]
         {
+            /*
             "Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T",
             "Civilian_Alt", "Volunteer_Alt", "Volunteer_P_Alt", "Volunteer_S_Alt", "Volunteer_T_Alt",
             "Infantry", "Infantry_P", "Infantry_S", "Infantry_T", "Infantry_PS", "Infantry_PT", "Infantry_ST",
@@ -28,14 +29,15 @@ namespace AssetsPV
             "Boat", "Boat_P", "Boat_S", "Boat_T",
             "Recon", "Flamethrower",
             "Recon_Alt", "Flamethrower_Alt",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well", "Farm",
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital",*/ "Oil_Well", "Farm",
 
         }, super_units = new string[]
         {
+            /*
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well", "Farm"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital",*/ "Oil_Well", "Farm"
         };
 
         public const float flat_alpha = VoxelLogic.flat_alpha;
@@ -141,8 +143,8 @@ namespace AssetsPV
             new float[] {0.75F,0.1F,0.15F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.65F,0.65F,0.65F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -268,8 +270,8 @@ namespace AssetsPV
             new float[] {0.7F,1.0F,1.0F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.75F,0.8F,0.8F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -395,8 +397,8 @@ namespace AssetsPV
             new float[] {0.8F,0.65F,0.25F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.8F,0.25F,0.25F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -522,8 +524,8 @@ namespace AssetsPV
             new float[] {0.6F,0.6F,0.6F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.8F,0.5F,0.1F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -649,8 +651,8 @@ namespace AssetsPV
             new float[] {0.0F,0.0F,0.5F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.85F,0.85F,0.35F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -776,8 +778,8 @@ namespace AssetsPV
             new float[] {0.6F,0.5F,0.35F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.4F,0.6F,0.35F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -903,8 +905,8 @@ namespace AssetsPV
             new float[] {0.75F,0.65F,0.05F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.55F,0.5F,0.95F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
@@ -1030,8 +1032,8 @@ namespace AssetsPV
             new float[] {0.7F,0.8F,0.9F,spin_alpha_1},
             //39 rotor frame 1
             new float[] {0.65F,0.35F,0.65F,spin_alpha_1},
-            //40 placeholder
-            new float[] {0F,0F,0F,0F},
+            //40 always green
+            new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust
             new float[] {0.7F,0.65F,0.33F,1F},
             //42 always dust
