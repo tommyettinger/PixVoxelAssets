@@ -3214,7 +3214,7 @@ namespace AssetsPV
         {
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             //new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }.AsParallel().ForAll(i =>
-            for(int i = 0; i < 8; i+=7)
+            for(int i = 0; i < 8; i++)
             {
                 {
                     Console.WriteLine("Processing receive animation: " + CURedux.WeaponTypes[i]);
@@ -3232,12 +3232,6 @@ namespace AssetsPV
                                 ImageInfo imi = new ImageInfo(248, 308, 8, false, false, true);
                                 PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
-                                if(i == 7)
-                                {
-                                    png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
-                                    WritePNG(png, b, basepalette);
-
-                                }
                             }
                         }
                     }
@@ -3250,20 +3244,6 @@ namespace AssetsPV
                             {
                                 AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
                                     "animation_frames/receiving/color{0}" + "/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                            }
-                        }
-                    }
-                    if(i == 7)
-                    {
-                        for(int strength = 0; strength < 4; strength++)
-                        {
-                            for(int d = 0; d < 4; d++)
-                            {
-                                for(int frame = 0; frame < 16; frame++)
-                                {
-                                    AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                        "animation_frames/receiving/color{0}" + "/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                                }
                             }
                         }
                     }
@@ -3484,7 +3464,7 @@ namespace AssetsPV
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             //new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }.AsParallel().ForAll(i =>
 
-            for(int i = 7; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 Console.WriteLine("Processing receive animation: " + CURedux.WeaponTypes[i]);
                 for(int s = 0; s < 4; s++)
@@ -3507,11 +3487,6 @@ namespace AssetsPV
                             ImageInfo imi = new ImageInfo(328, 408, 8, false, false, true);
                             PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
                             WritePNG(png, b, basepalette);
-                            if(i == 7)
-                            {
-                                png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
-                                WritePNG(png, b, basepalette);
-                            }
                         }
                     }
                 }
@@ -3546,20 +3521,6 @@ namespace AssetsPV
                         {
                             AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
                                 "animation_frames/receiving/color{0}/" + "/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
-                        }
-                    }
-                }
-                if(i == 7)
-                {
-                    for(int strength = 0; strength < 4; strength++)
-                    {
-                        for(int d = 0; d < 4; d++)
-                        {
-                            for(int frame = 0; frame < 16; frame++)
-                            {
-                                AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
-                                    "animation_frames/receiving/color{0}/" + "/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
-                            }
                         }
                     }
                 }

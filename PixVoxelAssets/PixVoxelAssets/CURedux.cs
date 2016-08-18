@@ -5339,7 +5339,7 @@ namespace AssetsPV
         //174 AA Gun
         //175 Machine Gun
         //176 Handgun
-        public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "Torpedo", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb", "Flame" };
+        public static string[] WeaponTypes = { "Handgun", "Machine_Gun", "Torpedo", "Cannon", "Long_Cannon", "Rocket", "Arc_Missile", "Bomb"};
 
         public static AnimationGenerator[] weaponAnimationsLarge = { HandgunAnimationLarge, MachineGunAnimationLarge, TorpedoAnimationLarge, CannonAnimationLarge,
                                                                        LongCannonAnimationLarge, RocketAnimationLarge, ArcMissileAnimationLarge, BombAnimationLarge, FlameAnimationLarge };
@@ -5348,7 +5348,7 @@ namespace AssetsPV
                                                                     RocketReceiveAnimationLarge,
                                                                     ArcMissileReceiveAnimationLarge,
                                                                     BombReceiveAnimationLarge,
-                                                                    BombReceiveAnimationLarge
+                                                                    //BombReceiveAnimationLarge
                                                                 };
 
 

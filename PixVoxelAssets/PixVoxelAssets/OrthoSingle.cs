@@ -373,19 +373,21 @@ namespace AssetsPV
         {
             if(VoxelLogic.VisualMode == "CU")
             {
-                Directory.CreateDirectory(blankFolder + "/animation_frames/");
-                Directory.CreateDirectory(blankFolder + "/standing_frames/");
-                Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/");
+                Directory.CreateDirectory(blankFolder + "animation_frames/");
+                Directory.CreateDirectory(blankFolder + "standing_frames/");
+                Directory.CreateDirectory(blankFolder + "animation_frames/receiving/");
                 foreach(string u in VoxelLogic.CurrentUnits)
                 {
-                    Directory.CreateDirectory(blankFolder + "/animation_frames/" + u);
-                    Directory.CreateDirectory(blankFolder + "/standing_frames/" + u);
+                    Directory.CreateDirectory(blankFolder + "animation_frames/" + u);
+                    Directory.CreateDirectory(blankFolder + "standing_frames/" + u);
                 }
                 foreach(string u in CURedux.WeaponTypes)
                 {
-                    Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/" + u);
+                    Directory.CreateDirectory(blankFolder + "animation_frames/receiving/" + u);
                 }
-                Directory.CreateDirectory(blankFolder + "/animation_frames/receiving/Explosion");
+                //DELETEME
+                Directory.Delete(blankFolder + "animation_frames/receiving/Flame/", true);
+                Directory.CreateDirectory(blankFolder + "animation_frames/receiving/Explosion");
                 for(int p = 0; p < 8 * (CURedux.wspecies.Length - 2); p++)
                 {
                     foreach(string u in VoxelLogic.CurrentUnits)
@@ -400,10 +402,19 @@ namespace AssetsPV
                         if(p >= 38 * 8)
                             Directory.CreateDirectory(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/" + u);
                     }
+
                     if(p < 8 || (p >= 208 && p < 37 * 8))
+                    {
                         Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
+                        //DELETEME
+                        Directory.Delete(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Flame", true);
+                    }
                     if(p >= 38 * 8)
+                    {
                         Directory.CreateDirectory(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
+                        //DELETEME
+                        Directory.Delete(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Flame/", true);
+                    }
                     //Directory.CreateDirectory("frames/" + altFolder + "color" + p);
                 }
             }
@@ -2284,7 +2295,7 @@ namespace AssetsPV
             string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             //new int[] { 0, 1, 2, 3, 4, 5, 6, 7}.AsParallel().ForAll(i => {
-            for(int i = 7; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 Console.WriteLine("Processing receive animation: " + CURedux.WeaponTypes[i]);
                 if(RENDER)
@@ -2304,11 +2315,6 @@ namespace AssetsPV
 
                                 PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
-                                if(i == 7)
-                                {
-                                    png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + s + "_" + frame + ".png", imi, true);
-                                    WritePNG(png, b, basepalette);
-                                }
                             }
                         }
                     }
@@ -2346,20 +2352,7 @@ namespace AssetsPV
                         }
                     }
                 }
-                if(i == 7)
-                {
-                    for(int strength = 0; strength < 4; strength++)
-                    {
-                        for(int d = 0; d < 4; d++)
-                        {
-                            for(int frame = 0; frame < 16; frame++)
-                            {
-                                AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_" + frame + ".png",
-                                    "animation_frames/receiving/color{0}" + "/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_" + frame + ".png", simplepalettes);
-                            }
-                        }
-                    }
-                }
+
                 /*
                 List<string> imageNames = new List<string>(4 * 4 * 8 * 16);
 
@@ -2655,7 +2648,7 @@ namespace AssetsPV
             string folder = ("frames/" + altFolder);
             //START AT 0 WHEN PROCESSING ALL OF THE ANIMATIONS.
             //new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }.AsParallel().ForAll(i => {
-            for(int i = 7; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 Console.WriteLine("Processing receive animation: " + CURedux.WeaponTypes[i]);
                 if(RENDER)
@@ -2684,11 +2677,6 @@ namespace AssetsPV
                                 ImageInfo imi = new ImageInfo(widthMassive, heightMassive, 8, false, false, true);
                                 PngWriter png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
                                 WritePNG(png, b, basepalette);
-                                if(i == 7)
-                                {
-                                    png = FileHelper.CreatePngWriter(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + s + "_super_" + frame + ".png", imi, true);
-                                    WritePNG(png, b, basepalette);
-                                }
                             }
                         }
                     }
@@ -2723,20 +2711,6 @@ namespace AssetsPV
                         {
                             AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
                                 "animation_frames/receiving/color{0}/" + "/" + CURedux.WeaponTypes[i] + "/" + CURedux.WeaponTypes[i] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
-                        }
-                    }
-                }
-                if(i == 7)
-                {
-                    for(int strength = 0; strength < 4; strength++)
-                    {
-                        for(int d = 0; d < 4; d++)
-                        {
-                            for(int frame = 0; frame < 16; frame++)
-                            {
-                                AlterPNGPaletteLimited(blankFolder + "animation_frames/receiving/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png",
-                                    "animation_frames/receiving/color{0}/" + "/" + CURedux.WeaponTypes[8] + "/" + CURedux.WeaponTypes[8] + "_face" + d + "_strength_" + strength + "_super_" + frame + ".png", simplepalettes);
-                            }
                         }
                     }
                 }
@@ -6122,16 +6096,14 @@ namespace AssetsPV
                 
             makeSimpleTiling();
             */
-            for(int a = 0; a < 2; a++)
+            for(int a = 2; a < 2; a++)
             {
-                /*
+                
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
                 {
-                    //if(VoxelLogic.AltVersions[u] == 0)
-                    //    continue;
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
-                */
+                
                 /*
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
