@@ -13,7 +13,6 @@ namespace AssetsPV
 
         public static string[] normal_units = new string[]
         {
-            /*
             "Civilian", "Volunteer", "Volunteer_P", "Volunteer_S", "Volunteer_T",
             "Civilian_Alt", "Volunteer_Alt", "Volunteer_P_Alt", "Volunteer_S_Alt", "Volunteer_T_Alt",
             "Infantry", "Infantry_P", "Infantry_S", "Infantry_T", "Infantry_PS", "Infantry_PT", "Infantry_ST",
@@ -29,15 +28,15 @@ namespace AssetsPV
             "Boat", "Boat_P", "Boat_S", "Boat_T",
             "Recon", "Flamethrower",
             "Recon_Alt", "Flamethrower_Alt",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital",*/ "Oil_Well", "Farm",
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well", "Farm",
 
         }, super_units = new string[]
         {
-            /*
+            
             "Copter", "Copter_P", "Copter_S", "Copter_T",
             "Plane", "Plane_P", "Plane_S", "Plane_T",
             "Boat", "Boat_P", "Boat_S", "Boat_T",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital",*/ "Oil_Well", "Farm"
+            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well", "Farm"
         };
 
         public const float flat_alpha = VoxelLogic.flat_alpha;

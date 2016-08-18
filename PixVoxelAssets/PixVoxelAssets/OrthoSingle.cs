@@ -1040,6 +1040,7 @@ namespace AssetsPV
         public static void WriteAllGIFs()
         {
             Directory.CreateDirectory("gifs/" + altFolder);
+            /*
             CURedux.normal_units.AsParallel().ForAll(u =>
             //foreach(string u in CURedux.normal_units)
             {
@@ -1154,6 +1155,7 @@ namespace AssetsPV
                     }
                 }
             });
+            */
             CURedux.super_units.AsParallel().ForAll(u =>
             //foreach(string u in CURedux.super_units)
             {
@@ -1271,7 +1273,7 @@ namespace AssetsPV
         public static void WriteZombieGIFs()
         {
             Directory.CreateDirectory("gifs/" + altFolder);
-            CURedux.normal_units.AsParallel().ForAll(u =>
+            /*CURedux.normal_units.AsParallel().ForAll(u =>
             //foreach(string u in CURedux.normal_units)
             {
                 string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
@@ -1329,7 +1331,7 @@ namespace AssetsPV
                     WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_zombie_Large_animated");
                 }
             });
-
+            */
             CURedux.super_units.AsParallel().ForAll(u =>
             //foreach(string u in CURedux.super_units)
             {
@@ -2464,7 +2466,7 @@ namespace AssetsPV
             {
                 for(int dir = 0; dir < 4; dir++)
                 {
-                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 120, 120, 80)), 2 + bonus * multiplier / 2);
+                    byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.BasicRotateLarge(parsed, dir), multiplier * 2, 120, 120, 80), 2 + bonus * multiplier / 2);
                     //byte[,,] colors = TransformLogic.RunCA(
                     //    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 40), 2),
                     //        2 + bonus * multiplier * 2);
@@ -2582,7 +2584,7 @@ namespace AssetsPV
 
                             for(int frame = 0; frame < 16; frame++)
                             {
-                                byte[,,] colors = TransformLogic.RunCA(TransformLogic.SealGaps(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60)), 2 + bonus * multiplier / 2);
+                                byte[,,] colors = TransformLogic.RunCA(TransformLogic.VoxListToLargerArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), multiplier * 2, 80, 80, 60), 2 + bonus * multiplier / 2);
 
                                 //byte[,,] colors = TransformLogic.RunCA(
                                 //    TransformLogic.ScalePartial(TransformLogic.VoxListToArray(VoxelLogic.RotateYaw(firing[frame], d, 80, 80), 80, 80, 60), 2),
@@ -6188,15 +6190,14 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Castle");
                 processUnitLargeWMilitary("Estate");
                 processUnitLargeWMilitary("Hospital");
-                */
                 processUnitLargeWMilitary("Farm");
                 processUnitLargeWMilitary("Oil_Well");
-                /*
+                */
                 for(int v = 0; v < CURedux.super_units.Length; v++)
                 {
                     processUnitHugeWMilitarySuper(CURedux.super_units[v]);
                 }
-                */
+                
                 //CURedux.super_units.AsParallel().ForAll(u => processUnitHugeWMilitarySuper(u));
                 /*
                 processUnitHugeWMilitarySuper("Copter");
@@ -6222,10 +6223,9 @@ namespace AssetsPV
                 processUnitHugeWMilitarySuper("Estate");
                 processUnitHugeWMilitarySuper("Airport");
                 processUnitHugeWMilitarySuper("Hospital");
-                */
                 processUnitHugeWMilitarySuper("Farm");
                 processUnitHugeWMilitarySuper("Oil_Well");
-                
+                */
                 addon = TallFacesDithered.addon = "";
             }
             //addon = TallFacesDithered.addon = "";
