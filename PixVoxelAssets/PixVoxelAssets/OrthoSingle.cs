@@ -385,8 +385,8 @@ namespace AssetsPV
                 {
                     Directory.CreateDirectory(blankFolder + "animation_frames/receiving/" + u);
                 }
-                //DELETEME
-                Directory.Delete(blankFolder + "animation_frames/receiving/Flame/", true);
+            
+                //Directory.Delete(blankFolder + "animation_frames/receiving/Flame/", true);
                 Directory.CreateDirectory(blankFolder + "animation_frames/receiving/Explosion");
                 for(int p = 0; p < 8 * (CURedux.wspecies.Length - 2); p++)
                 {
@@ -406,16 +406,13 @@ namespace AssetsPV
                     if(p < 8 || (p >= 208 && p < 37 * 8))
                     {
                         Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
-                        //DELETEME
-                        Directory.Delete(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Flame", true);
+                        //Directory.Delete(altFolder + ((p >= 208) ? "Alien/" : "") + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Flame", true);
                     }
                     if(p >= 38 * 8)
                     {
                         Directory.CreateDirectory(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
-                        //DELETEME
-                        Directory.Delete(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Flame/", true);
+                        //Directory.Delete(altFolder + "Divine/" + TallFacesDithered.colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Flame/", true);
                     }
-                    //Directory.CreateDirectory("frames/" + altFolder + "color" + p);
                 }
             }
             wrendered = storeColorCubesWBold();

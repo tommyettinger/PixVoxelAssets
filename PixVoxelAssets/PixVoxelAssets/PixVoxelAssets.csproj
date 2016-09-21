@@ -54,7 +54,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.OrthoSingle</StartupObject>
+    <StartupObject>AssetsPV.TallFacesDithered</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AssimpNet, Version=3.3.1.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6, processorArchitecture=MSIL">
@@ -670,6 +670,40 @@
     <None Include="CU2\Airport_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\archive\Airport_Large_W.vox" />
+    <None Include="CU2\archive\Artillery_Large_W.vox" />
+    <None Include="CU2\archive\Artillery_P_Large_W.vox" />
+    <None Include="CU2\archive\Artillery_S_Large_W.vox" />
+    <None Include="CU2\archive\Artillery_T_Large_W.vox" />
+    <None Include="CU2\archive\Boat_Large_W.vox" />
+    <None Include="CU2\archive\Boat_P_Large_W.vox" />
+    <None Include="CU2\archive\Boat_S_Large_W.vox" />
+    <None Include="CU2\archive\Boat_T_Large_W.vox" />
+    <None Include="CU2\archive\Castle_Large_W.vox" />
+    <None Include="CU2\archive\City_Large_W.vox" />
+    <None Include="CU2\archive\Civilian_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Civilian_Large_W.vox" />
+    <None Include="CU2\archive\Copter_Large_W.vox" />
+    <None Include="CU2\archive\Copter_P_Large_W.vox" />
+    <None Include="CU2\archive\Copter_S_Large_W.vox" />
+    <None Include="CU2\archive\Copter_T_Large_W.vox" />
+    <None Include="CU2\archive\Divine_Head_Large_W.vox" />
+    <None Include="CU2\archive\Farm_Large_W.vox" />
+    <None Include="CU2\archive\Flamethrower_Large_W.vox" />
+    <None Include="CU2\archive\Head_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Hospital_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_PS_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_PT_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_PT_Firing_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_P_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_P_Firing_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_ST_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_S_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_T_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_T_Firing_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Oil_Well_Large_W.vox" />
+    <None Include="CU2\archive\Recon_Large_W.vox" />
     <None Include="CU2\Artillery_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -721,6 +755,15 @@
     <None Include="CU2\Divine_Head_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Dock_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Estate_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Factory_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Farm_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -730,13 +773,28 @@
     <None Include="CU2\Head_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Head_Helmet_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Head_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Hospital_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Infantry_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Infantry_Firing_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Infantry_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Infantry_PS_Alt_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Infantry_PS_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Infantry_PT_Alt_Large_W.vox">
@@ -745,16 +803,34 @@
     <None Include="CU2\Infantry_PT_Firing_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Infantry_PT_Firing_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Infantry_PT_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Infantry_P_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Infantry_P_Firing_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Infantry_P_Firing_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Infantry_P_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Infantry_ST_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Infantry_ST_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Infantry_S_Alt_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Infantry_S_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Infantry_T_Alt_Large_W.vox">
@@ -763,10 +839,46 @@
     <None Include="CU2\Infantry_T_Firing_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Infantry_T_Firing_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Infantry_T_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Laboratory_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Oil_Well_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CU2\Plane_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Plane_P_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Plane_S_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Plane_T_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CU2\Recon_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Tank_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Tank_P_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Tank_S_Firing_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Tank_S_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Tank_T_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Terrain2\Desert_Huge_W.vox">
@@ -820,66 +932,32 @@
     <None Include="CU2\Terrain\Desert_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Dock_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Estate_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Factory_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="CU2\archive\Dock_Large_W.vox" />
+    <None Include="CU2\archive\Estate_Large_W.vox" />
+    <None Include="CU2\archive\Factory_Large_W.vox" />
     <None Include="CU2\Terrain\Forest_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Head_Helmet_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Head_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_Firing_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_PS_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_PT_Firing_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_PT_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_P_Firing_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_P_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_ST_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_S_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_T_Firing_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Infantry_T_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="CU2\archive\Head_Helmet_Large_W.vox" />
+    <None Include="CU2\archive\Head_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_Firing_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_PS_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_PT_Firing_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_PT_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_P_Firing_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_P_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_ST_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_S_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_T_Firing_Large_W.vox" />
+    <None Include="CU2\archive\Infantry_T_Large_W.vox" />
     <None Include="CU2\Terrain\Hill_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Terrain\Jungle_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Laboratory_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="CU2\archive\Laboratory_Large_W.vox" />
     <None Include="CU2\Terrain\Mountain_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -901,25 +979,31 @@
     <None Include="CU2\Terrain\Tundra_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Volunteer_Alt_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Volunteer_P_Alt_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Volunteer_P_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Plane_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Plane_P_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Plane_S_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Plane_T_Large_W.vox">
+    <None Include="CU2\archive\Volunteer_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Volunteer_P_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Volunteer_P_Large_W.vox" />
+    <None Include="CU2\archive\Plane_Large_W.vox" />
+    <None Include="CU2\archive\Plane_P_Large_W.vox" />
+    <None Include="CU2\archive\Plane_S_Large_W.vox" />
+    <None Include="CU2\archive\Plane_T_Large_W.vox" />
+    <None Include="CU2\archive\Truck_Large_W.vox" />
+    <None Include="CU2\archive\Truck_P_Large_W.vox" />
+    <None Include="CU2\archive\Truck_S_Large_W.vox" />
+    <None Include="CU2\archive\Truck_T_Large_W.vox" />
+    <None Include="CU2\archive\Tank_Large_W.vox" />
+    <None Include="CU2\archive\Tank_P_Large_W.vox" />
+    <None Include="CU2\archive\Tank_S_Firing_Large_W.vox" />
+    <None Include="CU2\archive\Tank_S_Large_W.vox" />
+    <None Include="CU2\archive\Tank_T_Large_W.vox" />
+    <None Include="CU2\archive\Terrain_Huge_W.vox" />
+    <None Include="CU2\archive\Volunteer_Large_W.vox" />
+    <None Include="CU2\archive\Volunteer_S_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Volunteer_S_Large_W.vox" />
+    <None Include="CU2\archive\Volunteer_T_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Volunteer_T_Large_W.vox" />
+    <None Include="CU2\archive\Zombie_Head_Alt_Large_W.vox" />
+    <None Include="CU2\archive\Zombie_Head_Large_W.vox" />
+    <None Include="CU2\Terrain_Huge_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Truck_Large_W.vox">
@@ -934,25 +1018,16 @@
     <None Include="CU2\Truck_T_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CU2\Tank_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Tank_P_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Tank_S_Firing_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Tank_S_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Tank_T_Large_W.vox">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CU2\Terrain_Huge_W.vox">
+    <None Include="CU2\Volunteer_Alt_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Volunteer_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Volunteer_P_Alt_Large_W.vox">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CU2\Volunteer_P_Large_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CU2\Volunteer_S_Alt_Large_W.vox">

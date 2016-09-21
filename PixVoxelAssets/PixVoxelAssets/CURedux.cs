@@ -54,6 +54,8 @@ namespace AssetsPV
         public const float grain_hard_alpha = VoxelLogic.grain_hard_alpha;
         public const float grain_some_alpha = VoxelLogic.grain_some_alpha;
         public const float grain_mild_alpha = VoxelLogic.grain_mild_alpha;
+        public const bool EYE_TWINKLE = false;
+        public const bool ZOMBIES = false;
 
         public const byte shadow = 253 - 25 * 4, smoke = 253 - 17 * 4, yellow_fire = 253 - 18 * 4, orange_fire = 253 - 19 * 4,
             sparks = 253 - 20 * 4, bold_paint = 253 - 31 * 4, metal = 253 - 13 * 4, inner_shadow = 253 - 16 * 4,
@@ -2551,7 +2553,7 @@ namespace AssetsPV
             }
             float[][][] copy = wpalettes.Replicate();
             //DIVINECHANGE
-            for(int i = 1; i < wspecies.Length - 2; i++)
+            for(int i = 1; i < wspecies.Length - 2 - (ZOMBIES ? 0 : 1); i++)
             {
                 float[][][] addon = new float[copy.Length][][];
                 for(int j = 0; j < copy.Length; j++)
@@ -2584,7 +2586,13 @@ namespace AssetsPV
             }
             VoxelLogic.wpalettecount = wpalettes.Length;
             wpc = VoxelLogic.wpalettecount;
-
+            if(!EYE_TWINKLE)
+            {
+                for(int p = 0; p < wpc; p++)
+                {
+                    wpalettes[p][10] = wpalettes[p][11].Replicate();
+                }
+            }
             if(disableGore)
             {
                 for(int p = 0; p < wpc; p++)
