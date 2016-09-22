@@ -2193,13 +2193,13 @@ namespace AssetsPV
             },
             new float[][] { //8 (58) road
             //terrain dark
-            new float[] {0.65F,0.65F,0.65F,1F}, //32
+            new float[] {0.55F,0.55F,0.55F,1F}, //32
             //terrain mid
-            new float[] {0.65F,0.65F,0.65F,1F}, //33
+            new float[] {0.55F,0.55F,0.55F,1F}, //33
             //terrain light
-            new float[] {0.65F,0.65F,0.65F,1F}, //34
+            new float[] {0.55F,0.55F,0.55F,1F}, //34
             //terrain highlight
-            new float[] {0.65F,0.65F,0.65F,1F}, //35
+            new float[] {0.55F,0.55F,0.55F,1F}, //35
             },
             new float[][] { //9 (59) river
             //terrain dark
@@ -2784,7 +2784,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2795,6 +2795,8 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
+            */
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(80 - (e + 1) * 3, 80 - (e + 1) * 3, 0, (e + 1) * 6, (e + 1) * 6, (e + 1) * 5,
@@ -2805,6 +2807,7 @@ namespace AssetsPV
                     SuperExplosions[e][f] = TransformLogic.VoxListToArray(expl[f], 160, 160, 120);
                 }
             }
+            */
         }
 
         public static void InitializeAlt()
