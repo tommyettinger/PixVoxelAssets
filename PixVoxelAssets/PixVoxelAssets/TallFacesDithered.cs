@@ -2309,7 +2309,7 @@ namespace AssetsPV
                 }
                 Console.WriteLine("Running standing GIF conversion for " + u + "...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
-
+                
                 imageNames = new List<string>(4 * 16 * 12);
 
                 foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
@@ -2345,6 +2345,7 @@ namespace AssetsPV
                     Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
                     WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Large_animated");
                 }
+                
                 if(!u.Contains("_Alt"))
                 {
                     imageNames = new List<string>(4 * 16 * 8);
@@ -2364,7 +2365,7 @@ namespace AssetsPV
                     }
                     Console.WriteLine("Running alien standing GIF conversion for " + u + "...");
                     WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Large_animated");
-
+                    
                     imageNames = new List<string>(4 * 16 * 12);
 
                     foreach(int p in CURedux.alienHighlights)
@@ -2400,6 +2401,7 @@ namespace AssetsPV
                         Console.WriteLine("Running alien weapon " + w + " GIF conversion for " + u + "...");
                         WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Large_animated");
                     }
+                    
                 }
             });
             if(ENABLE_SUPER)
@@ -3778,7 +3780,7 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 46 + 32, i = 0; y < 46 + 32 + LargeHeight * 2 && i < ImageHeightLarge; y += 4, i++)
+            for(int y = 62 + 32, i = 0; y < 62 + 32 + LargeHeight * 2 && i < ImageHeightLarge; y += 4, i++)
             {
                 for(int x = 32, j = 0; x < 32 + LargeWidth * 2 && j < ImageWidthLarge; x += 4, j++)
                 {
@@ -9037,8 +9039,7 @@ namespace AssetsPV
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
                 */
-
-
+                
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
