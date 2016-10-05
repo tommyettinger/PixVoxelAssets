@@ -323,7 +323,7 @@ namespace AssetsPV
                             }
                         }
                     }
-                    if(x == 28 || y == 28 || x == 91 || y == 91)
+                    if(x == 28 || y == 28 || x == 27 || y == 27 || x == 90 || y == 90 || x == 91 || y == 91)
                     {
                         neo[x, y, 0] = (byte)(253 - dark * 4);
                         neo[x, y, 1] = (byte)(253 - dark * 4);

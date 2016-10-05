@@ -2322,8 +2322,11 @@ namespace AssetsPV
         public static void WriteAllGIFs()
         {
             Directory.CreateDirectory("gifs/" + altFolder);
-            CURedux.normal_units.AsParallel().ForAll(u =>
+            /// TODO: Uncomment next line to enable rendering all units, once Tank_T has been changed
+            //CURedux.normal_units.AsParallel().ForAll(u =>
             //foreach(string u in CURedux.normal_units)
+            /// TODO: Also, comment out next line or remove it
+            new string[] { "Tank_T", "Tank_T_Alt" }.AsParallel().ForAll(u => 
             {
                 string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
                 List<string> imageNames = new List<string>(4 * 16 * 8);
@@ -6229,6 +6232,64 @@ namespace AssetsPV
                         */
             }
         }
+        private static byte Dither(byte[] sprite, int innerX, int innerY, int p)
+        {
+            //            switch((((7 * innerX) * (3 * innerY) + x + y + z) ^ ((11 * innerX) * (5 * innerY) + x + y + z) ^ (7 - innerX - innerY)) % 16)
+            // ((11 * (5 + innerX * innerX)) ^ (3 * (7 + innerY * innerY))
+            int i = innerY * 16 + innerX * 4;
+            if(sprite[i] == 0)
+                return 0;
+            //int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
+            i = (p ^ (p >> 1)) & 15;//((i + 103) << 10) / 1009;
+            //i &= 15;
+            switch(i)
+            {
+                case 0:
+                case 3:
+                case 6:
+                case 9:
+                case 12:
+                case 15:
+                    return sprite[innerY * 16 + innerX * 4];
+                case 4:
+                case 10:
+                    return sprite[innerY * 16 + innerX * 4 + 3];
+                case 1:
+                case 7:
+                case 13:
+                    return sprite[innerY * 16 + innerX * 4 + 2];
+                default:
+                    return sprite[innerY * 16 + innerX * 4 + 1];
+
+                    /*
+                    case 0:
+                    case 2:
+                    case 7:
+                    case 8:
+                    case 12:
+                    case 14:
+                    case 17:
+                    case 19:
+                        return sprite[innerY * 16 + innerX * 4];
+                    case 3:
+                    case 16:
+                        return sprite[innerY * 16 + innerX * 4 + 3];
+                    case 6:
+                    case 9:
+                    case 11:
+                    case 15:
+                        return sprite[innerY * 16 + innerX * 4 + 2];
+                    case 1:
+                    case 4:
+                    case 5:
+                    case 10:
+                    case 13:
+                    case 18:
+                    default:
+                        return sprite[innerY * 16 + innerX * 4 + 1];
+                        */
+            }
+        }
         private static byte RandomDither(byte[] sprite, int innerX, int innerY, Random rng)
         {
             switch((rng.Next(2) + 1) * rng.Next(9) + rng.Next(5))
@@ -6422,7 +6483,7 @@ namespace AssetsPV
                                             if(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                                 zbuffer[p] = vx.z * 3 + vx.x * 2 - vx.y * 2;
 
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, p);
 
                                             if(!barePositions[p] && argbValues[p] != 0)
                                                 outlineValues[p] = wditheredcurrent[mod_color][sp][80];
@@ -6477,7 +6538,7 @@ namespace AssetsPV
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
                                                 //10 is eye shine
-                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, p);
                                             }
                                             /*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
@@ -6509,14 +6570,14 @@ namespace AssetsPV
                                                 float sim = Simplex.RotatedNoise4D(facing, vx.x + 50, vx.y + 50, vx.z, 16 + jitter);
                                                 //int n = (int)Math.Round(Math.Pow(sim, 2.0 - 2.0 * sim) * 4f);
                                                 int n = (int)VoxelLogic.Clamp(Math.Round(sim * 3f), -2, 2) + 2;
-                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, p);
                                             }
                                             else
                                             {
                                                 if(useColorIndices && (mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40))) //water or grass
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                                 else
-                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, p);
 
                                             }
                                             if(argbValues[p] != 0)
@@ -6596,7 +6657,6 @@ namespace AssetsPV
                     if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && lightOutline) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = 0; editValues[i + bmpData.Stride - 2] = 0; editValues[i + bmpData.Stride - 3] = 0; blacken = true; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && zbuffer[i] - 5 > zbuffer[i + bmpData.Stride]) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = outlineValues[i - 1]; editValues[i + bmpData.Stride - 2] = outlineValues[i - 2]; editValues[i + bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     */
 
-
                     if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - 12 > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - 12 > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - 12 > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
@@ -6606,28 +6666,27 @@ namespace AssetsPV
                     if((i + 1 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 12 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 12 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 12 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    
                     if((i - 2 >= 0 && i - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2] == 0 && lightOutline) || (barePositions[i - 2] == false && zbuffer[i] - 20 > zbuffer[i - 2]))) { editValues[i - 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 2 >= 0 && i + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2] == 0 && lightOutline) || (barePositions[i + 2] == false && zbuffer[i] - 20 > zbuffer[i + 2]))) { editValues[i + 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - 2 * cols >= 0 && i - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 * cols] == 0 && lightOutline) || (barePositions[i - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 * cols]))) { editValues[i - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 2 * cols >= 0 && i + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 * cols] == 0 && lightOutline) || (barePositions[i + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 * cols]))) { editValues[i + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    
+                    if((i - 2 - cols >= 0 && i - 2 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 - cols] == 0 && lightOutline) || (barePositions[i - 2 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 - cols]))) { editValues[i - 2 - cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 + cols >= 0 && i + 2 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 + cols] == 0 && lightOutline) || (barePositions[i + 2 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 + cols]))) { editValues[i + 2 + cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 - cols >= 0 && i + 2 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 - cols] == 0 && lightOutline) || (barePositions[i + 2 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 - cols]))) { editValues[i + 2 - cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 2 + cols >= 0 && i - 2 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 + cols] == 0 && lightOutline) || (barePositions[i - 2 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 + cols]))) { editValues[i - 2 + cols] = outlineValues[i]; if(!blacken) shade = true; }
 
-                    if((i - 2 - cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - 2 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
-                    if((i - 1 - 2 * cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 1 + 2 * cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 1 - 2 * cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - 1 + 2 * cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
-                    if((i - 2 - 2 * cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 + 2 * cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 - 2 * cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - 2 + 2 * cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
-
+                    if((i - 1 - 2 * cols >= 0 && i - 1 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - 2 * cols] == 0 && lightOutline) || (barePositions[i - 1 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - 2 * cols]))) { editValues[i - 1 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 1 + 2 * cols >= 0 && i + 1 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + 2 * cols] == 0 && lightOutline) || (barePositions[i + 1 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + 2 * cols]))) { editValues[i + 1 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 1 - 2 * cols >= 0 && i + 1 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - 2 * cols] == 0 && lightOutline) || (barePositions[i + 1 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - 2 * cols]))) { editValues[i + 1 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 1 + 2 * cols >= 0 && i - 1 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + 2 * cols] == 0 && lightOutline) || (barePositions[i - 1 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + 2 * cols]))) { editValues[i - 1 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    /*
+                    if((i - 2 - 2 * cols >= 0 && i - 2 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 - 2 * cols] == 0 && lightOutline) || (barePositions[i - 2 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 - 2 * cols]))) { editValues[i - 2 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 + 2 * cols >= 0 && i + 2 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 + 2 * cols] == 0 && lightOutline) || (barePositions[i + 2 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 + 2 * cols]))) { editValues[i + 2 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 - 2 * cols >= 0 && i + 2 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 - 2 * cols] == 0 && lightOutline) || (barePositions[i + 2 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 - 2 * cols]))) { editValues[i + 2 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 2 + 2 * cols >= 0 && i - 2 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 + 2 * cols] == 0 && lightOutline) || (barePositions[i - 2 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 + 2 * cols]))) { editValues[i - 2 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    */
                     /*
                     if (argbValues[i] > 0 && i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = 0; argbValues[i - 4 - 2] = 0; argbValues[i - 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 2 > zbuffer[i + 4]) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = outlineValues[i - 1]; argbValues[i - 4 - 2] = outlineValues[i - 2]; argbValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (argbValues[i] > 0 && i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && lightOutline) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = 0; argbValues[i + 4 - 2] = 0; argbValues[i + 4 - 3] = 0; blacken = true; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && zbuffer[i] - 2 > zbuffer[i - 4]) { argbValues[i + 4] = 255; argbValues[i + 4 - 1] = outlineValues[i - 1]; argbValues[i + 4 - 2] = outlineValues[i - 2]; argbValues[i + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
@@ -6648,13 +6707,49 @@ namespace AssetsPV
                 }
             }
 
+            int runningX, runningY;
+            byte currentEdit;
             for(int i = 0; i < numBytes; i++)
             {
-                if(editValues[i] > 0)
+                if((currentEdit = editValues[i]) > 0)
                 {
-                    argbValues[i] = editValues[i];
+                    argbValues[i] = currentEdit;
+                    runningX = i % cols;
+                    runningY = i / cols;
+                    if(runningX < 1 || runningX >= cols - 1 || runningY < 1 || runningY >= rows - 1)
+                        continue;
+                    if(editValues[i - 1 - cols] > 0)
+                    {
+                        if(argbValues[i - 1] == 0)
+                            argbValues[i - 1] = currentEdit;
+                        if(argbValues[i - cols] == 0)
+                            argbValues[i - cols] = currentEdit;
+                    }
+                    if(editValues[i + 1 - cols] > 0)
+                    {
+                        if(argbValues[i + 1] == 0)
+                            argbValues[i + 1] = currentEdit;
+                        if(argbValues[i - cols] == 0)
+                            argbValues[i - cols] = currentEdit;
+                    }
+                    if(editValues[i - 1 + cols] > 0)
+                    {
+                        if(argbValues[i - 1] == 0)
+                            argbValues[i - 1] = currentEdit;
+                        if(argbValues[i + cols] == 0)
+                            argbValues[i + cols] = currentEdit;
+                    }
+                    if(editValues[i + 1 + cols] > 0)
+                    {
+                        if(argbValues[i + 1] == 0)
+                            argbValues[i + 1] = currentEdit;
+                        if(argbValues[i + cols] == 0)
+                            argbValues[i + cols] = currentEdit;
+                    }
+
                 }
             }
+
 
             if(!shadowless)
             {
@@ -6785,7 +6880,7 @@ namespace AssetsPV
                                             if(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                                 zbuffer[p] = vx.z * 3 + vx.x * 2 - vx.y * 2;
 
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, p);
 
                                             if(!barePositions[p] && argbValues[p] != 0)
                                                 outlineValues[p] = wditheredcurrent[mod_color][sp][80];
@@ -6844,7 +6939,7 @@ namespace AssetsPV
 
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
-                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, p);
                                             }
                                             /*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
@@ -6876,14 +6971,14 @@ namespace AssetsPV
                                                 float sim = Simplex.RotatedNoise4D(facing, vx.x + 20, vx.y + 20, vx.z, 16 + jitter);
                                                 //int n = (int)Math.Round(Math.Pow(sim, 2.0 - 2.0 * sim) * 4f);
                                                 int n = (int)VoxelLogic.Clamp(Math.Round(sim * 3f), -2, 2) + 2;
-                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, p);
                                             }
                                             else
                                             {
                                                 if(mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40)) //water or grass
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                                 else
-                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, p);
                                             }
                                             if(argbValues[p] != 0)
                                             {
@@ -6962,7 +7057,6 @@ namespace AssetsPV
                     if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && lightOutline) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = 0; editValues[i + bmpData.Stride - 2] = 0; editValues[i + bmpData.Stride - 3] = 0; blacken = true; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && zbuffer[i] - 5 > zbuffer[i + bmpData.Stride]) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = outlineValues[i - 1]; editValues[i + bmpData.Stride - 2] = outlineValues[i - 2]; editValues[i + bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     */
 
-                    
                     if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - 12 > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - 12 > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - 12 > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
@@ -6972,27 +7066,27 @@ namespace AssetsPV
                     if((i + 1 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 12 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 12 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 12 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    
                     if((i - 2 >= 0 && i - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2] == 0 && lightOutline) || (barePositions[i - 2] == false && zbuffer[i] - 20 > zbuffer[i - 2]))) { editValues[i - 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 2 >= 0 && i + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2] == 0 && lightOutline) || (barePositions[i + 2] == false && zbuffer[i] - 20 > zbuffer[i + 2]))) { editValues[i + 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - 2 * cols >= 0 && i - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 * cols] == 0 && lightOutline) || (barePositions[i - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 * cols]))) { editValues[i - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 2 * cols >= 0 && i + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 * cols] == 0 && lightOutline) || (barePositions[i + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 * cols]))) { editValues[i + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    
+                    if((i - 2 - cols >= 0 && i - 2 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 - cols] == 0 && lightOutline) || (barePositions[i - 2 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 - cols]))) { editValues[i - 2 - cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 + cols >= 0 && i + 2 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 + cols] == 0 && lightOutline) || (barePositions[i + 2 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 + cols]))) { editValues[i + 2 + cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 - cols >= 0 && i + 2 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 - cols] == 0 && lightOutline) || (barePositions[i + 2 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 - cols]))) { editValues[i + 2 - cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 2 + cols >= 0 && i - 2 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 + cols] == 0 && lightOutline) || (barePositions[i - 2 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 + cols]))) { editValues[i - 2 + cols] = outlineValues[i]; if(!blacken) shade = true; }
 
-                    if((i - 2 - cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - 2 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
-                    if((i - 1 - 2 * cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 1 + 2 * cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 1 - 2 * cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - 1 + 2 * cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
-                    if((i - 2 - 2 * cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 + 2 * cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i + 2 - 2 * cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; if(!blacken) shade = true; }
-                    if((i - 2 + 2 * cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    if((i - 1 - 2 * cols >= 0 && i - 1 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - 2 * cols] == 0 && lightOutline) || (barePositions[i - 1 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 - 2 * cols]))) { editValues[i - 1 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 1 + 2 * cols >= 0 && i + 1 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + 2 * cols] == 0 && lightOutline) || (barePositions[i + 1 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 + 2 * cols]))) { editValues[i + 1 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 1 - 2 * cols >= 0 && i + 1 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - 2 * cols] == 0 && lightOutline) || (barePositions[i + 1 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 1 - 2 * cols]))) { editValues[i + 1 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 1 + 2 * cols >= 0 && i - 1 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + 2 * cols] == 0 && lightOutline) || (barePositions[i - 1 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 1 + 2 * cols]))) { editValues[i - 1 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    /*
+                    if((i - 2 - 2 * cols >= 0 && i - 2 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 - 2 * cols] == 0 && lightOutline) || (barePositions[i - 2 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 - 2 * cols]))) { editValues[i - 2 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 + 2 * cols >= 0 && i + 2 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 + 2 * cols] == 0 && lightOutline) || (barePositions[i + 2 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 + 2 * cols]))) { editValues[i + 2 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i + 2 - 2 * cols >= 0 && i + 2 - 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 2 - 2 * cols] == 0 && lightOutline) || (barePositions[i + 2 - 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i + 2 - 2 * cols]))) { editValues[i + 2 - 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    if((i - 2 + 2 * cols >= 0 && i - 2 + 2 * cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 2 + 2 * cols] == 0 && lightOutline) || (barePositions[i - 2 + 2 * cols] == false && zbuffer[i] - 20 > zbuffer[i - 2 + 2 * cols]))) { editValues[i - 2 + 2 * cols] = outlineValues[i]; if(!blacken) shade = true; }
+                    */
 
                     /*
                     if (argbValues[i] > 0 && i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = 0; argbValues[i - 4 - 2] = 0; argbValues[i - 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 2 > zbuffer[i + 4]) { argbValues[i - 4] = 255; argbValues[i - 4 - 1] = outlineValues[i - 1]; argbValues[i - 4 - 2] = outlineValues[i - 2]; argbValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
@@ -7013,12 +7107,46 @@ namespace AssetsPV
                     else if(shade) { editValues[i] = outlineValues[i]; }
                 }
             }
-
+            int runningX, runningY;
+            byte currentEdit;
             for(int i = 0; i < numBytes; i++)
             {
-                if(editValues[i] > 0)
+                if((currentEdit = editValues[i]) > 0)
                 {
-                    argbValues[i] = editValues[i];
+                    argbValues[i] = currentEdit;
+                    runningX = i % cols;
+                    runningY = i / cols;
+                    if(runningX < 1 || runningX >= cols - 1 || runningY < 1 || runningY >= rows - 1)
+                        continue;
+                    if(editValues[i - 1 - cols] > 0)
+                    {
+                        if(argbValues[i - 1] == 0)
+                            argbValues[i - 1] = currentEdit;
+                        if(argbValues[i - cols] == 0)
+                            argbValues[i - cols] = currentEdit;
+                    }
+                    if(editValues[i + 1 - cols] > 0)
+                    {
+                        if(argbValues[i + 1] == 0)
+                            argbValues[i + 1] = currentEdit;
+                        if(argbValues[i - cols] == 0)
+                            argbValues[i - cols] = currentEdit;
+                    }
+                    if(editValues[i - 1 + cols] > 0)
+                    {
+                        if(argbValues[i - 1] == 0)
+                            argbValues[i - 1] = currentEdit;
+                        if(argbValues[i + cols] == 0)
+                            argbValues[i + cols] = currentEdit;
+                    }
+                    if(editValues[i + 1 + cols] > 0)
+                    {
+                        if(argbValues[i + 1] == 0)
+                            argbValues[i + 1] = currentEdit;
+                        if(argbValues[i + cols] == 0)
+                            argbValues[i + cols] = currentEdit;
+                    }
+
                 }
             }
 
@@ -7147,7 +7275,7 @@ namespace AssetsPV
                                             if(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                                 zbuffer[p] = vx.z * 2 + vx.x * 2 - vx.y * 2;
 
-                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                            argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, p);
                                         }
 
                                         if(!barePositions[p] && argbValues[p] != 0)
@@ -7202,7 +7330,7 @@ namespace AssetsPV
 
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
-                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, p);
                                             }/*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
                                             {
@@ -7234,14 +7362,14 @@ namespace AssetsPV
                                                 //int n = (int)Math.Round(Math.Pow(sim, 2.0 - 2.0 * sim) * 4f);
                                                 int n = (int)VoxelLogic.Clamp(Math.Round(sim * 3f), -2, 2) + 2;
 
-                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[(mod_color + n - 28) % 6 + 28][sp], i, j, p);
                                             }
                                             else
                                             {
                                                 if(mod_color == 27 || (VoxelLogic.VisualMode == "CU" && mod_color == 40)) //water or grass
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
                                                 else
-                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, vx.x, vx.y, vx.z);
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][sp], i, j, p);
                                             }
 
                                             if(argbValues[p] != 0)
@@ -7611,23 +7739,23 @@ namespace AssetsPV
 
             for(int dir = 0; dir < 4; dir++)
             {
-                FaceVoxel[,,] c2 = FaceLogic.GetFaces(TransformLogic.RotateYaw(colors, 90 * dir), true);
+                FaceVoxel[,,] c2 = FaceLogic.GetCubes(TransformLogic.RotateYaw(colors, 90 * dir));
                 
                 ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette]);
-                PngWriter png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                PngWriter png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_0.png", imi, true);
                 WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette + 4]);
-                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
+//                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+//                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette + 5]);
-                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
-                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
+//                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+//                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
             }
 
             VoxelLogic.VisualMode = tmpVisual;
@@ -8049,7 +8177,7 @@ namespace AssetsPV
                                             if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.gloss_alpha && r.Next(12) == 0)
                                             {
                                                 //10 is eye shine
-                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, vx.x, vx.y, vx.z);
+                                                argbValues[p] = Dither(wditheredcurrent[10][sp], i, j, p);
                                             }
                                             /*
                                             else if(VoxelLogic.wcolors[mod_color][3] == VoxelLogic.grain_hard_alpha)
@@ -8090,7 +8218,7 @@ namespace AssetsPV
                                                     argbValues[p] = RandomDither(wditheredcurrent[mod_color][sp], i, j, rng);
 
                                                 else
-                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][0], i, j, vx.x, vx.y, vx.z);
+                                                    argbValues[p] = Dither(wditheredcurrent[mod_color][0], i, j, p);
 
                                             }
                                             if(argbValues[p] != 0)
@@ -9065,7 +9193,7 @@ namespace AssetsPV
             
             writePaletteImages();
 
-            for(int a = 2; a < 2; a++)
+            for(int a = 1; a < 2; a++)
             {
                 /*
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -9073,7 +9201,7 @@ namespace AssetsPV
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
                 */
-                
+                /*
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
@@ -9086,8 +9214,9 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Tank");
                 processUnitLargeWMilitary("Tank_P");
                 processUnitLargeWMilitary("Tank_S");
+                */
                 processUnitLargeWMilitary("Tank_T");
-
+                /*
                 processUnitLargeWMilitary("Recon");
                 processUnitLargeWMilitary("Flamethrower");
 
@@ -9134,7 +9263,8 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Hospital");
                 processUnitLargeWMilitary("Farm");
                 processUnitLargeWMilitary("Oil_Well");
-                
+                */
+
                 /*
                 for(int v = 0; v < CURedux.super_units.Length; v++)
                 {
@@ -9177,7 +9307,7 @@ namespace AssetsPV
             //processReceivingMilitaryWSuper();
             
             
-            //WriteAllGIFs();
+            WriteAllGIFs();
             //addon = "Zombie_";
             //WriteZombieGIFs();
 

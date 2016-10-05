@@ -97,7 +97,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.4F,0.35F,0.5F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -224,7 +224,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -351,7 +351,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -478,7 +478,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -605,7 +605,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -732,7 +732,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -859,7 +859,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -986,7 +986,7 @@ namespace AssetsPV
             //15 gun barrel
             new float[] {0.3F,0.35F,0.4F,1F},
             //16 inner shadow
-            new float[] {0.3F,0.3F,0.29F,1F},
+            new float[] {0.26F,0.26F,0.25F,1F},
             //17 smoke
             new float[] {0.29F,0.25F,0.15F,waver_alpha},
             //18 yellow fire
@@ -2586,6 +2586,7 @@ namespace AssetsPV
             }
             VoxelLogic.wpalettecount = wpalettes.Length;
             wpc = VoxelLogic.wpalettecount;
+            /*
             if(!EYE_TWINKLE)
             {
                 for(int p = 0; p < wpc; p++)
@@ -2593,6 +2594,7 @@ namespace AssetsPV
                     wpalettes[p][10] = wpalettes[p][11].Replicate();
                 }
             }
+             */
             if(disableGore)
             {
                 for(int p = 0; p < wpc; p++)
@@ -2784,7 +2786,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            /*
+            
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2795,7 +2797,7 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
-            */
+
             /*
             for(int e = 0; e < 10; e++)
             {
