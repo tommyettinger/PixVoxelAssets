@@ -286,7 +286,7 @@ namespace AssetsPV
             return neo;
         }
         // changers are in format color, frequency, span, color, frequency, span...
-        public static byte[,,] ApplyTerrain(byte[,,] voxelData, byte[] changers, byte standard, byte dark, byte highlight)
+        public static byte[,,] ApplyTerrain(byte[,,] voxelData, byte[] changers, byte standard, byte dark, byte highlight, byte depth = 12)
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             byte[,,] neo = new byte[xSize, ySize, zSize];
@@ -301,13 +301,14 @@ namespace AssetsPV
                         continue;
                     if(c == 253)
                     {
-                        neo[x, y, 0] = (byte)(253 - dark * 4);
-                        neo[x, y, 1] = (byte)(253 - dark * 4);
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - dark * 4);
                     }
                     else if(c == 253 - 2 * 4)
                     {
-                        neo[x, y, 0] = (byte)(253 - highlight * 4);
-                        neo[x, y, 1] = (byte)(253 - highlight * 4);
+
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - highlight * 4);
                     }
                     else
                     {
@@ -316,22 +317,21 @@ namespace AssetsPV
                         {
                             if(hilbert % (changers[h + 1] * 5) >= changers[h + 1] * 5 - ((changers[h + 2] * 5) | 3))
                             {
-
-                                neo[x, y, 0] = (byte)(253 - changers[h] * 4);
-                                neo[x, y, 1] = (byte)(253 - changers[h] * 4);
+                                for(int d = 0; d < depth; d++)
+                                    neo[x, y, d] = (byte)(253 - changers[h] * 4);
                                 break;
                             }
                         }
                     }
                     if(x == 28 || y == 28 || x == 27 || y == 27 || x == 90 || y == 90 || x == 91 || y == 91)
                     {
-                        neo[x, y, 0] = (byte)(253 - dark * 4);
-                        neo[x, y, 1] = (byte)(253 - dark * 4);
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - dark * 4);
                     }
                     else if(neo[x, y, 0] == 0)
                     {
-                        neo[x, y, 0] = (byte)(253 - standard * 4);
-                        neo[x, y, 1] = (byte)(253 - standard * 4);
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - standard * 4);
                     }
                 }
             }

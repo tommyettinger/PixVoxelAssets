@@ -200,10 +200,6 @@ namespace AssetsPV
         public int Height { get; set; }
         public int[,] Land { get; set; }
         public int[,] takenLocations { get; set; }
-        public static string[] Terrains = new string[]
-        {"Plains","Forest","Desert","Jungle","Hills"
-        ,"Mountains","Ruins","Tundra","Road","River",
-        "Basement", "Sea"};
 
         public static int[] Depths = new int[]
             {

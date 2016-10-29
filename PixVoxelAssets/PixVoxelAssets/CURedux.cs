@@ -2123,13 +2123,13 @@ namespace AssetsPV
             },
             new float[][] { //1 (51) forest
             //terrain dark
-            new float[] {0.25F,0.8F,0.1F,1F}, //4
+            new float[] {0.3F,0.77F,0.15F,1F}, //4
             //terrain mid
-            new float[] {0.25F,0.8F,0.1F,1F}, //5
+            new float[] {0.3F,0.77F,0.15F,1F}, //5
             //terrain light
-            new float[] {0.25F,0.8F,0.1F,1F}, //6
+            new float[] {0.3F,0.77F,0.15F,1F}, //6
             //terrain highlight
-            new float[] {0.25F,0.8F,0.1F,1F}, //7
+            new float[] {0.3F,0.77F,0.15F,1F}, //7
             },
             new float[][] { //2 (52) desert
             //terrain dark
@@ -2143,13 +2143,13 @@ namespace AssetsPV
             },
             new float[][] { //3 (53) jungle
             //terrain dark
-            new float[] {0.0F,0.65F,0.4F,1F}, //12
+            new float[] {0.1F,0.68F,0.45F,1F}, //12
             //terrain mid
-            new float[] {0.0F,0.65F,0.4F,1F}, //13
+            new float[] {0.1F,0.68F,0.45F,1F}, //13
             //terrain light
-            new float[] {0.0F,0.65F,0.4F,1F}, //14
+            new float[] {0.1F,0.68F,0.45F,1F}, //14
             //terrain highlight
-            new float[] {0.0F,0.65F,0.4F,1F}, //15
+            new float[] {0.1F,0.68F,0.45F,1F}, //15
             },
             new float[][] { //4 (54) hills
             //terrain dark
@@ -2163,33 +2163,33 @@ namespace AssetsPV
             },
             new float[][] { //5 (55) mountains
             //terrain dark
-            new float[] {0.7F,0.8F,0.83F,1F}, //20
+            new float[] {0.73F,0.83F,0.88F,1F}, //20
             //terrain mid
-            new float[] {0.7F,0.8F,0.83F,1F}, //21
+            new float[] {0.73F,0.83F,0.88F,1F}, //21
             //terrain light
-            new float[] {0.7F,0.8F,0.83F,1F}, //22
+            new float[] {0.73F,0.83F,0.88F,1F}, //22
             //terrain highlight
-            new float[] {0.7F,0.8F,0.83F,1F}, //23
+            new float[] {0.73F,0.83F,0.88F,1F}, //23
             },
             new float[][] { //6 (56) ruins
             //terrain dark
-            new float[] {0.7F,0.3F,0.65F,1F}, //24
+            new float[] {0.8F,0.35F,0.65F,1F}, //24
             //terrain mid
-            new float[] {0.7F,0.3F,0.65F,1F}, //25
+            new float[] {0.8F,0.35F,0.65F,1F}, //25
             //terrain light
-            new float[] {0.7F,0.3F,0.65F,1F}, //26
+            new float[] {0.8F,0.35F,0.65F,1F}, //26
             //terrain highlight
-            new float[] {0.7F,0.3F,0.65F,1F}, //27
+            new float[] {0.8F,0.35F,0.65F,1F}, //27
             },
             new float[][] { //7 (57) tundra
             //terrain dark
-            new float[] {0.8F,1.2F,1.2F,1F}, //28
+            new float[] {0.8F,1.0F,1.2F,1F}, //28
             //terrain mid
-            new float[] {0.8F,1.2F,1.2F,1F}, //29
+            new float[] {0.8F,1.0F,1.2F,1F}, //29
             //terrain light
-            new float[] {0.8F,1.2F,1.2F,1F}, //30
+            new float[] {0.8F,1.0F,1.2F,1F}, //30
             //terrain highlight
-            new float[] {0.8F,1.2F,1.2F,1F}, //31
+            new float[] {0.8F,1.0F,1.2F,1F}, //31
             },
             new float[][] { //8 (58) road
             //terrain dark
@@ -2231,7 +2231,7 @@ namespace AssetsPV
             //terrain highlight
             new float[] {0.05F,0.45F,0.8F,1F}, //47
             },
-            new float[][] { //12 (62) custom 0 (brick red)
+            new float[][] { //12 (62) volcano (brick red)
             //terrain dark
             new float[] {1.0F,0.2F,-0.1F,1F}, //48
             //terrain mid
@@ -2241,7 +2241,7 @@ namespace AssetsPV
             //terrain highlight
             new float[] {1.0F,0.2F,-0.1F,1F}, //51
             },
-            new float[][] { //13 (63) custom 1 (bright purple)
+            new float[][] { //13 (63) poison (bright purple)
             //terrain dark
             new float[] {1.05F,0.15F,0.95F,1F}, //52
             //terrain mid
@@ -2251,15 +2251,15 @@ namespace AssetsPV
             //terrain highlight
             new float[] {1.05F,0.15F,0.95F,1F}, //55
             },
-            new float[][] { //14 (64) custom 2 (bright yellow)
+            new float[][] { //14 (64) warning (bright yellow)
             //terrain dark
-            new float[] {1.15F,1.1F,-0.1F,1F}, //56
+            new float[] {1.15F,1.1F,0.05F,1F}, //56
             //terrain mid
-            new float[] {1.15F,1.1F,-0.1F,1F}, //57
+            new float[] {1.15F,1.1F,0.05F,1F}, //57
             //terrain light
-            new float[] {1.15F,1.1F,-0.1F,1F}, //58
+            new float[] {1.15F,1.1F,0.05F,1F}, //58
             //terrain highlight
-            new float[] {1.15F,1.1F,-0.1F,1F}, //59
+            new float[] {1.15F,1.1F,0.05F,1F}, //59
             },
 
         };
@@ -2514,9 +2514,9 @@ namespace AssetsPV
             wpalettes_tw_purple; //33
         //gray 35, white 26, green 36, red 28, purple 33
         public static string[] Terrains = new string[]
-        {"Plains","Forest","Desert","Jungle","Hill"
-        ,"Mountain","Ruins","Tundra","Road","River", "Ocean", "Basement"
-        ,"Custom0","Custom1","Custom2"};
+        {"Plains","Forest","Sand","Jungle","Hill"
+        ,"Mountain","Ruins","Ice","Road","River", "Ocean", "Pit"
+        ,"Volcano","Poison","Warning"};
 
         public static byte[][][,,] Explosions, SuperExplosions;
         public const int maxExplosionFrames = 7;
@@ -2786,7 +2786,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2797,6 +2797,7 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
+            */
 
             /*
             for(int e = 0; e < 10; e++)

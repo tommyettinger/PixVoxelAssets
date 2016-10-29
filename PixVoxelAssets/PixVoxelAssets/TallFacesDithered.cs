@@ -6236,58 +6236,61 @@ namespace AssetsPV
         {
             //            switch((((7 * innerX) * (3 * innerY) + x + y + z) ^ ((11 * innerX) * (5 * innerY) + x + y + z) ^ (7 - innerX - innerY)) % 16)
             // ((11 * (5 + innerX * innerX)) ^ (3 * (7 + innerY * innerY))
-            int i = innerY * 16 + innerX * 4;
-            if(sprite[i] == 0)
-                return 0;
-            //int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
-            i = (p ^ (p >> 1)) & 15;//((i + 103) << 10) / 1009;
-            //i &= 15;
-            switch(i)
+            unchecked
             {
-                case 0:
-                case 3:
-                case 6:
-                case 9:
-                case 12:
-                case 15:
-                    return sprite[innerY * 16 + innerX * 4];
-                case 4:
-                case 10:
-                    return sprite[innerY * 16 + innerX * 4 + 3];
-                case 1:
-                case 7:
-                case 13:
-                    return sprite[innerY * 16 + innerX * 4 + 2];
-                default:
-                    return sprite[innerY * 16 + innerX * 4 + 1];
-
-                    /*
+                int i = innerY * 16 + innerX * 4;
+                if(sprite[i] == 0)
+                    return 0;
+                //int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
+                i = (p * 19 + (p ^ (p >> 1)) + (p + innerX + innerY ^ 0x9337)) >> 2 & 15;//((i + 103) << 10) / 1009;
+                                                       //i &= 15;
+                switch(i)
+                {
                     case 0:
                     case 2:
-                    case 7:
-                    case 8:
-                    case 12:
-                    case 14:
-                    case 17:
-                    case 19:
-                        return sprite[innerY * 16 + innerX * 4];
-                    case 3:
-                    case 16:
-                        return sprite[innerY * 16 + innerX * 4 + 3];
                     case 6:
-                    case 9:
+                    case 8:
                     case 11:
                     case 15:
-                        return sprite[innerY * 16 + innerX * 4 + 2];
-                    case 1:
+                        return sprite[innerY * 16 + innerX * 4];
                     case 4:
-                    case 5:
+                    case 9:
+                        return sprite[innerY * 16 + innerX * 4 + 3];
+                    case 3:
                     case 10:
                     case 13:
-                    case 18:
+                        return sprite[innerY * 16 + innerX * 4 + 2];
                     default:
                         return sprite[innerY * 16 + innerX * 4 + 1];
-                        */
+
+                        /*
+                        case 0:
+                        case 2:
+                        case 7:
+                        case 8:
+                        case 12:
+                        case 14:
+                        case 17:
+                        case 19:
+                            return sprite[innerY * 16 + innerX * 4];
+                        case 3:
+                        case 16:
+                            return sprite[innerY * 16 + innerX * 4 + 3];
+                        case 6:
+                        case 9:
+                        case 11:
+                        case 15:
+                            return sprite[innerY * 16 + innerX * 4 + 2];
+                        case 1:
+                        case 4:
+                        case 5:
+                        case 10:
+                        case 13:
+                        case 18:
+                        default:
+                            return sprite[innerY * 16 + innerX * 4 + 1];
+                            */
+                }
             }
         }
         private static byte RandomDither(byte[] sprite, int innerX, int innerY, Random rng)
@@ -7521,9 +7524,9 @@ namespace AssetsPV
 
             for(int i = 0; i < 15; i++)
             {
-                Console.WriteLine("Palette " + i);
+                //Console.WriteLine("Palette " + i);
                 byte[,,] colors = FaceLogic.VoxListToArrayPure(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color - 16 * i)).ToList(), 120, 120, 80);
-                Console.WriteLine(colors.ToList().Max());
+                //Console.WriteLine(colors.ToList().Max());
 
                 for(int shp = 0; shp < 16; shp++)
                 {
@@ -7596,128 +7599,225 @@ namespace AssetsPV
                 }
             }
             VoxelLogic.VisualMode = tmpVisual;
-
-            //int[,] grid = new int[9, 17];
-
-            //int[,] takenLocations = new int[9, 17];
-            //for(int i = 0; i < 9; i++)
-            //{
-            //    for(int j = 0; j < 17; j++)
-            //    {
-            //        takenLocations[i, j] = 0;
-            //        grid[i, j] = 0;
-            //        if(i > 0 && i < 8 && j > 0 && j < 16 && r.Next(3) > 0)
-            //        {
-            //            grid[i, j] = r.Next(11);
-            //        }
-            //    }
-            //}
-            ///*
-            //int numMountains = r.Next(17, 30);
-            //int iter = 0;
-            //int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
-            //do
-            //{
-            //    if(takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
-            //    {
-            //        takenLocations[rx, ry] = 2;
-            //        grid[rx, ry] = r.Next(9) + 1;
-            //        int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
-            //        int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
-            //        if(xdir <= 1) xdir++;
-            //        if(xdir >= 9) xdir--;
-            //        rx = xdir;
-            //        ry = ry + ydir;
-
-            //    }
-            //    else
-            //    {
-            //        rx = r.Next(8) + 1;
-            //        ry = r.Next(15) + 2;
-            //    }
-            //    iter++;
-            //} while(iter < numMountains);
-
-            //int extreme = 0;
-            //switch(r.Next(5))
-            //{
-            //    case 0:
-            //        extreme = 7;
-            //        break;
-            //    case 1:
-            //        extreme = 2;
-            //        break;
-            //    case 2:
-            //        extreme = 2;
-            //        break;
-            //    case 3:
-            //        extreme = 1;
-            //        break;
-            //    case 4:
-            //        extreme = 1;
-            //        break;
-            //}
-            //*/
-            ///*
-            //for(int i = 1; i < 8; i++)
-            //{
-            //    for(int j = 2; j < 15; j++)
-            //    {
-            //        for(int v = 0; v < 3; v++)
-            //        {
-
-            //            int[] adj = { 0, 0, 0, 0,
-            //                            0,0,0,0,
-            //                        0, 0, 0, 0, };
-            //            adj[0] = grid[i, j + 1];
-            //            adj[1] = grid[i, j - 1];
-            //            if(j % 2 == 0)
-            //            {
-            //                adj[2] = grid[i + 1, j + 1];
-            //                adj[3] = grid[i + 1, j - 1];
-            //            }
-            //            else
-            //            {
-            //                adj[2] = grid[i - 1, j + 1];
-            //                adj[3] = grid[i - 1, j - 1];
-            //            }
-            //            adj[4] = grid[i, j + 2];
-            //            adj[5] = grid[i, j - 2];
-            //            adj[6] = grid[i + 1, j];
-            //            adj[7] = grid[i - 1, j];
-            //            int likeliest = 0;
-            //            if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
-            //                likeliest = extreme;
-            //            if((adj.Contains(2) && r.Next(4) == 0))
-            //                likeliest = extreme;
-            //            if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
-            //                likeliest = extreme;
-            //            if((adj.Contains(1) && r.Next(5) > 1) || r.Next(4) == 0)
-            //                likeliest = r.Next(2) * 2 + 1;
-            //            if(adj.Contains(5) && r.Next(3) == 0)
-            //                likeliest = r.Next(4, 6);
-            //            if(r.Next(45) == 0)
-            //                likeliest = 6;
-            //            if(takenLocations[i, j] == 0)
-            //            {
-            //                grid[i, j] = likeliest;
-            //            }
-            //        }
-            //    }
-            //}
-            //*/
-
-            //for(int j = 0; j < 17; j++)
-            //{
-            //    for(int i = 0; i < 9; i++)
-            //    {
-            //        g.DrawImageUnscaled(tilings[grid[i, j]], (48 * 4 * i) - ((j % 2 == 0) ? 0 : 24 * 4) - 24 * 4 + 20, (12 * 4 * j) - 12 * 2 * 17 - 40);
-            //    }
-            //}
-            //return b;
         }
 
+        //int[,] grid = new int[9, 17];
+
+        //int[,] takenLocations = new int[9, 17];
+        //for(int i = 0; i < 9; i++)
+        //{
+        //    for(int j = 0; j < 17; j++)
+        //    {
+        //        takenLocations[i, j] = 0;
+        //        grid[i, j] = 0;
+        //        if(i > 0 && i < 8 && j > 0 && j < 16 && r.Next(3) > 0)
+        //        {
+        //            grid[i, j] = r.Next(11);
+        //        }
+        //    }
+        //}
+        ///*
+        //int numMountains = r.Next(17, 30);
+        //int iter = 0;
+        //int rx = r.Next(8) + 1, ry = r.Next(15) + 2;
+        //do
+        //{
+        //    if(takenLocations[rx, ry] < 1 && r.Next(6) > 0 && ((ry + 1) / 2 != ry))
+        //    {
+        //        takenLocations[rx, ry] = 2;
+        //        grid[rx, ry] = r.Next(9) + 1;
+        //        int ydir = ((ry + 1) / 2 > ry) ? 1 : -1;
+        //        int xdir = (ry % 2 == 0) ? rx + r.Next(2) : rx - r.Next(2);
+        //        if(xdir <= 1) xdir++;
+        //        if(xdir >= 9) xdir--;
+        //        rx = xdir;
+        //        ry = ry + ydir;
+
+        //    }
+        //    else
+        //    {
+        //        rx = r.Next(8) + 1;
+        //        ry = r.Next(15) + 2;
+        //    }
+        //    iter++;
+        //} while(iter < numMountains);
+
+        //int extreme = 0;
+        //switch(r.Next(5))
+        //{
+        //    case 0:
+        //        extreme = 7;
+        //        break;
+        //    case 1:
+        //        extreme = 2;
+        //        break;
+        //    case 2:
+        //        extreme = 2;
+        //        break;
+        //    case 3:
+        //        extreme = 1;
+        //        break;
+        //    case 4:
+        //        extreme = 1;
+        //        break;
+        //}
+        //*/
+        ///*
+        //for(int i = 1; i < 8; i++)
+        //{
+        //    for(int j = 2; j < 15; j++)
+        //    {
+        //        for(int v = 0; v < 3; v++)
+        //        {
+
+        //            int[] adj = { 0, 0, 0, 0,
+        //                            0,0,0,0,
+        //                        0, 0, 0, 0, };
+        //            adj[0] = grid[i, j + 1];
+        //            adj[1] = grid[i, j - 1];
+        //            if(j % 2 == 0)
+        //            {
+        //                adj[2] = grid[i + 1, j + 1];
+        //                adj[3] = grid[i + 1, j - 1];
+        //            }
+        //            else
+        //            {
+        //                adj[2] = grid[i - 1, j + 1];
+        //                adj[3] = grid[i - 1, j - 1];
+        //            }
+        //            adj[4] = grid[i, j + 2];
+        //            adj[5] = grid[i, j - 2];
+        //            adj[6] = grid[i + 1, j];
+        //            adj[7] = grid[i - 1, j];
+        //            int likeliest = 0;
+        //            if(!adj.Contains(1) && extreme == 2 && r.Next(5) > 1)
+        //                likeliest = extreme;
+        //            if((adj.Contains(2) && r.Next(4) == 0))
+        //                likeliest = extreme;
+        //            if(extreme == 7 && (r.Next(4) == 0) || (adj.Contains(7) && r.Next(3) > 0))
+        //                likeliest = extreme;
+        //            if((adj.Contains(1) && r.Next(5) > 1) || r.Next(4) == 0)
+        //                likeliest = r.Next(2) * 2 + 1;
+        //            if(adj.Contains(5) && r.Next(3) == 0)
+        //                likeliest = r.Next(4, 6);
+        //            if(r.Next(45) == 0)
+        //                likeliest = 6;
+        //            if(takenLocations[i, j] == 0)
+        //            {
+        //                grid[i, j] = likeliest;
+        //            }
+        //        }
+        //    }
+        //}
+        //*/
+
+        //for(int j = 0; j < 17; j++)
+        //{
+        //    for(int i = 0; i < 9; i++)
+        //    {
+        //        g.DrawImageUnscaled(tilings[grid[i, j]], (48 * 4 * i) - ((j % 2 == 0) ? 0 : 24 * 4) - 24 * 4 + 20, (12 * 4 * j) - 12 * 2 * 17 - 40);
+        //    }
+        //}
+        //return b;
+
+
         public static void renderTerrainSimple(string name, string kind, byte[] changers, byte standard, byte dark, byte highlight)
+        {
+
+            string tmpVisual = VoxelLogic.VisualMode;
+            VoxelLogic.VisualMode = "None";
+
+            BinaryReader bin = new BinaryReader(File.Open("CU2/Terrain3/" + (kind == "Ordered" ? kind : "Normal") + "_Huge_W.vox", FileMode.Open));
+            List<MagicaVoxelData> voxlist = VoxelLogic.FromMagicaRaw(bin);
+            int terrainPalette = CURedux.wspecies.Length * 8 - 16 - (CURedux.ZOMBIES ? 0 : 8);
+
+            //NORMAL WEATHER
+            wcurrent = wrendered[terrainPalette];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[terrainPalette];
+            wditheredcurrent = wdithered[terrainPalette];
+
+            Console.WriteLine("Terrain: " + name);
+            byte[,,] colors = TransformLogic.RunCA(PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight), 2);
+            string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
+            for(int dir = 0; dir < 4; dir++)
+            {
+                byte[,,] c1 = TransformLogic.RotateYaw(colors, 90 * dir);
+                for(int shp = 0; shp < 16; shp++)
+                {
+                    byte[,,] c2 = c1.Replicate();
+                    string nm = name;
+
+                    if((shp & 8) != 0)
+                    {
+                        nm += "_SE";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[80 + q, side, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+                    if((shp & 1) != 0)
+                    {
+                        nm += "_SW";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[side, 39 - q, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+                    if((shp & 2) != 0)
+                    {
+                        nm += "_NW";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[39 - q, side, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+                    if((shp & 4) != 0)
+                    {
+                        nm += "_NE";
+                        for(int side = 20; side < 100; side++)
+                        {
+                            for(int q = 0; q < 12; q++)
+                            {
+                                for(int z = 0; z <= q; z++)
+                                {
+                                    c2[side, 80 + q, 12 - z] = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(c2);
+                    PngWriter png = FileHelper.CreatePngWriter(folder + nm + "_Huge_face" + dir + "_Normal_0.png", imi, true);
+                    WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette]);
+                    PngWriter png2 = FileHelper.CreatePngWriter(bFolder + nm + "_Huge_face" + dir + "_0.png", imi, true);
+                    WritePNG(png2, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), basepalette);
+                }
+            }
+            
+            VoxelLogic.VisualMode = tmpVisual;
+        }
+
+        public static void renderTerrainSimpleOld(string name, string kind, byte[] changers, byte standard, byte dark, byte highlight)
         {
 
             string tmpVisual = VoxelLogic.VisualMode;
@@ -7740,7 +7840,7 @@ namespace AssetsPV
             for(int dir = 0; dir < 4; dir++)
             {
                 FaceVoxel[,,] c2 = FaceLogic.GetCubes(TransformLogic.RotateYaw(colors, 90 * dir));
-                
+
                 ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
                 PngWriter png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Normal_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette]);
@@ -7749,13 +7849,13 @@ namespace AssetsPV
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette + 4]);
-//                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
-//                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
+                //                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Dark_0.png", imi, true);
+                //                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
 
                 png = FileHelper.CreatePngWriter(folder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
                 WritePNG(png, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), simplepalettes[terrainPalette + 5]);
-//                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
-//                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
+                //                png2 = FileHelper.CreatePngWriter(bFolder + name + "_Huge_face" + dir + "_Bright_0.png", imi, true);
+                //                WritePNG(png2, processFrameHugeW(c2, terrainPalette, dir, 0, 1, true, true), basepalette);
             }
 
             VoxelLogic.VisualMode = tmpVisual;
@@ -7934,9 +8034,9 @@ namespace AssetsPV
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 30, (16 * (i - j + 6)) - 22);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 32, (16 * (i - j + 6)) + 4);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 30, (16 * (i - j + 6)) - 22);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 32, (16 * (i - j + 6)) + 4);
                 }
             }
 
@@ -9193,7 +9293,7 @@ namespace AssetsPV
             
             writePaletteImages();
 
-            for(int a = 1; a < 2; a++)
+            for(int a = 2; a < 2; a++)
             {
                 /*
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -9201,7 +9301,7 @@ namespace AssetsPV
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
                 */
-                /*
+                
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
@@ -9214,9 +9314,8 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Tank");
                 processUnitLargeWMilitary("Tank_P");
                 processUnitLargeWMilitary("Tank_S");
-                */
                 processUnitLargeWMilitary("Tank_T");
-                /*
+                
                 processUnitLargeWMilitary("Recon");
                 processUnitLargeWMilitary("Flamethrower");
 
@@ -9263,7 +9362,7 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Hospital");
                 processUnitLargeWMilitary("Farm");
                 processUnitLargeWMilitary("Oil_Well");
-                */
+                
 
                 /*
                 for(int v = 0; v < CURedux.super_units.Length; v++)
@@ -9307,7 +9406,7 @@ namespace AssetsPV
             //processReceivingMilitaryWSuper();
             
             
-            WriteAllGIFs();
+            //WriteAllGIFs();
             //addon = "Zombie_";
             //WriteZombieGIFs();
 
@@ -9315,7 +9414,65 @@ namespace AssetsPV
             
             Directory.CreateDirectory(altFolder + "Terrains");
             Directory.CreateDirectory(blankFolder + "Terrains");
+            /*
+            renderTerrainSimple("Road", "Ordered", new byte[] {
+                32, 5, 3,
+                33, 7, 3,
+                34, 9, 2}, 33, 32, 56);
 
+            renderTerrainSimple("Plains", "High", new byte[] {
+                0, 27, 7,
+                2, 34, 2, }, 1, 0, 2);
+            renderTerrainSimple("Forest", "High", new byte[] {
+                4, 27, 7,
+                6, 34, 2, }, 5, 4, 6);
+            renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
+                8, 27, 7,
+                10, 34, 2, }, 9, 8, 10);
+            renderTerrainSimple("Jungle", "High", new byte[] {
+                12, 27, 7,
+                14, 34, 2, }, 13, 12, 14);
+            renderTerrainSimple("Hill", "High", new byte[] {
+                16, 27, 7,
+                18, 34, 2, }, 17, 16, 18);
+            renderTerrainSimple("Mountain", "High", new byte[] {
+                20, 27, 7,
+                22, 34, 2, }, 21, 20, 22);
+            renderTerrainSimple("Ruins", "High", new byte[] {
+                24, 27, 7,
+                26, 34, 2, }, 25, 24, 26);
+            renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
+                28, 27, 7,
+                30, 34, 2, }, 29, 28, 30);
+
+            renderTerrainSimple("River", "Water", new byte[] {
+                36, 7, 2,
+                38, 13, 2,
+                45, 39, 7,
+                4, 51, 2, }, 37, 36, 38);
+            renderTerrainSimple("Ocean", "Water", new byte[] {
+                46, 23, 5,
+                47, 21, 4,
+                44, 29, 7, }, 45, 44, 46);
+            renderTerrainSimple("Pit", "Normal", new byte[] {
+                41, 11, 3,
+                }, 40, 40, 40);
+
+            renderTerrainSimple("Volcano", "Normal", new byte[] {
+                49, 30, 2,
+                57, 29, 5,
+                51, 13, 3,
+                50, 25, 8, }, 49, 48, 50);
+            renderTerrainSimple("Poison", "Water", new byte[] {
+                3, 27, 3,
+                2, 24, 9,
+                1, 22, 11,
+                52, 13, 7,}, 53, 52, 54);
+            renderTerrainSimple("Warning", "Ordered", new byte[] {
+                59, 5, 2,
+                }, 58, 58, 58);
+            */
+            /*
             renderTerrainSimple("Plains", "Normal", new byte[] {
                 1, 30, 1,
                 58, 29, 3,
@@ -9335,19 +9492,10 @@ namespace AssetsPV
                 52, 31, 2,
                 56, 27, 2,
                 36, 69, 13 }, 13, 12, 14);
-            renderTerrainSimple("Hill", "High", new byte[] {
-                16, 27, 7,
-                18, 34, 2, }, 17, 16, 18);
             renderTerrainSimple("Mountain", "High", new byte[] {
                 20, 27, 9,
                 22, 31, 3,
                 30, 41, 4, }, 21, 20, 22);
-            
-            renderTerrainSimple("Road", "Ordered", new byte[] {
-                32, 5, 3,
-                33, 7, 3,
-                34, 9, 2}, 33, 32, 56);
-            
             renderTerrainSimple("Tundra", "Rough", new byte[] {
                 30, 13, 5,
                 29, 17, 7,
@@ -9367,14 +9515,15 @@ namespace AssetsPV
                 46, 23, 5,
                 47, 21, 4,
                 44, 29, 7, }, 45, 44, 46);
-            
+
+             */
+
             Directory.CreateDirectory(altFolder + "Tilings");
             for(int i = 0; i < 40; i++)
             {
                 makeSimpleShrunkenTiling("tiling" + i);
             }
             
-
 
             /*
             processReceivingMilitaryW();
