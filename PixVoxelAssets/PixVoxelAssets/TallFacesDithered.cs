@@ -8034,9 +8034,9 @@ namespace AssetsPV
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 32, (16 * (i - j + 6)) + 4);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 32, (16 * (i - j + 6)) - 12);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 32, (16 * (i - j + 6)) + 4);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 32, (16 * (i - j + 6)) - 12);
                 }
             }
 
