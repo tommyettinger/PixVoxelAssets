@@ -1088,7 +1088,7 @@ namespace AssetsPV
             model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
                 new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
                 new Connector("Right_Lower_Leg", "Right_Upper_Leg", 11), new Connector("Right_Upper_Leg", "Torso", 1),
-                new Connector("Left_Upper_Leg", "Left_Lower_Leg", 10), new Connector("Torso", "Left_Lower_Leg", 0));
+                new Connector("Torso", "Left_Upper_Leg", 0), new Connector("Left_Upper_Leg", "Left_Lower_Leg", 10));
             return model;
         }
         private static List<MagicaVoxelData> findContinuousParts(ref byte[,,] data, List<MagicaVoxelData> previous, Func<byte, bool> pred)

@@ -1788,534 +1788,42 @@ namespace AssetsPV
                 }
                 WritePNG(png, b, simplepalettes[c]);
             }
-            Bitmap bmp = new Bitmap(256, simplepalettes.Length - 88, PixelFormat.Format32bppArgb),
-                bmp2 = new Bitmap(256, simplepalettes.Length, PixelFormat.Format32bppArgb);
-
-            Graphics g = Graphics.FromImage(bmp), g2 = Graphics.FromImage(bmp2);
-
-            for(int c = 0; c < 208; c++)
+            if(VoxelLogic.VisualMode == "CU")
             {
-                Image im = new Bitmap(altFolder + "palettes" + "/color" + c + ".png");
-                g.DrawImageUnscaled(im, 0, c);
-                g2.DrawImageUnscaled(im, 0, c);
-                im.Dispose();
+                Bitmap bmp = new Bitmap(256, simplepalettes.Length - 88, PixelFormat.Format32bppArgb),
+                    bmp2 = new Bitmap(256, simplepalettes.Length, PixelFormat.Format32bppArgb);
+
+                Graphics g = Graphics.FromImage(bmp), g2 = Graphics.FromImage(bmp2);
+
+                for(int c = 0; c < 208; c++)
+                {
+                    Image im = new Bitmap(altFolder + "palettes" + "/color" + c + ".png");
+                    g.DrawImageUnscaled(im, 0, c);
+                    g2.DrawImageUnscaled(im, 0, c);
+                    im.Dispose();
+                }
+
+                for(int c = 208; c < 296; c++)
+                {
+                    Image im = new Bitmap(altFolder + "palettes" + "/color" + c + ".png");
+                    g2.DrawImageUnscaled(im, 0, c);
+                    im.Dispose();
+                }
+
+                for(int c = 296; c < simplepalettes.Length; c++)
+                {
+                    Image im = new Bitmap(altFolder + "palettes" + "/color" + c + ".png");
+                    g.DrawImageUnscaled(im, 0, c - 88);
+                    g2.DrawImageUnscaled(im, 0, c);
+                    im.Dispose();
+                }
+                bmp.Save(altFolder + "palettes/HumansTerrains.png");
+                bmp2.Save(altFolder + "palettes/HumansAliensTerrains.png");
+                g.Dispose();
+                g2.Dispose();
+                bmp.Dispose();
+                bmp2.Dispose();
             }
-
-            for(int c = 208; c < 296; c++)
-            {
-                Image im = new Bitmap(altFolder + "palettes" + "/color" + c + ".png");
-                g2.DrawImageUnscaled(im, 0, c);
-                im.Dispose();
-            }
-
-            for(int c = 296; c < simplepalettes.Length; c++)
-            {
-                Image im = new Bitmap(altFolder + "palettes" + "/color" + c + ".png");
-                g.DrawImageUnscaled(im, 0, c - 88);
-                g2.DrawImageUnscaled(im, 0, c);
-                im.Dispose();
-            }
-            bmp.Save(altFolder + "palettes/HumansTerrains.png");
-            bmp2.Save(altFolder + "palettes/HumansAliensTerrains.png");
-            g.Dispose();
-            g2.Dispose();
-            bmp.Dispose();
-            bmp2.Dispose();
-            //         Image image = new Bitmap("white.png");
-            //         if(VoxelLogic.VisualMode == "CU")
-            //         {
-            //             int pIndex = 0;
-            //             float[][][][] pals = new float[][][][] { CURedux.wpalettes_tw_gray, CURedux.wpalettes_tw_green, CURedux.wpalettes_tw_purple, CURedux.wpalettes_tw_red, CURedux.wpalettes_tw_white };
-            //             string[] names = new string[] {"gray", "green", "purple", "red", "white" };
-            //             foreach(float[][][] cpal in pals)
-            //             {
-            //                 // 29 is the number of Slope enum types.
-            //                 byte[,,,] cubes = new byte[208, cpal[0].Length, 29, 80];
-            //                 ImageAttributes imageAttributes = new ImageAttributes();
-            //                 int width = 4;
-            //                 int height = 5;
-            //                 float[][] colorMatrixElements = {
-            //new float[] {1F, 0,  0,  0,  0},
-            //new float[] {0, 1F,  0,  0,  0},
-            //new float[] {0,  0,  1F, 0,  0},
-            //new float[] {0,  0,  0,  1F, 0},
-            //new float[] {0,  0,  0,  0, 1F}};
-
-            //                 ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
-
-            //                 imageAttributes.SetColorMatrix(
-            //                    colorMatrix,
-            //                    ColorMatrixFlag.Default,
-            //                    ColorAdjustType.Bitmap);
-            //                 for(int p = 0; p < cpal.Length; p++)
-            //                 {
-            //                     for(int current_color = 0; current_color < cpal[0].Length; current_color++)
-            //                     {
-            //                         if(current_color >= cpal[p].Length)
-            //                             continue;
-
-            //                         Bitmap b =
-            //                         new Bitmap(width, height, PixelFormat.Format32bppArgb);
-
-            //                         Graphics g = Graphics.FromImage((Image)b);
-
-            //                         if(!VoxelLogic.terrainPalettes.Contains(p) && current_color == 25)
-            //                         {
-            //                             colorMatrix = new ColorMatrix(new float[][]{
-            //new float[] {0.22F+cpal[p][current_color][0],  0,  0,  0, 0},
-            //new float[] {0,  0.251F+cpal[p][current_color][1],  0,  0, 0},
-            //new float[] {0,  0,  0.31F+cpal[p][current_color][2],  0, 0},
-            //new float[] {0,  0,  0,  1, 0},
-            //new float[] {0, 0, 0, 0, 1F}});
-            //                         }
-            //                         else if(cpal[p][current_color][3] == VoxelLogic.eraser_alpha)
-            //                         {
-            //                             colorMatrix = new ColorMatrix(new float[][]{
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  1F, 0},
-            //new float[] {0,  0,  0,  0, 1F}});
-            //                         }
-            //                         else if(cpal[p][current_color][3] == 0F)
-            //                         {
-            //                             colorMatrix = new ColorMatrix(new float[][]{
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  0, 0},
-            //new float[] {0,  0,  0,  0, 1F}});
-            //                         }
-            //                         else
-            //                         {
-            //                             colorMatrix = new ColorMatrix(new float[][]{
-            //new float[] {0.235F+cpal[p][current_color][0],  0,  0,  0, 0},
-            //new float[] {0,  0.26F+cpal[p][current_color][1],  0,  0, 0},
-            //new float[] {0,  0,  0.30F+cpal[p][current_color][2],  0, 0},
-            //new float[] {0,  0,  0,  1F, 0},
-            //new float[] {0, 0, 0, 0, 1F}});
-            //                         }
-            //                         imageAttributes.SetColorMatrix(
-            //                            colorMatrix,
-            //                            ColorMatrixFlag.Default,
-            //                            ColorAdjustType.Bitmap);
-
-            //                         string which_image = (((current_color >= 18 && current_color <= 20) || (VoxelLogic.VisualMode != "CU" && current_color == 40)) || cpal[p][current_color][3] == 0F
-            //                             || cpal[p][current_color][3] == VoxelLogic.flash_alpha
-            //                             || cpal[p][current_color][3] == VoxelLogic.flash_alpha_0 || cpal[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
-            //                            (cpal[p][current_color][3] == VoxelLogic.flat_alpha || cpal[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
-            //                         g.DrawImage(image,
-            //                            new Rectangle(0, 0,
-            //                                width, height),  // destination rectangle 
-            //                                                 //                   new Rectangle((vx.x + vx.y) * 4, 128 - 6 - 32 - vx.y * 2 + vx.x * 2 - 4 * vx.z, width, height),  // destination rectangle 
-            //                            0, 0,        // upper-left corner of source rectangle 
-            //                            width,       // width of source rectangle
-            //                            height,      // height of source rectangle
-            //                            GraphicsUnit.Pixel,
-            //                            imageAttributes);
-            //                         for(int i = 0; i < width; i++)
-            //                         {
-            //                             for(int j = 0; j < height; j++)
-            //                             {
-            //                                 Color c = b.GetPixel(i, j);
-            //                                 double h = 0.0, s = 1.0, v = 1.0;
-            //                                 VoxelLogic.ColorToHSV(c, out h, out s, out v);
-            //                                 //if(VoxelLogic.subtlePalettes.Contains(p))
-            //                                 //{
-            //                                 //    s = VoxelLogic.Clamp((s * 0.75), 0.0, 0.75);
-            //                                 //    v = VoxelLogic.Clamp(v * 0.94, 0.01, 0.94);
-            //                                 //}
-            //                                 for(int slp = 0; slp < 29; slp++)
-            //                                 {
-            //                                     Color c2 = Color.Transparent;
-            //                                     double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
-            //                                             v_alter = Math.Pow(v, 2.0 - 2.0 * v);
-            //                                     v_alter *= Math.Pow(v_alter, 0.38);
-            //                                     if(j == height - 1)
-            //                                     {
-            //                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
-            //                                     }
-            //                                     else
-            //                                     {
-            //                                         if(which_image.Equals("image"))
-            //                                         {
-
-            //                                             switch(slp)
-            //                                             {
-            //                                                 case Cube:
-            //                                                     {
-            //                                                         if(j == 0)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
-            //                                                         }
-            //                                                         else if(i < width / 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
-            //                                                         }
-            //                                                         else if(i >= width / 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.8, 0.03, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightTop:
-            //                                                     {
-            //                                                         /*
-            //                                                         if(j == 0)// && i == width - 1)
-            //                                                         {
-            //                                                             //c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
-            //                                                         }*/
-            //                                                         //if(i + j >= 5 && j > 0)
-            //                                                         if(i + j / 2 >= 4)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
-            //                                                         }
-            //                                                         else if(i + (j + 1) / 2 >= 2)
-            //                                                         //if(j >= 2 &&  i >=  2 - (j / 3) * 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.0, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.10, 1.0));
-
-            //                                                             //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.8, 0.03, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimTop:
-            //                                                     {
-            //                                                         /*
-            //                                                         if(j == 0)// && i == 0)
-            //                                                         {
-            //                                                             //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
-            //                                                         }*/
-
-            //                                                         //if(i < j - 1 && j > 0)
-            //                                                         if(i < j / 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
-
-            //                                                         }
-            //                                                         //else if(i + (j + 1) / 2 >= 2)
-            //                                                         else if(i - 1 <= (j + 1) / 2)
-            //                                                         //                                                    if(j >= 2 && i < (j / 3) * 2 + 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.25, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.9, 0.05, 1.0));
-
-            //                                                             //                                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.06, 1.0));
-            //                                                         }
-            //                                                         //else //if(i <= j / 2 + 2)
-            //                                                         //{
-            //                                                         //                                                      c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.25, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.9, 0.05, 1.0));
-            //                                                         //}
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightDim:
-            //                                                     {
-            //                                                         /*
-            //                                                         if(j == 0)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.09, 1.0));
-            //                                                         }
-            //                                                         else
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.275, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.875, 0.045, 1.0));
-            //                                                         }*/
-            //                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.275, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.875, 0.05, 1.0));
-
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightDimTop:
-            //                                                 case BrightDimTopThick:
-            //                                                     {
-            //                                                         //     if((i + j) / 2 >= 1 && i <= j / 2 && j > 0)
-
-            //                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.05, 0.08, 1.0));
-
-            //                                                         //   else // else if (j > 0)
-            //                                                         //   {
-            //                                                         //       c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Sqrt(s)) * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v * 0.95, 0.08, 1.0));
-            //                                                         //   }
-            //                                                     }
-            //                                                     break;
-
-            //                                                 case BrightBottom:
-            //                                                     {
-            //                                                         if(i > (j + 1) / 2 + 1)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
-            //                                                         }
-            //                                                         else if(i + 1 > (j + 1) / 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.4, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.7, 0.02, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimBottom:
-            //                                                     {
-            //                                                         if(i + (j + 1) / 2 < 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
-            //                                                         }
-            //                                                         else if(i + (j + 1) / 2 < 4)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightDimBottom:
-            //                                                 case BrightDimBottomThick:
-            //                                                     {
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.45, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.015, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-
-            //                                                 case BrightBack:
-            //                                                     {
-            //                                                         //if(i >= 1)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimBack:
-            //                                                     {
-            //                                                         //if(i < 3)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightTopBack:
-            //                                                     {
-            //                                                         if(i + (j + 3) / 4 >= 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimTopBack:
-            //                                                     {
-            //                                                         if(i - (j + 3) / 4 <= 1)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightBottomBack:
-            //                                                     {
-            //                                                         if(i >= j)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimBottomBack:
-            //                                                     {
-            //                                                         if(i + j <= 3)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightTopBackThick:
-            //                                                     {
-            //                                                         //if(i + (j + 3) / 4 >= 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimTopBackThick:
-            //                                                     {
-            //                                                         //if(i - (j + 3) / 4 <= 1)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BrightBottomBackThick:
-            //                                                     {
-            //                                                         //if(i >= j)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case DimBottomBackThick:
-            //                                                     {
-            //                                                         if(i + j <= 3)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case RearBrightTop:
-            //                                                     {
-            //                                                         if(i + (j + 3) / 4 >= 3 && j > 0)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.15, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case RearDimTop:
-            //                                                     {
-            //                                                         if(i - (j + 3) / 4 <= 0 && j > 0)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case RearBrightBottom:
-            //                                                     {
-            //                                                         if(i > j)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case RearDimBottom:
-            //                                                     {
-            //                                                         if(i + j <= 2)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.5, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.6, 0.01, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BackBackTop:
-            //                                                 case BackBack:
-            //                                                     {
-            //                                                         if(j > 0)
-            //                                                         {
-            //                                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
-            //                                                         }
-            //                                                     }
-            //                                                     break;
-            //                                                 case BackBackTopThick:
-            //                                                     {
-            //                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
-            //                                                     }
-            //                                                     break;
-            //                                                 case BackBackBottom:
-            //                                                 case BackBackBottomThick:
-            //                                                 default:
-            //                                                     {
-
-            //                                                     }
-            //                                                     break;
-            //                                             }
-            //                                         }
-
-            //                                         else if(which_image == "shine")
-            //                                         {
-            //                                             c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s * 0.9, 0.0112, 1.0), VoxelLogic.Clamp(v * 1.1, 0.1, 1.0));
-            //                                         }
-            //                                         else if(which_image == "flat")
-            //                                         {
-
-            //                                             if(current_color == 27)
-            //                                             {
-            //                                                 if(slp == 0)
-            //                                                 {
-            //                                                     if(j == 0)
-            //                                                     {
-            //                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.05, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
-            //                                                     }
-            //                                                     else if(i < width / 2)
-            //                                                     {
-            //                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.2, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.95, 0.06, 1.0));
-            //                                                     }
-            //                                                     else if(i >= width / 2)
-            //                                                     {
-            //                                                         c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.35, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.85, 0.03, 1.0));
-            //                                                     }
-            //                                                 }
-            //                                                 else if(j >= 2 && j < height - 1)
-            //                                                 {
-            //                                                     double h2 = h, s2 = 1.0, v2 = v;
-            //                                                     VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
-            //                                                     c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
-            //                                                 }
-            //                                             }
-            //                                             else
-            //                                             {
-            //                                                 if(j >= 2 && j < height - 1)
-            //                                                 {
-            //                                                     double h2 = h, s2 = 1.0, v2 = v;
-            //                                                     VoxelLogic.ColorToHSV(c, out h2, out s2, out v2);
-            //                                                     c2 = VoxelLogic.ColorFromHSV(h2, VoxelLogic.Clamp(s2 * 0.65, 0.0112, 1.0), VoxelLogic.Clamp(v2 * 0.85, 0.01, 1.0));
-            //                                                 }
-            //                                             }
-            //                                         }
-            //                                     }
-            //                                     if(c2.A != 0)
-            //                                     {
-            //                                         cubes[p, current_color, slp, i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c2.B);
-            //                                         cubes[p, current_color, slp, i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c2.G);
-            //                                         cubes[p, current_color, slp, i * 4 + j * width * 4 + 2] = Math.Max((byte)1, c2.R);
-            //                                         cubes[p, current_color, slp, i * 4 + j * width * 4 + 3] = 255;
-            //                                     }
-            //                                     else
-            //                                     {
-            //                                         cubes[p, current_color, slp, i * 4 + j * 4 * width + 0] = 0;
-            //                                         cubes[p, current_color, slp, i * 4 + j * 4 * width + 1] = 0;
-            //                                         cubes[p, current_color, slp, i * 4 + j * 4 * width + 2] = 0;
-            //                                         cubes[p, current_color, slp, i * 4 + j * 4 * width + 3] = 0;
-            //                                     }
-            //                                 }
-            //                             }
-            //                         }
-
-            //                     }
-            //                 }
-            //                 byte[][][][] cubes2 = new byte[cpal.Length][][][];
-            //                 for(int i = 0; i < cpal.Length; i++)
-            //                 {
-            //                     cubes2[i] = new byte[cpal[0].Length][][];
-            //                     for(int c = 0; c < cpal[0].Length; c++)
-            //                     {
-            //                         cubes2[i][c] = new byte[29][];
-            //                         for(int slp = 0; slp < 29; slp++)
-            //                         {
-            //                             cubes2[i][c][slp] = new byte[80];
-            //                             for(int j = 0; j < 80; j++)
-            //                             {
-            //                                 cubes2[i][c][slp][j] = cubes[i, c, slp, j];
-            //                             }
-            //                         }
-            //                     }
-            //                 }
-            //                 byte[][][] sp = new byte[cubes2.Length][][];
-            //                 int colorcount = Math.Min(cpal[0].Length, 63);
-            //                 for(int i = 0; i < sp.Length; i++)
-            //                 {
-            //                     sp[i] = new byte[256][];
-            //                     for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
-            //                     {
-            //                         sp[i][j] = new byte[] { cubes2[i][c][0][2], cubes2[i][c][0][1], cubes2[i][c][0][0] };
-            //                         sp[i][j - 1] = new byte[] { cubes2[i][c][0][2 + 16 + 16], cubes2[i][c][0][1 + 16 + 16], cubes2[i][c][0][0 + 16 + 16] };
-            //                         sp[i][j - 2] = new byte[] { cubes2[i][c][0][2 + 24 + 16], cubes2[i][c][0][1 + 24 + 16], cubes2[i][c][0][0 + 24 + 16] };
-            //                         sp[i][j - 3] = new byte[] { cubes2[i][c][0][2 + 64], cubes2[i][c][0][1 + 64], cubes2[i][c][0][0 + 64] };
-            //                     }
-            //                     sp[i][0] = new byte[] { 0, 0, 0 };
-            //                     sp[i][1] = new byte[] { 0, 0, 0 };
-            //                     sp[i][254] = new byte[] { 0, 0, 0 };
-            //                     sp[i][255] = new byte[] { 0, 0, 0 };
-            //                 }
-            //                 for(int c = 0; c < sp.Length; c++)
-            //                 {
-            //                     ImageInfo imi = new ImageInfo(256, 1, 8, false, false, true);
-            //                     PngWriter png = FileHelper.CreatePngWriter(altFolder + "palettes" + "/color" + c + "_" + names[pIndex] + "_effects.png", imi, true);
-            //                     byte[][] b = new byte[1][];
-            //                     b[0] = new byte[256];
-            //                     for(int i = 0; i < 256; i++)
-            //                     {
-            //                         b[0][i] = (byte)i;
-            //                     }
-            //                     WritePNG(png, b, sp[c]);
-            //                 }
-            //                 pIndex++;
-            //             }
-            //         }
         }
 
 
@@ -6322,7 +5830,7 @@ namespace AssetsPV
         }
 
 
-        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames)
+        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = true)
         {
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
             string folder = (altFolder);
@@ -6336,24 +5844,25 @@ namespace AssetsPV
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * 1, 10 * 1, 0, "Left_Leg");
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * 1, 10 * 1, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg");
                 }
             }
 
             //Directory.CreateDirectory("vox/" + altFolder);
             //VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + palette + ".vox", work, "W", palette, 40, 40, 40);
-
+            byte[,,] colors;
             //MagicaVoxelData[] explodeParsed = parsed.Replicate();
             for(int f = 0; f < framelimit; f++)
             {
+                colors = PatternLogic.ApplyPattern(modelFrames[f].Finalize(), model.Patterns);
                 for(int dir = 0; dir < 4; dir++)
                 {
-                    FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(PatternLogic.ApplyPattern(modelFrames[f].Finalize(), model.Patterns), dir * 90));
+                    FaceVoxel[,,] work = FaceLogic.GetFaces(TransformLogic.RotateYaw(colors, dir * 90));
 
                     //                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
                     byte[][] b = processFrameLargeW(work, palette, dir, f, framelimit, still, false);
 
-                    ImageInfo imi = new ImageInfo(LargeWidth, LargeHeight, 8, false, false, true);
+                    ImageInfo imi = new ImageInfo(ImageWidthLarge, ImageHeightLarge, 8, false, false, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + moniker + "_Iso_face" + dir + "_" + f + ".png", imi, true);
                     WritePNG(png, b, simplepalettes[palette]);
                 }
@@ -8484,7 +7993,7 @@ namespace AssetsPV
                 }
             }
         }
-        public static void processVoxGiantWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = false)
+        public static void processVoxGiantWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = true)
         {
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
             string folder = (altFolder + "vox/");
@@ -8979,16 +8488,16 @@ namespace AssetsPV
             //System.IO.Directory.CreateDirectory("vox/mecha3");
 
             VoxelLogic.Initialize();
-            VoxelLogic.VisualMode = "CU";
+            /*VoxelLogic.VisualMode = "CU";
             altFolder = "Diverse_PixVoxel_Wargame_Iso_Mini/";
             blankFolder = "Blank_PixVoxel_Wargame_Iso_Mini/";
             CURedux.Initialize(true);
-
-            //VoxelLogic.VisualMode = "W";
-            //altFolder = "Forays3/";
-            //blankFolder = altFolder;
-            //VoxelLogic.voxFolder = "ForaysBones/";
-            //ForaysPalettes.Initialize();
+            */
+            VoxelLogic.VisualMode = "W";
+            altFolder = "Forays4/";
+            blankFolder = altFolder;
+            VoxelLogic.voxFolder = "ForaysBones/";
+            ForaysPalettes.Initialize();
 
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
@@ -9292,7 +8801,7 @@ namespace AssetsPV
             */
             
             writePaletteImages();
-
+            
             for(int a = 2; a < 2; a++)
             {
                 /*
@@ -9412,8 +8921,8 @@ namespace AssetsPV
 
             //WriteDivineGIFs();
             
-            Directory.CreateDirectory(altFolder + "Terrains");
-            Directory.CreateDirectory(blankFolder + "Terrains");
+            //Directory.CreateDirectory(altFolder + "Terrains");
+            //Directory.CreateDirectory(blankFolder + "Terrains");
             /*
             renderTerrainSimple("Road", "Ordered", new byte[] {
                 32, 5, 3,
@@ -9517,7 +9026,7 @@ namespace AssetsPV
                 44, 29, 7, }, 45, 44, 46);
 
              */
-
+            /*
             Directory.CreateDirectory(altFolder + "Tilings");
             for(int i = 0; i < 40; i++)
             {
@@ -9717,8 +9226,8 @@ namespace AssetsPV
            );
 
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude = Model.Humanoid(left_weapon: "Bow"),
-                orc_assassin = Model.Humanoid(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
+            Model dude = Model.HumanoidAlt(left_weapon: "Bow"),
+                orc_assassin = Model.HumanoidAlt(body: "Orc", face: "Mask", left_weapon: "Bow", patterns: new Dictionary<byte, Pattern>() {
                 { 253 - 29 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
                 { 253 - 5 * 4, new Pattern(253 - 4 * 4, 0, 253 - 5 * 4, 0, 5, 2, 3, 1, 0.5f) },
                 //{ 253 - 29 * 4, new Pattern(253 - 13 * 4, 253 - 13 * 4, 253 - 48 * 4, 0, 5, 5, 1, 1, 0.7f) },
@@ -9799,35 +9308,35 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
 
-            /*
+            
             Pose bow0 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
-            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(45, "Torso", "Left_Lower_Leg", "Right_Lower_Leg", "Left_Upper_Leg", "Right_Upper_Leg")
             .AddYaw(30, "Right_Upper_Arm")
             .AddYaw(-15, "Right_Lower_Arm")
             .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
-            .Translate(0, -10, 0, "Left_Leg")
+            .Translate(0, -10, 0, "Left_Lower_Leg")
             ),
                 bow1 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
-            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(45, "Torso", "Left_Lower_Leg", "Right_Lower_Leg", "Left_Upper_Leg", "Right_Upper_Leg")
             .AddYaw(50, "Right_Upper_Arm")
             .AddYaw(-35, "Right_Lower_Arm")
             .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
             .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
-            .Translate(0, -10, 0, "Left_Leg")
+            .Translate(0, -10, 0, "Left_Lower_Leg")
             ),
 
                 bow2 = (model => model
             .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
             .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
-            .AddYaw(45, "Torso", "Left_Leg", "Right_Leg")
+            .AddYaw(45, "Torso", "Left_Lower_Leg", "Right_Lower_Leg", "Left_Upper_Leg", "Right_Upper_Leg")
             .AddYaw(60, "Right_Upper_Arm")
             .AddYaw(-15, "Right_Lower_Arm")
             .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
-            .Translate(0, -10, 0, "Left_Leg")
+            .Translate(0, -10, 0, "Left_Lower_Leg")
             );
             Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f, true),
                 brownLeatherPattern = new Pattern(253 - 44 * 4, 0, 253 - 43 * 4, 0, 3, 2, 2, 1, 0.6f, true),
@@ -9866,12 +9375,14 @@ namespace AssetsPV
                 swing1l = (model => model
             .AddPitch(10, "Left_Weapon")
             .AddPitch(70, "Left_Lower_Arm", "Left_Weapon")
-            //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+                        //.AddYaw(-10, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+            .AddYaw(350, "Torso")
             .AddPitch(75, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
                 swing2l = (model => model
             .AddPitch(-30, "Left_Weapon")
             .AddPitch(40, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
+            .AddYaw(30, "Torso")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
 
             Pose swing0r = (model => model),
@@ -9879,11 +9390,13 @@ namespace AssetsPV
             .AddPitch(10, "Right_Weapon")
             .AddPitch(70, "Right_Lower_Arm", "Right_Weapon")
             //.AddYaw(-10, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+            .AddYaw(350, "Torso")
             .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")),
                 swing2r = (model => model
             .AddPitch(-30, "Right_Weapon")
             .AddPitch(40, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
             .AddYaw(330, "Right_Lower_Arm", "Right_Weapon")
+            .AddYaw(30, "Torso")
             .AddSpread("Right_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
 
             Pose stab0l = (model => model),
@@ -9951,11 +9464,11 @@ namespace AssetsPV
             .AddPitch(10, "Right_Weapon")
             .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm")
             .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
-            */
+            
             ///START
 
-            /*
-            Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+            
+            Model hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -9973,43 +9486,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
-
-            processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.3f },
-                new float[] { 0, 1, 0.55f },
-                new float[] { 0, 1, 0.75f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.7f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.3f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_sword = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Longsword", patterns: velvet);
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Robe", right_weapon: "Longsword", patterns: velvet);
 
             processUnitLargeWModel("Hero_Robe_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10027,10 +9504,45 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Longsword");
+
+            processUnitLargeWModel("Hero_Plate_Sword", true, 0, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
 
             ///END
 
-            Model hero_mace = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+            Model hero_mace = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Mace", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10048,7 +9560,25 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_mace = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Robe", right_weapon: "Mace", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Mace", true, 0, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
 
             processUnitLargeWModel("Hero_Chain_Mace", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10066,7 +9596,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_mace = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Mace");
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Mace");
 
             processUnitLargeWModel("Hero_Plate_Mace", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10084,25 +9614,8 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_mace = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Mace", patterns: velvet);
-
-            processUnitLargeWModel("Hero_Plate_Robe", true, 0, hero_mace,
-                new Pose[] { swing0r, swing1r, swing2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.35f },
-                new float[] { 1, 2, 0.65f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.5f },
-                new float[] { 2, 0, 1.0f },});
-
-            Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+            
+            Model hero_dagger = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -10120,43 +9633,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_dagger = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
-                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.5f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.5f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 3, 2, 0.35f },
-                new float[] { 3, 2, 0.1f },
-                new float[] { 3, 2, 0.45f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.35f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
-
-            processUnitLargeWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
-                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.5f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 0.5f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 3, 2, 0.35f },
-                new float[] { 3, 2, 0.1f },
-                new float[] { 3, 2, 0.45f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.35f },
-                new float[] { 2, 0, 0.65f },
-                new float[] { 2, 0, 1.0f },});
-
-            hero_dagger = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Dagger", patterns: velvet);
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Robe", right_weapon: "Dagger", patterns: velvet);
 
             processUnitLargeWModel("Hero_Robe_Dagger", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -10174,8 +9651,44 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
 
-            Model hero_staff = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+            processUnitLargeWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Dagger");
+
+            processUnitLargeWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+            
+
+            Model hero_staff = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Staff", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10193,43 +9706,7 @@ namespace AssetsPV
                 new float[] { 4, 0, 0.6f },
                 new float[] { 4, 0, 1.0f },});
 
-            hero_staff = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
-
-            processUnitLargeWModel("Hero_Chain_Staff", true, 0, hero_staff,
-                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.7f },
-                new float[] { 1, 2, 0.1f },
-                new float[] { 1, 2, 0.6f },
-                new float[] { 2, 3, 0.2f },
-                new float[] { 2, 3, 0.9f },
-                new float[] { 3, 1, 0.7f },
-                new float[] { 1, 4, 0.6f },
-                new float[] { 1, 4, 0.9f },
-                new float[] { 4, 0, 0.2f },
-                new float[] { 4, 0, 0.6f },
-                new float[] { 4, 0, 1.0f },});
-
-            hero_staff = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Staff");
-
-            processUnitLargeWModel("Hero_Plate_Staff", true, 0, hero_staff,
-                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.7f },
-                new float[] { 1, 2, 0.1f },
-                new float[] { 1, 2, 0.6f },
-                new float[] { 2, 3, 0.2f },
-                new float[] { 2, 3, 0.9f },
-                new float[] { 3, 1, 0.7f },
-                new float[] { 1, 4, 0.6f },
-                new float[] { 1, 4, 0.9f },
-                new float[] { 4, 0, 0.2f },
-                new float[] { 4, 0, 0.6f },
-                new float[] { 4, 0, 1.0f },});
-
-            hero_staff = Model.Humanoid(body: "Human_Male_Robe", right_weapon: "Staff", patterns: velvet);
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Robe", right_weapon: "Staff", patterns: velvet);
 
             processUnitLargeWModel("Hero_Robe_Staff", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10247,8 +9724,43 @@ namespace AssetsPV
                 new float[] { 4, 0, 0.6f },
                 new float[] { 4, 0, 1.0f },});
 
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
 
-            Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+            processUnitLargeWModel("Hero_Chain_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Staff");
+
+            processUnitLargeWModel("Hero_Plate_Staff", true, 0, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+            
+            Model hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Bow", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
@@ -10266,7 +9778,25 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_bow = Model.Humanoid(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Robe", left_weapon: "Bow", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Bow", true, 0, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
 
             processUnitLargeWModel("Hero_Chain_Bow", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
@@ -10284,7 +9814,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Plate", left_weapon: "Bow");
             
             processUnitLargeWModel("Hero_Plate_Bow", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
@@ -10302,29 +9832,10 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_bow = Model.Humanoid(body: "Human_Male_Robe", left_weapon: "Bow", patterns: velvet);
-
-            processUnitLargeWModel("Hero_Robe_Bow", true, 0, hero_bow,
-                new Pose[] { bow0, bow1, bow2 },
-                new float[][] {
-                new float[] { 0, 1, 0.0f },
-                new float[] { 0, 1, 0.2f },
-                new float[] { 0, 1, 0.4f },
-                new float[] { 0, 1, 0.6f },
-                new float[] { 0, 1, 0.8f },
-                new float[] { 0, 1, 0.9f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 0, 1, 1.0f },
-                new float[] { 1, 2, 1.0f },
-                new float[] { 2, 0, 0.4f },
-                new float[] { 2, 0, 0.8f },
-                new float[] { 2, 0, 1.0f },});
-            */
-
             //processing voxels next
 
             /*
-            hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
             
             processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10342,7 +9853,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
             
-            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
             
             processVoxGiantWModel("Hero_Chain_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10360,7 +9871,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
             
-            hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Longsword");
 
             processVoxGiantWModel("Hero_Plate_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10397,7 +9908,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
             /*
-            Model hero_sword = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+            Model hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10415,7 +9926,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_sword = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Longsword", patterns: chain);
 
             processVoxGiantWModel("Hero_Chain_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10433,7 +9944,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_sword = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Longsword");
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Longsword");
 
             processVoxGiantWModel("Hero_Plate_Sword", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10451,7 +9962,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            Model hero_mace = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+            Model hero_mace = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Mace", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10469,7 +9980,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_mace = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Mace", patterns: chain);
 
             processVoxGiantWModel("Hero_Chain_Mace", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10487,7 +9998,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_mace = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Mace");
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Mace");
 
             processVoxGiantWModel("Hero_Plate_Mace", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10505,7 +10016,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            Model hero_dagger = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+            Model hero_dagger = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Dagger", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -10523,7 +10034,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_dagger = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Dagger", patterns: chain);
 
             processVoxGiantWModel("Hero_Chain_Dagger", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -10541,7 +10052,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_dagger = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Dagger");
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Dagger");
 
             processVoxGiantWModel("Hero_Plate_Dagger", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -10560,7 +10071,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
 
 
-            Model hero_staff = Model.Humanoid(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+            Model hero_staff = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Staff", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10578,7 +10089,7 @@ namespace AssetsPV
                 new float[] { 4, 0, 0.6f },
                 new float[] { 4, 0, 1.0f },});
 
-            hero_staff = Model.Humanoid(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Staff", patterns: chain);
 
             processVoxGiantWModel("Hero_Chain_Staff", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10596,7 +10107,7 @@ namespace AssetsPV
                 new float[] { 4, 0, 0.6f },
                 new float[] { 4, 0, 1.0f },});
 
-            hero_staff = Model.Humanoid(body: "Human_Male_Plate", right_weapon: "Staff");
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Staff");
 
             processVoxGiantWModel("Hero_Plate_Staff", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10615,7 +10126,7 @@ namespace AssetsPV
                 new float[] { 4, 0, 1.0f },});
 
 
-            Model hero_bow = Model.Humanoid(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+            Model hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Bow", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
@@ -10633,7 +10144,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_bow = Model.Humanoid(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Chain", left_weapon: "Bow", patterns: chain);
 
             processVoxGiantWModel("Hero_Chain_Bow", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
@@ -10651,7 +10162,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
 
-            hero_bow = Model.Humanoid(body: "Human_Male_Plate", left_weapon: "Bow");
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Plate", left_weapon: "Bow");
 
 
             processVoxGiantWModel("Hero_Plate_Bow", true, 0, hero_bow,

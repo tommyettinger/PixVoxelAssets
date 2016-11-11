@@ -2908,7 +2908,7 @@ namespace AssetsPV
         //    }
         //}
         
-        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames)
+        public static void processUnitLargeWModel(string moniker, bool still, int palette, Model model, Pose[] poses, float[][] frames, bool alt = true)
         {
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
             string folder = (altFolder);
@@ -2922,7 +2922,8 @@ namespace AssetsPV
                 Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier * bonus, 10 * multiplier * bonus, 0, "Left_Leg");
+                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * multiplier * bonus, 10 * multiplier * bonus, 0,
+                        (alt) ? "Left_Lower_Leg" : "Left_Leg");
                 }
             }
 
@@ -4004,6 +4005,7 @@ namespace AssetsPV
             */
 
             //            processReceivingMilitaryWSuper();
+            /*
             Bone altFace = Bone.readBone("Happy_Face");
             Pose pose0 = (model => model),
                 pose1 = (model => model.AddBone("Face", altFace)
@@ -4017,7 +4019,7 @@ namespace AssetsPV
             .AddYaw(30, "Left_Lower_Arm", "Left_Weapon")
             .AddSpread("Left_Weapon", 60f, 0f, 30f, 253 - 12 * 4));
             //            processUnitLargeWBones(left_weapon: "Longsword", pose: pose1);
-            Model dude = Model.Humanoid(left_weapon: "Longsword");
+            Model dude = Model.HumanoidAlt(left_weapon: "Longsword");
 
             processUnitLargeWModel("Dude_Sword", true, 0, dude,
                 new Pose[] { pose0, pose1, pose2 },
@@ -4063,7 +4065,9 @@ namespace AssetsPV
             s = altFolder + "/palette" + 0 + "_" + "Just_Sword" + "_Iso_face* ";
             startInfo.Arguments = "-dispose background -delay 150 -loop 0 " + s + " gifs/" + altFolder + "palette" + 0 + "_" + "Just_Sword" + "_Iso_animated.gif";
             Process.Start(startInfo).WaitForExit();
-
+            */
         }
+        
+       
     }
 }
