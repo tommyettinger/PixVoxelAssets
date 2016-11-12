@@ -18,9 +18,9 @@ namespace AssetsPV
 
         public MagicaVoxelData(BinaryReader stream, bool subsample)
         {
-            x = (byte)stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
-            y = (byte)stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
-            z = (byte)stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
+            x = stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
+            y = stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
+            z = stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
             color = stream.ReadByte();
         }
         public MagicaVoxelData(int x, int y, int z, int color)

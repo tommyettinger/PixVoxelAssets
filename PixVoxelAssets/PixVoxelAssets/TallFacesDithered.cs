@@ -175,13 +175,14 @@ namespace AssetsPV
                         {
                             Color c = b.GetPixel(i, j);
                             double h = 0.0, s = 1.0, v = 1.0;
+                            bool subtle = VoxelLogic.subtlePalettes.Contains(p);
                             VoxelLogic.ColorToHSV(c, out h, out s, out v);
                             //                            if(VoxelLogic.subtlePalettes.Contains(p) && i == 0 && j == 0)
                             //                                Console.WriteLine("palette: " + p + ", current_color: " + current_color + ", s before: " + s + ", s after: " + (VoxelLogic.Clamp(s - 0.3, 0.0, 0.6)));
-                            if(VoxelLogic.subtlePalettes.Contains(p))
+                            if(subtle)
                             {
-                                s = VoxelLogic.Clamp((s * 0.5), 0.0, 0.5);
-                                v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
+                                s = VoxelLogic.Clamp((s * 0.6), 0.0, 0.6);
+                                v = VoxelLogic.Clamp(v * 0.95, 0.01, 0.95);
                             }
                             else if(current_color == 40 && VoxelLogic.VisualMode == "CU" && !VoxelLogic.terrainPalettes.Contains(p))
                             {
@@ -197,7 +198,10 @@ namespace AssetsPV
 
                                 if(j == height - 1)
                                 {
-                                    c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
+                                    if(subtle)
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.45, 0.00625, 0.8), VoxelLogic.Clamp(v_alter * 0.725, 0.02, 1.0));
+                                    else
+                                        c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.65, 0.01, 1.0));
                                 }
                                 else
                                 {
@@ -7638,7 +7642,81 @@ namespace AssetsPV
                     parsed[i].color--;
             }
             */
-            
+
+        }
+
+        public static void processTerrainLargeW(string u, int palette, bool shadowless, bool addFloor)
+        {
+
+            Console.WriteLine("Processing: " + u + ", palette " + palette);
+            int framelimit = 1;
+            wcurrent = wrendered[palette];
+
+            VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
+            wditheredcurrent = wdithered[palette];
+
+
+            string folder = (altFolder);//"color" + i;
+            Directory.CreateDirectory(folder); //("color" + i);
+            ImageInfo imi = new ImageInfo(ImageWidthLarge, ImageHeightLarge, 8, false, false, true);
+
+            if(addFloor)
+            {
+                BinaryReader bin = new BinaryReader(File.Open("Terrain/" + u + "_Large_W.vox", FileMode.Open));
+                BinaryReader binFloor = new BinaryReader(File.Open("Terrain/Floor_Large_W.vox", FileMode.Open));
+                byte[,,] structure = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.FromMagicaRaw(bin), 60, 60, 60), 0, 0, 1),
+                    floor = TransformLogic.VoxListToArray(VoxelLogic.FromMagicaRaw(binFloor), 60, 60, 60);
+
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.Overlap(FaceLogic.GetFaces(TransformLogic.RotateYaw(floor, dir * 90)), FaceLogic.GetFaces(
+                        TransformLogic.RunThinningCA(TransformLogic.RotateYaw(structure, dir * 90), 2)));
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + (61 - palette) + "_" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, processFrameLargeW(faces, palette, dir, f, framelimit, true, shadowless), simplepalettes[palette]);
+                    }
+                }
+
+                /*
+                IEnumerable<MagicaVoxelData> structure = VoxelLogic.FromMagicaRaw(bin)
+                    .Select(v => VoxelLogic.AlterVoxel(v, 0, 0, 1, v.color));
+                voxes = structure.Concat(VoxelLogic.FromMagicaRaw(binFloor)).ToList();
+                */
+            }
+            else
+            {
+                byte[,,] voxes;
+                BinaryReader bin = new BinaryReader(File.Open("Terrain/" + u + "_Huge_W.vox", FileMode.Open));
+                if(shadowless)
+                    voxes = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.FromMagicaRaw(bin), 120, 120, 80), 20, 20, 0);
+                else
+                    voxes = TransformLogic.Translate(TransformLogic.VoxListToArray(VoxelLogic.PlaceShadowsW(VoxelLogic.FromMagicaRaw(bin)), 120, 120, 80), 20, 20, 1);
+
+                for(int dir = 0; dir < 4; dir++)
+                {
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(TransformLogic.RotateYaw(voxes, dir * 90));
+
+                    for(int f = 0; f < framelimit; f++)
+                    {
+                        PngWriter png = FileHelper.CreatePngWriter(altFolder + "/palette" + (61 - palette) + "_" + u + "_Large_face" + dir + "_" + f + ".png", imi, true);
+                        WritePNG(png, processFrameLargeW(faces, palette, dir, f, framelimit, true, shadowless), simplepalettes[palette]);
+                    }
+                }
+            }
+            //VoxelLogic.WriteVOX("vox/" + altFolder + u + ".vox", voxes, "W", palette, 80, 80, 80);
+            /*
+            MagicaVoxelData[] parsed = voxes.ToArray();
+            for(int i = 0; i < parsed.Length; i++)
+            {
+                parsed[i].x += 20;
+                parsed[i].y += 20;
+                if((254 - parsed[i].color) % 4 == 0)
+                    parsed[i].color--;
+            }
+            */
+
         }
         private static byte[][] generateWaterMask(int facing, int variant)
         {
@@ -7660,7 +7738,7 @@ namespace AssetsPV
             bool[] barePositions = new bool[numBytes];
             int xSize = 120, ySize = 120, zSize = 80;
             FaceVoxel[,,] faces = new FaceVoxel[xSize, ySize, zSize];
-            Array slopage = Enum.GetValues(typeof(Slope));
+            //Array slopage = Enum.GetValues(typeof(Slope));
             for(int mvdx = 83; mvdx >= 36; mvdx--)
             {
                 for(int mvdy = 36; mvdy <= 83; mvdy++)
@@ -7670,7 +7748,6 @@ namespace AssetsPV
                     int current_color = 28;
                     //int unshaded = VoxelLogic.WithoutShadingK(vx.color);
                     //int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + kcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - clear) / 4 : (253 - vx.color) / 4;
-                    int p = 0;
                     int mod_color = current_color;
                     double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant);
                     /*
@@ -7936,37 +8013,69 @@ namespace AssetsPV
                 }
             }
 
+            int runningX, runningY;
+            byte currentEdit;
             for(int i = 0; i < numBytes; i++)
             {
-                if(editValues[i] > 0)
+                if((currentEdit = editValues[i]) > 0)
                 {
-                    argbValues[i] = editValues[i];
+                    argbValues[i] = currentEdit;
+                    runningX = i % cols;
+                    runningY = i / cols;
+                    if(runningX < 1 || runningX >= cols - 1 || runningY < 1 || runningY >= rows - 1)
+                        continue;
+                    if(editValues[i - 1 - cols] > 0)
+                    {
+                        if(argbValues[i - 1] == 0)
+                            argbValues[i - 1] = currentEdit;
+                        if(argbValues[i - cols] == 0)
+                            argbValues[i - cols] = currentEdit;
+                    }
+                    if(editValues[i + 1 - cols] > 0)
+                    {
+                        if(argbValues[i + 1] == 0)
+                            argbValues[i + 1] = currentEdit;
+                        if(argbValues[i - cols] == 0)
+                            argbValues[i - cols] = currentEdit;
+                    }
+                    if(editValues[i - 1 + cols] > 0)
+                    {
+                        if(argbValues[i - 1] == 0)
+                            argbValues[i - 1] = currentEdit;
+                        if(argbValues[i + cols] == 0)
+                            argbValues[i + cols] = currentEdit;
+                    }
+                    if(editValues[i + 1 + cols] > 0)
+                    {
+                        if(argbValues[i + 1] == 0)
+                            argbValues[i + 1] = currentEdit;
+                        if(argbValues[i + cols] == 0)
+                            argbValues[i + cols] = currentEdit;
+                    }
                 }
             }
-            
+
             for(int i = 0; i < numBytes; i++)
             {
                 data[i / cols][i % cols] = argbValues[i];
             }
             //return data;
-            
-            byte[][] b2 = new byte[HugeHeight][];
-            for(int i = 0; i < HugeHeight; i++)
+
+            byte[][] b2 = new byte[ImageHeightHuge][];
+            for(int i = 0; i < ImageHeightHuge; i++)
             {
-                b2[i] = new byte[HugeWidth];
+                b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 0, i = 0; y < HugeHeight * 2; y += 2, i++)
+            for(int y = 0, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 4, i++)
             {
-                for(int x = 0, j = 0; x < HugeWidth * 2; x += 2, j++)
+                for(int x = 0, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 4, j++)
                 {
-                    if(i < HugeHeight && j < HugeWidth)
-                    {
-                        b2[i][j] = data[y][x];
-                    }
+                    b2[i][j] = data[y][x];
                 }
 
             }
+
             return b2;
         }
 
@@ -7983,13 +8092,14 @@ namespace AssetsPV
             string folder = altFolder;
             Directory.CreateDirectory(folder);
             ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
-
+            byte[][] data;
             for(int v = 0; v < 16; v++)
             { //
                 for(int dir = 0; dir < 4; dir++)
                 {
                     PngWriter png = FileHelper.CreatePngWriter(folder + "/palette" + 0 + "_Water_Huge_face" + dir + "_" + string.Format("{0:x}", v) + ".png", imi, true);
-                    WritePNG(png, generateWaterMask(dir, v), simplepalettes[15]);
+                    data = generateWaterMask(dir, v);
+                    WritePNG(png, data, simplepalettes[15]);
                 }
             }
         }
@@ -9831,6 +9941,26 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
+            
+            processTerrainHugeW("Floor", 13, true, false);
+            processTerrainHugeW("Wall_Straight", 13, true, true);
+            processTerrainHugeW("Wall_Corner", 13, true, true);
+            processTerrainHugeW("Wall_Tee", 13, true, true);
+            processTerrainHugeW("Wall_Cross", 13, true, true);
+            processTerrainHugeW("Door_Closed", 13, true, true);
+            processTerrainHugeW("Door_Open", 13, true, true);
+            processTerrainHugeW("Boulder", 13, true, true);
+            processTerrainHugeW("Grass", 14, true, false);
+            processTerrainHugeW("Rubble", 13, true, true);
+            
+
+            Simplex.InitSimplex();
+            processWater();
+
+
+
+
+
 
             //processing voxels next
 
@@ -10181,19 +10311,6 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
                 */
-            /*
-        processTerrainHugeW("Floor", 13, true, false);
-        processTerrainHugeW("Wall_Straight", 13, true, true);
-        processTerrainHugeW("Wall_Corner", 13, true, true);
-        processTerrainHugeW("Wall_Tee", 13, true, true);
-        processTerrainHugeW("Wall_Cross", 13, true, true);
-        processTerrainHugeW("Door_Closed", 13, true, true);
-        processTerrainHugeW("Door_Open", 13, true, true);
-        processTerrainHugeW("Boulder", 13, true, true);
-        processTerrainHugeW("Grass", 14, true, false);
-        */
-            //Simplex.InitSimplex();
-            //processWater();
 
         }
     }
