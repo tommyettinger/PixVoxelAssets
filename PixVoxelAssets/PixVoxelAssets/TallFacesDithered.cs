@@ -9574,10 +9574,24 @@ namespace AssetsPV
             .AddPitch(10, "Right_Weapon")
             .AddPitch(75, "Right_Upper_Arm", "Right_Lower_Arm")
             .AddSpread("Right_Weapon", -15f, 0f, 5f, 253 - 44 * 4));
-            
+
+            Pose shoot0l = (model => model.AddYaw(90, "Left_Weapon")),
+    shoot1l = (model => model
+.AddPitch(90, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")),
+    shoot2l = (model => model
+.AddPitch(90, "Left_Upper_Arm", "Left_Lower_Arm", "Left_Weapon")
+.AddStretch(1f, 0.9f, 1f, "Left_Weapon"));
+
+            Pose shoot0r = (model => model.AddYaw(90, "Right_Weapon")),
+    shoot1r = (model => model
+.AddPitch(90, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")),
+    shoot2r = (model => model
+.AddPitch(90, "Right_Upper_Arm", "Right_Lower_Arm", "Right_Weapon")
+.AddStretch(1f, 0.9f, 1f, "Right_Weapon"));
+
             ///START
 
-            
+            /*
             Model hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Sword", true, 0, hero_sword,
@@ -9941,7 +9955,80 @@ namespace AssetsPV
                 new float[] { 2, 0, 0.4f },
                 new float[] { 2, 0, 0.8f },
                 new float[] { 2, 0, 1.0f },});
-            
+            */
+            Model hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Crossbow", patterns: leather);
+
+            processUnitLargeWModel("Hero_Leather_Crossbow", true, 0, hero_crossbow,
+                new Pose[] { shoot0r, shoot1r, shoot2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1f },
+                new float[] { 1, 0, 0f },
+                new float[] { 1, 0, 0.3f },
+                new float[] { 1, 0, 0.65f },
+                new float[] { 1, 0, 1f },});
+
+            hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Robe", right_weapon: "Crossbow", patterns: velvet);
+
+            processUnitLargeWModel("Hero_Robe_Crossbow", true, 0, hero_crossbow,
+                new Pose[] { shoot0r, shoot1r, shoot2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1f },
+                new float[] { 1, 0, 0f },
+                new float[] { 1, 0, 0.3f },
+                new float[] { 1, 0, 0.65f },
+                new float[] { 1, 0, 1f },});
+
+            hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Chain", right_weapon: "Crossbow", patterns: chain);
+
+            processUnitLargeWModel("Hero_Chain_Crossbow", true, 0, hero_crossbow,
+                new Pose[] { shoot0r, shoot1r, shoot2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1f },
+                new float[] { 1, 0, 0f },
+                new float[] { 1, 0, 0.3f },
+                new float[] { 1, 0, 0.65f },
+                new float[] { 1, 0, 1f },});
+
+            hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Plate", right_weapon: "Crossbow");
+
+            processUnitLargeWModel("Hero_Plate_Crossbow", true, 0, hero_crossbow,
+                new Pose[] { shoot0r, shoot1r, shoot2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1f },
+                new float[] { 1, 0, 0f },
+                new float[] { 1, 0, 0.3f },
+                new float[] { 1, 0, 0.65f },
+                new float[] { 1, 0, 1f },});
+
+            /*
             processTerrainHugeW("Floor", 13, true, false);
             processTerrainHugeW("Wall_Straight", 13, true, true);
             processTerrainHugeW("Wall_Corner", 13, true, true);
@@ -9952,11 +10039,10 @@ namespace AssetsPV
             processTerrainHugeW("Boulder", 13, true, true);
             processTerrainHugeW("Grass", 14, true, false);
             processTerrainHugeW("Rubble", 13, true, true);
-            
 
             Simplex.InitSimplex();
             processWater();
-
+*/
 
 
 
