@@ -142,7 +142,6 @@ namespace AssetsPV
 
             float zx = 0, zy = 0, zz = 0;
             {
-
                 v.X = (ZeroOutX - hxs) + xOffset;
                 v.Y = (ZeroOutY - hys);
                 v.Z = (ZeroOutZ - hzs);
@@ -980,6 +979,14 @@ namespace AssetsPV
             }
             return this;
         }
+
+        public Model SwapBone(string start, string end)
+        {
+            Bones[start] = Bones[end];
+
+            return this;
+        }
+
         public Model SetAnatomy(params Connector[] anatomy)
         {
             Anatomy = anatomy;
@@ -1015,10 +1022,12 @@ namespace AssetsPV
                 foreach(Connector conn in Anatomy)
                 {
                     byte[,,] bs = TransformLogic.MergeVoxels(finals[conn.plug], finals[conn.socket], conn.matchColor, origX + 20, origY + 20, origZ + 20);
-                    if(bs == finals[conn.socket])
+                    /*
+                    if(bs.Tally(TransformLogic.dismiss) == finals[conn.socket].Tally(TransformLogic.dismiss))
                         Console.WriteLine("PLUG NOT FOUND: " + conn.plug + " connecting to " + conn.socket);
-                    else if(bs == finals[conn.plug])
+                    else if(bs.Tally(TransformLogic.dismiss) == finals[conn.plug].Tally(TransformLogic.dismiss))
                         Console.WriteLine("SOCKET NOT FOUND: " + conn.socket + " connecting to " + conn.plug);
+                    */
                     finals[conn.socket] = bs;
                     finished = conn.socket;
                 }
@@ -1062,6 +1071,9 @@ namespace AssetsPV
             model.AddBone("Left_Weapon", Bone.readBone(left_weapon));
             model.AddBone("Right_Weapon", Bone.readBone(right_weapon));
 
+            model.AddBone("Neutral_Face", Bone.readBone(body + "/Neutral_Face"));
+            model.AddBone("Hurt_Face", Bone.readBone(body + "/Hurt_Face"));
+            model.AddBone("Happy_Face", Bone.readBone(body + "/Happy_Face"));
 
             model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
                 new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
@@ -1084,6 +1096,10 @@ namespace AssetsPV
             model.AddBone("Right_Lower_Arm", Bone.readBone(body + "/RLowerArm"));
             model.AddBone("Left_Weapon", Bone.readBone(left_weapon));
             model.AddBone("Right_Weapon", Bone.readBone(right_weapon));
+
+            model.AddBone("Neutral_Face", Bone.readBone(body + "/Neutral_Face"));
+            model.AddBone("Hurt_Face", Bone.readBone(body + "/Hurt_Face"));
+            model.AddBone("Happy_Face", Bone.readBone(body + "/Happy_Face"));
 
             model.SetAnatomy(new Connector("Face", "Head", 9), new Connector("Head", "Torso", 8), new Connector("Right_Weapon", "Right_Lower_Arm", 6), new Connector("Left_Weapon", "Left_Lower_Arm", 6),
                 new Connector("Right_Lower_Arm", "Right_Upper_Arm", 5), new Connector("Left_Lower_Arm", "Left_Upper_Arm", 4), new Connector("Right_Upper_Arm", "Torso", 3), new Connector("Left_Upper_Arm", "Torso", 2),
