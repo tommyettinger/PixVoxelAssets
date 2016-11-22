@@ -9613,8 +9613,6 @@ bow_hit1 = (model => model
 .AddYaw(-15, "Right_Lower_Arm")
 .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
 .Translate(0, -10, 0, "Left_Lower_Leg"));
-
-            Model hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
             /*
             processUnitLargeWModel("Hero_Leather_Sword_Hit_Debug", true, 0, hero_sword, new Pose[] { swing0r, hit0, hit1 }, new float[][] {
                 new float[] { 0, 1, 0.0f },
@@ -9641,6 +9639,10 @@ bow_hit1 = (model => model
                 new float[] { 1, 1, 0.0f },
             });
             */
+
+            Model hero_sword, hero_mace, hero_dagger, hero_staff, hero_bow, hero_crossbow;
+            /*
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
             processUnitLargeWModel("Hero_Leather_Sword_Attack", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
                 new float[][] {
@@ -9665,7 +9667,7 @@ bow_hit1 = (model => model
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            
             hero_sword = Model.HumanoidAlt(body: "Human_Male_Robe", right_weapon: "Longsword", patterns: velvet);
 
             processUnitLargeWModel("Hero_Robe_Sword_Attack", true, 0, hero_sword,
@@ -9745,7 +9747,7 @@ bow_hit1 = (model => model
                 new float[] { 1, 1, 0.0f },
             });
 
-            Model hero_mace = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Mace_Attack", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -9853,7 +9855,7 @@ bow_hit1 = (model => model
                 new float[] { 1, 1, 0.0f },
             });
 
-            Model hero_dagger = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Dagger_Attack", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -9962,7 +9964,7 @@ bow_hit1 = (model => model
             });
 
 
-            Model hero_staff = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Staff_Attack", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10071,7 +10073,7 @@ bow_hit1 = (model => model
             });
 
 
-            Model hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Bow_Attack", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
@@ -10179,7 +10181,7 @@ bow_hit1 = (model => model
                 new float[] { 1, 1, 0.0f },
             });
 
-            Model hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Crossbow", patterns: leather);
+            hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Crossbow", patterns: leather);
 
             processUnitLargeWModel("Hero_Leather_Crossbow_Attack", true, 0, hero_crossbow,
                 new Pose[] { crossbow0r, crossbow1r, crossbow2r },
@@ -10286,6 +10288,167 @@ bow_hit1 = (model => model
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
+            */
+            hero_sword = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Longsword", patterns: leather);
+            processUnitLargeWModel("Heroine_Leather_Sword_Attack", true, 6, hero_sword,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            processUnitLargeWModel("Heroine_Leather_Sword_Hit", true, 6, hero_sword, new Pose[] { swing0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+            hero_mace = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Mace", patterns: leather);
+
+            processUnitLargeWModel("Heroine_Leather_Mace_Attack", true, 6, hero_mace,
+                new Pose[] { swing0r, swing1r, swing2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+            processUnitLargeWModel("Heroine_Leather_Mace_Hit", true, 6, hero_mace, new Pose[] { swing0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+            hero_dagger = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Dagger", patterns: leather);
+
+            processUnitLargeWModel("Heroine_Leather_Dagger_Attack", true, 6, hero_dagger,
+                new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+            processUnitLargeWModel("Heroine_Leather_Dagger_Hit", true, 6, hero_dagger, new Pose[] { stab0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+            hero_staff = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Staff", patterns: leather);
+
+            processUnitLargeWModel("Heroine_Leather_Staff_Attack", true, 6, hero_staff,
+                new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+            processUnitLargeWModel("Heroine_Leather_Staff_Hit", true, 6, hero_staff, new Pose[] { spin0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+            hero_bow = Model.HumanoidAlt(body: "Human_Female_Leather", left_weapon: "Bow", patterns: leather);
+
+            processUnitLargeWModel("Heroine_Leather_Bow_Attack", true, 6, hero_bow,
+                new Pose[] { bow0, bow1, bow2 },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+            processUnitLargeWModel("Heroine_Leather_Bow_Hit", true, 6, hero_bow, new Pose[] { bow0, bow_hit0, bow_hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+            hero_crossbow = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Crossbow", patterns: leather);
+
+            processUnitLargeWModel("Heroine_Leather_Crossbow_Attack", true, 6, hero_crossbow,
+                new Pose[] { crossbow0r, crossbow1r, crossbow2r },
+                new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1f },
+                new float[] { 1, 0, 0f },
+                new float[] { 1, 0, 0.3f },
+                new float[] { 1, 0, 0.65f },
+                new float[] { 1, 0, 1f },});
+
+            processUnitLargeWModel("Heroine_Leather_Crossbow_Hit", true, 6, hero_crossbow, new Pose[] { crossbow0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
 
             /*
             processTerrainHugeW("Floor", 13, true, false);
@@ -10383,7 +10546,7 @@ bow_hit1 = (model => model
                 new float[] { 2, 0, 1.0f },});
                 */
             /*
-            Model hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
+            hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Sword_Attack", true, 0, hero_sword,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10437,7 +10600,7 @@ bow_hit1 = (model => model
                 new float[] { 2, 0, 0.65f },
                 new float[] { 2, 0, 1.0f },});
 
-            Model hero_mace = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
+            hero_mace = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Mace", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Mace_Attack", true, 0, hero_mace,
                 new Pose[] { swing0r, swing1r, swing2r },
@@ -10491,7 +10654,7 @@ bow_hit1 = (model => model
                 new float[] { 2, 0, 0.5f },
                 new float[] { 2, 0, 1.0f },});
 
-            Model hero_dagger = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
+            hero_dagger = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Dagger", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Dagger_Attack", true, 0, hero_dagger,
                 new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
@@ -10546,7 +10709,7 @@ bow_hit1 = (model => model
                 new float[] { 2, 0, 1.0f },});
 
 
-            Model hero_staff = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
+            hero_staff = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Staff", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Staff_Attack", true, 0, hero_staff,
                 new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
@@ -10601,7 +10764,7 @@ bow_hit1 = (model => model
                 new float[] { 4, 0, 1.0f },});
 
 
-            Model hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
+            hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
 
             processVoxGiantWModel("Hero_Leather_Bow_Attack", true, 0, hero_bow,
                 new Pose[] { bow0, bow1, bow2 },
