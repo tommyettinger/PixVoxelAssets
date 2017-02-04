@@ -1427,7 +1427,9 @@ namespace AssetsPV
                     {
                         if(plug[x, y, z] > 0 &&
                            x - plugX + socketX >= 0 && y - plugY + socketY >= 0 && z - plugZ + socketZ >= 0 &&
-                           x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize)
+                           x - plugX + socketX < xSize && y - plugY + socketY < ySize && z - plugZ + socketZ < zSize &&
+                           !(working[x - plugX + socketX, y - plugY + socketY, z - plugZ + socketZ] > 257 - VoxelLogic.wcolorcount * 4 &&
+                             (254 - working[x - plugX + socketX, y - plugY + socketY, z - plugZ + socketZ]) % 4 == 0))
                         {
                             working[x - plugX + socketX,
                                     y - plugY + socketY,
