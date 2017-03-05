@@ -54,7 +54,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AssetsPV.TallFacesDithered</StartupObject>
+    <StartupObject>AssetsPV.AboveFacesDithered</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AssimpNet, Version=3.3.1.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6, processorArchitecture=MSIL">
@@ -98,6 +98,7 @@
     <Compile Include="OrthoSingle.cs" />
     <Compile Include="PatternLogic.cs" />
     <Compile Include="ForaysPalettes.cs" />
+    <Compile Include="AboveFacesDithered.cs" />
     <Compile Include="TallFacesDithered.cs" />
     <Compile Include="TallFaces.cs" />
     <Compile Include="TinyOrthoVoxels.cs" />
@@ -1411,7 +1412,6 @@
     <None Include="ForaysBones\Happy_Face_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ForaysBones\Head_W.vox" />
     <None Include="ForaysBones\Human_Female_Chain\Happy_Face_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1790,13 +1790,9 @@
     <None Include="ForaysBones\Katana_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ForaysBones\LLowerArm_W.vox" />
-    <None Include="ForaysBones\LLowerLeg_W.vox" />
     <None Include="ForaysBones\Longsword_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ForaysBones\LUpperArm_W.vox" />
-    <None Include="ForaysBones\LUpperLeg_W.vox" />
     <None Include="ForaysBones\Mace_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1851,14 +1847,9 @@
     <None Include="ForaysBones\Orc\Torso_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ForaysBones\RLowerArm_W.vox" />
-    <None Include="ForaysBones\RLowerLeg_W.vox" />
-    <None Include="ForaysBones\RUpperArm_W.vox" />
-    <None Include="ForaysBones\RUpperLeg_W.vox" />
     <None Include="ForaysBones\Staff_W.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ForaysBones\Torso_W.vox" />
     <None Include="Forays\Caves\Door_Closed_H.vox">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
