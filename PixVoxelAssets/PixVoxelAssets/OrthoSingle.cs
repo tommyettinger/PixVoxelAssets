@@ -5059,14 +5059,13 @@ namespace AssetsPV
             return data;
         }
 
-
-        private static byte[][] renderWSmart(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
-        {
-            return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 60, 60, 60);
-        }
         private static byte[][] renderWSmartSmall(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
             return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 60 / multiplier, 60 / multiplier, 60 / multiplier);
+        }
+        private static byte[][] renderWSmart(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
+        {
+            return renderGenericW(colors, palette, frame, maxFrames, still, shadowless, 60, 60, 60);
         }
         private static byte[][] renderWSmartHuge(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
