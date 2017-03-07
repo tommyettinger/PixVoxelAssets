@@ -86,25 +86,84 @@ namespace AssetsPV
                 VoxelLogic.wrendered[i] = new byte[VoxelLogic.wpalettes[0].Length][];
                 for(int c = 0; c < VoxelLogic.wpalettes[0].Length; c++)
                 {
+
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(i) && ((c >= 18 && c <= 20) || (VoxelLogic.VisualMode != "CU" && c == 40))) || VoxelLogic.wpalettes[i][c][3] == 0F
+                        || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flash_alpha
+                        || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flash_alpha_1) ? "shine" :
+                       (VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
                     cubes2[i][c] = new byte[29][];
                     VoxelLogic.wrendered[i][c] = new byte[channels];
                     for(int sp = 0; sp < 29; sp++)
                     {
                         cubes2[i][c][sp] = new byte[channels];
-                        for(int x = 0; x < width; x++)
+                        switch(which_image)
                         {
-                            for(int y = 0, y2 = 0; y < height; y++)
-                            {
-                                y2 = lut[y];
-                                for(int h = 0; h < 4; h++)
+                            case "image":
                                 {
-                                    cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + y2 * 16 + h];
-                                    if(sp == 0)
+                                    for(int x = 0; x < width; x++)
                                     {
-                                        VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + y2 * 16 + h];
+                                        for(int y = 0, y2 = 0; y < height; y++)
+                                        {
+                                            y2 = lut[y];
+                                            for(int h = 0; h < 4; h++)
+                                            {
+                                                cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + y2 * 16 + h];
+                                                if(sp == 0)
+                                                {
+                                                    VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + y2 * 16 + h];
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            case "flat":
+                                {
+                                    for(int x = 0; x < width; x++)
+                                    {
+                                        for(int y = 0; y < height; y++)
+                                        {
+                                            for(int h = 0; h < 4; h++)
+                                            {
+                                                if(y < 2)
+                                                {
+                                                    cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 0 * 16 + h];
+                                                    if(sp == 0)
+                                                    {
+                                                        VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 0 * 16 + h];
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 3 * 16 + h];
+                                                    if(sp == 0)
+                                                    {
+                                                        VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 3 * 16 + h];
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }
+                                break;
+                            case "shine":
+                                {
+                                    for(int x = 0; x < width; x++)
+                                    {
+                                        for(int y = 0; y < height; y++)
+                                        {
+                                            for(int h = 0; h < 4; h++)
+                                            {
+                                                cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 0 * 16 + h];
+                                                if(sp == 0)
+                                                {
+                                                    VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 0 * 16 + h];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -120,7 +179,7 @@ namespace AssetsPV
             int width = 4, height = 5, channels = width * height * 4;
             int[] lut = {
                 0, 0, 0, 0,
-                0, 1, 1, 0,
+                0, 0, 0, 0,
                 2, 1, 1, 2,
                 4, 3, 3, 4,
                 5, 5, 5, 5 };
@@ -2395,9 +2454,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 62 + 32, i = 0; y < 62 + 32 + LargeHeight * 2 && i < ImageHeightLarge; y += 2, i++)
+            for(int y = 62 + 32, i = 0; y < 62 + 32 + LargeHeight * 2 && i < ImageHeightLarge; y+=2, i++) // y+=2
             {
-                for(int x = 32, j = 0; x < 32 + LargeWidth * 2 && j < ImageWidthLarge; x += 2, j++)
+                for(int x = 32, j = 0; x < 32 + LargeWidth * 2 && j < ImageWidthLarge; x+=2, j++) // x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -2420,9 +2479,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 0, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 2, i++)
+            for(int y = 0, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y+=2, i++) // y+=2
             {
-                for(int x = 0, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 2, j++)
+                for(int x = 0, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x+=2, j++) //x+=2
                 {
                         b2[i][j] = b[y][x];
                 }
@@ -2458,7 +2517,8 @@ namespace AssetsPV
             return b2;
         }
 
-        private static byte[][] processFrameLargeOrthoW(FaceVoxel[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
+        private static byte[][] 
+            processFrameLargeOrthoW(FaceVoxel[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
         {
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
@@ -2471,9 +2531,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 62 + 32, i = 0; y < 62 + 32 + LargeHeight * 2 && i < ImageHeightLarge; y += 2, i++)
+            for(int y = 62 + 32, i = 0; y < 62 + 32 + LargeHeight * 2 && i < ImageHeightLarge; y+=2, i++) //y+=2
             {
-                for(int x = 32, j = 0; x < 32 + LargeWidth * 2 && j < ImageWidthLarge; x += 2, j++)
+                for(int x = 32, j = 0; x < 32 + LargeWidth * 2 && j < ImageWidthLarge; x+=2, j++) //x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -2496,9 +2556,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 0, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 2, i++)
+            for(int y = 0, i = 56; y < HugeHeight * 2 && i < ImageHeightHuge; y+=2, i++) //y+=2
             {
-                for(int x = 0, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 2, j++)
+                for(int x = 0, j = 22; x < HugeWidth * 2 && j < ImageWidthHuge; x+=2, j++) //x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -4173,9 +4233,11 @@ namespace AssetsPV
         
         private static int voxelToPixelGenericW(int innerX, int innerY, int x, int y, int z, int current_color, int cols, int jitter, bool still, int xdim, int zdim)
         {
-            return (y * vwidth + 2 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 1 : 0))
+            return (y * vwidth + 32 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.waver_alpha) ? jitter - 2 : 0))
                 + innerX +
-                cols * (zdim * 2 + x * top - z * 2 + innerY + 2 + ((still || VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27) ? 0 : jitter - 1));
+                cols * (zdim * 2 + x * top - z * 2 + innerY + 32 + ((VoxelLogic.wcolors[current_color][3] == VoxelLogic.flat_alpha || current_color == 27
+                                    || current_color == VoxelLogic.wcolorcount + 10 || current_color == VoxelLogic.wcolorcount + 20)
+                                    ? -2 : (still) ? 0 : jitter));
         }
 
         private static byte DitherRough(byte[] sprite, int innerX, int innerY, int x, int y, int z)
@@ -4332,7 +4394,7 @@ namespace AssetsPV
             // ((11 * (5 + innerX * innerX)) ^ (3 * (7 + innerY * innerY))
             unchecked
             {
-                int i = innerY * 12 + innerX * 4;
+                int i = innerY * 4 * vwidth + innerX * 4;
                 if(sprite[i] == 0)
                     return 0;
                 //int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
@@ -4421,18 +4483,19 @@ namespace AssetsPV
             Console.WriteLine("Processing: " + moniker + ", palette " + palette);
             string folder = (altFolder);
             Directory.CreateDirectory(folder + moniker);
-            Model[] modelFrames = (frames != null && frames.Length > 0) ? new Model[frames.Length] : new Model[] { model };
-
-            int framelimit = modelFrames.Length;
+            Model[] modelFrames;
 
             if(poses != null && poses.Length > 0 && frames != null && frames.Length > 0 && frames[0] != null && frames[0].Length == 3)
             {
-                Model[] posed = poses.Select(p => p(model.Replicate())).ToArray();
+                modelFrames = model.PoseInterpolate(poses, frames);
                 for(int i = 0; i < modelFrames.Length; i++)
                 {
-                    modelFrames[i] = posed[(int)(frames[i][0])].Interpolate(posed[(int)(frames[i][1])], frames[i][2]).Translate(10 * 1, 10 * 1, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg");
+                    modelFrames[i] = modelFrames[i].Translate(10 * 1, 10 * 1, 0, (alt) ? "Left_Lower_Leg" : "Left_Leg");
                 }
             }
+            else
+                modelFrames = new Model[] { model };
+            int framelimit = modelFrames.Length;
 
             //Directory.CreateDirectory("vox/" + altFolder);
             //VoxelLogic.WriteVOX("vox/" + altFolder + moniker + "_" + palette + ".vox", work, "W", palette, 40, 40, 40);
@@ -4473,15 +4536,16 @@ namespace AssetsPV
                     }
                 }
             }
-            Directory.CreateDirectory("gifs/" + altFolder + moniker);
+            Directory.CreateDirectory("gifs/" + altFolder);
             Console.WriteLine("Running GIF conversion ...");
-            WriteGIF(imageNames, 11, "gifs/" + altFolder + moniker + "/palette" + palette + "_" + moniker);
+            WriteGIF(imageNames, 11, "gifs/" + altFolder + "palette" + palette + "_" + moniker);
 
         }
 
         public static Random rng = new Random(0x1337BEEF);
         private static byte[][] renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
+            r = new Random(0x1337BEEF);
             rng = new Random(0xb335 + frame / 2);
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int rows = HugeHeight, cols = HugeWidth;
@@ -4872,6 +4936,7 @@ namespace AssetsPV
 
         private static byte[][] renderWSmartHuge(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
+            r = new Random(0x1337BEEF);
             rng = new Random(0xb335 + frame / 2);
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int rows = HugeHeight * 2, cols = HugeWidth * 2;
@@ -5610,6 +5675,7 @@ namespace AssetsPV
 
         private static byte[][] renderOrthoW(FaceVoxel[,,] faces, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
         {
+            r = new Random(0x1337BEEF);
             rng = new Random(0xb335 + frame / 2);
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
 
@@ -5635,7 +5701,7 @@ namespace AssetsPV
             xbuffer.Fill<int>(-999);
 
             int jitter = (((frame % 4) % 3) + ((frame % 4) / 3));
-            //if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
+            if(maxFrames >= 8) jitter = ((frame % 8 > 4) ? 4 - ((frame % 8) ^ 4) : frame % 8);
             bool[,] taken = new bool[xSize, ySize];
             for(int fz = zSize - 1; fz >= 0; fz--)
             {
@@ -8301,7 +8367,7 @@ namespace AssetsPV
                 new float[] { 2, 0, 1.0f },});
                 */
 
-
+            
             processTerrainHugeW("Floor", 13, true, false);
             processTerrainHugeW("Wall_Straight", 13, true, true);
             processTerrainHugeW("Wall_Corner", 13, true, true);

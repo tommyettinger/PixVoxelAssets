@@ -7712,6 +7712,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         {
             return Math.Min(Math.Max(min, x), max);
         }
+        public static float Clamp(float x, float min, float max)
+        {
+            return Math.Min(Math.Max(min, x), max);
+        }
 
         public static void ColorToHSV(Color color, out double hue, out double saturation, out double value)
         {

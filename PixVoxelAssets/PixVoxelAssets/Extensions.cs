@@ -565,11 +565,15 @@ namespace AssetsPV
         }
         public static Quaternion Euler(float yaw, float pitch, float roll)
         {
+            //return Quaternion.CreateFromYawPitchRoll(yaw * DegreesToRadians, pitch * DegreesToRadians, roll * DegreesToRadians);
+            return Quaternion.CreateFromYawPitchRoll(pitch * -DegreesToRadians, roll * -DegreesToRadians, yaw * -DegreesToRadians);
+            /*
             return Quaternion.Normalize(
                 Quaternion.Identity
                 .MulLeft(Quaternion.CreateFromAxisAngle(RollAxis, ((720 - roll) % 360) * DegreesToRadians))
                 .MulLeft(Quaternion.CreateFromAxisAngle(PitchAxis, ((720 - pitch) % 360) * DegreesToRadians))
                 .MulLeft(Quaternion.CreateFromAxisAngle(YawAxis, ((720 - yaw) % 360) * DegreesToRadians)));
+                */
         }
     }
 }

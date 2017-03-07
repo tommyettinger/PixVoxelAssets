@@ -27,13 +27,20 @@ namespace AssetsPV
         }
         public static float CW(float start, float end, float alpha)
         {
-            float e = (1080 + end) % 360, s = (end - start > 180) ? 360 + (1080 + start) % 360 : (1080 + start) % 360;
-            return (1080 + s + (e - s) * alpha) % 360;
+            float e = (1080 + end) % 360, s = (end - start > 180) ? 360 + (1080 + start) % 360 : (1080 + start) % 360,
+                v = (1080 + s + (e - s) * alpha) % 360;
+            if(Math.Abs((s - v) * (s - v) - (e - v) * (e - v)) < 90)
+                return (1080 + s + (e - s) * 0.5f) % 360;
+            else return v;
         }
         public static float CCW(float start, float end, float alpha)
         {
-            float s = (1080 + start) % 360, e = (end - start < -180) ? 360 + (1080 + end) % 360 : (1080 + end) % 360;
-            return (1080 + s + (e - s) * alpha) % 360;
+            float s = (1080 + start) % 360, e = (end - start < -180) ? 360 + (1080 + end) % 360 : (1080 + end) % 360,
+                v = (1080 + s + (e - s) * alpha) % 360;
+            if(Math.Abs((s - v) * (s - v) - (e - v) * (e - v)) < 90)
+                return (1080 + s + (e - s) * 0.5f) % 360;
+            else return v;
+
         }
         /*
          * @param yaw the rotation around the y axis in radians
@@ -1045,8 +1052,8 @@ namespace AssetsPV
                 m.AddBone(kv.Key, kv.Value);
             }
             return m;
-
         }
+        
         public Model Replicate()
         {
             Dictionary<string, Bone> bones = Bones.ToDictionary(kv => kv.Key, kv => kv.Value.Replicate());
@@ -1270,6 +1277,22 @@ namespace AssetsPV
             model.AddBone("Extra", data2);
             model.SetAnatomy();
             return model;
+        }
+        public Model[] PoseInterpolate(Pose[] poses, float[][] frames)
+        {
+            Model[] posed = new Model[poses.Length + 2], modelFrames = new Model[frames.Length];
+            for(int i = 0; i < poses.Length; i++)
+            {
+                posed[i+1] = poses[i](Replicate());
+            }
+            posed[0] = posed[1].Replicate();
+            posed[poses.Length + 1] = posed[poses.Length].Replicate();
+            for(int i = 0; i < frames.Length; i++)
+            {
+                modelFrames[i] = posed[(int)(frames[i][0]) + 1].Interpolate(posed[(int)(frames[i][1]) + 1], VoxelLogic.Clamp(frames[i][2] - 0.05f, 0.0f, 1.0f)).Interpolate(
+                    posed[(int)(frames[i][0]) + 1].Interpolate(posed[(int)(frames[i][1]) + 1], VoxelLogic.Clamp(frames[i][2] + 0.05f, 0.0f, 1.0f)), 0.5f);
+            }
+            return modelFrames;
         }
     }
 
