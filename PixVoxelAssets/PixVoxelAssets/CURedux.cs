@@ -2731,7 +2731,7 @@ namespace AssetsPV
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
             VoxelLogic.wcolorcount = wpalettes[0].Length;
 
-            for(int p = 0; p < VoxelLogic.wpalettecount - 1; p++)
+            for(int p = 0; p < VoxelLogic.wpalettecount; p++)
             {
                 float[] drip = wpalettes[p][27].ToArray(), transp = wpalettes[p][VoxelLogic.wcolorcount - 1];
                 drip[3] = 1F;
@@ -2786,7 +2786,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            /*
+            
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2797,7 +2797,7 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
-            */
+            
 
             /*
             for(int e = 0; e < 10; e++)
@@ -2981,7 +2981,7 @@ namespace AssetsPV
             VoxelLogic.clear = (byte)(253 - (VoxelLogic.wcolorcount - 1) * 4);
             VoxelLogic.wcolorcount = wpalettes_alt[0].Length;
 
-            for(int p = 0; p < VoxelLogic.wpalettecount - 1; p++)
+            for(int p = 0; p < VoxelLogic.wpalettecount; p++)
             {
                 float[] drip = wpalettes_alt[p][27].ToArray(), transp = wpalettes_alt[p][VoxelLogic.wcolorcount - 1];
                 drip[3] = 1F;

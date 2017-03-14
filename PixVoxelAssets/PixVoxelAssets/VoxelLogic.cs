@@ -9983,7 +9983,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body, bool alternate = false)
         {
-            BinaryReader hbin = new BinaryReader(File.Open("CU2/" + TallFacesDithered.addon + "Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
+            BinaryReader hbin = new BinaryReader(File.Open("CU3/" + TallFacesDithered.addon + "Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
             hbin.Close();
@@ -10043,7 +10043,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static List<MagicaVoxelData> AssembleZombieHeadToModelW(BinaryReader body, bool alternate = false)
         {
             r = new Random(0xFEEDABE);
-            BinaryReader hbin = new BinaryReader(File.Open("CU2/Zombie_Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
+            BinaryReader hbin = new BinaryReader(File.Open("CU3/Zombie_Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
             hbin.Close();
