@@ -52,7 +52,7 @@ namespace AssetsPV
         BackBackBottomThick = 28;
 
         public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
-            ImageWidthLarge = 68, ImageHeightLarge = 128, ImageWidthHuge = 188, ImageHeightHuge = 268;
+            ImageWidthLarge = 88, ImageHeightLarge = 128, ImageWidthHuge = 188, ImageHeightHuge = 268;
         public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3;
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             { Slope.BrightTop, BrightTop }, { Slope.DimTop, DimTop }, { Slope.BrightDim, BrightDim }, { Slope.BrightDimTop, BrightDimTop }, { Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
@@ -985,8 +985,9 @@ namespace AssetsPV
             {
                 string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
                 List<string> imageNames = new List<string>(4 * 16 * 8);
-                foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                 {
+                    int p = 48;
                     for(int dir = 0; dir < 8; dir++)
                     {
                         for(int f = 0; f < 4; f++)
@@ -1004,8 +1005,10 @@ namespace AssetsPV
 
                 imageNames = new List<string>(4 * 16 * 12);
 
-                foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                 {
+                    int p = 48;
+
                     for(int dir = 0; dir < 8; dir++)
                     {
                         for(int f = 0; f < 12; f++)
@@ -1024,8 +1027,9 @@ namespace AssetsPV
 
                     imageNames = new List<string>(4 * 16 * 16);
 
-                    foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                    //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                     {
+                        int p = 48;
                         for(int dir = 0; dir < 8; dir++)
                         {
                             for(int f = 0; f < 16; f++)
@@ -1041,8 +1045,9 @@ namespace AssetsPV
                 if(!u.Contains("_Alt"))
                 {
                     imageNames = new List<string>(4 * 16 * 8);
-                    foreach(int p in CURedux.alienHighlights)
+                    //foreach(int p in CURedux.alienHighlights)
                     {
+                        int p = 257;
                         for(int dir = 0; dir < 8; dir++)
                         {
                             for(int f = 0; f < 4; f++)
@@ -1060,8 +1065,10 @@ namespace AssetsPV
 
                     imageNames = new List<string>(4 * 16 * 12);
 
-                    foreach(int p in CURedux.alienHighlights)
+                    //foreach(int p in CURedux.alienHighlights)
                     {
+                        int p = 257;
+
                         for(int dir = 0; dir < 8; dir++)
                         {
                             for(int f = 0; f < 12; f++)
@@ -1080,8 +1087,10 @@ namespace AssetsPV
 
                         imageNames = new List<string>(4 * 16 * 16);
 
-                        foreach(int p in CURedux.alienHighlights)
+                        //foreach(int p in CURedux.alienHighlights)
                         {
+                            int p = 257;
+
                             for(int dir = 0; dir < 8; dir++)
                             {
                                 for(int f = 0; f < 16; f++)
@@ -1742,9 +1751,9 @@ namespace AssetsPV
                                 "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                     }
                 }
-                processUnitLargeWFiring(addon + u, a);
+                //processUnitLargeWFiring(addon + u, a);
 
-                processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
+                //processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
 
             }
         }
@@ -2474,7 +2483,7 @@ namespace AssetsPV
             }
             for(int y = 62 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 2, i++) // y+=2
             {
-                for(int x = 52, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 2, j++) // x+=2
+                for(int x = 32, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 2, j++) // x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -2551,7 +2560,7 @@ namespace AssetsPV
             }
             for(int y = 62 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 2, i++) //y+=2
             {
-                for(int x = 52, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 2, j++) //x+=2
+                for(int x = 32, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 2, j++) //x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -6636,9 +6645,9 @@ namespace AssetsPV
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (64 * (i + j - 18)) - 62, (64 * (i - j + 9)) + 26);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 12 + 128);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (64 * (i + j - 18)) - 62, (64 * (i - j + 9)) + 26);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 12 + 128);
                 }
             }
 
@@ -7938,6 +7947,7 @@ namespace AssetsPV
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
+                    
                     processUnitLargeWMilitary("Infantry");
                     processUnitLargeWMilitary("Infantry_P");
                     processUnitLargeWMilitary("Infantry_S");
@@ -8047,7 +8057,7 @@ namespace AssetsPV
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-
+                
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
                 
