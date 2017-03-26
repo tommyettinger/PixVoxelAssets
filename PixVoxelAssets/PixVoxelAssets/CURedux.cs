@@ -452,9 +452,9 @@ namespace AssetsPV
             //2 doors paint (dark) contrast
             new float[] {0.43F,0.05F,0.0F,1F},
             //3 doors paint (dark)
-            new float[] {0.6F,0.2F,0.07F,1F},
+            new float[] {0.6F,0.22F,0.07F,1F},
             //4 main paint (mid) contrast
-            new float[] {0.9F,0.27F,-0.02F,1F},
+            new float[] {0.9F,0.3F,-0.02F,1F},
             //5 main paint (mid)
             new float[] {1.05F,0.42F,0.06F,1F},
             //6 hair contrast
@@ -506,9 +506,9 @@ namespace AssetsPV
             //29 cockpit paint (gray)
             new float[] {0.7F,0.39F,0.18F,1F},
             //30 helmet paint (bold) contrast
-            new float[] {0.86F,0.2F,-0.01F,1F},
+            new float[] {0.83F,0.25F,0.01F,1F},
             //31 helmet paint (bold)
-            new float[] {1.0F,0.3F,0.12F,1F},
+            new float[] {0.97F,0.35F,0.13F,1F},
             //32 alternate paint contrast
             new float[] {0.25F,0.25F,0.2F,1F},
             //33 alternate paint
@@ -1475,9 +1475,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.0F,0.0F,0.0F,1F},
             //8 skin contrast
-            new float[] {0.51F,0.3F,0.1F,1F},
+            new float[] {0.54F,0.34F,0.13F,1F},
             //9 skin
-            new float[] {0.66F,0.42F,0.2F,1F},
+            new float[] {0.69F,0.48F,0.23F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1499,9 +1499,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.64F,0.64F,0.6F,1F},
             //8 skin contrast
-            new float[] {0.51F,0.3F,0.1F,1F},
+            new float[] {0.54F,0.34F,0.13F,1F},
             //9 skin
-            new float[] {0.66F,0.42F,0.2F,1F},
+            new float[] {0.69F,0.48F,0.23F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1523,9 +1523,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.66F,0.42F,0.2F,1F},
             //8 skin contrast
-            new float[] {0.51F,0.3F,0.1F,1F},
+            new float[] {0.54F,0.34F,0.13F,1F},
             //9 skin
-            new float[] {0.66F,0.42F,0.2F,1F},
+            new float[] {0.69F,0.48F,0.23F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1547,9 +1547,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.05F,0.0F,-0.05F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.36F,0.18F,0.04F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.61F,0.32F,0.17F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1571,9 +1571,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.64F,0.64F,0.6F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.36F,0.18F,0.04F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.61F,0.32F,0.17F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1595,9 +1595,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.65F,0.3F,0.15F,1F},
             //8 skin contrast
-            new float[] {0.4F,0.15F,0.0F,1F},
+            new float[] {0.36F,0.18F,0.04F,1F},
             //9 skin
-            new float[] {0.65F,0.3F,0.15F,1F},
+            new float[] {0.61F,0.32F,0.17F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1623,9 +1623,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.05F,0.0F,-0.05F,1F},
             //8 skin contrast
-            new float[] {0.35F,0.12F,0.0F,1F},
+            new float[] {0.32F,0.11F,0.02F,1F},
             //9 skin
-            new float[] {0.55F,0.22F,0.1F,1F},
+            new float[] {0.52F,0.21F,0.08F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1647,9 +1647,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.78F,0.68F,0.32F,1F},
             //8 skin contrast
-            new float[] {0.35F,0.12F,0.0F,1F},
+            new float[] {0.32F,0.11F,0.02F,1F},
             //9 skin
-            new float[] {0.55F,0.22F,0.1F,1F},
+            new float[] {0.52F,0.21F,0.08F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1671,9 +1671,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.54F,0.54F,0.5F,1F},
             //8 skin contrast
-            new float[] {0.35F,0.12F,0.0F,1F},
+            new float[] {0.32F,0.11F,0.02F,1F},
             //9 skin
-            new float[] {0.55F,0.22F,0.1F,1F},
+            new float[] {0.52F,0.21F,0.08F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -1695,9 +1695,9 @@ namespace AssetsPV
             //7 hair
             new float[] {0.55F,0.22F,0.1F,1F},
             //8 skin contrast
-            new float[] {0.35F,0.12F,0.0F,1F},
+            new float[] {0.32F,0.11F,0.02F,1F},
             //9 skin
-            new float[] {0.55F,0.22F,0.1F,1F},
+            new float[] {0.52F,0.21F,0.08F,1F},
             //10 eyes shine
             new float[] {1.4F,1.4F,1.4F,1F},
             //11 eyes
@@ -2786,7 +2786,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2797,7 +2797,7 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
-            
+            */
             
 
             /*

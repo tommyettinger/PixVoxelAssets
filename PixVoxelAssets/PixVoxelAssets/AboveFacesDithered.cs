@@ -15,7 +15,7 @@ namespace AssetsPV
     {
         const bool FORAYS = false;
         const bool WAR = true;
-        const bool RENDER = true;
+        const bool RENDER = false;
         const bool USE_PALETTE = true;
         const bool ENABLE_SUPER = false;
         public static string addon = ""; // "" // "Zombie_" // "Divine_"
@@ -628,7 +628,7 @@ namespace AssetsPV
         public static byte[][][] wcurrent, wditheredcurrent, wditheredcurrentortho;
 
         public static byte[][][] simplepalettes;
-        public static byte[][] basepalette;
+        public static byte[][] basepalette, exactpalettes;
         //public static int[] hilbertX, hilbertY, hilbertDist;
         public static void InitializeWPalette()
         {
@@ -670,21 +670,47 @@ namespace AssetsPV
             }
             wrendered = storeColorCubesW();
             simplepalettes = new byte[wrendered.Length][][];
+            exactpalettes = new byte[wrendered.Length][];
             int colorcount = Math.Min(VoxelLogic.wpalettes[0].Length, 63);
             for(int i = 0; i < simplepalettes.Length; i++)
             {
                 simplepalettes[i] = new byte[256][];
-                for(int j = 253, c = 0; j >= 4 && c < colorcount; c++, j -= 4)
+                exactpalettes[i] = new byte[768];
+                for(int j = 253, c = 0, k = 253 * 3 + 2; j >= 4 && c < colorcount; c++, j -= 4)
                 {
                     simplepalettes[i][j] = new byte[] { wrendered[i][c][0][2], wrendered[i][c][0][1], wrendered[i][c][0][0] };
+                    exactpalettes[i][k--] = wrendered[i][c][0][0];
+                    exactpalettes[i][k--] = wrendered[i][c][0][1];
+                    exactpalettes[i][k--] = wrendered[i][c][0][2];
                     simplepalettes[i][j - 1] = new byte[] { wrendered[i][c][0][2 + 0 + 32], wrendered[i][c][0][1 + 0 + 32], wrendered[i][c][0][0 + 0 + 32] };
+                    exactpalettes[i][k--] = wrendered[i][c][0][32];
+                    exactpalettes[i][k--] = wrendered[i][c][0][33];
+                    exactpalettes[i][k--] = wrendered[i][c][0][34];
                     simplepalettes[i][j - 2] = new byte[] { wrendered[i][c][0][2 + 8 + 32], wrendered[i][c][0][1 + 8 + 32], wrendered[i][c][0][0 + 8 + 32] };
+                    exactpalettes[i][k--] = wrendered[i][c][0][40];
+                    exactpalettes[i][k--] = wrendered[i][c][0][41];
+                    exactpalettes[i][k--] = wrendered[i][c][0][42];
                     simplepalettes[i][j - 3] = new byte[] { wrendered[i][c][0][2 + 64], wrendered[i][c][0][1 + 64], wrendered[i][c][0][0 + 64] };
+                    exactpalettes[i][k--] = wrendered[i][c][0][64];
+                    exactpalettes[i][k--] = wrendered[i][c][0][65];
+                    exactpalettes[i][k--] = wrendered[i][c][0][66];
                 }
                 simplepalettes[i][0] = new byte[] { 0, 0, 0 };
+                exactpalettes[i][0] = 0;
+                exactpalettes[i][1] = 0;
+                exactpalettes[i][2] = 0;
                 simplepalettes[i][1] = new byte[] { 0, 0, 0 };
+                exactpalettes[i][3] = 0;
+                exactpalettes[i][4] = 0;
+                exactpalettes[i][5] = 0;
                 simplepalettes[i][254] = new byte[] { 0, 0, 0 };
-                simplepalettes[i][255] = new byte[] { 0, 0, 0 };
+                exactpalettes[i][254 * 3] = 0;
+                exactpalettes[i][254 * 3 + 1] = 0;
+                exactpalettes[i][254 * 3 + 2] = 0;
+                simplepalettes[i][255] = new byte[] { 255, 255, 255 };
+                exactpalettes[i][255 * 3] = 255;
+                exactpalettes[i][255 * 3 + 1] = 255;
+                exactpalettes[i][255 * 3 + 2] = 255;
             }
             basepalette = new byte[256][];
             for(byte i = 1; i < 255; i++)
@@ -718,6 +744,22 @@ namespace AssetsPV
 
         public static void AlterPNGPalette(string input, string output, byte[][][] palettes)
         {
+            byte[] bytes = File.ReadAllBytes(input);
+            //Console.WriteLine("{0:X} {1:X} {2:X} TO {3:X} {4:X} {5:X}", bytes[41], bytes[42], bytes[43], bytes[41 + 255 * 3], bytes[42 + 255 * 3], bytes[43 + 255 * 3]);
+            int p = (addon == "Divine_") ? 38 * 8 : 0, limit = 8 * (CURedux.wspecies.Length - 2 - (CURedux.ZOMBIES ? 0 : 1));
+            for(; p < limit; p++)
+            {
+                byte[] palette = exactpalettes[p];
+                Array.Copy(palette, 0, bytes, 41, 768);
+                File.WriteAllBytes(
+                    altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/" + string.Format(output, p),
+                    bytes);
+
+                if(!USE_PALETTE)
+                    return;
+            }
+
+            /*
             PngReader pngr = FileHelper.CreatePngReader(input);
             ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
             ImageInfo imi = pngr.ImgInfo;
@@ -753,6 +795,7 @@ namespace AssetsPV
                 if(!USE_PALETTE)
                     return;
             }
+            */
         }
         public static void AlterPNGPaletteZombie(string input, string output, byte[][][] palettes)
         {
@@ -987,7 +1030,7 @@ namespace AssetsPV
                 List<string> imageNames = new List<string>(4 * 16 * 8);
                 //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                 {
-                    int p = 48;
+                    int p = 32;
                     for(int dir = 0; dir < 8; dir++)
                     {
                         for(int f = 0; f < 4; f++)
@@ -1007,7 +1050,7 @@ namespace AssetsPV
 
                 //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                 {
-                    int p = 48;
+                    int p = 32;
 
                     for(int dir = 0; dir < 8; dir++)
                     {
@@ -1029,7 +1072,7 @@ namespace AssetsPV
 
                     //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                     {
-                        int p = 48;
+                        int p = 32;
                         for(int dir = 0; dir < 8; dir++)
                         {
                             for(int f = 0; f < 16; f++)
@@ -1702,17 +1745,20 @@ namespace AssetsPV
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
             int alt = VoxelLogic.AltVersions[VoxelLogic.UnitLookup[u]];
+            MagicaVoxelData[] parsed = new MagicaVoxelData[0], explode_parsed = new MagicaVoxelData[0];
             for(int a = 0; a <= alt && a < 2; a++)
             {
-                BinaryReader bin = new BinaryReader(File.Open("CU3/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
-                List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0);
-
-                //Directory.CreateDirectory("vox/" + altFolder);
-                //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
-                MagicaVoxelData[] parsed = voxes.ToArray(), explode_parsed = voxes.ToArray();
 
                 if(RENDER)
                 {
+                    BinaryReader bin = new BinaryReader(File.Open("CU3/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
+                    List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0);
+
+                    //Directory.CreateDirectory("vox/" + altFolder);
+                    //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
+                    parsed = voxes.ToArray();
+                    explode_parsed = voxes.ToArray();
+
                     for(int i = 0; i < parsed.Length; i++)
                     {
                         parsed[i].x += 10;
@@ -1751,9 +1797,9 @@ namespace AssetsPV
                                 "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                     }
                 }
-                //processUnitLargeWFiring(addon + u, a);
+                processUnitLargeWFiring(addon + u, a);
 
-                //processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
+                processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
 
             }
         }
@@ -7936,7 +7982,7 @@ namespace AssetsPV
                 legs: "Armored_Jet", still: false);
             */
 
-            //writePaletteImages();
+            writePaletteImages();
             if(WAR)
             {
                 for(int a = 1; a < 2; a++)
@@ -8049,6 +8095,7 @@ namespace AssetsPV
                 }
 
                 processReceivingMilitaryW();
+                
                 //processReceivingMilitaryWSuper();
 
 
@@ -8057,7 +8104,7 @@ namespace AssetsPV
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-                
+                /*
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
                 
@@ -8123,7 +8170,7 @@ namespace AssetsPV
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
-                
+                */
             }
             /*
             renderTerrainSimple("Plains", "Normal", new byte[] {
