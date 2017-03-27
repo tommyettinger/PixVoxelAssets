@@ -742,7 +742,7 @@ namespace AssetsPV
                                                     {
                                                         if(i >= 1)
                                                         {
-                                                            c2 = new byte[] { dimi, brighti, brighti, dimi };
+                                                            c2 = new byte[] { brighti, brighti, brighti, brighti };
                                                             // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp(s_alter * 1.1, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 1.1, 0.09, 1.0));
                                                         }
                                                     }

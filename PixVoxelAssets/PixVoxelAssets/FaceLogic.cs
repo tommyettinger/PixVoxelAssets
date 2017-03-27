@@ -742,7 +742,7 @@ namespace AssetsPV
                     }
                 }
             }
-            return faces2;
+            return FillAllGaps(faces2);
         }
 
         public static FaceVoxel[,,] AddAllSpecial(FaceVoxel[,,] faces, bool regardless = true)
