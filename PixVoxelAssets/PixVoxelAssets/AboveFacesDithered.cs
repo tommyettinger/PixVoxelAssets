@@ -260,7 +260,7 @@ namespace AssetsPV
                                                 case BrightDim:
                                                     {
                                                         {
-                                                            c2 = new byte[] { brighti, topi, brighti, topi };
+                                                            c2 = new byte[] { dimi, dimi, dimi, dimi };
                                                         }
                                                     }
                                                     break;
@@ -268,7 +268,7 @@ namespace AssetsPV
                                                     {
                                                         if(i + j > 1 && j - i > -2)
                                                         {
-                                                            c2 = new byte[] { topi, brighti, topi, topi };
+                                                            c2 = new byte[] { brighti, topi, brighti, brighti };
                                                         }
                                                     }
                                                     break;
@@ -664,11 +664,11 @@ namespace AssetsPV
                                                     break;
                                                 case BrightDim:
                                                     {
-                                                        if(i >= j)
+                                                        if(i > j)
                                                         {
                                                             c2 = new byte[] { topi, topi, topi, topi };
                                                         }
-                                                        else if(i + 3 >= j)
+                                                        else// if(i + 3 >= j)
                                                         {
                                                             c2 = new byte[] { brighti, brighti, brighti, brighti };
                                                         }
@@ -704,9 +704,13 @@ namespace AssetsPV
                                                     break;
                                                 case BrightDimBottom:
                                                     {
-                                                        if(i >= j)
+                                                        if(i > j)
                                                         {
                                                             c2 = new byte[] { topi, topi, topi, topi };
+                                                        }
+                                                        else if(j - i < 2)
+                                                        {
+                                                            c2 = new byte[] { dimi, dimi, dimi, dimi };
                                                         }
                                                     }
                                                     break;
@@ -724,11 +728,11 @@ namespace AssetsPV
                                                     break;
                                                 case DimBack:
                                                     {
-                                                        if(i + j <= 2)
+                                                        if(i + j < 2)
                                                         {
                                                             c2 = new byte[] { topi, topi, topi, topi };
                                                         }
-                                                        else if(i + j <= 5)
+                                                        else// if(i + j <= 5)
                                                         {
                                                             c2 = new byte[] { dimi, dimi, dimi, dimi };
                                                         }
@@ -770,7 +774,7 @@ namespace AssetsPV
                                                             if(j - i >= 0)
                                                                 c2 = new byte[] { topi, topi, topi, topi };
                                                         }
-                                                        else if(j + i <= 4)
+                                                        else if(j + i < 4)
                                                         {
                                                             c2 = new byte[] { dimi, dimi, dimi, dimi };
                                                         }
@@ -871,7 +875,7 @@ namespace AssetsPV
                                                 case RearDimBottom:
                                                 case DimBottomBackThick:
                                                     {
-                                                        if(j <= 2)
+                                                        if(j < 2)
                                                         {
                                                             c2 = new byte[] { topi, topi, topi, topi };
                                                         }
@@ -3205,7 +3209,7 @@ namespace AssetsPV
                             : (FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + (d * 2) + "_death_" + frame + ".png", imi, true));
                         WritePNG(png, b, (palette >= 0) ? simplepalettes[palette] : basepalette);
 
-                        b = processFrameHugeOrthoW(faces, (palette >= 0) ? palette : 0, d, frame, 8, false, true);
+                        b = processFrameHugeOrthoW(faces, (palette >= 0) ? palette : 0, d, frame, 8, true, shadowless);
                         png = (palette >= 0)
                             ? FileHelper.CreatePngWriter(folder + "/palette" + palette + "_" + addon + u + extra_name + "_Large_face" + (d * 2 + 1) + "_death_" + frame + ".png", imi, true)
                             : FileHelper.CreatePngWriter(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + (d * 2 + 1) + "_death_" + frame + ".png", imi, true);
@@ -5251,7 +5255,7 @@ namespace AssetsPV
                         for(int y = -2; y <= 2; y++)
                         {
                             
-                            if(x * x * y * y < 4 && ((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
+                            if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
                             {
                                 editValues[ii] = outlineValues[i];
                                 shade = true;
@@ -5267,8 +5271,7 @@ namespace AssetsPV
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
                     */
-                    //if(shade)
-                    //    editValues[i] = outlineValues[i];
+                    //if(shade) editValues[i] = outlineValues[i];
                 }
             }
 
@@ -5298,14 +5301,14 @@ namespace AssetsPV
                 {
                     if(taken[x, y])
                     {
-                        int p = voxelToPixelLargeW(1, 3, x, y, 0, 25, cols, jitter, still);
-                        if(p > cols && p < numBytes - cols * vheight - 1)
+                        int p = voxelToPixelLargeW(0, 2, x, y, 0, 25, cols, jitter, still);
+                        if(p > cols + 4 && p < numBytes - cols * 2 - 4)
                         {
-                            for(int px = -1; px <= vwidth; px++)
+                            for(int px = -1; px <= 4; px++)
                             {
-                                for(int py = -1; py <= vheight; py++)
+                                for(int py = -1; py <= 2; py++)
                                 {
-                                    if((px < 0 && py < 0) || (px == vwidth && py == vheight) || (px < 0 && py == vheight) || (px == vwidth && py < 0))
+                                    if((px < 0 && py < 0) || (px == 4 && py == 2) || (px < 0 && py == 2) || (px == 4 && py < 0))
                                         continue;
                                     if(shadowValues[p + px + py * cols] == 0)
                                     {
@@ -5317,105 +5320,6 @@ namespace AssetsPV
                     }
                 }
             }
-            /*
-            for(int i = 0; i < numBytes; i++)
-            {
-                if(argbValues[i] > 0 && barePositions[i] == false)
-                {
-                    bool shade = false;
-
-                    if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - zbd > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; shade = true; }
-                    if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - zbd > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; shade = true; }
-                    if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - zbd > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; shade = true; }
-                    if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - zbd > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; shade = true; }
-
-                    if((i - 1 - cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; shade = true; }
-                    if((i + 1 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; shade = true; }
-                    if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
-                    if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
-
-                    if(shade)
-                        editValues[i] = outlineValues[i];
-                }
-            }
-            */
-
-
-            /*
-            shadowValues.Fill<byte>(0);
-            if(!shadowless)
-            {
-                int p = 0;
-                byte shadowColor = wditheredcurrentortho[25][1][8 * vwidth];
-                bool[,] nextTaken = new bool[xSize, ySize];
-                for(int iter = 0; iter < 4; iter++)
-                {
-                    for(int x = 1; x < xSize - 1; x++)
-                    {
-                        for(int y = 1; y < ySize - 1; y++)
-                        {
-                            int ctr = 0;
-                            for(int m = 0; m < 9; m++)
-                            {
-                                if(taken[x + xmods[m], y + ymods[m]])
-                                    ctr++;
-                            }
-                            if(ctr >= 5 || (taken[x, y] && ctr >= 3))
-                                nextTaken[x, y] = true;
-
-                        }
-                    }
-                    taken = nextTaken.Replicate();
-                }
-
-                for(int x = 0; x < xSize; x++)
-                {
-                    for(int y = 0; y < ySize; y++)
-                    {
-                        if(taken[x, y])
-                        {
-                            p = voxelToPixelLargeW(0, 3, x, y, 0, 25, cols, jitter, still);
-                            if(p < 0 || p > numBytes - cols - 4) continue;
-                            editValues[p] = shadowColor;
-                            editValues[p + 1] = shadowColor;
-                            editValues[p + 2] = shadowColor;
-                            editValues[p + 3] = shadowColor;
-                            editValues[p + cols] = shadowColor;
-                            editValues[p + cols + 1] = shadowColor;
-                            editValues[p + cols + 2] = shadowColor;
-                            editValues[p + cols + 3] = shadowColor;
-                        }
-                    }
-                }
-            }
-            lim = numBytes - cols * 2 - 2;
-            
-            for(int p = cols * 2 + 2; p < lim; p++)
-            {
-                for(int px = -2; px <= 2; px++)
-                {
-                    for(int py = -2; py <= 2; py++)
-                    {
-                        if(px * py * px * py < 5 && (e = editValues[p]) != 0
-                        && argbValues[p + px + py * cols] == 0 && shadowValues[p + px + py * cols] == 0)
-                        {
-                            shadowValues[p + px + py * cols] = e;
-                        }
-                        else if(px * py * px * py < 2 && (e = argbValues[p]) != 0 && (shadowValues[p + px + py * cols] == 0
-                            || (barePositions[p + px + py * cols] == false && zbuffer[p] - zbd > zbuffer[p + px + py * cols])))
-                        {
-                            shadowValues[p + px + py * cols] = e;
-                        }
-                        else if((px | py) == 0 && e != 0)
-                        {
-                            shadowValues[p] = e;
-                        }
-                    }
-                }
-            }
-            Array.Copy(shadowValues, argbValues, argbValues.Length);
-            */
-
 
             //int runningX, runningY;
             byte currentEdit;
@@ -5428,7 +5332,33 @@ namespace AssetsPV
                 }
                 else if(argbValues[i] == 0 && (currentEdit = shadowValues[i]) > 0)
                     argbValues[i] = currentEdit;
-                    /*
+            }
+
+            /*
+for(int i = 0; i < numBytes; i++)
+{
+    if(argbValues[i] > 0 && barePositions[i] == false)
+    {
+        bool shade = false;
+
+        if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - zbd > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; shade = true; }
+        if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - zbd > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; shade = true; }
+        if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - zbd > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; shade = true; }
+        if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - zbd > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; shade = true; }
+
+        if((i - 1 - cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; shade = true; }
+        if((i + 1 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; shade = true; }
+        if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
+        if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
+
+        if(shade)
+            editValues[i] = outlineValues[i];
+    }
+}
+*/
+
+
+            /*
                     runningX = i % cols;
                     runningY = i / cols;
                     if(runningX < 1 || runningX >= cols - 1 || runningY < 1 || runningY >= rows - 1)
@@ -5462,7 +5392,6 @@ namespace AssetsPV
                             argbValues[i + cols] = currentEdit;
                     }
                     */
-            }
 
             /*
             if(!shadowless)
@@ -5714,7 +5643,40 @@ namespace AssetsPV
                 }
             }
 
+            const int zbd = 4;
             int[] xmods = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 }, ymods = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+            int lim = numBytes - cols - 1;
+
+            const bool lightOutline = true;//!VoxelLogic.subtlePalettes.Contains(palette);
+            for(int i = 0, ii = 0; i < numBytes; i++)
+            {
+                if(argbValues[i] > 0 && barePositions[i] == false)
+                {
+                    bool shade = false;
+                    for(int x = -2; x <= 2; x++)
+                    {
+                        for(int y = -2; y <= 2; y++)
+                        {
+                            if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
+                            {
+                                editValues[ii] = outlineValues[i];
+                                shade = true;
+                            }
+                        }
+                    }
+                    /*if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - zbd > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; shade = true; }
+                    if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - zbd > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; shade = true; }
+                    if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - zbd > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; shade = true; }
+
+                    if((i - 1 - cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; shade = true; }
+                    if((i + 1 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; shade = true; }
+                    if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
+                    if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
+                    */
+                    //if(shade) editValues[i] = outlineValues[i];
+                }
+            }
+
             bool[,] nextTaken = new bool[xSize, ySize];
             for(int iter = 0; iter < 4; iter++)
             {
@@ -5741,14 +5703,14 @@ namespace AssetsPV
                 {
                     if(taken[x, y])
                     {
-                        int p = voxelToPixelLargeW(1, 3, x, y, 0, 25, cols, jitter, still);
-                        if(p > cols && p < numBytes - cols * vheight - 1)
+                        int p = voxelToPixelHugeW(0, 2, x, y, 0, 25, cols, jitter, still);
+                        if(p > cols && p < numBytes - cols * 3 - 5)
                         {
-                            for(int px = -1; px <= vwidth; px++)
+                            for(int px = -1; px <= 5; px++)
                             {
-                                for(int py = -1; py <= vheight; py++)
+                                for(int py = -1; py <= 3; py++)
                                 {
-                                    if((px < 0 && py < 0) || (px == vwidth && py == vheight) || (px < 0 && py == vheight) || (px == vwidth && py < 0))
+                                    if((px < 0 && py < 0) || (px == 5 && py == 3) || (px < 0 && py == 3) || (px == 5 && py < 0))
                                         continue;
                                     if(shadowValues[p + px + py * cols] == 0)
                                     {
@@ -5760,29 +5722,7 @@ namespace AssetsPV
                     }
                 }
             }
-            const int zbd = 5;
-            const bool lightOutline = true;//!VoxelLogic.subtlePalettes.Contains(palette);
-            for(int i = 0; i < numBytes; i++)
-            {
-                if(argbValues[i] > 0 && barePositions[i] == false)
-                {
-                    bool shade = false;
-
-                    if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - zbd > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; shade = true; }
-                    if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - zbd > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; shade = true; }
-                    if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - zbd > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; shade = true; }
-                    if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - zbd > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; shade = true; }
-
-                    if((i - 1 - cols >= 0 && i - 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 - cols] == 0 && lightOutline) || (barePositions[i - 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 - cols]))) { editValues[i - 1 - cols] = outlineValues[i]; shade = true; }
-                    if((i + 1 + cols >= 0 && i + 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 + cols] == 0 && lightOutline) || (barePositions[i + 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 + cols]))) { editValues[i + 1 + cols] = outlineValues[i]; shade = true; }
-                    if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
-                    if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
-
-                    if(shade)
-                        editValues[i] = outlineValues[i];
-                }
-            }
-
+            //int runningX, runningY;
             byte currentEdit;
 
             for(int i = 0; i < numBytes; i++)
@@ -5790,53 +5730,11 @@ namespace AssetsPV
                 if((currentEdit = editValues[i]) > 0)
                 {
                     argbValues[i] = currentEdit;
-                    /*
-                    runningX = i % cols;
-                    runningY = i / cols;
-                    if(runningX < 1 || runningX >= cols - 1 || runningY < 1 || runningY >= rows - 1)
-                        continue;
-                    if(editValues[i - 1 - cols] > 0)
-                    {
-                        if(argbValues[i - 1] == 0)
-                            argbValues[i - 1] = currentEdit;
-                        if(argbValues[i - cols] == 0)
-                            argbValues[i - cols] = currentEdit;
-                    }
-                    if(editValues[i + 1 - cols] > 0)
-                    {
-                        if(argbValues[i + 1] == 0)
-                            argbValues[i + 1] = currentEdit;
-                        if(argbValues[i - cols] == 0)
-                            argbValues[i - cols] = currentEdit;
-                    }
-                    if(editValues[i - 1 + cols] > 0)
-                    {
-                        if(argbValues[i - 1] == 0)
-                            argbValues[i - 1] = currentEdit;
-                        if(argbValues[i + cols] == 0)
-                            argbValues[i + cols] = currentEdit;
-                    }
-                    if(editValues[i + 1 + cols] > 0)
-                    {
-                        if(argbValues[i + 1] == 0)
-                            argbValues[i + 1] = currentEdit;
-                        if(argbValues[i + cols] == 0)
-                            argbValues[i + cols] = currentEdit;
-                    }
-                    */
                 }
+                else if(argbValues[i] == 0 && (currentEdit = shadowValues[i]) > 0)
+                    argbValues[i] = currentEdit;
             }
 
-            if(!shadowless)
-            {
-                for(int i = 0; i < numBytes; i++)
-                {
-                    if(argbValues[i] == 0 && shadowValues[i] > 0)
-                    {
-                        argbValues[i] = shadowValues[i];
-                    }
-                }
-            }
 
             for(int i = 0; i < numBytes; i++)
             {
@@ -6289,8 +6187,8 @@ namespace AssetsPV
                                             barePositions[p] = !(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha);
                                             if(VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_alpha || VoxelLogic.wcolors[current_color][3] == VoxelLogic.bordered_flat_alpha)
                                             {
-                                                zbuffer[p] = vx.z;
-                                                xbuffer[p] = vx.x;
+                                                zbuffer[p] = fz * 5 - j;
+                                                xbuffer[p] = fx;
                                             }
                                             argbValues[p] = DitherOrtho(wditheredcurrentortho[mod_color][sp], i, j, p);
                                         }
@@ -6387,7 +6285,7 @@ namespace AssetsPV
 
                                             }
 
-                                            zbuffer[p] = fz;
+                                            zbuffer[p] = fz * 5 - j;
                                             xbuffer[p] = fx;
 
                                             barePositions[p] = (VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha || VoxelLogic.wcolors[mod_color][3] == VoxelLogic.flash_alpha_0 ||
@@ -6433,15 +6331,15 @@ namespace AssetsPV
                 {
                     if(taken[x, y])
                     {
-                        int j = 3, i = 1,
+                        int j = 3, i = 0,
                             p = voxelToPixelGenericW(i, j, x, y, 0, 25, cols, jitter, still, xDim, zDim);
-                        if(p > cols && p < numBytes - cols * vheight - 1)
+                        if(p > cols + 3 && p < numBytes - cols * 3 - 3)
                         {
-                            for(int px = -1; px <= vwidth; px++)
+                            for(int px = -1; px <= 3; px++)
                             {
-                                for(int py = -1; py <= vheight; py++)
+                                for(int py = -1; py <= 3; py++)
                                 {
-                                    if((px < 0 && py < 0) || (px == vwidth && py == vheight) || (px < 0 && py == vheight) || (px == vwidth && py < 0))
+                                    if((px < 0 && py < 0) || (px == 3 && py == 3) || (px < 0 && py == 3) || (px == 3 && py < 0))
                                         continue;
                                     if(shadowValues[p + px + py * cols] == 0)
                                     {
@@ -6450,13 +6348,12 @@ namespace AssetsPV
                                 }
                             }
                         }
-
                     }
                 }
             }
 
             bool lightOutline = true; //!VoxelLogic.subtlePalettes.Contains(palette);
-            const int xbd = 3, zbd = 2;
+            const int xbd = 4, zbd = 13;
             for(int i = 0; i < numBytes; i++)
             {
                 if(argbValues[i] > 0 && barePositions[i] == false)
@@ -6488,12 +6385,12 @@ namespace AssetsPV
                     if((i - cols * 2 + 1 >= 0 && i - cols * 2 + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols * 2 + 1] == 0 && lightOutline) || (barePositions[i - cols * 2 + 1] == false && ((zbuffer[i] - zbuffer[i - cols * 2 + 1]) > zbd || ((xbuffer[i] - xbuffer[i - cols * 2 + 1]) > xbd && (zbuffer[i] - zbuffer[i - cols * 2 + 1]) <= 0))))) { editValues[i - cols * 2 + 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols * 2 - 1 >= 0 && i + cols * 2 - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols * 2 - 1] == 0 && lightOutline) || (barePositions[i + cols * 2 - 1] == false && ((zbuffer[i] - zbuffer[i + cols * 2 - 1]) > zbd || ((xbuffer[i] - xbuffer[i + cols * 2 + 1]) > xbd && (zbuffer[i] - zbuffer[i + cols * 2 + 1]) <= 0))))) { editValues[i + cols * 2 - 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols * 2 + 1 >= 0 && i + cols * 2 + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols * 2 + 1] == 0 && lightOutline) || (barePositions[i + cols * 2 + 1] == false && ((zbuffer[i] - zbuffer[i + cols * 2 + 1]) > zbd || ((xbuffer[i] - xbuffer[i + cols * 2 - 1]) > xbd && (zbuffer[i] - zbuffer[i + cols * 2 - 1]) <= 0))))) { editValues[i + cols * 2 + 1] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    
                     if((i - cols * 2 - 2 >= 0 && i - cols * 2 - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols * 2 - 2] == 0 && lightOutline) || (barePositions[i - cols * 2 - 2] == false && ((zbuffer[i] - zbuffer[i - cols * 2 - 2]) > zbd || ((xbuffer[i] - xbuffer[i - cols * 2 - 2]) > xbd && (zbuffer[i] - zbuffer[i - cols * 2 - 2]) <= 0))))) { editValues[i - cols * 2 - 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - cols * 2 + 2 >= 0 && i - cols * 2 + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols * 2 + 2] == 0 && lightOutline) || (barePositions[i - cols * 2 + 2] == false && ((zbuffer[i] - zbuffer[i - cols * 2 + 2]) > zbd || ((xbuffer[i] - xbuffer[i - cols * 2 + 2]) > xbd && (zbuffer[i] - zbuffer[i - cols * 2 + 2]) <= 0))))) { editValues[i - cols * 2 + 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols * 2 - 2 >= 0 && i + cols * 2 - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols * 2 - 2] == 0 && lightOutline) || (barePositions[i + cols * 2 - 2] == false && ((zbuffer[i] - zbuffer[i + cols * 2 - 2]) > zbd || ((xbuffer[i] - xbuffer[i + cols * 2 + 2]) > xbd && (zbuffer[i] - zbuffer[i + cols * 2 + 2]) <= 0))))) { editValues[i + cols * 2 - 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols * 2 + 2 >= 0 && i + cols * 2 + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols * 2 + 2] == 0 && lightOutline) || (barePositions[i + cols * 2 + 2] == false && ((zbuffer[i] - zbuffer[i + cols * 2 + 2]) > zbd || ((xbuffer[i] - xbuffer[i + cols * 2 - 2]) > xbd && (zbuffer[i] - zbuffer[i + cols * 2 - 2]) <= 0))))) { editValues[i + cols * 2 + 2] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    
                     if((i - cols - 2 >= 0 && i - cols - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols - 2] == 0 && lightOutline) || (barePositions[i - cols - 2] == false && ((zbuffer[i] - zbuffer[i - cols - 2]) > zbd || ((xbuffer[i] - xbuffer[i - cols - 2]) > xbd && (zbuffer[i] - zbuffer[i - cols - 2]) <= 0))))) { editValues[i - cols - 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - cols + 2 >= 0 && i - cols + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols + 2] == 0 && lightOutline) || (barePositions[i - cols + 2] == false && ((zbuffer[i] - zbuffer[i - cols + 2]) > zbd || ((xbuffer[i] - xbuffer[i - cols + 2]) > xbd && (zbuffer[i] - zbuffer[i - cols + 2]) <= 0))))) { editValues[i - cols + 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols - 2 >= 0 && i + cols - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols - 2] == 0 && lightOutline) || (barePositions[i + cols - 2] == false && ((zbuffer[i] - zbuffer[i + cols - 2]) > zbd || ((xbuffer[i] - xbuffer[i + cols + 2]) > xbd && (zbuffer[i] - zbuffer[i + cols + 2]) <= 0))))) { editValues[i + cols - 2] = outlineValues[i]; if(!blacken) shade = true; }
@@ -8394,8 +8291,8 @@ namespace AssetsPV
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
-                    processUnitLargeWMilitary("Tank");
                     processUnitLargeWMilitary("Tank_P");
+                    processUnitLargeWMilitary("Tank");
                     processUnitLargeWMilitary("Tank_S");
                     processUnitLargeWMilitary("Tank_T");
 
