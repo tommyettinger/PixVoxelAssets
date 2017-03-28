@@ -1086,9 +1086,9 @@ namespace AssetsPV
             new float[][]
             {
             //6 hair contrast
-            new float[] {0.74F,0.66F,0.27F,1F},
+            new float[] {0.62F,0.55F,0.25F,1F},
             //7 hair
-            new float[] {0.96F,0.91F,0.44F,1F},
+            new float[] {0.93F,0.87F,0.36F,1F},
             //8 skin contrast
             new float[] {0.81F,0.5F,0.29F,1F},
             //9 skin
@@ -1231,9 +1231,9 @@ namespace AssetsPV
             new float[][]
             {
             //6 hair contrast
-            new float[] {0.74F,0.66F,0.27F,1F},
+            new float[] {0.62F,0.55F,0.25F,1F},
             //7 hair
-            new float[] {0.96F,0.91F,0.44F,1F},
+            new float[] {0.93F,0.87F,0.36F,1F},
             //8 skin contrast
             new float[] {0.81F,0.53F,0.13F,1F},
             //9 skin
@@ -1643,9 +1643,9 @@ namespace AssetsPV
             new float[][]
             {
             //6 hair contrast
-            new float[] {0.74F,0.66F,0.27F,1F},
+            new float[] {0.62F,0.55F,0.25F,1F},
             //7 hair
-            new float[] {0.96F,0.91F,0.44F,1F},
+            new float[] {0.93F,0.87F,0.36F,1F},
             //8 skin contrast
             new float[] {0.32F,0.11F,0.02F,1F},
             //9 skin
@@ -2786,7 +2786,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            
+            /*
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2798,7 +2798,7 @@ namespace AssetsPV
                 }
             }
             
-            
+            */
 
             /*
             for(int e = 0; e < 10; e++)

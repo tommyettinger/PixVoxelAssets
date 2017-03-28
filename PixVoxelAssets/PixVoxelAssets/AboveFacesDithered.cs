@@ -11,11 +11,62 @@ using Assimp;
 
 namespace AssetsPV
 {
+    // Implementation credited mostly to http://sanity-free.org/12/crc32_implementation_in_csharp.html ,
+    // plus this slight change from Damien Guard:
+    // https://github.com/damieng/DamienGKit/blob/master/CSharp/DamienG.Library/Security/Cryptography/Crc32.cs#L114-L115
+    sealed class Crc32
+    {
+        uint[] table;
+
+        public uint ComputeChecksum(byte[] bytes)
+        {
+            uint crc = 0xffffffff;
+            for(int i = 0; i < 772; ++i)
+            {
+                byte index = (byte)(((crc) & 0xff) ^ bytes[i]);
+                crc = ((crc >> 8) ^ table[index]);
+            }
+            return ~crc;
+        }
+
+        public byte[] appendChecksum(byte[] bytes)
+        {
+            byte[] result = BitConverter.GetBytes(ComputeChecksum(bytes));
+            if(BitConverter.IsLittleEndian)
+                Array.Reverse(result);
+            Array.Copy(result, 0, bytes, 772, 4);
+            return bytes;
+        }
+
+        public Crc32()
+        {
+            uint poly = 0xedb88320;
+            table = new uint[256];
+            uint temp = 0;
+            for(uint i = 0; i < table.Length; ++i)
+            {
+                temp = i;
+                for(int j = 8; j > 0; --j)
+                {
+                    if((temp & 1) == 1)
+                    {
+                        temp = ((temp >> 1) ^ poly);
+                    }
+                    else
+                    {
+                        temp >>= 1;
+                    }
+                }
+                table[i] = temp;
+            }
+
+        }
+    }
     class AboveFacesDithered
     {
         const bool FORAYS = false;
         const bool WAR = true;
-        const bool RENDER = true;
+        const bool RENDER = false;
         const bool USE_PALETTE = true;
         const bool ENABLE_SUPER = false;
         public static string addon = ""; // "" // "Zombie_" // "Divine_"
@@ -1041,12 +1092,17 @@ namespace AssetsPV
             wrendered = storeColorCubesW();
             simplepalettes = new byte[wrendered.Length][][];
             exactpalettes = new byte[wrendered.Length][];
+            Crc32 crc = new Crc32();
             int colorcount = Math.Min(VoxelLogic.wpalettes[0].Length, 63);
             for(int i = 0; i < simplepalettes.Length; i++)
             {
                 simplepalettes[i] = new byte[256][];
-                exactpalettes[i] = new byte[768];
-                for(int j = 253, c = 0, k = 253 * 3 + 2; j >= 4 && c < colorcount; c++, j -= 4)
+                exactpalettes[i] = new byte[776];
+                exactpalettes[i][0] = 0x50;
+                exactpalettes[i][1] = 0x4C;
+                exactpalettes[i][2] = 0x54;
+                exactpalettes[i][3] = 0x45;
+                for(int j = 253, c = 0, k = 253 * 3 + 6; j >= 4 && c < colorcount; c++, j -= 4)
                 {
                     simplepalettes[i][j] = new byte[] { wrendered[i][c][0][2], wrendered[i][c][0][1], wrendered[i][c][0][0] };
                     exactpalettes[i][k--] = wrendered[i][c][0][0];
@@ -1066,21 +1122,22 @@ namespace AssetsPV
                     exactpalettes[i][k--] = wrendered[i][c][0][66];
                 }
                 simplepalettes[i][0] = new byte[] { 0, 0, 0 };
-                exactpalettes[i][0] = 0;
-                exactpalettes[i][1] = 0;
-                exactpalettes[i][2] = 0;
+                exactpalettes[i][0 + 4] = 0;
+                exactpalettes[i][1 + 4] = 0;
+                exactpalettes[i][2 + 4] = 0;
                 simplepalettes[i][1] = new byte[] { 0, 0, 0 };
-                exactpalettes[i][3] = 0;
-                exactpalettes[i][4] = 0;
-                exactpalettes[i][5] = 0;
+                exactpalettes[i][3 + 4] = 0;
+                exactpalettes[i][4 + 4] = 0;
+                exactpalettes[i][5 + 4] = 0;
                 simplepalettes[i][254] = new byte[] { 0, 0, 0 };
-                exactpalettes[i][254 * 3] = 0;
-                exactpalettes[i][254 * 3 + 1] = 0;
-                exactpalettes[i][254 * 3 + 2] = 0;
+                exactpalettes[i][254 * 3 + 4] = 0;
+                exactpalettes[i][254 * 3 + 1 + 4] = 0;
+                exactpalettes[i][254 * 3 + 2 + 4] = 0;
                 simplepalettes[i][255] = new byte[] { 255, 255, 255 };
-                exactpalettes[i][255 * 3] = 255;
-                exactpalettes[i][255 * 3 + 1] = 255;
-                exactpalettes[i][255 * 3 + 2] = 255;
+                exactpalettes[i][255 * 3 + 4] = 255;
+                exactpalettes[i][255 * 3 + 1 + 4] = 255;
+                exactpalettes[i][255 * 3 + 2 + 4] = 255;
+                exactpalettes[i] = crc.appendChecksum(exactpalettes[i]);
             }
             basepalette = new byte[256][];
             for(byte i = 1; i < 255; i++)
@@ -1119,8 +1176,7 @@ namespace AssetsPV
             int p = (addon == "Divine_") ? 38 * 8 : 0, limit = 8 * (CURedux.wspecies.Length - 2 - (CURedux.ZOMBIES ? 0 : 1));
             for(; p < limit; p++)
             {
-                byte[] palette = exactpalettes[p];
-                Array.Copy(palette, 0, bytes, 41, 768);
+                Array.Copy(exactpalettes[p], 0, bytes, 37, 776);
                 File.WriteAllBytes(
                     altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/" + string.Format(output, p),
                     bytes);
@@ -1392,9 +1448,9 @@ namespace AssetsPV
         public static void WriteAllGIFs()
         {
             Directory.CreateDirectory("gifs/" + altFolder);
-            CURedux.normal_units.AsParallel().ForAll(u =>
-            //foreach(string u in CURedux.normal_units)
-            //new string[] { "Tank_T", "Tank_T_Alt" }.AsParallel().ForAll(u => 
+            //CURedux.normal_units.AsParallel().ForAll(u =>
+            foreach(string u in CURedux.normal_units)
+            //new string[] { "Tank_P", "Tank_P_Alt" }.AsParallel().ForAll(u => 
             {
                 string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
                 List<string> imageNames = new List<string>(4 * 16 * 8);
@@ -1517,7 +1573,8 @@ namespace AssetsPV
                     }
 
                 }
-            });
+            }
+            //});
             if(ENABLE_SUPER)
             {
                 CURedux.super_units.AsParallel().ForAll(u =>
@@ -8291,8 +8348,8 @@ for(int i = 0; i < numBytes; i++)
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
-                    processUnitLargeWMilitary("Tank_P");
                     processUnitLargeWMilitary("Tank");
+                    processUnitLargeWMilitary("Tank_P");
                     processUnitLargeWMilitary("Tank_S");
                     processUnitLargeWMilitary("Tank_T");
 
@@ -8512,11 +8569,7 @@ for(int i = 0; i < numBytes; i++)
                 46, 23, 5,
                 47, 21, 4,
                 44, 29, 7, }, 45, 44, 46);
-
-             */
-            
-            
-
+            */
             /*
             processReceivingMilitaryW();
 
