@@ -1688,7 +1688,8 @@ namespace AssetsPV
                         Console.WriteLine("Running alien weapon " + w + " GIF conversion for Super " + u + "...");
                         WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Huge_animated");
                     }
-                });
+                //});
+                }
             }
         }
 
