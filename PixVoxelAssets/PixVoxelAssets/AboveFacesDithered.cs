@@ -66,7 +66,7 @@ namespace AssetsPV
     {
         const bool FORAYS = false;
         const bool WAR = true;
-        const bool RENDER = false;
+        const bool RENDER = true;
         const bool USE_PALETTE = true;
         const bool ENABLE_SUPER = false;
         public static string addon = ""; // "" // "Zombie_" // "Divine_"
@@ -1577,8 +1577,8 @@ namespace AssetsPV
             //});
             if(ENABLE_SUPER)
             {
-                CURedux.super_units.AsParallel().ForAll(u =>
-                //foreach(string u in CURedux.super_units)
+                //CURedux.super_units.AsParallel().ForAll(u =>
+                foreach(string u in CURedux.super_units)
                 {
                     List<string> imageNames = new List<string>(4 * 16 * 4);
                     for(int p = 0; p < 8; p++)
@@ -6745,7 +6745,10 @@ for(int i = 0; i < numBytes; i++)
             wditheredcurrentortho = wditheredortho[terrainPalette];
 
             Console.WriteLine("Terrain: " + name);
-            byte[,,] colors = TransformLogic.RunCA(PatternLogic.ApplyTerrain(TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight), 2);
+            byte[,,] colors = TransformLogic.RunCA(
+                PatternLogic.ApplyTerrain(
+                    TransformLogic.VoxListToArray(voxlist.Select(m => VoxelLogic.AlterVoxel(m, 20, 20, 0, m.color)), 120, 120, 80), changers, standard, dark, highlight),
+                (kind == "Ordered" ? 1 : 2), true, false);
             string folder = altFolder + "Terrains/", bFolder = blankFolder + "Terrains/";
             for(int dir = 0; dir < 4; dir++)
             {
@@ -6811,9 +6814,9 @@ for(int i = 0; i < numBytes; i++)
                             }
                         }
                     }
-
+                    //VoxelLogic.WriteVOX("vox/" + nm + ".vox", c2, "W", terrainPalette);
                     ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
-                    FaceVoxel[,,] faces = FaceLogic.GetFaces(c2);
+                    FaceVoxel[,,] faces = FaceLogic.GetFaces(c2, true);
                     PngWriter png = FileHelper.CreatePngWriter(folder + nm + "_Huge_face" + (dir*2) + "_0.png", imi, true);
                     WritePNG(png, processFrameHugeW(faces, terrainPalette, 0, 0, 1, true, true), simplepalettes[terrainPalette]);
                     png = FileHelper.CreatePngWriter(bFolder + nm + "_Huge_face" + (dir*2) + "_0.png", imi, true);
@@ -7046,9 +7049,9 @@ for(int i = 0; i < numBytes; i++)
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 12 + 128);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 14 + 128);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 12 + 128);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 14 + 128);
                 }
             }
 
@@ -8044,8 +8047,9 @@ for(int i = 0; i < numBytes; i++)
             //VoxelLogic.VisualMode = "W";
             //SaPalettes.Initialize();
 
-            System.IO.Directory.CreateDirectory(altFolder);
-            System.IO.Directory.CreateDirectory(blankFolder);
+            Directory.CreateDirectory("vox");
+            Directory.CreateDirectory(altFolder);
+            Directory.CreateDirectory(blankFolder);
             InitializeWPalette();
             //InitializeGWPalette();
 

@@ -1753,7 +1753,7 @@ namespace AssetsPV
             return vs;
 
         }
-        public static byte[,,] RunCA(byte[,,] voxelData, int smoothLevel, bool regardless = false)
+        public static byte[,,] RunCA(byte[,,] voxelData, int smoothLevel, bool regardless = false, bool canRemove = true)
         {
             if(smoothLevel <= 1)
                 return voxelData;
@@ -1798,8 +1798,10 @@ namespace AssetsPV
                                     }
                                 }
                             }
-                            if(emptyCount >= 18)
+                            if(emptyCount >= 18 && (canRemove || vs[0][x, y, z] == 0))
+                            {
                                 vs[v][x, y, z] = 0;
+                            }
                             else
                             {
                                 int max = 0, cc = colorCount[0], tmp;

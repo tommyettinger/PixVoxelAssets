@@ -1949,6 +1949,7 @@ namespace AssetsPV
                         */
 
                         nearFaces.Fill(null);
+                        int ct = 0;
                         for(int i = 0; i < 3; i++)
                         {
                             if(x - 1 + i >= 0 && x - 1 + i < xSize)
@@ -1964,6 +1965,7 @@ namespace AssetsPV
                                                 if(faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)] != null)
                                                 {
                                                     nearFaces[i * 9 + j * 3 + k] = faces[(x - 1 + i), (y - 1 + j), (z - 1 + k)];
+                                                    ct++;
                                                 }
                                             }
                                         }
@@ -1972,7 +1974,7 @@ namespace AssetsPV
                             }
                         }
 
-                        if((faces2[x, y, z] = faces[x, y, z]) != null)
+                        if((faces2[x, y, z] = faces[x, y, z]) != null || ct < 3)
                             continue;
                         FaceVoxel f = null;
                         if((f = FillGap(faces, x, y, z, nearFaces, 0, 6, 0, Slope.BrightDimTop)) != null)
