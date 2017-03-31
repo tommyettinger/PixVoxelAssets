@@ -11,57 +11,6 @@ using Assimp;
 
 namespace AssetsPV
 {
-    // Implementation credited mostly to http://sanity-free.org/12/crc32_implementation_in_csharp.html ,
-    // plus this slight change from Damien Guard:
-    // https://github.com/damieng/DamienGKit/blob/master/CSharp/DamienG.Library/Security/Cryptography/Crc32.cs#L114-L115
-    sealed class Crc32
-    {
-        uint[] table;
-
-        public uint ComputeChecksum(byte[] bytes)
-        {
-            uint crc = 0xffffffff;
-            for(int i = 0; i < 772; ++i)
-            {
-                byte index = (byte)(((crc) & 0xff) ^ bytes[i]);
-                crc = ((crc >> 8) ^ table[index]);
-            }
-            return ~crc;
-        }
-
-        public byte[] appendChecksum(byte[] bytes)
-        {
-            byte[] result = BitConverter.GetBytes(ComputeChecksum(bytes));
-            if(BitConverter.IsLittleEndian)
-                Array.Reverse(result);
-            Array.Copy(result, 0, bytes, 772, 4);
-            return bytes;
-        }
-
-        public Crc32()
-        {
-            uint poly = 0xedb88320;
-            table = new uint[256];
-            uint temp = 0;
-            for(uint i = 0; i < table.Length; ++i)
-            {
-                temp = i;
-                for(int j = 8; j > 0; --j)
-                {
-                    if((temp & 1) == 1)
-                    {
-                        temp = ((temp >> 1) ^ poly);
-                    }
-                    else
-                    {
-                        temp >>= 1;
-                    }
-                }
-                table[i] = temp;
-            }
-
-        }
-    }
     class AboveFacesDithered
     {
         const bool FORAYS = false;
@@ -69,6 +18,10 @@ namespace AssetsPV
         const bool RENDER = true;
         const bool USE_PALETTE = true;
         const bool ENABLE_SUPER = false;
+
+        const bool ENABLE_STANDING = true;
+        const bool ENABLE_FIRING = false;
+        const bool ENABLE_DYING = false;
         public static string addon = ""; // "" // "Zombie_" // "Divine_"
         public const int
         Cube = 0,
@@ -103,8 +56,8 @@ namespace AssetsPV
         BackBackBottomThick = 28;
 
         public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
-            ImageWidthLarge = 88, ImageHeightLarge = 128, ImageWidthHuge = 188, ImageHeightHuge = 268;
-        public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3;
+            ImageWidthLarge = 48, ImageHeightLarge = 68, ImageWidthHuge = 98, ImageHeightHuge = 138;
+        public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 4;
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             { Slope.BrightTop, BrightTop }, { Slope.DimTop, DimTop }, { Slope.BrightDim, BrightDim }, { Slope.BrightDimTop, BrightDimTop }, { Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
             { Slope.BrightDimBottom, BrightDimBottom }, { Slope.BrightBack, BrightBack }, { Slope.DimBack, DimBack },
@@ -1454,89 +1407,32 @@ namespace AssetsPV
             {
                 string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
                 List<string> imageNames = new List<string>(4 * 16 * 8);
-                //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                if(ENABLE_STANDING)
                 {
-                    int p = 32;
-                    for(int dir = 0; dir < 8; dir++)
-                    {
-                        for(int f = 0; f < 4; f++)
-                        {
-                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
-                        }
-                        for(int f = 0; f < 4; f++)
-                        {
-                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
-                        }
-                    }
-                }
-                Console.WriteLine("Running standing GIF conversion for " + u + "...");
-                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
-
-                imageNames = new List<string>(4 * 16 * 12);
-
-                //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
-                {
-                    int p = 32;
-
-                    for(int dir = 0; dir < 8; dir++)
-                    {
-                        for(int f = 0; f < 12; f++)
-                        {
-                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
-                        }
-                    }
-                }
-                Console.WriteLine("Running death GIF conversion for " + u + "...");
-                WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_Large_animated");
-
-                for(int w = 0; w < 2; w++)
-                {
-                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[stripped]][w] <= -1)
-                        continue;
-
-                    imageNames = new List<string>(4 * 16 * 16);
-
                     //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                     {
                         int p = 32;
                         for(int dir = 0; dir < 8; dir++)
                         {
-                            for(int f = 0; f < 16; f++)
+                            for(int f = 0; f < 4; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                            }
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                             }
                         }
                     }
-                    Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
-                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Large_animated");
+                    Console.WriteLine("Running standing GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
                 }
-
-                if(!u.Contains("_Alt"))
+                if(ENABLE_DYING)
                 {
-                    imageNames = new List<string>(4 * 16 * 8);
-                    //foreach(int p in CURedux.alienHighlights)
-                    {
-                        int p = 257;
-                        for(int dir = 0; dir < 8; dir++)
-                        {
-                            for(int f = 0; f < 4; f++)
-                            {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
-                            }
-                            for(int f = 0; f < 4; f++)
-                            {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
-                            }
-                        }
-                    }
-                    Console.WriteLine("Running alien standing GIF conversion for " + u + "...");
-                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Large_animated");
-
                     imageNames = new List<string>(4 * 16 * 12);
-
-                    //foreach(int p in CURedux.alienHighlights)
+                    //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                     {
-                        int p = 257;
+                        int p = 32;
 
                         for(int dir = 0; dir < 8; dir++)
                         {
@@ -1546,20 +1442,21 @@ namespace AssetsPV
                             }
                         }
                     }
-                    Console.WriteLine("Running alien death GIF conversion for " + u + "...");
-                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_alien_Large_animated");
-
+                    Console.WriteLine("Running death GIF conversion for " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_Large_animated");
+                }
+                if(ENABLE_FIRING)
+                {
                     for(int w = 0; w < 2; w++)
                     {
-                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[stripped]][w] <= -1)
                             continue;
 
                         imageNames = new List<string>(4 * 16 * 16);
 
-                        //foreach(int p in CURedux.alienHighlights)
+                        //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                         {
-                            int p = 257;
-
+                            int p = 32;
                             for(int dir = 0; dir < 8; dir++)
                             {
                                 for(int f = 0; f < 16; f++)
@@ -1568,10 +1465,77 @@ namespace AssetsPV
                                 }
                             }
                         }
-                        Console.WriteLine("Running alien weapon " + w + " GIF conversion for " + u + "...");
-                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Large_animated");
+                        Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
+                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Large_animated");
                     }
+                }
+                if(!u.Contains("_Alt"))
+                {
+                    if(ENABLE_STANDING)
+                    {
+                        imageNames = new List<string>(4 * 16 * 8);
+                        //foreach(int p in CURedux.alienHighlights)
+                        {
+                            int p = 257;
+                            for(int dir = 0; dir < 8; dir++)
+                            {
+                                for(int f = 0; f < 4; f++)
+                                {
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                }
+                                for(int f = 0; f < 4; f++)
+                                {
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                }
+                            }
+                        }
+                        Console.WriteLine("Running alien standing GIF conversion for " + u + "...");
+                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Large_animated");
+                    }
+                    if(ENABLE_DYING)
+                    {
+                        imageNames = new List<string>(4 * 16 * 12);
 
+                        //foreach(int p in CURedux.alienHighlights)
+                        {
+                            int p = 257;
+
+                            for(int dir = 0; dir < 8; dir++)
+                            {
+                                for(int f = 0; f < 12; f++)
+                                {
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                                }
+                            }
+                        }
+                        Console.WriteLine("Running alien death GIF conversion for " + u + "...");
+                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_alien_Large_animated");
+                    }
+                    if(ENABLE_FIRING)
+                    {
+                        for(int w = 0; w < 2; w++)
+                        {
+                            if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                                continue;
+
+                            imageNames = new List<string>(4 * 16 * 16);
+
+                            //foreach(int p in CURedux.alienHighlights)
+                            {
+                                int p = 257;
+
+                                for(int dir = 0; dir < 8; dir++)
+                                {
+                                    for(int f = 0; f < 16; f++)
+                                    {
+                                        imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                    }
+                                }
+                            }
+                            Console.WriteLine("Running alien weapon " + w + " GIF conversion for " + u + "...");
+                            WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Large_animated");
+                        }
+                    }
                 }
             }
             //});
@@ -2180,12 +2144,12 @@ namespace AssetsPV
                 if(RENDER)
                 {
                     BinaryReader bin = new BinaryReader(File.Open("CU3/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
-                    List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0);
+                    List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0, CURedux.REMOVE_TWINKLE);
 
                     //Directory.CreateDirectory("vox/" + altFolder);
                     //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
                     parsed = voxes.ToArray();
-                    explode_parsed = voxes.ToArray();
+                    //explode_parsed = voxes.ToArray();
 
                     for(int i = 0; i < parsed.Length; i++)
                     {
@@ -2225,9 +2189,10 @@ namespace AssetsPV
                                 "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                     }
                 }
-                processUnitLargeWFiring(addon + u, a);
 
-                processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : "");
+                //processUnitLargeWFiring(addon + u, a);
+
+                //processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : ""); //if this line is uncommented, also uncomment explode_parsed above
 
             }
         }
@@ -2326,7 +2291,7 @@ namespace AssetsPV
                     if(RENDER)
                     {
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0).ToArray() : VoxelLogic.AssembleHeadToModelW(bin, a > 0).ToArray();
+                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0).ToArray() : VoxelLogic.AssembleHeadToModelW(bin, a > 0, CURedux.REMOVE_TWINKLE).ToArray();
                         MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
 
                         ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
@@ -2955,9 +2920,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 62 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 2, i++) // y+=2
+            for(int y = 66 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 4, i++) // y+=2
             {
-                for(int x = 32, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 2, j++) // x+=2
+                for(int x = 28, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 4, j++) // x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -2980,9 +2945,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 72, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 2, i++) // y+=2
+            for(int y = 76, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 4, i++) // y+=2
             {
-                for(int x = 48, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 2, j++) //x+=2
+                for(int x = 40, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 4, j++) //x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -3032,9 +2997,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 62 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 2, i++) //y+=2
+            for(int y = 70 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 4, i++) //y+=2
             {
-                for(int x = 32, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 2, j++) //x+=2
+                for(int x = 22, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 4, j++) //x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -3057,9 +3022,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 48, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 2, i++) //y+=2
+            for(int y = 48, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 4, i++) //y+=2
             {
-                for(int x = 22, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 2, j++) //x+=2
+                for(int x = 8, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 4, j++) //x+=2
                 {
                     b2[i][j] = b[y][x];
                 }
@@ -5308,9 +5273,9 @@ namespace AssetsPV
                 if(argbValues[i] > 0 && barePositions[i] == false)
                 {
                     bool shade = false;
-                    for(int x = -2; x <= 2; x++)
+                    for(int x = -outline; x <= outline; x++)
                     {
-                        for(int y = -2; y <= 2; y++)
+                        for(int y = -outline; y <= outline; y++)
                         {
                             
                             if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
@@ -5710,15 +5675,15 @@ for(int i = 0; i < numBytes; i++)
             {
                 if(argbValues[i] > 0 && barePositions[i] == false)
                 {
-                    bool shade = false;
-                    for(int x = -2; x <= 2; x++)
+                    //bool shade = false;
+                    for(int x = -outline; x <= outline; x++)
                     {
-                        for(int y = -2; y <= 2; y++)
+                        for(int y = -outline; y <= outline; y++)
                         {
                             if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
                             {
                                 editValues[ii] = outlineValues[i];
-                                shade = true;
+                                //shade = true;
                             }
                         }
                     }
@@ -6068,13 +6033,13 @@ for(int i = 0; i < numBytes; i++)
                     }
                 }
             }
-
-            bool lightOutline = true;//!VoxelLogic.subtlePalettes.Contains(palette);
-            for(int i = 0; i < numBytes; i++)
+            const int zbd = 4;
+            const bool lightOutline = true;//!VoxelLogic.subtlePalettes.Contains(palette);
+            for(int i = 0, ii = 0; i < numBytes; i++)
             {
                 if(argbValues[i] > 0 && barePositions[i] == false)
                 {
-                    bool shade = false, blacken = false;
+                    bool shade = false;
                     /*
                     if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && lightOutline) { editValues[i - 4] = 255; editValues[i - 4 - 1] = 0; editValues[i - 4 - 2] = 0; editValues[i - 4 - 3] = 0; blacken = true; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && zbuffer[i] - 5 > zbuffer[i - 4]) { editValues[i - 4] = 255; editValues[i - 4 - 1] = outlineValues[i - 1]; editValues[i - 4 - 2] = outlineValues[i - 2]; editValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { editValues[i + 4] = 255; editValues[i + 4 - 1] = 0; editValues[i + 4 - 2] = 0; editValues[i + 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 5 > zbuffer[i + 4]) { editValues[i + 4] = 255; editValues[i + 4 - 1] = outlineValues[i - 1]; editValues[i + 4 - 2] = outlineValues[i - 2]; editValues[i + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
@@ -6082,12 +6047,24 @@ for(int i = 0; i < numBytes; i++)
                     if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && argbValues[i + bmpData.Stride] == 0 && lightOutline) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = 0; editValues[i + bmpData.Stride - 2] = 0; editValues[i + bmpData.Stride - 3] = 0; blacken = true; } else if (i + bmpData.Stride >= 0 && i + bmpData.Stride < argbValues.Length && barePositions[i + bmpData.Stride] == false && zbuffer[i] - 5 > zbuffer[i + bmpData.Stride]) { editValues[i + bmpData.Stride] = 255; editValues[i + bmpData.Stride - 1] = outlineValues[i - 1]; editValues[i + bmpData.Stride - 2] = outlineValues[i - 2]; editValues[i + bmpData.Stride - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     */
 
+                    for(int x = -outline; x <= outline; x++)
+                    {
+                        for(int y = -outline; y <= outline; y++)
+                        {
 
+                            if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
+                            {
+                                editValues[ii] = outlineValues[i];
+                                shade = true;
+                            }
+                        }
+                    }
+                    /*
                     if((i - 1 >= 0 && i - 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || (barePositions[i - 1] == false && zbuffer[i] - 12 > zbuffer[i - 1]))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - 12 > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - 12 > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - 12 > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    */
 
 
                     /*
@@ -6102,11 +6079,11 @@ for(int i = 0; i < numBytes; i++)
                     if (argbValues[i] > 0 && i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && argbValues[i + bmpData.Stride - 4] == 0 && lightOutline) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = 0; argbValues[i - bmpData.Stride + 4 - 2] = 0; argbValues[i - bmpData.Stride + 4 - 3] = 0; blacken = true; } else if (i + bmpData.Stride - 4 >= 0 && i + bmpData.Stride - 4 < argbValues.Length && barePositions[i + bmpData.Stride - 4] == false && zbuffer[i] - 2 > zbuffer[i + bmpData.Stride - 4]) { argbValues[i - bmpData.Stride + 4] = 255; argbValues[i - bmpData.Stride + 4 - 1] = outlineValues[i - 1]; argbValues[i - bmpData.Stride + 4 - 2] = outlineValues[i - 2]; argbValues[i - bmpData.Stride + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (argbValues[i] > 0 && i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && argbValues[i - bmpData.Stride + 4] == 0 && lightOutline) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = 0; argbValues[i + bmpData.Stride - 4 - 2] = 0; argbValues[i + bmpData.Stride - 4 - 3] = 0; blacken = true; } else if (i - bmpData.Stride + 4 >= 0 && i - bmpData.Stride + 4 < argbValues.Length && barePositions[i - bmpData.Stride + 4] == false && zbuffer[i] - 2 > zbuffer[i - bmpData.Stride + 4]) { argbValues[i + bmpData.Stride - 4] = 255; argbValues[i + bmpData.Stride - 4 - 1] = outlineValues[i - 1]; argbValues[i + bmpData.Stride - 4 - 2] = outlineValues[i - 2]; argbValues[i + bmpData.Stride - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     */
-                    if(blacken)
+                    /*if(blacken)
                     {
                         editValues[i] = 255;
                     }
-                    else if(shade) { editValues[i] = outlineValues[i]; }
+                    else if(shade) { editValues[i] = outlineValues[i]; }*/
                 }
             }
 
@@ -6412,19 +6389,30 @@ for(int i = 0; i < numBytes; i++)
 
             bool lightOutline = true; //!VoxelLogic.subtlePalettes.Contains(palette);
             const int xbd = 4, zbd = 13;
-            for(int i = 0; i < numBytes; i++)
+            for(int i = 0, ii = 0; i < numBytes; i++)
             {
                 if(argbValues[i] > 0 && barePositions[i] == false)
                 {
-                    bool shade = false, blacken = false;
+                    //bool shade = false, blacken = false;
                     /*
                     if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && lightOutline) { editValues[i - 4] = 255; editValues[i - 4 - 1] = 0; editValues[i - 4 - 2] = 0; editValues[i - 4 - 3] = 0; blacken = true; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && zbuffer[i] - 5 > zbuffer[i - 4]) { editValues[i - 4] = 255; editValues[i - 4 - 1] = outlineValues[i - 1]; editValues[i - 4 - 2] = outlineValues[i - 2]; editValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { editValues[i + 4] = 255; editValues[i + 4 - 1] = 0; editValues[i + 4 - 2] = 0; editValues[i + 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 5 > zbuffer[i + 4]) { editValues[i + 4] = 255; editValues[i + 4 - 1] = outlineValues[i - 1]; editValues[i + 4 - 2] = outlineValues[i - 2]; editValues[i + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i - cols >= 0 && i - cols < argbValues.Length && argbValues[i - cols] == 0 && lightOutline) { editValues[i - cols] = 255; editValues[i - cols - 1] = 0; editValues[i - cols - 2] = 0; editValues[i - cols - 3] = 0; blacken = true; } else if (i - cols >= 0 && i - cols < argbValues.Length && barePositions[i - cols] == false && zbuffer[i] - 5 > zbuffer[i - cols]) { editValues[i - cols] = 255; editValues[i - cols - 1] = outlineValues[i - 1]; editValues[i - cols - 2] = outlineValues[i - 2]; editValues[i - cols - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i + cols >= 0 && i + cols < argbValues.Length && argbValues[i + cols] == 0 && lightOutline) { editValues[i + cols] = 255; editValues[i + cols - 1] = 0; editValues[i + cols - 2] = 0; editValues[i + cols - 3] = 0; blacken = true; } else if (i + cols >= 0 && i + cols < argbValues.Length && barePositions[i + cols] == false && zbuffer[i] - 5 > zbuffer[i + cols]) { editValues[i + cols] = 255; editValues[i + cols - 1] = outlineValues[i - 1]; editValues[i + cols - 2] = outlineValues[i - 2]; editValues[i + cols - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     */
+                    for(int x = -outline; x <= outline; x++)
+                    {
+                        for(int y = -outline; y <= outline; y++)
+                        {
 
-
+                            if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length && !barePositions[ii]) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (zbuffer[i] - zbuffer[ii] > zbd || xbuffer[i] - xbuffer[ii] > xbd)))
+                            {
+                                editValues[ii] = outlineValues[i];
+                                //shade = true;
+                            }
+                        }
+                    }
+                    /*
                     if((i - 1 >= 0 && i - 1 < argbValues.Length) && (barePositions[i - 1] == false && ((argbValues[i] > 0 && argbValues[i - 1] == 0 && lightOutline) || ((zbuffer[i] - zbuffer[i - 1]) > zbd || (xbuffer[i] - xbuffer[i - 1]) > xbd)))) { editValues[i - 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + 1 >= 0 && i + 1 < argbValues.Length) && (barePositions[i + 1] == false && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || ((zbuffer[i] - zbuffer[i + 1]) > zbd || (xbuffer[i] - xbuffer[i + 1]) > xbd)))) { editValues[i + 1] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && ((zbuffer[i] - zbuffer[i - cols]) > zbd || ((xbuffer[i] - xbuffer[i - cols]) > xbd && (zbuffer[i] - zbuffer[i - cols]) <= 0))))) { editValues[i - cols] = outlineValues[i]; if(!blacken) shade = true; }
@@ -6453,7 +6441,7 @@ for(int i = 0; i < numBytes; i++)
                     if((i - cols + 2 >= 0 && i - cols + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols + 2] == 0 && lightOutline) || (barePositions[i - cols + 2] == false && ((zbuffer[i] - zbuffer[i - cols + 2]) > zbd || ((xbuffer[i] - xbuffer[i - cols + 2]) > xbd && (zbuffer[i] - zbuffer[i - cols + 2]) <= 0))))) { editValues[i - cols + 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols - 2 >= 0 && i + cols - 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols - 2] == 0 && lightOutline) || (barePositions[i + cols - 2] == false && ((zbuffer[i] - zbuffer[i + cols - 2]) > zbd || ((xbuffer[i] - xbuffer[i + cols + 2]) > xbd && (zbuffer[i] - zbuffer[i + cols + 2]) <= 0))))) { editValues[i + cols - 2] = outlineValues[i]; if(!blacken) shade = true; }
                     if((i + cols + 2 >= 0 && i + cols + 2 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols + 2] == 0 && lightOutline) || (barePositions[i + cols + 2] == false && ((zbuffer[i] - zbuffer[i + cols + 2]) > zbd || ((xbuffer[i] - xbuffer[i + cols - 2]) > xbd && (zbuffer[i] - zbuffer[i + cols - 2]) <= 0))))) { editValues[i + cols + 2] = outlineValues[i]; if(!blacken) shade = true; }
-
+                    */
 
 
                     /*
@@ -7041,7 +7029,7 @@ for(int i = 0; i < numBytes; i++)
                     tilings[i][j] = new Bitmap(altFolder + "Terrains/" + CURedux.Terrains[i] + "_Huge_face" + (j*2) + "_0" + ".png");
                 }
             }
-            Bitmap b = new Bitmap(64 * 14 * 2, 64 * 14 * 2);
+            Bitmap b = new Bitmap(32 * 14 * 2, 32 * 14 * 2);
             Graphics tiling = Graphics.FromImage(b);
             LocalMap.r = r;
             LocalMap lm = new LocalMap(32, 32, 1, 0);
@@ -7050,9 +7038,9 @@ for(int i = 0; i < numBytes; i++)
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 57 + 14 + 128);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (64 * (i + j - 18)) - 35, (64 * (i - j + 9)) + 26 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 57 + 14 + 128);
                 }
             }
 
@@ -8028,8 +8016,8 @@ for(int i = 0; i < numBytes; i++)
             if(WAR)
             {
                 VoxelLogic.VisualMode = "CU";
-                altFolder = "Diverse_PixVoxel_Wargame_Above_8way/";
-                blankFolder = "Blank_PixVoxel_Wargame_Above_8way/";
+                altFolder = "Diverse_PixVoxel_Wargame_Above_Mini/";
+                blankFolder = "Blank_PixVoxel_Wargame_Above_Mini/";
                 CURedux.Initialize(true);
             }
             if(FORAYS)
@@ -8353,6 +8341,11 @@ for(int i = 0; i < numBytes; i++)
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
+                    processUnitLargeWMilitary("Artillery");
+                    processUnitLargeWMilitary("Artillery_P");
+                    processUnitLargeWMilitary("Artillery_S");
+                    processUnitLargeWMilitary("Artillery_T");
+
                     processUnitLargeWMilitary("Tank");
                     processUnitLargeWMilitary("Tank_P");
                     processUnitLargeWMilitary("Tank_S");
@@ -8382,11 +8375,6 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Truck_P");
                     processUnitLargeWMilitary("Truck_S");
                     processUnitLargeWMilitary("Truck_T");
-
-                    processUnitLargeWMilitary("Artillery");
-                    processUnitLargeWMilitary("Artillery_P");
-                    processUnitLargeWMilitary("Artillery_S");
-                    processUnitLargeWMilitary("Artillery_T");
 
                     processUnitLargeWMilitary("Copter");
                     processUnitLargeWMilitary("Copter_P");
@@ -8453,7 +8441,7 @@ for(int i = 0; i < numBytes; i++)
                     addon = "";
                 }
 
-                processReceivingMilitaryW();
+                //processReceivingMilitaryW();
                 
                 //processReceivingMilitaryWSuper();
 
@@ -8463,7 +8451,7 @@ for(int i = 0; i < numBytes; i++)
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-                
+                /*
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
                 
@@ -8529,6 +8517,7 @@ for(int i = 0; i < numBytes; i++)
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
+                */
                 
             }
             /*
@@ -10225,6 +10214,58 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 1, 1, 0.0f },
             });
             }
+        }
+    }
+
+    // Implementation credited mostly to http://sanity-free.org/12/crc32_implementation_in_csharp.html ,
+    // plus this slight change from Damien Guard:
+    // https://github.com/damieng/DamienGKit/blob/master/CSharp/DamienG.Library/Security/Cryptography/Crc32.cs#L114-L115
+    sealed class Crc32
+    {
+        uint[] table;
+
+        public uint ComputeChecksum(byte[] bytes)
+        {
+            uint crc = 0xffffffff;
+            for(int i = 0; i < 772; ++i)
+            {
+                byte index = (byte)(((crc) & 0xff) ^ bytes[i]);
+                crc = ((crc >> 8) ^ table[index]);
+            }
+            return ~crc;
+        }
+
+        public byte[] appendChecksum(byte[] bytes)
+        {
+            byte[] result = BitConverter.GetBytes(ComputeChecksum(bytes));
+            if(BitConverter.IsLittleEndian)
+                Array.Reverse(result);
+            Array.Copy(result, 0, bytes, 772, 4);
+            return bytes;
+        }
+
+        public Crc32()
+        {
+            uint poly = 0xedb88320;
+            table = new uint[256];
+            uint temp = 0;
+            for(uint i = 0; i < table.Length; ++i)
+            {
+                temp = i;
+                for(int j = 8; j > 0; --j)
+                {
+                    if((temp & 1) == 1)
+                    {
+                        temp = ((temp >> 1) ^ poly);
+                    }
+                    else
+                    {
+                        temp >>= 1;
+                    }
+                }
+                table[i] = temp;
+            }
+
         }
     }
 }

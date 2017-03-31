@@ -9981,7 +9981,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         }
 
-        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body, bool alternate = false)
+        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body, bool alternate = false, bool remove_shine = false)
         {
             BinaryReader hbin = new BinaryReader(File.Open("CU3/" + TallFacesDithered.addon + "Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
@@ -10000,18 +10000,24 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 else Console.Write(", ");
             }
             */
-            foreach(MagicaVoxelData mvd in bod)
-            {
 
-                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+            for(int i = 0; i < bod.Count; i++)
+            {
+                if(bod[i].color == 253 - 40)
+                    bod[i] = AlterVoxel(bod[i], 253 - 44);
+                else if(bod[i].color > 257 - wcolorcount * 4 && (254 - bod[i].color) % 4 == 0)
                 {
-                    bodyPlug = mvd;
+                    bodyPlug = bod[i];
                     bodyPlug.color--;
                     break;
                 }
+
             }
+
             if(bodyPlug.color == 0)
+            {
                 return bod;
+            }
             foreach(MagicaVoxelData mvd in head)
             {
                 if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
@@ -10032,6 +10038,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             for(int i = 0; i < working.Count; i++)
             {
+                if(remove_shine && working[i].color == 253 - 40)
+                    working[i] = AlterVoxel(working[i], 253 - 44);
                 if((254 - working[i].color) % 4 == 0)
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
