@@ -20,8 +20,8 @@ namespace AssetsPV
         const bool ENABLE_SUPER = false;
 
         const bool ENABLE_STANDING = true;
-        const bool ENABLE_FIRING = false;
-        const bool ENABLE_DYING = false;
+        const bool ENABLE_FIRING = true;
+        const bool ENABLE_DYING = true;
         public static string addon = ""; // "" // "Zombie_" // "Divine_"
         public const int
         Cube = 0,
@@ -57,7 +57,7 @@ namespace AssetsPV
 
         public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
             ImageWidthLarge = 48, ImageHeightLarge = 68, ImageWidthHuge = 98, ImageHeightHuge = 138;
-        public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 4;
+        public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 1;
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             { Slope.BrightTop, BrightTop }, { Slope.DimTop, DimTop }, { Slope.BrightDim, BrightDim }, { Slope.BrightDimTop, BrightDimTop }, { Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
             { Slope.BrightDimBottom, BrightDimBottom }, { Slope.BrightBack, BrightBack }, { Slope.DimBack, DimBack },
@@ -943,7 +943,7 @@ namespace AssetsPV
                                                         c2 = new byte[] { brighti, brighti, brighti, brighti };
                                                     }
                                                 }
-                                                else if(j > 2)
+                                                else
                                                 {
                                                     c2 = new byte[] { brighti, dimi, topi, dimi };
                                                 }
@@ -2149,7 +2149,8 @@ namespace AssetsPV
                     //Directory.CreateDirectory("vox/" + altFolder);
                     //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
                     parsed = voxes.ToArray();
-                    //explode_parsed = voxes.ToArray();
+                    if(ENABLE_DYING)
+                        explode_parsed = voxes.ToArray();
 
                     for(int i = 0; i < parsed.Length; i++)
                     {
@@ -2189,10 +2190,10 @@ namespace AssetsPV
                                 "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                     }
                 }
-
-                //processUnitLargeWFiring(addon + u, a);
-
-                //processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : ""); //if this line is uncommented, also uncomment explode_parsed above
+                if(ENABLE_FIRING)
+                    processUnitLargeWFiring(addon + u, a);
+                if(ENABLE_DYING)
+                    processExplosionLargeW(addon + u, -1, explode_parsed, false, (a > 0) ? "_Alt" : ""); //if this line is uncommented, also uncomment explode_parsed above
 
             }
         }
@@ -2903,7 +2904,135 @@ namespace AssetsPV
             //            processFiringDouble(u);
 
             //            processExplosionDouble(u);
+        }
+        /*
+         * x+0,y+0  <-- 1 --> x+2,y+0
+         * ^ \ 16 \                 ^
+         * 2                        8
+         * v / 32 /                 v
+         * x+0,y+2  <-- 4 --> x+2,y+2
+         */
+        /*
+                 private static int[] xChoices = {
+            // 00xxxx
+            0, 0, 0, 0, // 0000 0001 0010 0011
+            0, 0, 0, 0, // 0100 0101 0110 0111
+            1, 0, 0, 0, // 1000 1001 1010 1011
+            1, 1, 0, 0, // 1100 1101 1110 1111
+            // 01xxxx
+            0, 0, 0, 0, // 0000 0001 0010 0011
+            1, 0, 0, 0, // 0100 0101 0110 0111
+            1, 0, 0, 1, // 1000 1001 1010 1011
+            1, 1, 0, 0, // 1100 1101 1110 1111
+            // 10xxxx
+            0, 1, 0, 0, // 0000 0001 0010 0011
+            0, 0, 0, 0, // 0100 0101 0110 0111
+            1, 1, 1, 0, // 1000 1001 1010 1011
+            1, 1, 1, 0, // 1100 1101 1110 1111
+            // 11xxxx
+            0, 0, 0, 0, // 0000 0001 0010 0011
+            0, 0, 0, 0, // 0100 0101 0110 0111
+            1, 0, 0, 0, // 1000 1001 1010 1011
+            1, 1, 0, 0, // 1100 1101 1110 1111
 
+        },
+            yChoices = {
+            // 00xxxx
+            0, 0, 0, 0, // 0000 0001 0010 0011
+            1, 0, 1, 1, // 0100 0101 0110 0111
+            0, 0, 0, 0, // 1000 1001 1010 1011
+            1, 0, 1, 0, // 1100 1101 1110 1111
+            // 01xxxx
+            0, 0, 0, 0, // 0000 0001 0010 0011
+            1, 0, 1, 1, // 0100 0101 0110 0111
+            1, 0, 0, 0, // 1000 1001 1010 1011
+            1, 1, 1, 0, // 1100 1101 1110 1111
+            // 10xxxx
+            1, 0, 1, 0, // 0000 0001 0010 0011
+            1, 1, 1, 1, // 0100 0101 0110 0111
+            1, 0, 0, 0, // 1000 1001 1010 1011
+            1, 1, 1, 0, // 1100 1101 1110 1111
+            // 11xxxx
+            0, 0, 0, 0, // 0000 0001 0010 0011
+            1, 0, 1, 1, // 0100 0101 0110 0111
+            0, 0, 0, 0, // 1000 1001 1010 1011
+            1, 0, 1, 0, // 1100 1101 1110 1111
+        };
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private static byte mostCommon(byte[][] b, int x, int y)
+        {
+            int i = (b[y][x] == b[y][x + 1] ? 1 : 0) | (b[y][x] == b[y + 1][x] ? 2 : 0)
+                | (b[y + 1][x + 1] == b[y + 1][x] ? 4 : 0) | (b[y + 1][x + 1] == b[y][x + 1] ? 8 : 0)
+                | (b[y + 1][x + 1] == b[y][x] ? 16 : 0) | (b[y + 1][x] == b[y][x + 1] ? 32 : 0);
+            return b[y + yChoices[i]][x + xChoices[i]];
+        }
+
+         */
+
+        public static int ColorPriorityCU(int c)
+        {
+            switch((253 - c) >> 2)
+            {
+                case 6:
+                case 7:
+                    return 55;// + ((253 - fv) & 3) * 3;
+                case 9:
+                    return 45;// + ((253 - fv) & 3) * 3;
+                case 8:
+                    return 82;// + ((253 - fv) & 3) * 3;
+                case 10:
+                case 11:
+                    return 90;// + ((253 - fv) & 3) * 3;
+                //case 16: return 24;
+                default: return 4;// + ((253 - fv) & 3) * 3;
+            }
+        }
+
+        private static byte mostCommon(byte[][] b, int x, int y)
+        {
+            byte best1 = b[y][x], best2 = 0, best3 = 0, best4 = 0, best5 = 0, current;
+            int count1 = 1, count2 = 0, count3 = 0, count4 = 0, count5 = 0, t;//, shade = best1 == 0 ? 3 : ((253 - best1) & 3), total = 1;
+            for(int j = -1; j <= 1; j++)
+            {
+                for(int i = -1; i <= 1; i++)
+                {
+                    current = b[y + j][x + i];
+                    if(current == 0) continue;
+                    //shade += ((253 - current) & 3);
+                    //total++;
+                    //current = (byte)((253 - current) >> 2);
+                    if(best1 == 0 || current == best1)
+                    {
+                        best1 = current;
+                        count1 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+                    }
+                    else if(best2 == 0 || current == best2)
+                    {
+                        best2 = current;
+                        count2 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+                    }
+                    else if(best3 == 0 || current == best3)
+                    {
+                        best3 = current;
+                        count3 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+                    }
+                    else if(best4 == 0 || current == best4)
+                    {
+                        best4 = current;
+                        count4 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+                    }
+                    else if(best5 == 0 || current == best5)
+                    {
+                        best5 = current;
+                        count5 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+                    }
+                }
+            }
+            return ((count5 > count2 && count5 > count3 && count5 > count1 && count5 > count4) ? best5 :
+                 (count4 > count2 && count4 > count3 && count4 > count1 && count4 > count5) ? best4 :
+                (count3 > count1 && count3 > count2 && count3 > count4 && count3 > count5) ? best3 :
+                (count2 > count1 && count2 > count3 && count2 > count4 && count2 > count5) ? best2 : best1);
+            //return current == 0 ? current : (byte)(253 - (current << 2) - (shade / total));
         }
 
         private static byte[][] processFrameLargeW(FaceVoxel[,,] parsed, int palette, int dir, int frame, int maxFrames, bool still, bool shadowless)
@@ -2920,11 +3049,11 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 66 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 4, i++) // y+=2
+            for(int y = 72 + 32, i = 0; y < HugeHeight - 3 && i < ImageHeightLarge; y += 4, i++) // y+=4
             {
-                for(int x = 28, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 4, j++) // x+=2
+                for(int x = 28, j = 0; x < HugeWidth - 3 && j < ImageWidthLarge; x += 4, j++) // x+=4
                 {
-                    b2[i][j] = b[y][x];
+                    b2[i][j] = mostCommon(b, x, y);
                 }
             }
 
@@ -2945,11 +3074,11 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 76, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 4, i++) // y+=2
+            for(int y = 76, i = 0; y < HugeHeight * 2 - 3 && i < ImageHeightHuge; y += 4, i++) // y+=2
             {
-                for(int x = 40, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 4, j++) //x+=2
+                for(int x = 40, j = 0; x < HugeWidth * 2 - 3 && j < ImageWidthHuge; x += 4, j++) //x+=2
                 {
-                    b2[i][j] = b[y][x];
+                    b2[i][j] = mostCommon(b, x, y);
                 }
 
             }
@@ -2997,11 +3126,11 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 70 + 32, i = 0; y < HugeHeight && i < ImageHeightLarge; y += 4, i++) //y+=2
+            for(int y = 72 + 32, i = 0; y < HugeHeight - 3 && i < ImageHeightLarge; y += 4, i++) //y+=2
             {
-                for(int x = 22, j = 0; x < HugeWidth && j < ImageWidthLarge; x += 4, j++) //x+=2
+                for(int x = 24, j = 0; x < HugeWidth - 3 && j < ImageWidthLarge; x += 4, j++) //x+=2
                 {
-                    b2[i][j] = b[y][x];
+                    b2[i][j] = mostCommon(b, x, y);
                 }
             }
 
@@ -3022,11 +3151,11 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 48, i = 0; y < HugeHeight * 2 && i < ImageHeightHuge; y += 4, i++) //y+=2
+            for(int y = 48, i = 0; y < HugeHeight * 2 - 3 && i < ImageHeightHuge; y += 4, i++) //y+=2
             {
-                for(int x = 8, j = 0; x < HugeWidth * 2 && j < ImageWidthHuge; x += 4, j++) //x+=2
+                for(int x = 8, j = 0; x < HugeWidth * 2 - 3 && j < ImageWidthHuge; x += 4, j++) //x+=2
                 {
-                    b2[i][j] = b[y][x];
+                    b2[i][j] = mostCommon(b, x, y);
                 }
 
             }
@@ -5294,7 +5423,7 @@ namespace AssetsPV
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
                     */
-                    //if(shade) editValues[i] = outlineValues[i];
+                    if(shade) editValues[i] = outlineValues[i];
                 }
             }
 
@@ -5666,7 +5795,7 @@ for(int i = 0; i < numBytes; i++)
                 }
             }
 
-            const int zbd = 4;
+            const int zbd = 5;
             int[] xmods = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 }, ymods = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
             int lim = numBytes - cols - 1;
 
@@ -5675,7 +5804,7 @@ for(int i = 0; i < numBytes; i++)
             {
                 if(argbValues[i] > 0 && barePositions[i] == false)
                 {
-                    //bool shade = false;
+                    bool shade = false;
                     for(int x = -outline; x <= outline; x++)
                     {
                         for(int y = -outline; y <= outline; y++)
@@ -5683,7 +5812,7 @@ for(int i = 0; i < numBytes; i++)
                             if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (barePositions[ii] == false && zbuffer[i] - zbd > zbuffer[ii])))
                             {
                                 editValues[ii] = outlineValues[i];
-                                //shade = true;
+                                shade = true;
                             }
                         }
                     }
@@ -5696,7 +5825,7 @@ for(int i = 0; i < numBytes; i++)
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
                     */
-                    //if(shade) editValues[i] = outlineValues[i];
+                    if(shade) editValues[i] = outlineValues[i];
                 }
             }
 
@@ -6033,7 +6162,7 @@ for(int i = 0; i < numBytes; i++)
                     }
                 }
             }
-            const int zbd = 4;
+            const int zbd = 5;
             const bool lightOutline = true;//!VoxelLogic.subtlePalettes.Contains(palette);
             for(int i = 0, ii = 0; i < numBytes; i++)
             {
@@ -6393,22 +6522,22 @@ for(int i = 0; i < numBytes; i++)
             {
                 if(argbValues[i] > 0 && barePositions[i] == false)
                 {
-                    //bool shade = false, blacken = false;
+                    bool shade = false;
                     /*
                     if (i - 4 >= 0 && i - 4 < argbValues.Length && argbValues[i - 4] == 0 && lightOutline) { editValues[i - 4] = 255; editValues[i - 4 - 1] = 0; editValues[i - 4 - 2] = 0; editValues[i - 4 - 3] = 0; blacken = true; } else if (i - 4 >= 0 && i - 4 < argbValues.Length && barePositions[i - 4] == false && zbuffer[i] - 5 > zbuffer[i - 4]) { editValues[i - 4] = 255; editValues[i - 4 - 1] = outlineValues[i - 1]; editValues[i - 4 - 2] = outlineValues[i - 2]; editValues[i - 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i + 4 >= 0 && i + 4 < argbValues.Length && argbValues[i + 4] == 0 && lightOutline) { editValues[i + 4] = 255; editValues[i + 4 - 1] = 0; editValues[i + 4 - 2] = 0; editValues[i + 4 - 3] = 0; blacken = true; } else if (i + 4 >= 0 && i + 4 < argbValues.Length && barePositions[i + 4] == false && zbuffer[i] - 5 > zbuffer[i + 4]) { editValues[i + 4] = 255; editValues[i + 4 - 1] = outlineValues[i - 1]; editValues[i + 4 - 2] = outlineValues[i - 2]; editValues[i + 4 - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i - cols >= 0 && i - cols < argbValues.Length && argbValues[i - cols] == 0 && lightOutline) { editValues[i - cols] = 255; editValues[i - cols - 1] = 0; editValues[i - cols - 2] = 0; editValues[i - cols - 3] = 0; blacken = true; } else if (i - cols >= 0 && i - cols < argbValues.Length && barePositions[i - cols] == false && zbuffer[i] - 5 > zbuffer[i - cols]) { editValues[i - cols] = 255; editValues[i - cols - 1] = outlineValues[i - 1]; editValues[i - cols - 2] = outlineValues[i - 2]; editValues[i - cols - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     if (i + cols >= 0 && i + cols < argbValues.Length && argbValues[i + cols] == 0 && lightOutline) { editValues[i + cols] = 255; editValues[i + cols - 1] = 0; editValues[i + cols - 2] = 0; editValues[i + cols - 3] = 0; blacken = true; } else if (i + cols >= 0 && i + cols < argbValues.Length && barePositions[i + cols] == false && zbuffer[i] - 5 > zbuffer[i + cols]) { editValues[i + cols] = 255; editValues[i + cols - 1] = outlineValues[i - 1]; editValues[i + cols - 2] = outlineValues[i - 2]; editValues[i + cols - 3] = outlineValues[i - 3]; if (!blacken) shade = true; }
                     */
-                    for(int x = -outline; x <= outline; x++)
+                    for(int x = -outline; x <= outline+1; x++)
                     {
-                        for(int y = -outline; y <= outline; y++)
+                        for(int y = -outline; y <= outline+1; y++)
                         {
 
                             if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length && !barePositions[ii]) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (zbuffer[i] - zbuffer[ii] > zbd || xbuffer[i] - xbuffer[ii] > xbd)))
                             {
                                 editValues[ii] = outlineValues[i];
-                                //shade = true;
+                                shade = true;
                             }
                         }
                     }
@@ -6460,11 +6589,9 @@ for(int i = 0; i < numBytes; i++)
                     if(blacken)
                     {
                         editValues[i] = 255;
-                    }
-                    else if(shade) {
-                    //    editValues[i] = outlineValues[i];
-                    }
-                    */
+                    }*/
+                    if(shade) editValues[i] = outlineValues[i];
+                    
                 }
             }
 
@@ -8341,6 +8468,11 @@ for(int i = 0; i < numBytes; i++)
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
+                    processUnitLargeWMilitary("Infantry");
+                    processUnitLargeWMilitary("Infantry_P");
+                    processUnitLargeWMilitary("Infantry_S");
+                    processUnitLargeWMilitary("Infantry_T");
+
                     processUnitLargeWMilitary("Artillery");
                     processUnitLargeWMilitary("Artillery_P");
                     processUnitLargeWMilitary("Artillery_S");
@@ -8350,11 +8482,6 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Tank_P");
                     processUnitLargeWMilitary("Tank_S");
                     processUnitLargeWMilitary("Tank_T");
-
-                    processUnitLargeWMilitary("Infantry");
-                    processUnitLargeWMilitary("Infantry_P");
-                    processUnitLargeWMilitary("Infantry_S");
-                    processUnitLargeWMilitary("Infantry_T");
 
                     processUnitLargeWMilitary("Infantry_PS");
                     processUnitLargeWMilitary("Infantry_PT");
@@ -8441,7 +8568,7 @@ for(int i = 0; i < numBytes; i++)
                     addon = "";
                 }
 
-                //processReceivingMilitaryW();
+                processReceivingMilitaryW();
                 
                 //processReceivingMilitaryWSuper();
 
@@ -8451,7 +8578,7 @@ for(int i = 0; i < numBytes; i++)
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-                /*
+                
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
                 
@@ -8517,7 +8644,7 @@ for(int i = 0; i < numBytes; i++)
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
-                */
+                
                 
             }
             /*

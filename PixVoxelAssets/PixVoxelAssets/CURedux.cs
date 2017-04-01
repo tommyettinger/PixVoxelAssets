@@ -28,7 +28,7 @@ namespace AssetsPV
             "Boat", "Boat_P", "Boat_S", "Boat_T",
             "Recon", "Flamethrower",
             "Recon_Alt", "Flamethrower_Alt",
-            "Laboratory", "Dock", "Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well", "Farm",
+            "Laboratory", "Dock","Airport", "City", "Factory", "Castle", "Estate", "Hospital", "Oil_Well", "Farm",
 
         }, super_units = new string[]
         {
@@ -2786,7 +2786,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            /*
+            
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2797,7 +2797,7 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
-            */
+            
             
 
 
