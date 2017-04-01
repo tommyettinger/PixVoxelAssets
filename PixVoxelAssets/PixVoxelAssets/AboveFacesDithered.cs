@@ -1469,14 +1469,15 @@ namespace AssetsPV
                         WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Large_animated");
                     }
                 }
+
                 if(!u.Contains("_Alt"))
                 {
+                    int p = 281;
                     if(ENABLE_STANDING)
                     {
                         imageNames = new List<string>(4 * 16 * 8);
                         //foreach(int p in CURedux.alienHighlights)
                         {
-                            int p = 257;
                             for(int dir = 0; dir < 8; dir++)
                             {
                                 for(int f = 0; f < 4; f++)
@@ -1498,8 +1499,6 @@ namespace AssetsPV
 
                         //foreach(int p in CURedux.alienHighlights)
                         {
-                            int p = 257;
-
                             for(int dir = 0; dir < 8; dir++)
                             {
                                 for(int f = 0; f < 12; f++)
@@ -1522,7 +1521,6 @@ namespace AssetsPV
 
                             //foreach(int p in CURedux.alienHighlights)
                             {
-                                int p = 257;
 
                                 for(int dir = 0; dir < 8; dir++)
                                 {
@@ -7165,9 +7163,9 @@ for(int i = 0; i < numBytes; i++)
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 57 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 58 + 14 + 128);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 57 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 58 + 14 + 128);
                 }
             }
 
