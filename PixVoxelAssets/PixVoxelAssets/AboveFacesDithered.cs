@@ -1039,7 +1039,6 @@ namespace AssetsPV
                         Directory.CreateDirectory(altFolder + ((p >= 208) ? "Alien/" : "") + colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
                     if(p >= 38 * 8)
                         Directory.CreateDirectory(altFolder + "Divine/" + colorNames[p % 8] + "/animation_frames/receiving/color" + p + "/Explosion");
-                    //Directory.CreateDirectory("frames/" + altFolder + "color" + p);
                 }
             }
             wrendered = storeColorCubesW();
@@ -1137,44 +1136,6 @@ namespace AssetsPV
                 if(!USE_PALETTE)
                     return;
             }
-
-            /*
-            PngReader pngr = FileHelper.CreatePngReader(input);
-            ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
-            ImageInfo imi = pngr.ImgInfo;
-
-            pngr.End();
-            int p = (addon == "Divine_") ? 38 * 8 : 0;
-            for(; p < 8 * (CURedux.wspecies.Length - 2 - (CURedux.ZOMBIES ? 0 : 1)); p++)
-            {
-                byte[][] palette = palettes[p];
-                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
-
-                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
-                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                else
-                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
-
-                PngChunkPLTE pal;
-                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
-                    pal = pngw.GetMetadata().CreatePLTEChunk();
-                else
-                    pal = pngw.GetMetadata().GetPLTE();
-
-                pal.SetNentries(256);
-                for(int i = 1; i < 255; i++)
-                {
-                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
-                }
-                pal.SetEntry(0, 0, 0, 0);
-                pal.SetEntry(255, 0, 0, 0);
-                pngw.WriteRowsByte(lines.ScanlinesB);
-                pngw.End();
-
-                if(!USE_PALETTE)
-                    return;
-            }
-            */
         }
         public static void AlterPNGPaletteZombie(string input, string output, byte[][][] palettes)
         {
@@ -1227,100 +1188,24 @@ namespace AssetsPV
 
         public static void AlterPNGPaletteLimited(string input, string output, byte[][][] palettes)
         {
-            PngReader pngr = FileHelper.CreatePngReader(input);
-            ImageLines lines = pngr.ReadRowsByte(0, pngr.ImgInfo.Rows, 1);
-            ImageInfo imi = pngr.ImgInfo;
-
-            pngr.End();
-
+            byte[] bytes = File.ReadAllBytes(input);
+            //Console.WriteLine("{0:X} {1:X} {2:X} TO {3:X} {4:X} {5:X}", bytes[41], bytes[42], bytes[43], bytes[41 + 255 * 3], bytes[42 + 255 * 3], bytes[43 + 255 * 3]);
+            //int p = (addon == "Divine_") ? 38 * 8 : 0, limit = 8 * (CURedux.wspecies.Length - 2 - (CURedux.ZOMBIES ? 0 : 1));
             for(int p = 0; p < 8; p++)
             {
-                byte[][] palette = palettes[p];
-                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
-
-                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
-                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                else
-                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
-
-                PngChunkPLTE pal;
-                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
-                    pal = pngw.GetMetadata().CreatePLTEChunk();
-                else
-                    pal = pngw.GetMetadata().GetPLTE();
-
-                pal.SetNentries(256);
-                for(int i = 1; i < 255; i++)
-                {
-                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
-                }
-                pal.SetEntry(0, 0, 0, 0);
-                pal.SetEntry(255, 0, 0, 0);
-                pngw.WriteRowsByte(lines.ScanlinesB);
-                pngw.End();
-                if(!USE_PALETTE)
-                    return;
+                Array.Copy(exactpalettes[p], 0, bytes, 37, 776);
+                File.WriteAllBytes(
+                    altFolder + colorNames[p] + "/" + string.Format(output, p),
+                    bytes);
             }
             for(int p = 208; p < 8 * 37; p++)
             {
-                byte[][] palette = palettes[p];
-                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + "Alien/" + colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
 
-                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
-                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                else
-                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
-
-                PngChunkPLTE pal;
-                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
-                    pal = pngw.GetMetadata().CreatePLTEChunk();
-                else
-                    pal = pngw.GetMetadata().GetPLTE();
-
-                pal.SetNentries(256);
-                for(int i = 1; i < 255; i++)
-                {
-                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
-                }
-                pal.SetEntry(0, 0, 0, 0);
-                pal.SetEntry(255, 0, 0, 0);
-                pngw.WriteRowsByte(lines.ScanlinesB);
-                pngw.End();
-
-                if(!USE_PALETTE)
-                    return;
+                Array.Copy(exactpalettes[p], 0, bytes, 37, 776);
+                File.WriteAllBytes(
+                    altFolder + "Alien/" + colorNames[p % 8] + "/" + string.Format(output, p),
+                    bytes);
             }
-            /*
-            for(int p = 38 * 8; p < (CURedux.wspecies.Length - 2); p++)
-            {
-                byte[][] palette = palettes[p];
-                PngWriter pngw = FileHelper.CreatePngWriter(altFolder + "Divine/" + colorNames[p % 8] + "/" + string.Format(output, p), imi, true);
-
-                if(pngw.GetChunksList().GetById1(PngChunkTRNS.ID) == null)
-                    pngw.GetMetadata().CreateTRNSChunk().setIndexEntryAsTransparent(0);
-                else
-                    pngw.GetMetadata().GetTRNS().setIndexEntryAsTransparent(0);
-
-                PngChunkPLTE pal;
-                if(pngw.GetChunksList().GetById1(PngChunkPLTE.ID) == null)
-                    pal = pngw.GetMetadata().CreatePLTEChunk();
-                else
-                    pal = pngw.GetMetadata().GetPLTE();
-
-                pal.SetNentries(256);
-                for(int i = 1; i < 255; i++)
-                {
-                    pal.SetEntry(i, palette[i][0], palette[i][1], palette[i][2]);
-                }
-                pal.SetEntry(0, 0, 0, 0);
-                pal.SetEntry(255, 0, 0, 0);
-                pngw.WriteRowsByte(lines.ScanlinesB);
-                pngw.End();
-
-                if(!USE_PALETTE)
-                    return;
-            }
-            */
         }
 
         public static void WriteGIF(List<string> images, int delay, string output)
@@ -1338,7 +1223,6 @@ namespace AssetsPV
                 //settings.Colors = 256;
                 //collection.Quantize(settings);
                 //collection.Optimize();
-                // Save gif
                 collection.Write(output + ".gif");
             }
         }

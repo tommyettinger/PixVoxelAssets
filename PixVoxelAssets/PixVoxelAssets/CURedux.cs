@@ -958,13 +958,13 @@ namespace AssetsPV
             //1 tires, treads
             new float[] {0.37F,0.35F,0.34F,1F},
             //2 doors paint (dark) contrast
-            new float[] {0.18F,-0.02F,0.15F,1F},
+            new float[] {0.25F,0.03F,0.22F,1F},
             //3 doors paint (dark)
-            new float[] {0.3F,0.05F,0.25F,1F},
+            new float[] {0.4F,0.1F,0.35F,1F},
             //4 main paint (mid) contrast
-            new float[] {0.38F,0.01F,0.43F,1F},
+            new float[] {0.43F,0.05F,0.5F,1F},
             //5 main paint (mid)
-            new float[] {0.5F,0.1F,0.55F,1F},
+            new float[] {0.58F,0.16F,0.65F,1F},
             //6 hair contrast
             new float[] {0.5F,0.2F,0.08F,1F},
             //7 hair
@@ -1010,17 +1010,17 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 cockpit paint (gray) contrast
-            new float[] {0.4F,0.25F,0.5F,1F},
+            new float[] {0.58F,0.4F,0.65F,1F},
             //29 cockpit paint (gray)
-            new float[] {0.55F,0.33F,0.65F,1F},
+            new float[] {0.7F,0.53F,0.8F,1F},
             //30 helmet paint (bold) contrast
-            new float[] {0.6F,0.12F,0.6F,1F},
+            new float[] {0.65F,0.1F,0.63F,1F},
             //31 helmet paint (bold)
-            new float[] {0.73F,0.28F,0.73F,1F},
+            new float[] {0.8F,0.22F,0.78F,1F},
             //32 alternate paint contrast
-            new float[] {0.3F,0.3F,0.3F,1F},
+            new float[] {0.4F,0.4F,0.4F,1F},
             //33 alternate paint
-            new float[] {0.42F,0.42F,0.42F,1F},
+            new float[] {0.52F,0.52F,0.52F,1F},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass
@@ -1028,11 +1028,11 @@ namespace AssetsPV
             //36 rotor frame 0 contrast
             new float[] {0.7F,0.8F,0.9F,spin_alpha_0},
             //37 rotor frame 0
-            new float[] {0.65F,0.35F,0.65F,spin_alpha_0},
+            new float[] {0.75F,0.5F,0.75F,spin_alpha_0},
             //38 rotor frame 1 contrast
             new float[] {0.7F,0.8F,0.9F,spin_alpha_1},
             //39 rotor frame 1
-            new float[] {0.65F,0.35F,0.65F,spin_alpha_1},
+            new float[] {0.75F,0.5F,0.75F,spin_alpha_1},
             //40 grass
             new float[] {0.24F,0.55F,0.02F,1F},
             //41 always darker dust

@@ -177,8 +177,6 @@ namespace AssetsPV
                             double h = 0.0, s = 1.0, v = 1.0;
                             bool subtle = VoxelLogic.subtlePalettes.Contains(p);
                             VoxelLogic.ColorToHSV(c, out h, out s, out v);
-                            //                            if(VoxelLogic.subtlePalettes.Contains(p) && i == 0 && j == 0)
-                            //                                Console.WriteLine("palette: " + p + ", current_color: " + current_color + ", s before: " + s + ", s after: " + (VoxelLogic.Clamp(s - 0.3, 0.0, 0.6)));
                             if(subtle)
                             {
                                 s = VoxelLogic.Clamp((s * 0.6), 0.0, 0.6);
