@@ -337,5 +337,60 @@ namespace AssetsPV
             }
             return neo;
         }
+
+        // changers are in format color, frequency, span, color, frequency, span...
+        public static byte[,,] ApplySubTerrain(byte[,,] voxelData, byte[] changers, byte standard, byte dark, byte highlight, byte depth = 1)
+        {
+            int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
+            byte[,,] neo = new byte[xSize, ySize, zSize];
+            byte c = 0;
+            int hilbert = 0;
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    c = voxelData[x, y, 0];
+                    if(c == 0)
+                        continue;
+                    if(c == 253)
+                    {
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - dark * 4);
+                    }
+                    else if(c == 253 - 2 * 4)
+                    {
+
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - highlight * 4);
+                    }
+                    else
+                    {
+                        hilbert = HilbertCode2D(x, y);
+                        for(int h = 0; h < changers.Length - 2; h += 3)
+                        {
+                            if(hilbert % (changers[h + 1] * 3) >= changers[h + 1] * 3 - ((changers[h + 2] * 3) | 1))
+                            {
+                                for(int d = 0; d < depth; d++)
+                                    neo[x, y, d] = (byte)(253 - changers[h] * 4);
+                                break;
+                            }
+                        }
+                    }
+                    /*
+                    if(x == 23 || y == 23 || x == 22 || y == 22 || x == 36 || y == 36 || x == 37 || y == 37)
+                    {
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - standard * 4);
+                    }
+                    else */if(neo[x, y, 0] == 0)
+                    {
+                        for(int d = 0; d < depth; d++)
+                            neo[x, y, d] = (byte)(253 - standard * 4);
+                    }
+                }
+            }
+            return neo;
+        }
+
     }
 }
