@@ -93,7 +93,7 @@ namespace AssetsPV
                 for(int c = 0; c < VoxelLogic.wpalettes[0].Length; c++)
                 {
 
-                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(i) && ((c >= 18 && c <= 20) || (VoxelLogic.VisualMode != "CU" && c == 40))) || VoxelLogic.wpalettes[i][c][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(i) && ((c >= 18 && c <= 20) || c == 16 || (VoxelLogic.VisualMode != "CU" && (c == 40)))) || VoxelLogic.wpalettes[i][c][3] == 0F
                         || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[i][c][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[i][c][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -160,10 +160,10 @@ namespace AssetsPV
                                         {
                                             for(int h = 0; h < 4; h++)
                                             {
-                                                cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 0 * 16 + h];
+                                                cubes2[i][c][sp][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + h];
                                                 if(sp == 0)
                                                 {
-                                                    VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + 0 * 16 + h];
+                                                    VoxelLogic.wrendered[i][c][x * 4 + y * width * 4 + h] = cubes[i][c][sp][x * 4 + h];
                                                 }
                                             }
                                         }
@@ -196,7 +196,8 @@ namespace AssetsPV
                     byte brighti = (byte)(topi - 1);
                     byte dimi = (byte)(topi - 2);
                     byte darki = (byte)(topi - 3);
-                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || (VoxelLogic.VisualMode != "CU" && current_color == 40))) || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 16
+                        || (VoxelLogic.VisualMode != "CU" && (current_color == 40)))) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -605,7 +606,8 @@ namespace AssetsPV
                     byte brighti = (byte)(topi - 1);
                     byte dimi = (byte)(topi - 2);
                     byte darki = (byte)(topi - 3);
-                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || (VoxelLogic.VisualMode != "CU" && current_color == 40))) || VoxelLogic.wpalettes[p][current_color][3] == 0F
+                    string which_image = ((!VoxelLogic.terrainPalettes.Contains(p) && ((current_color >= 18 && current_color <= 20) || current_color == 16
+                        || (VoxelLogic.VisualMode != "CU" && (current_color == 40)))) || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
                        (VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flat_alpha || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.bordered_flat_alpha) ? "flat" : "image";
@@ -1300,11 +1302,11 @@ namespace AssetsPV
                         {
                             for(int f = 0; f < 4; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                             }
                             for(int f = 0; f < 4; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                             }
                         }
                     }
@@ -1322,7 +1324,7 @@ namespace AssetsPV
                         {
                             for(int f = 0; f < 12; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
                             }
                         }
                     }
@@ -1345,7 +1347,7 @@ namespace AssetsPV
                             {
                                 for(int f = 0; f < 16; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
                                 }
                             }
                         }
@@ -1366,11 +1368,11 @@ namespace AssetsPV
                             {
                                 for(int f = 0; f < 4; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                                 }
                                 for(int f = 0; f < 4; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                                 }
                             }
                         }
@@ -1387,7 +1389,7 @@ namespace AssetsPV
                             {
                                 for(int f = 0; f < 12; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
                                 }
                             }
                         }
@@ -1410,7 +1412,7 @@ namespace AssetsPV
                                 {
                                     for(int f = 0; f < 16; f++)
                                     {
-                                        imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                        imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
                                     }
                                 }
                             }
@@ -8352,19 +8354,18 @@ for(int i = 0; i < numBytes; i++)
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
-                    processUnitLargeWMilitary("Tank");
-
+                    /*
                     processUnitLargeWMilitary("Infantry");
                     processUnitLargeWMilitary("Infantry_P");
                     processUnitLargeWMilitary("Infantry_S");
                     processUnitLargeWMilitary("Infantry_T");
-                    /*
+                    
                     processUnitLargeWMilitary("Artillery");
                     processUnitLargeWMilitary("Artillery_P");
                     processUnitLargeWMilitary("Artillery_S");
                     processUnitLargeWMilitary("Artillery_T");
 
-                    //processUnitLargeWMilitary("Tank");
+                    processUnitLargeWMilitary("Tank");
                     processUnitLargeWMilitary("Tank_P");
                     processUnitLargeWMilitary("Tank_S");
                     processUnitLargeWMilitary("Tank_T");
@@ -8402,6 +8403,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Boat");
                     processUnitLargeWMilitary("Boat_P");
                     processUnitLargeWMilitary("Boat_S");
+                    */
                     processUnitLargeWMilitary("Boat_T");
 
                     processUnitLargeWMilitary("Laboratory");
@@ -8415,7 +8417,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Hospital");
                     processUnitLargeWMilitary("Farm");
                     processUnitLargeWMilitary("Oil_Well");
-                    */
+                    
                     /*
                     for(int v = 0; v < CURedux.super_units.Length; v++)
                     {
@@ -8454,12 +8456,12 @@ for(int i = 0; i < numBytes; i++)
                     addon = "";
                 }
 
-                //processReceivingMilitaryW();
+                processReceivingMilitaryW();
                 
                 //processReceivingMilitaryWSuper();
 
 
-                //WriteAllGIFs();
+                WriteAllGIFs();
                 //addon = "Zombie_";
                 //WriteZombieGIFs();
 
