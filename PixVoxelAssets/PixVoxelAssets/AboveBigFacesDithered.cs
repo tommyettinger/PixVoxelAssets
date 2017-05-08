@@ -1302,11 +1302,11 @@ namespace AssetsPV
                         {
                             for(int f = 0; f < 4; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                             }
                             for(int f = 0; f < 4; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                             }
                         }
                     }
@@ -1324,7 +1324,7 @@ namespace AssetsPV
                         {
                             for(int f = 0; f < 12; f++)
                             {
-                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
                             }
                         }
                     }
@@ -1347,7 +1347,7 @@ namespace AssetsPV
                             {
                                 for(int f = 0; f < 16; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
                                 }
                             }
                         }
@@ -1368,11 +1368,11 @@ namespace AssetsPV
                             {
                                 for(int f = 0; f < 4; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                                 }
                                 for(int f = 0; f < 4; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_" + f + ".png");
                                 }
                             }
                         }
@@ -1389,7 +1389,7 @@ namespace AssetsPV
                             {
                                 for(int f = 0; f < 12; f++)
                                 {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_death_" + f + ".png");
                                 }
                             }
                         }
@@ -1412,7 +1412,7 @@ namespace AssetsPV
                                 {
                                     for(int f = 0; f < 16; f++)
                                     {
-                                        imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                        imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + stripped + "/" + u + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
                                     }
                                 }
                             }
@@ -8354,8 +8354,9 @@ for(int i = 0; i < numBytes; i++)
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
-                    /*
+                    
                     processUnitLargeWMilitary("Infantry");
+                    /*
                     processUnitLargeWMilitary("Infantry_P");
                     processUnitLargeWMilitary("Infantry_S");
                     processUnitLargeWMilitary("Infantry_T");
@@ -8381,10 +8382,9 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Volunteer_P");
                     processUnitLargeWMilitary("Volunteer_S");
                     processUnitLargeWMilitary("Volunteer_T");
-                    
 
                     processUnitLargeWMilitary("Civilian");
-
+                    
                     processUnitLargeWMilitary("Truck");
                     processUnitLargeWMilitary("Truck_P");
                     processUnitLargeWMilitary("Truck_S");
@@ -8403,7 +8403,6 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Boat");
                     processUnitLargeWMilitary("Boat_P");
                     processUnitLargeWMilitary("Boat_S");
-                    */
                     processUnitLargeWMilitary("Boat_T");
 
                     processUnitLargeWMilitary("Laboratory");
@@ -8417,7 +8416,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Hospital");
                     processUnitLargeWMilitary("Farm");
                     processUnitLargeWMilitary("Oil_Well");
-                    
+                    */
                     /*
                     for(int v = 0; v < CURedux.super_units.Length; v++)
                     {
@@ -8456,7 +8455,7 @@ for(int i = 0; i < numBytes; i++)
                     addon = "";
                 }
 
-                processReceivingMilitaryW();
+                //processReceivingMilitaryW();
                 
                 //processReceivingMilitaryWSuper();
 
