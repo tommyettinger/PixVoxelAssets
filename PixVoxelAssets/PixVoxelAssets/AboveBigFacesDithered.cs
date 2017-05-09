@@ -13,8 +13,8 @@ namespace AssetsPV
 {
     class AboveBigFacesDithered
     {
-        const bool FORAYS = false;
-        const bool WAR = true;
+        const bool FORAYS = true;
+        const bool WAR = false;
         const bool RENDER = true;
         const bool USE_PALETTE = true;
         const bool ENABLE_SUPER = false;
@@ -8346,7 +8346,7 @@ for(int i = 0; i < numBytes; i++)
             writePaletteImages();
             if(WAR)
             {
-                for(int a = 1; a < 2; a++)
+                for(int a = 2; a < 2; a++)
                 {
                     /*
                     for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -8356,7 +8356,7 @@ for(int i = 0; i < numBytes; i++)
                     */
                     
                     processUnitLargeWMilitary("Infantry");
-                    /*
+                    
                     processUnitLargeWMilitary("Infantry_P");
                     processUnitLargeWMilitary("Infantry_S");
                     processUnitLargeWMilitary("Infantry_T");
@@ -8416,7 +8416,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Hospital");
                     processUnitLargeWMilitary("Farm");
                     processUnitLargeWMilitary("Oil_Well");
-                    */
+                    
                     /*
                     for(int v = 0; v < CURedux.super_units.Length; v++)
                     {
@@ -8460,7 +8460,7 @@ for(int i = 0; i < numBytes; i++)
                 //processReceivingMilitaryWSuper();
 
 
-                WriteAllGIFs();
+                //WriteAllGIFs();
                 //addon = "Zombie_";
                 //WriteZombieGIFs();
 
@@ -8468,7 +8468,7 @@ for(int i = 0; i < numBytes; i++)
                 
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
-                /*
+                
                 renderTerrainSimple("Road", "Ordered", new byte[] {
                     32, 5, 3,
                     33, 7, 3,
@@ -8531,7 +8531,7 @@ for(int i = 0; i < numBytes; i++)
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
-                */
+                
                 
             }
 
@@ -10021,6 +10021,170 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
+
+
+
+                hero_sword = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Longsword", patterns: velvet);
+                processUnitLargeWModel("Heroine_Robe_Sword_Attack", true, 6, hero_sword,
+                    new Pose[] { swing0r, swing1r, swing2r },
+                    new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.7f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.3f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+                processUnitLargeWModel("Heroine_Robe_Sword_Hit", true, 6, hero_sword, new Pose[] { swing0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+                hero_mace = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Mace", patterns: velvet);
+
+                processUnitLargeWModel("Heroine_Robe_Mace_Attack", true, 6, hero_mace,
+                    new Pose[] { swing0r, swing1r, swing2r },
+                    new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.35f },
+                new float[] { 1, 2, 0.65f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.5f },
+                new float[] { 2, 0, 1.0f },});
+
+                processUnitLargeWModel("Heroine_Robe_Mace_Hit", true, 6, hero_mace, new Pose[] { swing0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+                hero_dagger = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Dagger", patterns: velvet);
+
+                processUnitLargeWModel("Heroine_Robe_Dagger_Attack", true, 6, hero_dagger,
+                    new Pose[] { stab0r, stab1r, stab2r, stab1r_alt },
+                    new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.5f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 3, 2, 0.35f },
+                new float[] { 3, 2, 0.1f },
+                new float[] { 3, 2, 0.45f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.35f },
+                new float[] { 2, 0, 0.65f },
+                new float[] { 2, 0, 1.0f },});
+
+                processUnitLargeWModel("Heroine_Robe_Dagger_Hit", true, 6, hero_dagger, new Pose[] { stab0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+                hero_staff = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Staff", patterns: velvet);
+
+                processUnitLargeWModel("Heroine_Robe_Staff_Attack", true, 6, hero_staff,
+                    new Pose[] { spin0r, spin1r_a, spin1r_b, spin1r_c, spin2r },
+                    new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.7f },
+                new float[] { 1, 2, 0.1f },
+                new float[] { 1, 2, 0.6f },
+                new float[] { 2, 3, 0.2f },
+                new float[] { 2, 3, 0.9f },
+                new float[] { 3, 1, 0.7f },
+                new float[] { 1, 4, 0.6f },
+                new float[] { 1, 4, 0.9f },
+                new float[] { 4, 0, 0.2f },
+                new float[] { 4, 0, 0.6f },
+                new float[] { 4, 0, 1.0f },});
+
+                processUnitLargeWModel("Heroine_Robe_Staff_Hit", true, 6, hero_staff, new Pose[] { spin0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+                hero_bow = Model.HumanoidAlt(body: "Human_Female_Robe", left_weapon: "Bow", patterns: velvet);
+
+                processUnitLargeWModel("Heroine_Robe_Bow_Attack", true, 6, hero_bow,
+                    new Pose[] { bow0, bow1, bow2 },
+                    new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.2f },
+                new float[] { 0, 1, 0.4f },
+                new float[] { 0, 1, 0.6f },
+                new float[] { 0, 1, 0.8f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 0, 1, 1.0f },
+                new float[] { 1, 2, 1.0f },
+                new float[] { 2, 0, 0.4f },
+                new float[] { 2, 0, 0.8f },
+                new float[] { 2, 0, 1.0f },});
+
+                processUnitLargeWModel("Heroine_Robe_Bow_Hit", true, 6, hero_bow, new Pose[] { bow0, bow_hit0, bow_hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
+                hero_crossbow = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Crossbow", patterns: velvet);
+
+                processUnitLargeWModel("Heroine_Robe_Crossbow_Attack", true, 6, hero_crossbow,
+                    new Pose[] { crossbow0r, crossbow1r, crossbow2r },
+                    new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 0, 1, 0.3f },
+                new float[] { 0, 1, 0.55f },
+                new float[] { 0, 1, 0.75f },
+                new float[] { 0, 1, 0.9f },
+                new float[] { 0, 1, 1f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 1, 2, 1f },
+                new float[] { 1, 0, 0f },
+                new float[] { 1, 0, 0.3f },
+                new float[] { 1, 0, 0.65f },
+                new float[] { 1, 0, 1f },});
+
+                processUnitLargeWModel("Heroine_Robe_Crossbow_Hit", true, 6, hero_crossbow, new Pose[] { crossbow0r, hit0, hit1 }, new float[][] {
+                new float[] { 0, 1, 0.0f },
+                new float[] { 1, 2, 0.0f },
+                new float[] { 1, 2, 0.5f },
+                new float[] { 2, 1, 0.0f },
+                new float[] { 2, 1, 0.5f },
+                new float[] { 1, 1, 0.0f },
+            });
+
             }
         }
     }
