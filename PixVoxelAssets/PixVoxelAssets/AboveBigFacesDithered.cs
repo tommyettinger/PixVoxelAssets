@@ -8648,7 +8648,7 @@ for(int i = 0; i < numBytes; i++)
 
             if(FORAYS)
             {
-                processTerrainHugeW("Floor", 13, true, false);
+                /*processTerrainHugeW("Floor", 13, true, false);
                 processTerrainHugeW("Wall_Straight", 13, true, true);
                 processTerrainHugeW("Wall_Corner", 13, true, true);
                 processTerrainHugeW("Wall_Tee", 13, true, true);
@@ -8661,7 +8661,7 @@ for(int i = 0; i < numBytes; i++)
 
                 Simplex.InitSimplex();
                 processWater();
-
+                */
                 Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f, true),
                     brownLeatherPattern = new Pattern(253 - 44 * 4, 0, 253 - 43 * 4, 0, 3, 2, 2, 1, 0.6f, true),
                     tanLeatherPattern = new Pattern(253 - 46 * 4, 0, 253 - 45 * 4, 0, 3, 2, 2, 1, 0.6f, true),
@@ -8698,26 +8698,31 @@ for(int i = 0; i < numBytes; i++)
                 .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
                 .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
                 .AddYaw(45, "Torso", "Left_Lower_Leg", "Right_Lower_Leg", "Left_Upper_Leg", "Right_Upper_Leg")
-                .AddYaw(30, "Right_Upper_Arm")
-                .AddYaw(-15, "Right_Lower_Arm")
-                .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
-                .Translate(0, -10, 0, "Left_Lower_Leg")),
+                //.AddRoll(180, "Left_Weapon")
+                .AddYaw(45, "Right_Upper_Arm")
+                .AddYaw(-25, "Right_Lower_Arm")
+                .AddRoll(60, "Left_Upper_Arm", "Left_Lower_Arm")
+                .Translate(0, -10, 0, "Left_Lower_Leg")
+                ),
                 bow1 = (model => model
                 .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
                 .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
                 .AddYaw(45, "Torso", "Left_Lower_Leg", "Right_Lower_Leg", "Left_Upper_Leg", "Right_Upper_Leg")
-                .AddYaw(50, "Right_Upper_Arm")
-                .AddYaw(-35, "Right_Lower_Arm")
-                .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+                //.AddRoll(180, "Left_Weapon")
+                .AddYaw(65, "Right_Upper_Arm")
+                .AddYaw(-45, "Right_Lower_Arm")
+                .AddRoll(60, "Left_Upper_Arm", "Left_Lower_Arm")
                 .AddStretch(0.85f, 1.0f, 1.6f, "Left_Weapon")
-                .Translate(0, -10, 0, "Left_Lower_Leg")),
+                .Translate(0, -10, 0, "Left_Lower_Leg")
+                ),
                 bow2 = (model => model
                 .AddPitch(90, "Left_Weapon", "Left_Lower_Arm", "Right_Lower_Arm")
                 .AddPitch(45, "Left_Upper_Arm", "Right_Upper_Arm")
                 .AddYaw(45, "Torso", "Left_Lower_Leg", "Right_Lower_Leg", "Left_Upper_Leg", "Right_Upper_Leg")
-                .AddYaw(60, "Right_Upper_Arm")
-                .AddYaw(-15, "Right_Lower_Arm")
-                .AddYaw(60, "Left_Upper_Arm", "Left_Lower_Arm")
+                //.AddRoll(180, "Left_Weapon")
+                .AddYaw(75, "Right_Upper_Arm")
+                .AddYaw(-25, "Right_Lower_Arm")
+                .AddRoll(60, "Left_Upper_Arm", "Left_Lower_Arm")
                 .Translate(0, -10, 0, "Left_Lower_Leg")
                 );
 
@@ -8886,7 +8891,7 @@ for(int i = 0; i < numBytes; i++)
                 */
 
                 Model hero_sword, hero_mace, hero_dagger, hero_staff, hero_bow, hero_crossbow;
-
+                /*
                 hero_sword = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Longsword", patterns: leather);
                 processUnitLargeWModel("Hero_Leather_Sword_Attack", true, 0, hero_sword,
                     new Pose[] { swing0r, swing1r, swing2r },
@@ -9316,7 +9321,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            */
 
                 hero_bow = Model.HumanoidAlt(body: "Human_Male_Leather", left_weapon: "Bow", patterns: leather);
 
@@ -9425,7 +9430,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                /*
                 hero_crossbow = Model.HumanoidAlt(body: "Human_Male_Leather", right_weapon: "Crossbow", patterns: leather);
 
                 processUnitLargeWModel("Hero_Leather_Crossbow_Attack", true, 0, hero_crossbow,
@@ -9533,12 +9538,12 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                */
 
 
                 // start of female human renders
 
-
+                /*
                 hero_sword = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Longsword", patterns: leather);
                 processUnitLargeWModel("Heroine_Leather_Sword_Attack", true, 6, hero_sword,
                     new Pose[] { swing0r, swing1r, swing2r },
@@ -9645,7 +9650,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                */
                 hero_bow = Model.HumanoidAlt(body: "Human_Female_Leather", left_weapon: "Bow", patterns: leather);
 
                 processUnitLargeWModel("Heroine_Leather_Bow_Attack", true, 6, hero_bow,
@@ -9672,7 +9677,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                /*
                 hero_crossbow = Model.HumanoidAlt(body: "Human_Female_Leather", right_weapon: "Crossbow", patterns: leather);
 
                 processUnitLargeWModel("Heroine_Leather_Crossbow_Attack", true, 6, hero_crossbow,
@@ -9699,7 +9704,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+/*
                 hero_sword = Model.HumanoidAlt(body: "Human_Female_Chain", right_weapon: "Longsword", patterns: chain);
                 processUnitLargeWModel("Heroine_Chain_Sword_Attack", true, 6, hero_sword,
                     new Pose[] { swing0r, swing1r, swing2r },
@@ -9806,7 +9811,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            */
                 hero_bow = Model.HumanoidAlt(body: "Human_Female_Chain", left_weapon: "Bow", patterns: chain);
 
                 processUnitLargeWModel("Heroine_Chain_Bow_Attack", true, 6, hero_bow,
@@ -9833,7 +9838,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                /*
                 hero_crossbow = Model.HumanoidAlt(body: "Human_Female_Chain", right_weapon: "Crossbow", patterns: chain);
 
                 processUnitLargeWModel("Heroine_Chain_Crossbow_Attack", true, 6, hero_crossbow,
@@ -9967,7 +9972,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            */
                 hero_bow = Model.HumanoidAlt(body: "Human_Female_Plate", left_weapon: "Bow");
 
                 processUnitLargeWModel("Heroine_Plate_Bow_Attack", true, 6, hero_bow,
@@ -9994,7 +9999,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                /*
                 hero_crossbow = Model.HumanoidAlt(body: "Human_Female_Plate", right_weapon: "Crossbow");
 
                 processUnitLargeWModel("Heroine_Plate_Crossbow_Attack", true, 6, hero_crossbow,
@@ -10021,7 +10026,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            
 
 
                 hero_sword = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Longsword", patterns: velvet);
@@ -10130,7 +10135,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            */
                 hero_bow = Model.HumanoidAlt(body: "Human_Female_Robe", left_weapon: "Bow", patterns: velvet);
 
                 processUnitLargeWModel("Heroine_Robe_Bow_Attack", true, 6, hero_bow,
@@ -10157,7 +10162,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+                /*
                 hero_crossbow = Model.HumanoidAlt(body: "Human_Female_Robe", right_weapon: "Crossbow", patterns: velvet);
 
                 processUnitLargeWModel("Heroine_Robe_Crossbow_Attack", true, 6, hero_crossbow,
@@ -10184,7 +10189,7 @@ for(int i = 0; i < numBytes; i++)
                 new float[] { 2, 1, 0.5f },
                 new float[] { 1, 1, 0.0f },
             });
-
+            */
             }
         }
     }
