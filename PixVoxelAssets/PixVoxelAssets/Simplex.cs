@@ -998,7 +998,7 @@ namespace AssetsPV
     
                         //always between 0.0F and 3.0F, tends strongly toward 3.0 anywhere close to center, 0.0 always at edges
                         float contrib = Math.Min(Math.Max(0.0F, (2F - (Math.Max(Math.Abs(59.5F - x), Math.Abs(59.5F - y)) / 30F))), 1F) * 3F;
-                        NoiseGridFlatWaterHuge[v, x, y] = (float)((major.EvaluateFloat(x / 4.0, y / 4.0, v * 2.1) * 3.0F + minor.EvaluateFloat(x / 1.5, y / 1.5, v * 1.2)) / 4.0F) * contrib;
+                        NoiseGridFlatWaterHuge[v, x, y] = ((major.EvaluateFloat(x / 4.0, y / 4.0, v * 2.1) * 3.0F + minor.EvaluateFloat(x / 1.5, y / 1.5, v * 1.2)) / 4.0F) * contrib;
                         //if (Math.Abs(7.5 - x) > 6 || Math.Abs(7.5 - y) > 6)
                         //{
                         //    NoiseGridFlatWater[v, x, y] = orange[x, y] * 0.2F;
@@ -1051,7 +1051,7 @@ namespace AssetsPV
 
                         NoiseGridFlatWaterHuge[v, x, y] /= 3.0F;
                         NoiseGridFlatWaterHuge[v, x, y] += 0.45F;
-                        NoiseGridFlatWaterHuge[v, x, y] = (float)Math.Truncate(NoiseGridFlatWaterHuge[v, x, y] * 32) / 32.0F;
+                        NoiseGridFlatWaterHuge[v, x, y] = (int)(NoiseGridFlatWaterHuge[v, x, y] * 32f) / 32.0F;
 
                     }
                 }

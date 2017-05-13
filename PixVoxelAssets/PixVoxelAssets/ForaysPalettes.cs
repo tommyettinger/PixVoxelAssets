@@ -905,13 +905,13 @@ namespace AssetsPV
             //1 dry bark
             new float[] {0.45F,0.33F,0.15F,grain_some_alpha},
             //2 green leaves contrast
-            new float[] {0.05F,0.35F,0.0F,1F},
+            new float[] {0.08F,0.45F,0.03F,1F},
             //3 green leaves
-            new float[] {0.15F,0.55F,0.1F,1F},
+            new float[] {0.2F,0.65F,0.1F,1F},
             //4 grassy ground contrast
-            new float[] {0.22F,0.6F,0.05F,1F},
+            new float[] {0.15F,0.65F,0.02F,1F},
             //5 grassy ground
-            new float[] {0.35F,0.75F,0.15F,1F},
+            new float[] {0.25F,0.8F,0.1F,1F},
             //6 dead leaves contrast
             new float[] {0.7F,0.57F,0.45F,1F},
             //7 dead leaves
@@ -957,17 +957,17 @@ namespace AssetsPV
             //27 water
             new float[] {0.4F,0.6F,0.9F,flat_alpha},
             //28 fuzz deepest
-            new float[] {0.0F,0.25F,-0.05F,fuzz_alpha},
+            new float[] {0.03F,0.25F,0.01F,fuzz_alpha},
             //29 fuzz deep
-            new float[] {0.05F,0.35F,0.0F,fuzz_alpha},
+            new float[] {0.05F,0.34F,0.02F,fuzz_alpha},
             //30 fuzz mid-deep
-            new float[] {0.1F,0.45F,0.05F,fuzz_alpha},
+            new float[] {0.08F,0.43F,0.04F,fuzz_alpha},
             //31 fuzz mid-light
-            new float[] {0.15F,0.55F,0.1F,fuzz_alpha},
+            new float[] {0.11F,0.52F,0.06F,fuzz_alpha},
             //32 fuzz light
-            new float[] {0.2F,0.65F,0.15F,fuzz_alpha},
+            new float[] {0.15F,0.61F,0.09F,fuzz_alpha},
             //33 fuzz lightest
-            new float[] {0.25F,0.75F,0.2F,fuzz_alpha},
+            new float[] {0.2F,0.7F,0.13F,fuzz_alpha},
             //34 gore
             new float[] {0.67F,0.05F,-0.1F,1F},
             //35 glass

@@ -154,17 +154,17 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         public static void Initialize()
         {
             MovementType[] values = (MovementType[])Enum.GetValues(typeof(MovementType));
-            foreach (MovementType v in values)
+            foreach(MovementType v in values)
             {
                 MobilityToUnits[v] = new List<int>();
             }
-            for (int t = 0; t < Terrains.Length; t++)
+            for(int t = 0; t < Terrains.Length; t++)
             {
                 TerrainLookup[Terrains[t]] = t;
                 TerrainToMobilities[t] = new List<MovementType>();
                 TerrainToUnits[t] = new List<int>();
             }
-            for (int i = 0; i < CurrentUnits.Length; i++)
+            for(int i = 0; i < CurrentUnits.Length; i++)
             {
                 UnitLookup[CurrentUnits[i]] = i;
                 MobilityToUnits[CurrentMobilities[i]].Add(i);
@@ -186,16 +186,16 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             MobilityToTerrains[MovementType.Immobile] =
                 new List<int>() { };
 
-            foreach (var kv in MobilityToTerrains)
+            foreach(var kv in MobilityToTerrains)
             {
-                foreach (int t in kv.Value)
+                foreach(int t in kv.Value)
                 {
                     TerrainToMobilities[t].Add(kv.Key);
                 }
             }
-            foreach (var kv in TerrainToMobilities)
+            foreach(var kv in TerrainToMobilities)
             {
-                foreach (MovementType m in kv.Value)
+                foreach(MovementType m in kv.Value)
                     TerrainToUnits[kv.Key].AddRange(MobilityToUnits[m]);
                 TerrainToUnits[kv.Key] = TerrainToUnits[kv.Key].Distinct().ToList();
             }
@@ -7539,14 +7539,14 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                ColorMatrixFlag.Default,
                ColorAdjustType.Bitmap);
 
-            for (int current_color = 0; current_color < 168; current_color++)
+            for(int current_color = 0; current_color < 168; current_color++)
             {
                 Bitmap b =
                 new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
                 Graphics g = Graphics.FromImage((Image)b);
 
-                if (current_color / 8 == 96 / 8)
+                if(current_color / 8 == 96 / 8)
                 {
                     colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
@@ -7555,7 +7555,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                 }
-                else if (xcolors[current_color][3] == flat_alpha)
+                else if(xcolors[current_color][3] == flat_alpha)
                 {
                     colorMatrix = new ColorMatrix(new float[][]{
    new float[] {0.22F+xcolors[current_color][0],  0,  0,  0, 0},
@@ -7564,7 +7564,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
    new float[] {0,  0,  0,  1F, 0},
    new float[] {0, 0, 0, 0, 1F}});
                 }
-                else if (current_color / 8 == 10) //lights
+                else if(current_color / 8 == 10) //lights
                 {
                     float lightCalc = 0.06F;
                     colorMatrix = new ColorMatrix(new float[][]{
@@ -7599,23 +7599,23 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                    GraphicsUnit.Pixel,
                    imageAttributes);
                 cubes[current_color] = new byte[80];
-                for (int i = 0; i < width; i++)
+                for(int i = 0; i < width; i++)
                 {
-                    for (int j = 0; j < height; j++)
+                    for(int j = 0; j < height; j++)
                     {
                         try
                         {
                             Color c = b.GetPixel(i, j);
                             double h = 0.0, s = 1.0, v = 1.0;
-                            if (!(current_color / 8 == 10 || current_color / 8 == 13 || current_color / 8 == 14) &&
+                            if(!(current_color / 8 == 10 || current_color / 8 == 13 || current_color / 8 == 14) &&
                                 (xcolors[current_color][3] == 1F || current_color / 8 == 15 || current_color / 8 == 16))
                             {
-                                if (j == 0)
+                                if(j == 0)
                                 {
                                     ColorToHSV(c, out h, out s, out v);
                                     c = ColorFromHSV(h, Math.Min(1.0, s * 1.1), v);
                                 }
-                                else if (i >= width / 2 || j == height - 1)
+                                else if(i >= width / 2 || j == height - 1)
                                 {
                                     ColorToHSV(c, out h, out s, out v);
                                     c = ColorFromHSV(h, Math.Min(1.0, s * 1.35), Math.Max(0.01, v * ((xcolors[current_color][0] + xcolors[current_color][1] + xcolors[current_color][2] > 2.5) ? 1.0 : 0.85)));
@@ -7626,7 +7626,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                     c = ColorFromHSV(h, Math.Min(1.0, s * 1.2), Math.Max(0.01, v * ((xcolors[current_color][0] + xcolors[current_color][1] + xcolors[current_color][2] > 2.5) ? 1.0 : 0.95)));
                                 }
                             }
-                            if (c.A != 0)
+                            if(c.A != 0)
                             {
                                 cubes[current_color][i * 4 + j * width * 4 + 0] = Math.Max((byte)1, c.B);
                                 cubes[current_color][i * 4 + j * width * 4 + 1] = Math.Max((byte)1, c.G);
@@ -7641,7 +7641,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                                 cubes[current_color][i * 4 + j * width * 4 + 3] = 0;
                             }
                         }
-                        catch (Exception e)
+                        catch(Exception e)
                         {
                             Console.WriteLine(e.StackTrace);
                             Console.WriteLine(e.InnerException);
@@ -7650,9 +7650,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 }
 
             }
-            for (int current_color = 80; current_color < 88; current_color++)
+            for(int current_color = 80; current_color < 88; current_color++)
             {
-                for (int frame = 0; frame < 4; frame++)
+                for(int frame = 0; frame < 4; frame++)
                 {
                     Bitmap b =
                     new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -7681,9 +7681,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                        imageAttributes);
 
                     cubes[88 + current_color + (8 * frame)] = new byte[80];
-                    for (int i = 0; i < width; i++)
+                    for(int i = 0; i < width; i++)
                     {
-                        for (int j = 0; j < height; j++)
+                        for(int j = 0; j < height; j++)
                         {
                             Color c = b.GetPixel(i, j);
 
@@ -7831,7 +7831,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static int[] subtlePalettes = { 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 },
             drabPalettes = { },// { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
-            terrainPalettes = { };
+            terrainPalettes = AboveBigFacesDithered.FORAYS ? new int[]{13, 14, 15} : new int[] { };
         static VoxelLogic()
         {
             wpalettecount = wpalettes.Length;
