@@ -3851,7 +3851,7 @@ namespace AssetsPV
                                 mod_color = current_color;
                                 if(i % 4 == 3)
                                 {
-                                    double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant);
+                                    double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant, 0);
 
                                     if(wave > 0.73)
                                     {

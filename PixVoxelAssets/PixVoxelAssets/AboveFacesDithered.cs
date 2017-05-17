@@ -7257,7 +7257,7 @@ for(int i = 0; i < numBytes; i++)
                     //int unshaded = VoxelLogic.WithoutShadingK(vx.color);
                     //int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + kcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - clear) / 4 : (253 - vx.color) / 4;
                     int mod_color = current_color;
-                    double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant);
+                    double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant, 0);
                     /*
                     if(wave > 0.73)
                     {

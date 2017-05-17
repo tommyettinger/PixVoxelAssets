@@ -606,7 +606,7 @@ namespace AssetsPV
                     byte brighti = (byte)(topi - 1);
                     byte dimi = (byte)(topi - 2);
                     byte darki = (byte)(topi - 3);
-                    string which_image = (((!FORAYS || p != 15) && ((current_color >= 18 && current_color <= 20) || current_color == 16
+                    string which_image = (((FORAYS && p == 15) || ((current_color >= 18 && current_color <= 20) || current_color == 16
                         || (VoxelLogic.VisualMode != "CU" && (current_color == 40))))// || VoxelLogic.wpalettes[p][current_color][3] == 0F
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha
                         || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_0 || VoxelLogic.wpalettes[p][current_color][3] == VoxelLogic.flash_alpha_1) ? "shine" :
@@ -620,7 +620,7 @@ namespace AssetsPV
                                 byte[] c2 = new byte[] { 0, 0, 0, 0 };
 
                                 {
-                                    if(j == height - 1)
+                                    if(j == height - 1 && !which_image.Equals("shine"))
                                     {
                                         c2 = new byte[] { darki, darki, darki, darki };
                                         // c2 = VoxelLogic.ColorFromHSV(h, VoxelLogic.Clamp((s + s * s * s * Math.Pow(s, 0.3)) * 1.55, 0.0112, 1.0), VoxelLogic.Clamp(v_alter * 0.5, 0.01, 1.0));
@@ -7240,7 +7240,7 @@ for(int i = 0; i < numBytes; i++)
             */
 
         }
-        private static FaceVoxel[,,] generateWaterMask(int facing, int variant)
+        private static FaceVoxel[,,] generateWaterMask(int facing, int variant, int frame)
         {
             rng = new Random(0xb335);
             int rows = HugeHeight * 2, cols = HugeWidth * 2;
@@ -7271,7 +7271,7 @@ for(int i = 0; i < numBytes; i++)
                     //int unshaded = VoxelLogic.WithoutShadingK(vx.color);
                     //int current_color = ((255 - vx.color) % 4 == 0) ? (255 - vx.color) / 4 + kcolorcount : ((254 - vx.color) % 4 == 0) ? (253 - clear) / 4 : (253 - vx.color) / 4;
                     int mod_color = current_color;
-                    double wave = Simplex.FindNoiseFlatWaterHuge(facing, vx.x, vx.y, variant);
+                    double wave = Simplex.FindNoiseFlatWater48(facing, vx.x - 36, vx.y - 36, variant, frame);
                     /*
                     if(wave > 0.73)
                     {
@@ -7497,19 +7497,36 @@ for(int i = 0; i < numBytes; i++)
             wditheredcurrent = wdithered[15];
             wditheredcurrentortho = wditheredortho[15];
 
-            string folder = altFolder + "Water/";
+            string folder = altFolder + "Water/", tsi, tso;
             Directory.CreateDirectory(folder);
+            Directory.CreateDirectory("gifs/" + altFolder + "Water");
             ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
-            byte[][] data;
+            List<string> iso = new List<string> { "", "", "", ""}, ortho = new List<string> { "", "", "", "" };
             for(int v = 0; v < 16; v++)
-            { //
+            {
                 for(int dir = 0; dir < 4; dir++)
                 {
-                    FaceVoxel[,,] faces = generateWaterMask(dir, v);
-                    PngWriter png = FileHelper.CreatePngWriter(folder + "/palette15_Water_Iso_face" + dir + "_" + string.Format("{0:x}", v) + ".png", imi, true);
-                    WritePNG(png, processFrameHugeW(faces, 15, dir, 0, 1, true, true), simplepalettes[15]);
-                    png = FileHelper.CreatePngWriter(folder + "/palette15_Water_Ortho_face" + dir + "_" + string.Format("{0:x}", v) + ".png", imi, true);
-                    WritePNG(png, processFrameHugeOrthoW(faces, 15, dir, 0, 1, true, true), simplepalettes[15]);
+                    for(int frame = 0; frame < 3; frame++)
+                    {
+                        FaceVoxel[,,] faces = generateWaterMask(dir, v, frame);
+                        PngWriter png = FileHelper.CreatePngWriter(tsi = ($"{folder}palette15_Water_Iso_face{dir}_{v:x}_{frame}.png"), imi, true);
+                        iso[frame] = tsi;
+                        WritePNG(png, processFrameHugeW(faces, 15, dir, 0, 1, true, true), simplepalettes[15]);
+                        png = FileHelper.CreatePngWriter(tso = ($"{folder}palette15_Water_Ortho_face{dir}_{v:x}_{frame}.png"), imi, true);
+                        ortho[frame] = tso;
+                        WritePNG(png, processFrameHugeOrthoW(faces, 15, dir, 0, 1, true, true), simplepalettes[15]);
+                        if(frame == 1)
+                        {
+                            png = FileHelper.CreatePngWriter(tsi = ($"{folder}palette15_Water_Iso_face{dir}_{v:x}_3.png"), imi, true);
+                            iso[3] = tsi;
+                            WritePNG(png, processFrameHugeW(faces, 15, dir, 0, 1, true, true), simplepalettes[15]);
+                            png = FileHelper.CreatePngWriter(tso = ($"{folder}palette15_Water_Ortho_face{dir}_{v:x}_3.png"), imi, true);
+                            ortho[3] = tso;
+                            WritePNG(png, processFrameHugeOrthoW(faces, 15, dir, 0, 1, true, true), simplepalettes[15]);
+                        }
+                    }
+                    WriteGIF(iso, 22, $"gifs/{altFolder}Water/palette15_Water_Iso_face{dir}_{v:x}");
+                    WriteGIF(ortho, 22, $"gifs/{altFolder}Water/palette15_Water_Ortho_face{dir}_{v:x}");
                 }
             }
         }
@@ -8630,20 +8647,19 @@ for(int i = 0; i < numBytes; i++)
 
             if(FORAYS)
             {
+                Simplex.InitSimplex();
                 /*
-                processTerrainHugeW("Floor", 13, true, false);
-                
+                processTerrainHugeW("Floor", 13, true, false);                
                 processTerrainHugeW("Wall_Straight", 13, true, true);
                 processTerrainHugeW("Wall_Corner", 13, true, true);
                 processTerrainHugeW("Wall_Tee", 13, true, true);
                 processTerrainHugeW("Wall_Cross", 13, true, true);
                 processTerrainHugeW("Door_Closed", 13, true, true);
                 processTerrainHugeW("Door_Open", 13, true, true);
-                processTerrainHugeW("Boulder", 13, true, true);*/
-                processTerrainHugeW("Grass", 14, true, false);
+                processTerrainHugeW("Boulder", 13, true, true);
                 processTerrainHugeW("Rubble", 13, true, true);
-                
-                Simplex.InitSimplex();
+                processTerrainHugeW("Grass", 14, true, false);
+                */
                 processWater();
                 
                 Pattern blackLeatherPattern = new Pattern(253 - 48 * 4, 0, 253 - 47 * 4, 0, 5, 2, 3, 1, 0.5f, true),
