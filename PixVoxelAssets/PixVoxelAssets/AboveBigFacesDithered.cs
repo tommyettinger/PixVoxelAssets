@@ -999,13 +999,13 @@ namespace AssetsPV
             }
             return cubes2;
         }
+        //public static int[] hilbertX, hilbertY, hilbertDist;
 
         public static byte[][][][] wrendered, wdithered, wditheredortho;
         public static byte[][][] wcurrent, wditheredcurrent, wditheredcurrentortho;
 
         public static byte[][][] simplepalettes;
         public static byte[][] basepalette, exactpalettes;
-        //public static int[] hilbertX, hilbertY, hilbertDist;
         public static void InitializeWPalette()
         {
             if(VoxelLogic.VisualMode == "CU")
@@ -5296,6 +5296,7 @@ namespace AssetsPV
                                 }
                             }
                         }
+                        if(shade) editValues[i] = outlineValues[i];
                         /*if((i + 1 >= 0 && i + 1 < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1] == 0 && lightOutline) || (barePositions[i + 1] == false && zbuffer[i] - zbd > zbuffer[i + 1]))) { editValues[i + 1] = outlineValues[i]; shade = true; }
                         if((i - cols >= 0 && i - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - cols] == 0 && lightOutline) || (barePositions[i - cols] == false && zbuffer[i] - zbd > zbuffer[i - cols]))) { editValues[i - cols] = outlineValues[i]; shade = true; }
                         if((i + cols >= 0 && i + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + cols] == 0 && lightOutline) || (barePositions[i + cols] == false && zbuffer[i] - zbd > zbuffer[i + cols]))) { editValues[i + cols] = outlineValues[i]; shade = true; }
@@ -5305,7 +5306,6 @@ namespace AssetsPV
                         if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
                         if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
                         */
-                        if(shade) editValues[i] = outlineValues[i];
                     }
                 }
 
