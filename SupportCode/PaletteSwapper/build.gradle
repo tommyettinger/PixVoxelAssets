@@ -1,0 +1,52 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+  dependencies {
+    classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+  }
+}
+
+allprojects {
+  apply plugin: 'eclipse'
+  apply plugin: 'idea'
+}
+
+configure(subprojects) {
+  apply plugin: 'java'
+  sourceCompatibility = 1.6
+}
+
+subprojects {
+  version = '0.0.1-SNAPSHOT'
+  ext.appName = 'PaletteSwapper'
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+}
+
+// Clearing Eclipse project data in root folder:
+tasks.eclipse.doLast {
+  delete '.project'
+  delete '.classpath'
+  delete '.settings/'
+}
+
+// Run `gradle pack` task to generate skin.atlas file at assets/ui.
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+task pack << {
+  // Note that if you need multiple atlases, you can duplicate the
+  // TexturePacker.process invocation and change paths to generate
+  // additional atlases with this task.
+  TexturePacker.process(
+    'raw/ui',           // Raw assets path.
+    'assets/ui',        // Output directory.
+    'skin'              // Name of the generated atlas (without extension).
+  )
+}
