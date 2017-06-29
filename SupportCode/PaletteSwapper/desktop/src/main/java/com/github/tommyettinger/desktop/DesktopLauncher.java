@@ -18,8 +18,8 @@ public class DesktopLauncher {
     private static LwjglApplicationConfiguration getDefaultConfiguration() {
         LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
         configuration.title = "PaletteSwapper";
-        configuration.width = 640;
-        configuration.height = 480;
+        configuration.width = 1350;
+        configuration.height = 650;
         for (int size : new int[] { 128, 64, 32, 16 }) {
             configuration.addIcon("icon" + size + ".png", FileType.Internal);
         }

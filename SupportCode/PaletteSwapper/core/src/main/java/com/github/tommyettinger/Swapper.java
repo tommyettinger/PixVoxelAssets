@@ -3,14 +3,19 @@ package com.github.tommyettinger;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectIntMap;
+import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.OrderedSet;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
@@ -18,14 +23,17 @@ import com.kotcrab.vis.ui.widget.VisWindow;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Swapper extends ApplicationAdapter {
     private Stage stage;
-    private ObjectIntMap<String> paintColors, skinHairColors;
-    String[] paintArray, skinHairArray;
+    private ObjectIntMap<String> paintColors, skinHairColors, weaponMapping;
+    private OrderedMap<String, String> unitMapping;
+    private String[] paintArray, skinHairArray, unitArray;
+    private OrderedSet<String> femaleUnits;
 
     @Override
     public void create () {
         VisUI.load(SkinScale.X1);
         paintColors = new ObjectIntMap<String>(11);
         skinHairColors = new ObjectIntMap<String>(32);
+        weaponMapping = new ObjectIntMap<String>(64);
         paintArray = new String[]{
                 "Dark",
                 "White",
@@ -40,54 +48,230 @@ public class Swapper extends ApplicationAdapter {
             paintColors.put(paintArray[i], i);
         }
         skinHairArray = new String[]{
-                "Pale Skin, Blond Hair",
-                "Pale Skin, Red Hair",
-                "Pale Skin, Gray Hair",
-                "Pale Skin, No Hair",
-                "Light Skin, Brown Hair",
-                "Light Skin, Black Hair",
-                "Light Skin, Blond Hair",
-                "Light Skin, Gray Hair",
-                "Light Skin, No Hair",
-                "Gold Skin, Black Hair",
-                "Gold Skin, Gray Hair",
-                "Gold Skin, No Hair",
-                "Gold Skin, Scarlet Hair",
-                "Gold Skin, Green Hair",
-                "Gold Skin, Blue Hair",
-                "Gold Skin, Magenta Hair",
-                "Olive (Medium Brown) Skin, Black Hair",
-                "Olive (Medium Brown) Skin, Gray Hair",
-                "Olive (Medium Brown) Skin, No Hair",
-                "Ochre (Warm Brown) Skin, Black Hair",
-                "Ochre (Warm Brown) Skin, Gray Hair",
-                "Ochre (Warm Brown) Skin, No Hair",
-                "Coffee (Dark Brown) Skin, Black Hair",
-                "Coffee (Dark Brown) Skin, Blond Hair",
-                "Coffee (Dark Brown) Skin, Gray Hair",
-                "Coffee (Dark Brown) Skin, No Hair",
+                "Pale Skin\nBlond Hair",
+                "Pale Skin\nRed Hair",
+                "Pale Skin\nGray Hair",
+                "Pale Skin\nNo Hair",
+                "Light Skin\nBrown Hair",
+                "Light Skin\nBlack Hair",
+                "Light Skin\nBlond Hair",
+                "Light Skin\nGray Hair",
+                "Light Skin\nNo Hair",
+                "Gold Skin\nBlack Hair",
+                "Gold Skin\nGray Hair",
+                "Gold Skin\nNo Hair",
+                "Gold Skin\nScarlet Hair",
+                "Gold Skin\nGreen Hair",
+                "Gold Skin\nBlue Hair",
+                "Gold Skin\nMagenta Hair",
+                "Mid Brown Skin\nBlack Hair",
+                "Mid Brown Skin\nGray Hair",
+                "Mid Brown Skin\nNo Hair",
+                "Warm Brown Skin\nBlack Hair",
+                "Warm Brown Skin\nGray Hair",
+                "Warm Brown Skin\nNo Hair",
+                "Dark Brown Skin\nBlack Hair",
+                "Dark Brown Skin\nBlond Hair",
+                "Dark Brown Skin\nGray Hair",
+                "Dark Brown Skin\nNo Hair",
         };
         for (int i = 0; i < skinHairArray.length; i++) {
             skinHairColors.put(skinHairArray[i], i);
         }
+        unitArray = new String[]{
+                "Infantry",
+                "Bazooka",
+                "Bike",
+                "Rifle Sniper",
+                "Missile Sniper",
+                "Mortar Sniper",
+                "Light Tank",
+                "War Tank",
+                "Heavy Cannon",
+                "Light Artillery",
+                "AA Artillery",
+                "Stealth Artillery",
+                "Recon",
+                "AA Gun",
+                "Flamethrower",
+                "Prop Plane",
+                "Heavy Bomber",
+                "Fighter Jet",
+                "Supply Truck",
+                "Amphi Transport",
+                "Transport Copter",
+                "Jetpack",
+                "Gunship Copter",
+                "Blitz Copter",
+                "Build Rig",
+                "Jammer",
+                "Comm Copter",
+                "Sapper",
+                "Submarine",
+                "Stealth Jet",
+                "Patrol Boat",
+                "Cruiser",
+                "Battleship",
+                "Volunteer",
+                "Engineer",
+                "Smuggler",
+                "Medic",
+                "Civilian"
+        };
+        femaleUnits = new OrderedSet<String>(32);
+        femaleUnits.addAll(
+                "Infantry",
+                "Infantry_P",
+                "Infantry_S",
+                "Infantry_T",
+                "Infantry_PS",
+                "Infantry_PT",
+                "Infantry_ST",
+                "Artillery",
+                "Artillery_P",
+                "Artillery_S",
+                "Artillery_T",
+                "Tank",
+                "Tank_P",
+                "Tank_S",
+                "Tank_T",
+                "Truck_P",
+                "Recon",
+                "Flamethrower",
+                "Volunteer",
+                "Volunteer_P",
+                "Volunteer_S",
+                "Volunteer_T",
+                "Civilian"
+        );
+        unitMapping = new OrderedMap<String, String>(64);
+        unitMapping.put("Infantry", "Infantry");
+        unitMapping.put("Bazooka", "Infantry_P");
+        unitMapping.put("Bike", "Infantry_S");
+        unitMapping.put("Rifle Sniper", "Infantry_T");
+        unitMapping.put("Missile Sniper", "Infantry_PS");
+        unitMapping.put("Mortar Sniper", "Infantry_PT");
+        unitMapping.put("Light Tank", "Tank");
+        unitMapping.put("War Tank", "Tank_P");
+        unitMapping.put("Heavy Cannon", "Artillery_P");
+        unitMapping.put("Light Artillery", "Artillery");
+        unitMapping.put("AA Artillery", "Artillery_S");
+        unitMapping.put("Stealth Artillery", "Artillery_T");
+        unitMapping.put("Recon", "Recon");
+        unitMapping.put("AA Gun", "Tank_S");
+        unitMapping.put("Flamethrower", "Flamethrower");
+        unitMapping.put("Prop Plane", "Plane");
+        unitMapping.put("Heavy Bomber", "Plane_P");
+        unitMapping.put("Fighter Jet", "Plane_S");
+        unitMapping.put("Supply Truck", "Truck");
+        unitMapping.put("Amphibious Transport", "Truck_S");
+        unitMapping.put("Transport Copter", "Copter");
+        unitMapping.put("Jetpack", "Infantry_ST");
+        unitMapping.put("Gunship Copter", "Copter_P");
+        unitMapping.put("Blitz Copter", "Copter_S");
+        unitMapping.put("Build Rig", "Truck_T");
+        unitMapping.put("Jammer", "Truck_P");
+        unitMapping.put("Comm Copter", "Copter_T");
+        unitMapping.put("Sapper", "Tank_T");
+        unitMapping.put("Submarine", "Boat_T");
+        unitMapping.put("Stealth Jet", "Plane_T");
+        unitMapping.put("Patrol Boat", "Boat");
+        unitMapping.put("Cruiser", "Boat_S");
+        unitMapping.put("Battleship", "Boat_P");
+        unitMapping.put("Civilian", "Civilian");
+        unitMapping.put("Volunteer", "Volunteer");
+        unitMapping.put("Engineer", "Volunteer_P");
+        unitMapping.put("Smuggler", "Volunteer_S");
+        unitMapping.put("Medic", "Volunteer_T");
+
+        weaponMapping.put("Infantry", 1);
+        weaponMapping.put("Infantry_P", 3);
+        weaponMapping.put("Infantry_S", 1);
+        weaponMapping.put("Infantry_T", 3);
+        weaponMapping.put("Infantry_PS", 1);
+        weaponMapping.put("Infantry_PT", 2);
+        weaponMapping.put("Infantry_ST", 1);
+        weaponMapping.put("Artillery", 2);
+        weaponMapping.put("Artillery_P", 1);
+        weaponMapping.put("Artillery_S", 2);
+        weaponMapping.put("Artillery_T", 2);
+        weaponMapping.put("Tank", 3);
+        weaponMapping.put("Tank_P", 3);
+        weaponMapping.put("Tank_S", 1);
+        weaponMapping.put("Tank_T", 3);
+        weaponMapping.put("Plane", 1);
+        weaponMapping.put("Plane_P", 2);
+        weaponMapping.put("Plane_S", 1);
+        weaponMapping.put("Plane_T", 1);
+        weaponMapping.put("Truck", 0);
+        weaponMapping.put("Truck_P", 0);
+        weaponMapping.put("Truck_S", 0);
+        weaponMapping.put("Truck_T", 0);
+        weaponMapping.put("Copter", 0);
+        weaponMapping.put("Copter_P", 3);
+        weaponMapping.put("Copter_S", 1);
+        weaponMapping.put("Copter_T", 0);
+        weaponMapping.put("Boat", 1);
+        weaponMapping.put("Boat_P", 1);
+        weaponMapping.put("Boat_S", 3);
+        weaponMapping.put("Boat_T", 3);
+        weaponMapping.put("Recon", 1);
+        weaponMapping.put("Flamethrower", 1);
+        weaponMapping.put("City", 0);
+        weaponMapping.put("Factory", 0);
+        weaponMapping.put("Airport", 0);
+        weaponMapping.put("Dock", 0);
+        weaponMapping.put("Laboratory", 0);
+        weaponMapping.put("Castle", 0);
+        weaponMapping.put("Estate", 0);
+        weaponMapping.put("Volunteer", 0);
+        weaponMapping.put("Volunteer_P", 0);
+        weaponMapping.put("Volunteer_S", 0);
+        weaponMapping.put("Volunteer_T", 0);
+        weaponMapping.put("Civilian", 0);
+
+        TextureAtlas atlas = new TextureAtlas("WargameAbove.atlas");
+        Texture palette = new Texture("palettes/default.png");
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         VisTable root = new VisTable();
         root.setFillParent(true);
         stage.addActor(root);
-
-        final VisTextButton textButton = new VisTextButton("click me!");
+        VisWindow window = new VisWindow("Palette Swapper");
+        window.add("Select what palettes to use").pad(5f).row();
+        window.add("Paint and Uniform Colors:").pad(5f).row();;
+        final VisCheckBox[] paintBoxes = new VisCheckBox[8], skinBoxes = new VisCheckBox[skinHairArray.length],
+        unitBoxes = new VisCheckBox[unitArray.length];
+        for (int i = 0; i < 8; i++) {
+            window.add(paintBoxes[i] = new VisCheckBox(paintArray[i] + " Paint", i < 2)).pad(5f);
+        }
+        window.row();
+        window.add("Skin and Hair Colors:").pad(5f).row();
+        for (int i = 0; i < skinHairArray.length; i++) {
+            window.add(skinBoxes[i] = new VisCheckBox(skinHairArray[i], true)).pad(5f);
+            if(i % 8 == 7)
+                window.row();
+        }
+        window.row();
+        window.add("Unit Types:").pad(5f).row();
+        for (int i = 0; i < unitArray.length; i++) {
+            window.add(unitBoxes[i] = new VisCheckBox(unitArray[i], i == 0)).pad(5f);
+            if(i % 8 == 7)
+                window.row();
+        }
+        window.row();
+        VisCheckBox female = new VisCheckBox("Generate Female Units (Where Possible)?", true);
+        window.add(female);
+        window.row();
+        final VisTextButton textButton = new VisTextButton("Generate!");
         textButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                textButton.setText("clicked");
-                Dialogs.showOKDialog(stage, "message", "good job!");
+                Dialogs.showOKDialog(stage, "Sorry!", "Not implemented just yet!");
             }
         });
 
-        VisWindow window = new VisWindow("example window");
-        window.add("this is a simple VisUI window").padTop(5f).row();
         window.add(textButton).pad(10f);
         window.pack();
         window.centerWindow();
