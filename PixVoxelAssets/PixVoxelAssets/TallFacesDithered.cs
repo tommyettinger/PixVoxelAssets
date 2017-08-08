@@ -8471,8 +8471,8 @@ namespace AssetsPV
 
             VoxelLogic.Initialize();
             VoxelLogic.VisualMode = "CU";
-            altFolder = "Diverse_PixVoxel_Wargame_Iso_Mini/";
-            blankFolder = "Blank_PixVoxel_Wargame_Iso_Mini/";
+            altFolder = "Diverse_PixVoxel_Wargame_Iso_Mini2/";
+            blankFolder = "Blank_PixVoxel_Wargame_Iso_Mini2/";
             CURedux.Initialize(true);
             /*
             VoxelLogic.VisualMode = "W";

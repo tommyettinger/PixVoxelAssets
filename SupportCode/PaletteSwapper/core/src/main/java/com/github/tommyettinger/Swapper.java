@@ -106,7 +106,7 @@ public class Swapper extends ApplicationAdapter {
                 "Build Rig",
                 "Jammer",
                 "Comm Copter",
-                "Sapper",
+                "Mud Tank",
                 "Submarine",
                 "Stealth Jet",
                 "Patrol Boat",
@@ -172,17 +172,17 @@ public class Swapper extends ApplicationAdapter {
         unitMapping.put("Build Rig", "Truck_T");
         unitMapping.put("Jammer", "Truck_P");
         unitMapping.put("Comm Copter", "Copter_T");
-        unitMapping.put("Sapper", "Tank_T");
+        unitMapping.put("Mud Tank", "Tank_T");
         unitMapping.put("Submarine", "Boat_T");
         unitMapping.put("Stealth Jet", "Plane_T");
         unitMapping.put("Patrol Boat", "Boat");
         unitMapping.put("Cruiser", "Boat_S");
         unitMapping.put("Battleship", "Boat_P");
-        unitMapping.put("Civilian", "Civilian");
         unitMapping.put("Volunteer", "Volunteer");
         unitMapping.put("Engineer", "Volunteer_P");
         unitMapping.put("Smuggler", "Volunteer_S");
         unitMapping.put("Medic", "Volunteer_T");
+        unitMapping.put("Civilian", "Civilian");
 
         weaponMapping.put("Infantry", 1);
         weaponMapping.put("Infantry_P", 3);
@@ -239,7 +239,6 @@ public class Swapper extends ApplicationAdapter {
         root.setFillParent(true);
         stage.addActor(root);
         VisWindow window = new VisWindow("Palette Swapper");
-        window.add("Select what palettes to use").pad(5f).row();
         window.add("Paint and Uniform Colors:").pad(5f).row();;
         final VisCheckBox[] paintBoxes = new VisCheckBox[8], skinBoxes = new VisCheckBox[skinHairArray.length],
         unitBoxes = new VisCheckBox[unitArray.length];
@@ -261,8 +260,14 @@ public class Swapper extends ApplicationAdapter {
                 window.row();
         }
         window.row();
-        VisCheckBox female = new VisCheckBox("Generate Female Units (Where Possible)?", true);
+        VisCheckBox female = new VisCheckBox("Generate Female Units?", true);
+        VisCheckBox receiving = new VisCheckBox("Generate 'receiving\nattack' animations?", false);
+        VisCheckBox environment = new VisCheckBox("Generate flat\nenvironment tiles?", false);
+        VisCheckBox slopes = new VisCheckBox("Generate sloped\nenvironment tiles?", false);
         window.add(female);
+        window.add(receiving);
+        window.add(environment);
+        window.add(slopes);
         window.row();
         final VisTextButton textButton = new VisTextButton("Generate!");
         textButton.addListener(new ChangeListener() {

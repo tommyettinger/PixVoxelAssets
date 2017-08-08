@@ -2819,7 +2819,7 @@ namespace AssetsPV
 
             VoxelLogic.wpalettecount = wpalettes_alt.Length;
             int wpc = VoxelLogic.wpalettecount;
-            /*
+           
             for(int c = 6; c <= 11; c++)
             {
                 for(int p = 0; p < wpc; p++)
@@ -2868,7 +2868,7 @@ namespace AssetsPV
             }
             VoxelLogic.wpalettecount = wpalettes.Length;
             wpc = VoxelLogic.wpalettecount;
-            */
+            
             
             VoxelLogic.terrainPalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
             VoxelLogic.subtlePalettes = new int[] { wpc, wpc + 1, wpc + 2, wpc + 3 };
