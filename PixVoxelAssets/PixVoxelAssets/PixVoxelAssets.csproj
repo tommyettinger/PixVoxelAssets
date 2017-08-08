@@ -137,12 +137,11 @@
     <Content Include="LivingTemplateStill.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Pngcs.dll">
+    <Content Include="Pngcs.dll" />
+    <Content Include="Pngcs.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Pngcs.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Pngcs.xml" />
     <Content Include="TemplateGif.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
