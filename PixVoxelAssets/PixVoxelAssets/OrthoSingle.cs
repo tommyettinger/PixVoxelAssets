@@ -33,7 +33,8 @@ namespace AssetsPV
             //widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2) * (vheight - top) + 2,
             widthHuge = (60 * multiplier * vwidth + 1), heightHuge = ((40 + 60) * multiplier * (vheight - top) + 1),
             widthMassive = (80 * multiplier * vwidth + 1), heightMassive = ((60 + 80) * multiplier * (vheight - top) + 1);
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
+        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         //private static FileStream offbin = new FileStream("offsets3dither.bin", FileMode.OpenOrCreate);
@@ -48,7 +49,7 @@ namespace AssetsPV
         public static string[] classes = TallVoxels.classes;
         private static byte[][][] storeColorCubesWBold()
         {
-            r = new Random(0x1337BEEF);
+            r.FromSnapshot(rState);
             VoxelLogic.wpalettecount = VoxelLogic.wpalettes.Length;
             //            wcolorcount = VoxelLogic.wpalettes[0].Length;
             int width = vwidth;
@@ -4658,11 +4659,11 @@ namespace AssetsPV
             }
 
         }
-        public static Random rng = new Random(0x1337BEEF);
+        public static PRNG rng = new PRNG(0x1337BEEF);
 
         private static byte[][] renderGenericW(byte[,,] colors, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
         {
-            rng = new Random(0xb335 + frame / 2);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
 
             //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;

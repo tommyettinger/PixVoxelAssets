@@ -9,7 +9,8 @@ namespace AssetsPV
 {
     class CURedux
     {
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
+        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
 
         public static string[] normal_units = new string[]
         {

@@ -103,6 +103,7 @@
     <Compile Include="PatternLogic.cs" />
     <Compile Include="ForaysPalettes.cs" />
     <Compile Include="AboveFacesDithered.cs" />
+    <Compile Include="PRNG.cs" />
     <Compile Include="TallFacesDithered.cs" />
     <Compile Include="TallFaces.cs" />
     <Compile Include="TinyOrthoVoxels.cs" />

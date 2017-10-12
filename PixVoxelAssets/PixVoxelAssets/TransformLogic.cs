@@ -12,7 +12,7 @@ namespace AssetsPV
     {
         public static int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
         public const float DegreesToRadians = (float)(Math.PI / 180), RadiansToDegrees = (float)(180 / Math.PI);
-        private Random r = new Random(0x1337BEEF);
+        private PRNG r = PRNG.r;
         public byte[,,] Colors;
         public string Name;
 
@@ -1302,7 +1302,7 @@ namespace AssetsPV
     public class TransformLogic
     {
         public const int Multiplier = OrthoSingle.multiplier, Bonus = OrthoSingle.bonus;
-        public static Random rng = new Random(0x1337beef);
+        public static PRNG rng = new PRNG(0x1337beef);
 
         public static byte[,,] MergeVoxels(byte[,,] plug, byte[,,] socket, int matchColor)
         {
@@ -2501,7 +2501,7 @@ namespace AssetsPV
         }
         public static byte[,,] RandomRemoval(byte[,,] voxelData)
         {
-            Random r = new Random(1337);
+            rng.Reseed(1337u);
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             byte[,,] cpy = voxelData.Replicate();
             int current_color;
@@ -2517,15 +2517,15 @@ namespace AssetsPV
                         {
                             cpy[x, y, z] = 0;
                         }
-                        else if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && r.Next(11) < 8) //rare sparks
+                        else if((current_color == 40 || current_color == VoxelLogic.wcolorcount + 5 || current_color == VoxelLogic.wcolorcount + 20) && rng.Next(11) < 8) //rare sparks
                         {
                             cpy[x, y, z] = 0;
                         }
-                        else if((current_color == 27 || current_color == VoxelLogic.wcolorcount + 4) && r.Next(7) < 2) //water
+                        else if((current_color == 27 || current_color == VoxelLogic.wcolorcount + 4) && rng.Next(7) < 2) //water
                         {
                             cpy[x, y, z] = 2;
                         }
-                        else if(current_color == 42 && r.Next(13) < 2 && HasAdjacentColor(voxelData, xSize, ySize, zSize, x, y, z, 0)) //dust
+                        else if(current_color == 42 && rng.Next(13) < 2 && HasAdjacentColor(voxelData, xSize, ySize, zSize, x, y, z, 0)) //dust
                         {
                             cpy[x, y, z] = 0;
                         }
@@ -2537,7 +2537,7 @@ namespace AssetsPV
 
         public static byte[,,] RandomChanges(byte[,,] voxelData)
         {
-            Random r = new Random(1337);
+            rng.Reseed(1337u);
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             byte[,,] cpy = voxelData.Replicate();
             int current_color;
@@ -2549,34 +2549,34 @@ namespace AssetsPV
                     {
                         current_color = (253 - cpy[x, y, z]) / 4;
 
-                        if(current_color == 17 && r.Next(9) < 2 && HasAdjacentColor(voxelData, xSize, ySize, zSize, x, y, z, 0)) //smoke //253 - 17 * 4
+                        if(current_color == 17 && rng.Next(9) < 2 && HasAdjacentColor(voxelData, xSize, ySize, zSize, x, y, z, 0)) //smoke //253 - 17 * 4
                         {
                             cpy[x, y, z] = 0;
                         }
                         else if(current_color == 18) //yellow fire
                         {
-                            if(r.Next(3) > 0)
+                            if(rng.Next(3) > 0)
                             {
-                                cpy[x, y, z] -= (byte)(4 * r.Next(3));
+                                cpy[x, y, z] -= (byte)(4 * rng.Next(3));
                             }
                         }
                         else if(current_color == 19) // orange fire
                         {
-                            if(r.Next(5) < 4)
+                            if(rng.Next(5) < 4)
                             {
-                                cpy[x, y, z] += (byte)(4 * r.Next(2));
+                                cpy[x, y, z] += (byte)(4 * rng.Next(2));
                             }
                         }
                         else if(current_color == 20) // sparks
                         {
-                            if(r.Next(5) > 0)
+                            if(rng.Next(5) > 0)
                             {
-                                cpy[x, y, z] += (byte)(4 * r.Next(3));
+                                cpy[x, y, z] += (byte)(4 * rng.Next(3));
                             }
                         }
                         else if(current_color == 42) // dust
                         {
-                            if(r.Next(4) == 0)
+                            if(rng.Next(4) == 0)
                             {
                                 cpy[x, y, z] = 253 - 4 * 41;
                             }

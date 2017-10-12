@@ -19,7 +19,7 @@ namespace AssetsPV
             widthSmall = 60 * vwidth + 2, heightSmall = (60 + 60/2)  * (vheight - top) + 2,
             widthHuge = 120  * multiplier * vwidth + 2, heightHuge = (80 + 120/2)  * multiplier * (vheight - top) + 2,
             widthMassive = 160 * 2 * multiplier * vwidth + 2, heightMassive = (120 + 160/2) * 2 * multiplier * (vheight - top) + 2;
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
         public static string altFolder = "";
 
         private static FileStream offbin = new FileStream("offsets3dither.bin", FileMode.OpenOrCreate);
@@ -3039,11 +3039,11 @@ namespace AssetsPV
             }
 
         }
-        public static Random rng = new Random(0x1337BEEF);
+        public static PRNG rng = new PRNG(0x1337BEEF);
 
         private static byte[][] renderGenericW(byte[,,] colors, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
         {
-            rng = new Random(0xb335 + frame / 2);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
             int rows = ((xDim+yDim) + zDim) * multiplier * (vheight - top) + 2, cols = (xDim + yDim) * multiplier * vwidth + 2;
             byte[][] data = new byte[rows][];

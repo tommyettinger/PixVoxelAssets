@@ -206,7 +206,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             "Person",
         };
 
-        private static Random r = new Random();
+        private static PRNG r = PRNG.r;
         public const float flat_alpha = 0.77F;
         public const float bordered_flat_alpha = 0.78F;
         public const float bordered_alpha = 0.79F;
@@ -10050,7 +10050,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         public static List<MagicaVoxelData> AssembleZombieHeadToModelW(BinaryReader body, bool alternate = false)
         {
-            r = new Random(0xFEEDABE);
+            r.Reseed(0xFEEDABE);
             BinaryReader hbin = new BinaryReader(File.Open("CU3/Zombie_Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
@@ -10113,7 +10113,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         }
         public static List<MagicaVoxelData> Zombify(BinaryReader bin)
         {
-            r = new Random(0xFEEDABE);
+            r.Reseed(0xFEEDABE);
             List<MagicaVoxelData> voxels = FromMagicaRaw(bin);
             voxels.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
             return voxels;

@@ -13,7 +13,7 @@ namespace AssetsPV
 
     class TallPaletteDraw
     {
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
         private static byte[][] colors = null;
 
         public static float[][] flatcolors = new float[][]

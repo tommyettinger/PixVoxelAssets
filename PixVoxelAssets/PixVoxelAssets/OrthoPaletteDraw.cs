@@ -12,7 +12,8 @@ namespace AssetsPV
 
     class OrthoPaletteDraw
     {
-        public static Random r = new Random();
+        public static PRNG r = PRNG.r;
+        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
         public static float[][] flatcolors = new float[][]
         {
             //plains

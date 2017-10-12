@@ -207,7 +207,7 @@ namespace AssetsPV
                 7, 5, 3, 5, 1,
                 5,5,5,5,5,5,5,5
             };
-        public static Random r = new Random();
+        public static Random r = PRNG.r;
 
         public LocalMap(int MapWidth, int MapHeight)
         {

@@ -34,7 +34,7 @@ namespace AssetsPV
             {  Slope.BrightTop, BrightTop }, {  Slope.DimTop, DimTop }, {  Slope.BrightDim, BrightDim }, {  Slope.BrightDimTop, BrightDimTop }, {  Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
             {  Slope.BrightDimBottom, BrightDimBottom }, {  Slope.BrightBack, BrightBack }, {  Slope.DimBack, DimBack },
             {  Slope.BrightTopBack, BrightTopBack }, {  Slope.DimTopBack, DimTopBack }, {  Slope.BrightBottomBack, BrightBottomBack }, {  Slope.DimBottomBack, DimBottomBack }, {  Slope.BackBack, BackBack } };
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
         public static string altFolder = "";
 
         private static FileStream offbin = new FileStream("offsets2.bin", FileMode.OpenOrCreate);

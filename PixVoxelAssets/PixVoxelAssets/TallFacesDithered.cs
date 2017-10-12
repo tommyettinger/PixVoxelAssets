@@ -66,7 +66,8 @@ namespace AssetsPV
             { Slope.DimTopBackThick, DimTopBackThick }, { Slope.DimBottomBackThick, DimBottomBackThick },
             { Slope.BackBackTopThick, BackBackTopThick }, { Slope.BackBackBottomThick, BackBackBottomThick } };
 
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
+        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         private static FileStream offbin = new FileStream("offsets2dither.bin", FileMode.OpenOrCreate);
@@ -81,7 +82,7 @@ namespace AssetsPV
         public static string[] colorNames = new string[] { "Dark", "White", "Red", "Orange", "Yellow", "Green", "Blue", "Purple" };
         public static byte[][][][] storeColorCubesWBold()
         {
-            r = new Random(0x1337BEEF);
+            r.FromSnapshot(rState);
             VoxelLogic.wpalettecount = VoxelLogic.wpalettes.Length;
             //            wcolorcount = VoxelLogic.wpalettes[0].Length;
             // 29 is the number of Slope enum types.
@@ -3507,7 +3508,7 @@ namespace AssetsPV
 
         public static byte[][] Lump(byte[][] original, int palette)
         {
-            r = new Random(0x1337);
+            r.FromSnapshot(altState);
             int height = original.Length, width = original[0].Length, sy, sx;
             byte[][] next = new byte[height][];
             for(int i = 0; i < height; i++)
@@ -5861,10 +5862,10 @@ namespace AssetsPV
 
         }
 
-        public static Random rng = new Random(0x1337BEEF);
+        public static PRNG rng = new PRNG(0x1337BEEF);
         private static byte[][] renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            rng = new Random(0xb335 + frame / 2);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int rows = HugeHeight, cols = HugeWidth;
             byte[][] data = new byte[rows][];
@@ -6218,7 +6219,7 @@ namespace AssetsPV
 
         private static byte[][] renderWSmartHuge(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            rng = new Random(0xb335 + frame / 2);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int rows = HugeHeight * 2, cols = HugeWidth * 2;
             byte[][] data = new byte[rows][];
@@ -6577,7 +6578,7 @@ namespace AssetsPV
 
         private static byte[][] renderWSmartMassive(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            rng = new Random(0xb335 + frame / 2);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
 
             int rows = 408 * 2, cols = 328 * 2;
             byte[][] data = new byte[rows][];
@@ -7592,7 +7593,7 @@ namespace AssetsPV
         }
         private static byte[][] generateWaterMask(int facing, int variant)
         {
-            rng = new Random(0xb335);
+            rng.Reseed(0xb335u);
             int rows = HugeHeight * 2, cols = HugeWidth * 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)

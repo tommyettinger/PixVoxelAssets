@@ -200,11 +200,13 @@ namespace AssetsPV
             return neo;
         }
         */
+
+        public static PRNG rng = new PRNG(1337);
         public static byte[,,] ApplyPattern(byte[,,] voxelData, Dictionary<byte, Pattern> patterns)
         {
             if(patterns == null)
                 return voxelData;
-            Random rng = new Random(1337);
+            rng.Reseed(1337u);
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             byte[,,] neo = voxelData.Replicate();
             Pattern pat;
@@ -234,12 +236,12 @@ namespace AssetsPV
                             if(adjEmpty)
                             {
                                 //colorCount[c]++;
-                                Extensions.r = new Random(seed);
+                                Extensions.r.Reseed(seed);
                                 CenterChangeOn = pat.CenterChangeOn.RandomElement();
                                 CenterChangeOff = pat.CenterChangeOff.RandomElement();
                                 EmptyChangeOn = pat.EmptyChangeOn.RandomElement();
                                 EmptyChangeOff = pat.EmptyChangeOff.RandomElement();
-                                Extensions.r = new Random(seed);
+                                Extensions.r.Reseed(seed);
                             }
                             if(adjEmpty && (z) % upmove < upspan &&
                                 (((x) ^ (y) ^ (z)) % sidemove) < sidespan &&

@@ -14,7 +14,8 @@ namespace AssetsPV
     class MiniOrthoVoxels
     {
         private static int vwidth = 2, vheight = 4;
-        private static Random r = new Random(0x1337beef);
+        public static PRNG r = PRNG.r;
+        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
 
         public const int factions = 1;
         public static string altFolder = "";

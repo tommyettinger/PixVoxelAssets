@@ -14,7 +14,7 @@ namespace AssetsPV
     class ForaysVoxels
     {
         private static int vwidth = 1, vheight = 2;
-        private static Random r = new Random(0x1337beef);
+        private static Random r = PRNG.r;
 
         public const int factions = 1;
         public static string altFolder = "";

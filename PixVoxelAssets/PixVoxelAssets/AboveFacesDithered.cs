@@ -69,7 +69,8 @@ namespace AssetsPV
             { Slope.DimTopBackThick, DimTopBackThick }, { Slope.DimBottomBackThick, DimBottomBackThick },
             { Slope.BackBackTopThick, BackBackTopThick }, { Slope.BackBackBottomThick, BackBackBottomThick } };
 
-        public static Random r = new Random(0x1337BEEF);
+        public static PRNG r = PRNG.r;
+        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         public static Tuple<string, int>[] undead = TallVoxels.undead,
@@ -5054,11 +5055,11 @@ namespace AssetsPV
 
         }
 
-        public static Random rng = new Random(0x1337BEEF);
+        public static PRNG rng = new PRNG(0x1337BEEF);
         private static byte[][] renderWSmart(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            r = new Random(0x1337BEEF);
-            rng = new Random(0xb335 + frame / 2);
+            r.FromSnapshot(rState);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int xSize = 60, ySize = 60, zSize = 60;
             int rows = HugeHeight, cols = HugeWidth;
@@ -5448,8 +5449,8 @@ for(int i = 0; i < numBytes; i++)
 
         private static byte[][] renderWSmartHuge(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            r = new Random(0x1337BEEF);
-            rng = new Random(0xb335 + frame / 2);
+            r.FromSnapshot(rState);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
             int rows = HugeHeight * 2, cols = HugeWidth * 2;
             byte[][] data = new byte[rows][];
@@ -5779,7 +5780,7 @@ for(int i = 0; i < numBytes; i++)
 
         private static byte[][] renderWSmartMassive(FaceVoxel[,,] faceVoxels, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless)
         {
-            rng = new Random(0xb335 + frame / 2);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
 
             int rows = 408 * 2, cols = 328 * 2;
             byte[][] data = new byte[rows][];
@@ -6127,8 +6128,8 @@ for(int i = 0; i < numBytes; i++)
 
         private static byte[][] renderOrthoW(FaceVoxel[,,] faces, int facing, int palette, int frame, int maxFrames, bool still, bool shadowless, int xDim, int yDim, int zDim)
         {
-            r = new Random(0x1337BEEF);
-            rng = new Random(0xb335 + frame / 2);
+            r.FromSnapshot(rState);
+            rng.Reseed(0xb335u + ((uint)frame >> 1));
             bool useColorIndices = !VoxelLogic.terrainPalettes.Contains(palette);
 
             //int rows = xDim * multiplier * (vheight - top) * 2 + 2, cols = yDim * multiplier * vwidth + 2;
@@ -7228,7 +7229,7 @@ for(int i = 0; i < numBytes; i++)
         }
         private static byte[][] generateWaterMask(int facing, int variant)
         {
-            rng = new Random(0xb335);
+            rng.Reseed(0xb335u);
             int rows = HugeHeight * 2, cols = HugeWidth * 2;
             byte[][] data = new byte[rows][];
             for(int i = 0; i < rows; i++)
