@@ -9981,9 +9981,10 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
 
         }
 
-        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body, bool alternate = false, bool remove_shine = false)
+        public static List<MagicaVoxelData> AssembleHeadToModelW(BinaryReader body, bool alternate = false, bool remove_shine = false, bool helmet = false, bool mask = false)
         {
-            BinaryReader hbin = new BinaryReader(File.Open("CU3/" + TallFacesDithered.addon + "Head" + (alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
+            BinaryReader hbin = new BinaryReader(File.Open("CU3/" +
+                TallFacesDithered.addon + "Head" + (mask ? "" : helmet ? "_Helmet" : alternate ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
             List<MagicaVoxelData> head = FromMagicaRaw(hbin).ToList();
             List<MagicaVoxelData> bod = FromMagicaRaw(body).ToList();
             hbin.Close();
@@ -10106,7 +10107,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                 if((254 - working[i].color) % 4 == 0)
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
-            bod.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
+            bod.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(17) < 6);
             bod.AddRange(working);
             return bod;
 
@@ -10115,7 +10116,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         {
             r.Reseed(0xFEEDABE);
             List<MagicaVoxelData> voxels = FromMagicaRaw(bin);
-            voxels.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(11) == 0);
+            voxels.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(17) < 6);
             return voxels;
         }
 

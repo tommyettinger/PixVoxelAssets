@@ -19,7 +19,7 @@ namespace AssetsPV
         public static bool RENDER = true;
         public static bool USE_PALETTE = true;
         public static bool ENABLE_SUPER = false;
-        public static string addon = ""; // "" // "Zombie_" // "Divine_"
+        public static string addon = "Zombie_"; // "" // "Zombie_" // "Divine_"
         public const int
         Cube = 0,
         BrightTop = 1,
@@ -111,6 +111,7 @@ namespace AssetsPV
             for(int p = 0; p < VoxelLogic.wpalettes.Length; p++)
             {
                 bool subtle = VoxelLogic.subtlePalettes.Contains(p);
+                bool spooky = (VoxelLogic.VisualMode == "CU" && p >= 37 * 8 && p < 38 * 8);
                 for(int current_color = 0; current_color < VoxelLogic.wpalettes[0].Length; current_color++)
                 {
                     if(current_color >= VoxelLogic.wpalettes[p].Length)
@@ -194,7 +195,12 @@ namespace AssetsPV
                                 h += (v + s) * 0.075 - 0.11;
                                 v *= 0.8 + r.NextDouble() * 0.18;
                             }
-                                for(int slp = 0; slp < 29; slp++)
+                            if(spooky)
+                            {
+                                s = VoxelLogic.Clamp((s * 0.85), 0.0, 0.9);
+                                v = VoxelLogic.Clamp(v * 0.88, 0.01, 0.88);
+                            }
+                            for(int slp = 0; slp < 29; slp++)
                             {
                                 Color c2 = Color.Transparent;
                                 double s_alter = (s * 0.78 + s * s * s * Math.Sqrt(s)),
@@ -2531,7 +2537,7 @@ namespace AssetsPV
         {
             byte[] bytes = File.ReadAllBytes(input);
             //Console.WriteLine("{0:X} {1:X} {2:X} TO {3:X} {4:X} {5:X}", bytes[41], bytes[42], bytes[43], bytes[41 + 255 * 3], bytes[42 + 255 * 3], bytes[43 + 255 * 3]);
-            int p = (addon == "Divine_") ? 38 * 8 : 0, limit = 8 * (CURedux.wspecies.Length - 2 - (CURedux.ZOMBIES ? 0 : 1));
+            int p = (addon == "Divine_") ? 38 * 8 : (addon == "Zombie_") ? 37 * 8 : 0, limit = 8 * (CURedux.wspecies.Length - 2 - (CURedux.ZOMBIES ? 0 : 1));
             for(; p < limit; p++)
             {
                 Array.Copy(exactpalettes[p], 0, bytes, 37, 776);
@@ -3402,14 +3408,16 @@ namespace AssetsPV
             string folder = altFolder;
             Console.WriteLine("Processing: " + u + ", palette " + 99);
 
-            bool zombie = u.StartsWith("Zombie_");
+            bool zombie = u.StartsWith("Zombie_"), gasMask = u.StartsWith("Mask_");
             if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
             int alt = VoxelLogic.AltVersions[VoxelLogic.UnitLookup[u]];
+            if(gasMask && alt == 0)
+                return;
             for(int a = 0; a <= alt && a < 1; a++)
             {
                 BinaryReader bin = new BinaryReader(File.Open("CU3/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox", FileMode.Open));
-                List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0, CURedux.REMOVE_TWINKLE);
+                List<MagicaVoxelData> voxes = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0) : VoxelLogic.AssembleHeadToModelW(bin, a > 0, CURedux.REMOVE_TWINKLE, true, gasMask);
 
                 //Directory.CreateDirectory("vox/" + altFolder);
                 //VoxelLogic.WriteVOX("vox/" + altFolder + u + "_0.vox", voxes, "W", 0, 40, 40, 40);
@@ -3444,10 +3452,10 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < framelimit; f++)
                     {
-                        if(zombie)
-                            AlterPNGPaletteZombie(blankFolder + "/standing_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png",
-                                "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
-                        else
+                        //if(zombie)
+                        //    AlterPNGPaletteZombie(blankFolder + "/standing_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png",
+                        //        "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
+                        //else
                             AlterPNGPalette(blankFolder + "/standing_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png",
                                 "standing_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_" + f + ".png", simplepalettes);
                     }
@@ -3461,10 +3469,11 @@ namespace AssetsPV
         public static void processUnitLargeWFiring(string u, int a)
         {
             Console.WriteLine("Processing: " + u);
-            bool zombie = u.StartsWith("Zombie_");
-            if(addon.Length > 0)
+            bool zombie = u.StartsWith("Zombie_"), gasMask = u.StartsWith("Mask_"); if(addon.Length > 0)
                 u = u.Remove(0, addon.Length);
             int alt = VoxelLogic.AltVersions[VoxelLogic.UnitLookup[u]];
+            if(gasMask && alt == 0)
+                return;
             string filename = "CU3/" + u + (alt > 1 && a > 0 ? "_Alt" : "") + "_Large_W.vox";
             BinaryReader bin;
             MagicaVoxelData[] parsed;
@@ -3532,10 +3541,10 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 16; f++)
                         {
-                            if(zombie)
-                                AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
-                            else
+                            //if(zombie)
+                            //    AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
+                            //        "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            //else
                                 AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
                                     "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
@@ -3549,7 +3558,7 @@ namespace AssetsPV
                     if(RENDER)
                     {
                         bin = new BinaryReader(File.Open(filename, FileMode.Open));
-                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0).ToArray() : VoxelLogic.AssembleHeadToModelW(bin, a > 0, CURedux.REMOVE_TWINKLE).ToArray();
+                        parsed = zombie ? VoxelLogic.AssembleZombieHeadToModelW(bin, a > 0).ToArray() : VoxelLogic.AssembleHeadToModelW(bin, a > 0, CURedux.REMOVE_TWINKLE, true, gasMask).ToArray();
                         MagicaVoxelData[][] firing = CURedux.makeFiringAnimationLarge(parsed, VoxelLogic.UnitLookup[u], w);
 
                         ImageInfo imi = new ImageInfo(ImageWidthHuge, ImageHeightHuge, 8, false, false, true);
@@ -3572,10 +3581,10 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 16; f++)
                         {
-                            if(zombie)
-                                AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                    "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
-                            else
+                            //if(zombie)
+                            //    AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
+                            //        "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            //else
                                 AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png",
                                     "animation_frames/color{0}/" + u + "/" + addon + u + (a > 0 ? "_Alt" : "") + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
                         }
@@ -3747,10 +3756,10 @@ namespace AssetsPV
             {
                 for(int f = 0; f < framelimit; f++)
                 {
-                    if(zombie)
-                        AlterPNGPaletteZombie(blankFolder + "standing_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
-                            "standing_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
-                    else
+                    //if(zombie)
+                    //    AlterPNGPaletteZombie(blankFolder + "standing_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
+                    //        "standing_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
+                    //else
                         AlterPNGPalette(blankFolder + "standing_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png",
                             "standing_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_" + f + ".png", simplepalettes);
                 }
@@ -3815,12 +3824,12 @@ namespace AssetsPV
                     {
                         for(int f = 0; f < 16; f++)
                         {
-                            if(zombie)
-                            {
-                                AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
-                                   "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
-                            }
-                            else
+                            //if(zombie)
+                            //{
+                            //    AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
+                            //       "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
+                            //}
+                            //else
                             {
                                 AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png",
                                    "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png", simplepalettes);
@@ -5082,10 +5091,10 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < 12; f++)
                     {
-                        if(zombie)
-                            AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png",
-                                "animation_frames/color{0}/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
-                        else
+                        //if(zombie)
+                        //    AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png",
+                        //        "animation_frames/color{0}/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
+                        //else
                             AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png",
                                 "animation_frames/color{0}/" + u + "/" + addon + u + extra_name + "_Large_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
@@ -5299,10 +5308,10 @@ namespace AssetsPV
                 {
                     for(int f = 0; f < 12; f++)
                     {
-                        if(zombie)
-                            AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
-                                "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
-                        else
+                        //if(zombie)
+                        //    AlterPNGPaletteZombie(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
+                        //        "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
+                        //else
                             AlterPNGPalette(blankFolder + "animation_frames/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png",
                                 "animation_frames/color{0}/" + u + "/" + addon + u + "_Huge_face" + dir + "_death_" + f + ".png", simplepalettes);
                     }
@@ -6653,9 +6662,13 @@ namespace AssetsPV
                     return 0;
                 //int i = (innerX & 1) | ((innerY & 1) << 1) | ((innerX & 2) << 1) | ((innerY & 2) << 2); // ^ ((x+1) * 13 + (y+1) * 21 + (z+1) * 25)
                 //i = (p * 19 + (p ^ (p >> 1)) + (p + innerX + innerY ^ 0x9337)) >> 2 & 15;//((i + 103) << 10) / 1009;
-                                                                                         //i &= 15;
+                //i &= 15;
 
-                i = (int)PRNG.Randomize((uint)((innerX + innerY) * 0x3F4A7C15 + p * 0x7F4A7C15)) & 15;
+                i *= 0x7F4A7C15 * p;
+                i = (i ^ i >> 14) * (0x2C9277B5 + (i * 0x632BE5A6));
+                i = (i ^ i >> 13) & 15;
+
+                //i = (int)PRNG.Randomize((uint)((innerX + innerY) * 0x3F4A7C15 + p * 0x7F4A7C15)) & 15;
                 switch(i)
                 {
                     case 0:
@@ -9402,10 +9415,10 @@ namespace AssetsPV
 
             VoxelLogic.Initialize();
 
-            //VoxelLogic.VisualMode = "CU";
-            //altFolder = "Diverse_PixVoxel_Wargame_Iso_Normal/";
-            //blankFolder = "Blank_PixVoxel_Wargame_Iso_Normal/";
-            //CURedux.Initialize(true);
+            VoxelLogic.VisualMode = "CU";
+            altFolder = "Diverse_PixVoxel_Wargame_Iso_Normal/";
+            blankFolder = "Blank_PixVoxel_Wargame_Iso_Normal/";
+            CURedux.Initialize(true);
             /*
             VoxelLogic.VisualMode = "W";
             altFolder = "Forays4/";
@@ -9416,19 +9429,19 @@ namespace AssetsPV
             //VoxelLogic.VisualMode = "Mon";
             //altFolder = "Mon/";
             //MonPalettes.Initialize();
-
+            /*
             altFolder = "sau12_colorful/";
             blankFolder = "sau12_blank/";
             VoxelLogic.VisualMode = "W";
             SaPalettes.Initialize();
-
+            */
             Directory.CreateDirectory(altFolder);
             Directory.CreateDirectory(blankFolder);
             InitializeWPalette();
             //InitializeGWPalette();
 
             //            makeFlatTiling().Save("tiling_flat_gray.png");
-            
+            /*
             processUnitLargeW("Lomuk", 13, false, false);
             processUnitLargeWalkW("Lomuk", 13);
             processUnitHugeW("Nodebpe", 14, true, false);
@@ -9491,6 +9504,7 @@ namespace AssetsPV
             processUnitLargeWalkW("Human_Female", 9);
             processUnitLargeW("Human_Female", 10, true, false);
             processUnitLargeWalkW("Human_Female", 10);
+            */
             /*
 
             processUnitHugeW("Barrel", 38, true, false);
@@ -9717,7 +9731,7 @@ namespace AssetsPV
             
             writePaletteImages();
             
-            for(int a = 1; a < 2; a++)
+            for(int a = 0; a < 3; a++)
             {
                 /*
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -9726,9 +9740,10 @@ namespace AssetsPV
                 }
                 */
 
-                /*
+                
                 processUnitLargeWMilitary("Infantry");
-                processUnitLargeWMilitary("Infantry_P");
+                //processUnitLargeWMilitary("Infantry_P");
+                /*
                 processUnitLargeWMilitary("Infantry_S");
                 processUnitLargeWMilitary("Infantry_T");
 
@@ -9743,7 +9758,7 @@ namespace AssetsPV
                 
                 processUnitLargeWMilitary("Recon");
                 processUnitLargeWMilitary("Flamethrower");
-
+                
                 processUnitLargeWMilitary("Civilian");
 
                 processUnitLargeWMilitary("Volunteer");
@@ -9765,12 +9780,13 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Copter_P");
                 processUnitLargeWMilitary("Copter_S");
                 processUnitLargeWMilitary("Copter_T");
-
+                
                 processUnitLargeWMilitary("Plane");
                 processUnitLargeWMilitary("Plane_P");
                 processUnitLargeWMilitary("Plane_S");
+                */
                 processUnitLargeWMilitary("Plane_T");
-
+                /*
                 processUnitLargeWMilitary("Boat");
                 processUnitLargeWMilitary("Boat_P");
                 processUnitLargeWMilitary("Boat_S");
@@ -9824,7 +9840,7 @@ namespace AssetsPV
                 processUnitHugeWMilitarySuper("Farm");
                 processUnitHugeWMilitarySuper("Oil_Well");
                 */
-                addon = "";
+                addon = (a == 0) ? "Mask_" : "";
             }
             
             //processReceivingMilitaryW();
