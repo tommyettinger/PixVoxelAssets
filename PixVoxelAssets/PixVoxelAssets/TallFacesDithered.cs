@@ -2702,7 +2702,10 @@ namespace AssetsPV
             foreach(string u in CURedux.normal_units)
             //new string[] { "Tank_T", "Tank_T_Alt" }.AsParallel().ForAll(u => 
             {
-                string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
+
+                if(u.Contains("_Alt")) continue;
+
+                string stripped = u;
                 List<string> imageNames = new List<string>(4 * 16 * 8);
                 foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
                 {
@@ -2720,7 +2723,7 @@ namespace AssetsPV
                 }
                 Console.WriteLine("Running standing GIF conversion for " + u + "...");
                 WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Large_animated");
-                
+
                 imageNames = new List<string>(4 * 16 * 12);
 
                 foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
@@ -2756,7 +2759,7 @@ namespace AssetsPV
                     Console.WriteLine("Running weapon " + w + " GIF conversion for " + u + "...");
                     WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Large_animated");
                 }
-                
+
                 if(!u.Contains("_Alt"))
                 {
                     imageNames = new List<string>(4 * 16 * 8);
@@ -2776,7 +2779,7 @@ namespace AssetsPV
                     }
                     Console.WriteLine("Running alien standing GIF conversion for " + u + "...");
                     WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Large_animated");
-                    
+
                     imageNames = new List<string>(4 * 16 * 12);
 
                     foreach(int p in CURedux.alienHighlights)
@@ -2812,7 +2815,241 @@ namespace AssetsPV
                         Console.WriteLine("Running alien weapon " + w + " GIF conversion for " + u + "...");
                         WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Large_animated");
                     }
-                    
+
+                }
+            }
+            if(ENABLE_SUPER)
+            {
+                CURedux.super_units.AsParallel().ForAll(u =>
+                //foreach(string u in CURedux.super_units)
+                {
+                    List<string> imageNames = new List<string>(4 * 16 * 4);
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                            }
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running standing GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_Huge_animated");
+
+                    imageNames = new List<string>(4 * 16 * 12);
+
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 12; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running death GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_Huge_animated");
+
+                    for(int w = 0; w < 2; w++)
+                    {
+                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                            continue;
+
+                        imageNames = new List<string>(4 * 16 * 16);
+
+                        for(int p = 0; p < 8; p++)
+                        {
+                            for(int dir = 0; dir < 4; dir++)
+                            {
+                                for(int f = 0; f < 16; f++)
+                                {
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                }
+                            }
+                        }
+                        Console.WriteLine("Running weapon " + w + " GIF conversion for Super " + u + "...");
+                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_Huge_animated");
+                    }
+
+                    imageNames = new List<string>(4 * 16 * 4);
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                            }
+                            for(int f = 0; f < 4; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running alien standing GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_alien_Huge_animated");
+
+                    imageNames = new List<string>(4 * 16 * 12);
+
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 12; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_death_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running alien death GIF conversion for Super " + u + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_death_alien_Huge_animated");
+
+                    for(int w = 0; w < 2; w++)
+                    {
+                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                            continue;
+
+                        imageNames = new List<string>(4 * 16 * 16);
+
+                        foreach(int p in CURedux.alienHighlights)
+                        {
+                            for(int dir = 0; dir < 4; dir++)
+                            {
+                                for(int f = 0; f < 16; f++)
+                                {
+                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "/color" + p + "/" + u + "/" + u + "_Huge_face" + dir + "_attack_" + w + "_" + f + ".png");
+                                }
+                            }
+                        }
+                        Console.WriteLine("Running alien weapon " + w + " GIF conversion for Super " + u + "...");
+                        WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_alien_Huge_animated");
+                    }
+                });
+            }
+        }
+
+        public static void WriteMaskGIFs()
+        {
+            Directory.CreateDirectory("gifs/" + altFolder);
+            //CURedux.normal_units.AsParallel().ForAll(u =>
+            foreach(string u in CURedux.normal_units)
+            //new string[] { "Tank_T", "Tank_T_Alt" }.AsParallel().ForAll(u => 
+            {
+                if(u.Contains("_Alt") || VoxelLogic.AltVersions[VoxelLogic.UnitLookup[u]] == 0) continue;
+                string plus = addon + u;
+                List<string> imageNames = new List<string>(4 * 8 * 8);
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running standing GIF conversion for " + plus + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + plus + "_Large_animated");
+
+                imageNames = new List<string>(4 * 8 * 12);
+
+                for(int p = 0; p < 8; p++)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running death GIF conversion for " + plus + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + plus + "_death_Large_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[plus]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 8 * 16);
+
+                    for(int p = 0; p < 8; p++)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running weapon " + w + " GIF conversion for " + plus + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + plus + "_attack_" + w + "_Large_animated");
+                }
+
+                imageNames = new List<string>(4 * 16 * 8);
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                        for(int f = 0; f < 4; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/standing_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running alien standing GIF conversion for " + plus + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + plus + "_alien_Large_animated");
+
+                imageNames = new List<string>(4 * 16 * 12);
+
+                foreach(int p in CURedux.alienHighlights)
+                {
+                    for(int dir = 0; dir < 4; dir++)
+                    {
+                        for(int f = 0; f < 12; f++)
+                        {
+                            imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_death_" + f + ".png");
+                        }
+                    }
+                }
+                Console.WriteLine("Running alien death GIF conversion for " + plus + "...");
+                WriteGIF(imageNames, 11, "gifs/" + altFolder + plus + "_death_alien_Large_animated");
+
+                for(int w = 0; w < 2; w++)
+                {
+                    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup[u]][w] <= -1)
+                        continue;
+
+                    imageNames = new List<string>(4 * 16 * 16);
+
+                    foreach(int p in CURedux.alienHighlights)
+                    {
+                        for(int dir = 0; dir < 4; dir++)
+                        {
+                            for(int f = 0; f < 16; f++)
+                            {
+                                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/" + u + "/" + plus + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Running alien weapon " + w + " GIF conversion for " + plus + "...");
+                    WriteGIF(imageNames, 11, "gifs/" + altFolder + plus + "_attack_" + w + "_alien_Large_animated");
                 }
             }
             if(ENABLE_SUPER)
@@ -2935,10 +3172,11 @@ namespace AssetsPV
         public static void WriteZombieGIFs()
         {
             Directory.CreateDirectory("gifs/" + altFolder);
-            CURedux.normal_units.AsParallel().ForAll(u =>
-            //foreach(string u in CURedux.normal_units)
+            //CURedux.normal_units.AsParallel().ForAll(u =>
+            foreach(string u in CURedux.normal_units)
             {
-                string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
+                if(u.Contains("_Alt")) continue;
+                string stripped = u;
                 List<string> imageNames = new List<string>(4 * 8 * 4);
                 for(int p = 37 * 8; p < 38 * 8; p++)
                 {
@@ -2992,7 +3230,7 @@ namespace AssetsPV
                     Console.WriteLine("Running weapon " + w + " GIF conversion for Zombie_" + u + "...");
                     WriteGIF(imageNames, 11, "gifs/" + altFolder + u + "_attack_" + w + "_zombie_Large_animated");
                 }
-            });
+            }
             if(ENABLE_SUPER)
             {
                 CURedux.super_units.AsParallel().ForAll(u =>
@@ -9730,8 +9968,9 @@ namespace AssetsPV
             */
             
             writePaletteImages();
-            
-            for(int a = 0; a < 3; a++)
+
+            //for(int a = 0; a < 3; a++)
+            for(int a = 1; a < 2; a++)
             {
                 /*
                 for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -9739,8 +9978,8 @@ namespace AssetsPV
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
                 */
+                addon = "Mask_";
 
-                
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
@@ -9836,15 +10075,18 @@ namespace AssetsPV
                 processUnitHugeWMilitarySuper("Farm");
                 processUnitHugeWMilitarySuper("Oil_Well");
                 */
-                addon = (a == 0) ? "Mask_" : "";
+                //addon = (a == 0) ? "Mask_" : "";
+                addon = "";
             }
             
             processReceivingMilitaryW();
             
-            processReceivingMilitaryWSuper();
+            //processReceivingMilitaryWSuper();
 
 
             WriteAllGIFs();
+            addon = "Mask_";
+            WriteMaskGIFs();
             addon = "Zombie_";
             WriteZombieGIFs();
 
@@ -9913,7 +10155,7 @@ namespace AssetsPV
             Directory.CreateDirectory(altFolder + "Tilings");
             for(int i = 0; i < 40; i++)
             {
-                makeSimpleShrunkenTiling("tiling" + i);
+                makeSimpleTiling("tiling" + i);
             }
 
 

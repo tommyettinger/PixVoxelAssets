@@ -10006,7 +10006,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 if(remove_shine && bod[i].color == 253 - 40)
                     bod[i] = AlterVoxel(bod[i], 253 - 44);
-                else if(bod[i].color > 257 - wcolorcount * 4 && (254 - bod[i].color) % 4 == 0)
+                else if(mask && (253 - bod[i].color >> 3) == 4)
+                    bod[i] = AlterVoxel(bod[i], bod[i].color + 80);
+                else if(bod[i].color > 257 - wcolorcount * 4 && (254 - bod[i].color & 3) == 0)
                 {
                     bodyPlug = bod[i];
                     bodyPlug.color--;
@@ -10021,7 +10023,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             }
             foreach(MagicaVoxelData mvd in head)
             {
-                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color) % 4 == 0)
+                if(mvd.color > 257 - wcolorcount * 4 && (254 - mvd.color & 3) == 0)
                 {
                     headPlug = mvd;
                     headPlug.color--;
@@ -10041,7 +10043,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 if(remove_shine && working[i].color == 253 - 40)
                     working[i] = AlterVoxel(working[i], 253 - 44);
-                else if((254 - working[i].color) % 4 == 0)
+                else if((254 - working[i].color & 3) == 0)
                     working[i] = new MagicaVoxelData { x = working[i].x, y = working[i].y, z = working[i].z, color = (byte)(working[i].color - 1) };
             }
             bod.AddRange(working);
