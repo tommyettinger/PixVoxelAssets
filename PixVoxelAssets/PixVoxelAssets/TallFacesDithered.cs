@@ -9742,8 +9742,7 @@ namespace AssetsPV
 
                 
                 processUnitLargeWMilitary("Infantry");
-                //processUnitLargeWMilitary("Infantry_P");
-                /*
+                processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
                 processUnitLargeWMilitary("Infantry_T");
 
@@ -9784,9 +9783,7 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Plane");
                 processUnitLargeWMilitary("Plane_P");
                 processUnitLargeWMilitary("Plane_S");
-                */
                 processUnitLargeWMilitary("Plane_T");
-                /*
                 processUnitLargeWMilitary("Boat");
                 processUnitLargeWMilitary("Boat_P");
                 processUnitLargeWMilitary("Boat_S");
@@ -9803,8 +9800,7 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Hospital");
                 processUnitLargeWMilitary("Farm");
                 processUnitLargeWMilitary("Oil_Well");
-                */
-
+                
                 /*
                 for(int v = 0; v < CURedux.super_units.Length; v++)
                 {
@@ -9843,86 +9839,83 @@ namespace AssetsPV
                 addon = (a == 0) ? "Mask_" : "";
             }
             
-            //processReceivingMilitaryW();
+            processReceivingMilitaryW();
             
-            //processReceivingMilitaryWSuper();
+            processReceivingMilitaryWSuper();
 
 
-            //WriteAllGIFs();
-            //addon = "Zombie_";
-            //WriteZombieGIFs();
+            WriteAllGIFs();
+            addon = "Zombie_";
+            WriteZombieGIFs();
 
             //WriteDivineGIFs();
 
-            //Directory.CreateDirectory(altFolder + "Terrains");
-            //Directory.CreateDirectory(blankFolder + "Terrains");
+            Directory.CreateDirectory(altFolder + "Terrains");
+            Directory.CreateDirectory(blankFolder + "Terrains");
 
-            //Directory.CreateDirectory(altFolder + "Terrains");
-            //Directory.CreateDirectory(blankFolder + "Terrains");
+            renderTerrainSimple("Road", "Ordered", new byte[] {
+                    32, 5, 3,
+                    33, 7, 3,
+                    34, 9, 2}, 33, 32, 56);
 
-            //renderTerrainSimple("Road", "Ordered", new byte[] {
-            //        32, 5, 3,
-            //        33, 7, 3,
-            //        34, 9, 2}, 33, 32, 56);
+            renderTerrainSimple("Plains", "High", new byte[] {
+                    0, 27, 7,
+                    2, 34, 2, }, 1, 0, 2);
+            renderTerrainSimple("Forest", "High", new byte[] {
+                    4, 27, 7,
+                    6, 34, 2, }, 5, 4, 6);
+            renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
+                    8, 27, 7,
+                    10, 34, 2, }, 9, 8, 10);
+            renderTerrainSimple("Jungle", "High", new byte[] {
+                    12, 27, 7,
+                    14, 34, 2, }, 13, 12, 14);
+            renderTerrainSimple("Hill", "High", new byte[] {
+                    16, 27, 7,
+                    18, 34, 2, }, 17, 16, 18);
+            renderTerrainSimple("Mountain", "High", new byte[] {
+                    20, 27, 7,
+                    22, 34, 2, }, 21, 20, 22);
+            renderTerrainSimple("Ruins", "High", new byte[] {
+                    24, 27, 7,
+                    26, 34, 2, }, 25, 24, 26);
+            renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
+                    28, 27, 7,
+                    30, 34, 2, }, 29, 28, 30);
 
-            //renderTerrainSimple("Plains", "High", new byte[] {
-            //        0, 27, 7,
-            //        2, 34, 2, }, 1, 0, 2);
-            //renderTerrainSimple("Forest", "High", new byte[] {
-            //        4, 27, 7,
-            //        6, 34, 2, }, 5, 4, 6);
-            //renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
-            //        8, 27, 7,
-            //        10, 34, 2, }, 9, 8, 10);
-            //renderTerrainSimple("Jungle", "High", new byte[] {
-            //        12, 27, 7,
-            //        14, 34, 2, }, 13, 12, 14);
-            //renderTerrainSimple("Hill", "High", new byte[] {
-            //        16, 27, 7,
-            //        18, 34, 2, }, 17, 16, 18);
-            //renderTerrainSimple("Mountain", "High", new byte[] {
-            //        20, 27, 7,
-            //        22, 34, 2, }, 21, 20, 22);
-            //renderTerrainSimple("Ruins", "High", new byte[] {
-            //        24, 27, 7,
-            //        26, 34, 2, }, 25, 24, 26);
-            //renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
-            //        28, 27, 7,
-            //        30, 34, 2, }, 29, 28, 30);
+            renderTerrainSimple("River", "Water", new byte[] {
+                    36, 7, 2,
+                    38, 13, 2,
+                    45, 39, 7,
+                    4, 51, 2, }, 37, 36, 38);
+            renderTerrainSimple("Ocean", "Water", new byte[] {
+                    46, 23, 5,
+                    47, 21, 4,
+                    44, 29, 7, }, 45, 44, 46);
+            renderTerrainSimple("Pit", "Normal", new byte[] {
+                    41, 11, 3,
+                    }, 40, 40, 40);
 
-            //renderTerrainSimple("River", "Water", new byte[] {
-            //        36, 7, 2,
-            //        38, 13, 2,
-            //        45, 39, 7,
-            //        4, 51, 2, }, 37, 36, 38);
-            //renderTerrainSimple("Ocean", "Water", new byte[] {
-            //        46, 23, 5,
-            //        47, 21, 4,
-            //        44, 29, 7, }, 45, 44, 46);
-            //renderTerrainSimple("Pit", "Normal", new byte[] {
-            //        41, 11, 3,
-            //        }, 40, 40, 40);
+            renderTerrainSimple("Volcano", "Normal", new byte[] {
+                    49, 30, 2,
+                    57, 29, 5,
+                    51, 13, 3,
+                    50, 25, 8, }, 49, 48, 50);
+            renderTerrainSimple("Poison", "Water", new byte[] {
+                    3, 27, 3,
+                    2, 24, 9,
+                    1, 22, 11,
+                    52, 13, 7,}, 53, 52, 54);
+            renderTerrainSimple("Warning", "Ordered", new byte[] {
+                    59, 5, 2,
+                    }, 58, 58, 58);
 
-            //renderTerrainSimple("Volcano", "Normal", new byte[] {
-            //        49, 30, 2,
-            //        57, 29, 5,
-            //        51, 13, 3,
-            //        50, 25, 8, }, 49, 48, 50);
-            //renderTerrainSimple("Poison", "Water", new byte[] {
-            //        3, 27, 3,
-            //        2, 24, 9,
-            //        1, 22, 11,
-            //        52, 13, 7,}, 53, 52, 54);
-            //renderTerrainSimple("Warning", "Ordered", new byte[] {
-            //        59, 5, 2,
-            //        }, 58, 58, 58);
-            
-            //Directory.CreateDirectory(altFolder + "Tilings");
-            //for(int i = 0; i < 40; i++)
-            //{
-            //    makeSimpleShrunkenTiling("tiling" + i);
-            //}
-            
+            Directory.CreateDirectory(altFolder + "Tilings");
+            for(int i = 0; i < 40; i++)
+            {
+                makeSimpleShrunkenTiling("tiling" + i);
+            }
+
 
 
             //makeDetailedTiling();
