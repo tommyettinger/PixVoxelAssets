@@ -10006,7 +10006,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             {
                 if(remove_shine && bod[i].color == 253 - 40)
                     bod[i] = AlterVoxel(bod[i], 253 - 44);
-                else if(mask && (253 - bod[i].color >> 3) == 4)
+                else if(mask && (253 - bod[i].color == 32) || (253 - bod[i].color == 36))
                     bod[i] = AlterVoxel(bod[i], bod[i].color + 80);
                 else if(bod[i].color > 257 - wcolorcount * 4 && (254 - bod[i].color & 3) == 0)
                 {

@@ -10045,7 +10045,6 @@ namespace AssetsPV
                     processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                 }
                 */
-
                 processUnitLargeWMilitary("Infantry");
                 processUnitLargeWMilitary("Infantry_P");
                 processUnitLargeWMilitary("Infantry_S");
@@ -10064,12 +10063,12 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Flamethrower");
                 
                 processUnitLargeWMilitary("Civilian");
-
+                
                 processUnitLargeWMilitary("Volunteer");
                 processUnitLargeWMilitary("Volunteer_P");
                 processUnitLargeWMilitary("Volunteer_S");
                 processUnitLargeWMilitary("Volunteer_T");
-
+                
                 processUnitLargeWMilitary("Truck");
                 processUnitLargeWMilitary("Truck_P");
                 processUnitLargeWMilitary("Truck_S");
@@ -10079,7 +10078,7 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Artillery_P");
                 processUnitLargeWMilitary("Artillery_S");
                 processUnitLargeWMilitary("Artillery_T");
-
+                
                 processUnitLargeWMilitary("Copter");
                 processUnitLargeWMilitary("Copter_P");
                 processUnitLargeWMilitary("Copter_S");
@@ -10089,6 +10088,7 @@ namespace AssetsPV
                 processUnitLargeWMilitary("Plane_P");
                 processUnitLargeWMilitary("Plane_S");
                 processUnitLargeWMilitary("Plane_T");
+                
                 processUnitLargeWMilitary("Boat");
                 processUnitLargeWMilitary("Boat_P");
                 processUnitLargeWMilitary("Boat_S");
@@ -10156,7 +10156,7 @@ namespace AssetsPV
             WriteZombieGIFs();
 
             //WriteDivineGIFs();
-            /*
+            
             Directory.CreateDirectory(altFolder + "Terrains");
             Directory.CreateDirectory(blankFolder + "Terrains");
 
@@ -10221,7 +10221,7 @@ namespace AssetsPV
             {
                 makeSimpleTiling("tiling" + i);
             }
-            */
+            
 
 
             //makeDetailedTiling();
