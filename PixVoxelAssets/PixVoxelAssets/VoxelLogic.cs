@@ -16,11 +16,11 @@ namespace AssetsPV
         public byte z;
         public byte color;
 
-        public MagicaVoxelData(BinaryReader stream, bool subsample)
+        public MagicaVoxelData(BinaryReader stream)
         {
-            x = stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
-            y = stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
-            z = stream.ReadByte();//(subsample ? stream.ReadByte() / 2 : stream.ReadByte());
+            x = stream.ReadByte();
+            y = stream.ReadByte();
+            z = stream.ReadByte();
             color = stream.ReadByte();
         }
         public MagicaVoxelData(int x, int y, int z, int color)
@@ -30,6 +30,15 @@ namespace AssetsPV
             this.z = (byte)z;
 
             this.color = (byte)color;
+        }
+
+        public MagicaVoxelData(byte x, byte y, byte z, byte color)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+
+            this.color = color;
         }
     }
     public struct TotalVoxel
@@ -9262,8 +9271,6 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (magic == "VOX ")
             {
-                bool subsample = false;
-
                 while (stream.BaseStream.Position < stream.BaseStream.Length)
                 {
                     // each chunk has an ID, size and child chunks
@@ -9280,19 +9287,15 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         sizez = stream.ReadInt32();
                         taken = new int[sizex, sizey];
                         taken.Fill(-1);
-                        if (sizex > 32 || sizey > 32) subsample = true;
-
                         stream.ReadBytes(chunkSize - 4 * 3);
                     }
                     else if (chunkName == "XYZI")
                     {
                         // XYZI contains n voxels
                         int numVoxels = stream.ReadInt32();
-                        int div = (subsample ? 2 : 1);
-
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++)
-                            voxelData.Add(new MagicaVoxelData(stream, subsample));
+                            voxelData.Add(new MagicaVoxelData(stream));
                     }
                     else if (chunkName == "RGBA")
                     {
@@ -9807,11 +9810,9 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             int version = stream.ReadInt32();
 
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
-            if (magic == "VOX ")
+            if(magic == "VOX ")
             {
-                bool subsample = false;
-
-                while (stream.BaseStream.Position < stream.BaseStream.Length)
+                while(stream.BaseStream.Position < stream.BaseStream.Length)
                 {
                     // each chunk has an ID, size and child chunks
                     char[] chunkId = stream.ReadChars(4);
@@ -9820,30 +9821,28 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     string chunkName = new string(chunkId);
 
                     // there are only 2 chunks we only care about, and they are SIZE and XYZI
-                    if (chunkName == "SIZE")
+                    if(chunkName == "SIZE")
                     {
                         sizex = stream.ReadInt32();
                         sizey = stream.ReadInt32();
                         sizez = stream.ReadInt32();
-                        if (sizex > 32 || sizey > 32) subsample = true;
 
                         stream.ReadBytes(chunkSize - 4 * 3);
                     }
-                    else if (chunkName == "XYZI")
+                    else if(chunkName == "XYZI")
                     {
                         // XYZI contains n voxels
                         int numVoxels = stream.ReadInt32();
-                        int div = (subsample ? 2 : 1);
 
                         // each voxel has x, y, z and color index values
-                        for (int i = 0; i < numVoxels; i++)
-                            voxelData.Add(new MagicaVoxelData(stream, subsample));
+                        for(int i = 0; i < numVoxels; i++)
+                            voxelData.Add(new MagicaVoxelData(stream));
                     }
-                    else if (chunkName == "RGBA")
+                    else if(chunkName == "RGBA")
                     {
                         //colors = new float[256][];
 
-                        for (int i = 0; i < 256; i++)
+                        for(int i = 0; i < 256; i++)
                         {
                             byte r = stream.ReadByte();
                             byte g = stream.ReadByte();
@@ -9854,7 +9853,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     }
                     else stream.ReadBytes(chunkSize);   // read any excess bytes
                 }
-                
+
             }
             /*            taken.Fill(-1);
                         foreach (MagicaVoxelData mvd in voxelsAltered.FindAll(v => v.z == 0))
@@ -10120,6 +10119,94 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
             List<MagicaVoxelData> voxels = FromMagicaRaw(bin);
             voxels.RemoveAll(mvd => mvd.color > 253 - 4 * 57 && mvd.color != 253 - 4 * 10 && mvd.color != 253 - 4 * 11 && r.Next(17) < 6);
             return voxels;
+        }
+        /// <summary>
+        /// Load a MagicaVoxel .vox format file into a MagicaVoxelData List that we use for voxel chunks.
+        /// </summary>
+        /// <param name="stream">An open BinaryReader stream that is the .vox file.</param>
+        /// <returns>The voxel chunk data for the MagicaVoxel .vox file.</returns>
+        public static List<MagicaVoxelData> FromMagicaProcedural(BinaryReader stream, uint seed, int odds1024 = 650)
+        {
+            // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+            r.Reseed(seed);
+            List<MagicaVoxelData> voxelData = new List<MagicaVoxelData>(), voxelsAltered = new List<MagicaVoxelData>();
+            string magic = new string(stream.ReadChars(4));
+            int version = stream.ReadInt32();
+
+            // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
+            if(magic == "VOX ")
+            {
+                while(stream.BaseStream.Position < stream.BaseStream.Length)
+                {
+                    // each chunk has an ID, size and child chunks
+                    char[] chunkId = stream.ReadChars(4);
+                    int chunkSize = stream.ReadInt32();
+                    int childChunks = stream.ReadInt32();
+                    string chunkName = new string(chunkId);
+
+                    // there are only 2 chunks we only care about, and they are SIZE and XYZI
+                    if(chunkName == "SIZE")
+                    {
+                        sizex = stream.ReadInt32();
+                        sizey = stream.ReadInt32();
+                        sizez = stream.ReadInt32();
+                        stream.ReadBytes(chunkSize - 4 * 3);
+                    }
+                    else if(chunkName == "XYZI")
+                    {
+                        // XYZI contains n voxels
+                        int numVoxels = stream.ReadInt32();
+                        // each voxel has x, y, z and color index values
+                        byte vx, vy, vz, vc;
+                        for(int i = 0; i < numVoxels; i++)
+                        {
+                            vx = stream.ReadByte();
+                            vy = stream.ReadByte();
+                            vz = stream.ReadByte();
+                            vc = stream.ReadByte();
+                            if(vy < sizey >> 1 && (vc == 113 || (PRNG.Randomize(seed + 0x7F4A7C15U * (((vx * 17u) / 18u) * 181u + (vy * 12u) / 13u + (vz / 5u))) & 1023) < odds1024))
+                            {
+                                voxelData.Add(new MagicaVoxelData(vx, vy, vz, vc));
+                                voxelData.Add(new MagicaVoxelData(vx, sizey - 1 - vy, vz, vc));
+                            }
+                        }
+                    }
+                    else if(chunkName == "RGBA")
+                    {
+                        //colors = new float[256][];
+
+                        for(int i = 0; i < 256; i++)
+                        {
+                            byte r = stream.ReadByte();
+                            byte g = stream.ReadByte();
+                            byte b = stream.ReadByte();
+                            byte a = stream.ReadByte();
+
+                        }
+                    }
+                    else stream.ReadBytes(chunkSize);   // read any excess bytes
+                }
+
+            }
+            /*            taken.Fill(-1);
+                        foreach (MagicaVoxelData mvd in voxelsAltered.FindAll(v => v.z == 0))
+                        {
+                            taken[mvd.x, mvd.y] = 2;
+                        }
+                        foreach (MagicaVoxelData mvd in voxelsAltered.FindAll(v => v.z >= 100))
+                        {
+                            if(taken[mvd.x, mvd.y] != 2)
+                            {
+                                MagicaVoxelData vox = new MagicaVoxelData();
+                                vox.x = mvd.x;
+                                vox.y = mvd.y;
+                                vox.z = (byte)(0);
+                                vox.color = 249 - 96;
+                                voxelData.Add(vox);
+                            }
+                        }*/
+            stream.Close();
+            return voxelData;
         }
 
         public static List<MagicaVoxelData> MergeVoxels(IEnumerable<MagicaVoxelData> plug, IEnumerable<MagicaVoxelData> socket, int matchColor)

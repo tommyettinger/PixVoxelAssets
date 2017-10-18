@@ -80,8 +80,8 @@ namespace AssetsPV
 
         public long NextLong()
         {
-            return (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B500000000L ^
-            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5;
+            return (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B500000000L ^
+            ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5L & 0xFFFFFFFFL);
         }
         /// <summary>
         /// Gets a pseudo-random int that is between 0 (inclusive) and maxValue (exclusive); maxValue must be
@@ -96,8 +96,8 @@ namespace AssetsPV
             long threshold = (0x7fffffffffffffffL - maxValue + 1) % maxValue;
             for(;;)
             {
-                long bits = ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B500000000L ^
-            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5) & 0x7fffffffffffffffL;
+                long bits = ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B500000000L ^
+            ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5L & 0xFFFFFFFFL)) & 0x7fffffffffffffffL;
                 if(bits >= threshold)
                     return bits % maxValue;
             }
@@ -120,7 +120,7 @@ namespace AssetsPV
         /// <returns>any int, all 32 bits are pseudo-random</returns>
         public int NextInt()
         {
-            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5);
+            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U);
         }
         /// <summary>
         /// Returns a positive pseudo-random int, which can have any 31-bit positive value.
@@ -128,7 +128,17 @@ namespace AssetsPV
         /// <returns>any random positive int, all but the sign bit are pseudo-random</returns>
         public override int Next()
         {
-            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5);
+            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U);
+        }
+        /// <summary>
+        /// Returns a positive pseudo-random int, which can have any 31-bit positive value.
+        /// </summary>
+        /// <param name="bits">the maximum number of bits to use for the result</param>
+        /// <returns>an int between 0 and <code>Pow(2, bits)</code></returns>
+        /// <returns>any random int using up to the specified amount of bits</returns>
+        public int NextBits(int bits)
+        {
+            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U >> (32 - bits));
         }
         /// <summary>
         /// Gets a pseudo-random int that is between 0 (inclusive) and maxValue (exclusive), which can be positive or negative.
@@ -138,7 +148,7 @@ namespace AssetsPV
         /// <returns>an int between 0 and maxValue</returns>
         public override int Next(int maxValue)
         {
-            return (int)((maxValue * (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5) & 0x7FFFFFFFL)) >> 31);
+            return (int)((maxValue * (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U) & 0x7FFFFFFFL)) >> 31);
         }
         /// <summary>
         /// Gets a pseudo-random int that is between minValue (inclusive) and maxValue (exclusive); both can be positive or negative.
@@ -163,7 +173,7 @@ namespace AssetsPV
                 throw new ArgumentNullException("buffer");
             for(int i = 0; i < buffer.Length;)
             {
-                uint r = ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5);
+                uint r = ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U);
                 for(int n = Math.Min(buffer.Length - i, 4); n-- > 0; r >>= 8)
                     buffer[i++] = (byte)r;
             }
@@ -175,7 +185,7 @@ namespace AssetsPV
         public override double NextDouble()
         {
             return (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B500000000L ^
-            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5) & 0x1FFFFFFFFFFFFFL) * 1.1102230246251565E-16;
+            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U) & 0x1FFFFFFFFFFFFFL) * 1.1102230246251565E-16;
         }
         /// <summary>
         /// Gets a random double between 0.0 (inclusive) and 1.0 (exclusive).
@@ -187,7 +197,7 @@ namespace AssetsPV
         protected override double Sample()
         {
             return (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B500000000L ^
-            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B5) & 0x1FFFFFFFFFFFFFL) * 1.1102230246251565E-16;
+            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U) & 0x1FFFFFFFFFFFFFL) * 1.1102230246251565E-16;
         }
         /// <summary>
         /// Returns a new RNG using the same algorithm and a copy of the internal state this uses.

@@ -135,8 +135,6 @@ Ruins	purple-gray
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (magic == "VOX ")
             {
-                bool subsample = false;
-
                 while (stream.BaseStream.Position < stream.BaseStream.Length)
                 {
                     // each chunk has an ID, size and child chunks
@@ -152,20 +150,16 @@ Ruins	purple-gray
                         sizey = stream.ReadInt32();
                         sizez = stream.ReadInt32();
 
-                        if (sizex > 32 || sizey > 32) subsample = true;
-
                         stream.ReadBytes(chunkSize - 4 * 3);
                     }
                     else if (chunkName == "XYZI")
                     {
                         // XYZI contains n voxels
                         int numVoxels = stream.ReadInt32();
-                        int div = (subsample ? 2 : 1);
-
                         // each voxel has x, y, z and color index values
                         voxelData = new MagicaVoxelData[numVoxels];
                         for (int i = 0; i < voxelData.Length; i++)
-                            voxelData[i] = new MagicaVoxelData(stream, subsample);
+                            voxelData[i] = new MagicaVoxelData(stream);
                     }
                     else if (chunkName == "RGBA")
                     {

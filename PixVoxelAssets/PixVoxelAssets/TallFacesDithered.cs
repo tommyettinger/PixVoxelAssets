@@ -9326,8 +9326,8 @@ namespace AssetsPV
                 }
             }
             byte[,,] result = TransformLogic.Overlap(modelBase, //TransformLogic.FillInteriorAndOpen(
-                                //TransformLogic.RunSurfaceCA(
-                                //TransformLogic.RunCA(
+                                                                //TransformLogic.RunSurfaceCA(
+                                                                //TransformLogic.RunCA(
                                 TransformLogic.RandomChanges(
                                     FaceLogic.FaceArrayToByteArray(
                                     FaceLogic.RecolorCA(
@@ -9343,8 +9343,8 @@ namespace AssetsPV
                                         ))
                                     , 2))
                                 )
-                        //, 2, true)
-                        //)
+                    //, 2, true)
+                    //)
                     );
             foreach(int palette in CURedux.humanHighlights)
             {
@@ -9701,6 +9701,31 @@ namespace AssetsPV
             }
             //VoxelLogic.WriteVOX(folder + u + "_palette" + palette + ".vox", result, "W", palette);
         }
+        public static void WriteVOXProcedural(string u)
+        {
+            BinaryReader bin = new BinaryReader(File.Open(u + ".vox", FileMode.Open));
+            uint seed = (uint)rng.NextInt();
+            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaProcedural(bin, seed, 340); ; //VoxelLogic.PlaceShadowsW(
+            byte[,,] result = TransformLogic.RunCA(
+            FaceLogic.FaceArrayToByteArray(
+            FaceLogic.DoubleSize(
+            //FaceLogic.FillAllGaps(
+            FaceLogic.GetFaces(voxes, 40, 40, 40, true))),
+            4, true, true);
+            result = VoxelLogic.VoxListToArray(Model.BytesToListsCU(result).OrderByDescending(l => l.Count).First(), 80, 80, 80);
+            foreach(int palette in CURedux.alienHighlights)
+            {
+                string folder = "vox_out/color" + (palette % 8) + "/";
+                Directory.CreateDirectory(folder);
+                Console.WriteLine("Processing: " + u + " with seed " + seed + ", palette " + palette);
+
+                //FaceVoxel[,,] faces = FaceLogic.OverlapAll(m.AllBones().Select(b => FaceLogic.FillAllGaps(FaceLogic.GetFaces(b))));
+
+                VoxelLogic.WriteVOX(folder + u + "_seed" + seed + "_palette" + palette + ".vox",
+                    result,
+                    "W", palette);
+            }
+        }
 
         public static AssimpContext ac;// = new AssimpContext();
         public static ConsoleLogStream log;// = new ConsoleLogStream();
@@ -10037,196 +10062,186 @@ namespace AssetsPV
             
             writePaletteImages();
 
-            for(int a = 0; a < 3; a++)
-            {
-                /*
-                for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
-                {
-                    processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
-                }
-                */
-                processUnitLargeWMilitary("Infantry");
-                processUnitLargeWMilitary("Infantry_P");
-                processUnitLargeWMilitary("Infantry_S");
-                processUnitLargeWMilitary("Infantry_T");
+            //for(int a = 0; a < 3; a++)
+            //{
+            //    processUnitLargeWMilitary("Infantry");
+            //    processUnitLargeWMilitary("Infantry_P");
+            //    processUnitLargeWMilitary("Infantry_S");
+            //    processUnitLargeWMilitary("Infantry_T");
 
-                processUnitLargeWMilitary("Infantry_PS");
-                processUnitLargeWMilitary("Infantry_PT");
-                processUnitLargeWMilitary("Infantry_ST");
+            //    processUnitLargeWMilitary("Infantry_PS");
+            //    processUnitLargeWMilitary("Infantry_PT");
+            //    processUnitLargeWMilitary("Infantry_ST");
 
-                processUnitLargeWMilitary("Tank");
-                processUnitLargeWMilitary("Tank_P");
-                processUnitLargeWMilitary("Tank_S");
-                processUnitLargeWMilitary("Tank_T");
-                
-                processUnitLargeWMilitary("Recon");
-                processUnitLargeWMilitary("Flamethrower");
-                
-                processUnitLargeWMilitary("Civilian");
-                
-                processUnitLargeWMilitary("Volunteer");
-                processUnitLargeWMilitary("Volunteer_P");
-                processUnitLargeWMilitary("Volunteer_S");
-                processUnitLargeWMilitary("Volunteer_T");
-                
-                processUnitLargeWMilitary("Truck");
-                processUnitLargeWMilitary("Truck_P");
-                processUnitLargeWMilitary("Truck_S");
-                processUnitLargeWMilitary("Truck_T");
+            //    processUnitLargeWMilitary("Tank");
+            //    processUnitLargeWMilitary("Tank_P");
+            //    processUnitLargeWMilitary("Tank_S");
+            //    processUnitLargeWMilitary("Tank_T");
 
-                processUnitLargeWMilitary("Artillery");
-                processUnitLargeWMilitary("Artillery_P");
-                processUnitLargeWMilitary("Artillery_S");
-                processUnitLargeWMilitary("Artillery_T");
-                
-                processUnitLargeWMilitary("Copter");
-                processUnitLargeWMilitary("Copter_P");
-                processUnitLargeWMilitary("Copter_S");
-                processUnitLargeWMilitary("Copter_T");
-                
-                processUnitLargeWMilitary("Plane");
-                processUnitLargeWMilitary("Plane_P");
-                processUnitLargeWMilitary("Plane_S");
-                processUnitLargeWMilitary("Plane_T");
-                
-                processUnitLargeWMilitary("Boat");
-                processUnitLargeWMilitary("Boat_P");
-                processUnitLargeWMilitary("Boat_S");
-                processUnitLargeWMilitary("Boat_T");
+            //    processUnitLargeWMilitary("Recon");
+            //    processUnitLargeWMilitary("Flamethrower");
 
-                processUnitLargeWMilitary("Laboratory");
-                processUnitLargeWMilitary("Dock");
-                processUnitLargeWMilitary("Airport");
-                processUnitLargeWMilitary("City");
-                processUnitLargeWMilitary("Factory");
-                processUnitLargeWMilitary("Castle");
-                processUnitLargeWMilitary("Estate");
+            //    processUnitLargeWMilitary("Civilian");
 
-                processUnitLargeWMilitary("Hospital");
-                processUnitLargeWMilitary("Farm");
-                processUnitLargeWMilitary("Oil_Well");
-                
-                /*
-                for(int v = 0; v < CURedux.super_units.Length; v++)
-                {
-                    processUnitHugeWMilitarySuper(CURedux.super_units[v]);
-                }
-                */
-                //CURedux.super_units.AsParallel().ForAll(u => processUnitHugeWMilitarySuper(u));
-                /*
-                processUnitHugeWMilitarySuper("Copter");
-                processUnitHugeWMilitarySuper("Copter_P");
-                processUnitHugeWMilitarySuper("Copter_S");
-                processUnitHugeWMilitarySuper("Copter_T");
+            //    processUnitLargeWMilitary("Volunteer");
+            //    processUnitLargeWMilitary("Volunteer_P");
+            //    processUnitLargeWMilitary("Volunteer_S");
+            //    processUnitLargeWMilitary("Volunteer_T");
 
-                processUnitHugeWMilitarySuper("Plane");
-                processUnitHugeWMilitarySuper("Plane_P");
-                processUnitHugeWMilitarySuper("Plane_S");
-                processUnitHugeWMilitarySuper("Plane_T");
+            //    processUnitLargeWMilitary("Truck");
+            //    processUnitLargeWMilitary("Truck_P");
+            //    processUnitLargeWMilitary("Truck_S");
+            //    processUnitLargeWMilitary("Truck_T");
 
-                processUnitHugeWMilitarySuper("Boat");
-                processUnitHugeWMilitarySuper("Boat_P");
-                processUnitHugeWMilitarySuper("Boat_S");
-                processUnitHugeWMilitarySuper("Boat_T");
+            //    processUnitLargeWMilitary("Artillery");
+            //    processUnitLargeWMilitary("Artillery_P");
+            //    processUnitLargeWMilitary("Artillery_S");
+            //    processUnitLargeWMilitary("Artillery_T");
 
-                processUnitHugeWMilitarySuper("Laboratory");
-                processUnitHugeWMilitarySuper("Dock");
-                processUnitHugeWMilitarySuper("City");
-                processUnitHugeWMilitarySuper("Factory");
-                processUnitHugeWMilitarySuper("Castle");
-                processUnitHugeWMilitarySuper("Estate");
-                processUnitHugeWMilitarySuper("Airport");
-                processUnitHugeWMilitarySuper("Hospital");
-                
-                processUnitHugeWMilitarySuper("Farm");
-                processUnitHugeWMilitarySuper("Oil_Well");
-                */
-                addon = (a == 0) ? "Mask_" : "";
-            }
-            
-            processReceivingMilitaryW();
-            
-            //processReceivingMilitaryWSuper();
+            //    processUnitLargeWMilitary("Copter");
+            //    processUnitLargeWMilitary("Copter_P");
+            //    processUnitLargeWMilitary("Copter_S");
+            //    processUnitLargeWMilitary("Copter_T");
+
+            //    processUnitLargeWMilitary("Plane");
+            //    processUnitLargeWMilitary("Plane_P");
+            //    processUnitLargeWMilitary("Plane_S");
+            //    processUnitLargeWMilitary("Plane_T");
+
+            //    processUnitLargeWMilitary("Boat");
+            //    processUnitLargeWMilitary("Boat_P");
+            //    processUnitLargeWMilitary("Boat_S");
+            //    processUnitLargeWMilitary("Boat_T");
+
+            //    processUnitLargeWMilitary("Laboratory");
+            //    processUnitLargeWMilitary("Dock");
+            //    processUnitLargeWMilitary("Airport");
+            //    processUnitLargeWMilitary("City");
+            //    processUnitLargeWMilitary("Factory");
+            //    processUnitLargeWMilitary("Castle");
+            //    processUnitLargeWMilitary("Estate");
+
+            //    processUnitLargeWMilitary("Hospital");
+            //    processUnitLargeWMilitary("Farm");
+            //    processUnitLargeWMilitary("Oil_Well");
+
+            //    /*
+            //    processUnitHugeWMilitarySuper("Copter");
+            //    processUnitHugeWMilitarySuper("Copter_P");
+            //    processUnitHugeWMilitarySuper("Copter_S");
+            //    processUnitHugeWMilitarySuper("Copter_T");
+
+            //    processUnitHugeWMilitarySuper("Plane");
+            //    processUnitHugeWMilitarySuper("Plane_P");
+            //    processUnitHugeWMilitarySuper("Plane_S");
+            //    processUnitHugeWMilitarySuper("Plane_T");
+
+            //    processUnitHugeWMilitarySuper("Boat");
+            //    processUnitHugeWMilitarySuper("Boat_P");
+            //    processUnitHugeWMilitarySuper("Boat_S");
+            //    processUnitHugeWMilitarySuper("Boat_T");
+
+            //    processUnitHugeWMilitarySuper("Laboratory");
+            //    processUnitHugeWMilitarySuper("Dock");
+            //    processUnitHugeWMilitarySuper("City");
+            //    processUnitHugeWMilitarySuper("Factory");
+            //    processUnitHugeWMilitarySuper("Castle");
+            //    processUnitHugeWMilitarySuper("Estate");
+            //    processUnitHugeWMilitarySuper("Airport");
+            //    processUnitHugeWMilitarySuper("Hospital");
+
+            //    processUnitHugeWMilitarySuper("Farm");
+            //    processUnitHugeWMilitarySuper("Oil_Well");
+            //    */
+            //    addon = (a == 0) ? "Mask_" : "";
+            //}
+
+            //processReceivingMilitaryW();
+
+            ////processReceivingMilitaryWSuper();
 
 
-            WriteAllGIFs();
-            addon = "Mask_";
-            WriteMaskGIFs();
-            addon = "Zombie_";
-            WriteZombieGIFs();
+            //WriteAllGIFs();
+            //addon = "Mask_";
+            //WriteMaskGIFs();
+            //addon = "Zombie_";
+            //WriteZombieGIFs();
 
-            //WriteDivineGIFs();
-            
-            Directory.CreateDirectory(altFolder + "Terrains");
-            Directory.CreateDirectory(blankFolder + "Terrains");
+            ////WriteDivineGIFs();
 
-            renderTerrainSimple("Plains", "High", new byte[] {
-                    0, 27, 7,
-                    2, 34, 2, }, 1, 0, 2);
-            renderTerrainSimple("Road", "Ordered", new byte[] {
-                    32, 5, 3,
-                    33, 7, 3,
-                    34, 9, 2}, 33, 32, 56);
-            renderTerrainSimple("Forest", "High", new byte[] {
-                    4, 27, 7,
-                    6, 34, 2, }, 5, 4, 6);
-            renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
-                    8, 27, 7,
-                    10, 34, 2, }, 9, 8, 10);
-            renderTerrainSimple("Jungle", "High", new byte[] {
-                    12, 27, 7,
-                    14, 34, 2, }, 13, 12, 14);
-            renderTerrainSimple("Hill", "High", new byte[] {
-                    16, 27, 7,
-                    18, 34, 2, }, 17, 16, 18);
-            renderTerrainSimple("Mountain", "High", new byte[] {
-                    20, 27, 7,
-                    22, 34, 2, }, 21, 20, 22);
-            renderTerrainSimple("Ruins", "High", new byte[] {
-                    24, 27, 7,
-                    26, 34, 2, }, 25, 24, 26);
-            renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
-                    28, 27, 7,
-                    30, 34, 2, }, 29, 28, 30);
+            //Directory.CreateDirectory(altFolder + "Terrains");
+            //Directory.CreateDirectory(blankFolder + "Terrains");
 
-            renderTerrainSimple("River", "Water", new byte[] {
-                    36, 7, 2,
-                    38, 13, 2,
-                    45, 39, 7,
-                    4, 51, 2, }, 37, 36, 38);
-            renderTerrainSimple("Ocean", "Water", new byte[] {
-                    46, 23, 5,
-                    47, 21, 4,
-                    44, 29, 7, }, 45, 44, 46);
-            renderTerrainSimple("Pit", "Normal", new byte[] {
-                    41, 11, 3,
-                    }, 40, 40, 40);
+            //renderTerrainSimple("Plains", "High", new byte[] {
+            //        0, 27, 7,
+            //        2, 34, 2, }, 1, 0, 2);
+            //renderTerrainSimple("Road", "Ordered", new byte[] {
+            //        32, 5, 3,
+            //        33, 7, 3,
+            //        34, 9, 2}, 33, 32, 56);
+            //renderTerrainSimple("Forest", "High", new byte[] {
+            //        4, 27, 7,
+            //        6, 34, 2, }, 5, 4, 6);
+            //renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
+            //        8, 27, 7,
+            //        10, 34, 2, }, 9, 8, 10);
+            //renderTerrainSimple("Jungle", "High", new byte[] {
+            //        12, 27, 7,
+            //        14, 34, 2, }, 13, 12, 14);
+            //renderTerrainSimple("Hill", "High", new byte[] {
+            //        16, 27, 7,
+            //        18, 34, 2, }, 17, 16, 18);
+            //renderTerrainSimple("Mountain", "High", new byte[] {
+            //        20, 27, 7,
+            //        22, 34, 2, }, 21, 20, 22);
+            //renderTerrainSimple("Ruins", "High", new byte[] {
+            //        24, 27, 7,
+            //        26, 34, 2, }, 25, 24, 26);
+            //renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
+            //        28, 27, 7,
+            //        30, 34, 2, }, 29, 28, 30);
 
-            renderTerrainSimple("Volcano", "Normal", new byte[] {
-                    49, 30, 2,
-                    57, 29, 5,
-                    51, 13, 3,
-                    50, 25, 8, }, 49, 48, 50);
-            renderTerrainSimple("Poison", "Water", new byte[] {
-                    3, 27, 3,
-                    2, 24, 9,
-                    1, 22, 11,
-                    52, 13, 7,}, 53, 52, 54);
-            renderTerrainSimple("Warning", "Ordered", new byte[] {
-                    59, 5, 2,
-                    }, 58, 58, 58);
-            
-            Directory.CreateDirectory(altFolder + "Tilings");
-            for(int i = 0; i < 40; i++)
-            {
-                makeSimpleTiling("tiling" + i);
-            }
-            
+            //renderTerrainSimple("River", "Water", new byte[] {
+            //        36, 7, 2,
+            //        38, 13, 2,
+            //        45, 39, 7,
+            //        4, 51, 2, }, 37, 36, 38);
+            //renderTerrainSimple("Ocean", "Water", new byte[] {
+            //        46, 23, 5,
+            //        47, 21, 4,
+            //        44, 29, 7, }, 45, 44, 46);
+            //renderTerrainSimple("Pit", "Normal", new byte[] {
+            //        41, 11, 3,
+            //        }, 40, 40, 40);
+
+            //renderTerrainSimple("Volcano", "Normal", new byte[] {
+            //        49, 30, 2,
+            //        57, 29, 5,
+            //        51, 13, 3,
+            //        50, 25, 8, }, 49, 48, 50);
+            //renderTerrainSimple("Poison", "Water", new byte[] {
+            //        3, 27, 3,
+            //        2, 24, 9,
+            //        1, 22, 11,
+            //        52, 13, 7,}, 53, 52, 54);
+            //renderTerrainSimple("Warning", "Ordered", new byte[] {
+            //        59, 5, 2,
+            //        }, 58, 58, 58);
+
+            //Directory.CreateDirectory(altFolder + "Tilings");
+            //for(int i = 0; i < 40; i++)
+            //{
+            //    makeSimpleTiling("tiling" + i);
+            //}
+
 
 
             //makeDetailedTiling();
 
-            //WriteVOXMilitary("Plane_T");
+            WriteVOXProcedural("Spaceship");
+            WriteVOXProcedural("Spaceship");
+            WriteVOXProcedural("Spaceship");
+            WriteVOXProcedural("Spaceship");
             /*
             WriteVOXMilitary("Tank");
             WriteVOXMilitary("Tank_P");

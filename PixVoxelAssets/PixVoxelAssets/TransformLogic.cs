@@ -1278,6 +1278,54 @@ namespace AssetsPV
             model.SetAnatomy();
             return model;
         }
+
+        public static List<List<MagicaVoxelData>> BytesToListsCU(byte[,,] data)
+        {
+            byte[,,] data2 = data.Replicate();
+            List<List<MagicaVoxelData>> lists = new List<List<MagicaVoxelData>>(10);
+            int xSize = data.GetLength(0), ySize = data.GetLength(1), zSize = data.GetLength(2);
+
+            int regular_ctr = 0, gun_ctr = 0, wheel_ctr = 0;
+            for(int x = 0; x < xSize; x++)
+            {
+                for(int y = 0; y < ySize; y++)
+                {
+                    for(int z = 0; z < zSize; z++)
+                    {
+                        if(data2[x, y, z] >= 253 - 1 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt >= 253 - 1 * 4);
+                            if(bn.Count > 0)
+                                lists.Add(bn);
+                        }
+                        else if(data2[x, y, z] <= 253 - 12 * 4 && data2[x, y, z] >= 253 - 16 * 4)
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt <= 253 - 12 * 4 && bt >= 253 - 16 * 4);
+                            if(bn.Count > 0)
+                                lists.Add(bn);
+                        }
+                        else if(data2[x, y, z] > 0 && data2[x, y, z] != 253 - 27 * 4) // quick hack to force water splashes into "Extra"
+                        {
+                            var l = new List<MagicaVoxelData>();
+                            l.Add(new MagicaVoxelData(x, y, z, data2[x, y, z]));
+                            List<MagicaVoxelData> bn = findContinuousParts(ref data2, l,
+                                bt => bt > 0 && bt != 253 - 27 * 4 && (bt > 253 - 12 * 4 || bt < 253 - 16 * 4));
+                            if(bn.Count > 0)
+                                lists.Add(bn);
+                        }
+                    }
+                }
+            }
+            lists.Add(VoxelLogic.VoxArrayToList(data2));
+            return lists;
+        }
+
         public Model[] PoseInterpolate(Pose[] poses, float[][] frames)
         {
             Model[] posed = new Model[poses.Length + 2], modelFrames = new Model[frames.Length];
