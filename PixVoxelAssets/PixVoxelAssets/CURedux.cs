@@ -55,7 +55,7 @@ namespace AssetsPV
         public const float grain_hard_alpha = VoxelLogic.grain_hard_alpha;
         public const float grain_some_alpha = VoxelLogic.grain_some_alpha;
         public const float grain_mild_alpha = VoxelLogic.grain_mild_alpha;
-        public const bool REMOVE_TWINKLE = false;
+        public const bool REMOVE_TWINKLE = true;
         public const bool ZOMBIES = true;
 
         public const byte shadow = 253 - 25 * 4, smoke = 253 - 17 * 4, yellow_fire = 253 - 18 * 4, orange_fire = 253 - 19 * 4,
@@ -2787,7 +2787,7 @@ namespace AssetsPV
             };
             Explosions = new byte[10][][,,];
             SuperExplosions = new byte[10][][,,];
-            /*
+            
             for(int e = 0; e < 10; e++)
             {
                 MagicaVoxelData[][] expl = FireballSwitchable(randomFill(60 - (e + 1) * 2, 60 - (e + 1) * 2, 0, (e + 1) * 4, (e + 1) * 4, (e + 1) * 3,
@@ -2798,7 +2798,7 @@ namespace AssetsPV
                     Explosions[e][f] = TransformLogic.VoxListToArray(expl[f], 120, 120, 80);
                 }
             }
-            */
+            
 
 
             /*

@@ -499,7 +499,7 @@ namespace AssetsPV
         {
             int xSize = voxelData.GetLength(0), ySize = voxelData.GetLength(1), zSize = voxelData.GetLength(2);
             FaceVoxel[,,] data = new FaceVoxel[xSize, ySize, zSize];
-            bool[] nearby = new bool[27];
+            //bool[] nearby = new bool[27];
             for(int z = 0; z < zSize; z++)
             {
                 for(int x = 0; x < xSize; x++)
@@ -509,6 +509,7 @@ namespace AssetsPV
                         byte mvd = voxelData[x, y, z];
                         if(mvd > 0 && (VoxelLogic.VisualMode != "CU" || mvd > CURedux.emitter0))
                         {
+                            /*
                             nearby.Fill(false);
                             for(int i = 0; i < 3; i++)
                             {
@@ -531,7 +532,7 @@ namespace AssetsPV
                                         }
                                     }
                                 }
-                            }
+                            }*/
                             //if(!AllArray(nearby))
                                 data[x, y, z] = new FaceVoxel(new MagicaVoxelData { x = (byte)x, y = (byte)y, z = (byte)z, color = mvd }, Slope.Cube);
                         }

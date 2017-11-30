@@ -18316,7 +18316,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                         byte tempX = (byte)(voxels[i].x - (xSize / 2));
                         byte tempY = (byte)(voxels[i].y - (ySize / 2));
                         vls[i].x = (byte)((tempY) + (ySize / 2));
-                        vls[i].y = (byte)((tempX * -1) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((-tempX) + (xSize / 2) - 1);
                         vls[i].z = voxels[i].z;
                         vls[i].color = voxels[i].color;
                     }
@@ -18326,8 +18326,8 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         byte tempX = (byte)(voxels[i].x - (xSize / 2));
                         byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempX * -1) + (xSize / 2) - 1);
-                        vls[i].y = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].x = (byte)((-tempX) + (xSize / 2) - 1);
+                        vls[i].y = (byte)((-tempY) + (ySize / 2) - 1);
                         vls[i].z = voxels[i].z;
                         vls[i].color = voxels[i].color;
                     }
@@ -18337,7 +18337,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
                     {
                         byte tempX = (byte)(voxels[i].x - (xSize / 2));
                         byte tempY = (byte)(voxels[i].y - (ySize / 2));
-                        vls[i].x = (byte)((tempY * -1) + (ySize / 2) - 1);
+                        vls[i].x = (byte)((-tempY) + (ySize / 2) - 1);
                         vls[i].y = (byte)(tempX + (xSize / 2));
                         vls[i].z = voxels[i].z;
                         vls[i].color = voxels[i].color;

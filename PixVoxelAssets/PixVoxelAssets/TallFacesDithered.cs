@@ -19,7 +19,7 @@ namespace AssetsPV
         public static bool RENDER = true;
         public static bool USE_PALETTE = true;
         public static bool ENABLE_SUPER = false;
-        public static string addon = "Zombie_"; // "" // "Zombie_" // "Divine_"
+        public static string addon = "";// "Zombie_"; // "" // "Zombie_" // "Divine_"
         public const int
         Cube = 0,
         BrightTop = 1,
@@ -10161,11 +10161,11 @@ namespace AssetsPV
             ////processReceivingMilitaryWSuper();
 
 
-            //WriteAllGIFs();
-            //addon = "Mask_";
-            //WriteMaskGIFs();
-            //addon = "Zombie_";
-            //WriteZombieGIFs();
+            WriteAllGIFs();
+            addon = "Mask_";
+            WriteMaskGIFs();
+            addon = "Zombie_";
+            WriteZombieGIFs();
 
             ////WriteDivineGIFs();
 
@@ -10238,10 +10238,12 @@ namespace AssetsPV
 
             //makeDetailedTiling();
 
+            /*
             WriteVOXProcedural("Spaceship");
             WriteVOXProcedural("Spaceship");
             WriteVOXProcedural("Spaceship");
             WriteVOXProcedural("Spaceship");
+            */
             /*
             WriteVOXMilitary("Tank");
             WriteVOXMilitary("Tank_P");
