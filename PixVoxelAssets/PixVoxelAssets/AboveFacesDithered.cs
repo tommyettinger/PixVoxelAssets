@@ -57,7 +57,7 @@ namespace AssetsPV
 
         public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
             ImageWidthLarge = 48, ImageHeightLarge = 68, ImageWidthHuge = 98, ImageHeightHuge = 138;
-        public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 2;
+        public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 1;
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             { Slope.BrightTop, BrightTop }, { Slope.DimTop, DimTop }, { Slope.BrightDim, BrightDim }, { Slope.BrightDimTop, BrightDimTop }, { Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
             { Slope.BrightDimBottom, BrightDimBottom }, { Slope.BrightBack, BrightBack }, { Slope.DimBack, DimBack },
@@ -2854,25 +2854,6 @@ namespace AssetsPV
 
          */
 
-        public static int ColorPriorityCU(int c)
-        {
-            switch((253 - c) >> 2)
-            {
-                case 6:
-                case 7:
-                    return 55;// + ((253 - fv) & 3) * 3;
-                case 9:
-                    return 45;// + ((253 - fv) & 3) * 3;
-                case 8:
-                    return 82;// + ((253 - fv) & 3) * 3;
-                case 10:
-                case 11:
-                    return 180;// + ((253 - fv) & 3) * 3;
-                //case 16: return 24;
-                default: return 4;// + ((253 - fv) & 3) * 3;
-            }
-        }
-
         //private static byte mostCommon(byte[][] b, int x, int y)
         //{
         //    byte best1 = b[y][x], best2 = 0, best3 = 0, best4 = 0, best5 = 0, current;
@@ -2942,6 +2923,27 @@ namespace AssetsPV
         //    }
         //}
 
+        public static int ColorPriorityCU(int c)
+        {
+            int shadeMod = (((253 - c) & 3) == 3) ? 5 : 2;
+            switch((253 - c) >> 2)
+            {
+                case 6:
+                case 7:
+                    return 55 * shadeMod;// + ((253 - fv) & 3) * 3;
+                case 9:
+                    return 56 * shadeMod;// + ((253 - fv) & 3) * 3;
+                case 8:
+                    return 132 * shadeMod;// + ((253 - fv) & 3) * 3;
+                case 10:
+                case 11:
+                    return 283;// + ((253 - fv) & 3) * 3;
+                //case 16: return 24;
+                case 25: return 10;
+                default: return 4 * shadeMod;// + ((253 - fv) & 3) * 3;
+            }
+        }
+
         private static byte mostCommon(byte[][] b, int x, int y)
         {
             byte best1 = b[y][x], best2 = 0, best3 = 0, best4 = 0, best5 = 0, current, weight = 1;
@@ -2949,23 +2951,25 @@ namespace AssetsPV
             //if(best1 == 0) return 0;
             int count1 = 1, count2 = 0, count3 = 0, count4 = 0, count5 = 0, t;//, shade = best1 == 0 ? 3 : ((253 - best1) & 3), total = 1;
 
-            for(int j = -1; j <= 1; j++)
+            for(int j = -2; j <= 2; j++)
             {
-                for(int i = -1; i <= 1; i++)
+                for(int i = -2; i <= 2; i++)
                 {
-                    if((i & j) != 0) continue;
+                    //if((i * i + j * j) > 5) continue;
+                    //if((i & j) != 0) continue;
                     current = b[y + j][x + i];
                     if(current == 0)
                         weight++;
                 }
             }
+            //if(weight > 10) return 0;
             
-            for(int j = -1; j <= 1; j++)
+            for(int j = -2; j <= 2; j++)
             {
-                for(int i = -1; i <= 1; i++)
+                for(int i = -2; i <= 2; i++)
                 {
-                    //if((i * i + j * j) > 4) continue;
-                    if((i & j) != 0) continue;
+                    //if((i * i + j * j) > 5) continue;
+                    //if((i & j) != 0) continue;
                     current = b[y + j][x + i];
                     //if(current == 0 || (i & j) != 0) continue;
                     if(best1 == 0 || current == best1)
@@ -3015,9 +3019,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 72 + 34, i = 0; y < HugeHeight - 3 && i < ImageHeightLarge; y += 4, i++) // y+=4
+            for(int y = 72 + 34, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 4, i++) // y+=4
             {
-                for(int x = 30, j = 0; x < HugeWidth - 3 && j < ImageWidthLarge; x += 4, j++) // x+=4
+                for(int x = 30, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 4, j++) // x+=4
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -3040,9 +3044,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 78, i = 0; y < HugeHeight * 2 - 3 && i < ImageHeightHuge; y += 4, i++) // y+=2
+            for(int y = 78, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 4, i++) // y+=2
             {
-                for(int x = 42, j = 0; x < HugeWidth * 2 - 3 && j < ImageWidthHuge; x += 4, j++) //x+=2
+                for(int x = 42, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 4, j++) //x+=2
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -3092,9 +3096,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 72 + 34, i = 0; y < HugeHeight - 3 && i < ImageHeightLarge; y += 4, i++) //y+=2
+            for(int y = 72 + 35, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 4, i++) //y+=2
             {
-                for(int x = 26, j = 0; x < HugeWidth - 3 && j < ImageWidthLarge; x += 4, j++) //x+=2
+                for(int x = 26, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 4, j++) //x+=2
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -3117,9 +3121,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 50, i = 0; y < HugeHeight * 2 - 3 && i < ImageHeightHuge; y += 4, i++) //y+=2
+            for(int y = 50, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 4, i++) //y+=2
             {
-                for(int x = 9, j = 0; x < HugeWidth * 2 - 3 && j < ImageWidthHuge; x += 4, j++) //x+=2
+                for(int x = 9, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 4, j++) //x+=2
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -6498,7 +6502,6 @@ for(int i = 0; i < numBytes; i++)
                     {
                         for(int y = -outline; y <= outline; y++)
                         {
-
                             if(((ii = i + x + cols * y) >= 0 && ii < argbValues.Length && !barePositions[ii]) && ((argbValues[i] > 0 && argbValues[ii] == 0 && lightOutline) || (zbuffer[i] - zbuffer[ii] > zbd || xbuffer[i] - xbuffer[ii] > xbd)))
                             {
                                 editValues[ii] = outlineValues[i];
@@ -8434,29 +8437,29 @@ for(int i = 0; i < numBytes; i++)
                         processUnitLargeWMilitary(VoxelLogic.CurrentUnits[u]);
                     }
                     */
+                    //processUnitLargeWMilitary("Infantry");
+                    //for(int w = 0; w < 2; w++)
+                    //{
+                    //    if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup["Infantry"]][w] <= -1)
+                    //        continue;
+
+                    //    List<string> imageNames = new List<string>(4 * 16 * 16);
+
+                    //    //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
+                    //    {
+                    //        int p = 32;
+                    //        for(int dir = 0; dir < 8; dir++)
+                    //        {
+                    //            for(int f = 0; f < 16; f++)
+                    //            {
+                    //                imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/Infantry/" + "Infantry" + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
+                    //            }
+                    //        }
+                    //    }
+                    //    Console.WriteLine("Running weapon " + w + " GIF conversion for Infantry...");
+                    //    WriteGIF(imageNames, 11, "gifs/" + altFolder + "Infantry_attack_" + w + "_Large_animated");
+                    //}
                     processUnitLargeWMilitary("Infantry");
-                    for(int w = 0; w < 2; w++)
-                    {
-                        if(VoxelLogic.CurrentWeapons[VoxelLogic.UnitLookup["Infantry"]][w] <= -1)
-                            continue;
-
-                        List<string> imageNames = new List<string>(4 * 16 * 16);
-
-                        //foreach(int p in (stripped != u ? CURedux.humanAltHighlights : CURedux.humanHighlights))
-                        {
-                            int p = 32;
-                            for(int dir = 0; dir < 8; dir++)
-                            {
-                                for(int f = 0; f < 16; f++)
-                                {
-                                    imageNames.Add(altFolder + ((p >= 38 * 8) ? "Divine/" : ((p >= 37 * 8) ? "Zombie/" : ((p >= 208) ? "Alien/" : ""))) + colorNames[p % 8] + "/animation_frames/" + "color" + p + "/Infantry/" + "Infantry" + "_Large_face" + dir + "_attack_" + w + "_" + f + ".png");
-                                }
-                            }
-                        }
-                        Console.WriteLine("Running weapon " + w + " GIF conversion for Infantry...");
-                        WriteGIF(imageNames, 11, "gifs/" + altFolder + "Infantry_attack_" + w + "_Large_animated");
-                    }
-                    /*
                     processUnitLargeWMilitary("Infantry_P");
                     processUnitLargeWMilitary("Infantry_S");
                     processUnitLargeWMilitary("Infantry_T");
@@ -8517,7 +8520,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Hospital");
                     processUnitLargeWMilitary("Farm");
                     processUnitLargeWMilitary("Oil_Well");
-                    */
+                    
                     /*
                     for(int v = 0; v < CURedux.super_units.Length; v++)
                     {
@@ -8561,12 +8564,12 @@ for(int i = 0; i < numBytes; i++)
                 //processReceivingMilitaryWSuper();
 
 
-                //WriteAllGIFs();
+                WriteAllGIFs();
                 //addon = "Zombie_";
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-                /*
+                
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
                 
@@ -8632,7 +8635,6 @@ for(int i = 0; i < numBytes; i++)
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
-                */
                 
             }
             /*
