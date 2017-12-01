@@ -18,6 +18,7 @@ namespace AssetsPV
         const bool RENDER = true;
         const bool USE_PALETTE = true;
         const bool ENABLE_SUPER = false;
+        const bool ENABLE_ALT = false;
 
         const bool ENABLE_STANDING = true;
         const bool ENABLE_FIRING = true;
@@ -55,8 +56,10 @@ namespace AssetsPV
         BackBackTopThick = 27,
         BackBackBottomThick = 28;
 
+        //public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
+        //    ImageWidthLarge = 48, ImageHeightLarge = 68, ImageWidthHuge = 98, ImageHeightHuge = 138;
         public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
-            ImageWidthLarge = 48, ImageHeightLarge = 68, ImageWidthHuge = 98, ImageHeightHuge = 138;
+            ImageWidthLarge = 64, ImageHeightLarge = 88, ImageWidthHuge = 128, ImageHeightHuge = 196;
         public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 1;
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             { Slope.BrightTop, BrightTop }, { Slope.DimTop, DimTop }, { Slope.BrightDim, BrightDim }, { Slope.BrightDimTop, BrightDimTop }, { Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
@@ -1290,6 +1293,8 @@ namespace AssetsPV
             foreach(string u in CURedux.normal_units)
             //new string[] { "Tank_P", "Tank_P_Alt" }.AsParallel().ForAll(u => 
             {
+                if(!ENABLE_ALT && u.Contains("_Alt"))
+                    continue;
                 string stripped = u.Contains("_Alt") ? u.Substring(0, u.LastIndexOf("_Alt")) : u;
                 List<string> imageNames = new List<string>(4 * 16 * 8);
                 if(ENABLE_STANDING)
@@ -2047,7 +2052,7 @@ namespace AssetsPV
 
                     for(int dir = 0; dir < 4; dir++)
                     {
-                        FaceVoxel[,,] faces = FaceLogic.GetCubes(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
+                        FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateLarge(parsed, dir), 60, 60, 60, 153));
 
                         for(int f = 0; f < framelimit; f++)
                         {
@@ -2141,7 +2146,7 @@ namespace AssetsPV
                         {
                             for(int frame = 0; frame < 16; frame++)
                             {
-                                FaceVoxel[,,] faces = FaceLogic.GetCubes(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(flying[frame], d), 120, 120, 80, 153));
+                                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(flying[frame], d), 120, 120, 80, 153));
 
 
                                 byte[][] b = processFrameHugeW(faces, 0, d, frame, 16, true, false);
@@ -2186,7 +2191,7 @@ namespace AssetsPV
                         {
                             for(int frame = 0; frame < 16; frame++)
                             {
-                                FaceVoxel[,,] faces = FaceLogic.GetCubes(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(firing[frame], d), 120, 120, 80, 153));
+                                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(firing[frame], d), 120, 120, 80, 153));
 
                                 byte[][] b = processFrameHugeW(faces, 0, d, frame, 16, true, false);
 
@@ -2271,7 +2276,7 @@ namespace AssetsPV
                         {
                             for(int frame = 0; frame < 16; frame++)
                             {
-                                FaceVoxel[,,] faces = FaceLogic.GetCubes(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(receive[frame], d), 120, 120, 80, 153));
+                                FaceVoxel[,,] faces = FaceLogic.GetFaces(FaceLogic.VoxListToArray(VoxelLogic.BasicRotateHuge(receive[frame], d), 120, 120, 80, 153));
 
                                 byte[][] b = processFrameHugeW(faces, 0, d, frame, 16, true, false);
 
@@ -2925,7 +2930,7 @@ namespace AssetsPV
 
         public static int ColorPriorityCU(int c)
         {
-            int shadeMod = (((253 - c) & 3) == 3) ? 5 : 2;
+            int shadeMod = (((253 - c) & 3) == 3) ? 7 : 2;
             switch((253 - c) >> 2)
             {
                 case 6:
@@ -2936,8 +2941,9 @@ namespace AssetsPV
                 case 8:
                     return 132 * shadeMod;// + ((253 - fv) & 3) * 3;
                 case 10:
+                    return 151;
                 case 11:
-                    return 283;// + ((253 - fv) & 3) * 3;
+                    return 203;// + ((253 - fv) & 3) * 3;
                 //case 16: return 24;
                 case 25: return 10;
                 default: return 4 * shadeMod;// + ((253 - fv) & 3) * 3;
@@ -2951,9 +2957,9 @@ namespace AssetsPV
             //if(best1 == 0) return 0;
             int count1 = 1, count2 = 0, count3 = 0, count4 = 0, count5 = 0, t;//, shade = best1 == 0 ? 3 : ((253 - best1) & 3), total = 1;
 
-            for(int j = -2; j <= 2; j++)
+            for(int j = -1; j <= 1; j++)
             {
-                for(int i = -2; i <= 2; i++)
+                for(int i = -1; i <= 1; i++)
                 {
                     //if((i * i + j * j) > 5) continue;
                     //if((i & j) != 0) continue;
@@ -2962,12 +2968,15 @@ namespace AssetsPV
                         weight++;
                 }
             }
-            //if(weight > 10) return 0;
-            
-            for(int j = -2; j <= 2; j++)
+            //if(weight > 5) return 0;
+
+            for(int i = -1; i <= 1; i++)
             {
-                for(int i = -2; i <= 2; i++)
+                for(int j = -1; j <= 1; j++)
                 {
+                    //t = 5 - (j * j * 4);
+                    t = 5 - (i * i * 2);
+
                     //if((i * i + j * j) > 5) continue;
                     //if((i & j) != 0) continue;
                     current = b[y + j][x + i];
@@ -2975,27 +2984,27 @@ namespace AssetsPV
                     if(best1 == 0 || current == best1)
                     {
                         best1 = current;
-                        count1 += (t = ColorPriorityCU(current) * weight);
+                        count1 += (t * ColorPriorityCU(current) * weight);
                     }
                     else if(best2 == 0 || current == best2)
                     {
                         best2 = current;
-                        count2 += (t = ColorPriorityCU(current) * weight);
+                        count2 += (t * ColorPriorityCU(current) * weight);
                     }
                     else if(best3 == 0 || current == best3)
                     {
                         best3 = current;
-                        count3 += (t = ColorPriorityCU(current) * weight);
+                        count3 += (t * ColorPriorityCU(current) * weight);
                     }
                     else if(best4 == 0 || current == best4)
                     {
                         best4 = current;
-                        count4 += (t = ColorPriorityCU(current) * weight);
+                        count4 += (t * ColorPriorityCU(current) * weight);
                     }
                     else if(best5 == 0 || current == best5)
                     {
                         best5 = current;
-                        count5 += (t = ColorPriorityCU(current) * weight);
+                        count5 += (t * ColorPriorityCU(current) * weight);
                     }
                 }
             }
@@ -3019,9 +3028,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 72 + 34, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 4, i++) // y+=4
+            for(int y = 72 + 34, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 3, i++) // y+=4
             {
-                for(int x = 30, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 4, j++) // x+=4
+                for(int x = 30, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 3, j++) // x+=4
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -3044,9 +3053,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 78, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 4, i++) // y+=2
+            for(int y = 78, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 3, i++) // y+=2
             {
-                for(int x = 42, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 4, j++) //x+=2
+                for(int x = 42, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 3, j++) //x+=2
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -3096,9 +3105,9 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 72 + 35, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 4, i++) //y+=2
+            for(int y = 72 + 35, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 3, i++) //y+=2
             {
-                for(int x = 26, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 4, j++) //x+=2
+                for(int x = 25, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 3, j++) //x+=2
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -3121,9 +3130,9 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 50, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 4, i++) //y+=2
+            for(int y = 50, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 3, i++) //y+=2
             {
-                for(int x = 9, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 4, j++) //x+=2
+                for(int x = 9, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 3, j++) //x+=2
                 {
                     b2[i][j] = mostCommon(b, x, y);
                 }
@@ -5269,7 +5278,7 @@ namespace AssetsPV
 
                                     if(shadowValues[p] == 0)
                                     {
-                                        shadowValues[p] = wditheredcurrent[current_color][1][i * 4 + j * 16];
+                                        shadowValues[p] = wditheredcurrent[25][1][i * 4 + j * 16];
                                     }
                                 }
                             }
@@ -5392,7 +5401,7 @@ namespace AssetsPV
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
                     */
-                    if(shade) editValues[i] = outlineValues[i];
+                    //if(shade) editValues[i] = outlineValues[i];
                 }
             }
 
@@ -5422,18 +5431,18 @@ namespace AssetsPV
                 {
                     if(taken[x, y])
                     {
-                        int p = voxelToPixelLargeW(0, 2, x, y, 0, 25, cols, jitter, still);
-                        if(p > cols + 4 && p < numBytes - cols * 2 - 4)
+                        int p = voxelToPixelLargeW(1, 2, x, y, 0, 25, cols, jitter, still);
+                        if(p > cols * 2 + 2 && p < numBytes - cols * 2 - 4)
                         {
-                            for(int px = -1; px <= 4; px++)
+                            for(int px = -2; px <= 3; px++)
                             {
-                                for(int py = -1; py <= 2; py++)
+                                for(int py = -2; py <= 2; py++)
                                 {
-                                    if((px < 0 && py < 0) || (px == 4 && py == 2) || (px < 0 && py == 2) || (px == 4 && py < 0))
+                                    if((px == -2 && py == -2) || (px == 3 && py == 2) || (px == -2 && py == 2) || (px == 3 && py == -2))
                                         continue;
                                     if(shadowValues[p + px + py * cols] == 0)
                                     {
-                                        shadowValues[p + px + py * cols] = wditheredcurrentortho[25][1][8 * vwidth];
+                                        shadowValues[p + px + py * cols] = wditheredcurrent[25][1][32];
                                     }
                                 }
                             }
@@ -5794,7 +5803,7 @@ for(int i = 0; i < numBytes; i++)
                     if((i + 1 - cols >= 0 && i + 1 - cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i + 1 - cols] == 0 && lightOutline) || (barePositions[i + 1 - cols] == false && zbuffer[i] - zbd > zbuffer[i + 1 - cols]))) { editValues[i + 1 - cols] = outlineValues[i]; shade = true; }
                     if((i - 1 + cols >= 0 && i - 1 + cols < argbValues.Length) && ((argbValues[i] > 0 && argbValues[i - 1 + cols] == 0 && lightOutline) || (barePositions[i - 1 + cols] == false && zbuffer[i] - zbd > zbuffer[i - 1 + cols]))) { editValues[i - 1 + cols] = outlineValues[i]; shade = true; }
                     */
-                    if(shade) editValues[i] = outlineValues[i];
+                    //if(shade) editValues[i] = outlineValues[i];
                 }
             }
 
@@ -5824,18 +5833,18 @@ for(int i = 0; i < numBytes; i++)
                 {
                     if(taken[x, y])
                     {
-                        int p = voxelToPixelHugeW(0, 2, x, y, 0, 25, cols, jitter, still);
-                        if(p > cols && p < numBytes - cols * 3 - 5)
+                        int p = voxelToPixelHugeW(1, 2, x, y, 0, 25, cols, jitter, still);
+                        if(p > cols * 2 + 2 && p < numBytes - cols * 2 - 4)
                         {
-                            for(int px = -1; px <= 5; px++)
+                            for(int px = -2; px <= 3; px++)
                             {
-                                for(int py = -1; py <= 3; py++)
+                                for(int py = -2; py <= 2; py++)
                                 {
-                                    if((px < 0 && py < 0) || (px == 5 && py == 3) || (px < 0 && py == 3) || (px == 5 && py < 0))
+                                    if((px == -2 && py == -2) || (px == 3 && py == 2) || (px == -2 && py == 2) || (px == 3 && py == -2))
                                         continue;
                                     if(shadowValues[p + px + py * cols] == 0)
                                     {
-                                        shadowValues[p + px + py * cols] = wditheredcurrentortho[25][1][8 * vwidth];
+                                        shadowValues[p + px + py * cols] = wditheredcurrent[25][1][32];
                                     }
                                 }
                             }
@@ -6464,15 +6473,14 @@ for(int i = 0; i < numBytes; i++)
                 {
                     if(taken[x, y])
                     {
-                        int j = 3, i = 0,
-                            p = voxelToPixelGenericW(i, j, x, y, 0, 25, cols, jitter, still, xDim, zDim);
+                        int p = voxelToPixelGenericW(1, 3, x, y, 0, 25, cols, jitter, still, xDim, zDim);
                         if(p > cols + 3 && p < numBytes - cols * 3 - 3)
                         {
-                            for(int px = -1; px <= 3; px++)
+                            for(int px = -2; px <= 2; px++)
                             {
-                                for(int py = -1; py <= 3; py++)
+                                for(int py = -1; py <= 2; py++)
                                 {
-                                    if((px < 0 && py < 0) || (px == 3 && py == 3) || (px < 0 && py == 3) || (px == 3 && py < 0))
+                                    if((px == -2 && py < 0) || (px == 2 && py == 2) || (px == -2 && py == 2) || (px == 2 && py < 0))
                                         continue;
                                     if(shadowValues[p + px + py * cols] == 0)
                                     {
@@ -6558,7 +6566,7 @@ for(int i = 0; i < numBytes; i++)
                     {
                         editValues[i] = 255;
                     }*/
-                    if(shade) editValues[i] = outlineValues[i];
+                    //if(shade) editValues[i] = outlineValues[i];
                     
                 }
             }
@@ -6581,7 +6589,7 @@ for(int i = 0; i < numBytes; i++)
                         sum += (shadowValues[i - 1] > 0) ? 1 : 0;
                         sum += (shadowValues[i - cols] > 0) ? 1 : 0;
                         sum += (shadowValues[i + cols] > 0) ? 1 : 0;
-                        if(sum > 2)
+                        if(sum > 1)
                             argbValues[i] = shadowValues[i];
                     }
                 }
@@ -8111,8 +8119,8 @@ for(int i = 0; i < numBytes; i++)
             if(WAR)
             {
                 VoxelLogic.VisualMode = "CU";
-                altFolder = "Diverse_PixVoxel_Wargame_Above_Mini2/";
-                blankFolder = "Blank_PixVoxel_Wargame_Above_Mini2/";
+                altFolder = "Diverse_PixVoxel_Wargame_Above_Mini3/";
+                blankFolder = "Blank_PixVoxel_Wargame_Above_Mini3/";
                 Directory.CreateDirectory("gifs/" + altFolder);
                 CURedux.Initialize(true);
             }
@@ -8485,7 +8493,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Volunteer_P");
                     processUnitLargeWMilitary("Volunteer_S");
                     processUnitLargeWMilitary("Volunteer_T");
-                    
+
 
                     processUnitLargeWMilitary("Civilian");
 
@@ -8520,7 +8528,7 @@ for(int i = 0; i < numBytes; i++)
                     processUnitLargeWMilitary("Hospital");
                     processUnitLargeWMilitary("Farm");
                     processUnitLargeWMilitary("Oil_Well");
-                    
+
                     /*
                     for(int v = 0; v < CURedux.super_units.Length; v++)
                     {
@@ -8572,7 +8580,7 @@ for(int i = 0; i < numBytes; i++)
                 
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
-                
+
                 renderTerrainSimple("Road", "Ordered", new byte[] {
                     32, 5, 3,
                     33, 7, 3,
@@ -8629,13 +8637,13 @@ for(int i = 0; i < numBytes; i++)
                 renderTerrainSimple("Warning", "Ordered", new byte[] {
                     59, 5, 2,
                     }, 58, 58, 58);
-                
+
                 Directory.CreateDirectory(altFolder + "Tilings");
                 for(int i = 0; i < 40; i++)
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
-                
+
             }
             /*
             renderTerrainSimple("Plains", "Normal", new byte[] {
