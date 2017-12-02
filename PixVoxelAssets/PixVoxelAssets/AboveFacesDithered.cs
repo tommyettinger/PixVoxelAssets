@@ -2859,7 +2859,7 @@ namespace AssetsPV
 
          */
 
-        //private static byte mostCommon(byte[][] b, int x, int y)
+        //private static byte mostCommon(byte[][] b, int x, int y, bool terrain)
         //{
         //    byte best1 = b[y][x], best2 = 0, best3 = 0, best4 = 0, best5 = 0, current;
         //    int count1 = 1, count2 = 0, count3 = 0, count4 = 0, count5 = 0, t;//, shade = best1 == 0 ? 3 : ((253 - best1) & 3), total = 1;
@@ -2876,27 +2876,27 @@ namespace AssetsPV
         //            if(best1 == 0 || current == best1)
         //            {
         //                best1 = current;
-        //                count1 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+        //                count1 += (t = (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
         //            }
         //            else if(best2 == 0 || current == best2)
         //            {
         //                best2 = current;
-        //                count2 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+        //                count2 += (t = (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
         //            }
         //            else if(best3 == 0 || current == best3)
         //            {
         //                best3 = current;
-        //                count3 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+        //                count3 += (t = (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
         //            }
         //            else if(best4 == 0 || current == best4)
         //            {
         //                best4 = current;
-        //                count4 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+        //                count4 += (t = (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
         //            }
         //            else if(best5 == 0 || current == best5)
         //            {
         //                best5 = current;
-        //                count5 += (t = ColorPriorityCU(current) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
+        //                count5 += (t = (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * (((253 - current) & 3) == 3 ? 3 : 1)) * (1 + (63 >> i * i * j * j));
         //            }
         //        }
         //    }
@@ -2930,27 +2930,99 @@ namespace AssetsPV
 
         public static int ColorPriorityCU(int c)
         {
-            int shadeMod = (((253 - c) & 3) == 3) ? 7 : 2;
+            int shadeMod = ((253 - c) & 3);// (((253 - c) & 3) == 3) ? 5 : 1;
+            shadeMod *= shadeMod;
+            ++shadeMod;
             switch((253 - c) >> 2)
             {
                 case 6:
                 case 7:
                     return 55 * shadeMod;// + ((253 - fv) & 3) * 3;
                 case 9:
-                    return 56 * shadeMod;// + ((253 - fv) & 3) * 3;
+                    return 55 * shadeMod;// + ((253 - fv) & 3) * 3;
                 case 8:
                     return 132 * shadeMod;// + ((253 - fv) & 3) * 3;
                 case 10:
-                    return 151;
+                    return 390 * shadeMod;
                 case 11:
-                    return 203;// + ((253 - fv) & 3) * 3;
+                    return 205 * shadeMod;// + ((253 - fv) & 3) * 3;
                 //case 16: return 24;
                 case 25: return 10;
                 default: return 4 * shadeMod;// + ((253 - fv) & 3) * 3;
             }
         }
 
-        private static byte mostCommon(byte[][] b, int x, int y)
+        private static byte mostCommonIso(byte[][] b, int x, int y, bool terrain)
+        {
+            byte best1 = b[y][x], best2 = 0, best3 = 0, best4 = 0, best5 = 0, current, weight = 1;
+            //if(best1 == 0 && ((x & 3) & (y & 3)) == 3) return 0;
+            //if(best1 == 0) return 0;
+            int count1 = 1, count2 = 0, count3 = 0, count4 = 0, count5 = 0, t;//, shade = best1 == 0 ? 3 : ((253 - best1) & 3), total = 1;
+
+            for(int j = -2; j <= 2; j++)
+            {
+                for(int i = -2; i <= 2; i++)
+                {
+                    //if((i * i + j * j) > 5) continue;
+                    //if((i & j) != 0) continue;
+                    //if(i * i == j * j && i * i > 3) continue;
+                    //if(i != 0 && j != 0) continue;
+                    if((i * i + j * j) > 4) continue;
+                    current = b[y + j][x + i];
+                    if(current == 0)
+                        weight++;
+                }
+            }
+            if(weight > 8) return 0;
+            for(int j = -2; j <= 2; j++)
+            {
+                for(int i = -2; i <= 2; i++)
+                {
+                    //if(i * i == j * j && i * i > 3) continue;
+                    //if(i != 0 && j != 0) continue;
+                    //if(i * i > 2 && j != 0) continue;
+                    //t = 5 - (j * j * 4);
+                    //if((i & j) != 0) continue;
+                    //t = 6 - (i * i);
+
+                    //if((i * i + j * j) > 5) continue;
+                    t = 1;
+                    current = b[y + j][x + i];
+                    //if(current == 0 || (i & j) != 0) continue;
+                    if(best1 == 0 || current == best1)
+                    {
+                        best1 = current;
+                        count1 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
+                    }
+                    else if(best2 == 0 || current == best2)
+                    {
+                        best2 = current;
+                        count2 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
+                    }
+                    else if(best3 == 0 || current == best3)
+                    {
+                        best3 = current;
+                        count3 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
+                    }
+                    else if(best4 == 0 || current == best4)
+                    {
+                        best4 = current;
+                        count4 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
+                    }
+                    else if(best5 == 0 || current == best5)
+                    {
+                        best5 = current;
+                        count5 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
+                    }
+                }
+            }
+            return ((count5 > count2 && count5 > count3 && count5 > count1 && count5 > count4) ? best5 :
+                 (count4 > count2 && count4 > count3 && count4 > count1 && count4 > count5) ? best4 :
+                (count3 > count1 && count3 > count2 && count3 > count4 && count3 > count5) ? best3 :
+                (count2 > count1 && count2 > count3 && count2 > count4 && count2 > count5) ? best2 : best1);
+        }
+
+        private static byte mostCommonOrtho(byte[][] b, int x, int y, bool terrain)
         {
             byte best1 = b[y][x], best2 = 0, best3 = 0, best4 = 0, best5 = 0, current, weight = 1;
             //if(best1 == 0 && ((x & 3) & (y & 3)) == 3) return 0;
@@ -2968,14 +3040,14 @@ namespace AssetsPV
                         weight++;
                 }
             }
-            //if(weight > 5) return 0;
+            //if(weight > 4) return 0;
 
             for(int i = -1; i <= 1; i++)
             {
                 for(int j = -1; j <= 1; j++)
                 {
                     //t = 5 - (j * j * 4);
-                    t = 5 - (i * i * 2);
+                    t = 5 - (i * i);
 
                     //if((i * i + j * j) > 5) continue;
                     //if((i & j) != 0) continue;
@@ -2984,27 +3056,27 @@ namespace AssetsPV
                     if(best1 == 0 || current == best1)
                     {
                         best1 = current;
-                        count1 += (t * ColorPriorityCU(current) * weight);
+                        count1 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
                     }
                     else if(best2 == 0 || current == best2)
                     {
                         best2 = current;
-                        count2 += (t * ColorPriorityCU(current) * weight);
+                        count2 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
                     }
                     else if(best3 == 0 || current == best3)
                     {
                         best3 = current;
-                        count3 += (t * ColorPriorityCU(current) * weight);
+                        count3 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
                     }
                     else if(best4 == 0 || current == best4)
                     {
                         best4 = current;
-                        count4 += (t * ColorPriorityCU(current) * weight);
+                        count4 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
                     }
                     else if(best5 == 0 || current == best5)
                     {
                         best5 = current;
-                        count5 += (t * ColorPriorityCU(current) * weight);
+                        count5 += (t * (terrain ? ((253 - current) & 3) * ((253 - current) & 3) + 1 : ColorPriorityCU(current)) * weight);
                     }
                 }
             }
@@ -3020,7 +3092,7 @@ namespace AssetsPV
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
             wditheredcurrentortho = wditheredortho[palette];
-
+            bool terrain = VoxelLogic.terrainPalettes.Contains(palette);
             b = renderWSmart(parsed, dir, palette, frame, maxFrames, still, shadowless);
 
             b2 = new byte[ImageHeightLarge][];
@@ -3032,7 +3104,7 @@ namespace AssetsPV
             {
                 for(int x = 30, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 3, j++) // x+=4
                 {
-                    b2[i][j] = mostCommon(b, x, y);
+                    b2[i][j] = mostCommonIso(b, x, y, terrain);
                 }
             }
 
@@ -3043,7 +3115,7 @@ namespace AssetsPV
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrent = wdithered[palette];
-
+            bool terrain = VoxelLogic.terrainPalettes.Contains(palette);
             b = renderWSmartHuge(faces, dir, palette, frame, maxFrames, still, shadowless);
             //return b;
 
@@ -3057,7 +3129,7 @@ namespace AssetsPV
             {
                 for(int x = 42, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 3, j++) //x+=2
                 {
-                    b2[i][j] = mostCommon(b, x, y);
+                    b2[i][j] = mostCommonIso(b, x, y, terrain);
                 }
 
             }
@@ -3097,7 +3169,7 @@ namespace AssetsPV
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrentortho = wditheredortho[palette];
-
+            bool terrain = VoxelLogic.terrainPalettes.Contains(palette);
             b = renderOrthoW(parsed, dir, palette, frame, maxFrames, still, shadowless, 60, 60, 60);
 
             b2 = new byte[ImageHeightLarge][];
@@ -3109,7 +3181,7 @@ namespace AssetsPV
             {
                 for(int x = 25, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 3, j++) //x+=2
                 {
-                    b2[i][j] = mostCommon(b, x, y);
+                    b2[i][j] = mostCommonOrtho(b, x, y, terrain);
                 }
             }
 
@@ -3120,6 +3192,7 @@ namespace AssetsPV
             byte[][] b, b2;
             VoxelLogic.wcolors = VoxelLogic.wpalettes[palette];
             wditheredcurrentortho = wditheredortho[palette];
+            bool terrain = VoxelLogic.terrainPalettes.Contains(palette);
 
             b = renderOrthoW(faces, dir, palette, frame, maxFrames, still, shadowless, 120, 120, 80);
             //return b;
@@ -3134,7 +3207,7 @@ namespace AssetsPV
             {
                 for(int x = 9, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 3, j++) //x+=2
                 {
-                    b2[i][j] = mostCommon(b, x, y);
+                    b2[i][j] = mostCommonOrtho(b, x, y, terrain);
                 }
 
             }
@@ -7132,7 +7205,7 @@ for(int i = 0; i < numBytes; i++)
                     tilings[i][j] = new Bitmap(altFolder + "Terrains/" + CURedux.Terrains[i] + "_Huge_face" + (j*2) + "_0" + ".png");
                 }
             }
-            Bitmap b = new Bitmap(32 * 14 * 2, 32 * 14 * 2);
+            Bitmap b = new Bitmap(42 * 14 * 2, 42 * 14 * 2);
             Graphics tiling = Graphics.FromImage(b);
             LocalMap.r = r;
             LocalMap lm = new LocalMap(32, 32, 1, 0);
@@ -7141,9 +7214,9 @@ for(int i = 0; i < numBytes; i++)
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 58 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (42 * (i + j - 18)) - 20, (42 * (i - j + 9)) - 58 + 14 + 128);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (32 * (i + j - 18)) - 20, (32 * (i - j + 9)) - 58 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (42 * (i + j - 18)) - 20, (42 * (i - j + 9)) - 58 + 14 + 128);
                 }
             }
 
@@ -8437,6 +8510,71 @@ for(int i = 0; i < numBytes; i++)
             writePaletteImages();
             if(WAR)
             {
+                Directory.CreateDirectory(altFolder + "Terrains");
+                Directory.CreateDirectory(blankFolder + "Terrains");
+
+                renderTerrainSimple("Plains", "High", new byte[] {
+                    0, 27, 7,
+                    2, 34, 2, }, 1, 0, 2);
+                renderTerrainSimple("Forest", "High", new byte[] {
+                    4, 27, 7,
+                    6, 34, 2, }, 5, 4, 6);
+                renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
+                    8, 27, 7,
+                    10, 34, 2, }, 9, 8, 10);
+                renderTerrainSimple("Road", "Ordered", new byte[] {
+                    32, 5, 3,
+                    33, 7, 3,
+                    34, 9, 2}, 33, 32, 56);
+                renderTerrainSimple("Jungle", "High", new byte[] {
+                    12, 27, 7,
+                    14, 34, 2, }, 13, 12, 14);
+                renderTerrainSimple("Hill", "High", new byte[] {
+                    16, 27, 7,
+                    18, 34, 2, }, 17, 16, 18);
+                renderTerrainSimple("Mountain", "High", new byte[] {
+                    20, 27, 7,
+                    22, 34, 2, }, 21, 20, 22);
+                renderTerrainSimple("Ruins", "High", new byte[] {
+                    24, 27, 7,
+                    26, 34, 2, }, 25, 24, 26);
+                renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
+                    28, 27, 7,
+                    30, 34, 2, }, 29, 28, 30);
+
+                renderTerrainSimple("River", "Water", new byte[] {
+                    36, 7, 2,
+                    38, 13, 2,
+                    45, 39, 7,
+                    4, 51, 2, }, 37, 36, 38);
+                renderTerrainSimple("Ocean", "Water", new byte[] {
+                    46, 23, 5,
+                    47, 21, 4,
+                    44, 29, 7, }, 45, 44, 46);
+                renderTerrainSimple("Pit", "Normal", new byte[] {
+                    41, 11, 3,
+                    }, 40, 40, 40);
+
+                renderTerrainSimple("Volcano", "Normal", new byte[] {
+                    49, 30, 2,
+                    57, 29, 5,
+                    51, 13, 3,
+                    50, 25, 8, }, 49, 48, 50);
+                renderTerrainSimple("Poison", "Water", new byte[] {
+                    3, 27, 3,
+                    2, 24, 9,
+                    1, 22, 11,
+                    52, 13, 7,}, 53, 52, 54);
+                renderTerrainSimple("Warning", "Ordered", new byte[] {
+                    59, 5, 2,
+                    }, 58, 58, 58);
+
+                Directory.CreateDirectory(altFolder + "Tilings");
+                for(int i = 0; i < 40; i++)
+                {
+                    makeSimpleShrunkenTiling("tiling" + i);
+                }
+
                 for(int a = 1; a < 2; a++)
                 {
                     /*
@@ -8578,72 +8716,6 @@ for(int i = 0; i < numBytes; i++)
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-
-                Directory.CreateDirectory(altFolder + "Terrains");
-                Directory.CreateDirectory(blankFolder + "Terrains");
-
-                renderTerrainSimple("Road", "Ordered", new byte[] {
-                    32, 5, 3,
-                    33, 7, 3,
-                    34, 9, 2}, 33, 32, 56);
-
-                renderTerrainSimple("Plains", "High", new byte[] {
-                    0, 27, 7,
-                    2, 34, 2, }, 1, 0, 2);
-                renderTerrainSimple("Forest", "High", new byte[] {
-                    4, 27, 7,
-                    6, 34, 2, }, 5, 4, 6);
-                renderTerrainSimple("Sand", "High", new byte[] { //was called Desert
-                    8, 27, 7,
-                    10, 34, 2, }, 9, 8, 10);
-                renderTerrainSimple("Jungle", "High", new byte[] {
-                    12, 27, 7,
-                    14, 34, 2, }, 13, 12, 14);
-                renderTerrainSimple("Hill", "High", new byte[] {
-                    16, 27, 7,
-                    18, 34, 2, }, 17, 16, 18);
-                renderTerrainSimple("Mountain", "High", new byte[] {
-                    20, 27, 7,
-                    22, 34, 2, }, 21, 20, 22);
-                renderTerrainSimple("Ruins", "High", new byte[] {
-                    24, 27, 7,
-                    26, 34, 2, }, 25, 24, 26);
-                renderTerrainSimple("Ice", "High", new byte[] { //was called Tundra
-                    28, 27, 7,
-                    30, 34, 2, }, 29, 28, 30);
-
-                renderTerrainSimple("River", "Water", new byte[] {
-                    36, 7, 2,
-                    38, 13, 2,
-                    45, 39, 7,
-                    4, 51, 2, }, 37, 36, 38);
-                renderTerrainSimple("Ocean", "Water", new byte[] {
-                    46, 23, 5,
-                    47, 21, 4,
-                    44, 29, 7, }, 45, 44, 46);
-                renderTerrainSimple("Pit", "Normal", new byte[] {
-                    41, 11, 3,
-                    }, 40, 40, 40);
-
-                renderTerrainSimple("Volcano", "Normal", new byte[] {
-                    49, 30, 2,
-                    57, 29, 5,
-                    51, 13, 3,
-                    50, 25, 8, }, 49, 48, 50);
-                renderTerrainSimple("Poison", "Water", new byte[] {
-                    3, 27, 3,
-                    2, 24, 9,
-                    1, 22, 11,
-                    52, 13, 7,}, 53, 52, 54);
-                renderTerrainSimple("Warning", "Ordered", new byte[] {
-                    59, 5, 2,
-                    }, 58, 58, 58);
-
-                Directory.CreateDirectory(altFolder + "Tilings");
-                for(int i = 0; i < 40; i++)
-                {
-                    makeSimpleShrunkenTiling("tiling" + i);
-                }
 
             }
             /*

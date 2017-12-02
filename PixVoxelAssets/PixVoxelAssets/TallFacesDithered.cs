@@ -185,12 +185,13 @@ namespace AssetsPV
                             VoxelLogic.ColorToHSV(c, out h, out s, out v);
                             //                            if(VoxelLogic.subtlePalettes.Contains(p) && i == 0 && j == 0)
                             //                                Console.WriteLine("palette: " + p + ", current_color: " + current_color + ", s before: " + s + ", s after: " + (VoxelLogic.Clamp(s - 0.3, 0.0, 0.6)));
+                            
                             if(subtle)
                             {
-                                s = VoxelLogic.Clamp((s * 0.5), 0.0, 0.5);
-                                v = VoxelLogic.Clamp(v * 0.9, 0.01, 0.9);
+                                s = VoxelLogic.Clamp((s * 0.8), 0.0, 0.8);
+                                //v = VoxelLogic.Clamp(v * 0.95, 0.01, 0.95);
                             }
-                            else if(current_color == 40 && VoxelLogic.VisualMode == "CU" && !subtle)
+                            else if(current_color == 40 && VoxelLogic.VisualMode == "CU")
                             {
                                 h += (v + s) * 0.075 - 0.11;
                                 v *= 0.8 + r.NextDouble() * 0.18;
