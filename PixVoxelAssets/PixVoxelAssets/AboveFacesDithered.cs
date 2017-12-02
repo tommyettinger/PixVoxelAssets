@@ -59,7 +59,7 @@ namespace AssetsPV
         //public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
         //    ImageWidthLarge = 48, ImageHeightLarge = 68, ImageWidthHuge = 98, ImageHeightHuge = 138;
         public const int LargeWidth = 88, LargeHeight = 128, HugeWidth = 248, HugeHeight = 368,
-            ImageWidthLarge = 64, ImageHeightLarge = 88, ImageWidthHuge = 128, ImageHeightHuge = 196;
+            ImageWidthLarge = 64, ImageHeightLarge = 88, ImageWidthHuge = 128, ImageHeightHuge = 168;
         public const int multiplier = 1, bonus = 1, vwidth = 3, vheight = 5, top = 3, outline = 1;
         public static Dictionary<Slope, int> slopes = new Dictionary<Slope, int> { { Slope.Cube, Cube },
             { Slope.BrightTop, BrightTop }, { Slope.DimTop, DimTop }, { Slope.BrightDim, BrightDim }, { Slope.BrightDimTop, BrightDimTop }, { Slope.BrightBottom, BrightBottom }, { Slope.DimBottom, DimBottom },
@@ -3028,7 +3028,7 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 72 + 34, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 3, i++) // y+=4
+            for(int y = 42 + 34, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 3, i++) // y+=4
             {
                 for(int x = 30, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 3, j++) // x+=4
                 {
@@ -3053,7 +3053,7 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 78, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 3, i++) // y+=2
+            for(int y = 69, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 3, i++) // y+=2
             {
                 for(int x = 42, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 3, j++) //x+=2
                 {
@@ -3105,7 +3105,7 @@ namespace AssetsPV
             {
                 b2[i] = new byte[ImageWidthLarge];
             }
-            for(int y = 72 + 35, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 3, i++) //y+=2
+            for(int y = 42 + 35, i = 0; y < HugeHeight - 4 && i < ImageHeightLarge; y += 3, i++) //y+=2
             {
                 for(int x = 25, j = 0; x < HugeWidth - 4 && j < ImageWidthLarge; x += 3, j++) //x+=2
                 {
@@ -3130,7 +3130,7 @@ namespace AssetsPV
                 b2[i] = new byte[ImageWidthHuge];
             }
 
-            for(int y = 50, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 3, i++) //y+=2
+            for(int y = 41, i = 0; y < HugeHeight * 2 - 4 && i < ImageHeightHuge; y += 3, i++) //y+=2
             {
                 for(int x = 9, j = 0; x < HugeWidth * 2 - 4 && j < ImageWidthHuge; x += 3, j++) //x+=2
                 {
@@ -8119,8 +8119,8 @@ for(int i = 0; i < numBytes; i++)
             if(WAR)
             {
                 VoxelLogic.VisualMode = "CU";
-                altFolder = "Diverse_PixVoxel_Wargame_Above_Mini3/";
-                blankFolder = "Blank_PixVoxel_Wargame_Above_Mini3/";
+                altFolder = "Diverse_PixVoxel_Wargame_Above_Mini4/";
+                blankFolder = "Blank_PixVoxel_Wargame_Above_Mini4/";
                 Directory.CreateDirectory("gifs/" + altFolder);
                 CURedux.Initialize(true);
             }
@@ -8467,6 +8467,7 @@ for(int i = 0; i < numBytes; i++)
                     //    Console.WriteLine("Running weapon " + w + " GIF conversion for Infantry...");
                     //    WriteGIF(imageNames, 11, "gifs/" + altFolder + "Infantry_attack_" + w + "_Large_animated");
                     //}
+
                     processUnitLargeWMilitary("Infantry");
                     processUnitLargeWMilitary("Infantry_P");
                     processUnitLargeWMilitary("Infantry_S");
@@ -8577,7 +8578,7 @@ for(int i = 0; i < numBytes; i++)
                 //WriteZombieGIFs();
 
                 //WriteDivineGIFs();
-                
+
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
 
