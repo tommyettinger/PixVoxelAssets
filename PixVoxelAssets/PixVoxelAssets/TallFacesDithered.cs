@@ -69,7 +69,7 @@ namespace AssetsPV
             { Slope.BackBackTopThick, BackBackTopThick }, { Slope.BackBackBottomThick, BackBackBottomThick } };
 
         public static PRNG r = PRNG.r;
-        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
+        public static ulong rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         private static FileStream offbin = new FileStream("offsets2dither.bin", FileMode.OpenOrCreate);
@@ -9706,7 +9706,7 @@ namespace AssetsPV
         {
             BinaryReader bin = new BinaryReader(File.Open(u + ".vox", FileMode.Open));
             uint seed = (uint)rng.NextInt();
-            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaProcedural(bin, seed, 340); ; //VoxelLogic.PlaceShadowsW(
+            List<MagicaVoxelData> voxes = VoxelLogic.FromMagicaProcedural(bin, seed, 340UL); ; //VoxelLogic.PlaceShadowsW(
             byte[,,] result = TransformLogic.RunCA(
             FaceLogic.FaceArrayToByteArray(
             FaceLogic.DoubleSize(

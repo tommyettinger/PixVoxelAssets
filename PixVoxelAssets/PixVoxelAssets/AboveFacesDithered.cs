@@ -73,7 +73,7 @@ namespace AssetsPV
             { Slope.BackBackTopThick, BackBackTopThick }, { Slope.BackBackBottomThick, BackBackBottomThick } };
 
         public static PRNG r = PRNG.r;
-        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
+        public static ulong rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         public static Tuple<string, int>[] undead = TallVoxels.undead,
@@ -7205,7 +7205,7 @@ for(int i = 0; i < numBytes; i++)
                     tilings[i][j] = new Bitmap(altFolder + "Terrains/" + CURedux.Terrains[i] + "_Huge_face" + (j*2) + "_0" + ".png");
                 }
             }
-            Bitmap b = new Bitmap(42 * 14 * 2, 42 * 14 * 2);
+            Bitmap b = new Bitmap(84 * 14, 84 * 14);
             Graphics tiling = Graphics.FromImage(b);
             LocalMap.r = r;
             LocalMap lm = new LocalMap(32, 32, 1, 0);
@@ -7214,9 +7214,9 @@ for(int i = 0; i < numBytes; i++)
                 for(int i = 0; i < 32; i++)
                 {
                     if(lm.Land[i, j] < 11)
-                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (42 * (i + j - 18)) - 20, (42 * (i - j + 9)) - 58 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[lm.Land[i, j]][r.Next(4)], (42 * (i + j - 18)) - 26, (42 * (i - j + 9)) - 58 - 5 + 128);
                     else
-                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (42 * (i + j - 18)) - 20, (42 * (i - j + 9)) - 58 + 14 + 128);
+                        tiling.DrawImageUnscaled(tilings[0][r.Next(4)], (42 * (i + j - 18)) - 26, (42 * (i - j + 9)) - 58 - 5 + 128);
                 }
             }
 
@@ -8512,7 +8512,7 @@ for(int i = 0; i < numBytes; i++)
             {
                 Directory.CreateDirectory(altFolder + "Terrains");
                 Directory.CreateDirectory(blankFolder + "Terrains");
-
+                /*
                 renderTerrainSimple("Plains", "High", new byte[] {
                     0, 27, 7,
                     2, 34, 2, }, 1, 0, 2);
@@ -8568,14 +8568,14 @@ for(int i = 0; i < numBytes; i++)
                 renderTerrainSimple("Warning", "Ordered", new byte[] {
                     59, 5, 2,
                     }, 58, 58, 58);
-
+                */
                 Directory.CreateDirectory(altFolder + "Tilings");
                 for(int i = 0; i < 40; i++)
                 {
                     makeSimpleShrunkenTiling("tiling" + i);
                 }
 
-                for(int a = 1; a < 2; a++)
+                for(int a = 2; a < 2; a++)
                 {
                     /*
                     for(int u = 0; u < VoxelLogic.CurrentUnits.Length; u++)
@@ -8711,7 +8711,7 @@ for(int i = 0; i < numBytes; i++)
                 //processReceivingMilitaryWSuper();
 
 
-                WriteAllGIFs();
+                //WriteAllGIFs();
                 //addon = "Zombie_";
                 //WriteZombieGIFs();
 

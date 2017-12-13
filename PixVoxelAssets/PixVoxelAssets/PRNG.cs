@@ -5,73 +5,24 @@ namespace AssetsPV
     public class PRNG : Random
     {
         public static PRNG r = new PRNG(0x1337BEEF);
-        public static uint[] rState = r.GetSnapshot(), altState = new uint[] {1111U, 2222U, 3333U, 4444U, 5555U, 6666U, 7777U, 8888U, 9999U,
-            10101010U, 11111111U, 12121212U, 13131313U, 14141414U, 15151515U, 16161616U, 17171717U};
+        public static ulong rState = r.state, altState = 1337133713371337UL;
 
-        public static uint GlobalRandomState = 31337U; //Randomize((uint)(DateTime.Now.Ticks ^ DateTime.Now.Ticks >> 32))
+        public static ulong GlobalRandomState = 31337U; //Randomize((uint)(DateTime.Now.Ticks ^ DateTime.Now.Ticks >> 32))
 
-        public uint choice = 0U;
-        public uint[] state = new uint[16];
-
+        public ulong state = 0UL;
         public PRNG()
         {
-            for(int i = 0; i < 16; i++)
-            {
-                
-                choice += (state[i] = Randomize(GlobalRandomState += 0x7F4A7C15U));
-            }
+            state = Randomize(GlobalRandomState += 0x6C8E9CF570932BD5UL);
         }
         public PRNG(int seed)
         {
-            uint seed2 = Randomize((uint)seed * 0x7F4A7C15U);
-            for(int i = 0; i < 16; i++)
-            {
-                choice += (state[i] = Randomize(seed2 += 0x7F4A7C15U));
-            }
+            state = Randomize((ulong)seed * 0x6C8E9CF570932BD5UL);
         }
 
-        public PRNG(int[] seed)
+        public PRNG(ulong seed)
         {
-            if(seed == null || seed.Length <= 0) seed = new int[1];
-            uint sum = 191U;
-            for(int s = 0; s < seed.Length; s++)
-            {
-                sum += Randomize((uint)seed[s]);
-                for(int i = 0; i < 16; i++)
-                {
-                    choice += (state[i] ^= Randomize(sum += 0x7F4A7C15U));
-                }
-            }
+            state = seed;
         }
-        public PRNG(uint[] stateSeed, uint choiceSeed)
-        {
-            if(stateSeed == null || stateSeed.Length == 0)
-            {
-                for(int i = 0; i < 16; i++)
-                {
-                    choice += (state[i] = Randomize(GlobalRandomState += 0x7F4A7C15U));
-                }
-            }
-            else if(stateSeed.Length != 16)
-            {
-                uint sum = 191U;
-                for(int s = 0; s < stateSeed.Length; s++)
-                {
-                    sum += Randomize(stateSeed[s]);
-                    for(int i = 0; i < 16; i++)
-                    {
-                        choice += (state[i] ^= Randomize(sum += 0x7F4A7C15U));
-                    }
-                }
-
-            }
-            else
-            {
-                Buffer.BlockCopy(stateSeed, 0, state, 0, 64);
-                choice = choiceSeed;
-            }
-        }
-
 
         /// <summary>
         /// Returns a pseudo-random long, which can be positive or negative and have any 64-bit value.
@@ -80,8 +31,9 @@ namespace AssetsPV
 
         public long NextLong()
         {
-            return (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B500000000L ^
-            ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5L & 0xFFFFFFFFL);
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return (long)(z ^ (state >> 22));
         }
         /// <summary>
         /// Gets a pseudo-random int that is between 0 (inclusive) and maxValue (exclusive); maxValue must be
@@ -93,11 +45,13 @@ namespace AssetsPV
         public long NextLong(long maxValue)
         {
             if(maxValue <= 0) return 0;
-            long threshold = (0x7fffffffffffffffL - maxValue + 1) % maxValue;
+            long threshold = (0x7fffffffffffffffL - maxValue + 1) % maxValue, bits;
+            ulong z;
             for(;;)
             {
-                long bits = ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B500000000L ^
-            ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5L & 0xFFFFFFFFL)) & 0x7fffffffffffffffL;
+                z = (state += 0x6C8E9CF570932BD5UL);
+                z = (z ^ (z >> 25)) * (z | 0xA529L);
+                bits = (long)(z ^ (state >> 22)) & 0x7fffffffffffffffL;
                 if(bits >= threshold)
                     return bits % maxValue;
             }
@@ -120,7 +74,10 @@ namespace AssetsPV
         /// <returns>any int, all 32 bits are pseudo-random</returns>
         public int NextInt()
         {
-            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U);
+
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return (int)(z ^ (state >> 22));
         }
         /// <summary>
         /// Returns a positive pseudo-random int, which can have any 31-bit positive value.
@@ -128,17 +85,21 @@ namespace AssetsPV
         /// <returns>any random positive int, all but the sign bit are pseudo-random</returns>
         public override int Next()
         {
-            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U);
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return (int)(z ^ (state >> 22)) & 0x7FFFFFFF;
         }
         /// <summary>
-        /// Returns a positive pseudo-random int, which can have any 31-bit positive value.
+        /// Returns a pseudo-random int, which can have any value that uses at most the specified amount of bits.
         /// </summary>
         /// <param name="bits">the maximum number of bits to use for the result</param>
         /// <returns>an int between 0 and <code>Pow(2, bits)</code></returns>
         /// <returns>any random int using up to the specified amount of bits</returns>
         public int NextBits(int bits)
         {
-            return (int)((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U >> (32 - bits));
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return (int)((z ^ (state >> 22)) >> (32 - bits));
         }
         /// <summary>
         /// Gets a pseudo-random int that is between 0 (inclusive) and maxValue (exclusive), which can be positive or negative.
@@ -148,7 +109,9 @@ namespace AssetsPV
         /// <returns>an int between 0 and maxValue</returns>
         public override int Next(int maxValue)
         {
-            return (int)((maxValue * (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U) & 0x7FFFFFFFL)) >> 31);
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return (int)((maxValue * ((long)(z ^ (state >> 22)) & 0x7FFFFFFFL)) >> 31);
         }
         /// <summary>
         /// Gets a pseudo-random int that is between minValue (inclusive) and maxValue (exclusive); both can be positive or negative.
@@ -171,11 +134,14 @@ namespace AssetsPV
         {
             if(buffer == null)
                 throw new ArgumentNullException("buffer");
+            ulong z;
             for(int i = 0; i < buffer.Length;)
             {
-                uint r = ((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U);
-                for(int n = Math.Min(buffer.Length - i, 4); n-- > 0; r >>= 8)
-                    buffer[i++] = (byte)r;
+                z = (state += 0x6C8E9CF570932BD5UL);
+                z = (z ^ (z >> 25)) * (z | 0xA529L);
+                z ^= (state >> 22);
+                for(int n = Math.Min(buffer.Length - i, 8); n-- > 0; z >>= 8)
+                    buffer[i++] = (byte)z;
             }
         }
         /// <summary>
@@ -184,8 +150,9 @@ namespace AssetsPV
         /// <returns>a pseudo-random double between 0.0 inclusive and 1.0 exclusive</returns>
         public override double NextDouble()
         {
-            return (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B500000000L ^
-            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U) & 0x1FFFFFFFFFFFFFL) * 1.1102230246251565E-16;
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return ((z ^ (state >> 22)) & 0x1FFFFFFFFFFFFFUL) * 1.1102230246251565E-16;
         }
         /// <summary>
         /// Gets a random double between 0.0 (inclusive) and 1.0 (exclusive).
@@ -196,8 +163,9 @@ namespace AssetsPV
         /// <returns>a pseudo-random double between 0.0 inclusive and 1.0 exclusive</returns>
         protected override double Sample()
         {
-            return (((state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495) * 0x2C9277B500000000L ^
-            (state[(choice += 0x9CBC276DU) & 15] += (state[choice >> 28] >> 13) + 0x5F356495U) * 0x2C9277B5U) & 0x1FFFFFFFFFFFFFL) * 1.1102230246251565E-16;
+            ulong z = (state += 0x6C8E9CF570932BD5UL);
+            z = (z ^ (z >> 25)) * (z | 0xA529L);
+            return ((z ^ (state >> 22)) & 0x1FFFFFFFFFFFFFUL) * 1.1102230246251565E-16;
         }
         /// <summary>
         /// Returns a new RNG using the same algorithm and a copy of the internal state this uses.
@@ -206,61 +174,34 @@ namespace AssetsPV
         /// <returns>a copy of this RNG</returns>
         public PRNG Copy()
         {
-            return new PRNG(state, choice);
+            return new PRNG(state);
         }
         /// <summary>
         /// Gets a snapshot of the current state as a uint array. This snapshot can be used to restore the current state.
         /// </summary>
         /// <returns>a snapshot of the current state as a uint array</returns>
-        public uint[] GetSnapshot()
+        public ulong GetSnapshot()
         {
-            uint[] snap = new uint[17];
-            Array.Copy(state, snap, 16);
-            snap[16] = choice;
-            return snap;
+            return state;
         }
 
         /// <summary>
         /// Restores the state this uses internally to the one stored in snapshot, a uint array.
         /// </summary>
         /// <param name="snapshot">a uint array normally produced by GetSnapshot() called on this PRNG</param>
-        public void FromSnapshot(uint[] snapshot)
+        public void FromSnapshot(ulong snapshot)
         {
-            if(snapshot == null)
-                throw new ArgumentNullException("snapshot");
-            if(snapshot.Length < 17)
-            {
-                uint seed2 = Randomize((uint)snapshot.Length * 0x8D265FCDU);
-                for(uint i = 0; i < 16U; i++)
-                {
-                    state[i] = Randomize(seed2 + i * 0x7F4A7C15U);
-                }
-                choice = Randomize(Randomize(seed2 - 0x7F4A7C15U));
-
-            }
-            else
-            {
-                Array.Copy(snapshot, state, 16);
-                choice = snapshot[16];
-            }
+            state = snapshot;
         }
 
-        public void Reseed(uint seed)
+        public void Reseed(ulong seed)
         {
-            seed = Randomize(seed * 0x7F4A7C15U);
-            for(int i = 0; i < 16; i++)
-            {
-                choice += (state[i] = Randomize(seed += 0x7F4A7C15U));
-            }
+            state = Randomize(seed * 0x6C8E9CF570932BD5UL);
         }
 
         public void Reseed(int seed)
         {
-            uint seed2 = Randomize((uint)seed * 0x7F4A7C15U);
-            for(int i = 0; i < 16; i++)
-            {
-                choice += (state[i] = Randomize(seed2 += 0x7F4A7C15U));
-            }
+            state = Randomize((ulong)seed * 0x6C8E9CF570932BD5UL);
         }
 
         /// <summary>
@@ -268,17 +209,18 @@ namespace AssetsPV
         /// </summary>
         /// <remarks>
         /// This is not the same implementation used in the rest of this class' methods; it is used by some constructors.
-        /// This is expected to be called with <code>Randomize(state += 0x7F4A7C15U)</code> to generate a sequence of random numbers, or with
-        /// <code>Randomize(state -= 0x7F4A7C15U)</code> to go backwards in the same sequence. Using other constants for the increment does not
+        /// This is expected to be called with <code>Randomize(state += 0x6C8E9CF570932BD5UL)</code> to generate a sequence of random numbers, or with
+        /// <code>Randomize(state -= 0x6C8E9CF570932BD5UL)</code> to go backwards in the same sequence. Using other constants for the increment does not
         /// guarantee quality in the same way; in particular, using <code>Randomize(++state)</code> yields poor results for quality, and other
         /// very small numbers will likely also be low-quality.
         /// </remarks>
-        /// <param name="state">A UInt32 that should be different every time you want a different random result; use <code>Randomize(state += 0x7F4A7C15U)</code> ideally.</param>
+        /// <param name="state">A UInt32 that should be different every time you want a different random result; use <code>Randomize(state += 0x6C8E9CF570932BD5UL)</code> ideally.</param>
         /// <returns>A pseudo-random permutation of state.</returns>
-        public static uint Randomize(uint state)
+        public static ulong Randomize(ulong state)
         {
-            state = (state ^ state >> 14) * (0x2C9277B5U + (state * 0x632BE5A6U));
-            return state ^ state >> 13;
+            return (state = (state ^ (state >> 25)) * (state | 0xA529L)) ^ (state >> 22);
+            //state = (state ^ state >> 14) * (0x2C9277B5U + (state * 0x632BE5A6U));
+            //return state ^ state >> 13;
         }
 
     }

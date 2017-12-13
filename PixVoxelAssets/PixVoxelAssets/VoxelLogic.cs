@@ -10125,7 +10125,7 @@ MovementType.Immobile, MovementType.Immobile, MovementType.Immobile, MovementTyp
         /// </summary>
         /// <param name="stream">An open BinaryReader stream that is the .vox file.</param>
         /// <returns>The voxel chunk data for the MagicaVoxel .vox file.</returns>
-        public static List<MagicaVoxelData> FromMagicaProcedural(BinaryReader stream, uint seed, int odds1024 = 650)
+        public static List<MagicaVoxelData> FromMagicaProcedural(BinaryReader stream, uint seed, ulong odds1024 = 650)
         {
             // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
             r.Reseed(seed);

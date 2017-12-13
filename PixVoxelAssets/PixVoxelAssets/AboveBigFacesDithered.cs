@@ -70,7 +70,7 @@ namespace AssetsPV
             { Slope.BackBackTopThick, BackBackTopThick }, { Slope.BackBackBottomThick, BackBackBottomThick } };
 
         public static PRNG r = PRNG.r;
-        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
+        public static ulong rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         public static Tuple<string, int>[] undead = TallVoxels.undead,

@@ -34,7 +34,7 @@ namespace AssetsPV
             widthHuge = (60 * multiplier * vwidth + 1), heightHuge = ((40 + 60) * multiplier * (vheight - top) + 1),
             widthMassive = (80 * multiplier * vwidth + 1), heightMassive = ((60 + 80) * multiplier * (vheight - top) + 1);
         public static PRNG r = PRNG.r;
-        public static uint[] rState = PRNG.rState, altState = PRNG.altState;
+        public static ulong rState = PRNG.rState, altState = PRNG.altState;
         public static string altFolder = "", blankFolder = "";
 
         //private static FileStream offbin = new FileStream("offsets3dither.bin", FileMode.OpenOrCreate);
