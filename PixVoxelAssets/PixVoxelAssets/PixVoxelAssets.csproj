@@ -64,8 +64,12 @@
       <HintPath>..\packages\AssimpNet.3.3.1\lib\net45\AssimpNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Magick.NET-Q8-AnyCPU, Version=7.0.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\packages\Magick.NET-Q8-AnyCPU.7.0.0.0101\lib\net40-client\Magick.NET-Q8-AnyCPU.dll</HintPath>
+    <Reference Include="Magick.NET-Q8-AnyCPU, Version=14.8.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec">
+      <HintPath>..\packages\Magick.NET-Q8-AnyCPU.14.8.0\lib\netstandard20\Magick.NET-Q8-AnyCPU.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magick.NET.Core, Version=14.8.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec">
+      <HintPath>..\packages\Magick.NET.Core.14.8.0\lib\netstandard20\Magick.NET.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Pngcs, Version=1.1.4.1, Culture=neutral, processorArchitecture=MSIL">
@@ -3382,7 +3386,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\AssimpNet.3.3.1\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.3.3.1\build\AssimpNet.targets'))" />
+    <Error Condition="!Exists('../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets'))" />
   </Target>
+  <Import Project="../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets" Condition="Exists('../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
