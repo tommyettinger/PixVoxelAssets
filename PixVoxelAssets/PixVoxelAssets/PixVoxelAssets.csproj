@@ -65,11 +65,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Magick.NET-Q8-AnyCPU, Version=14.8.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec">
-      <HintPath>..\packages\Magick.NET-Q8-AnyCPU.14.8.0\lib\netstandard20\Magick.NET-Q8-AnyCPU.dll</HintPath>
+      <HintPath>..\packages\Magick.NET-Q8-AnyCPU.14.8.1\lib\netstandard20\Magick.NET-Q8-AnyCPU.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Magick.NET.Core, Version=14.8.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec">
-      <HintPath>..\packages\Magick.NET.Core.14.8.0\lib\netstandard20\Magick.NET.Core.dll</HintPath>
+      <HintPath>..\packages\Magick.NET.Core.14.8.1\lib\netstandard20\Magick.NET.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Pngcs, Version=1.1.4.1, Culture=neutral, processorArchitecture=MSIL">
@@ -3387,8 +3387,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\AssimpNet.3.3.1\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.3.3.1\build\AssimpNet.targets'))" />
     <Error Condition="!Exists('../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets'))" />
+    <Error Condition="!Exists('../packages/Magick.NET-Q8-AnyCPU.14.8.1/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '../packages/Magick.NET-Q8-AnyCPU.14.8.1/build/netstandard20/Magick.NET-Q8-AnyCPU.targets'))" />
   </Target>
   <Import Project="../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets" Condition="Exists('../packages/Magick.NET-Q8-AnyCPU.14.8.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" />
+  <Import Project="../packages/Magick.NET-Q8-AnyCPU.14.8.1/build/netstandard20/Magick.NET-Q8-AnyCPU.targets" Condition="Exists('../packages/Magick.NET-Q8-AnyCPU.14.8.1/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
